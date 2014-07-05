@@ -30,5 +30,5 @@
 #
 
 # Defines the files to retrieve
-SOFTWARE_SOURCE_FILES  = $(SOFTWARE_ORIGINAL_NAME).tar.bz2
+SOFTWARE_SOURCE_FILES = $(SOFTWARE_UPSTREAM_NAME).tar.bz2
 
