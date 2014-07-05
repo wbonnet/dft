@@ -29,14 +29,8 @@
 #
 #
 
-# Replace dashes from target by spaces
-ARGLIST = $(shell echo $* | tr \- \  )
-
 # Store the software name
-NEW_SOFTWARE_NAME    = $(word 1, $(ARGLIST))
-
-# Store the software version
-NEW_SOFTWARE_VERSION = $(word 2, $(ARGLIST))
+NEW_SOFTWARE_NAME    = $*
 
 # Create a new software version entry in the repository
 new-software-%:
@@ -61,9 +55,6 @@ new-software-%:
 
     # Set the software name in the new software Makefile
 	@(sed -i -e "s/%%SOFTWARE_UPSTREAM_NAME%%/$(NEW_SOFTWARE_NAME)/g" $(NEW_SOFTWARE_NAME)/Makefile )
-
-    # Set the software version in the new software Makefile
-	@(sed -i -e "s/%%SOFTWARE_VERSION%%/$(NEW_SOFTWARE_VERSION)/g" $(NEW_SOFTWARE_NAME)/Makefile )
 
     # Last step is to add the new directory to GIT
 	# @git add $(NEW_SOFTWARE_NAME)
