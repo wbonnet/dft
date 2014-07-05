@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = flex
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 2.5.38
+#http://prdownloads.sourceforge.net/flex/flex-2.5.38.tar.bz2
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = gmp
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 5.1.3
+#http://ftp.gnu.org/gnu/gmp/gmp-5.1.3.tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

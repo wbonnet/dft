@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = mpfr
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 3.1.2
+#http://www.mpfr.org/mpfr-3.1.2/mpfr-3.1.2.tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

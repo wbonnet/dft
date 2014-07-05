@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = pkg-config
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 0.28
+#http://pkgconfig.freedesktop.org/releases/pkg-config-0.28.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

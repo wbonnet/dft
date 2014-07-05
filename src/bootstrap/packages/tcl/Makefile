@@ -30,10 +30,11 @@
 #
 
 # Defines the upstreal software name
-SOFTWARE_UPSTREAM_NAME = tcl
+SOFTWARE_UPSTREAM_NAME = %%SOFTWARE_UPSTREAM_NAME%%
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 8.6.1
+#http://prdownloads.sourceforge.net/tcl/tcl8.6.1-src.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

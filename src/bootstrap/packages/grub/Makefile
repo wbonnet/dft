@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = grub
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 2.00
+#http://ftp.gnu.org/gnu/grub/grub-2.00.tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

@@ -57,7 +57,7 @@ new-software-%:
 	@(sed -i -e "s/%%SOFTWARE_UPSTREAM_NAME%%/$(NEW_SOFTWARE_NAME)/g" $(NEW_SOFTWARE_NAME)/Makefile )
 
     # Last step is to add the new directory to GIT
-	# @git add $(NEW_SOFTWARE_NAME)
+	@git add $(NEW_SOFTWARE_NAME)
 
 
 # Catch all target. Call the same targets in each subfolder

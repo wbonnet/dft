@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = less
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 458
+#http://www.greenwoodsoftware.com/less/less-458.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

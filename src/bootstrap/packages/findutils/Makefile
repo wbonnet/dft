@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = findutils
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 4.4.2
+#http://ftp.gnu.org/gnu/findutils/findutils-4.4.2.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

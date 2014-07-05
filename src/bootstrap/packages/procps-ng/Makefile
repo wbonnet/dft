@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = procps-ng
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 3.3.9
+#http://sourceforge.net/projects/procps-ng/files/Production/procps-ng-3.3.9.tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

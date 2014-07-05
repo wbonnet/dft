@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = expect
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 5.17
+#ftp://ftp.astron.com/pub/file/file-5.17.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

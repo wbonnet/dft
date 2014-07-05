@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = gettext
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 0.18.3.2
+#http://ftp.gnu.org/gnu/gettext/gettext-0.18.3.2.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

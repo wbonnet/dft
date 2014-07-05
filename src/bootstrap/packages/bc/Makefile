@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = bc
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 1.06.95
+#http://alpha.gnu.org/gnu/bc/bc-1.06.95.tar.bz2
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

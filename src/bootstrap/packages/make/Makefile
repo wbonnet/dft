@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = make
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 4.0
+#http://ftp.gnu.org/gnu/make/make-4.0.tar.bz2
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

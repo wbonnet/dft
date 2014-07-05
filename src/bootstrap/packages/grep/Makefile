@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = grep
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 2.16
+#http://ftp.gnu.org/gnu/grep/grep-2.16.tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

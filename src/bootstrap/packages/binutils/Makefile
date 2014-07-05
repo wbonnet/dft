@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = binutils
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 2.24
+#http://ftp.gnu.org/gnu/binutils/binutils-2.24.tar.bz2
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

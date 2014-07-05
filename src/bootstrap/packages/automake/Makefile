@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = automake
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 1.14.1
+#http://ftp.gnu.org/gnu/automake/automake-1.14.1.tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

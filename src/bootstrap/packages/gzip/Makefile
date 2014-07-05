@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = gzip
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 1.6
+#http://ftp.gnu.org/gnu/gzip/gzip-1.6.tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

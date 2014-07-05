@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = bison
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 3.0.2
+#http://ftp.gnu.org/gnu/bison/bison-3.0.2.tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

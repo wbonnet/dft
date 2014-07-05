@@ -33,13 +33,15 @@
 SOFTWARE_UPSTREAM_NAME = bash
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 4.2
+#http://ftp.gnu.org/gnu/bash/bash-4.2.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk
 
 # Defines the patches to apply on the software
 # PATCHFILES += 0000_some_patch.diff
+# http://www.linuxfromscratch.org/patches/lfs/7.5/bash-4.2-fixes-12.patch
 
 # Include the build system root makefile
 include buildsystem/lffs.mk

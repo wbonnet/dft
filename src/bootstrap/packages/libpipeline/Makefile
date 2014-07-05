@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = libpipeline
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 1.2.6
+#http://download.savannah.gnu.org/releases/libpipeline/libpipeline-1.2.6.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

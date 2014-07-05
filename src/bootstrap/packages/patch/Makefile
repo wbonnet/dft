@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = patch
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 2.7.1
+#http://ftp.gnu.org/gnu/patch/patch-2.7.1.tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

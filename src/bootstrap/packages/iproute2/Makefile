@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = iproute2
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 3.12.0
+#http://www.kernel.org/pub/linux/utils/net/iproute2/iproute2-3.12.0.tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

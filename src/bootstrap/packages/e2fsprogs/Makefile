@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = e2fsprogs
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 1.42.9
+#http://prdownloads.sourceforge.net/e2fsprogs/e2fsprogs-1.42.9.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

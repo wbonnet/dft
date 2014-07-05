@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = gdbm
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 1.11
+#http://ftp.gnu.org/gnu/gdbm/gdbm-1.11.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

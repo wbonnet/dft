@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = groff
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 1.22.2
+#http://ftp.gnu.org/gnu/groff/groff-1.22.2.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

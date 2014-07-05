@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = mpc
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 1.0.2
+#http://www.multiprecision.org/mpc/download/mpc-1.0.2.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

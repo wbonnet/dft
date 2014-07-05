@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = psmisc
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 22.20
+#http://prdownloads.sourceforge.net/psmisc/psmisc-22.20.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

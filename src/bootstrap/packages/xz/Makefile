@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = xz
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 5.0.5
+#http://tukaani.org/xz/xz-5.0.5.tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

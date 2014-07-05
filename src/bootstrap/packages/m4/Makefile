@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = m4
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 1.4.17
+#http://ftp.gnu.org/gnu/m4/m4-1.4.17.tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

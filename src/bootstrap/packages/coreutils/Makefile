@@ -33,13 +33,15 @@
 SOFTWARE_UPSTREAM_NAME = coreutils
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 8.22
+#http://ftp.gnu.org/gnu/coreutils/coreutils-8.22.tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk
 
 # Defines the patches to apply on the software
 # PATCHFILES += 0000_some_patch.diff
+# http://www.linuxfromscratch.org/patches/lfs/7.5/coreutils-8.22-i18n-4.patch
 
 # Include the build system root makefile
 include buildsystem/lffs.mk

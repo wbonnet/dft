@@ -33,13 +33,15 @@
 SOFTWARE_UPSTREAM_NAME = glibc
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 2.19
+#http://ftp.gnu.org/gnu/glibc/glibc-2.19.tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk
 
 # Defines the patches to apply on the software
 # PATCHFILES += 0000_some_patch.diff
+# http://www.linuxfromscratch.org/patches/lfs/7.5/glibc-2.19-fhs-1.patch
 
 # Include the build system root makefile
 include buildsystem/lffs.mk

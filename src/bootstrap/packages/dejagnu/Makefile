@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = dejagnu
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 1.5.1
+#http://ftp.gnu.org/gnu/dejagnu/dejagnu-1.5.1.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

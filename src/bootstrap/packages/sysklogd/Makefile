@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = sysklogd
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 1.5
+#http://www.infodrom.org/projects/sysklogd/download/sysklogd-1.5.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

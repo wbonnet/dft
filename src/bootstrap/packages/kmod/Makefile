@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = kmod
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 16
+#http://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-16.tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

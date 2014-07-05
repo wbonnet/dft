@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = systemd
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 208
+#http://www.freedesktop.org/software/systemd/systemd-208.tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

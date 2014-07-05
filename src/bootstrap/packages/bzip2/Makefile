@@ -33,13 +33,15 @@
 SOFTWARE_UPSTREAM_NAME = bzip2
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 1.0.6
+#http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk
 
 # Defines the patches to apply on the software
 # PATCHFILES += 0000_some_patch.diff
+# http://www.linuxfromscratch.org/patches/lfs/7.5/bzip2-1.0.6-install_docs-1.patch
 
 # Include the build system root makefile
 include buildsystem/lffs.mk

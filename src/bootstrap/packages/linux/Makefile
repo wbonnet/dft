@@ -1,4 +1,4 @@
-# vim: ft=make ts=4 sw=4 noet
+ # vim: ft=make ts=4 sw=4 noet
 #
 # The contents of this file are subject to the Apache 2.0 license you may not 
 # use this file except in compliance with the License.
@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = linux
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 3.13.3
+#http://www.kernel.org/pub/linux/kernel/v3.x/linux-3.13.3.tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

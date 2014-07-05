@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = inetutils
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 1.9.2
+#http://ftp.gnu.org/gnu/inetutils/inetutils-1.9.2.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

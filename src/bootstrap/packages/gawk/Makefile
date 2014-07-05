@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = gawk
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 4.1.0
+#http://ftp.gnu.org/gnu/gawk/gawk-4.1.0.tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

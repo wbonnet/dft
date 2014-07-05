@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = man-pages
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 3.59
+#http://www.kernel.org/pub/linux/docs/man-pages/man-pages-3.59.tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = ncurses
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 5.9
+#http://ftp.gnu.org/gnu/ncurses/ncurses-5.9.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

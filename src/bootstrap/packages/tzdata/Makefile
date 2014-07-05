@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = tzdata
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 2013i
+#http://www.iana.org/time-zones/repository/releases/tzdata2013i.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

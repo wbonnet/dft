@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = diffutils
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 3.3
+#http://ftp.gnu.org/gnu/diffutils/diffutils-3.3.tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

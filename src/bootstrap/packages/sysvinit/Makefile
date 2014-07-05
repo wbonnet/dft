@@ -33,13 +33,15 @@
 SOFTWARE_UPSTREAM_NAME = sysvinit
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 2.88dsf
+#http://download.savannah.gnu.org/releases/sysvinit/sysvinit-2.88dsf.tar.bz2
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk
 
 # Defines the patches to apply on the software
 # PATCHFILES += 0000_some_patch.diff
+# http://www.linuxfromscratch.org/patches/lfs/7.5/sysvinit-2.88dsf-consolidated-1.patch
 
 # Include the build system root makefile
 include buildsystem/lffs.mk

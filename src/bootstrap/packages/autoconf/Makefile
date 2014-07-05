@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = autoconf
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 2.69
+#http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

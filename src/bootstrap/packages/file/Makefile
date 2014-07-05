@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = file
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 5.45
+#http://prdownloads.sourceforge.net/expect/expect5.45.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

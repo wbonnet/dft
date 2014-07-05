@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = check
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 0.9.12
+# http://sourceforge.net/projects/check/files/check/0.9.12/check-0.9.12.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

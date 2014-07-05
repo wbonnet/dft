@@ -33,7 +33,8 @@
 SOFTWARE_UPSTREAM_NAME = libtool
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 2.4.2
+#http://ftp.gnu.org/gnu/libtool/libtool-2.4.2.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk
