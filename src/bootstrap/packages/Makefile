@@ -29,9 +29,13 @@
 #
 #
 
-# Store the software version
+# Replace dashes from target by spaces
 ARGLIST = $(shell echo $* | tr \- \  )
+
+# Store the software name
 NEW_SOFTWARE_NAME    = $(word 1, $(ARGLIST))
+
+# Store the software version
 NEW_SOFTWARE_VERSION = $(word 2, $(ARGLIST))
 
 # Create a new software version entry in the repository
