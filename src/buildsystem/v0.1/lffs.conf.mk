@@ -77,7 +77,6 @@ WORK_SRC            ?= $(WORK_DIR)/$(SOFTWARE_FULLNAME)
 OBJ_DIR             ?= $(WORK_SRC)
 INSTALL_DIR         ?= $(WORK_ROOT_DIR)/install-$(BUILDER_ARCHITECTURE)
 TEMP_DIR            ?= $(WORK_DIR)/tmp
-TEMP_DIR_FULL_PATH  ?= $(shell pwd)/$(TEMP_DIR)
 CHECKSUM_FILE       ?= checksums
 LOG_DIR             ?= log
 

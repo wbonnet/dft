@@ -56,7 +56,23 @@ DISPLAY_COMPLETED_TARGET_NAME  = @echo "    completed [$@] "
 #
 # Cookie maker
 #
-TARGET_DONE = @mkdir -p $(dir $(COOKIEROOTDIR)/$@) && touch $(COOKIEROOTDIR)/$@
+TARGET_DONE = @mkdir -p $(dir $(COOKIE_ROOT_DIR)/$@) && touch $(COOKIE_ROOT_DIR)/$@
+
+# ------------------------------------------------------------------------------
+#
+# Directory maker used by the base rules
+#
+$(sort $(BUILD_SYSTEM_ROOT) $(FILE_DIR) $(WORK_ROOT_DIR) $(WORK_DIR) $(DOWNLOAD_DIR) $(PARTIAL_DIR) $(COOKIE_ROOT_DIR) $(EXTRACT_DIR) $(WORK_SRC) $(OBJ_DIR) $(INSTALL_DIR) $(PKG_DIR) $(LOG_DIR) $(PATCH_DIR)):
+	@if test -d $@; then : ; else \
+		echo making $@; \
+		install -d $@; \
+	fi
+
+$(COOKIE_DIR)/%:
+	@if test -d $@; then : ; else \
+		install -d $@; \
+	fi
+
 
 # ------------------------------------------------------------------------------
 #
@@ -161,7 +177,7 @@ help :
 # Delete the work directory and its contents
 #
 clean: 
-	@rm -rf $(PARTIALDIR) $(WORKDIR) $(INSTALLDIR) $(PACKAGEDIR) $(COOKIEROOTDIR) 
+	@rm -rf $(PARTIAL_DIR) $(WORK_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(COOKIE_ROOT_DIR) 
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 
 
@@ -170,7 +186,7 @@ clean:
 # Delete the root work directory and its contents
 #
 distclean: 
-	@rm -rf $(WORKROOTDIR) $(COOKIEROOTDIR) $(DOWNLOADDIR)
+	@rm -rf $(WORK_ROOT_DIR) $(COOKIE_ROOT_DIR) $(DOWNLOAD_DIR)
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 
 
@@ -210,7 +226,6 @@ show-config :
 	@echo "  OBJ_DIR                           $(OBJ_DIR)"
 	@echo "  INSTALL_DIR                       $(INSTALL_DIR)"
 	@echo "  TEMP_DIR                          $(TEMP_DIR)"
-	@echo "  TEMP_DIR_FULL_PATH                $(TEMP_DIR_FULL_PATH)"
 	@echo "  LOG_DIR                           $(LOG_DIR)"
 	@echo
 	@echo "  CHECKSUM_FILE                     $(CHECKSUM_FILE)"
@@ -227,6 +242,12 @@ show-config :
 	@echo "x CONFIGURE_SCRIPTS                 $(CONFIGURE_SCRIPTS)"
 	@echo "x BUILD_SCRIPTS                     $(BUILD_SCRIPTS)"
 
+# ============================== TARGET DEFINITION =============================
+
+prerequisite : $(COOKIEDIR) pre-everything 
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
+
 
 # ------------------------------------------------------------------------------
 #
@@ -239,9 +260,10 @@ show-config :
 
 # Construct the list of files path under downloaddir which will be processed by
 # the $(DOWNLOAD_DIR)/% target
-FETCH_TARGETS ?=  $(addprefix $(DOWNLOAD_DIR)/,$(DISTFILES))
+FETCH_TARGETS ?=  $(addprefix $(DOWNLOAD_DIR)/,$(DIST_FILES))
 
 fetch : prerequisite $(DOWNLOAD_DIR) $(COOKIE_ROOT_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
+	@echo Targets : $(FETCH_TARGETS)
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
