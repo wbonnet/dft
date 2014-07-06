@@ -29,12 +29,15 @@
 #
 #
 
-# Defines the upstreal software name
+# Defines the upstream software name
 SOFTWARE_UPSTREAM_NAME = binutils
 
 # Defines the software version
 SOFTWARE_VERSION = 2.24
 #http://ftp.gnu.org/gnu/binutils/binutils-2.24.tar.bz2
+
+# If this software is a GNU project, then set the variable
+GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

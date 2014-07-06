@@ -32,6 +32,19 @@
 
 # ------------------------------------------------------------------------------
 #
+# Retrieves informations about the host used to build the softwares
+#
+# ------------------------------------------------------------------------------
+
+BUILDER_HOSTNAME                 := $(shell uname -n)
+BUILDER_ARCHITECTURE             := $(shell uname -s | tr '[:upper:]' '[:lower:]')-$(shell uname -m | tr '[:upper:]' '[:lower:]')
+BUILDER_OPERATING_SYSTEM         := $(shell uname -s | tr '[:upper:]' '[:lower:]')
+BUILDER_OPERATING_SYSTEM_FLAVOR  := $(word 3, $(shell lsb_release -i | tr '[:lower:]' '[:upper:]'))
+BUILDER_OPERATING_SYSTEM_VERSION := $(word 2, $(shell lsb_release -c | tr '[:lower:]' '[:upper:]'))
+
+
+# ------------------------------------------------------------------------------
+#
 # Defines the set of variables used for GNU project softwares 
 #
 # ------------------------------------------------------------------------------
@@ -44,32 +57,33 @@ GNU_NMIRROR  = $(GNU_NGNUROOT)/$(GNU_PROJECT)/
 
 
 
-
+# ------------------------------------------------------------------------------
+#
 # Defines the default values for directories
-#BASEDIR ?= $(CURDIR)
-#FILEDIR ?= files
-#PATCHDIR ?= patches
-#WORKROOTDIR ?= work
-#WORKDIR ?= $(WORKROOTDIR)/build-$(THIS_ARCHITECTURE)
-#DOWNLOADDIR ?= $(WORKROOTDIR)/download
-#PARTIALDIR ?= $(DOWNLOADDIR)/partial
-#COOKIEROOTDIR ?= $(WORKROOTDIR)/cookies-$(THIS_ARCHITECTURE)
-#COOKIEDIR ?= $(COOKIEROOTDIR)
-#EXTRACTDIR ?= $(WORKDIR)
-#WORKSRC ?= $(WORKDIR)/$(SOFTWARE_DISTNAME)
-#OBJDIR ?= $(WORKSRC)
-#INSTALLDIR ?= $(WORKROOTDIR)/install-$(THIS_ARCHITECTURE)
-#PKGDIR ?= $(WORKROOTDIR)/package
-#SCRATCHDIR ?= tmp
-#TMPDIR ?= $(WORKDIR)/tmp
-#TMPDIR_FULLPATH ?= $(shell pwd)/$(TMPDIR)
-#CHECKSUM_FILE ?= checksums
-#MANIFEST_FILE ?= manifest
-#LOGDIR ?= log
+#
+# ------------------------------------------------------------------------------
+
+BASE_DIR            ?= $(CURDIR)
+FILE_DIR            ?= files
+PATCH_DIR           ?= patches
+WORK_ROOT_DIR       ?= work
+WORK_DIR            ?= $(WORK_ROOT_DIR)/build-$(BUILDER_ARCHITECTURE)
+DOWNLOAD_DIR        ?= $(WORK_ROOT_DIR)/download
+PARTIAL_DIR         ?= $(DOWNLOAD_DIR)/partial
+COOKIE_ROOT_DIR     ?= $(WORK_ROOT_DIR)/cookies-$(BUILDER_ARCHITECTURE)
+COOKIE_DIR          ?= $(COOKIE_ROOT_DIR)
+EXTRACT_DIR         ?= $(WORK_DIR)
+WORK_SRC            ?= $(WORK_DIR)/$(SOFTWARE_FULLNAME)
+OBJ_DIR             ?= $(WORK_SRC)
+INSTALL_DIR         ?= $(WORK_ROOT_DIR)/install-$(BUILDER_ARCHITECTURE)
+TEMP_DIR            ?= $(WORK_DIR)/tmp
+TEMP_DIR_FULL_PATH  ?= $(shell pwd)/$(TEMP_DIR)
+CHECKSUM_FILE       ?= checksums
+LOG_DIR             ?= log
 
 # Defines the default targets used for building
-#CONFIGURE_SCRIPTS ?= $(WORKSRC)/configure
-#BUILD_SCRIPTS     ?= $(WORKSRC)/Makefile
+#CONFIGURE_SCRIPTS   ?= $(WORKSRC)/configure
+#BUILD_SCRIPTS       ?= $(WORKSRC)/Makefile
 
 # prepend the local file listing
 #FILE_SITES = $(foreach DIR,$(FILEDIR) $(GARCHIVEPATH),file://$(DIR)/)

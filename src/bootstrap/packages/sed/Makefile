@@ -29,12 +29,15 @@
 #
 #
 
-# Defines the upstreal software name
+# Defines the upstream software name
 SOFTWARE_UPSTREAM_NAME = sed
 
 # Defines the software version
 SOFTWARE_VERSION = 4.2.2
 #http://ftp.gnu.org/gnu/sed/sed-4.2.2.tar.bz2
+
+# If this software is a GNU project, then set the variable
+GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

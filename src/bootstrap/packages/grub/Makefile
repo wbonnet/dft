@@ -29,12 +29,18 @@
 #
 #
 
-# Defines the upstreal software name
+# Defines the upstream software name
 SOFTWARE_UPSTREAM_NAME = grub
 
 # Defines the software version
 SOFTWARE_VERSION = 2.00
 #http://ftp.gnu.org/gnu/grub/grub-2.00.tar.xz
+
+# If this software is a GNU project, then set the variable
+GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
+
+# Defines the upstream source archive filename
+SOFTWARE_SOURCE_FILES = $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

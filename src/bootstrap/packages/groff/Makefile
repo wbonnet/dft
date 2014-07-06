@@ -29,12 +29,18 @@
 #
 #
 
-# Defines the upstreal software name
+# Defines the upstream software name
 SOFTWARE_UPSTREAM_NAME = groff
 
 # Defines the software version
 SOFTWARE_VERSION = 1.22.2
 #http://ftp.gnu.org/gnu/groff/groff-1.22.2.tar.gz
+
+# If this software is a GNU project, then set the variable
+GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
+
+# Defines the upstream source archive filename
+SOFTWARE_SOURCE_FILES = $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

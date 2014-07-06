@@ -29,12 +29,18 @@
 #
 #
 
-# Defines the upstreal software name
+# Defines the upstream software name
 SOFTWARE_UPSTREAM_NAME = kbd
 
 # Defines the software version
 SOFTWARE_VERSION = 2.0.1
 #http://ftp.altlinux.org/pub/people/legion/kbd/kbd-2.0.1.tar.gz
+
+# If this software is a GNU project, then set the variable
+# GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
+
+# Defines the upstream source archive filename
+SOFTWARE_SOURCE_FILES = $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

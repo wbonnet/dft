@@ -29,12 +29,18 @@
 #
 #
 
-# Defines the upstreal software name
+# Defines the upstream software name
 SOFTWARE_UPSTREAM_NAME = mpfr
 
 # Defines the software version
 SOFTWARE_VERSION = 3.1.2
 #http://www.mpfr.org/mpfr-3.1.2/mpfr-3.1.2.tar.xz
+
+# If this software is a GNU project, then set the variable
+# GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
+
+# Defines the upstream source archive filename
+SOFTWARE_SOURCE_FILES = $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

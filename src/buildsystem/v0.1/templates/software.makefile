@@ -29,11 +29,14 @@
 #
 #
 
-# Defines the upstreal software name
+# Defines the upstream software name
 SOFTWARE_UPSTREAM_NAME = %%SOFTWARE_UPSTREAM_NAME%%
 
 # Defines the software version
 SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+
+# If this software is a GNU project, then set the variable
+# GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

@@ -36,46 +36,46 @@
 TAR_ARGS = --no-same-owner
 
 extract-archive-%.tar : 
-	@echo "        extracting $(DOWNLOADDIR)/$*.tar"
-	@tar $(TAR_ARGS) -xf $(DOWNLOADDIR)/$*.tar -C $(EXTRACTDIR)
+	@echo "        extracting $(DOWNLOAD_DIR)/$*.tar"
+	@tar $(TAR_ARGS) -xf $(DOWNLOAD_DIR)/$*.tar -C $(EXTRACT_DIR)
 	$(TARGET_DONE)
 
 extract-archive-%.tar.gz : 
-	@echo "        extracting $(DOWNLOADDIR)/$*.tar.gz"
-	@tar $(TAR_ARGS) -xzf $(DOWNLOADDIR)/$*.tar.gz -C $(EXTRACTDIR)
+	@echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz"
+	@tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tar.gz -C $(EXTRACT_DIR)
 	$(TARGET_DONE)
 
 extract-archive-%.tgz : 
-	@echo "        extracting $(DOWNLOADDIR)/$*.tgz"
-	@tar $(TAR_ARGS) -xzf $(DOWNLOADDIR)/$*.tgz -C $(EXTRACTDIR)
+	@echo "        extracting $(DOWNLOAD_DIR)/$*.tgz"
+	@tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tgz -C $(EXTRACT_DIR)
 	$(TARGET_DONE)
 
 extract-archive-%.tar.bz2 : 
-	@echo "        extracting $(DOWNLOADDIR)/$*.tar.bz2"
-	@tar $(TAR_ARGS) -xjf $(DOWNLOADDIR)/$*.tar.bz2 -C $(EXTRACTDIR)
+	@echo "        extracting $(DOWNLOAD_DIR)/$*.tar.bz2"
+	@tar $(TAR_ARGS) -xjf $(DOWNLOAD_DIR)/$*.tar.bz2 -C $(EXTRACT_DIR)
 	$(TARGET_DONE)
 
 extract-archive-%.tar.xz : 
-	@echo "        extracting $(DOWNLOADDIR)/$*.tar.xz"
-	@tar $(TAR_ARGS) -xJf $(DOWNLOADDIR)/$*.tar.xz -C $(EXTRACTDIR)
+	@echo "        extracting $(DOWNLOAD_DIR)/$*.tar.xz"
+	@tar $(TAR_ARGS) -xJf $(DOWNLOAD_DIR)/$*.tar.xz -C $(EXTRACT_DIR)
 	$(TARGET_DONE)	
 
 extract-archive-%.zip : 
-	@echo "        extracting $(DOWNLOADDIR)/$*.zip"
-	@unzip $(DOWNLOADDIR)/$*.zip -d $(EXTRACTDIR)
+	@echo "        extracting $(DOWNLOAD_DIR)/$*.zip"
+	@unzip $(DOWNLOAD_DIR)/$*.zip -d $(EXTRACT_DIR)
 	$(TARGET_DONE)
 
 # ------------------------------------------------------------------------------
 #
 # patch utilities
 #
-PATCHDIRLEVEL ?= 0
-PATCHDIRFUZZ  ?= 2
-PATCH_ARGS     = --directory=$(WORKSRC) --strip=$(PATCHDIRLEVEL) --fuzz=$(PATCHDIRFUZZ)
+PATCH_DIR_LEVEL ?= 0
+PATCH_DIR_FUZZ  ?= 2
+PATCH_ARGS       = --directory=$(WORK_SRC) --strip=$(PATCH_DIR_LEVEL) --fuzz=$(PATCH_DIR_FUZZ)
 
 apply-patch-% : 
-	@echo " ==> Applying $(PATCHDIR)/$*"
-	patch $(PATCH_ARGS) < $(PATCHDIR)/$*
+	@echo " ==> Applying $(PATCH_DIR)/$*"
+	patch $(PATCH_ARGS) < $(PATCH_DIR)/$*
 	$(TARGET_DONE)
 
 # ------------------------------------------------------------------------------
@@ -87,7 +87,7 @@ apply-patch-% :
 # mentions the file without an "OK".
 checksum-% : $(CHECKSUM_FILE) 
 	@if grep -- '$*' $(CHECKSUM_FILE) > /dev/null; then  \
-		if cat $(CHECKSUM_FILE) | (cd $(DOWNLOADDIR); LC_ALL="C" LANG="C" md5sum -c 2>&1) | grep -- '$*' | grep -v ':[ ]\+OK' > /dev/null; then \
+		if cat $(CHECKSUM_FILE) | (cd $(DOWNLOAD_DIR); LC_ALL="C" LANG="C" md5sum -c 2>&1) | grep -- '$*' | grep -v ':[ ]\+OK' > /dev/null; then \
 			echo "        \033[1m[Failed] : checksum of file $* is invalid\033[0m" ; \
 			false; \
 		else \

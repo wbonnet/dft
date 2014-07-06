@@ -29,12 +29,18 @@
 #
 #
 
-# Defines the upstreal software name
+# Defines the upstream software name
 SOFTWARE_UPSTREAM_NAME = less
 
 # Defines the software version
 SOFTWARE_VERSION = 458
 #http://www.greenwoodsoftware.com/less/less-458.tar.gz
+
+# If this software is a GNU project, then set the variable
+# GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
+
+# Defines the upstream source archive filename
+SOFTWARE_SOURCE_FILES = $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

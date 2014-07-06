@@ -29,12 +29,18 @@
 #
 #
 
-# Defines the upstreal software name
+# Defines the upstream software name
 SOFTWARE_UPSTREAM_NAME = systemd
 
 # Defines the software version
 SOFTWARE_VERSION = 208
 #http://www.freedesktop.org/software/systemd/systemd-208.tar.xz
+
+# If this software is a GNU project, then set the variable
+# GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
+
+# Defines the upstream source archive filename
+SOFTWARE_SOURCE_FILES = $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

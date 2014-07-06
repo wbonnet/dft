@@ -46,6 +46,20 @@ endif
 
 # ------------------------------------------------------------------------------
 #
+# Used for output...
+#
+DISPLAY_TARGET_NOT_IMPLEMENTED = @echo "Target [$@] is not implemented !"
+DISPLAY_COMPLETED_TARGET_NAME  = @echo "    completed [$@] "
+
+
+# ------------------------------------------------------------------------------
+#
+# Cookie maker
+#
+TARGET_DONE = @mkdir -p $(dir $(COOKIEROOTDIR)/$@) && touch $(COOKIEROOTDIR)/$@
+
+# ------------------------------------------------------------------------------
+#
 # Determine this Makefile directory which is the root of the build system
 # 
 BUILD_SYSTEM_ROOT := $(dir $(lastword $(MAKEFILE_LIST)))
@@ -166,52 +180,52 @@ distclean:
 #
 show-configuration : show-config
 show-config :
-	@echo "SOFTWARE_UPSTREAM_NAME     $(SOFTWARE_UPSTREAM_NAME)"
-	@echo "SOFTWARE_VERSION           $(SOFTWARE_VERSION)"
-	@echo "SOFTWARE_FULLNAME          $(SOFTWARE_FULLNAME)"
-	@echo "SOFTWARE_SOURCE_FILES      $(SOFTWARE_SOURCE_FILES)"
+	@echo "Software configuration"
+	@echo "  SOFTWARE_UPSTREAM_NAME            $(SOFTWARE_UPSTREAM_NAME)"
+	@echo "  SOFTWARE_VERSION                  $(SOFTWARE_VERSION)"
+	@echo "  SOFTWARE_FULLNAME                 $(SOFTWARE_FULLNAME)"
+	@echo "  SOFTWARE_SOURCE_FILES             $(SOFTWARE_SOURCE_FILES)"
 	@echo
-	@echo "GNU_PROJECT                $(GNU_PROJECT)"
+	@echo "  GNU_PROJECT                       $(GNU_PROJECT)"
+	@echo "  SF_PROJECT                        $(SF_PROJECT)"
 	@echo
-	@echo "x UPSTREAM_SOURCE_ACCESS : $(UPSTREAM_SOURCE_ACCESS)"
-	@echo "x UPSTREAM_SOURCES_URL   : $(UPSTREAM_SOURCES_URL)"
+	@echo "x UPSTREAM_SOURCE_ACCESS            $(UPSTREAM_SOURCE_ACCESS)"
+	@echo "x UPSTREAM_SOURCES_URL              $(UPSTREAM_SOURCES_URL)"
 	@echo
-	@echo "x ALLFILES               : $(ALLFILES)"
+	@echo "x ALL_FILES                         $(ALL_FILES)"
 	@echo
-	@echo "x BUILD_SYSTEM_DIR       : $(BUILD_SYSTEM_DIR)"
-	@echo "  Répertoire contenant le Makefile courant"
-	@echo "x BASEDIR                : $(BASEDIR)"
-	@echo "x WORKROOTDIR            : $(WORKROOTDIR)"
-	@echo "x WORKDIR                : $(WORKDIR)"
-	@echo "x FILEDIR                : $(FILEDIR)"
-	@echo "x PATCHDIR               : $(PATCHDIR)"
-	@echo "x DOWNLOADDIR            : $(DOWNLOADDIR)"
-	@echo "x PARTIALDIR             : $(PARTIALDIR)"
-	@echo "x COOKIEROOTDIR          : $(COOKIEROOTDIR)"
-	@echo "x COOKIEDIR              : $(COOKIEDIR)"
-	@echo "x EXTRACTDIR             : $(EXTRACTDIR)"
-	@echo "x WORKSRC                : $(WORKSRC)"
-	@echo "x OBJDIR                 : $(OBJDIR)"
-	@echo "x INSTALLDIR             : $(INSTALLDIR)"
-	@echo "x PKGDIR                 : $(PKGDIR)"
-	@echo "x SCRATCHDIR             : $(SCRATCHDIR)"
-	@echo "x TMPDIR                 : $(TMPDIR)"
-	@echo "x TMPDIR_FULLPATH        : $(TMPDIR_FULLPATH)"
-	@echo "x LOGDIR                 : $(LOGDIR)"
+	@echo "Directories configuration"
+	@echo "  BUILD_SYSTEM_ROOT                 $(BUILD_SYSTEM_ROOT)"
+	@echo "  BASE_DIR                          $(BASE_DIR)"
+	@echo "  WORK_ROOT_DIR                     $(WORK_ROOT_DIR)"
+	@echo "  WORK_DIR                          $(WORK_DIR)"
+	@echo "  FILE_DIR                          $(FILE_DIR)"
+	@echo "  PATCH_DIR                         $(PATCH_DIR)"
+	@echo "  DOWNLOAD_DIR                      $(DOWNLOAD_DIR)"
+	@echo "  PARTIAL_DIR                       $(PARTIAL_DIR)"
+	@echo "  COOKIE_ROOT_DIR                   $(COOKIE_ROOT_DIR)"
+	@echo "  COOKIE_DIR                        $(COOKIE_DIR)"
+	@echo "  EXTRACT_DIR                       $(EXTRACT_DIR)"
+	@echo "  WORK_SRC                          $(WORK_SRC)"
+	@echo "  OBJ_DIR                           $(OBJ_DIR)"
+	@echo "  INSTALL_DIR                       $(INSTALL_DIR)"
+	@echo "  TEMP_DIR                          $(TEMP_DIR)"
+	@echo "  TEMP_DIR_FULL_PATH                $(TEMP_DIR_FULL_PATH)"
+	@echo "  LOG_DIR                           $(LOG_DIR)"
 	@echo
-	@echo "x CHECKSUM_FILE          : $(CHECKSUM_FILE)"
-	@echo "x MANIFEST_FILE          : $(MANIFEST_FILE)"
+	@echo "  CHECKSUM_FILE                     $(CHECKSUM_FILE)"
 	@echo
-	@echo "x THIS_HOSTNAME          : $(THIS_HOSTNAME)"
-	@echo "x THIS_ARCHITECTURE      : $(THIS_ARCHITECTURE)"
-	@echo "x THIS_OPERATING_SYSTEM  : $(THIS_OPERATING_SYSTEM)"
-	@echo "x THIS_OPERATING_SYSTEM_FLAVOR : $(THIS_OPERATING_SYSTEM_FLAVOR)"
+	@echo "  BUILDER_ARCHITECTURE              $(BUILDER_ARCHITECTURE)"
+	@echo "  BUILDER_HOSTNAME                  $(BUILDER_HOSTNAME)"
+	@echo "  BUILDER_OPERATING_SYSTEM          $(BUILDER_OPERATING_SYSTEM)"
+	@echo "  BUILDER_OPERATING_SYSTEM_FLAVOR   $(BUILDER_OPERATING_SYSTEM_FLAVOR)"
+	@echo "  BUILDER_OPERATING_SYSTEM_VERSION  $(BUILDER_OPERATING_SYSTEM_VERSION)"
 	@echo
-	@echo "x BUILD_ENV  : $(BUILD_ENV)"
-	@echo "x BUILD_ARGS : $(BUILD_ARGS)"
+	@echo "x BUILD_ENV                         $(BUILD_ENV)"
+	@echo "x BUILD_ARGS                        $(BUILD_ARGS)"
 	@echo
-	@echo "x CONFIGURE_SCRIPTS      : $(CONFIGURE_SCRIPTS)"
-	@echo "x 	BUILD_SCRIPTS          : $(BUILD_SCRIPTS)"
+	@echo "x CONFIGURE_SCRIPTS                 $(CONFIGURE_SCRIPTS)"
+	@echo "x BUILD_SCRIPTS                     $(BUILD_SCRIPTS)"
 
 
 # ------------------------------------------------------------------------------
@@ -224,23 +238,23 @@ show-config :
 #
 
 # Construct the list of files path under downloaddir which will be processed by
-# the $(DOWNLOADDIR)/% target
-FETCH_TARGETS ?=  $(addprefix $(DOWNLOADDIR)/,$(DISTFILES))
+# the $(DOWNLOAD_DIR)/% target
+FETCH_TARGETS ?=  $(addprefix $(DOWNLOAD_DIR)/,$(DISTFILES))
 
-fetch : prerequisite $(DOWNLOADDIR) $(COOKIEROOTDIR) pre-fetch $(FETCH_TARGETS) post-fetch
+fetch : prerequisite $(DOWNLOAD_DIR) $(COOKIE_ROOT_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
 #
 # TODO: Handle several sources for a file
 #
-$(DOWNLOADDIR)/% :
-	@if test -f $(COOKIEDIR)/checksum-$* ; then \
+$(DOWNLOAD_DIR)/% :
+	@if test -f $(COOKIE_DIR)/checksum-$* ; then \
 		true ; \
 	else \
-		if [ "$(UPSTREAM_SOURCE_ACCESS)" = "wget" ] ; then \
-			wget $(WGET_OPTS) -T 30 -c -P $(PARTIALDIR) $(UPSTREAM_SOURCES_URL)/$* ; \
-			mv $(PARTIALDIR)/$* $@ ; \
+		if [ "$(UPSTREAM_SOURCE_ACCESS_TOOL)" = "wget" ] ; then \
+			wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(UPSTREAM_SOURCES_URL)/$* ; \
+			mv $(PARTIAL_DIR)/$* $@ ; \
 			if test -r $@ ; then \
 				true ; \
 			else \
@@ -248,7 +262,7 @@ $(DOWNLOADDIR)/% :
 				false; \
 			fi; \
 		else \
-			echo "Fetch method $(UPSTREAM_SOURCE_ACCESS) is not implemented" ; \
+			echo "Fetch method $(UPSTREAM_SOURCE_ACCESS_TOOL) is not implemented" ; \
 		fi ; \
 	fi ;
 

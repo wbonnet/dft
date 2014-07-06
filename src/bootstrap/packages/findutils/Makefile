@@ -29,15 +29,21 @@
 #
 #
 
-# Defines the upstreal software name
+# Defines the upstream software name
 SOFTWARE_UPSTREAM_NAME = findutils
 
 # Defines the software version
 SOFTWARE_VERSION = 4.4.2
 #http://ftp.gnu.org/gnu/findutils/findutils-4.4.2.tar.gz
 
+# If this software is a GNU project, then set the variable
+GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
+
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk
+
+# Defines the upstream source archive filename
+SOFTWARE_SOURCE_FILES = $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.gz
 
 # Defines the patches to apply on the software
 # PATCHFILES += 0000_some_patch.diff
