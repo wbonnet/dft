@@ -39,6 +39,41 @@
 GNU_SITE     = http://ftp.gnu.org
 GNU_GNUROOT  = $(GNU_SITE)/gnu
 GNU_NGNUROOT = $(GNU_SITE)/non-gnu
-GNU_PROJECT ?= $(or $(GNU_PROJ),$(NAME))
 GNU_MIRROR   = $(GNU_GNUROOT)/$(GNU_PROJECT)/
 GNU_NMIRROR  = $(GNU_NGNUROOT)/$(GNU_PROJECT)/
+
+
+
+
+# Defines the default values for directories
+#BASEDIR ?= $(CURDIR)
+#FILEDIR ?= files
+#PATCHDIR ?= patches
+#WORKROOTDIR ?= work
+#WORKDIR ?= $(WORKROOTDIR)/build-$(THIS_ARCHITECTURE)
+#DOWNLOADDIR ?= $(WORKROOTDIR)/download
+#PARTIALDIR ?= $(DOWNLOADDIR)/partial
+#COOKIEROOTDIR ?= $(WORKROOTDIR)/cookies-$(THIS_ARCHITECTURE)
+#COOKIEDIR ?= $(COOKIEROOTDIR)
+#EXTRACTDIR ?= $(WORKDIR)
+#WORKSRC ?= $(WORKDIR)/$(SOFTWARE_DISTNAME)
+#OBJDIR ?= $(WORKSRC)
+#INSTALLDIR ?= $(WORKROOTDIR)/install-$(THIS_ARCHITECTURE)
+#PKGDIR ?= $(WORKROOTDIR)/package
+#SCRATCHDIR ?= tmp
+#TMPDIR ?= $(WORKDIR)/tmp
+#TMPDIR_FULLPATH ?= $(shell pwd)/$(TMPDIR)
+#CHECKSUM_FILE ?= checksums
+#MANIFEST_FILE ?= manifest
+#LOGDIR ?= log
+
+# Defines the default targets used for building
+#CONFIGURE_SCRIPTS ?= $(WORKSRC)/configure
+#BUILD_SCRIPTS     ?= $(WORKSRC)/Makefile
+
+# prepend the local file listing
+#FILE_SITES = $(foreach DIR,$(FILEDIR) $(GARCHIVEPATH),file://$(DIR)/)
+
+# Definition of the package that must be installed on each build platform
+#PREREQUISITE_BASE_PKGS ?= make
+#PREREQUISITE_BASE_PKGS_UBUNTU ?= build-essential

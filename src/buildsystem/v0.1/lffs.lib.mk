@@ -29,3 +29,76 @@
 #
 #
 
+# ------------------------------------------------------------------------------
+#
+# archive extraction utilities
+#
+TAR_ARGS = --no-same-owner
+
+extract-archive-%.tar : 
+	@echo "        extracting $(DOWNLOADDIR)/$*.tar"
+	@tar $(TAR_ARGS) -xf $(DOWNLOADDIR)/$*.tar -C $(EXTRACTDIR)
+	$(TARGET_DONE)
+
+extract-archive-%.tar.gz : 
+	@echo "        extracting $(DOWNLOADDIR)/$*.tar.gz"
+	@tar $(TAR_ARGS) -xzf $(DOWNLOADDIR)/$*.tar.gz -C $(EXTRACTDIR)
+	$(TARGET_DONE)
+
+extract-archive-%.tgz : 
+	@echo "        extracting $(DOWNLOADDIR)/$*.tgz"
+	@tar $(TAR_ARGS) -xzf $(DOWNLOADDIR)/$*.tgz -C $(EXTRACTDIR)
+	$(TARGET_DONE)
+
+extract-archive-%.tar.bz2 : 
+	@echo "        extracting $(DOWNLOADDIR)/$*.tar.bz2"
+	@tar $(TAR_ARGS) -xjf $(DOWNLOADDIR)/$*.tar.bz2 -C $(EXTRACTDIR)
+	$(TARGET_DONE)
+
+extract-archive-%.tar.xz : 
+	@echo "        extracting $(DOWNLOADDIR)/$*.tar.xz"
+	@tar $(TAR_ARGS) -xJf $(DOWNLOADDIR)/$*.tar.xz -C $(EXTRACTDIR)
+	$(TARGET_DONE)	
+
+extract-archive-%.zip : 
+	@echo "        extracting $(DOWNLOADDIR)/$*.zip"
+	@unzip $(DOWNLOADDIR)/$*.zip -d $(EXTRACTDIR)
+	$(TARGET_DONE)
+
+# ------------------------------------------------------------------------------
+#
+# patch utilities
+#
+PATCHDIRLEVEL ?= 0
+PATCHDIRFUZZ  ?= 2
+PATCH_ARGS     = --directory=$(WORKSRC) --strip=$(PATCHDIRLEVEL) --fuzz=$(PATCHDIRFUZZ)
+
+apply-patch-% : 
+	@echo " ==> Applying $(PATCHDIR)/$*"
+	patch $(PATCH_ARGS) < $(PATCHDIR)/$*
+	$(TARGET_DONE)
+
+# ------------------------------------------------------------------------------
+#
+# checksum utilities
+#
+
+# Check a given file's checksum against $(CHECKSUM_FILE) and error out if it 
+# mentions the file without an "OK".
+checksum-% : $(CHECKSUM_FILE) 
+	@if grep -- '$*' $(CHECKSUM_FILE) > /dev/null; then  \
+		if cat $(CHECKSUM_FILE) | (cd $(DOWNLOADDIR); LC_ALL="C" LANG="C" md5sum -c 2>&1) | grep -- '$*' | grep -v ':[ ]\+OK' > /dev/null; then \
+			echo "        \033[1m[Failed] : checksum of file $* is invalid\033[0m" ; \
+			false; \
+		else \
+			echo "        [  OK   ] : $*" ; \
+		fi \
+	else  \
+		echo "        \033[1m[Missing] : $* is not in the checksum file\033[0m" ; \
+		false; \
+	fi
+	$(TARGET_DONE)
+
+$(CHECKSUM_FILE):
+	@touch $(CHECKSUM_FILE)
+
