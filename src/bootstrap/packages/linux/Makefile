@@ -34,7 +34,7 @@ SOFTWARE_UPSTREAM_NAME = linux
 
 # Defines the software version
 SOFTWARE_VERSION = 3.13.3
-#http://www.kernel.org/pub/linux/kernel/v3.x/linux-3.13.3.tar.xz
+SOFTWARE_UPSTREAM_SITES = http://www.kernel.org/pub/linux/kernel/v3.x/	
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
