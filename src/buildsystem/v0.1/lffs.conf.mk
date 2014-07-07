@@ -55,6 +55,20 @@ GNU_NGNUROOT = $(GNU_SITE)/non-gnu
 GNU_MIRROR   = $(GNU_GNUROOT)/$(GNU_PROJECT)/
 GNU_NMIRROR  = $(GNU_NGNUROOT)/$(GNU_PROJECT)/
 
+SAVANNAH_SITE   = http://ftp.gnu.org
+SAVANNAH_ROOT   = $(SAVANNAH_SITE)/releases
+SAVANNAH_MIRROR = $(SAVANNAH_ROOT)/$(SAVANNAH_PROJECT)/
+
+
+# ------------------------------------------------------------------------------
+#
+# Defines the set of variables used for SourceForge project softwares 
+#
+# ------------------------------------------------------------------------------
+
+SF_SITE     = http://prdownloads.sourceforge.net
+SF_ROOT     = $(SF_SITE)/gnu
+SF_MIRROR   = $(SF_ROOT)/$(SF_PROJECT)/
 
 
 # ------------------------------------------------------------------------------
@@ -70,8 +84,7 @@ WORK_ROOT_DIR       ?= work
 WORK_DIR            ?= $(WORK_ROOT_DIR)/build-$(BUILDER_ARCHITECTURE)
 DOWNLOAD_DIR        ?= $(WORK_ROOT_DIR)/download
 PARTIAL_DIR         ?= $(DOWNLOAD_DIR)/partial
-COOKIE_ROOT_DIR     ?= $(WORK_ROOT_DIR)/cookies-$(BUILDER_ARCHITECTURE)
-COOKIE_DIR          ?= $(COOKIE_ROOT_DIR)
+COOKIE_DIR          ?= $(WORK_ROOT_DIR)/cookies-$(BUILDER_ARCHITECTURE)
 EXTRACT_DIR         ?= $(WORK_DIR)
 WORK_SRC            ?= $(WORK_DIR)/$(SOFTWARE_FULLNAME)
 OBJ_DIR             ?= $(WORK_SRC)
@@ -81,8 +94,8 @@ CHECKSUM_FILE       ?= checksums
 LOG_DIR             ?= log
 
 # Defines the default targets used for building
-#CONFIGURE_SCRIPTS   ?= $(WORKSRC)/configure
-#BUILD_SCRIPTS       ?= $(WORKSRC)/Makefile
+CONFIGURE_SCRIPTS   ?= $(WORK_SRC)/configure
+BUILD_SCRIPTS       ?= $(WORK_SRC)/Makefile
 
 # prepend the local file listing
 #FILE_SITES = $(foreach DIR,$(FILEDIR) $(GARCHIVEPATH),file://$(DIR)/)
