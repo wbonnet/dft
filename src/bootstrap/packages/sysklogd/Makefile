@@ -34,7 +34,7 @@ SOFTWARE_UPSTREAM_NAME = sysklogd
 
 # Defines the software version
 SOFTWARE_VERSION = 1.5
-#http://www.infodrom.org/projects/sysklogd/download/sysklogd-1.5.tar.gz
+SOFTWARE_UPSTREAM_SITES = http://www.infodrom.org/projects/$(SOFTWARE_UPSTREAM_NAME)/download
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
