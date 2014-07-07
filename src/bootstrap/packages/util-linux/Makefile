@@ -34,16 +34,16 @@ SOFTWARE_UPSTREAM_NAME = util-linux
 
 # Defines the software version
 SOFTWARE_VERSION = 2.24.1
-#http://www.kernel.org/pub/linux/utils/util-linux/v2.24/util-linux-2.24.1.tar.xz
+SOFTWARE_UPSTREAM_SITES = http://www.kernel.org/pub/linux/utils/$(SOFTWARE_UPSTREAM_NAME)/v2.24
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
 
-# Include software common definitions
-include $(SOFTWARE_UPSTREAM_NAME).mk
-
 # Defines the upstream source archive filename
 SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.xz
+
+# Include software common definitions
+include $(SOFTWARE_UPSTREAM_NAME).mk
 
 # Defines the patches to apply on the software
 # PATCHFILES += 0000_some_patch.diff
