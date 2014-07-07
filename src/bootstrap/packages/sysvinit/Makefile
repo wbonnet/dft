@@ -37,7 +37,8 @@ SOFTWARE_VERSION = 2.88dsf
 #http://download.savannah.gnu.org/releases/sysvinit/sysvinit-2.88dsf.tar.bz2
 
 # If this software is a GNU project, then set the variable
-# GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
+SAVANNAH_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
+SOFTWARE_UPSTREAM_SITES = $(SAVANNAH_MIRROR)
 
 # Defines the upstream source archive filename
 SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.bz2
