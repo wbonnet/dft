@@ -40,7 +40,7 @@ SOFTWARE_VERSION = 2.6.6
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
 
 # Defines the upstream source archive filename
-SOFTWARE_SOURCE_FILES = $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.xz
+SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

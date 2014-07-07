@@ -39,6 +39,9 @@ SOFTWARE_VERSION = 2.88dsf
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
 
+# Defines the upstream source archive filename
+SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.bz2
+
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk
 

@@ -43,7 +43,7 @@ SOFTWARE_VERSION = 2013i
 include $(SOFTWARE_UPSTREAM_NAME).mk
 
 # Defines the upstream source archive filename
-SOFTWARE_SOURCE_FILES = $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.gz
+SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.gz
 
 # Defines the patches to apply on the software
 # PATCHFILES += 0000_some_patch.diff

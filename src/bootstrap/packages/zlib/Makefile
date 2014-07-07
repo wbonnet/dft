@@ -34,16 +34,16 @@ SOFTWARE_UPSTREAM_NAME = zlib
 
 # Defines the software version
 SOFTWARE_VERSION = 1.2.8
-#http://www.zlib.net/zlib-1.2.8.tar.xz
+SOFTWARE_UPSTREAM_SITES = http://www.zlib.net/
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
 
+# Defines the upstream source archive filename
+SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.xz
+
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk
-
-# Defines the upstream source archive filename
-SOFTWARE_SOURCE_FILES = $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.xz
 
 # Defines the patches to apply on the software
 # PATCHFILES += 0000_some_patch.diff

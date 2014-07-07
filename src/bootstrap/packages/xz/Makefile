@@ -34,7 +34,7 @@ SOFTWARE_UPSTREAM_NAME = xz
 
 # Defines the software version
 SOFTWARE_VERSION = 5.0.5
-#http://tukaani.org/xz/xz-5.0.5.tar.xz
+SOFTWARE_UPSTREAM_SITES = http://tukaani.org/$(SOFTWARE_UPSTREAM_NAME)
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
@@ -43,7 +43,7 @@ SOFTWARE_VERSION = 5.0.5
 include $(SOFTWARE_UPSTREAM_NAME).mk
 
 # Defines the upstream source archive filename
-SOFTWARE_SOURCE_FILES = $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.xz
+SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.xz
 
 # Defines the patches to apply on the software
 # PATCHFILES += 0000_some_patch.diff

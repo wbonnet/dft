@@ -37,6 +37,7 @@ SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
+# SOFTWARE_UPSTREAM_SITES = $(GNU_MIRROR)
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk
