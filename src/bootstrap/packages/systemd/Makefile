@@ -34,7 +34,7 @@ SOFTWARE_UPSTREAM_NAME = systemd
 
 # Defines the software version
 SOFTWARE_VERSION = 208
-#http://www.freedesktop.org/software/systemd/systemd-208.tar.xz
+SOFTWARE_UPSTREAM_SITES = http://www.freedesktop.org/software/$(SOFTWARE_UPSTREAM_NAME)
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
