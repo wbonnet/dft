@@ -34,7 +34,7 @@ SOFTWARE_UPSTREAM_NAME = man-pages
 
 # Defines the software version
 SOFTWARE_VERSION = 3.59
-#http://www.kernel.org/pub/linux/docs/man-pages/man-pages-3.59.tar.xz
+SOFTWARE_UPSTREAM_SITES = http://www.kernel.org/pub/linux/docs/$(SOFTWARE_UPSTREAM_NAME)
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
