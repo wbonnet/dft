@@ -34,7 +34,6 @@ SOFTWARE_UPSTREAM_NAME = libpipeline
 
 # Defines the software version
 SOFTWARE_VERSION = 1.2.6
-#http://download.savannah.gnu.org/releases/libpipeline/libpipeline-1.2.6.tar.gz
 
 # If this software is a GNU project, then set the variable
 SAVANNAH_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
