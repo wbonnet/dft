@@ -34,7 +34,7 @@ SOFTWARE_UPSTREAM_NAME = mpfr
 
 # Defines the software version
 SOFTWARE_VERSION = 3.1.2
-#http://www.mpfr.org/mpfr-3.1.2/mpfr-3.1.2.tar.xz
+SOFTWARE_UPSTREAM_SITES = http://www.mpfr.org/$(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION)
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
