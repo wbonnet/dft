@@ -225,7 +225,11 @@ show-config :
 	@echo "x BUILD_ARGS                        $(BUILD_ARGS)"
 	@echo
 
-# ============================== TARGET DEFINITION =============================
+# ------------------------------------------------------------------------------
+#
+# Prerequisite target. Currently does nothing, should check for basic building 
+# packages to be avaiable. Should add a check based onthe flavor.
+#
 
 prerequisite : $(COOKIE_DIR) pre-everything 
 	$(DISPLAY_COMPLETED_TARGET_NAME)
@@ -250,9 +254,6 @@ fetch : prerequisite $(DOWNLOAD_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) pre-fetch $(FE
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
-#
-# TODO: Handle several sources for a file
-#
 $(DOWNLOAD_DIR)/% :
 	if test -f $(COOKIE_DIR)/checksum-$* ; then \
 		true ; \
@@ -272,3 +273,71 @@ $(DOWNLOAD_DIR)/% :
 	fi ;
 
 
+# ------------------------------------------------------------------------------
+#
+# Compare checksum file contents and current md5
+#
+
+CHECKSUM_TARGETS ?= $(addprefix checksum-,$(filter-out $(_NOCHECKSUM) $(NOCHECKSUM),$(SOFTWARE_DIST_FILES)))
+
+checksum : fetch pre-checksum checksum_banner $(CHECKSUM_TARGETS) post-checksum
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
+
+# Pretty output :)
+checksum_banner :
+	@echo "    running checksums"
+
+
+# ------------------------------------------------------------------------------
+#
+# checksum utilities
+#
+
+# Check a given file's checksum against $(CHECKSUM_FILE) and error out if it 
+# mentions the file without an "OK".
+checksum-% : $(CHECKSUM_FILE) 
+	@if grep -- '$*' $(CHECKSUM_FILE) > /dev/null; then  \
+		if cat $(CHECKSUM_FILE) | (cd $(DOWNLOAD_DIR); LC_ALL="C" LANG="C" md5sum -c 2>&1) | grep -- '$*' | grep -v ':[ ]\+OK' > /dev/null; then \
+			echo "        \033[1m[Failed] : checksum of file $* is invalid\033[0m" ; \
+			false; \
+		else \
+			echo "        [  OK   ] : $*" ; \
+		fi \
+	else  \
+		echo "        \033[1m[Missing] : $* is not in the checksum file\033[0m" ; \
+		false; \
+	fi
+	$(TARGET_DONE)
+
+# ------------------------------------------------------------------------------
+#
+# Create the checksum file if needed
+#
+
+$(CHECKSUM_FILE):
+	@touch $(CHECKSUM_FILE)
+
+# ------------------------------------------------------------------------------
+#
+# Remove the files identified in the NOCHECKSUM targets
+#
+
+MAKESUM_TARGETS ?=  $(filter-out $(_NOCHECKSUM) $(NOCHECKSUM),$(SOFTWARE_DIST_FILES))
+
+# Check that the files really exist, even if they should be downloaded by
+# fetch  target. Then call md5sum to generate checksum file
+makesum  : pre-makesum fetch post-makesum 
+	@if test "x$(MAKESUM_TARGETS)" != "x"; then \
+		(cd $(DOWNLOAD_DIR) && md5sum $(MAKESUM_TARGETS)) > $(CHECKSUM_FILE) ; \
+		echo "    checksums made for $(MAKESUM_TARGETS)" ; \
+		cat $(CHECKSUM_FILE) ; \
+	else \
+		cp /dev/null $(CHECKSUM_FILE) ; \
+	fi
+
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
+
+# Provided for convenience
+makesums : makesum

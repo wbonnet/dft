@@ -80,31 +80,6 @@ apply-patch-% :
 
 # ------------------------------------------------------------------------------
 #
-# checksum utilities
-#
-
-# Check a given file's checksum against $(CHECKSUM_FILE) and error out if it 
-# mentions the file without an "OK".
-checksum-% : $(CHECKSUM_FILE) 
-	@if grep -- '$*' $(CHECKSUM_FILE) > /dev/null; then  \
-		if cat $(CHECKSUM_FILE) | (cd $(DOWNLOAD_DIR); LC_ALL="C" LANG="C" md5sum -c 2>&1) | grep -- '$*' | grep -v ':[ ]\+OK' > /dev/null; then \
-			echo "        \033[1m[Failed] : checksum of file $* is invalid\033[0m" ; \
-			false; \
-		else \
-			echo "        [  OK   ] : $*" ; \
-		fi \
-	else  \
-		echo "        \033[1m[Missing] : $* is not in the checksum file\033[0m" ; \
-		false; \
-	fi
-	$(TARGET_DONE)
-
-$(CHECKSUM_FILE):
-	@touch $(CHECKSUM_FILE)
-
-
-# ------------------------------------------------------------------------------
-#
 # Directory maker used by the base rules
 #
 $(sort $(BUILD_SYSTEM_ROOT) $(FILE_DIR) $(WORK_ROOT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(EXTRACT_DIR) $(WORK_SRC) $(OBJ_DIR) $(INSTALL_DIR) $(PKG_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR)):
