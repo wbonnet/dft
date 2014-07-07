@@ -34,7 +34,7 @@ SOFTWARE_UPSTREAM_NAME = bzip2
 
 # Defines the software version
 SOFTWARE_VERSION = 1.0.6
-#http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz
+SOFTWARE_UPSTREAM_SITES = http://www.bzip.org/$(SOFTWARE_VERSION)
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
