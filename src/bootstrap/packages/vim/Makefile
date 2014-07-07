@@ -34,16 +34,16 @@ SOFTWARE_UPSTREAM_NAME = vim
 
 # Defines the software version
 SOFTWARE_VERSION = 7.4
-#ftp://ftp.vim.org/pub/vim/unix/vim-7.4.tar.bz2
+SOFTWARE_UPSTREAM_SITES = ftp://ftp.vim.org/pub/$(SOFTWARE_UPSTREAM_NAME)/unix
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
 
+# Defines the upstream source archive filename
+SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.bz2
+
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk
-
-# Defines the upstream source archive filename
-SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.xz
 
 # Defines the patches to apply on the software
 # PATCHFILES += 0000_some_patch.diff
