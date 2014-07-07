@@ -34,7 +34,7 @@ SOFTWARE_UPSTREAM_NAME = less
 
 # Defines the software version
 SOFTWARE_VERSION = 458
-#http://www.greenwoodsoftware.com/less/less-458.tar.gz
+SOFTWARE_UPSTREAM_SITES = http://www.greenwoodsoftware.com/$(SOFTWARE_UPSTREAM_NAME)
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
