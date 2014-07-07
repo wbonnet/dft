@@ -34,7 +34,6 @@ SOFTWARE_UPSTREAM_NAME = bc
 
 # Defines the software version
 SOFTWARE_VERSION = 1.06
-#http://alpha.gnu.org/gnu/bc/bc-1.06.95.tar.bz2
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

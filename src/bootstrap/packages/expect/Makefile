@@ -33,8 +33,9 @@
 SOFTWARE_UPSTREAM_NAME = expect
 
 # Defines the software version
-SOFTWARE_VERSION = 5.17
-#ftp://ftp.astron.com/pub/file/file-5.17.tar.gz
+SOFTWARE_VERSION = 5.45
+#SOFTWARE_UPSTREAM_SITES = ftp://ftp.astron.com/pub/$(SOFTWARE_UPSTREAM_NAME)
+#http://prdownloads.sourceforge.net/expect/expect5.45.tar.gz
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
@@ -45,7 +46,7 @@ SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.gz
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk
 
- Defines the patches to apply on the software
+# Defines the patches to apply on the software
 # PATCHFILES += 0000_some_patch.diff
 
 # Include the build system root makefile
