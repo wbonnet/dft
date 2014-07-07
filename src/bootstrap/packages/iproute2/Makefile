@@ -34,7 +34,7 @@ SOFTWARE_UPSTREAM_NAME = iproute2
 
 # Defines the software version
 SOFTWARE_VERSION = 3.12.0
-#http://www.kernel.org/pub/linux/utils/net/iproute2/iproute2-3.12.0.tar.xz
+SOFTWARE_UPSTREAM_SITES = http://www.kernel.org/pub/linux/utils/net/$(SOFTWARE_UPSTREAM_NAME)
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

@@ -40,7 +40,7 @@ SOFTWARE_UPSTREAM_SITES = http://www.kernel.org/pub/linux/kernel/v3.x/
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
 
 # Defines the upstream source archive filename
-SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.xz
+SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk
