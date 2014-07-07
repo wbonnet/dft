@@ -34,7 +34,7 @@ SOFTWARE_UPSTREAM_NAME = pkg-config
 
 # Defines the software version
 SOFTWARE_VERSION = 0.28
-#http://pkgconfig.freedesktop.org/releases/pkg-config-0.28.tar.gz
+SOFTWARE_UPSTREAM_SITES = http://$(SOFTWARE_UPSTREAM_NAME).freedesktop.org/releases/
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
