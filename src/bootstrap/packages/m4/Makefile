@@ -34,13 +34,13 @@ SOFTWARE_UPSTREAM_NAME = m4
 
 # Defines the software version
 SOFTWARE_VERSION = 1.4.17
-#http://ftp.gnu.org/gnu/m4/m4-1.4.17.tar.xz
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
+SOFTWARE_UPSTREAM_SITES = $(GNU_MIRROR)
 
 # Defines the upstream source archive filename
-SOFTWARE_SOURCE_FILES = $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.xz
+SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

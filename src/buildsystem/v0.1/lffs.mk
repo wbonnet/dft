@@ -250,12 +250,11 @@ prerequisite : $(COOKIE_DIR) pre-everything
 FETCH_TARGETS ?=  $(addprefix $(DOWNLOAD_DIR)/,$(SOFTWARE_DIST_FILES))
 
 fetch : prerequisite $(DOWNLOAD_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
-	@echo Targets : $(FETCH_TARGETS)
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
 $(DOWNLOAD_DIR)/% :
-	if test -f $(COOKIE_DIR)/checksum-$* ; then \
+	@if test -f $(COOKIE_DIR)/checksum-$* ; then \
 		true ; \
 	else \
 		if [ "$(UPSTREAM_DOWNLOAD_TOOL)" = "wget" ] ; then \
@@ -341,3 +340,16 @@ makesum  : pre-makesum fetch post-makesum
 
 # Provided for convenience
 makesums : makesum
+
+
+# ------------------------------------------------------------------------------
+#
+# Extract the contents of the files downloaded by the fetch target
+#
+
+EXTRACT_TARGETS ?=  $(addprefix extract-archive-,$(SOFTWARE_DIST_FILES))
+
+extract : $(EXTRACT_DIR) checksum pre-extract $(EXTRACT_TARGETS) post-extract
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
+

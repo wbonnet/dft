@@ -25,7 +25,7 @@
 #
 # Contributors list :
 #
-#    William B nnet 	wllmbnnt@gmail.com
+#    William Bonnet 	wllmbnnt@gmail.com
 #
 #
 
@@ -38,8 +38,6 @@ SOFTWARE_VERSION = 2.69
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
 SOFTWARE_UPSTREAM_SITES = $(GNU_MIRROR)
-
-#http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.xz
 
 # Defines the upstream source archive filename
 SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.xz

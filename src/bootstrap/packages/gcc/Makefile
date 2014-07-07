@@ -34,10 +34,13 @@ SOFTWARE_UPSTREAM_NAME = gcc
 
 # Defines the software version
 SOFTWARE_VERSION = 4.8.2
-#http://ftp.gnu.org/gnu/gcc/gcc-4.8.2/gcc-4.8.2.tar.bz2
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
+SOFTWARE_UPSTREAM_SITES = $(GNU_MIRROR)/$(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION)
+
+# Defines the upstream source archive filename
+SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.bz2
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk
