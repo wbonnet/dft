@@ -34,7 +34,7 @@ SOFTWARE_UPSTREAM_NAME = perl
 
 # Defines the software version
 SOFTWARE_VERSION = 5.18.2
-#http://www.cpan.org/src/5.0/perl-5.18.2.tar.bz2
+SOFTWARE_UPSTREAM_SITES = http://www.cpan.org/src/5.0
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
