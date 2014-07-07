@@ -34,7 +34,7 @@ SOFTWARE_UPSTREAM_NAME = kmod
 
 # Defines the software version
 SOFTWARE_VERSION = 16
-#http://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-16.tar.xz
+SOFTWARE_UPSTREAM_SITES = http://www.kernel.org/pub/linux/utils/kernel/$(SOFTWARE_UPSTREAM_NAME)
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
