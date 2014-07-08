@@ -34,10 +34,10 @@ SOFTWARE_UPSTREAM_NAME = e2fsprogs
 
 # Defines the software version
 SOFTWARE_VERSION = 1.42.9
-#http://prdownloads.sourceforge.net/e2fsprogs/e2fsprogs-1.42.9.tar.gz
 
 # If this software is a GNU project, then set the variable
-# GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
+SF_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
+SOFTWARE_UPSTREAM_SITES = $(SF_MIRROR)
 
 # Defines the upstream source archive filename
 SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.gz

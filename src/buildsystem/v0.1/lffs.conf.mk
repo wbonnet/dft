@@ -66,10 +66,9 @@ SAVANNAH_MIRROR = $(SAVANNAH_ROOT)/$(SAVANNAH_PROJECT)/
 #
 # ------------------------------------------------------------------------------
 
-SF_SITE     = http://prdownloads.sourceforge.net
-SF_ROOT     = $(SF_SITE)/gnu
-SF_MIRROR   = $(SF_ROOT)/$(SF_PROJECT)/
-
+SF_SITE     = downloads.sourceforge.net/project
+SF_ROOT     = $(SF_SITE)
+SF_MIRROR   = $(SF_ROOT)/$(SF_PROJECT)/$(SF_PROJECT)/v$(SOFTWARE_VERSION)
 
 # ------------------------------------------------------------------------------
 #
