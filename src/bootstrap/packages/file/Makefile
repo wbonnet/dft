@@ -33,19 +33,15 @@
 SOFTWARE_UPSTREAM_NAME = file
 
 # Defines the software version
-SOFTWARE_VERSION = 5.45
-#http://prdownloads.sourceforge.net/expect/expect5.45.tar.gz
+SOFTWARE_VERSION = 5.17
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
 
 # Defines the upstream source archive filename# If this software is a SourceForge hosted project, then set the variable
 # SF_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
-# SOFTWARE_UPSTREAM_SITES = $(SF_MIRROR)
 
-# If this software is a SourceForge hosted project, then set the variable
-# SF_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
-# SOFTWARE_UPSTREAM_SITES = $(SF_MIRROR)
+SOFTWARE_UPSTREAM_SITES = ftp://ftp.astron.com/pub/$(SOFTWARE_UPSTREAM_NAME)
 
 SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.gz
 
