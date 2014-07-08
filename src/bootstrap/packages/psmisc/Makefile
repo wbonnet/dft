@@ -40,8 +40,8 @@ SOFTWARE_VERSION = 22.20
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
 
 # If this software is a SourceForge hosted project, then set the variable
-# SF_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
-# SOFTWARE_UPSTREAM_SITES = $(SF_MIRROR)
+SF_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
+SOFTWARE_UPSTREAM_SITES = $(SF_MIRROR)/psmisc
 
 # Defines the upstream source archive filename
 SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.gz
