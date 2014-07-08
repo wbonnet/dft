@@ -39,7 +39,14 @@ SOFTWARE_VERSION = 5.45
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
 
-# Defines the upstream source archive filename
+# Defines the upstream source archive filename# If this software is a SourceForge hosted project, then set the variable
+# SF_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
+# SOFTWARE_UPSTREAM_SITES = $(SF_MIRROR)
+
+# If this software is a SourceForge hosted project, then set the variable
+# SF_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
+# SOFTWARE_UPSTREAM_SITES = $(SF_MIRROR)
+
 SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.gz
 
 # Include software common definitions

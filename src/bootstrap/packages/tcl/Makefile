@@ -34,13 +34,16 @@ SOFTWARE_UPSTREAM_NAME = tcl
 
 # Defines the software version
 SOFTWARE_VERSION = 8.6.1
-#http://prdownloads.sourceforge.net/tcl/tcl8.6.1-src.tar.gz
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
 
+# If this software is a SourceForge hosted project, then set the variable
+SF_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
+SOFTWARE_UPSTREAM_SITES = $(SF_MIRROR)/Tcl/$(SOFTWARE_VERSION)
+
 # Defines the upstream source archive filename
-SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.gz
+SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)$(SOFTWARE_VERSION)-src.tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk
