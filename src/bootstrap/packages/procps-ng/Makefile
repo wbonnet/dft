@@ -34,17 +34,16 @@ SOFTWARE_UPSTREAM_NAME = procps-ng
 
 # Defines the software version
 SOFTWARE_VERSION = 3.3.9
-#http://sourceforge.net/projects/procps-ng/files/Production/procps-ng-3.3.9.tar.xz
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
 
 # If this software is a SourceForge hosted project, then set the variable
-# SF_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
-# SOFTWARE_UPSTREAM_SITES = $(SF_MIRROR)
+SF_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
+SOFTWARE_UPSTREAM_SITES = $(SF_MIRROR)/Production
 
 # Defines the upstream source archive filename
-SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.gz
+SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk
