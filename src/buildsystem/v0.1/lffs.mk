@@ -353,3 +353,38 @@ extract : $(EXTRACT_DIR) checksum pre-extract $(EXTRACT_TARGETS) post-extract
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
+
+# ------------------------------------------------------------------------------
+#
+# Run the configure script
+#
+
+CONFIGURE_TARGETS ?= $(addprefix configure-,$(CONFIGURE_SCRIPTS))
+
+configure : patch $(OBJ_DIR) pre-configure $(CONFIGURE_TARGETS) post-configure
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
+
+
+# ------------------------------------------------------------------------------
+#
+# Appy patches to the sources
+#
+
+PATCH_TARGETS ?=  $(addprefix apply-patch-,$(PATCHFILES))
+
+patch : extract pre-patch $(PATCH_TARGETS) post-patch
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
+
+
+# ------------------------------------------------------------------------------
+#
+# Build the target binaries
+#
+
+BUILD_TARGETS ?= $(addprefix build-,$(BUILD_CHECK_SCRIPTS)) $(addprefix build-,$(BUILD_SCRIPTS))
+
+build : configure $(OBJ_DIR) pre-build $(BUILD_TARGETS) post-build
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)

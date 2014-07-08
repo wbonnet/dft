@@ -29,3 +29,13 @@
 #
 #
 
+
+# ------------------------------------------------------------------------------
+#
+# Execute the configure script
+#
+
+configure-%/configure :
+	@echo "    running configure in $(OBJ_DIR)"
+	@cd "$(OBJ_DIR)" && $(CONFIGURE_ENV) $(abspath $*)/configure $(CONFIGURE_ARGS)
+	$(TARGET_DONE)

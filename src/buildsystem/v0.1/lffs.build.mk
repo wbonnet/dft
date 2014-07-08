@@ -29,3 +29,12 @@
 #
 #
 
+# ------------------------------------------------------------------------------
+#
+# Execute the building script
+#
+
+build-%/Makefile : 
+	@echo "        running make in $*" 
+	echo cd $* && $(BUILD_ENV) $(MAKE) -C $(abspath $(OBJ_DIR)) $(BUILD_ARGS)
+	@$(TARGET_DONE)
