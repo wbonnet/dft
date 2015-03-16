@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = tar
 
 # Defines the software version
-SOFTWARE_VERSION = 1.27.1
+SOFTWARE_VERSION = 1.28
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = man-db
 
 # Defines the software version
-SOFTWARE_VERSION = 2.6.6
+SOFTWARE_VERSION = 2.7.1
 #http://download.savannah.gnu.org/releases/man-db/man-db-2.6.6.tar.xz
 
 # If this software is a GNU project, then set the variable

@@ -33,7 +33,13 @@
 SOFTWARE_UPSTREAM_NAME = lfs-bootscripts
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 20150222
+
+# Definies the upstream site
+SOFTWARE_UPSTREAM_SITES = http://www.linuxfromscratch.org/lfs/downloads/$(LFS_VERSION)
+
+# Defines the upstream source archive filename
+SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.bz2
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

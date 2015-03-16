@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = binutils
 
 # Defines the software version
-SOFTWARE_VERSION = 2.24
+SOFTWARE_VERSION = 2.25
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

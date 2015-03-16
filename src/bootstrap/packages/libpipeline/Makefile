@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = libpipeline
 
 # Defines the software version
-SOFTWARE_VERSION = 1.2.6
+SOFTWARE_VERSION = 1.4.0
 
 # If this software is a GNU project, then set the variable
 SAVANNAH_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

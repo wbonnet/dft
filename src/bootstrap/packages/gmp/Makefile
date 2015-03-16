@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = gmp
 
 # Defines the software version
-SOFTWARE_VERSION = 5.1.3
+SOFTWARE_VERSION = 6.0.0a
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

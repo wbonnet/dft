@@ -33,15 +33,13 @@
 SOFTWARE_UPSTREAM_NAME = udev-lfs
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 20140408
 
-# If this software is a GNU project, then set the variable
-# GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
-# SOFTWARE_UPSTREAM_SITES = $(GNU_MIRROR)
+# Definies the upstream site
+SOFTWARE_UPSTREAM_SITES = http://anduin.linuxfromscratch.org/sources/other/
 
-# If this software is a SourceForge hosted project, then set the variable
-# SF_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
-# SOFTWARE_UPSTREAM_SITES = $(SF_MIRROR)
+# Defines the upstream source archive filename
+SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.bz2
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

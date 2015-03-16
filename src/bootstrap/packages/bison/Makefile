@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = bison
 
 # Defines the software version
-SOFTWARE_VERSION = 3.0.2
+SOFTWARE_VERSION = 3.0.4
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

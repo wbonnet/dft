@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = file
 
 # Defines the software version
-SOFTWARE_VERSION = 5.17
+SOFTWARE_VERSION = 5.22
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

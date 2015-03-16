@@ -33,14 +33,11 @@
 SOFTWARE_UPSTREAM_NAME = shadow
 
 # Defines the software version
-SOFTWARE_VERSION = 4.1.5.1
-SOFTWARE_UPSTREAM_SITES = http://cdn.debian.net/debian/pool/main/s/$(SOFTWARE_UPSTREAM_NAME)
-
-# If this software is a GNU project, then set the variable
-# GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
+SOFTWARE_VERSION = 4.2.1
+SOFTWARE_UPSTREAM_SITES = http://pkg-shadow.alioth.debian.org/releases/
 
 # Defines the upstream source archive filename
-SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)_$(SOFTWARE_VERSION).orig.tar.gz
+SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.xz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

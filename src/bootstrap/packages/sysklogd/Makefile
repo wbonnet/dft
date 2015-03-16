@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = sysklogd
 
 # Defines the software version
-SOFTWARE_VERSION = 1.5
+SOFTWARE_VERSION = 1.5.1
 SOFTWARE_UPSTREAM_SITES = http://www.infodrom.org/projects/$(SOFTWARE_UPSTREAM_NAME)/download
 
 # If this software is a GNU project, then set the variable

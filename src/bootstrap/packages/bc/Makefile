@@ -33,14 +33,14 @@
 SOFTWARE_UPSTREAM_NAME = bc
 
 # Defines the software version
-SOFTWARE_VERSION = 1.06
+SOFTWARE_VERSION = 1.06.95
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
-SOFTWARE_UPSTREAM_SITES = $(GNU_MIRROR)
+SOFTWARE_UPSTREAM_SITES = $(GNU_MIRROR_ALPHA)
 
 # Defines the upstream source archive filename
-SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.gz
+SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.bz2
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

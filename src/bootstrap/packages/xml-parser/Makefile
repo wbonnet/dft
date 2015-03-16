@@ -30,18 +30,16 @@
 #
 
 # Defines the upstream software name
-SOFTWARE_UPSTREAM_NAME = xml-parser
+SOFTWARE_UPSTREAM_NAME = XML-Parser
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 2.44
 
-# If this software is a GNU project, then set the variable
-# GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
-# SOFTWARE_UPSTREAM_SITES = $(GNU_MIRROR)
+# Definies the upstream site
+SOFTWARE_UPSTREAM_SITES = http://cpan.metacpan.org/authors/id/T/TO/TODDR
 
-# If this software is a SourceForge hosted project, then set the variable
-# SF_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
-# SOFTWARE_UPSTREAM_SITES = $(SF_MIRROR)
+# Defines the upstream source archive filename
+SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.gz
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = xz
 
 # Defines the software version
-SOFTWARE_VERSION = 5.0.5
+SOFTWARE_VERSION = 5.2.0
 SOFTWARE_UPSTREAM_SITES = http://tukaani.org/$(SOFTWARE_UPSTREAM_NAME)
 
 # If this software is a GNU project, then set the variable

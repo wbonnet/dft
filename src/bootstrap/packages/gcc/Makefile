@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = gcc
 
 # Defines the software version
-SOFTWARE_VERSION = 4.8.2
+SOFTWARE_VERSION = 4.9.2
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

@@ -29,6 +29,9 @@
 #
 #
 
+# Defines the LFS base version
+LFS_VERSION ?= 7.7
+
 # Defines the files to retrieve
 SOFTWARE_SOURCE_FILES ?= $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.bz2
 

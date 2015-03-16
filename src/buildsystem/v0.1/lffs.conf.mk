@@ -55,6 +55,12 @@ GNU_NGNUROOT = $(GNU_SITE)/non-gnu
 GNU_MIRROR   = $(GNU_GNUROOT)/$(GNU_PROJECT)/
 GNU_NMIRROR  = $(GNU_NGNUROOT)/$(GNU_PROJECT)/
 
+GNU_SITE_ALPHA     = http://alpha.gnu.org
+GNU_GNUROOT_ALPHA  = $(GNU_SITE_ALPHA)/gnu
+GNU_NGNUROOT_ALPHA = $(GNU_SITE_ALPHA)/non-gnu
+GNU_MIRROR_ALPHA   = $(GNU_GNUROOT_ALPHA)/$(GNU_PROJECT)/
+GNU_NMIRROR_ALPHA  = $(GNU_NGNUROOT_ALPHA)/$(GNU_PROJECT)/
+
 SAVANNAH_SITE   = http://download.savannah.gnu.org
 SAVANNAH_ROOT   = $(SAVANNAH_SITE)/releases
 SAVANNAH_MIRROR = $(SAVANNAH_ROOT)/$(SAVANNAH_PROJECT)/
@@ -68,7 +74,10 @@ SAVANNAH_MIRROR = $(SAVANNAH_ROOT)/$(SAVANNAH_PROJECT)/
 
 SF_SITE     = downloads.sourceforge.net/project
 SF_ROOT     = $(SF_SITE)
-SF_MIRROR   = $(SF_ROOT)/$(SF_PROJECT)
+SF_VERSION ?= $(SOFTWARE_VERSION)
+SF_MIRROR   = $(SF_ROOT)/$(SF_PROJECT)/$(SF_PROJECT)/$(SF_VERSION)
+
+http://downloads.sourceforge.net/project/check/check/0.9.14/check-0.9.14.tar.gz
 
 # ------------------------------------------------------------------------------
 #

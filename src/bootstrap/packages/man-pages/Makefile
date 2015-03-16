@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = man-pages
 
 # Defines the software version
-SOFTWARE_VERSION = 3.59
+SOFTWARE_VERSION = 3.79
 SOFTWARE_UPSTREAM_SITES = http://www.kernel.org/pub/linux/docs/$(SOFTWARE_UPSTREAM_NAME)
 
 # If this software is a GNU project, then set the variable

@@ -33,11 +33,11 @@
 SOFTWARE_UPSTREAM_NAME = grub
 
 # Defines the software version
-SOFTWARE_VERSION = 2.00
+SOFTWARE_VERSION = 2.02~beta2
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
-SOFTWARE_UPSTREAM_SITES = $(GNU_MIRROR)
+SOFTWARE_UPSTREAM_SITES = $(GNU_MIRROR_ALPHA)
 
 # Defines the upstream source archive filename
 SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION).tar.xz

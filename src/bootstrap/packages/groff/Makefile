@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = groff
 
 # Defines the software version
-SOFTWARE_VERSION = 1.22.2
+SOFTWARE_VERSION = 1.22.3
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

@@ -33,14 +33,11 @@
 SOFTWARE_UPSTREAM_NAME = e2fsprogs
 
 # Defines the software version
-SOFTWARE_VERSION = 1.42.9
+SOFTWARE_VERSION = 1.42.12
 
-# If this software is a GNU project, then set the variable
-# GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
-# SOFTWARE_UPSTREAM_SITES = $(GNU_MIRROR)
-
-# If this software is a SF project, then set the variable
+# If this software is a SourceForge hosted project, then set the variable
 SF_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
+SF_VERSION = v$(SOFTWARE_VERSION)
 SOFTWARE_UPSTREAM_SITES = $(SF_MIRROR)
 
 # Defines the upstream source archive filename

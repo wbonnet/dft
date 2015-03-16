@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = automake
 
 # Defines the software version
-SOFTWARE_VERSION = 1.14.1
+SOFTWARE_VERSION = 1.15
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

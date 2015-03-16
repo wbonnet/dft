@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = kmod
 
 # Defines the software version
-SOFTWARE_VERSION = 16
+SOFTWARE_VERSION = 19
 SOFTWARE_UPSTREAM_SITES = http://www.kernel.org/pub/linux/utils/kernel/$(SOFTWARE_UPSTREAM_NAME)
 
 # If this software is a GNU project, then set the variable

@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = tzdata
 
 # Defines the software version
-SOFTWARE_VERSION = 2013i
+SOFTWARE_VERSION = 2015a
 SOFTWARE_UPSTREAM_SITES = http://www.iana.org/time-zones/repository/releases
 
 # If this software is a GNU project, then set the variable

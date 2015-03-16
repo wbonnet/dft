@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = gawk
 
 # Defines the software version
-SOFTWARE_VERSION = 4.1.0
+SOFTWARE_VERSION = 4.1.1
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

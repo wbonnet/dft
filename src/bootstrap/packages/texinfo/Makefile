@@ -36,12 +36,7 @@ SOFTWARE_UPSTREAM_NAME = texinfo
 SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
 
 # If this software is a GNU project, then set the variable
-# GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
-# SOFTWARE_UPSTREAM_SITES = $(GNU_MIRROR)
-
-# If this software is a SourceForge hosted project, then set the variable
-# SF_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
-# SOFTWARE_UPSTREAM_SITES = $(SF_MIRROR)
+GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
 
 # Include software common definitions
 include $(SOFTWARE_UPSTREAM_NAME).mk

@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = grep
 
 # Defines the software version
-SOFTWARE_VERSION = 2.16
+SOFTWARE_VERSION = 2.21
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = libtool
 
 # Defines the software version
-SOFTWARE_VERSION = 2.4.2
+SOFTWARE_VERSION = 2.4.6
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

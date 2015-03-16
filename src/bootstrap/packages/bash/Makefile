@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = bash
 
 # Defines the software version
-SOFTWARE_VERSION = 4.2
+SOFTWARE_VERSION = 4.3.30
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)
