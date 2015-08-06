@@ -63,5 +63,5 @@ new-software-%:
 # Catch all target. Call the same targets in each subfolder
 %:
 	@for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \
-		$(MAKE) -C $$i $* ; \
+		$(MAKE) -C $$i $*  || exit 1 ; \
 	done
