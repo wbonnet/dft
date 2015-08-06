@@ -36,6 +36,11 @@
 #
 
 configure-%/configure :
-	@echo "    running configure in $(OBJ_DIR)"
-	@cd "$(OBJ_DIR)" && $(CONFIGURE_ENV) $(abspath $*)/configure $(CONFIGURE_ARGS)
+	@if test -f $(COOKIE_DIR)/configure-$*/configure ; then \
+		true ; \
+	else \
+		echo "    running configure in $(OBJ_DIR)" ; \
+		cd "$(OBJ_DIR)" && $(CONFIGURE_ENV) $(abspath $*)/configure $(CONFIGURE_ARGS) ; \
+	fi ; 
 	$(TARGET_DONE)
+
