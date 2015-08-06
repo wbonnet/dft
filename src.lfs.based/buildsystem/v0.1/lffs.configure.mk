@@ -49,3 +49,4 @@ reconfigure-%/configure :
 		rm -f $(COOKIE_DIR)/configure-$*/configure ; \
 	fi ; 
 	$(TARGET_DONE)
+
