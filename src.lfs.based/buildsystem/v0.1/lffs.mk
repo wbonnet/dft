@@ -400,3 +400,15 @@ BUILD_TARGETS ?= $(addprefix build-,$(BUILD_CHECK_SCRIPTS)) $(addprefix build-,$
 build : configure $(OBJ_DIR) pre-build $(BUILD_TARGETS) post-build
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
+
+
+# ------------------------------------------------------------------------------
+#
+# Rebuild the target binaries
+#
+
+REBUILD_TARGETS ?= $(addprefix rebuild-,$(BUILD_CHECK_SCRIPTS)) $(addprefix rebuild-,$(BUILD_SCRIPTS))
+
+rebuild : configure $(OBJ_DIR) pre-rebuild $(REBUILD_TARGETS) build post-rebuild
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
