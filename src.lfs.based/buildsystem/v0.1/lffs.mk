@@ -368,6 +368,18 @@ configure : patch $(OBJ_DIR) pre-configure $(CONFIGURE_TARGETS) post-configure
 
 # ------------------------------------------------------------------------------
 #
+# Force running again the configure script
+#
+
+RECONFIGURE_TARGETS ?= $(addprefix reconfigure-,$(CONFIGURE_SCRIPTS))
+
+reconfigure : patch $(OBJ_DIR) pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconfigure
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
+
+
+# ------------------------------------------------------------------------------
+#
 # Appy patches to the sources
 #
 

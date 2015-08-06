@@ -44,3 +44,8 @@ configure-%/configure :
 	fi ; 
 	$(TARGET_DONE)
 
+reconfigure-%/configure :
+	@if test -f $(COOKIE_DIR)/configure-$*/configure ; then \
+		rm -f $(COOKIE_DIR)/configure-$*/configure ; \
+	fi ; 
+	$(TARGET_DONE)
