@@ -48,8 +48,8 @@ extract-archive-%.tar.gz :
 	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar.gz ; then \
 		true ; \
 	else \
-		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz"
-		tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tar.gz -C $(EXTRACT_DIR)
+		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz" ; \
+		tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tar.gz -C $(EXTRACT_DIR) ; \
 	fi ;
 	$(TARGET_DONE)
 
@@ -57,8 +57,8 @@ extract-archive-%.tgz :
 	@if test -f $(COOKIE_DIR)/extract-archive-$*.tgz ; then \
 		true ; \
 	else \
-		echo "        extracting $(DOWNLOAD_DIR)/$*.tgz"
-		tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tgz -C $(EXTRACT_DIR)
+		echo "        extracting $(DOWNLOAD_DIR)/$*.tgz" ; \
+		tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tgz -C $(EXTRACT_DIR) ; \
 	fi ;
 	$(TARGET_DONE)
 
@@ -75,8 +75,8 @@ extract-archive-%.tar.xz :
 	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar.xz ; then \
 		true ; \
 	else \
-		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.xz"
-		tar $(TAR_ARGS) -xJf $(DOWNLOAD_DIR)/$*.tar.xz -C $(EXTRACT_DIR)
+		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.xz" ; \
+		tar $(TAR_ARGS) -xJf $(DOWNLOAD_DIR)/$*.tar.xz -C $(EXTRACT_DIR) ; \
 	fi ;
 	$(TARGET_DONE)	
 
@@ -84,8 +84,8 @@ extract-archive-%.zip :
 	@if test -f $(COOKIE_DIR)/extract-archive-$*.zip ; then \
 		true ; \
 	else \
-		echo "        extracting $(DOWNLOAD_DIR)/$*.zip"
-		unzip $(DOWNLOAD_DIR)/$*.zip -d $(EXTRACT_DIR)
+		echo "        extracting $(DOWNLOAD_DIR)/$*.zip" ; \
+		unzip $(DOWNLOAD_DIR)/$*.zip -d $(EXTRACT_DIR) ; \
 	fi ;
 	$(TARGET_DONE)
 
