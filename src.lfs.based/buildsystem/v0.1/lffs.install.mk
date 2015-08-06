@@ -29,3 +29,24 @@
 #
 #
 
+# ------------------------------------------------------------------------------
+#
+# Execute the install target script
+#
+
+do-install :
+	@if test -f $(COOKIE_DIR)/do-install ; then \
+		true ; \
+	else \
+		echo "        running install in $(OBJ_DIR)"  ; \
+		cd $(OBJ_DIR) && $(BUILD_ENV) $(MAKE) DESTDIR=$(abspath $(INSTALL_DIR)) install ; \
+	fi ; 
+	@$(TARGET_DONE)
+
+do-reinstall :
+	@if test -f $(COOKIE_DIR)/do-install ; then \
+		rm -f $(COOKIE_DIR)/do-install ; \
+		rm -fr $(abspath $(INSTALL_DIR)) ; \
+	fi ; 
+	$(TARGET_DONE)
+
