@@ -75,7 +75,7 @@ SAVANNAH_MIRROR = $(SAVANNAH_ROOT)/$(SAVANNAH_PROJECT)/
 SF_SITE     = downloads.sourceforge.net/project
 SF_ROOT     = $(SF_SITE)
 SF_VERSION ?= $(SOFTWARE_VERSION)
-SF_MIRROR   = $(SF_ROOT)/$(SF_PROJECT)/$(SF_PROJECT)/$(SF_VERSION)
+SF_MIRROR   = $(SF_ROOT)/$(SF_PROJECT)
 
 http://downloads.sourceforge.net/project/check/check/0.9.14/check-0.9.14.tar.gz
 

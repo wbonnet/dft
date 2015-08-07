@@ -51,3 +51,9 @@ include $(SOFTWARE_UPSTREAM_NAME).mk
 
 # Include the build system root makefile
 include buildsystem/lffs.mk
+
+# This software has no configure script
+configure-%/configure :
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
+

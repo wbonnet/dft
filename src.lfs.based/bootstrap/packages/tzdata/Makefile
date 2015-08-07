@@ -50,3 +50,9 @@ SOFTWARE_DIST_FILES += $(SOFTWARE_UPSTREAM_NAME)$(SOFTWARE_VERSION).tar.gz
 
 # Include the build system root makefile
 include buildsystem/lffs.mk
+
+# This software has no configure script
+configure-%/configure :
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
+

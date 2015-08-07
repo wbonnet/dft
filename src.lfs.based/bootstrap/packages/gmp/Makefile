@@ -50,3 +50,10 @@ include $(SOFTWARE_UPSTREAM_NAME).mk
 
 # Include the build system root makefile
 include buildsystem/lffs.mk
+
+# Fix the extract name
+post-extract:
+	if [ -d "$(EXTRACT_DIR)/$(SOFTWARE_UPSTREAM_NAME)-6.0.0" ] ; then \
+		mv "$(EXTRACT_DIR)/$(SOFTWARE_UPSTREAM_NAME)-6.0.0" $(WORK_SRC) ; \
+	fi
+

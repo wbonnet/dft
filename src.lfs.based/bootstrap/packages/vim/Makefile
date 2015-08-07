@@ -34,6 +34,7 @@ SOFTWARE_UPSTREAM_NAME = vim
 
 # Defines the software version
 SOFTWARE_VERSION = 7.4
+SOFTWARE_EXTRACT_VERSION = 74
 SOFTWARE_UPSTREAM_SITES = ftp://ftp.vim.org/pub/$(SOFTWARE_UPSTREAM_NAME)/unix
 
 # If this software is a GNU project, then set the variable
@@ -50,3 +51,8 @@ include $(SOFTWARE_UPSTREAM_NAME).mk
 
 # Include the build system root makefile
 include buildsystem/lffs.mk
+
+post-extract:
+	@ if [ -d "$(EXTRACT_DIR)/$(SOFTWARE_UPSTREAM_NAME)$(SOFTWARE_EXTRACT_VERSION)" ] ; then \
+		mv $(EXTRACT_DIR)/$(SOFTWARE_UPSTREAM_NAME)$(SOFTWARE_EXTRACT_VERSION) $(WORK_SRC) ; \
+	fi ;
