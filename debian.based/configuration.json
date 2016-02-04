@@ -2,9 +2,10 @@
 // TODO Handle keyring
 // TODO Handle repo sync between upstream and local
 // TODO Handle package compilation
-
+// TODO liste des flavours pour ps fire nimporte quoi et les controler dans le check config
 // TODO Configuration for rootfs and initramfs
 // TODO Block with generic configuration ? 
+// TODO groups of groups ?
 
 // ----------------------------------------------------------------------------
 //
