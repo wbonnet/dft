@@ -1,0 +1,179 @@
+// TODO Handle packages sources
+// TODO Handle keyring
+// TODO Handle repo sync between upstream and local
+// TODO Handle package compilation
+
+// TODO Configuration for rootfs and initramfs
+// TODO Block with generic configuration ? 
+
+// ----------------------------------------------------------------------------
+//
+// Definition of the distributions used to bootstrap firmware construction
+//
+{ "distributions" : [
+		// Debian 7.0 Jessie
+		{ 
+			"name" : "Debian Jessie" ,
+			"architecture" : [
+				"amd64" ,
+				"i386" ,
+				"armel" ,
+				"armhf"
+			 ] ,
+			"repositories"	: [
+				{ 
+					"url" : "http://ftp.fr.debian.org/debian/" ,
+					"suite" : "jessie" ,
+					"sections" : [
+						"main" ,
+						"contrib" ,
+						"non-free"
+					]
+				} ,
+				{ 
+					"url" : "http://security.debian.org/debian/" ,
+					"suite" : "jessie/updates" ,
+					"sections" : [
+						"main" ,
+						"contrib" ,
+						"non-free"
+					]
+				} ,
+				{ 
+					"url" : "http://ftp.fr.debian.org/debian/" ,
+					"suite" : "jessie-updates" ,
+					"sections" : [
+						"main" ,
+						"contrib" ,
+						"non-free"
+					]
+				}
+			]
+		}
+	]
+}
+
+// ----------------------------------------------------------------------------
+//
+// Definition of groups of packages. Group are more handy for packages manipulation
+//
+{ "groups-of-packages" : [
+		// Base operating system
+		{ 
+			"group-name" : "base" ,
+			"include-in-production" : true ,
+			"packages"	: [
+				{ "name" : "apt" } ,
+				{ "name" : "wget" } ,
+				{ "name" : "locales" } ,
+				{ "name" : "ethtool" } ,
+				{ "name" : "initramfs-tools" } ,
+				{ "name" : "gawk" } ,
+				{ "name" : "isc-dhcp-client" } ,
+				{ "name" : "linux-image" }
+				{ "name" : "sudo" }
+			]
+		} ,
+		// Security and network security packages
+		{ 
+			"group-name" : "security" ,
+			"include-in-production" : true ,
+			"packages"	: [
+				{ "name" : "shorewall" }
+			]
+		} ,
+		// Some packages used for debugging, not present in production target
+		{ 
+			"group-name" : "debug" ,
+			"include-in-production" : false ,
+			"packages"	: [
+				{ "name" : "apt" } ,
+				{ "name" : "apt-utils"  } ,
+				{ "name" : "apt-file"  } ,
+				{ "name" : "aptitude"  } ,
+				{ "name" : "bash-completion"  } ,
+				{ "name" : "openssh-server"  } ,
+				{ "name" : "htop" } ,
+				{ "name" : "vim" } ,
+				{ "name" : "tree" } ,
+				{ "name" : "less" } ,
+				{ "name" : "lsof" } ,
+				{ "name" : "host" } ,
+				{ "name" : "rsyslog" } ,
+				{ "name" : "strace" }
+			]
+		}
+	]
+}
+
+// ----------------------------------------------------------------------------
+//
+// Firmware definitions, based on group of packages to include
+//
+{ "firmwares" : [
+		{
+			"name" : "test",
+			"group-of-packages" : [
+				"base" ,
+				"security" ,
+				"debug"
+			]
+		}
+	]
+}
+
+// ----------------------------------------------------------------------------
+//
+// Definitions ot the different target boards we support
+//
+{ "boards" : [
+//		{ 
+//			"name" : "Beagleboard Black" ,
+//			"architecture" : "armel"
+//			repository ?
+//			kernel ?
+//		} ,
+		{ 
+			"name" : "Raspberry PI 2" ,
+			"architecture" : "armhf"
+		} ,
+		{
+			"name" : "Raspberry PI A" ,
+			"architecture" : "armel"
+		} ,
+		{ 
+			"name" : "Raspberry PI B 512Mo" ,
+			"architecture" : "armel"
+		} ,
+		{ 
+			"name" : "Generic x86-64" ,
+			"architecture" : "amd64"
+		} ,
+		{ 
+			"name" : "Generic x86" ,
+			"architecture" : "i386"
+		} 
+	]
+}
+
+// ----------------------------------------------------------------------------
+//
+// Definitions ot the different target boards we support
+//
+{ "production-targets" : [
+		{ 
+			"name" : "test-Jessie-rpi2" ,
+			"board" : "Raspberry PI 2" ,
+			"distribution" : "Debian Jessie" ,
+			"firmware" : "test"
+		} ,
+		{ 
+			"name" : "test-Jessie-x86-64" ,
+			"board" : "Generic x86-64" ,
+			"distribution" : "Debian Jessie" ,
+			"firmware" : "test"
+//			"build-production" : true ,
+//			"build-debug" : true ,
+		}
+	]
+}
