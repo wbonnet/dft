@@ -126,7 +126,17 @@
 			"packages" : [
 				"less" 
 			]
+		},
+		{
+			"name" : "depends-test",
+			"based-on-firmware" : [
+				"test"
+			] ,
+			"packages" : [
+				"iotop" 
+			]
 		}
+
 	]
 }
 
@@ -209,3 +219,6 @@
 		}
 	]
 }
+
+
+// definition of flavours
