@@ -49,8 +49,7 @@ endif
 # Used for output...
 #
 DISPLAY_TARGET_NOT_IMPLEMENTED = @echo "Target [$@] is not implemented !"
-DISPLAY_COMPLETED_TARGET_NAME  = @echo "    completed [$@] "
-
+DISPLAY_COMPLETED_TARGET_NAME  = @echo "    completed [$@]"
 
 # ------------------------------------------------------------------------------
 #
@@ -77,7 +76,7 @@ SOFTWARE_FULLNAME ?= $(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION)
 #
 # Source retrieving tools and settings
 #
-UPSTREAM_DOWNLOAD_TOOL ?= wget
+UPSTREAM_DOWNLOAD_TOOL ?= curl
 
 
 # ------------------------------------------------------------------------------
@@ -258,7 +257,7 @@ $(DOWNLOAD_DIR)/% :
 		true ; \
 	else \
 		if [ "$(UPSTREAM_DOWNLOAD_TOOL)" = "wget" ] ; then \
-			wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SOFTWARE_UPSTREAM_SITES)/$* ; \
+			wget -T 30 -c -P $(PARTIAL_DIR) $(SOFTWARE_UPSTREAM_SITES)/$* ; \
 			mv $(PARTIAL_DIR)/$* $@ ; \
 			if test -r $@ ; then \
 				true ; \
@@ -267,7 +266,18 @@ $(DOWNLOAD_DIR)/% :
 				false; \
 			fi; \
 		else \
-			echo "Fetch method $(UPSTREAM_DOWNLOAD_TOOL) is not implemented" ; \
+			if [ "$(UPSTREAM_DOWNLOAD_TOOL)" = "curl" ] ; then \
+				curl  --silent --show-error -o $(PARTIAL_DIR)/$* $(SOFTWARE_UPSTREAM_SITES)/$* ; \
+				mv $(PARTIAL_DIR)/$* $@ ; \
+				if test -r $@ ; then \
+					true ; \
+				else \
+					echo 'ERROR : Failed to download $@!' 1>&2; \
+					false; \
+				fi; \
+			else \
+				echo "Fetch method $(UPSTREAM_DOWNLOAD_TOOL) is not implemented" ; \
+			fi ; \
 		fi ; \
 	fi ;
 

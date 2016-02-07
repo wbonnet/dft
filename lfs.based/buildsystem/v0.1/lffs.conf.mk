@@ -75,9 +75,7 @@ SAVANNAH_MIRROR = $(SAVANNAH_ROOT)/$(SAVANNAH_PROJECT)/
 SF_SITE     = downloads.sourceforge.net/project
 SF_ROOT     = $(SF_SITE)
 SF_VERSION ?= $(SOFTWARE_VERSION)
-SF_MIRROR   = $(SF_ROOT)/$(SF_PROJECT)
-
-http://downloads.sourceforge.net/project/check/check/0.9.14/check-0.9.14.tar.gz
+SF_MIRROR   = $(SF_ROOT)/$(SF_PROJECT)/files/$(SF_PROJECT)/$(SOFTWARE_VERSION)
 
 # ------------------------------------------------------------------------------
 #
@@ -112,3 +110,17 @@ BUILD_SCRIPTS       ?= $(WORK_SRC)/Makefile
 #PREREQUISITE_BASE_PKGS ?= make
 #PREREQUISITE_BASE_PKGS_UBUNTU ?= build-essential
 
+# ------------------------------------------------------------------------------
+#
+# Defines the default values for directories
+#
+# ------------------------------------------------------------------------------
+TEXT_UNDERLINE=\e[4m	  			# Underline
+TEXT_BOLD=\e[1m    		   			# Bold
+TEXT_RED=\e[31m    					# Red
+TEXT_GREEN=\e[32m 	 				# Green
+TEXT_YELLOW=\e[33m	    			# Yellow
+TEXT_BLUE=\e[34m    				# Blue
+TEXT_CYAN=\e[96m    				# Cyan
+TEXT_WHITE=\e[97m   				# White
+TEXT_RESET=\e[39m	 	      		# Text reset
