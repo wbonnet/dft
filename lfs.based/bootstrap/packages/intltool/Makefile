@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = intltool
 
 # Defines the software version
-SOFTWARE_VERSION = 0.50.2
+SOFTWARE_VERSION = 0.51.0
 
 # Definies the upstream site
 SOFTWARE_UPSTREAM_SITES = http://launchpad.net/intltool/trunk/$(SOFTWARE_VERSION)/+download/

@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = check
 
 # Defines the software version
-SOFTWARE_VERSION = 0.9.14
+SOFTWARE_VERSION = 0.10.0
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

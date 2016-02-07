@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = eudev
 
 # Defines the software version
-SOFTWARE_VERSION = 2.1.1
+SOFTWARE_VERSION = 3.1.2
 
 # Definies the upstream site
 SOFTWARE_UPSTREAM_SITES = http://dev.gentoo.org/~blueness/$(SOFTWARE_UPSTREAM_NAME)/

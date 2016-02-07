@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = procps-ng
 
 # Defines the software version
-SOFTWARE_VERSION = 3.3.10
+SOFTWARE_VERSION = 3.3.11
 
 # If this software is a GNU project, then set the variable
 # GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

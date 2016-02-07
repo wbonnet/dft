@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = iproute2
 
 # Defines the software version
-SOFTWARE_VERSION = 3.19.0
+SOFTWARE_VERSION = 4.2.0
 SOFTWARE_UPSTREAM_SITES = http://www.kernel.org/pub/linux/utils/net/$(SOFTWARE_UPSTREAM_NAME)
 
 # If this software is a GNU project, then set the variable

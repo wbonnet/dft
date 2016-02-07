@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = patch
 
 # Defines the software version
-SOFTWARE_VERSION = 2.7.4
+SOFTWARE_VERSION = 2.7.5
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

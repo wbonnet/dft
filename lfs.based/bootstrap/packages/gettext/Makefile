@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = gettext
 
 # Defines the software version
-SOFTWARE_VERSION = 0.19.4
+SOFTWARE_VERSION = 0.19.5.1
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

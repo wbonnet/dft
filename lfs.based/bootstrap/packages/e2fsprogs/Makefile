@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = e2fsprogs
 
 # Defines the software version
-SOFTWARE_VERSION = 1.42.12
+SOFTWARE_VERSION = 1.42.13
 
 # If this software is a SourceForge hosted project, then set the variable
 SF_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = coreutils
 
 # Defines the software version
-SOFTWARE_VERSION = 8.23
+SOFTWARE_VERSION = 8.24
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

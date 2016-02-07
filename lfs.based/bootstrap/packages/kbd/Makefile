@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = kbd
 
 # Defines the software version
-SOFTWARE_VERSION = 2.0.2
+SOFTWARE_VERSION = 2.0.3
 SOFTWARE_UPSTREAM_SITES = http://ftp.altlinux.org/pub/people/legion/$(SOFTWARE_UPSTREAM_NAME)
 
 # If this software is a GNU project, then set the variable

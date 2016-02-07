@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = ncurses
 
 # Defines the software version
-SOFTWARE_VERSION = 5.9
+SOFTWARE_VERSION = 6.0
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

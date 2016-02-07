@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = texinfo
 
 # Defines the software version
-SOFTWARE_VERSION = %%SOFTWARE_VERSION%%
+SOFTWARE_VERSION = 6.0
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

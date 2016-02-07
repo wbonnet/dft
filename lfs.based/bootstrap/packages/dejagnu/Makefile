@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = dejagnu
 
 # Defines the software version
-SOFTWARE_VERSION = 1.5.2
+SOFTWARE_VERSION = 1.5.3
 
 # If this software is a GNU project, then set the variable
 GNU_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

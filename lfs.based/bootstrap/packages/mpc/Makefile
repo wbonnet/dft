@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = mpc
 
 # Defines the software version
-SOFTWARE_VERSION = 1.0.2
+SOFTWARE_VERSION = 1.0.3
 SOFTWARE_UPSTREAM_SITES = http://www.multiprecision.org/$(SOFTWARE_UPSTREAM_NAME)/download
 
 # If this software is a GNU project, then set the variable

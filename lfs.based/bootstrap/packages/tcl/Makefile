@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = tcl
 
 # Defines the software version
-SOFTWARE_VERSION = 8.6.3
+SOFTWARE_VERSION = 8.6.4
 
 # If this software is a SourceForge hosted project, then set the variable
 SF_PROJECT = $(SOFTWARE_UPSTREAM_NAME)

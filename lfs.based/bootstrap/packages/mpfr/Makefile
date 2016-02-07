@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = mpfr
 
 # Defines the software version
-SOFTWARE_VERSION = 3.1.2
+SOFTWARE_VERSION = 3.1.3
 SOFTWARE_UPSTREAM_SITES = http://www.mpfr.org/$(SOFTWARE_UPSTREAM_NAME)-$(SOFTWARE_VERSION)
 
 # If this software is a GNU project, then set the variable

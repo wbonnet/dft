@@ -33,7 +33,7 @@
 SOFTWARE_UPSTREAM_NAME = util-linux
 
 # Defines the software version
-SOFTWARE_VERSION = 2.26
+SOFTWARE_VERSION = 2.27
 SOFTWARE_UPSTREAM_SITES = http://www.kernel.org/pub/linux/utils/$(SOFTWARE_UPSTREAM_NAME)/v$(SOFTWARE_VERSION)
 
 # If this software is a GNU project, then set the variable
