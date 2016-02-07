@@ -51,9 +51,9 @@ include $(SOFTWARE_UPSTREAM_NAME).mk
 # Include the build system root makefile
 include buildsystem/lffs.mk
 
-make mrproper
-Maintenant, testez et faites l'extraction à partir des sources des en-têtes du noyau visibles par l'utilisateur. Elles se situent dans un répertoire local intermédiaire et on les copie dans le répertoire adéquat car le processus d'extraction supprime tous les fichiers existant dans le répertoire cible.
+# make mrproper
+# Maintenant, testez et faites l'extraction à partir des sources des en-têtes du noyau visibles par l'utilisateur. Elles se situent dans un répertoire local intermédiaire et on les copie dans le répertoire adéquat car le processus d'extraction supprime tous les fichiers existant dans le répertoire cible.
 
-make headers_check
-make INSTALL_HDR_PATH=dest headers_install
-cp -rv dest/include/* /tools/include
+# make headers_check
+# make INSTALL_HDR_PATH=dest headers_install
+# cp -rv dest/include/* /tools/include
