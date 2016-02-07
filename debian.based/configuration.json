@@ -2,7 +2,6 @@
 // TODO Handle keyring
 // TODO Handle repo sync between upstream and local
 // TODO Handle package compilation
-// TODO liste des flavours pour ps fire nimporte quoi et les controler dans le check config
 // TODO Configuration for rootfs and initramfs
 // TODO Block with generic configuration ? 
 // TODO groups of groups ?
@@ -64,22 +63,19 @@
 			"group-name" : "base" ,
 			"packages"	: [
 				{ "name" : "apt" } ,
-				{ "name" : "wget" } ,
-				{ "name" : "locales" } ,
 				{ "name" : "ethtool" } ,
-				{ "name" : "initramfs-tools" } ,
 				{ "name" : "gawk" } ,
+				{ "name" : "initramfs-tools" } ,
 				{ "name" : "isc-dhcp-client" } ,
-				{ "name" : "linux-image" }
-				{ "name" : "sudo" }
+				{ "name" : "linux-image" } ,
+				{ "name" : "locales" } ,
+				{ "name" : "sudo" } ,
+				{ "name" : "wget" }
 			]
 		} ,
-		// Security and network security packages
+		// Security security packages
 		{ 
 			"group-name" : "security" ,
-			"exclude-from-flavour" : [
-				{ "name" : "debug" }
-			] ,
 			"packages"	: [
 				{ "name" : "shorewall" }
 			]
@@ -87,29 +83,58 @@
 		// Some packages used for debugging, not present in production target
 		{ 
 			"group-name" : "debug" ,
-			"exclude-from-flavour" : [
-				{ "name" : "validation" } ,
-				{ "name" : "production" } 
-			] ,
 			"packages"	: [
 				{ "name" : "apt" } ,
 				{ "name" : "apt-utils"  } ,
 				{ "name" : "apt-file"  } ,
 				{ "name" : "aptitude"  } ,
 				{ "name" : "bash-completion"  } ,
-				{ "name" : "openssh-server"  } ,
+				{ "name" : "host" } ,
 				{ "name" : "htop" } ,
-				{ "name" : "vim" } ,
-				{ "name" : "tree" } ,
 				{ "name" : "less" } ,
 				{ "name" : "lsof" } ,
-				{ "name" : "host" } ,
+				{ "name" : "openssh-server"  } ,
 				{ "name" : "rsyslog" } ,
-				{ "name" : "strace" }
+				{ "name" : "strace" } ,
+				{ "name" : "tree" } ,
+				{ "name" : "vim" }
 			]
 		}
 	]
 }
+
+// ----------------------------------------------------------------------------
+//
+// Flavours definitions, uses group-of packages, packages and defines exclusion
+//
+{ "flavours" : [
+		{
+			"name" : "debug",
+			"group-of-packages" : [
+				"debug"
+			], 
+			"exclude-group-of-packages" : [
+				"security"
+			] 
+		},
+		{
+			"name" : "validation",
+			"exclude-group-of-packages" : [
+				"debug"
+			], 
+			"packages" : [
+				"iotop" 
+			]
+		},
+		{
+			"name" : "production",
+			"exclude-group-of-packages" : [
+				"debug"
+			] 
+		}
+	]
+}
+
 
 // ----------------------------------------------------------------------------
 //
@@ -120,8 +145,7 @@
 			"name" : "test",
 			"group-of-packages" : [
 				"base" ,
-				"security" ,
-				"debug"
+				"security"
 			] ,
 			"packages" : [
 				"less" 
@@ -139,9 +163,6 @@
 
 	]
 }
-
-// affinity to flavour ?
-
 
 // ----------------------------------------------------------------------------
 //
@@ -195,14 +216,13 @@
 //
 { "production-targets" : [
 		{
-			"include-in-build" : true , 
+			"include-in-build" : false , 
 			"name" : "test-Jessie-rpi2" ,
 			"board" : "Raspberry PI 2" ,
 			"distribution" : "Debian Jessie" ,
 			"firmware" : "test" ,
 			"flavours-to-build" : [
-				"production" ,
-				"ivvq" 
+				"production" 
 			]
 		} ,
 		{ 
@@ -213,12 +233,9 @@
 			"firmware" : "test" ,
 			"flavours-to-build" : [
 				"production" ,
-				"ivvq" ,
+				"validation" ,
 				"debug"
 			]
 		}
 	]
 }
-
-
-// definition of flavours
