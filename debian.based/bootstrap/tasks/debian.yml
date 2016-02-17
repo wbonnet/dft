@@ -1,0 +1,41 @@
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
+# All rights reserved. Use is subject to license terms.
+#
+#
+# Contributors list :
+#
+#    William Bonnet   wllmbnnt@gmail.com
+#
+#
+
+---
+- hosts: ebmr
+  user: root
+  tasks:
+    - name: Add source repository into sources list.
+      apt_repository: repo='deb http://ftp.fr.debian.org/debian/ jessie main contrib non-free' state=present
+      apt_repository: repo='deb-src http://ftp.fr.debian.org/debian/ jessie main contrib non-free' state=present
+      apt_repository: repo='deb http://security.debian.org/ jessie/updates main contrib non-free' state=present
+      apt_repository: repo='deb-src http://security.debian.org/ jessie/updates main contrib non-free' state=present
+      apt_repository: repo='deb http://ftp.fr.debian.org/debian/ jessie-updates main contrib non-free' state=present
+      apt_repository: repo='deb-src http://ftp.fr.debian.org/debian/ jessie-updates main contrib non-free' state=present
+
+  tasks:
+   - name: Install packages
+     apt: name={{item}} state=installed update_cache=true
+     with_items:
+        - sudo
+        - htop
+        - tree
+        - vim
+        - rsync     
