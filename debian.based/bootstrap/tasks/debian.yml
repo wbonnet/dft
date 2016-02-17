@@ -19,7 +19,7 @@
 #
 
 ---
-- hosts: ebmr
+- hosts: debian-servers
   user: root
   tasks:
     - name: Add source repository into sources list.
