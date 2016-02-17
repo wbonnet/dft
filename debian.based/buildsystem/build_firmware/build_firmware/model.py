@@ -17,3 +17,84 @@
 #    William Bonnet 	wllmbnnt@gmail.com
 #
 #
+
+class Repository
+#					"url" : "http://ftp.fr.debian.org/debian/" ,
+#					"suite" : "jessie" ,
+#					"sections" : [
+#						"main" ,
+#						"contrib" ,
+#						"non-free"
+
+class Distribuion:
+#			"name" : "Debian Jessie" ,
+#			"architecture" : [
+#				"amd64" ,
+#				"i386" ,
+#				"armel" ,
+#				"armhf"
+
+class Package:
+#			{ "name" : "apt" } ,
+
+
+class GroupOfPackage : 
+#			"group-name" : "base" ,
+#			"packages"	: [
+#				{ "name" : "ethtool" } ,
+#				{ "name" : "gawk" } ,
+
+
+class Flavour:
+#			"name" : "debug",
+#			"group-of-packages" : [
+#				"debug"
+#			], 
+#			"exclude-group-of-packages" : [
+#				"security"
+#			] 
+#			"packages" : [
+#				"iotop" 
+#			]
+
+
+class Firmware:
+#			"name" : "test",
+#			"group-of-packages" : [
+#				"base" ,
+#				"security"
+#			] ,
+#			"packages" : [
+#				"less" 
+#			]
+#		},
+#""		{
+#			"name" : "depends-test",
+#			"based-on-firmware" : [
+#				"test"
+#			] ,
+#			"packages" : [
+#				"iotop" 
+#			]
+#		}
+
+class Board:
+#/			"name" : "Beagleboard Black" ,
+#//			"architecture" : "armel" ,
+#//			"group-of-packages" : [
+#//				"raspberry-pi-2-support"
+#//			]
+#//			repository ?
+#//			kernel ?
+
+class ProductionTarget:
+#			"include-in-build" : false , 
+#""			"name" : "test-Jessie-rpi2" ,
+#			"board" : "Raspberry PI 2" ,
+#			"distribution" : "Debian Jessie" ,
+#			"firmware" : "test" ,
+#			"flavours-to-build" : [
+#				"production" ,
+#				"validation" ,
+#				"debug"
+#			]
