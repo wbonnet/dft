@@ -106,7 +106,7 @@
 { "flavours" : [
 		{
 			"name" : "debug",
-			"group-of-packages" : [
+			"groups-of-packages" : [
 				"debug"
 			], 
 			"exclude-group-of-packages" : [
@@ -139,7 +139,7 @@
 { "firmwares" : [
 		{
 			"name" : "test",
-			"group-of-packages" : [
+			"groups-of-packages" : [
 				"base" ,
 				"security"
 			] ,
@@ -168,7 +168,7 @@
 //		{ 
 //			"name" : "Beagleboard Black" ,
 //			"architecture" : "armel" ,
-//			"group-of-packages" : [
+//			"groups-of-packages" : [
 //				"raspberry-pi-2-support"
 //			]
 //			repository ?
@@ -177,21 +177,21 @@
 		{ 
 			"name" : "Raspberry PI 2" ,
 			"architecture" : "armhf" ,
-			"group-of-packages" : [
+			"groups-of-packages" : [
 				"raspberry-pi-2-support"
 			]
 		} ,
 		{
 			"name" : "Raspberry PI A" ,
 			"architecture" : "armel" ,
-			"group-of-packages" : [
+			"groups-of-packages" : [
 				"raspberry-pi-a-support"
 			]
 		} ,
 		{ 
 			"name" : "Raspberry PI B 512Mo" ,
 			"architecture" : "armel" ,
-			"group-of-packages" : [
+			"groups-of-packages" : [
 				"raspberry-pi-b-support"
 			]
 		} ,
