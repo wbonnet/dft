@@ -24,7 +24,7 @@
   tasks:
 
   # Create a ftpsync group
-  - user: name=ftpsync state=present
+  - group: name=ftpsync state=present
 
   # Add the user 'ftpsync' with a bash shell, appending the group 'ftpsync' to the user's groups
   - user: name=ftpsync shell=/bin/bash groups=ftpsync append=yes

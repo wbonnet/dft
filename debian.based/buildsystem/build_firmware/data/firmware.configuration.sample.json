@@ -1,6 +1,7 @@
 // TODO Configuration for rootfs and initramfs
 // TODO Block with generic configuration ? 
 // TODO groups of groups ?
+// TODO version range and version blacklist for packages
 
 // ----------------------------------------------------------------------------
 //
