@@ -18,7 +18,13 @@
 #
 #
 
-class Repository
+class Repository:
+	'Class for reposotories'
+
+	def __init__(self, url, suite, sections):
+		self.url = url
+		self.suite = suite
+		self.sections = sections
 #					"url" : "http://ftp.fr.debian.org/debian/" ,
 #					"suite" : "jessie" ,
 #					"sections" : [
@@ -27,6 +33,11 @@ class Repository
 #						"non-free"
 
 class Distribuion:
+	'Class for distributions'
+
+	def __init__(self, name, architecture):
+		self.name = name
+		self.architecture = architecture
 #			"name" : "Debian Jessie" ,
 #			"architecture" : [
 #				"amd64" ,
@@ -35,10 +46,19 @@ class Distribuion:
 #				"armhf"
 
 class Package:
+	'Class for packages'
+
+	def __init__(self, name):
+		self.name = name
 #			{ "name" : "apt" } ,
 
 
 class GroupOfPackage : 
+	'Class for groups of packages'
+
+	def __init__(self, group_name):
+		self.group_name = group_name
+		self.packages = packages
 #			"group-name" : "base" ,
 #			"packages"	: [
 #				{ "name" : "ethtool" } ,
@@ -46,6 +66,12 @@ class GroupOfPackage :
 
 
 class Flavour:
+	'Class for flavours'
+
+	def __init__(self, name, exclude_group_of_packages, packages):
+		self.name = name
+		self.exclude_group_of_packages = exclude_group_of_packages
+		self.packages = packages
 #			"name" : "debug",
 #			"group-of-packages" : [
 #				"debug"
@@ -59,6 +85,13 @@ class Flavour:
 
 
 class Firmware:
+	'Class for firmwares'
+
+	def __init__(self, name, group_of_packages, packages, based_on_firmware):
+		self.name = name
+		self.group_of_packages = group_of_packages
+		self.packages = packages
+		self.based_on_firmware = based_on_firmware
 #			"name" : "test",
 #			"group-of-packages" : [
 #				"base" ,
@@ -79,6 +112,12 @@ class Firmware:
 #		}
 
 class Board:
+	'Class for boards'
+
+	def __init__(self, name, architecture, group_of_packages):
+		self.name = name
+		self.architecture = architecture
+		self.group_of_packages = group_of_packages
 #/			"name" : "Beagleboard Black" ,
 #//			"architecture" : "armel" ,
 #//			"group-of-packages" : [
@@ -88,6 +127,8 @@ class Board:
 #//			kernel ?
 
 class ProductionTarget:
+		'Class for production targets'
+
 #			"include-in-build" : false , 
 #""			"name" : "test-Jessie-rpi2" ,
 #			"board" : "Raspberry PI 2" ,
