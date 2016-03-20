@@ -28,7 +28,7 @@
             dest=/etc/apt/sources.list 
             owner=root 
             group=root 
-            mode="u=rw,g=r,o=r"           
+            mode="u=rw,g=r,o=r"          
 
 - name: Install packages
   apt: name={{ item }} 
