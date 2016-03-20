@@ -23,6 +23,7 @@
 #
 
 ---
+# Copy the apt sources templates to the target host and set distribution version
 - name: Copy sources.list template to target host
   template: src=templates/sources.list.j2 
             dest=/etc/apt/sources.list 
@@ -30,6 +31,7 @@
             group=root 
             mode="u=rw,g=r,o=r"          
 
+# Install some useful packages. All of these should be by default the machines
 - name: Install packages
   apt: name={{ item }} 
        state=installed 

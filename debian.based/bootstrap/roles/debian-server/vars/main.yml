@@ -1,0 +1,30 @@
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
+# All rights reserved. Use is subject to license terms.
+#
+#
+# Contributors list :
+#
+#    William Bonnet   wllmbnnt@gmail.com
+#
+#
+
+#
+# debian-server variables definition
+#
+
+# default value is current stable version (jessie)
+# not using 'stable' because it could change over time
+# it seems better to change it to stretch and so one by the
+# administrator, instead of having an automatic change of 
+# 'stable' version
+debian_version: jessie
