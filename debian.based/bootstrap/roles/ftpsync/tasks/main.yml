@@ -18,68 +18,88 @@
 #
 #
 
+#
+# Common installation tasks to get a ftpsync up and running
+#
+
 ---
-- hosts: debian-repository
-  user: root
-  tasks:
+# Create the ftpsync group
+- name: Create the ftpsync group
+  group: name={{ ftpsync_user_group }} state=present
 
-  # Create a ftpsync group
-  - group: name=ftpsync state=present
+# Add the user 'ftpsync' with a bash shell, appending the group 'ftpsync' to the user's groups
+- name: Create the ftpsync user
+  user: name={{ ftpsync_user_username }} shell={{ ftpsync_user_shell }} home={{ ftpsync_user_home_dir }} groups={{ ftpsync_user_group }} append=yes 
 
-  # Add the user 'ftpsync' with a bash shell, appending the group 'ftpsync' to the user's groups
-  - user: name=ftpsync shell=/bin/bash groups=ftpsync append=yes
+# Install the Apache Web server
+- name: Install Apache web server
+  apt: pkg=apache2 state=installed update_cache=true 
 
-  # Install the Apache Web server
-  - name: Install Apache web server
-    apt: pkg=apache2 state=installed update_cache=true 
+# Create the target directory
+- name: Create target directory
+  file: path={{ ftpsync_repository_dir }} state=directory mode=0775 group={{ ftpsync_user_group }}
 
-  # Create the target directory
-  - name: Create target directory
-    file: path=/var/www/repository state=directory mode=0775 group=ftpsync
+# Download the ftpsync archive
+- name: Get ftp sync and extract archive
+  unarchive: src=https://ftp-master.debian.org/ftpsync.tar.gz dest=/tmp copy=no
 
-  # Download the ftpsync archive
-  - name: Get ftp sync and extract archive
-    unarchive: src=https://ftp-master.debian.org/ftpsync.tar.gz dest=/tmp copy=no
+# Copy the extract files to the ftpsync user home directory
+- name: Copy the extracted files to usr/local
+  command: cp -fr /tmp/distrib/{{item}} {{ ftpsync_user_home_dir }}
+  with_items:
+    - bin
+    - etc
+    - log
+    - README
 
-  # Copy the extract files to the ftpsync user home directory
-  - name: Copy the extracted files to usr/local
-    command: cp -fr /tmp/distrib/{{item}} /home/ftpsync
-    with_items:
-      - bin
-      - etc
-      - log
-      - README
+# Chown ownership of files in ftpsync homedir
+- name: Change the ownship of ftpsync homedir files and dirs
+  file: path={{ ftpsync_user_home_dir }} 
+        group=ftpsync 
+        owner=ftpsync 
+        recurse=yes
 
-  # Chown ownership of files in ftpsync homedir
-  - name: Change the ownship of ftpsync homedir files and dirs
-    file: path=/home/ftpsync group=ftpsync owner=ftpsync recurse=yes
+# Clean the distrib dir from /tmp
+- name: Delete the distrib dir after copying to user
+  file: path=/tmp/distrib state=absent
 
-  # Clean the distrib dir from /tmp
-  - name: Delete the distrib dir after copying to user
-    file: path=/tmp/distrib state=absent
+# Copy the template to configuration file
+- name: Copy the ftpconf.conf.sample to production file
+  command: cp  {{ ftpsync_user_home_dir }}/etc/ftpsync.conf.sample {{ ftpsync_user_home_dir }}/etc/ftpsync.conf
 
-  # Copy the template to configuration file
-  - name: Copy the ftpconf.conf.sample to production file
-    command: cp  /home/ftpsync/etc/ftpsync.conf.sample /home/ftpsync/etc/ftpsync.conf
+# Add the destination dir to the configuration file
+- name: Modify the configuration file used for synchronization TO destination dir
+  lineinfile: dest={{ ftpsync_user_home_dir }}/etc/ftpsync.conf 
+              state=present 
+              line='TO="{{ ftpsync_repository_dir }}"'
 
-  # Add the destination dir to the configuration file
-  - name: Modify the configuration file used for synchronization TO destination dir
-    lineinfile: dest=/home/ftpsync/etc/ftpsync.conf state=present line='TO="/var/www/repository/"'
+# Add the mirror to the configuration file
+- name: Modify the configuration file used for synchronization RSYNC mirror to use
+  lineinfile: dest={{ ftpsync_user_home_dir }}/etc/ftpsync.conf 
+              state=present 
+              line="RSYNC_HOST={{ ftpsync_conf_debian_mirror }}"
 
-  # Add the mirror to the configuration file
-  - name: Modify the configuration file used for synchronization RSYNC mirror to use
-    lineinfile: dest=/home/ftpsync/etc/ftpsync.conf state=present line="RSYNC_HOST=ftp.fr.debian.org"
+# Add the EXCLUDE directive to the configuration file
+- name: Modify the configuration file used for synchronization EXCLUDE
+  lineinfile: dest={{ ftpsync_user_home_dir }}/etc/ftpsync.conf 
+              state=present 
+              line='EXCLUDE="{{ ftpsync_conf_exclude }}"' 
 
-  # Add the EXCLUDE directive to the configuration file
-  - name: Modify the configuration file used for synchronization EXCLUDE
-    lineinfile: dest=/home/ftpsync/etc/ftpsync.conf state=present line='EXCLUDE="--exclude=jessie-k** --exclude=oldstable* --exclude=sid* --exclude=testing* --exclude=unstable* --exclude=experimental* --exclude=Debian* --exclude=stable* --exclude=stretch* --exclude=wheezy* --exclude=oldold* --exclude=squeeze* --exclude=rc-buggy"' 
+# Add the ARCH_ EXCLUDE directive to the configuration file
+- name: Modify the configuration file used for synchronization ARCH_EXCLUDE
+  lineinfile: dest={{ ftpsync_user_home_dir }}/etc/ftpsync.conf 
+              state=present 
+              line='ARCH_INCLUDE="{{ ftpsync_conf_arch_include }}"' 
 
-  # Add the ARCH_ EXCLUDE directive to the configuration file
-  - name: Modify the configuration file used for synchronization ARCH_EXCLUDE
-    lineinfile: dest=/home/ftpsync/etc/ftpsync.conf state=present line='ARCH_EXCLUDE="alpha arm arm64 armhf hppa hurd-i386 i386 ia64 kfreebsd-amd64 kfreebsd-i386 m68k mips64el mipsel mips powerpc ppc64el s390 s390x sh sparc"' 
-
-  # Add ftpsync to cron table for user ftpsync. Scheduled every 12 hours.
-  - cron: name="Repository update" hour="11,23" user="ftpsync" job="cd /home/ftpsync/ && /home/ftpsync/bin/ftpsync"
+# Add ftpsync to cron table for user ftpsync. Scheduled every 12 hours.
+- cron: name="Repository update" 
+        month={{ftpsync_cron_month}} 
+        weekday={{ftpsync_cron_weekday}} 
+        day={{ftpsync_cron_day}} 
+        hour={{ftpsync_cron_hour}} 
+        minute={{ftpsync_cron_minute}} 
+        user="{{ ftpsync_user_username }}" 
+        job="cd {{ ftpsync_user_home_dir }} && {{ ftpsync_user_home_dir }}/bin/ftpsync"
 
 
    

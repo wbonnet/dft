@@ -24,10 +24,16 @@
 
 ---
 - name: Copy sources.list template to target host
-  template: src=templates/sources.list.j2 dest=/etc/apt/sources.list owner=root group=root mode="u=rw,g=r,o=r" backup=yes
+  template: src=templates/sources.list.j2 
+            dest=/etc/apt/sources.list 
+            owner=root 
+            group=root 
+            mode="u=rw,g=r,o=r"           
 
 - name: Install packages
-  apt: name={{ item }} state=installed update_cache=true
+  apt: name={{ item }} 
+       state=installed 
+       update_cache=true
   with_items:
     - sudo
     - htop
