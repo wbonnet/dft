@@ -31,6 +31,6 @@ ftpsync_cron_weekday: "*"
 ftpsync_cron_day: "*"
 ftpsync_cron_hour: "11,23"
 ftpsync_cron_minute: "*"
-ftpsync_conf_debian_mirror: ftp.fr.debian.org
+ftpsync_conf_debian_mirror: ftp.de.debian.org
 ftpsync_conf_arch_include: "amd64 armel amrhf arm64 sources"
-ftpsync_conf_exclude: "--exclude=jessie-k** --exclude=oldstable* --exclude=sid* --exclude=testing* --exclude=unstable* --exclude=experimental* --exclude=Debian* --exclude=stable* --exclude=stretch* --exclude=wheezy* --exclude=oldold* --exclude=squeeze* --exclude=rc-buggy"
+ftpsync_conf_exclude: "--exclude=jessie-k** --exclude=oldstable* --exclude=sid* --exclude=unstable* --exclude=experimental* --exclude=Debian* --exclude=wheezy* --exclude=oldold* --exclude=squeeze* --exclude=rc-buggy"
