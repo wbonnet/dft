@@ -101,5 +101,18 @@
         user="{{ ftpsync_user_username }}" 
         job="cd {{ ftpsync_user_home_dir }} && {{ ftpsync_user_home_dir }}/bin/ftpsync"
 
+# Copy the Apache vhost configuration file to the server 
+- name: Copy Apache vhost configuration file to to target host
+  template: src=templates/001-ftpsync-debian-mirror.conf.j2
+            dest=/etc/apache2/sites-available/001-ftpsync-debian-mirror.conf
+            owner=root 
+            group=root 
+            mode="u=rw,g=r,o=r"          
 
-   
+# Enable the Apache vhost
+- name: Enable the Apache vhost
+  command: a2ensite 001-ftpsync-debian-mirror
+
+# Restart the Apache configuration
+- name: Restart the Apache configuration
+  service: name=apache2 state=restarted

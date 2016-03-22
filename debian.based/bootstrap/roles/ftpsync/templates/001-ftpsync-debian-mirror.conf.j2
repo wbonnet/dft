@@ -1,0 +1,55 @@
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
+# All rights reserved. Use is subject to license terms.
+#
+#
+# Contributors list :
+#
+#    William Bonnet   wllmbnnt@gmail.com
+#
+#
+
+<VirtualHost *:80>
+    # The ServerName directive sets the request scheme, hostname and port that
+    # the server uses to identify itself. This is used when creating
+    # redirection URLs. In the context of virtual hosts, the ServerName
+    # specifies what hostname must appear in the request's Host: header to
+    # match this virtual host. For the default virtual host (this file) this
+    # value is not decisive as it is used as a last resort host regardless.
+    # However, you must set it for any further virtual host explicitly.
+{% if ftpsync_apache_vhost_servername is defined %}
+    ServerName {{ ftpsync_apache_vhost_servername }}
+{% else %}
+    #ServerName example.com
+{% endif %}
+{% if ftpsync_apache_vhost_serveralias is defined %}
+    ServerName {{ ftpsync_apache_vhost_serveralias }}
+{% else %}
+    #ServerAlias www.example.com
+{% endif %}
+
+    ServerAdmin webmaster@localhost
+    DocumentRoot {{ ftpsync_repository_dir }}
+
+    # Options to be set for a Debian mirror. Symlinks must be working
+    Options +Indexes +SymlinksIfOwnerMatch
+
+    # Options to be set for a Debian mirror. Descriptions are suppressed
+    IndexOptions NameWidth=* +SuppressDescription
+
+    # Defines the log level
+    LogLevel {{ ftpsync_apache_vhost_log_level }}
+
+    ErrorLog ${APACHE_LOG_DIR}/{{ ftpsync_apache_vhost_error_log_file }}
+    CustomLog ${APACHE_LOG_DIR}/{{ ftpsync_apache_vhost_access_log_file }} combined
+
+</VirtualHost>

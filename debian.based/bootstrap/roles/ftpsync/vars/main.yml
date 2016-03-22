@@ -31,6 +31,23 @@ ftpsync_cron_weekday: "*"
 ftpsync_cron_day: "*"
 ftpsync_cron_hour: "11,23"
 ftpsync_cron_minute: "*"
+
+#
+# ftpsync configuration file variables
+#
 ftpsync_conf_debian_mirror: ftp.de.debian.org
 ftpsync_conf_arch_include: "amd64 armel amrhf arm64 sources"
 ftpsync_conf_exclude: "--exclude=jessie-k** --exclude=oldstable* --exclude=sid* --exclude=unstable* --exclude=experimental* --exclude=Debian* --exclude=wheezy* --exclude=oldold* --exclude=squeeze* --exclude=rc-buggy"
+
+#
+# Apache virtual host variabless
+#
+
+# Uncomment the next line to activate the ServerName directive in the vhost
+#ftpsync_apache_vhost_servername: example.com
+# Uncomment the next line to activate the ServerAlias directive in the vhost
+#ftpsync_apache_vhost_serveralias: mirror.example.com
+ftpsync_apache_vhost_error_log_file: debian-mirror.error.log
+ftpsync_apache_vhost_access_log_file: debian-mirror.access.log
+ftpsync_apache_vhost_log_level: warn
+ftpsync_apache_vhost_directory: debian
