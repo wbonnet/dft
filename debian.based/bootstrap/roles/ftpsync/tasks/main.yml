@@ -63,9 +63,53 @@
 - name: Delete the distrib dir after copying to user
   file: path=/tmp/distrib state=absent
 
-# Copy the template to configuration file
-- name: Copy the ftpconf.conf.sample to production file
-  command: cp  {{ ftpsync_user_home_dir }}/etc/ftpsync.conf.sample {{ ftpsync_user_home_dir }}/etc/ftpsync.conf
+# Copy the ftpsync main archive configuration file to target host 
+- name: Copy ftpsync main archive configuration file to target host
+  template: src=templates/ftpsync.conf.j2
+            dest={{ ftpsync_user_home_dir }}/etc/ftpsync.conf
+            owner=ftpsync 
+            group=ftpsync
+            mode="u=rw,g=r,o=r"          
+
+# Copy the ftpsync backports archive configuration file to target host 
+- name: Copy ftpsync backports archive configuration file to target host
+  template: src=templates/ftpsynci-backports.conf.j2
+            dest={{ ftpsync_user_home_dir }}/etc/ftpsync-backports.conf
+            owner=ftpsync 
+            group=ftpsync
+            mode="u=rw,g=r,o=r"          
+
+# Copy the ftpsync security archive configuration file to target host 
+- name: Copy ftpsync security archive configuration file to target host
+  template: src=templates/ftpsync-security.conf.j2
+            dest={{ ftpsync_user_home_dir }}/etc/ftpsync-security.conf
+            owner=ftpsync 
+            group=ftpsync
+            mode="u=rw,g=r,o=r"          
+
+# Copy the ftpsync ports archive configuration file to target host 
+- name: Copy ftpsync ports archive configuration file to target host
+  template: src=templates/ftpsync-ports.conf.j2
+            dest={{ ftpsync_user_home_dir }}/etc/ftpsync-ports.conf
+            owner=ftpsync 
+            group=ftpsync
+            mode="u=rw,g=r,o=r"          
+
+# Copy the synchronize_all_archives script to target host 
+- name: Copy synchronize_all_archives script to target host
+  copy:     src=files/synchronize_all_archives
+            dest={{ ftpsync_user_home_dir }}/bin/synchronize_all_archives
+            owner=ftpsync 
+            group=ftpsync
+            mode="u=rwx,g=rx,o=rx"          
+
+# Copy the synchronize_all_archives configuration file to target host 
+- name: Copy synchronize_all_archives configuration file to target host
+  template: src=templates/synchronize_all_archives.conf.j2
+            dest={{ ftpsync_user_home_dir }}/etc/synchronize_all_archives.conf
+            owner=ftpsync 
+            group=ftpsync
+            mode="u=rw,g=r,o=r"          
 
 # Add the destination dir to the configuration file
 - name: Modify the configuration file used for synchronization TO destination dir
@@ -99,10 +143,10 @@
         hour={{ftpsync_cron_hour}} 
         minute={{ftpsync_cron_minute}} 
         user="{{ ftpsync_user_username }}" 
-        job="cd {{ ftpsync_user_home_dir }} && {{ ftpsync_user_home_dir }}/bin/ftpsync"
+        job="cd {{ ftpsync_user_home_dir }} && {{ ftpsync_user_home_dir }}/bin/synchronize-all-archives-with-ftpsync"
 
-# Copy the Apache vhost configuration file to the server 
-- name: Copy Apache vhost configuration file to to target host
+# Copy the Apache vhost configuration file to target host 
+- name: Copy Apache vhost configuration file to target host
   template: src=templates/001-ftpsync-debian-mirror.conf.j2
             dest=/etc/apache2/sites-available/001-ftpsync-debian-mirror.conf
             owner=root 
