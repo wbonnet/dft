@@ -4,7 +4,7 @@
 cd ${HOME}
 
 # Source the synchronize all configuration file
-source ${HOME}/etc/synchronize-all-archives.cfg
+source ${HOME}/etc/ftpsync-synchronize-all-archives.conf
 
 # Synchronize main archive
 if [ ${SYNCHRONIZE_ALL_ARCHIVES_DO_SYNCHRONIZE_MAIN} -eq 1 ] ;
@@ -12,10 +12,21 @@ then
   ${HOME}/bin/ftpsync
 fi
 
-# Iterate the list of other archives
-for ARCHIVE in backports security ports do ;
-  if [ ${SYNCHRONIZE_ALL_ARCHIVES_DO_SYNCHRONIZE_${ARCHIVE}} -eq 1 ] ;
-  then
-    ${HOME}/bin/ftpsync sync:archive:${ARCHIVE}
-  fi
-done
+# Synchronize ports archive
+if [ ${SYNCHRONIZE_ALL_ARCHIVES_DO_SYNCHRONIZE_PORTS} -eq 1 ] ;
+then
+  ${HOME}/bin/ftpsync sync:archive:ports
+fi
+
+# Synchronize backports archive
+if [ ${SYNCHRONIZE_ALL_ARCHIVES_DO_SYNCHRONIZE_BACKPORTS} -eq 1 ] ;
+then
+  ${HOME}/bin/ftpsync sync:archive:backports
+fi
+
+# Synchronize security archive
+if [ ${SYNCHRONIZE_ALL_ARCHIVES_DO_SYNCHRONIZE_SECURITY} -eq 1 ] ;
+then
+  ${HOME}/bin/ftpsync sync:archive:security
+fi
+

@@ -49,6 +49,7 @@ ftpsync_apache_vhost_error_log_file: debian-mirror.error.log
 ftpsync_apache_vhost_access_log_file: debian-mirror.access.log
 ftpsync_apache_vhost_log_level: warn
 ftpsync_apache_vhost_directory: debian
+ftpsync_apache_document_root: /var/www/repository/
 
 #
 # ftpsync main archive configuration
@@ -57,10 +58,7 @@ ftpsync_main_repository_dir: /var/www/repository/debian
 ftpsync_conf_main_debian_mirror: ftp.de.debian.org
 ftpsync_conf_main_debian_mirror_path: debian
 ftpsync_conf_main_arch_include: "amd64 armel armhf arm64 source"
-# Not used in this example, thus commented to generate an empty variable
-# and defaults to the ftpsync.conf.sample value
-#ftpsync_conf_main_exclude: "--exclude=jessie-k** --exclude=oldstable* --exclude=sid* --exclude=unstable* --exclude=experimental* --exclude=Debian* --exclude=wheezy* --exclude=oldold* --exclude=squeeze* --exclude=rc-buggy"
-ftpsync_conf_exclude: ""
+ftpsync_conf_main_exclude: ""
 
 #
 # ftpsync security archive configuration
@@ -69,10 +67,7 @@ ftpsync_security_repository_dir: /var/www/repository/debian-security
 ftpsync_conf_security_debian_mirror: ftp.de.debian.org
 ftpsync_conf_security_debian_mirror_path: debian-security
 ftpsync_conf_security_arch_include: "amd64 armel armhf arm64 source"
-# Not used in this example, thus commented to generate an empty variable
-# and defaults to the ftpsync.conf.sample value
-# ftpsync_conf_security_exclude: "--exclude=jessie-k** --exclude=oldstable* --exclude=sid* --exclude=unstable* --exclude=experimental* --exclude=Debian* --exclude=wheezy* --exclude=oldold* --exclude=squeeze* --exclude=rc-buggy"
-ftpsync_conf_exclude: ""
+ftpsync_conf_security_exclude: ""
 
 #
 # ftpsync backports archive configuration
@@ -81,10 +76,7 @@ ftpsync_backports_repository_dir: /var/www/repository/debian-backports
 ftpsync_conf_backports_debian_mirror: ftp.de.debian.org
 ftpsync_conf_backports_debian_mirror_path: debian-backports
 ftpsync_conf_backports_arch_include: "amd64 armel armhf arm64 source"
-# Not used in this example, thus commented to generate an empty variable
-# and defaults to the ftpsync.conf.sample value
-# ftpsync_conf_backports_exclude: "--exclude=jessie-k** --exclude=oldstable* --exclude=sid* --exclude=unstable* --exclude=experimental* --exclude=Debian* --exclude=wheezy* --exclude=oldold* --exclude=squeeze* --exclude=rc-buggy"
-ftpsync_conf_exclude: ""
+ftpsync_conf_backports_exclude: ""
 
 #
 # ftpsync ports archive configuration
@@ -93,7 +85,17 @@ ftpsync_ports_repository_dir: /var/www/repository/debian-ports
 ftpsync_conf_ports_debian_mirror: ftp.de.debian.org
 ftpsync_conf_ports_debian_mirror_path: debian-ports
 ftpsync_conf_ports_arch_include: "ppc64 powerpcspe sparc64"
-# Not used in this example, thus commented to generate an empty variable
-# and defaults to the ftpsync.conf.sample value
-# ftpsync_conf_ports_exclude: "--exclude=jessie-k** --exclude=oldstable* --exclude=sid* --exclude=unstable* --exclude=experimental* --exclude=Debian* --exclude=wheezy* --exclude=oldold* --exclude=squeeze* --exclude=rc-buggy"
-ftpsync_conf_exclude: ""
+ftpsync_conf_ports_exclude: ""
+
+#
+# Flags controlling which archives have to be synchronize
+# 
+# If the value is set to 1, then the cron job will synchronize the given 
+# archive. If set to something else, it will not be synchronized.
+# These variables are expanded in the configuration file of the 
+# synchronize_all_archives script ( config is in /etc with .conf suffix)
+#
+synchronize_all_archives_do_synchronize_main: 1
+synchronize_all_archives_do_synchronize_security: 1
+synchronize_all_archives_do_synchronize_ports: 1
+synchronize_all_archives_do_synchronize_backports: 1

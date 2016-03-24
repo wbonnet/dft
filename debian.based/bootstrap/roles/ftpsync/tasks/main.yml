@@ -29,15 +29,47 @@
 
 # Add the user 'ftpsync' with a bash shell, appending the group 'ftpsync' to the user's groups
 - name: Create the ftpsync user
-  user: name={{ ftpsync_user_username }} shell={{ ftpsync_user_shell }} home={{ ftpsync_user_home_dir }} groups={{ ftpsync_user_group }} append=yes 
+  user: name={{ ftpsync_user_username }} 
+        shell={{ ftpsync_user_shell }} 
+        home={{ ftpsync_user_home_dir }} 
+        groups={{ ftpsync_user_group }} 
+        append=yes 
 
 # Install the Apache Web server
 - name: Install Apache web server
   apt: pkg=apache2 state=installed update_cache=true 
 
-# Create the target directory
-- name: Create target directory
-  file: path={{ ftpsync_repository_dir }} state=directory mode=0775 group={{ ftpsync_user_group }}
+# Create the main archive target directory
+- name: Create the main archive target directory
+  file: path={{ ftpsync_main_repository_dir }} 
+        state=directory 
+        mode=0775 
+        group={{ ftpsync_user_group }}
+        owner={{ ftpsync_user_username }}
+
+# Create the ports archive target directory
+- name: Create the ports archive target directory
+  file: path={{ ftpsync_ports_repository_dir }} 
+        state=directory 
+        mode=0775 
+        group={{ ftpsync_user_group }}
+        owner={{ ftpsync_user_username }}
+
+# Create the backports archive target directory
+- name: Create the backports archive target directory
+  file: path={{ ftpsync_backports_repository_dir }} 
+        state=directory 
+        mode=0775 
+        group={{ ftpsync_user_group }}
+        owner={{ ftpsync_user_username }}
+
+# Create the security archive target directory
+- name: Create the security archive target directory
+  file: path={{ ftpsync_security_repository_dir }}
+        state=directory 
+        mode=0775 
+        group={{ ftpsync_user_group }}
+        owner={{ ftpsync_user_username }}
 
 # Download the ftpsync archive
 - name: Get ftp sync and extract archive
@@ -73,7 +105,7 @@
 
 # Copy the ftpsync backports archive configuration file to target host 
 - name: Copy ftpsync backports archive configuration file to target host
-  template: src=templates/ftpsynci-backports.conf.j2
+  template: src=templates/ftpsync-backports.conf.j2
             dest={{ ftpsync_user_home_dir }}/etc/ftpsync-backports.conf
             owner=ftpsync 
             group=ftpsync
@@ -95,45 +127,21 @@
             group=ftpsync
             mode="u=rw,g=r,o=r"          
 
-# Copy the synchronize_all_archives script to target host 
-- name: Copy synchronize_all_archives script to target host
-  copy:     src=files/synchronize_all_archives
-            dest={{ ftpsync_user_home_dir }}/bin/synchronize_all_archives
+# Copy the ftpsync-synchronize-all-archives script to target host 
+- name: Copy ftpsync-synchronize-all-archives script to target host
+  copy:     src=files/ftpsync-synchronize-all-archives
+            dest={{ ftpsync_user_home_dir }}/bin/ftpsync-synchronize-all-archives
             owner=ftpsync 
             group=ftpsync
             mode="u=rwx,g=rx,o=rx"          
 
-# Copy the synchronize_all_archives configuration file to target host 
-- name: Copy synchronize_all_archives configuration file to target host
-  template: src=templates/synchronize_all_archives.conf.j2
-            dest={{ ftpsync_user_home_dir }}/etc/synchronize_all_archives.conf
+# Copy the ftpsync-synchronize-all-archives configuration file to target host 
+- name: Copy ftpsync-synchronize-all-archives-configuration file to target host
+  template: src=templates/ftpsync-synchronize-all-archives.conf.j2
+            dest={{ ftpsync_user_home_dir }}/etc/ftpsync-synchronize-all-archives.conf
             owner=ftpsync 
             group=ftpsync
             mode="u=rw,g=r,o=r"          
-
-# Add the destination dir to the configuration file
-- name: Modify the configuration file used for synchronization TO destination dir
-  lineinfile: dest={{ ftpsync_user_home_dir }}/etc/ftpsync.conf 
-              state=present 
-              line='TO="{{ ftpsync_repository_dir }}"'
-
-# Add the mirror to the configuration file
-- name: Modify the configuration file used for synchronization RSYNC mirror to use
-  lineinfile: dest={{ ftpsync_user_home_dir }}/etc/ftpsync.conf 
-              state=present 
-              line="RSYNC_HOST={{ ftpsync_conf_debian_mirror }}"
-
-# Add the EXCLUDE directive to the configuration file
-- name: Modify the configuration file used for synchronization EXCLUDE
-  lineinfile: dest={{ ftpsync_user_home_dir }}/etc/ftpsync.conf 
-              state=present 
-              line='EXCLUDE="{{ ftpsync_conf_exclude }}"' 
-
-# Add the ARCH_ EXCLUDE directive to the configuration file
-- name: Modify the configuration file used for synchronization ARCH_EXCLUDE
-  lineinfile: dest={{ ftpsync_user_home_dir }}/etc/ftpsync.conf 
-              state=present 
-              line='ARCH_INCLUDE="{{ ftpsync_conf_arch_include }}"' 
 
 # Add ftpsync to cron table for user ftpsync. Scheduled every 12 hours.
 - cron: name="Repository update" 
@@ -143,7 +151,7 @@
         hour={{ftpsync_cron_hour}} 
         minute={{ftpsync_cron_minute}} 
         user="{{ ftpsync_user_username }}" 
-        job="cd {{ ftpsync_user_home_dir }} && {{ ftpsync_user_home_dir }}/bin/synchronize-all-archives-with-ftpsync"
+        job="cd {{ ftpsync_user_home_dir }} && {{ ftpsync_user_home_dir }}/bin/ftpsync-synchronize-all-archives"
 
 # Copy the Apache vhost configuration file to target host 
 - name: Copy Apache vhost configuration file to target host
