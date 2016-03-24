@@ -36,8 +36,10 @@ ftpsync_cron_minute: "*"
 # ftpsync configuration file variables
 #
 ftpsync_conf_debian_mirror: ftp.de.debian.org
-ftpsync_conf_arch_include: "amd64 armel amrhf arm64 sources"
-ftpsync_conf_exclude: "--exclude=jessie-k** --exclude=oldstable* --exclude=sid* --exclude=unstable* --exclude=experimental* --exclude=Debian* --exclude=wheezy* --exclude=oldold* --exclude=squeeze* --exclude=rc-buggy"
+ftpsync_conf_debian_path: debian
+ftpsync_conf_arch_include: "amd64 armel armhf arm64 sparc64 source"
+#ftpsync_conf_exclude: "--exclude=jessie-k** --exclude=oldstable* --exclude=sid* --exclude=unstable* --exclude=experimental* --exclude=Debian* --exclude=wheezy* --exclude=oldold* --exclude=squeeze* --exclude=rc-buggy"
+ftpsync_conf_exclude: ""
 
 #
 # Apache virtual host variabless
