@@ -25,11 +25,17 @@ ftpsync_user_username: ftpsync
 ftpsync_user_group: ftpsync
 ftpsync_user_home_dir: /home/ftpsync/
 ftpsync_user_shell: /bin/bash
+
+# Parameters of the cron job. Cron is running the 
+# ftpsync_synchronize_all_archives script
 ftpsync_cron_month: "*"
 ftpsync_cron_weekday: "*"
 ftpsync_cron_day: "*"
 ftpsync_cron_hour: "11,23"
 ftpsync_cron_minute: "*"
+
+# limit I/O bandwidth. Value is KBytes per second, unset or 0 means unlimited
+ftpsync_rsync_bandwidth_limit: 50000
 
 #
 # Apache virtual host variabless
