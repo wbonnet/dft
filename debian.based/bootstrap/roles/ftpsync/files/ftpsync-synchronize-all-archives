@@ -6,27 +6,34 @@ cd ${HOME}
 # Source the synchronize all configuration file
 source ${HOME}/etc/ftpsync-synchronize-all-archives.conf
 
+# Synchronize security archive
+if [ ${SYNCHRONIZE_ALL_ARCHIVES_DO_SYNCHRONIZE_SECURITY} -eq 1 ] ;
+then
+  echo "$(date +"%Y-%m-%d %H:%M:%S") : Synchronization starting : security"
+  ${HOME}/bin/ftpsync sync:archive:security
+  echo "$(date +"%Y-%m-%d %H:%M:%S") : Synchronization finished : security"
+fi
+
 # Synchronize main archive
 if [ ${SYNCHRONIZE_ALL_ARCHIVES_DO_SYNCHRONIZE_MAIN} -eq 1 ] ;
 then
+  echo "$(date +"%Y-%m-%d %H:%M:%S") : Synchronization starting : debian"
   ${HOME}/bin/ftpsync
-fi
-
-# Synchronize ports archive
-if [ ${SYNCHRONIZE_ALL_ARCHIVES_DO_SYNCHRONIZE_PORTS} -eq 1 ] ;
-then
-  ${HOME}/bin/ftpsync sync:archive:ports
+  echo "$(date +"%Y-%m-%d %H:%M:%S") : Synchronization finished : debian"
 fi
 
 # Synchronize backports archive
 if [ ${SYNCHRONIZE_ALL_ARCHIVES_DO_SYNCHRONIZE_BACKPORTS} -eq 1 ] ;
 then
+  echo "$(date +"%Y-%m-%d %H:%M:%S") : Synchronization starting : debian-backports"
   ${HOME}/bin/ftpsync sync:archive:backports
+  echo "$(date +"%Y-%m-%d %H:%M:%S") : Synchronization finished : debian-backports"
 fi
 
-# Synchronize security archive
-if [ ${SYNCHRONIZE_ALL_ARCHIVES_DO_SYNCHRONIZE_SECURITY} -eq 1 ] ;
+# Synchronize ports archive
+if [ ${SYNCHRONIZE_ALL_ARCHIVES_DO_SYNCHRONIZE_PORTS} -eq 1 ] ;
 then
-  ${HOME}/bin/ftpsync sync:archive:security
+  echo "$(date +"%Y-%m-%d %H:%M:%S") : Synchronization starting : debian-ports"
+  ${HOME}/bin/ftpsync sync:archive:ports
+  echo "$(date +"%Y-%m-%d %H:%M:%S") : Synchronization finished : debian-ports"
 fi
-
