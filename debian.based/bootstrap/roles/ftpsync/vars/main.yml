@@ -35,7 +35,7 @@ ftpsync_cron_hour: "11,23"
 ftpsync_cron_minute: "*"
 
 # limit I/O bandwidth. Value is KBytes per second, unset or 0 means unlimited
-ftpsync_rsync_bandwidth_limit: 4000
+ftpsync_rsync_bandwidth_limit: 8000
 
 #
 # Apache virtual host variabless
