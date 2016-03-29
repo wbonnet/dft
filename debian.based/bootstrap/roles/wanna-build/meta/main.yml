@@ -24,4 +24,4 @@
 
 ---
 dependencies:
-    - { role: debian-server }
+    - { role: debian-host }

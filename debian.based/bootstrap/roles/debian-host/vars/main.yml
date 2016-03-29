@@ -19,7 +19,7 @@
 #
 
 #
-# debian-server variables definition
+# debian-host variables definition
 #
 
 # default value is current stable version (jessie)
