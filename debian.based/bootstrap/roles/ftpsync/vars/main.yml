@@ -32,7 +32,7 @@ ftpsync_cron_month: "*"
 ftpsync_cron_weekday: "*"
 ftpsync_cron_day: "*"
 ftpsync_cron_hour: "11,23"
-ftpsync_cron_minute: "*"
+ftpsync_cron_minute: "0"
 
 # limit I/O bandwidth. Value is KBytes per second, unset or 0 means unlimited
 ftpsync_rsync_bandwidth_limit: 8000
