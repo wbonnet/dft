@@ -49,12 +49,12 @@ ftpsync_apache_vhost_error_log_file: debian-mirror.error.log
 ftpsync_apache_vhost_access_log_file: debian-mirror.access.log
 ftpsync_apache_vhost_log_level: warn
 ftpsync_apache_vhost_directory: debian
-ftpsync_apache_document_root: /var/www/repository/
+ftpsync_apache_document_root: /var/www/mirrors/debian/
 
 #
 # ftpsync main archive configuration
 #
-ftpsync_main_repository_dir: /var/www/repository/debian
+ftpsync_main_repository_dir: /var/www/mirrors/debian/debian
 ftpsync_conf_main_debian_mirror: ftp.de.debian.org
 ftpsync_conf_main_debian_mirror_path: debian
 ftpsync_conf_main_arch_include: "amd64 armel armhf arm64 source"
@@ -63,7 +63,7 @@ ftpsync_conf_main_exclude: ""
 #
 # ftpsync security archive configuration
 #
-ftpsync_security_repository_dir: /var/www/repository/debian-security
+ftpsync_security_repository_dir: /var/www/mirrors/debian/debian-security
 ftpsync_conf_security_debian_mirror: ftp.de.debian.org
 ftpsync_conf_security_debian_mirror_path: debian-security
 ftpsync_conf_security_arch_include: "amd64 armel armhf arm64 source"
@@ -72,7 +72,7 @@ ftpsync_conf_security_exclude: ""
 #
 # ftpsync backports archive configuration
 #
-ftpsync_backports_repository_dir: /var/www/repository/debian-backports
+ftpsync_backports_repository_dir: /var/www/mirrors/debian/debian-backports
 ftpsync_conf_backports_debian_mirror: ftp.de.debian.org
 ftpsync_conf_backports_debian_mirror_path: debian-backports
 ftpsync_conf_backports_arch_include: "amd64 armel armhf arm64 source"
@@ -81,7 +81,7 @@ ftpsync_conf_backports_exclude: ""
 #
 # ftpsync ports archive configuration
 #
-ftpsync_ports_repository_dir: /var/www/repository/debian-ports
+ftpsync_ports_repository_dir: /var/www/mirrors/debian/debian-ports
 ftpsync_conf_ports_debian_mirror: ftp.de.debian.org
 ftpsync_conf_ports_debian_mirror_path: debian-ports
 ftpsync_conf_ports_arch_include: "ppc64 powerpcspe sparc64"
