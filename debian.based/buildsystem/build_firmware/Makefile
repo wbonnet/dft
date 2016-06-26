@@ -26,7 +26,7 @@
 #	Install all requirements using PIP
 #
 init:
-    pip install -r requirements.txt
+	pip install -r requirements.txt
 
 #
 # Target : test, tests
@@ -35,5 +35,7 @@ init:
 #	
 #	Run unit tests
 #
+tests: test
+	
 test:
-    py.test tests
+	py.test tests
