@@ -36,6 +36,6 @@ init:
 #	Run unit tests
 #
 tests: test
-	
+
 test:
-	py.test tests
+	nosetests

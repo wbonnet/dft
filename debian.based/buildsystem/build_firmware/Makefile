@@ -38,4 +38,4 @@ init:
 tests: test
 	
 test:
-	py.test tests
+	nosetests
