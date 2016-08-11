@@ -21,7 +21,7 @@
 class Repository:
 	"""This class contains Debian repository informations.
 
-	   Repository are Distribution components. Each distribution contains one or more repository
+       Repository are Distribution components. Each distribution contains one or more repository
 	"""
 
 	def __init__(self, url, suite, sections):
@@ -40,7 +40,7 @@ class Repository:
 class Distribuion:
 	"""This class contains the definition of a Debian distribution. 
 
-	   A distribution is defined by its name, the list of supported architecture and the list of available repositories
+       A distribution is defined by its name, the list of supported architecture and the list of available repositories
 	"""
 
 	def __init__(self, name, architectures, repositories):
@@ -59,7 +59,7 @@ class Distribuion:
 class Package:
 	"""This class contains the definition of a package
 
-	   In this version it is only defined by its name. Future evolution may include version management.
+       In this version it is only defined by its name. Future evolution may include version management.
 	"""
 
 	def __init__(self, name):
@@ -72,12 +72,12 @@ class Package:
 		self.name = name
 
 class GroupOfPackage : 
-	"""This class for groups of packages
+	"""This class contains the definition of groups of packages
 
-	   Groups of packages are provided for convinience and packages manipulation. 
+       Groups of packages are provided for convinience and packages manipulation. 
 	"""
 
-	def __init__(self, group_name):
+	def __init__(self, group_name, packages):
 		"""Default constructor
 		
     	Args:
@@ -91,7 +91,7 @@ class GroupOfPackage :
 class Flavour:
 	"""This class defines flavours
 
-	   Flavours are used to create modulation on rootfs and firmware. A firmware will be generated
+       Flavours are used to create modulation on rootfs and firmware. A firmware will be generated
 	   in different version, one for each associated flavour. Each flavour defines lists of packages
 	   to add or to exclude to create the variation.
 	"""
@@ -114,9 +114,9 @@ class Flavour:
 class Firmware:
 	"""This class defines a firmware
 
-	   A firmware is a distribution installed from a list of packages. They are defined by
-	   a list of group of packages and a completary list of packages to install. Optionnaly 
-	   a firmware can also be based on another on. In this case it will be used as ancestor	   
+       A firmware is a distribution installed from a list of packages. They are defined by
+       a list of group of packages and a completary list of packages to install. Optionnaly 
+       a firmware can also be based on another on. In this case it will be used as ancestor	   
 	"""
 
 	def __init__(self, name, group_of_packages, packages, based_on_firmware):
@@ -137,8 +137,8 @@ class Firmware:
 class Board:
 	"""This class defines a board
 
-	A board is the physical target for which the firmware is generated. It is defined by its name, architecture 
-	and a list of package (which should be used for BSP)
+       A board is the physical target for which the firmware is generated. It is defined by its name, architecture 
+       and a list of package (which should be used for BSP)
 	"""
 
 	def __init__(self, name, architecture, group_of_packages):
@@ -155,11 +155,11 @@ class Board:
 		self.group_of_packages = group_of_packages
 
 class ProductionTarget:
-	"""Definition of production targets
+	"""This class defines a production target
 
-	Production targets contains all the information mandotory to create the binary firmware.
-	These information are defined in a tuple including the target board, the distributionto use
-	the firmware, and some flavours to build
+       Production targets contains all the information mandotory to create the binary firmware.
+       These information are defined in a tuple including the target board, the distributionto use
+       the firmware, and some flavours to build
 	"""
 
 	def __init__(self, name, include_in_build, board, distribution, firmware, flavours):

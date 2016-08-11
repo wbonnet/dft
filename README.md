@@ -47,3 +47,42 @@ strip_rootfs
 ------------
 
 
+
+
+
+
+Depot
+	=> mirroring
+	=> population locale
+
+
+Construction RootFS						=> build_rootfs
+	<= depot
+	=> base
+	=> modulation
+
+Construction du firmware  				=> build_firmware
+	xxx
+
+Chaine de build_rootfs					=> build_bootloader
+	<= sources ?
+	=> noyau
+	=> uboot
+
+
+xxx config usine						=> factory_setup
+xxx creation squashfs					=> assemble ?
+xxx striping							=> strip_rootfs
+xxx Assemblage du firmware				=> assemble_firmware
+xxx outils de controles secu etc
+xxx generation image carte				=> build_image
+
+
+
+
+
+
+
+
+
+
