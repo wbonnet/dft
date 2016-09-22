@@ -25,3 +25,8 @@
 
 ---
 - include: packages.yml
+
+# aptitude apt-utils ? => apt
+# locales => locales ?
+# acpid  ?
+# whois
