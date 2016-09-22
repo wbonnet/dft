@@ -22,3 +22,19 @@
 
 # Fails on error
 set -e
+
+# Defines the working directories
+workdir="./unionfs-test"
+lowerdir="${workdir}/lowerdir"
+upperdir="${workdir}/upperdir"
+mergedir="${workdir}/mergedir"
+
+# Make sure the directories exist
+mkdir -p "${workdir}"
+mkdir -p "${lowerdir}"
+mkdir -p "${upperdir}"
+mkdir -p "${mergedir}"
+
+# Mount and stack the layers
+sudo mount -t squashfs lffs-test.squashfs "${lowerdir}" -o loop
+sudo mount -t unionfs -o dirs=${upperdir}=rw:${lowerdir}=ro unionfs ${mergedir}
