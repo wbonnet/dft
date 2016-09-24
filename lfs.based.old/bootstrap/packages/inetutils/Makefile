@@ -22,12 +22,12 @@
 # Copyright 2008-2013 Open Community Software Association: Packaging content
 #
 #
-#
 # Contributors list :
 #
 #    William Bonnet 	wllmbnnt@gmail.com
 #
 #
+
 
 # Defines the upstream software name
 SOFTWARE_UPSTREAM_NAME = inetutils

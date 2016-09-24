@@ -10,7 +10,6 @@
 #
 #
 #
-# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).  
 # Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
 # All rights reserved. Use is subject to license terms.
 #
@@ -23,12 +22,12 @@
 # Copyright 2008-2013 Open Community Software Association: Packaging content
 #
 #
-#
 # Contributors list :
 #
 #    William Bonnet 	wllmbnnt@gmail.com
 #
 #
+
 
 # Defines the upstream software name
 SOFTWARE_UPSTREAM_NAME = bzip2

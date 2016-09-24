@@ -22,7 +22,6 @@
 # Copyright 2008-2013 Open Community Software Association: Packaging content
 #
 #
-#
 # Contributors list :
 #
 #    William Bonnet 	wllmbnnt@gmail.com

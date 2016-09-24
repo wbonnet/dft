@@ -1,4 +1,4 @@
- # vim: ft=make ts=4 sw=4 noet
+# vim: ft=make ts=4 sw=4 noet
 #
 # The contents of this file are subject to the Apache 2.0 license you may not 
 # use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 # Copyright 2006 Cory Omand: Scripts and add-on make modules, except where otherwise noted.
 # Copyright 2008 Dagobert Michelsen (OpenCSW): Enhancements to the CSW GAR system
 # Copyright 2008-2013 Open Community Software Association: Packaging content
-#
 #
 #
 # Contributors list :
