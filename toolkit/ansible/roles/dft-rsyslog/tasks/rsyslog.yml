@@ -27,7 +27,7 @@
 #
 
 ---
-- name : LFFS - Install rsyslog
+- name : DFT - Install rsyslog
   apt: name={{ item }} 
        state=installed 
        update_cache=true

@@ -37,5 +37,5 @@ mkdir -p "${upperdir}"
 mkdir -p "${mergedir}"
 
 # Mount and stack the layers
-sudo mount -t squashfs lffs-test.squashfs "${lowerdir}" -o loop
+sudo mount -t squashfs dft-test.squashfs "${lowerdir}" -o loop
 sudo mount -t unionfs -o dirs=${upperdir}=rw:${lowerdir}=ro unionfs ${mergedir}

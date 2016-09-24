@@ -27,7 +27,7 @@
 #
 
 ---
-- name : LFFS - Install gstreamer
+- name : DFT - Install gstreamer
   apt: name={{ item }} 
        state=installed 
        update_cache=true

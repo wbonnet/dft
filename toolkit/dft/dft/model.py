@@ -21,8 +21,8 @@
 #
 #
 
-class LffsConfiguration : 
-	"""This class defines configuration for the LFFS toolchain
+class DftConfiguration : 
+	"""This class defines configuration for the DFT toolchain
 
        The tool configuration contains environment variables used to define 
        information such as default root working path, cache directories, etc.

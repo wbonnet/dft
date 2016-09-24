@@ -25,7 +25,7 @@
 set -e
 
 # Define the working dir, used as a target to debootstrap
-rootfs_mountpoint=$(mktemp -d /tmp/lffs-test.XXXXXXXXXX)
+rootfs_mountpoint=$(mktemp -d /tmp/dft-test.XXXXXXXXXX)
 
 # Default values to use when calling debootsrap
 debootstrap_target="minbase"
@@ -38,7 +38,7 @@ sudo debootstrap --no-check-gpg --variant="${debootstrap_target}" "${target_vers
 echo "Bootstrapping is now finished"
 
 # Create the squashfs file
-squashfs_filename="lffs-test.squashfs"
+squashfs_filename="dft-test.squashfs"
 
 echo "Creating squashfs ..."
 sudo mksquashfs	"${rootfs_mountpoint}/" "${squashfs_filename}" -b 256K >> ./create-squashfs.log

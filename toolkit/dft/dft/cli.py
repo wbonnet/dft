@@ -36,7 +36,7 @@ class Cli:
 		self.version = "0.0.1"
 
 		# Create the internal parser from argparse
-		self.parser = argparse.ArgumentParser(description='Linux Firmware From Scratch v' + self.version + '. LFFS is a collection of tools used to create Linux based firmwares')
+		self.parser = argparse.ArgumentParser(description='Debian firmware Toolkit v' + self.version + '. DFT is a collection of tools used to create Debian based firmwares')
 	
 	def parse(self, args):
 		# According to the command, call the method dedicated to parse the arguments

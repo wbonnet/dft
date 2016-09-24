@@ -27,7 +27,7 @@
 #
 
 ---
-- name : LFFS - Install chromium
+- name : DFT - Install chromium
   apt: name={{ item }} 
        state=installed 
        update_cache=true

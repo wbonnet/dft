@@ -27,7 +27,7 @@
 #
 
 ---
-- name : LFFS - Install sudo
+- name : DFT - Install sudo
   apt: name={{ item }} 
        state=installed 
        update_cache=true

@@ -27,7 +27,7 @@
 #
 
 ---
-- name : LFFS - Setup X11
+- name : DFT - Setup X11
   apt: name={{ item }} 
        state=installed 
        update_cache=true

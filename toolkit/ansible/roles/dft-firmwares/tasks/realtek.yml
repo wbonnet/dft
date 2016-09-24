@@ -27,7 +27,7 @@
 #
 
 ---
-- name : LFFS - Install firmware realtek
+- name : DFT - Install firmware realtek
   apt: name={{ item }} 
        state=installed 
        update_cache=true

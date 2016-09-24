@@ -27,7 +27,7 @@
 #
 
 ---
-- name : LFFS - Install isc-dhcp-server
+- name : DFT - Install isc-dhcp-server
   apt: name={{ item }} 
        state=installed 
        update_cache=true

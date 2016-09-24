@@ -27,7 +27,7 @@
 #
 
 ---
-- name : LFFS - Install tftpd-hpa
+- name : DFT - Install tftpd-hpa
   apt: name={{ item }} 
        state=installed 
        update_cache=true

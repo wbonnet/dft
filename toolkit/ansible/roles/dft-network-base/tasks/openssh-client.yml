@@ -27,7 +27,7 @@
 #
 
 ---
-- name : LFFS - Install OpenSSH Client
+- name : DFT - Install OpenSSH Client
   apt: name={{ item }} 
        state=installed 
        update_cache=true

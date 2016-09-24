@@ -27,7 +27,7 @@
 #
 
 ---
-- name : LFFS - Install bind9
+- name : DFT - Install bind9
   apt: name={{ item }} 
        state=installed 
        update_cache=true

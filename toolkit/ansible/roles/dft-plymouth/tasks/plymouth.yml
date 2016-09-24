@@ -26,10 +26,10 @@
 # files, one file per functionnality.
 #
 
-#---
-#- name : [LFFS] Setup Plymouth
-#  apt: name={{ item }} 
-#       state=installed 
-#       update_cache=true
-#  with_items:
-#    - plymouth
+---
+- name : DFT - Install plymouth
+  apt: name={{ item }} 
+       state=installed 
+       update_cache=true
+  with_items:
+    - plymouth

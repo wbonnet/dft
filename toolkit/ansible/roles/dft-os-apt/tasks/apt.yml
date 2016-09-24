@@ -27,7 +27,7 @@
 #
 
 #---
-- name : LFFS - Install APT packages management
+- name : DFT - Install APT packages management
   apt: name={{ item }} 
        state=installed 
        update_cache=true

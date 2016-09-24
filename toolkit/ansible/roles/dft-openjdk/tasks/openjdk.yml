@@ -27,7 +27,7 @@
 #
 
 ---
-- name : LFFS - Install openjdk
+- name : DFT - Install openjdk
   apt: name={{ item }} 
        state=installed 
        update_cache=true

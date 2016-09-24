@@ -27,7 +27,7 @@
 #
 
 ---
-- name : LFFS - Install DHCP client
+- name : DFT - Install DHCP client
   apt: name={{ item }} 
        state=installed 
        update_cache=true

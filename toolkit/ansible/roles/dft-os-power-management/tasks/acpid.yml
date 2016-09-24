@@ -27,7 +27,7 @@
 #
 
 #---
-- name : LFFS - Install acpid
+- name : DFT - Install acpid
   apt: name={{ item }} 
        state=installed 
        update_cache=true

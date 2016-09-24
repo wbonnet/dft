@@ -27,7 +27,7 @@
 #
 
 #---
-- name : LFFS - Install SNMP
+- name : DFT - Install SNMP
   apt: name={{ item }} 
        state=installed 
        update_cache=true
