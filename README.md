@@ -1,13 +1,15 @@
-lffs
+dft
 ====
 
-Linux Firmware From Scratch is an Experimentation project with LFS and Debian to build squashfs firmware targetting Raspberry PI, Beagle board and x86 VMs
+Debian Firmware Toolkit is an Experimentation project with LFS and Debian to build squashfs firmware targetting Raspberry PI, Beagle board and x86 VMs. 
+
+It was originnaly named Linux Firmware From Scratch
 
 
 Build System description
 ========================
 
-The LFFS build system is in buildsystem subdirectory. The following commands are available, and are described hereafter :
+The DFT build system is in buildsystem subdirectory. The following commands are available, and are described hereafter :
 
 * assemble_firmware
 * build_bootloader

@@ -10,7 +10,7 @@
 #
 #
 #
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
+# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).  
 # All rights reserved. Use is subject to license terms.
 #
 # Even if this work is a complete rewrite, it is originally derivated work based 
@@ -20,6 +20,7 @@
 # Copyright 2006 Cory Omand: Scripts and add-on make modules, except where otherwise noted.
 # Copyright 2008 Dagobert Michelsen (OpenCSW): Enhancements to the CSW GAR system
 # Copyright 2008-2013 Open Community Software Association: Packaging content
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
 #
 #
 #

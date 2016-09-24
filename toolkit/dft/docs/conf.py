@@ -1,5 +1,5 @@
-
-f this file are subject to the Apache 2.0 license you may not
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
 # use this file except in compliance with the License.
 #
 # Software distributed under the License is distributed on an "AS IS" basis,
@@ -8,13 +8,15 @@ f this file are subject to the Apache 2.0 license you may not
 # License.
 #
 #
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
+# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).  
 # All rights reserved. Use is subject to license terms.
+#
+# Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
 #
 #
 # Contributors list :
 #
-#    William Bonnet     wllmbnnt@gmail.com
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 #
-
