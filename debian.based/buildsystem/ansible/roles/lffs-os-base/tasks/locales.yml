@@ -24,11 +24,9 @@
 #
 
 ---
-- name : LFFS - Install OS base packages
+- name : LFFS - Install locales
   apt: name={{ item }} 
        state=installed 
        update_cache=true
   with_items:
-    - udev
-    - kmod
-    - whois
+    - locales

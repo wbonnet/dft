@@ -23,12 +23,10 @@
 # files, one file per functionnality.
 #
 
----
-- name : LFFS - Install OS base packages
+#---
+- name : LFFS - Install acpid
   apt: name={{ item }} 
        state=installed 
        update_cache=true
   with_items:
-    - udev
-    - kmod
-    - whois
+    - acpid

@@ -18,17 +18,6 @@
 #
 #
 
-#
-# Include the list of specific tasks. Tasks are separated into different
-# files, one file per functionnality.
-#
-
----
-- name : LFFS - Install OS base packages
-  apt: name={{ item }} 
-       state=installed 
-       update_cache=true
-  with_items:
-    - udev
-    - kmod
-    - whois
+# Defines only the local host. All the installation is done through a local connection, without ssh
+[local]                                                                                                                                      
+127.0.0.1

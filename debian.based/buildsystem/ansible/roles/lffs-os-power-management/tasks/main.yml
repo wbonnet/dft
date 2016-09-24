@@ -24,11 +24,5 @@
 #
 
 ---
-- name : LFFS - Install OS base packages
-  apt: name={{ item }} 
-       state=installed 
-       update_cache=true
-  with_items:
-    - udev
-    - kmod
-    - whois
+- include: acpid.yml
+- include: upower.yml
