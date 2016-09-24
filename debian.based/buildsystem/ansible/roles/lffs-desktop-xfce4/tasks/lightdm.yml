@@ -24,7 +24,7 @@
 #
 
 ---
-- name : [LFFS] Setup LightDM
+- name : LFFS - Setup LightDM
   apt: name={{ item }} 
        state=installed 
        update_cache=true
