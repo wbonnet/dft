@@ -17,10 +17,8 @@
 #    William Bonnet     wllmbnnt@gmail.com
 #
 #
-
 import cli
 import sys
-
 
 def main():
 	"""
@@ -28,7 +26,7 @@ def main():
 	and run it
 	"""
 	parser = cli.Cli()
-	parser.parse(sys.argv[1:])
+	parser.parse(sys.argv[1])
 	return parser.run()
 	
 
