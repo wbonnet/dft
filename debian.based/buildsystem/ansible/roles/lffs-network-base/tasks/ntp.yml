@@ -24,7 +24,7 @@
 #
 
 ---
-- name : [LFFS] Install NTP
+- name : LFFS - Install NTP
   apt: name={{ item }} 
        state=installed 
        update_cache=true

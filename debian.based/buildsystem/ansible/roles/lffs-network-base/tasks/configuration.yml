@@ -24,4 +24,4 @@
 #
 
 ---
-- name : [LFFS] Setup default hostname
+- name : LFFS - Setup default hostname

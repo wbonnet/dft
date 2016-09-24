@@ -24,8 +24,9 @@
 #
 
 ---
-- include: packages.yml
-- include: ntp.yml
-- include: openssh-server.yml
-- include: openssh-client.yml
-- include: dhcp-client.yml
+- name : LFFS - Install DHCP client
+  apt: name={{ item }} 
+       state=installed 
+       update_cache=true
+  with_items:
+    - isc-dhcp-client

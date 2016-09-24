@@ -24,7 +24,7 @@
 #
 
 ---
-- name : [LFFS] Install network base packages
+- name : LFFS - Install network base packages
   apt: name={{ item }} 
        state=installed 
        update_cache=true
