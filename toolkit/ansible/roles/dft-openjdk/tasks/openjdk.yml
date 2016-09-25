@@ -27,18 +27,14 @@
 #
 
 ---
-- name : DFT - Retrieve debian version
-  command: lsb_release -a | grep ^Release | cut -f2
-  register: debian_version
-
 - name : DFT - Install openjdk8
   apt: name={{ item }} 
        state=installed 
        update_cache=true
        install_recommends=no
   with_items:
-    - openjdk8
-  when: debian_version.find('testing') == 1
+    - openjdk-8-jdk
+  when: (ansible_distribution == "Debian" and ansible_distribution_major_version == "testing")
 
 - name : DFT - Install openjdk7
   apt: name={{ item }} 
@@ -46,5 +42,5 @@
        update_cache=true
        install_recommends=no
   with_items:
-    - openjdk7
-  when: debian_version.find('8.') == 1
+    - openjdk-7-jdk
+  when: (ansible_distribution == "Debian" and ansible_distribution_major_version <= "8")
