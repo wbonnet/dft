@@ -27,10 +27,24 @@
 #
 
 ---
-- name : DFT - Install openjdk
+- name : DFT - Retrieve debian version
+  command: lsb_release -a | grep ^Release | cut -f2
+  register: debian_version
+
+- name : DFT - Install openjdk8
   apt: name={{ item }} 
        state=installed 
        update_cache=true
        install_recommends=no
   with_items:
     - openjdk8
+  when: debian_version.find('testing') == 1
+
+- name : DFT - Install openjdk7
+  apt: name={{ item }} 
+       state=installed 
+       update_cache=true
+       install_recommends=no
+  with_items:
+    - openjdk7
+  when: debian_version.find('8.') == 1
