@@ -34,3 +34,4 @@
        install_recommends=no
   with_items:
     - chromium
+  when: (ansible_architecture == "i386" or ansible_architecture == "x86_64")
