@@ -34,3 +34,4 @@
        install_recommends=no
   with_items:
     - snort
+  when: (ansible_distribution == "Debian" and ansible_distribution_major_version != "8")
