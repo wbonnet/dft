@@ -31,6 +31,7 @@
   apt: name={{ item }} 
        state=installed 
        update_cache=true
+       install_recommends=no
   with_items:
     - snmp
     - snmpd
