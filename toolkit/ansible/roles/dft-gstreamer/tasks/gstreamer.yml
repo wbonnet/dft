@@ -33,4 +33,7 @@
        update_cache=true
        install_recommends=no
   with_items:
-    - gstreamer
+    - gstreamer1.0-x
+    - gstreamer1.0-plugins-good
+    - gstreamer1.0-plugins-bad
+    - gstreamer1.0-plugins-ugly
