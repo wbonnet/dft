@@ -27,7 +27,7 @@
 #
 
 ---
-- name : DFT - Setup Xfce4 session and desktop
+- name : DFT - Install Xfce4 session and desktop
   apt: name={{ item }} 
        state=installed 
        update_cache=true

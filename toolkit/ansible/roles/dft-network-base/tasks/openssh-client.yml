@@ -27,7 +27,7 @@
 #
 
 ---
-- name : DFT - Install OpenSSH Client
+- name : DFT - Install openssh client
   apt: name={{ item }} 
        state=installed 
        update_cache=true

@@ -27,7 +27,7 @@
 #
 
 ---
-- name : DFT - install smcroute
+- name : DFT - Install smcroute
   apt: name={{ item }} 
        state=installed 
        update_cache=true

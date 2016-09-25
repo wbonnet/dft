@@ -27,7 +27,7 @@
 #
 
 ---
-- name : DFT - Setup LightDM
+- name : DFT - Install LightDM
   apt: name={{ item }} 
        state=installed 
        update_cache=true

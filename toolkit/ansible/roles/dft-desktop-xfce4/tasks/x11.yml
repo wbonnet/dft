@@ -27,7 +27,7 @@
 #
 
 ---
-- name : DFT - Setup X11
+- name : DFT - Install X11
   apt: name={{ item }} 
        state=installed 
        update_cache=true

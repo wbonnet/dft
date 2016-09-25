@@ -27,7 +27,7 @@
 #
 
 ---
-- name : DFT - Install NTP
+- name : DFT - Install ntp
   apt: name={{ item }} 
        state=installed 
        update_cache=true

@@ -27,7 +27,7 @@
 #
 
 ---
-- name : DFT - install freeradius
+- name : DFT - Install freeradius
   apt: name={{ item }} 
        state=installed 
        update_cache=true
