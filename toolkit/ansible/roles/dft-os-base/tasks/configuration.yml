@@ -27,10 +27,5 @@
 #
 
 ---
-- name : DFT - Install locales
-  apt: name={{ item }} 
-       state=installed 
-       update_cache=true
-       install_recommends=no
-  with_items:
-    - locales
+- name : DFT - Setup hostname
+  hostname: name={{ dft-hostname }} 

@@ -27,10 +27,13 @@
 #
 
 ---
-- name : DFT - Install locales
-  apt: name={{ item }} 
-       state=installed 
-       update_cache=true
-       install_recommends=no
-  with_items:
-    - locales
+- name: DFT - Setup hostname
+  hostname: name={{ dft_hostname }}
+
+- name: DFT - Add hostname to /etc/hosts
+  lineinfile: dest=/etc/hosts 
+              regexp='^127\.0\.0\.1' 
+              line='127.0.0.1\tlocalhost {{ dft_hostname }}'
+              owner=root
+              group=root
+              mode=0644
