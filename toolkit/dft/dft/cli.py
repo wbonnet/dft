@@ -22,6 +22,7 @@
 #
 
 import argparse, textwrap
+import build_baseos
 
 #
 #	Class Cli
@@ -37,9 +38,9 @@ class Cli:
 
 		# Create the internal parser from argparse
 		self.parser = argparse.ArgumentParser(description=textwrap.dedent('''\
-Debian Firmware Toolkit v' + self.version + '. DFT is a collection of tools used to create Debian based firmwares', 
+Debian Firmware Toolkit v''' + self.version + ''' - DFT is a collection of tools used to create Debian based firmwares 
 					 			 
-Command avalaible are :
+Available commands are :
 . assemble_firmware                Create a firmware from a baseos and generate the configuration files used to loading after booting
 . build_baseos                     Generate a debootstrap from a Debian repository, install and configure required packages
 . build_bootloader                 Build the bootloader toolchain (kernel, initramfs, grub or uboot)
@@ -54,6 +55,8 @@ Command avalaible are :
 	def parse(self, args):
 		# Stores the argument in the instance
 		self.command = args
+
+		self.add_parser_option_common()
 		
 		# According to the command, call the method dedicated to parse the arguments
 		if   self.command == "assemble_firmware":            self.add_parser_option_assemble_firmware()
@@ -67,7 +70,6 @@ Command avalaible are :
 		elif self.command == "strip_rootfs":                 self.add_parser_option_strip_rootfs()
 		else:							                     
 			# If the command word is unknown, the force the parsing of the help flag
-			self.add_parser_option_unknown()
 			return self.parser.parse_args(['-h']) 
 
 		# Finally call the parser that has been completed by the previous lines
@@ -176,17 +178,23 @@ Command avalaible are :
 	def add_parser_option_strip_rootfs(self):
 		pass
 
-	def add_parser_option_unknown(self):
-		# Add the arguments
-		self.parser.add_argument('command', 
-								 choices=['assemble_firmware', 'build_baseos', 'build_bootloader', 
-								 		  'build_image', 'build_firmware', 'check_rootfs', 
-								 		  'factory_setup', 'generate_content_information', 
-								 		  'strip_rootfs', 'usage'],
-								 help='Select the command to run')
+	def add_parser_option_common(self):
+		# Activate the use of the rootfs cache archive. When building a baseos
+		# with debootstrap, having this option enable will make DFT look for
+		# an existing cache archive, an extract it instead of doing a fresh 
+		# debootstrap installation
+		self.parser.add_argument(	'--log-level',
+									action='store',
+                      				dest='log_level',
+                                    choices=['debug', 'info', 'warning', 'error', 'critical'],
+									help="defines the minimal log level. Default value is  warning")
+
 
 	def run(self):
-		# According to the command, call the method dedicated to run the command called from cli
+		""" According to the command, call the method dedicated to run the
+			command called from cli
+		"""
+		# 
 		if   self.command == "assemble_firmware":            self.run_assemble_firmware()
 		elif self.command == "build_baseos":                 self.run_build_baseos()
 		elif self.command == "build_bootloader":             self.run_build_bootloader()
@@ -201,6 +209,14 @@ Command avalaible are :
 		pass
 
 	def run_build_baseos(self):
+		""" Method used to handl eth build_baseos command. 
+			Create the business objet, then execute the entry point
+		"""
+		# Create the business object
+		command = build_baseos.BuildBaseOS()
+
+		# Then
+		command.install_baseos()
 		pass
 
 	def run_build_bootloader(self):
