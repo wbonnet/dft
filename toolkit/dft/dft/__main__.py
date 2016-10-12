@@ -20,16 +20,27 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 #
-import cli
-import sys
+import cli, sys
 
 def main():
 	"""
 	Main entry point for the script. Create a parser, process the command line, 
 	and run it
 	"""
+
+	# Create the Cli object in charge of parsing command line, then select and
+	# call the run method
 	parser = cli.Cli()
-	parser.parse(sys.argv[1])
+
+	# If a command has been passed on the cli, then forward it, otherwise use
+	# default --help value to ensure to display help
+	if (len(sys.argv) >= 2):
+		parser.parse(sys.argv[1])
+	else:
+		args = ["__help__", "-h"]
+		parser.parse(args)
+
+	# Once parsed call the runner method
 	return parser.run()
 	
 
