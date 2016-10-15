@@ -103,7 +103,7 @@ class BuildBaseOS:
         self.rootfs_generator_cachedir = "/tmp"
 
         # Current log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-        self.log_level = "INFO"
+        self.log_level = "DEBUG"
 
         # Name of the current baseos being produced. Used in rootfs mount
         # point path and archive name generation
@@ -119,8 +119,11 @@ class BuildBaseOS:
 
         logging.basicConfig(level=self.log_level)
 
-
-
+        # 
+        self.dft_source_path = "/home/william/Devel/dft/toolkit/ansible"
+        self.dft_additional_path =  [ "/tmp/dft" ]
+        self.dft_ansible_targets = [ "test" ]
+        
     # -------------------------------------------------------------------------
     #
     # install_baseos
@@ -138,6 +141,11 @@ class BuildBaseOS:
         . cleanup installation files
         . cleanup QEMU
         """
+
+        # Check that DFT path is valid
+        if os.path.isdir(self.dft_source_path) == False:
+            logging.critical("Path to DFT installation is not valid : %s",  self.dft_source_path)
+            exit(1)
 
         # Ensure target rootfs mountpoint exists and is a dir
         if os.path.isdir(self.rootfs_mountpoint) == False:
@@ -160,12 +168,8 @@ class BuildBaseOS:
             if self.use_rootfs_cache == True:
                 self.update_rootfs_archive()
 
-#TODO
-#        Copy DFT stuff
-
-#TODO
-#        Run ansible
-# question is what the use of the archive if it is done here ? only cache debootstrap ? 
+        # Launch Ansible to install roles identified in configuration file
+        self.install_packages()
 
         # Once installation has been played, we need to do some cleanup
         # like ensute that no mount bind is still mounted, or delete the
@@ -176,6 +180,71 @@ class BuildBaseOS:
         # since some cleanup tasks could need QEMU
         if self.use_qemu_static == True:
             self.cleanup_qemu()
+
+
+
+    # -------------------------------------------------------------------------
+    #
+    # run_ansible
+    #
+    # -------------------------------------------------------------------------
+    def install_packages(self):
+        """This method remove the QEMU static binary which has been previously 
+        copied to the target 
+        """
+
+        logging.info("installing packages...")
+
+        # Create the target directory. DFT files will be installed under this
+        # directory.
+        try:
+            logging.debug("copying DFT toolkit...")
+
+            # Create the target directory in the rootfs
+            dft_target_path = self.rootfs_mountpoint + "/dft_bootstrap/"
+            if not os.path.exists(dft_target_path):
+                os.makedirs(dft_target_path)
+
+            # Copy the DFT toolkit content to the target rootfs
+            for target_to_copy in os.listdir(self.dft_source_path):
+                target_to_copy_path = os.path.join(self.dft_source_path, target_to_copy)
+                if os.path.isfile(target_to_copy_path):
+                    logging.debug("copying file " + target_to_copy_path + " => " + dft_target_path)
+                    shutil.copy(target_to_copy_path, dft_target_path)
+                else:
+                    logging.debug("copying tree " + target_to_copy_path + " => " + dft_target_path)
+                    shutil.copytree(target_to_copy_path, os.path.join(dft_target_path, target_to_copy))
+
+            # Copy the DFT toolkit content to the target rootfs
+            for additional_path in self.dft_additional_path:
+                for target_to_copy in os.listdir(additional_path):
+                    target_to_copy_path = os.path.join(additional_path, target_to_copy)
+                    if os.path.isfile(target_to_copy_path):
+                        logging.debug("copying file " + target_to_copy_path + " => " + dft_target_path)
+                        shutil.copy(target_to_copy_path, dft_target_path)
+                    else:
+                        logging.debug("copying tree " + target_to_copy_path + " => " + dft_target_path)
+                        shutil.copytree(target_to_copy_path, os.path.join(dft_target_path, target_to_copy))
+
+        except OSError as e:
+            # Call clean up to umount /proc and /dev
+            self.cleanup_installation_files()
+            logging.critical("Error: %s - %s." % (e.filename, e.strerror))
+            exit(1)
+
+        except shutil.Error as e:
+            self.cleanup_installation_files()
+            logging.critical("Error: %s - %s." % (e.filename, e.strerror))
+            exit(1)
+     
+        # Copy the project roles to the target rootfs
+
+        # Execute Ansible
+        logging.info("running ansible...")
+        for ansible_target in self.dft_ansible_targets:
+            sudo_command = "LANG=C sudo chroot " + self.rootfs_mountpoint + " /usr/bin/ansible-playbook -i inventory.yml -c local " + ansible_target + ".yml"
+            logging.info("running ansible playbook : " + sudo_command)
+            subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
 
 
 
@@ -262,9 +331,10 @@ class BuildBaseOS:
             logging.debug("running : " + sudo_command)
             subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
 
-
         # Delete the DFT files from the rootfs
-        #TODO
+#        shutil.rmtree(self.rootfs_mountpoint + "/dft_bootstrap")
+
+
 
     # -------------------------------------------------------------------------
     #
@@ -280,8 +350,8 @@ class BuildBaseOS:
 
         # Open the file and writes the timestamp in it
         filepath = self.rootfs_mountpoint + "/etc/dft_version"
-        f = tempfile.NamedTemporaryFile(mode='w+', delete=False)        
-        f.write("DFT-" + self.timestamp + "\n")
+        with tempfile.NamedTemporaryFile(mode='w+', delete=False) as f:
+            f.write("DFT-" + self.timestamp + "\n")
         f.close()
 
         sudo_command = "sudo mv -f " + f.name + " " + filepath
@@ -310,7 +380,8 @@ class BuildBaseOS:
 
         # Catch file removal exceptions
         except OSError as e:
-            print ("Error: %s - %s." % (e.filename, e.strerror))
+            logging.critical("Error: %s - %s." % (e.filename, e.strerror))
+            exit(1)
 
         # Create the new archive
         cache_archive = tarfile.open(self.archive_filename)
@@ -442,8 +513,8 @@ class BuildBaseOS:
         filepath = self.rootfs_mountpoint + "/etc/apt/apt.conf.d/10no-check-valid-until"
 
         # Open the file and writes configuration in it
-        f = tempfile.NamedTemporaryFile(mode='w+', delete=False)        
-        f.write("Acquire::Check-Valid-Until \"0\";\n")
+        with tempfile.NamedTemporaryFile(mode='w+', delete=False) as f:
+            f.write("Acquire::Check-Valid-Until \"0\";\n")
         f.close()
 
         sudo_command = "sudo mv -f " + f.name + " " + filepath
@@ -454,10 +525,10 @@ class BuildBaseOS:
         filepath = self.rootfs_mountpoint + "/etc/apt/sources.list"
 
         # Open the file and writes configuration in it
-        f = tempfile.NamedTemporaryFile(mode='w+', delete=False)        
-        f.write("deb " + self.debian_mirror_url + "/debian " + self.target_version + " main contrib non-free\n")
-        f.write("deb " + self.debian_mirror_url + "/debian-security " + self.target_version + "/updates main contrib non-free\n")
-        f.write("deb " + self.debian_mirror_url + "/debian " + self.target_version + "-updates main contrib non-free\n")
+        with tempfile.NamedTemporaryFile(mode='w+', delete=False) as f:
+            f.write("deb " + self.debian_mirror_url + "/debian " + self.target_version + " main contrib non-free\n")
+            f.write("deb " + self.debian_mirror_url + "/debian-security " + self.target_version + "/updates main contrib non-free\n")
+            f.write("deb " + self.debian_mirror_url + "/debian " + self.target_version + "-updates main contrib non-free\n")
         f.close()
 
         sudo_command = "sudo mv -f " + f.name + " " + filepath
