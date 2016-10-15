@@ -23,7 +23,7 @@
 
 import logging, os, subprocess, tarfile, shutil, tempfile, distutils
 from datetime import datetime
-from distutils import dir_utils
+from distutils import dir_util
 
 #
 #    Class BuildBaseOS
