@@ -243,7 +243,7 @@ class BuildBaseOS:
         # Execute Ansible
         logging.info("running ansible...")
         for ansible_target in self.dft_ansible_targets:
-            sudo_command = "LANG=C sudo chroot " + self.rootfs_mountpoint + " /usr/bin/ansible-playbook -i inventory.yml -c local " + ansible_target + ".yml"
+            sudo_command = "LANG=C sudo chroot " + self.rootfs_mountpoint + " /bin.bash -c \"cd " + self.rootfs_mountpoint + "/dft_bootstrap /usr/bin/ansible-playbook -i inventory.yml -c local " + ansible_target + ".yml\""
             logging.info("running ansible playbook : " + sudo_command)
             subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
 
