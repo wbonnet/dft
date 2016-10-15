@@ -21,14 +21,14 @@
 #
 #
 
-import logging, os, subprocess, tarfile, shutil
+import logging, os, subprocess, tarfile, shutil, tempfile
 from datetime import datetime
 
 #
 #    Class BuildBaseOS
 #
 class BuildBaseOS: 
-    '''This class implements method needed to create the base OS
+    """This class implements method needed to create the base OS
 
        The "base OS" is the initial installation of Debian (debootstrap) which
        is used to apply ansible playbooks.
@@ -39,15 +39,25 @@ class BuildBaseOS:
          . copy DFT and project specific templates into /dft_bootstrap
          . run ansible in the chroot
          . cleanup things when installation is done
-    '''
+    """
 
+
+
+    # -------------------------------------------------------------------------
+    #
+    # __init__
+    #
+    # -------------------------------------------------------------------------
     def __init__(self):
-        '''Default constructor
-        '''
+        """Default constructor
+        """
 
         # Default mirror to use. It has to be the URL of a valid Debian mirror
         # It is used by debootstrap as its sources of packages.
         self.pkg_archive_url = "http://mirrors/debian/"
+
+        # TODO Temporary until file parsing is fixed
+        self.debian_mirror_url  = "http://mirrors/"
 
         # Target version to use when building the debootstrap. It has to be
         # a Debian version (jessie, stretch, etc.)
@@ -55,7 +65,7 @@ class BuildBaseOS:
 
         # Stores the target architecture
         # TODO should we have a list here ? 
-        self.target_arch = "armhf"
+        self.target_arch = "amd64"
 
         # Retrieve the architecture of the host
         self.host_arch = subprocess.check_output("dpkg --print-architecture", shell=True).decode('UTF-8').rstrip()
@@ -68,11 +78,11 @@ class BuildBaseOS:
 
         # Boolean used to flag if the cache archive should used instead 
         # of doing a real debootstrap installation
-        self.use_rootfs_cache = True
+        self.use_rootfs_cache = False
 
         # Boolean used to flag if the cache archive should used updated
         # after doing a real debootstrap installation
-        self.update_rootfs_cache = True
+        self.update_rootfs_cache = False
 
         # Boolean used to flag if the cache archive is available. This value 
         # is set by the setup_configuration method. Default is False, to 
@@ -102,10 +112,22 @@ class BuildBaseOS:
         # Generate the cache archive filename
         self.archive_filename = self.rootfs_generator_cachedir + "/" + self.target_arch + "-" +  self.target_version + "-" +  self.target_name + ".tar"
 
+        # Flags used to remove 'mount bind' states
+        self.proc_is_mounted   = False
+        self.devpts_is_mounted = False
+        self.devshm_is_mounted = False
+
         logging.basicConfig(level=self.log_level)
 
+
+
+    # -------------------------------------------------------------------------
+    #
+    # install_baseos
+    #
+    # -------------------------------------------------------------------------
     def install_baseos(self):
-        '''This method implement the logic of generating the rootfs. It calls
+        """This method implement the logic of generating the rootfs. It calls
         dedicated method for each step. The main steps are :
 
         . setting up configuration
@@ -115,13 +137,13 @@ class BuildBaseOS:
         . deploy DFT Ansible templates, and run Ansible to do confiugration
         . cleanup installation files
         . cleanup QEMU
-        '''
+        """
 
         # Ensure target rootfs mountpoint exists and is a dir
         if os.path.isdir(self.rootfs_mountpoint) == False:
             os.makedirs(self.rootfs_mountpoint)
         else:
-            logging.warn("Target rootfs mount point already exists : " + self.rootfs_mountpoint)
+            logging.warn("target rootfs mount point already exists : " + self.rootfs_mountpoint)
 
         # Check if the archive has to be used instead of doing a debootstraping
         # for real. Only if the archive exist...
@@ -138,17 +160,12 @@ class BuildBaseOS:
             if self.use_rootfs_cache == True:
                 self.update_rootfs_archive()
 
-        # Generate a unique build timestamp into /etc/dft_version 
-        self.generate_build_number()
-
-        # Generate the APT sources that will be used during the Ansible phase
-        self.generate_apt_sources_configuration()
-
 #TODO
 #        Copy DFT stuff
 
 #TODO
 #        Run ansible
+# question is what the use of the archive if it is done here ? only cache debootstrap ? 
 
         # Once installation has been played, we need to do some cleanup
         # like ensute that no mount bind is still mounted, or delete the
@@ -160,10 +177,17 @@ class BuildBaseOS:
         if self.use_qemu_static == True:
             self.cleanup_qemu()
 
+
+
+    # -------------------------------------------------------------------------
+    #
+    # setup_qemu
+    #
+    # -------------------------------------------------------------------------
     def setup_qemu(self):
-        '''This method remove the QEMU static binary which has been previously 
+        """This method remove the QEMU static binary which has been previously 
         copied to the target 
-        '''
+        """
 
         # We should not execute if the flag is not set. Should have already 
         # been tested, but double check by security
@@ -175,12 +199,20 @@ class BuildBaseOS:
         elif self.target_arch == "armel":     qemu_target_arch = "arm"
         else:                                 qemu_target_arch = self.target_arch
 
-        logging.info("Setting up QEMU for arch " + self.target_arch + "(/usr/bin/qemu-" + qemu_target_arch + "-static)")
-        os.system("sudo cp /usr/bin/qemu-" + qemu_target_arch + "-static " + self.rootfs_mountpoint + "/usr/bin/")
+        logging.info("setting up QEMU for arch " + self.target_arch + " (using /usr/bin/qemu-" + qemu_target_arch + "-static)")
+        sudo_command = "sudo cp /usr/bin/qemu-" + qemu_target_arch + "-static " + self.rootfs_mountpoint + "/usr/bin/"
+        subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
 
+
+
+    # -------------------------------------------------------------------------
+    #
+    # cleanup_qemu
+    #
+    # -------------------------------------------------------------------------
     def cleanup_qemu(self):
-        '''This method copy the QEMU static binary to the target 
-        '''
+        """This method copy the QEMU static binary to the target 
+        """
 
         # We should not execute if the flag is not set. Should have already 
         # been tested, but double check by security
@@ -193,41 +225,82 @@ class BuildBaseOS:
         else:                                 qemu_target_arch = self.target_arch
         
         # Execute the file removal with root privileges
-        logging.info("Cleaning QEMU for arch " + self.target_arch + "(/usr/bin/qemu-" + qemu_target_arch + "-static)")
+        logging.info("cleaning QEMU for arch " + self.target_arch + "(/usr/bin/qemu-" + qemu_target_arch + "-static)")
         os.system("sudo rm " + self.rootfs_mountpoint + "/usr/bin/qemu-" + qemu_target_arch + "-static")
 
+
+
+    # -------------------------------------------------------------------------
+    #
+    # cleanup_installation_files
+    #
+    # -------------------------------------------------------------------------
     def cleanup_installation_files(self):
-        '''This method is incharge of cleaning processes after Ansible has been 
+        """This method is incharge of cleaning processes after Ansible has been 
         launched. In some case some daemons are still running inside the 
         chroot, and they have to be stopped manually, or even killed in order
         to be able to umount /dev/ and /proc from inside the chroot
-        '''
-        logging.info("Starting to cleanup installation files")
+        """
+        logging.info("starting to cleanup installation files")
         pass
 
+        # Check if /proc is mounted, then umount it
+        if self.proc_is_mounted == True:
+            sudo_command = "sudo umount " + self.rootfs_mountpoint + "/dev/pts"
+            logging.debug("running : " + sudo_command)
+            subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+
+        # Check if /dev/shm is mounted, then umount it
+        if self.devshm_is_mounted == True:
+            sudo_command = "sudo umount " + self.rootfs_mountpoint + "/dev/shm"
+            logging.debug("running : " + sudo_command)
+            subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+
+        # Check if /dev/pts is mounted, then umount it
+        if self.devpts_is_mounted == True:
+            sudo_command = "sudo umount " + self.rootfs_mountpoint + "/proc"
+            logging.debug("running : " + sudo_command)
+            subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+
+
+        # Delete the DFT files from the rootfs
+        #TODO
+
+    # -------------------------------------------------------------------------
+    #
+    # generate_build_number
+    #
+    # -------------------------------------------------------------------------
     def generate_build_number(self):
-        '''
-        '''
+        """ Generate a version number in /etc/dft_version file. This is used
+        to keep track of generation date.
+        """
 
-        logging.info("Starting to generate build number")
+        logging.info("starting to generate build number")
 
-        # Open the file and writes configuration in it
-        buildnumber_filepath = self.rootfs_mountpoint + "/etc/dft_version"
-        buildnumber_file = open(buildnumber_filepath, "w")
-        buildnumber_file.write("Acquire::Check-Valid-Until \"0\"")
-        buildnumber_file.close()
+        # Open the file and writes the timestamp in it
+        filepath = self.rootfs_mountpoint + "/etc/dft_version"
+        f = tempfile.NamedTemporaryFile(mode='w+', delete=False)        
+        f.write("DFT-" + self.timestamp + "\n")
+        f.close()
 
-        # Change file owner to root:root
-        shutil.chown(buildnumber_filepath, 0, 0)
+        sudo_command = "sudo mv -f " + f.name + " " + filepath
+        logging.debug("running : " + sudo_command)
+        subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+   
 
-    
+    # -------------------------------------------------------------------------
+    #
+    # update_rootfs_archive
+    #
+    # -------------------------------------------------------------------------
     def update_rootfs_archive(self):
-        '''This methods update (delete then recreate) the rootfs archive after
+        """This methods update (delete then recreate) the rootfs archive after
         doing a real debootstrap installation.
 
         Archive is not updated if cache has been used instead of debootstraping
-        otherwise it would generate the same archive'''
-        logging.info("Starting to update rootfs archive")
+        otherwise it would generate the same archive"""
+        logging.info("starting to update rootfs archive")
 
         # Remove existing archive before generating the new one
         try:
@@ -244,12 +317,19 @@ class BuildBaseOS:
         cache_archive.add(name=self.rootfs_mountpoint)
         cache_archive.close()
 
+
+
+    # -------------------------------------------------------------------------
+    #
+    # fake_generate_debootstrap_rootfs
+    #
+    # -------------------------------------------------------------------------
     def fake_generate_debootstrap_rootfs(self):
-        logging.info("Starting to fake generate debootstrap rootfs")
+        logging.info("starting to fake generate debootstrap rootfs")
 
         # Check that the archive exists
         if os.path.isfile(self.archive_filename) == False:
-            logging.warning("Cache has been activate and archive file does not exist : " + self.archive_filename)
+            logging.warning("cache has been activate and archive file does not exist : " + self.archive_filename)
             return False
 
         # Extract tar file to rootfs mountpoint
@@ -257,13 +337,19 @@ class BuildBaseOS:
         cache_archive = tarfile.open(self.archive_filename)
         cache_archive.extractall(path=self.rootfs_mountpoint)
         cache_archive.close()
-        pass
 
+
+
+    # -------------------------------------------------------------------------
+    #
+    # generate_debootstrap_rootfs
+    #
+    # -------------------------------------------------------------------------
     def generate_debootstrap_rootfs(self):
-        '''
-        '''
+        """
+        """
 
-        logging.info("Starting to generate debootstrap rootfs")
+        logging.info("starting to generate debootstrap rootfs")
 
         # Generate the base debootstrap command
         debootstrap_command  = "sudo debootstrap --no-check-gpg"
@@ -271,18 +357,17 @@ class BuildBaseOS:
         # Add the foreign and arch only if they are different from host, and
         # thus if use_qemu_static is True
         if self.use_qemu_static == True:
+            logging.info("running debootstrap stage 1")
             debootstrap_command += " --foreign --arch=" + self.target_arch 
+        else:
+            logging.info("running debootstrap")
 
         # Add the target, mount point and repository url to the debootstrap command
         debootstrap_command += " " +  self.target_version + " " + self.rootfs_mountpoint + " " + self.pkg_archive_url
 
         # Finally run the subprocess
-        logging.info("doing debootstrap stage 1")
         logging.debug("running : " + debootstrap_command)
         subprocess.run(debootstrap_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
-
-        if self.use_qemu_static == True:
-            debootstrap_command += " --foreign --arch=" + self.target_arch 
 
         # Check if we are working with foreign arch, then ... 
         if self.use_qemu_static == True:
@@ -297,19 +382,22 @@ class BuildBaseOS:
 
 
         # Mount bind /proc into the rootfs mountpoint
-        mount_command = "sudo mount --bind --make-rslave /proc " + self.rootfs_mountpoint + "}/proc"
-        logging.debug("running : " + mount_command)
-        subprocess.run(mount_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+        sudo_command = "sudo mount --bind --make-rslave /proc " + self.rootfs_mountpoint + "/proc"
+        logging.debug("running : " + sudo_command)
+        subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+        self.proc_is_mounted = True
 
         # Mount bind /dev/pts into the rootfs mountpoint
-        mount_command = "sudo mount --bind --make-rslave /dev/pts " + self.rootfs_mountpoint + "}/dev/pts"
-        logging.debug("running : " + mount_command)
-        subprocess.run(mount_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+        sudo_command = "sudo mount --bind --make-rslave /dev/pts " + self.rootfs_mountpoint + "/dev/pts"
+        logging.debug("running : " + sudo_command)
+        subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+        self.devpts_is_mounted = True
 
         # Mount bind /dev/shm into the rootfs mountpoint
-        mount_command = "sudo mount --bind --make-rslave /dev/shm " + self.rootfs_mountpoint + "}/dev/shm"
-        logging.debug("running : " + mount_command)
-        subprocess.run(mount_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+        sudo_command = "sudo mount --bind --make-rslave /dev/shm " + self.rootfs_mountpoint + "/dev/shm"
+        logging.debug("running : " + sudo_command)
+        subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+        self.devshm_is_mounted = True
 
         # Update the APT sources
         self.generate_apt_sources_configuration()
@@ -324,9 +412,18 @@ class BuildBaseOS:
         logging.debug("running : " + apt_command)
         subprocess.run(apt_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
 
+        # Generate a unique build timestamp into /etc/dft_version 
+        self.generate_build_number()
 
+
+
+    # -------------------------------------------------------------------------
+    #
+    # generate_apt_sources_configuration
+    #
+    # -------------------------------------------------------------------------
     def generate_apt_sources_configuration(self):
-        ''' This method has two functions, configure APT sources and configure
+        """ This method has two functions, configure APT sources and configure
         apt to ignore validity check on expired repositories
 
         The method generates a file named 10no-check-valid-until which is 
@@ -337,31 +434,32 @@ class BuildBaseOS:
 
         Second part of the methods iterate the repositories from configuration
         file and generates sources.list
-        '''
+        """
         #TODO : remove validity check after generation ? => flag ? 
-        logging.info("Starting to generate APT sources configuration")
+        logging.info("starting to generate APT sources configuration")
 
         # Generate the file path
-        apt_conf_filepath = self.rootfs_mountpoint + "/etc/apt/apt.conf.d/10no-check-valid-until"
+        filepath = self.rootfs_mountpoint + "/etc/apt/apt.conf.d/10no-check-valid-until"
 
         # Open the file and writes configuration in it
-        apt_conf_file = open(apt_conf_filepath, "w")
-        apt_conf_file.write("Acquire::Check-Valid-Until \"0\"")
-        apt_conf_file.close()
+        f = tempfile.NamedTemporaryFile(mode='w+', delete=False)        
+        f.write("Acquire::Check-Valid-Until \"0\";\n")
+        f.close()
 
-        # Change file owner to root:root
-        shutil.chown(apt_conf_filepath, 0, 0)
+        sudo_command = "sudo mv -f " + f.name + " " + filepath
+        logging.debug("running : " + sudo_command)
+        subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
 
         # Generate the file path
-        sources_filepath = self.rootfs_mountpoint + "/etc/apt/sources.list"
+        filepath = self.rootfs_mountpoint + "/etc/apt/sources.list"
 
         # Open the file and writes configuration in it
-        sources_file = open(apt_conf_filepath, "w")
-        sources_file.write("Acquire::Check-Valid-Until \"0\"")
-        sources_file.write("deb " + self.debian_mirror_url + "/debian " + self.target_version + " main contrib non-free")
-        sources_file.write("deb " + self.debian_mirror_url + "/debian-security " + self.target_version + "/updates main contrib non-free")
-        sources_file.write("deb " + self.debian_mirror_url + "/debian " + self.target_version + "-updates main contrib non-free")
-        sources_file.close()
+        f = tempfile.NamedTemporaryFile(mode='w+', delete=False)        
+        f.write("deb " + self.debian_mirror_url + "/debian " + self.target_version + " main contrib non-free\n")
+        f.write("deb " + self.debian_mirror_url + "/debian-security " + self.target_version + "/updates main contrib non-free\n")
+        f.write("deb " + self.debian_mirror_url + "/debian " + self.target_version + "-updates main contrib non-free\n")
+        f.close()
 
-        # Change file owner to root:root
-        shutil.chown(sources_filepath, 0, 0)
+        sudo_command = "sudo mv -f " + f.name + " " + filepath
+        logging.debug("running : " + sudo_command)
+        subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
