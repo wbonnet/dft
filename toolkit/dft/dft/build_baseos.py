@@ -243,10 +243,9 @@ class BuildBaseOS:
         # Execute Ansible
         logging.info("running ansible...")
         for ansible_target in self.dft_ansible_targets:
-            sudo_command = "LANG=C sudo chroot " + self.rootfs_mountpoint + " /bin.bash -c \"cd " + self.rootfs_mountpoint + "/dft_bootstrap /usr/bin/ansible-playbook -i inventory.yml -c local " + ansible_target + ".yml\""
-            logging.info("running ansible playbook : " + sudo_command)
-            subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
-
+            sudo_command = "LANG=C sudo chroot " + self.rootfs_mountpoint + " /bin/bash -c \"cd /dft_bootstrap && /usr/bin/ansible-playbook -i inventory.yml -c local " + ansible_target + ".yml\""
+            self.execute_command(sudo_command)
+    
 
 
     # -------------------------------------------------------------------------
@@ -271,7 +270,7 @@ class BuildBaseOS:
 
         logging.info("setting up QEMU for arch " + self.target_arch + " (using /usr/bin/qemu-" + qemu_target_arch + "-static)")
         sudo_command = "sudo cp /usr/bin/qemu-" + qemu_target_arch + "-static " + self.rootfs_mountpoint + "/usr/bin/"
-        subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+        self.execute_command(sudo_command)
 
 
 
@@ -316,20 +315,17 @@ class BuildBaseOS:
         # Check if /proc is mounted, then umount it
         if self.proc_is_mounted == True:
             sudo_command = "sudo umount " + self.rootfs_mountpoint + "/dev/pts"
-            logging.debug("running : " + sudo_command)
-            subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+            self.execute_command(sudo_command)
 
         # Check if /dev/shm is mounted, then umount it
         if self.devshm_is_mounted == True:
             sudo_command = "sudo umount " + self.rootfs_mountpoint + "/dev/shm"
-            logging.debug("running : " + sudo_command)
-            subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+            self.execute_command(sudo_command)
 
         # Check if /dev/pts is mounted, then umount it
         if self.devpts_is_mounted == True:
             sudo_command = "sudo umount " + self.rootfs_mountpoint + "/proc"
-            logging.debug("running : " + sudo_command)
-            subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+            self.execute_command(sudo_command)
 
         # Delete the DFT files from the rootfs
 #        shutil.rmtree(self.rootfs_mountpoint + "/dft_bootstrap")
@@ -355,9 +351,8 @@ class BuildBaseOS:
         f.close()
 
         sudo_command = "sudo mv -f " + f.name + " " + filepath
-        logging.debug("running : " + sudo_command)
-        subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
-   
+        self.execute_command(sudo_command)
+
 
     # -------------------------------------------------------------------------
     #
@@ -381,6 +376,7 @@ class BuildBaseOS:
         # Catch file removal exceptions
         except OSError as e:
             logging.critical("Error: %s - %s." % (e.filename, e.strerror))
+            self.cleanup_installation_files()
             exit(1)
 
         # Create the new archive
@@ -437,8 +433,7 @@ class BuildBaseOS:
         debootstrap_command += " " +  self.target_version + " " + self.rootfs_mountpoint + " " + self.pkg_archive_url
 
         # Finally run the subprocess
-        logging.debug("running : " + debootstrap_command)
-        subprocess.run(debootstrap_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+        self.execute_command(debootstrap_command)
 
         # Check if we are working with foreign arch, then ... 
         if self.use_qemu_static == True:
@@ -447,27 +442,23 @@ class BuildBaseOS:
 
             # And second stage must be run
             logging.info("doing debootstrap stage 2")
-            logging.debug("running : " + debootstrap_command)
             debootstrap_command  = "LANG=C sudo chroot " + self.rootfs_mountpoint + " /debootstrap/debootstrap --second-stage"
-            subprocess.run(debootstrap_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+            self.execute_command(debootstrap_command)
 
 
         # Mount bind /proc into the rootfs mountpoint
         sudo_command = "sudo mount --bind --make-rslave /proc " + self.rootfs_mountpoint + "/proc"
-        logging.debug("running : " + sudo_command)
-        subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+        self.execute_command(sudo_command)
         self.proc_is_mounted = True
 
         # Mount bind /dev/pts into the rootfs mountpoint
         sudo_command = "sudo mount --bind --make-rslave /dev/pts " + self.rootfs_mountpoint + "/dev/pts"
-        logging.debug("running : " + sudo_command)
-        subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+        self.execute_command(sudo_command)
         self.devpts_is_mounted = True
 
         # Mount bind /dev/shm into the rootfs mountpoint
         sudo_command = "sudo mount --bind --make-rslave /dev/shm " + self.rootfs_mountpoint + "/dev/shm"
-        logging.debug("running : " + sudo_command)
-        subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+        self.execute_command(sudo_command)
         self.devshm_is_mounted = True
 
         # Update the APT sources
@@ -475,13 +466,11 @@ class BuildBaseOS:
 
         # Then update the list of packages
         apt_command = "sudo chroot " + self.rootfs_mountpoint + " /usr/bin/apt-get update"
-        logging.debug("running : " + apt_command)
-        subprocess.run(apt_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+        self.execute_command(apt_command)
  
         # Install extra packages into the chroot
         apt_command = "sudo chroot " + self.rootfs_mountpoint + " /usr/bin/apt-get install --no-install-recommends --yes --allow-unauthenticated apt-utils ansible"
-        logging.debug("running : " + apt_command)
-        subprocess.run(apt_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+        self.execute_command(apt_command)
 
         # Generate a unique build timestamp into /etc/dft_version 
         self.generate_build_number()
@@ -518,8 +507,7 @@ class BuildBaseOS:
         f.close()
 
         sudo_command = "sudo mv -f " + f.name + " " + filepath
-        logging.debug("running : " + sudo_command)
-        subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+        self.execute_command(sudo_command)
 
         # Generate the file path
         filepath = self.rootfs_mountpoint + "/etc/apt/sources.list"
@@ -532,5 +520,31 @@ class BuildBaseOS:
         f.close()
 
         sudo_command = "sudo mv -f " + f.name + " " + filepath
-        logging.debug("running : " + sudo_command)
-        subprocess.run(sudo_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+        self.execute_command(sudo_command)
+
+    # -------------------------------------------------------------------------
+    #
+    # exec_sudo
+    #
+    # -------------------------------------------------------------------------
+    def execute_command(self, command):
+        """ This method run a command as a subprocess. Typical use case is 
+        running sudo commands.
+
+        This method is a wrapper to subprocess.run , and will be moved soon
+        in a helper object. It provides mutalisation of error handling
+        """
+
+        try:
+            logging.debug("running : " + command)
+            subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+
+        except subprocess.CalledProcessError as e:
+            self.cleanup_installation_files()
+            logging.critical("Error %d occured when executing %s" % (e.returncode, e.cmd))
+            logging.debug("stdout")
+            logging.debug("%s" % (e.stdout.decode('UTF-8')))
+            logging.debug("stderr")
+            logging.debug("%s" % (e.stderr.decode('UTF-8')))
+            exit(1)
+
