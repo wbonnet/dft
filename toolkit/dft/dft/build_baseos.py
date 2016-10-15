@@ -23,7 +23,7 @@
 
 import logging, os, subprocess, tarfile, shutil, tempfile, distutils
 from datetime import datetime
-from distutils import dir_util
+from distutils import dir_util, file_util
 
 #
 #    Class BuildBaseOS
@@ -211,7 +211,7 @@ class BuildBaseOS:
                 target_to_copy_path = os.path.join(self.dft_source_path, target_to_copy)
                 if os.path.isfile(target_to_copy_path):
                     logging.debug("copying file " + target_to_copy_path + " => " + dft_target_path)
-                    distutils.dir_util.copy_file(target_to_copy_path, dft_target_path)
+                    distutils.file_util.copy_file(target_to_copy_path, dft_target_path)
                 else:
                     logging.debug("copying tree " + target_to_copy_path + " => " + dft_target_path)
                     distutils.dir_util.copy_tree(target_to_copy_path, os.path.join(dft_target_path, target_to_copy))
@@ -222,7 +222,7 @@ class BuildBaseOS:
                     target_to_copy_path = os.path.join(additional_path, target_to_copy)
                     if os.path.isfile(target_to_copy_path):
                         logging.debug("copying file " + target_to_copy_path + " => " + dft_target_path)
-                        distutils.dir_util.copy_file(target_to_copy_path, dft_target_path)
+                        distutils.file_util.copy_file(target_to_copy_path, dft_target_path)
                     else:
                         logging.debug("copying tree " + target_to_copy_path + " => " + dft_target_path)
                         distutils.dir_util.copy_tree(target_to_copy_path, os.path.join(dft_target_path, target_to_copy))
