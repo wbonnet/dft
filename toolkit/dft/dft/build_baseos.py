@@ -21,7 +21,7 @@
 #
 #
 
-import logging, os, subprocess, tarfile, shutil, tempfile
+import logging, os, subprocess, tarfile, shutil, tempfile, distutils
 from datetime import datetime
 
 #
@@ -123,7 +123,7 @@ class BuildBaseOS:
         self.dft_source_path = "/home/william/Devel/dft/toolkit/ansible"
         self.dft_additional_path =  [ "/tmp/dft" ]
         self.dft_ansible_targets = [ "test" ]
-        
+
     # -------------------------------------------------------------------------
     #
     # install_baseos
@@ -210,10 +210,10 @@ class BuildBaseOS:
                 target_to_copy_path = os.path.join(self.dft_source_path, target_to_copy)
                 if os.path.isfile(target_to_copy_path):
                     logging.debug("copying file " + target_to_copy_path + " => " + dft_target_path)
-                    shutil.copy(target_to_copy_path, dft_target_path)
+                    distutils.dir_util.copy_file(target_to_copy_path, dft_target_path)
                 else:
                     logging.debug("copying tree " + target_to_copy_path + " => " + dft_target_path)
-                    shutil.copytree(target_to_copy_path, os.path.join(dft_target_path, target_to_copy))
+                    distutils.dir_util.copy_tree(target_to_copy_path, os.path.join(dft_target_path, target_to_copy))
 
             # Copy the DFT toolkit content to the target rootfs
             for additional_path in self.dft_additional_path:
@@ -221,10 +221,10 @@ class BuildBaseOS:
                     target_to_copy_path = os.path.join(additional_path, target_to_copy)
                     if os.path.isfile(target_to_copy_path):
                         logging.debug("copying file " + target_to_copy_path + " => " + dft_target_path)
-                        shutil.copy(target_to_copy_path, dft_target_path)
+                        distutils.dir_util.copy_file(target_to_copy_path, dft_target_path)
                     else:
                         logging.debug("copying tree " + target_to_copy_path + " => " + dft_target_path)
-                        shutil.copytree(target_to_copy_path, os.path.join(dft_target_path, target_to_copy))
+                        distutils.dir_util.copy_tree(target_to_copy_path, os.path.join(dft_target_path, target_to_copy))
 
         except OSError as e:
             # Call clean up to umount /proc and /dev
@@ -311,7 +311,6 @@ class BuildBaseOS:
         to be able to umount /dev/ and /proc from inside the chroot
         """
         logging.info("starting to cleanup installation files")
-        pass
 
         # Check if /proc is mounted, then umount it
         if self.proc_is_mounted == True:
