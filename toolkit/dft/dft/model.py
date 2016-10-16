@@ -49,17 +49,17 @@ class DftConfiguration:
 
     # Default configuration file to use if none is provided through the cli
     if filename == None:
-      self.configuration_filename = "~/.dftrc"
+      self.configuration_file = "~/.dftrc"
     else:
-      self.configuration_filename = filename
+      self.configuration_file = filename
 
     # Boolean used to flag if the cache archive should used instead 
     # of doing a real debootstrap installation
-    self.use_rootfs_cache = False
+    self.use_cache_archive = False
 
     # Boolean used to flag if the cache archive should used updated
     # after doing a real debootstrap installation
-    self.update_rootfs_cache = False
+    self.update_cache_archive = False
 
     # Current log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
     # TODO : default should be changed to INFO

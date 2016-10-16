@@ -64,7 +64,7 @@ class BuildBaseOS:
         # Boolean used to flag if the cache archive is available. This value 
         # is set by the setup_configuration method. Default is False, to 
         # ensure it will be rebuild
-        self.rootfs_cache_is_available = False
+        self.cache_archive_is_available = False
  
         # Flags used to remove 'mount bind' states
         self.proc_is_mounted   = False
@@ -105,17 +105,17 @@ class BuildBaseOS:
 
         # Check if the archive has to be used instead of doing a debootstraping
         # for real. Only if the archive exist...
-        if self.project.dft.use_rootfs_cache == True and self.rootfs_cache_is_available == True:
+        if self.project.dft.use_cache_archive == True and self.cache_archive_is_available == True:
             self.fake_generate_debootstrap_rootfs()
         else:
             # In any other cases, do a real debootstrap call
             self.generate_debootstrap_rootfs()
 
         # þest the archive has to be updated
-        if self.project.dft.update_rootfs_cache == True:
+        if self.project.dft.update_cache_archive == True:
             # But only do it if we haven't bee using the cache, or it
             # would be extracted, then archived again.
-            if self.project.dft.use_rootfs_cache == True:
+            if self.project.dft.use_cache_archive == True:
                 self.update_rootfs_archive()
 
         # Launch Ansible to install roles identified in configuration file
