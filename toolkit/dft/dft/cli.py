@@ -22,7 +22,7 @@
 #
 
 import argparse, textwrap
-import build_baseos
+import build_baseos, model
 
 #
 #	Class Cli
@@ -34,7 +34,7 @@ class Cli:
 
 	def __init__(self):
 		# Current version
-		self.version = "0.0.2"
+		self.version = "0.0.3"
 
 		# Create the internal parser from argparse
 		self.parser = argparse.ArgumentParser(description=textwrap.dedent('''\
@@ -73,7 +73,7 @@ Available commands are :
 			return self.parser.parse_args(['-h']) 
 
 		# Finally call the parser that has been completed by the previous lines
-		self.parser.parse_args() 
+		self.args = self.parser.parse_args() 
 
 	def add_parser_option_assemble_firmware(self):
 		pass
@@ -99,6 +99,7 @@ Available commands are :
 		self.parser.add_argument(	'--project-file',
 									action='store',
                       				dest='project_file',
+                      				required=True,
 									help='project definition file')	
 
 		# Overrides the target architecture from the configuration file by
@@ -194,6 +195,10 @@ Available commands are :
 		""" According to the command, call the method dedicated to run the
 			command called from cli
 		"""
+
+		# Create the project definition object, and load its configuration
+		self.project = model.ProjectDefinition(self.args.project_file)
+
 		# 
 		if   self.command == "assemble_firmware":            self.run_assemble_firmware()
 		elif self.command == "build_baseos":                 self.run_build_baseos()
@@ -213,7 +218,7 @@ Available commands are :
 			Create the business objet, then execute the entry point
 		"""
 		# Create the business object
-		command = build_baseos.BuildBaseOS()
+		command = build_baseos.BuildBaseOS(self.project)
 
 		# Then
 		command.install_baseos()
