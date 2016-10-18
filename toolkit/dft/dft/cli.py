@@ -210,13 +210,13 @@ Available commands are :
 			logging.debug("Overriding pkg_archive_url with CLI value : %s => %s",  self.project.baseos.pkg_archive_url, self.args.override_debian_mirror)
 			self.project.baseos.pkg_archive_url = self.args.override_debian_mirror
 		
-		if self.args.update_cache_archive != self.project.baseos.update_cache_archive:
+		if self.args.update_cache_archive != self.project.dft.update_cache_archive:
 			logging.debug("Overriding update_cache_archive with CLI value : %s => %s",  self.project.dft.update_cache_archive, self.args.update_cache_archive)
-			self.project.baseos.update_cache_archive = self.args.update_cache_archive
+			self.project.dft.update_cache_archive = self.args.update_cache_archive
 
-		if self.args.use_cache_archive != self.project.baseos.use_cache_archive:
+		if self.args.use_cache_archive != self.project.dft.use_cache_archive:
 			logging.debug("Overriding use_cache_archive with CLI value : %s => %s",  self.project.dft.use_cache_archive, self.args.use_cache_archive)
-			self.project.baseos.use_cache_archive = self.args.use_cache_archive
+			self.project.dft.use_cache_archive = self.args.use_cache_archive
 
 		if self.args.limit_target_version != None:
 			logging.debug("Overriding target_version with CLI value : %s => %s",  self.project.target_version, self.args.limit_target_version)
