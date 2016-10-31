@@ -24,36 +24,45 @@
 import argparse, textwrap, logging
 import build_baseos, model
 
+# -----------------------------------------------------------------------------
 #
 #	Class Cli
 #
+# -----------------------------------------------------------------------------
 class Cli:
 	"""This class represent the command line parser for this tool. It brings 
 	methods used to parse command line arguments then run the program itself
 	"""
 
+    # -------------------------------------------------------------------------
+    #
+    # __init__
+    #
+    # -------------------------------------------------------------------------
 	def __init__(self):
 		# Current version
-		self.version = "0.0.3"
+		self.version = "0.0.4"
 
 		# Create the internal parser from argparse
 		self.parser = argparse.ArgumentParser(description=textwrap.dedent('''\
-Debian Firmware Toolkit v''' + self.version + ''' - DFT is a collection of tools used to create Debian based firmwares 
+Debian Firmware Toolkit v''' + self.version + '''
+
+DFT is a collection of tools used to create Debian based firmwares 
 					 			 
 Available commands are :
-. assemble_firmware                Create a firmware from a baseos and generate the configuration files used to loading after booting
+x assemble_firmware                Create a firmware from a baseos and generate the configuration files used to loading after booting
 . build_baseos                     Generate a debootstrap from a Debian repository, install and configure required packages
-. build_bootloader                 Build the bootloader toolchain (kernel, initramfs, grub or uboot)
-. build_image                      Build the disk image from the firmware (or rootfs) and bootloader toolchain
-. build_firmware                   Build the firmware configuration files and scripts used to load in memory the firmware
-. check_rootfs                     Control the content of the baseos rootfs after its generation (debsecan and openscap)
-. factory_setup                    Apply some extra factory setup before generating the firmware
-. generate_content_information     Generate a manifest identiyfing content and versions
-. strip_rootfs                     Strip down the rootfs before assembling the firmware'''),
+x build_bootloader                 Build the bootloader toolchain (kernel, initramfs, grub or uboot)
+x build_image                      Build the disk image from the firmware (or rootfs) and bootloader toolchain
+x build_firmware                   Build the firmware configuration files and scripts used to load in memory the firmware
+x check_rootfs                     Control the content of the baseos rootfs after its generation (debsecan and openscap)
+x factory_setup                    Apply some extra factory setup before generating the firmware
+x generate_content_information     Generate a manifest identiyfing content and versions
+x strip_rootfs                     Strip down the rootfs before assembling the firmware'''),
 											  formatter_class=argparse.RawTextHelpFormatter)
 	
 		# Set the log level from the configuration
-		# TODO globalize logging
+# TODO globalize logging
 		logging.basicConfig(level="DEBUG")
 
 	def parse(self, args):
@@ -109,7 +118,7 @@ Available commands are :
 		# Overrides the target architecture from the configuration file by
 		# limiting it to a given list of arch. Architectures not defined in 
 		# the configuration file can be added with this parameter
-		# TODO: parse the list of argument. So far only one value is handled
+# TODO: parse the list of argument. So far only one value is handled
 		self.parser.add_argument(	'--limit-arch',
 									action='store',
                       				dest='limit_target_arch',
@@ -118,7 +127,7 @@ Available commands are :
 		# Overrides the target version used to build the baseos. Version to 
 		# use is limited it to a given list of arch. Versions not defined
 		# in the configuration file can be added with this parameter
-		# TODO: parse the list of argument. So far only one value is handled
+# TODO: parse the list of argument. So far only one value is handled
 		self.parser.add_argument(	'--limit-version',
 									action='store',
                       				dest='limit_target_version',
@@ -155,6 +164,15 @@ Available commands are :
 										 "defines a single mirror, not a full list of mirrors. Thus the list of mirrors \n"
 										 "will be replaced by a single one")
 		
+		# During installation ansible files from DFT toolkit are copied to 
+		# /dft_bootstrap in the target rootfs. This option prevents DFT from
+		# removing these files. This is useful to debug ansible stuff and 
+		# replay an playbooks at will
+		self.parser.add_argument(	'--keep-bootstrap-files',
+									action='store_true',
+                      				dest='keep_bootstrap_files',
+									help='do not delete DFT bootstrap files after instalaltion (debug purpose)')	
+
 		# delete work dir
 		# => should not be in this command ? move it to buil_firmware ?
 
@@ -195,6 +213,11 @@ Available commands are :
 									help="defines the minimal log level. Default value is  warning")
 
 
+    # -------------------------------------------------------------------------
+    #
+    # run
+    #
+    # -------------------------------------------------------------------------
 	def run(self):
 		""" According to the command, call the method dedicated to run the
 			command called from cli
@@ -226,13 +249,19 @@ Available commands are :
 			logging.debug("Overriding target_arch with CLI value : %s => %s",  self.project.target_arch, self.args.limit_target_arch)
 			self.project.target_arch = self.args.limit_target_arch
 
-		if self.args.config_file != None:#
+		if self.args.config_file != None:
 			logging.debug("Overriding config_file with CLI value : %s => %s",  self.project.dft.configuration_file, self.args.config_file)
 			self.project.dft.configuration_file = self.args.config_file
 
-		if self.args.log_level != None:#
-			logging.debug("Overriding log_lvel with CLI value : %s => %s",  self.project.dft.log_level, self.args.log_level.upper())
-			self.project.dft.log_level = self.args.log_level.upper()
+		if self.args.log_level != None:
+			if self.args.log_level.upper() != self.project.dft.log_level.upper():
+				logging.debug("Overriding log_lvel with CLI value : %s => %s",  self.project.dft.log_level, self.args.log_level.upper())
+				self.project.dft.log_level = self.args.log_level.upper()
+
+		if self.args.keep_bootstrap_files != None:
+			if self.args.keep_bootstrap_files != self.project.dft.keep_bootstrap_files:
+				logging.debug("Overriding keep_bootstrap_files with CLI value : %s => %s",  self.project.dft.keep_bootstrap_files, self.args.keep_bootstrap_files)
+				self.project.dft.keep_bootstrap_files = self.args.keep_bootstrap_files
 
 		# ---------------------------------------------------------------------
 
@@ -248,11 +277,21 @@ Available commands are :
 		elif self.command == "generate_content_information": self.run_generate_content_information()
 		elif self.command == "strip_rootfs":                 self.run_strip_rootfs()
 	
+    # -------------------------------------------------------------------------
+    #
+    # run_assemble_firmware
+    #
+    # -------------------------------------------------------------------------
 	def run_assemble_firmware(self):
 		pass
 
+    # -------------------------------------------------------------------------
+    #
+    # run_build_baseos
+    #
+    # -------------------------------------------------------------------------
 	def run_build_baseos(self):
-		""" Method used to handl eth build_baseos command. 
+		""" Method used to handle the build_baseos command. 
 			Create the business objet, then execute the entry point
 		"""
 		# Create the business object
@@ -262,23 +301,58 @@ Available commands are :
 		command.install_baseos()
 		pass
 
+    # -------------------------------------------------------------------------
+    #
+    # run_build_bootloader
+    #
+    # -------------------------------------------------------------------------
 	def run_build_bootloader(self):
 		pass
 
+    # -------------------------------------------------------------------------
+    #
+    # run_build_image
+    #
+    # -------------------------------------------------------------------------
 	def run_build_image(self):
 		pass
 
+    # -------------------------------------------------------------------------
+    #
+    # run_build_firmware
+    #
+    # -------------------------------------------------------------------------
 	def run_build_firmware(self):
 		pass
 
+    # -------------------------------------------------------------------------
+    #
+    # run_check_rootfs
+    #
+    # -------------------------------------------------------------------------
 	def run_check_rootfs(self):
 		pass
 
+    # -------------------------------------------------------------------------
+    #
+    # run_factory_setup
+    #
+    # -------------------------------------------------------------------------
 	def run_factory_setup(self):
 		pass
 
+    # -------------------------------------------------------------------------
+    #
+    # run_content_information
+    #
+    # -------------------------------------------------------------------------
 	def run_content_information(self):
 		pass
 
+    # -------------------------------------------------------------------------
+    #
+    # run_strip_rootfs
+    #
+    # -------------------------------------------------------------------------
 	def run_strip_rootfs(self):
 		pass
