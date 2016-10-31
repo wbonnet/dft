@@ -23,11 +23,11 @@
 
 from datetime import datetime
 
-# -------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #
 # class DftConfiguration
 #
-# -------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 class DftConfiguration: 
   """This class defines default configuration for the DFT toolchain
 
@@ -38,11 +38,11 @@ class DftConfiguration:
   in order of priority (from the highest priority to the lowest).
   """
 
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
   #
   # __init__
   #
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
   def __init__(self, filename = None):
     """
     """
@@ -62,11 +62,11 @@ class DftConfiguration:
     self.update_cache_archive = False
 
     # Current log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-    # TODO : default should be changed to INFO
+# TODO : default should be changed to INFO
     self.log_level = "DEBUG"
 
     # Path to the installation of the DFT ansible roles
-    # TODO : change to some place under /usr/share once packaging will be done
+# TODO : change to some place under /usr/share once packaging will be done
     self.dft_source_path = "/home/william/Devel/dft/toolkit/ansible"
 
     # Debootstrap target to use (minbase or buildd)
@@ -74,15 +74,21 @@ class DftConfiguration:
 
     # Path to the default directory ued to store rootfs and cache archives
     # It defaults to /tmp
-    # TODO : This may lead to full file system, should be changed, may be
-    # a mandatory value in the config file ? => change to None
+# TODO : This may lead to full file system, should be changed, may be
+# a mandatory value in the config file ? => change to None
     self.working_directory = None
-   
-  # -------------------------------------------------------------------------
+
+    # During installation ansible files from DFT toolkit are copied to 
+    # /dft_bootstrap in the target rootfs. This falgs prevents DFT from
+    # removing these files if set to True. This is useful to debug 
+    # ansible stuff and replay an playbooks at will
+    self.keep_bootstrap_files = False
+
+  # ---------------------------------------------------------------------------
   #
   # load_configuration
   #
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
   def load_configuration(self, filename = None):
     # Check that the filename has been passed either now or when calling init
     # Check that the file exist
@@ -91,11 +97,11 @@ class DftConfiguration:
 
 
 
-# -------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #
 # Class ProjectDefinition
 #
-# -------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 class ProjectDefinition :
   """This class defines a project. A project holds all the information used
   to produce the different object created by DFT (baseos, modulations, 
@@ -105,11 +111,11 @@ class ProjectDefinition :
   definition object. It also includes tool configuration by itself.
   """ 
 
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
   #
   # __init__
   #
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
   def __init__(self, filename = None):
       """
       """
@@ -138,37 +144,37 @@ class ProjectDefinition :
       self.target_version = "stretch"
 
       # Stores the target architecture
-      # TODO should we have a list here ? 
+# TODO should we have a list here ? 
       self.target_arch = "amd64"
 
       # Name of the current baseos being produced. Used in rootfs mount
       # point path and archive name generation
-      # TODO temporary values
+# TODO temporary values
       self.target_name = "test"
 
-      # TODO temporary values
+# TODO temporary values
       self.dft_additional_path =  [ "/tmp/dft-additional" ]
       self.dft_ansible_targets = [ "test" ]
 
-      # TODO 
+# TODO 
       # Generate the cache archive filename
       self.rootfs_generator_cachedir = "/tmp/dft"
       self.rootfs_base_workdir = "/tmp/dft/rootfs_mountpoint"
       self.archive_filename = self.rootfs_generator_cachedir + "/" + self.target_arch + "-" +  self.target_version + "-" +  self.target_name + ".tar"
 
-      # TODO 
+# TODO 
       # Generates the path to the rootfs mountpoint
       rootfs_image_name   = self.target_arch + "-" + self.target_version + "-" + self.timestamp
 
-      # TODO
+# TODO
       # Stores the path to the rootfs mountpoint used by debootstrap
       self.rootfs_mountpoint = self.rootfs_base_workdir + "/" + rootfs_image_name
   
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
   #
   # load_definition
   #
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
   def load_definition(self, filename = None):
     # Check that the filename has been passed either now or when calling init
     # Check that the file exist
@@ -182,22 +188,22 @@ class ProjectDefinition :
 
 
 
-# -------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #
 # BaseosDefinition
 #
-# -------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 class BaseosDefinition :
   """This class contains the definition of a baseos rootfs. It includes
   information about everything that is used either to configure its 
   specific build environment, or about things to include inside the firmware
   """ 
 
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
   #
   # __init__
   #
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
   def __init__(self, filename = None):
     """
     """
@@ -211,15 +217,15 @@ class BaseosDefinition :
     # It is used by debootstrap as its sources of packages.
     self.pkg_archive_url = "http://mirrors/debian"
 
-    # TODO Temporary until file parsing is fixed
-    # TODO Should be a list
+# TODO Temporary until file parsing is fixed
+# TODO Should be a list
     self.debian_mirror_url  = "http://mirrors"
 
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
   #
   # load_definition
   #
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
   def load_definition(self, filename = None):
     # Check that the filename has been passed either now or when calling init
     # Check that the file exist
@@ -227,11 +233,11 @@ class BaseosDefinition :
     pass
 
 
-# -------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #
 # FirmwareDefinition
 #
-# -------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 class FirmwareDefinition :
   """This class contains the definition of a firmware. It includes
   information about which rootfs should be used, how many squashfs have to 
@@ -241,11 +247,11 @@ class FirmwareDefinition :
   is the tool used on the target to created the stacked overlayfs
   """ 
 
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
   #
   # __init__
   #
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
   def __init__(self, filename = None):
       """
       """
@@ -255,11 +261,11 @@ class FirmwareDefinition :
       # can be use to initialize several objects
       self.filename = filename
 
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
   #
   # load_definition
   #
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
   def load_definition(self, filename = None):
     # Check that the filename has been passed either now or when calling init
     # Check that the file exist
