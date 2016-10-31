@@ -71,6 +71,10 @@ class BuildBaseOS:
         self.devpts_is_mounted = False
         self.devshm_is_mounted = False
 
+        # Flag used to prevent multiple call to cleanup since cleanup is used
+        # in exception processing
+        self.doing_cleanup_installation_files = False
+
         # Set the log level from the configuration
         logging.basicConfig(level=project.dft.log_level)
 
@@ -197,6 +201,7 @@ class BuildBaseOS:
         for ansible_target in self.project.dft_ansible_targets:
             sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint + " /bin/bash -c \"cd /dft_bootstrap && /usr/bin/ansible-playbook -i inventory.yml -c local " + ansible_target + ".yml\""
             self.execute_command(sudo_command)
+        logging.info("ansible stage successfull")
     
 
 
@@ -240,6 +245,10 @@ class BuildBaseOS:
         if self.use_qemu_static != True:
             return
 
+        if self.project.dft.keep_bootstrap_files == True:
+            logging.debug("keep_bootstrap_files is activated, keeping QEMU in " + self.project.rootfs_mountpoint)
+            return
+
         # Copy the QEMU binary to the target, using root privileges
         if   self.project.target_arch == "armhf":   qemu_target_arch = "arm"
         elif self.project.target_arch == "armel":   qemu_target_arch = "arm"
@@ -264,6 +273,15 @@ class BuildBaseOS:
         """
         logging.info("starting to cleanup installation files")
 
+        # Are we already doing a cleanup ? this may happens if an exception
+        # occurs when cleaning up. It prevents multiple call and loop in
+        # exception processing
+        if self.doing_cleanup_installation_files == True:
+            return
+
+        # Set the flag used to prevent multiple call
+        self.doing_cleanup_installation_files = True
+
         # Check if /proc is mounted, then umount it
         if self.proc_is_mounted == True:
             sudo_command = "sudo umount " + self.project.rootfs_mountpoint + "/dev/pts"
@@ -279,8 +297,13 @@ class BuildBaseOS:
             sudo_command = "sudo umount " + self.project.rootfs_mountpoint + "/proc"
             self.execute_command(sudo_command)
 
+        self.doing_cleanup_installation_files = False
+
         # Delete the DFT files from the rootfs
-#        shutil.rmtree(self.project.rootfs_mountpoint + "/dft_bootstrap")
+        if self.project.dft.keep_bootstrap_files == False:
+            shutil.rmtree(self.project.rootfs_mountpoint + "/dft_bootstrap")
+        else:
+            logging.debug("keep_bootstrap_files is activated, keeping DFT bootstrap files in " + self.project.rootfs_mountpoint + "/dft_bootstrap")
 
 
 
@@ -447,7 +470,7 @@ class BuildBaseOS:
         Second part of the methods iterate the repositories from configuration
         file and generates sources.list
         """
-        #TODO : remove validity check after generation ? => flag ? 
+#TODO : remove validity check after generation ? => flag ? 
         logging.info("starting to generate APT sources configuration")
 
         # Generate the file path
