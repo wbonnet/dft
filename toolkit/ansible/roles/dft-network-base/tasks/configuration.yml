@@ -27,4 +27,5 @@
 #
 
 ---
-- name : DFT - Setup default hostname
+- name : DFT - Setup network/interfaces
+
