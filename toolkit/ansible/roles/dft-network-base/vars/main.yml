@@ -21,16 +21,5 @@
 #
 #
 
-#
-# Include the list of specific tasks. Tasks are separated into different
-# files, one file per functionnality.
-#
-
----
-- name : DFT - Setup network/interfaces
-  template: src=templates/interfaces.j2 
-            dest=/etc/network/interfaces
-            owner=root 
-            group=root 
-            mode="u=rw,g=r,o=r"          
-
+dft_network_interfaces:
+  - { name: "eth0", auto: True, dhcp: True }

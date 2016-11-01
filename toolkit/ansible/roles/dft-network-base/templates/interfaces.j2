@@ -1,0 +1,34 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+{% for interface in dft_network_interfaces %}
+# Definition of interface {{ interface.name }}
+auto {{ interface.name }}
+{% if interface.dhcp is defined %}
+iface {{ interface.name }} inet dhcp
+{% else %}
+iface {{ interface.name }} inet static
+{% if interface.address is defined %}
+    address   {{ interface.address }}
+{% endif %}
+{% if interface.network is defined %}
+    network   {{ interface.network }}
+{% endif %}
+{% if interface.netmask is defined %}
+    netmask   {{ interface.netmask }}
+{% endif %}
+{% if interface.gateway is defined %}
+    gateway   {{ interface.gateway }}
+{% endif %}
+{% if interface.broadcast is defined %}
+    broadcast {{ interface.broadcast }}
+{% endif %}
+{% endif %}
+
+{% endfor %}
