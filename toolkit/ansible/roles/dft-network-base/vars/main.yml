@@ -23,3 +23,9 @@
 
 dft_network_interfaces:
   - { name: "eth0", dhcp: True }
+
+dft_ntp_servers:
+  - 0.debian.pool.ntp.org
+  - 1.debian.pool.ntp.org
+  - 2.debian.pool.ntp.org
+  - 3.debian.pool.ntp.org
