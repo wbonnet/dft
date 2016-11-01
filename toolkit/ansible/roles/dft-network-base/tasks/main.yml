@@ -28,6 +28,7 @@
 
 ---
 - include: packages.yml
+- include: configuration.yml
 - include: ntp.yml
 - include: openssh-server.yml
 - include: openssh-client.yml
