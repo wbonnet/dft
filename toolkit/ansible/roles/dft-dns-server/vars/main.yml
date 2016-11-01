@@ -21,30 +21,33 @@
 #
 #
 
-#
-# Include the list of specific tasks. Tasks are separated into different
-# files, one file per functionnality.
-#
+dft_dns_server:
+  zone: 
+    primary_server_name: "dft.org."
+    hostmaster_email: "dft.org."
+    serial: "1"
+    refresh: "86400"
+    retry: "900"
+    expire: "2419200"
+    minimum_ttl: "3600"
+    ttl: "1D"
 
----
-- name : DFT - Install bind9
-  apt: name={{ item }} 
-       state=installed 
-       update_cache=true
-       install_recommends=no
-  with_items:
-    - bind9
+  dns:
+    - hostname: dns1.dft.org
+    - hostname: dns2.dft.org
 
-- name : DFT - Setup bind9 zones
-  template: src=templates/zone.j2 
-            dest=/etc/bind/db.dft.org
-            owner=root 
-            group=root 
-            mode="u=rw,g=r,o=r"          
+  mx:
+    - hostname: mx1.dft.org
+      preference: 10
+    - hostname: mx2.dft.org
+      preference: 20
+  
+  hosts:
+    - hostname: example1
+      address: 10.0.0.1
+    - hostname: example2
+      address: 10.0.0.2
 
-- name : DFT - Setup bind9 reverse zones
-  template: src=templates/reverse.j2 
-            dest=/etc/bind/reverse.dft.org
-            owner=root 
-            group=root 
-            mode="u=rw,g=r,o=r"          
+  cnames:
+    - hostname: example3
+      cname: example1
