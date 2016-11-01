@@ -22,4 +22,4 @@
 #
 
 dft_network_interfaces:
-  - { name: "eth0", auto: True, dhcp: True }
+  - { name: "eth0", dhcp: True }
