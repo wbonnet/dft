@@ -21,11 +21,6 @@
 #
 #
 
-#
-# Include the list of specific tasks. Tasks are separated into different
-# files, one file per functionnality.
-#
-
 ---
 - name : DFT - Install LightDM
   apt: name={{ item }} 
@@ -34,3 +29,10 @@
        install_recommends=no
   with_items:
     - lightdm
+
+- name : DFT - Configure autologin
+  template: src=templates/lightdm.conf.j2
+            dest=/etc/lightdm/lightdm.conf
+            owner=root 
+            group=root 
+            mode="u=rw,g=r,o=r"          

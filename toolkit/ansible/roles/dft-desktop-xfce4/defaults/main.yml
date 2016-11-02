@@ -21,14 +21,11 @@
 #
 #
 
----
-- name : DFT - Install Xfce4 session and desktop
-  apt: name={{ item }} 
-       state=installed 
-       update_cache=true
-       install_recommends=no
-  with_items:
-    - xfwm4 
-    - xfce4-settings 
-    - libxfce4ui-utils 
-    - xfce4-session
+# Default is to activate autologin
+dft_lightdm_autologin: True
+
+# Default login user
+dft_lightdm_autologin_user: "dft"
+
+# Default login user timeout
+dft_lightdm_autologin_user_timeout: 0
