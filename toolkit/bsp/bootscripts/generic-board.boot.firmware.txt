@@ -1,0 +1,39 @@
+
+# ----------------------------------------------------------------------------
+#
+# DFT firmare u-boot script for Generic Board
+#
+# Generation date : __GENERATION_DATE__
+# DFT version     : __DFT_VERSION__
+#
+
+#
+# Definition of environment variables
+#
+setenv initrd_addr    0x43300000
+setenv initrd_file    initrd.img
+setenv initrd_size    __INITRD_SIZE__
+setenv fstype         __FILESYSTEM_TYPE__
+setenv fdtfile        'default.dtb'
+setenv image          zImage
+setenv mmcroot        '/dev/mmcblk0p1 rootwait ro'
+setenv mmcargs        'setenv bootargs console=${console} root=${mmcroot} rootfstype=${fstype}'
+setenv mmcdev         0
+setenv mmcpart        1
+
+#
+# Definition of the macro needed to load DTB Kernel and initrd to ram
+#
+setenv loadinitrd     '${fstype}load mmc ${mmcdev}:${mmcpart} ${initrd_addr} ${initrd_file}'
+setenv loadfdt        '${fstype}load mmc ${mmcdev}:${mmcpart} ${fdt_addr_r} ${fdtfile}'
+setenv loadimage      '${fstype}load mmc ${mmcdev}:${mmcpart} ${kernel_addr_r} ${image}'
+
+#
+# Definition of the macro needed to run the kernel using initrd and dtb
+#
+setenv fwboot 'run mmcargs ; run loadimage ; run loadinitrd ; run loadfdt ; bootz ${kernel_addr_r} ${initrd_addr}:${initrd_size} ${fdt_addr_r}'
+
+#
+# Thunderbirds are go !
+#
+run fwboot
