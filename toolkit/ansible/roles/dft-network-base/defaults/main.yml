@@ -22,8 +22,7 @@
 #
 
 dft_network_interfaces:
-  - name: "eth0"
-    dhcp: True
+  - { name: "eth0" , dhcp: True }
 
 dft_ntp_servers:
   - 0.debian.pool.ntp.org

@@ -34,3 +34,5 @@
        install_recommends=no
   with_items:
     - isc-dhcp-client
+
+# TODO : configure options to send to dhcp server

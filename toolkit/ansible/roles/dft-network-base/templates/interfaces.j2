@@ -29,6 +29,9 @@ iface {{ interface.name }} inet static
 {% if interface.broadcast is defined %}
     broadcast {{ interface.broadcast }}
 {% endif %}
+{% if interface.vlan_raw_device is defined %}
+    vlan_raw_device {{ interface.vlan_raw_device }}
+{% endif %}
 {% endif %}
 
 {% endfor %}
