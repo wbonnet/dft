@@ -3,7 +3,7 @@
 # Definition of the distributions used to bootstrap firmware construction
 #
 distributions :
-    # Debian 7.0 Jessie
+    # Debian 8.0 Jessie
     - name: 'jessie'
       architecture: [ 'amd64', 'i386', 'armel', 'armhf' ]
       repositories:
