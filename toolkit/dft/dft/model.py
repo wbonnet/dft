@@ -21,6 +21,7 @@
 #
 #
 
+import logging, yaml
 from datetime import datetime
 
 # -----------------------------------------------------------------------------
@@ -121,8 +122,14 @@ class ProjectDefinition :
       """
 
       # Store the filename containing the whole project definition
-      # Filename is mandatory, and cannot be defaulted
-      self.filename = filename
+      # Filename is mandatory, and is defaulted to project.yml if 
+      # not defined
+      if (filename == None):
+        self.filename = 'project.yml'
+        logging.debug("setting default project filename : " + self.filename)
+      else:
+        self.filename = filename
+        logging.debug("setting new project filename : " + self.filename)
 
       # Timestamp is used to produce distinct directory in case of several
       # run, and also used to produce the serial number (/etc/dft_version)
@@ -136,6 +143,8 @@ class ProjectDefinition :
 
       # Create the object storing the firmware definition
       self.firmware = FirmwareDefinition()
+
+
 
 
 
@@ -176,9 +185,28 @@ class ProjectDefinition :
   #
   # ---------------------------------------------------------------------------
   def load_definition(self, filename = None):
-    # Check that the filename has been passed either now or when calling init
-    # Check that the file exist
-    # Load it
+
+    # Test if the filename has been redefinied
+    if (filename != None):
+      self.filename = filename
+      logging.debug("setting new project filename : " + self.filename)
+
+    logging.debug("loading project : " + self.filename)
+
+    # Enter a try except section. This is how we handle missing files, through
+    # exception mecanism. If a FileNotFoundError is raised, then exit the 
+    # program
+    try:   
+      # Load it
+      with open(self.filename, 'r') as f:
+        doc = yaml.load(f)   
+        print(doc["baseos"])
+
+    except FileNotFoundError as e:
+        # Call clean up to umount /proc and /dev
+        logging.critical("Error: %s - %s." % (e.filename, e.strerror))
+        exit(1)
+
     # Load the sub config files
     pass
 #il faut

@@ -112,7 +112,7 @@ x strip_rootfs                     Strip down the rootfs before assembling the f
 		self.parser.add_argument(	'--project-file',
 									action='store',
                       				dest='project_file',
-                      				required=True,
+                      				default='project.yml',
 									help='project definition file')	
 
 		# Overrides the target architecture from the configuration file by
@@ -225,6 +225,7 @@ x strip_rootfs                     Strip down the rootfs before assembling the f
 
 		# Create the project definition object, and load its configuration
 		self.project = model.ProjectDefinition(self.args.project_file)
+		self.project.load_definition()
 
 		# ---------------------------------------------------------------------
 		# Override configuration with values passed on the commande line
