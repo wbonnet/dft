@@ -21,30 +21,87 @@
 #
 #
 
+
 # ----------------------------------------------------------------------------
 #
-# Definition of the repositories to use
+# Definition of the project working directories
 #
+#   The value define hereafter overrides tools default configuration. This 
+#   mechanism is use to have custom working directories, dedicated to a given
+#   project.
+# 
+#   Directories can be defined completly, or partially at project scope. This 
+#   means that only some of the directories can be redefined. Undefined ones
+#   default to the values defined in dft tool configuration
+#
+#   Some values contains a list of dirctories, for instance 'additional_roles'
+#   The list is used to defined exta roles and playbooks, within scope project 
+#   (thus which are not in the dft open-source scope). Additional directories
+#   content is copied to /dft_bootstrap during bootstrap phase, and can be used
+#   to install additional oftware nd configuration to the firmware.
+#
+# ----------------------------------------------------------------------------
+configuration:
+  # Defines the root of the working directories. A dirctory named after 
+  # project name will be created under this path, and subdirectories used to 
+  # store baseos, bootloader, image, etc will be created
+  working_dir: "/tmp/dft"
+
+  # Defines the project name. Mostly used for output and directories creation
+  project_name: "netshell"
+
+  # Defines the path to project configuration files. By default (undefined  
+  # value) configuration files are searched in the same directory as the 
+  # current project.yml file
+  project_path: "~/Devel/dft/toolkit/dft/example_data/starter-project/netshell"
+
+  # Path to the dft installation directory
+  dft_base: "~/Devel/dft/toolkit/dft"
+
+  # Define a list of directories with additional content (roles, playbooks, etc)
+  # which are copied to /dft_bootstrap during rootfs bootstrapping. These paths 
+  # contains project specific definition (which are not included in the dft 
+  # open-source tool)
+  additional_roles:
+  - "/tmp/additional-dft"
+
+# ----------------------------------------------------------------------------
+#
+# Definition of the sub configuration files (for baseos, repositorie, etc.)
+#
+#   The section can be defined in any order. But inside a definition, the 
+#   list of yml files is ordered. The files are loaded in the same order as
+#   the list. This mechanism is used to overload previous definitions
+# ----------------------------------------------------------------------------
+
+# Definition of the repositories to use
 repositories:
   - repositories.yml
 
+# Definition of the baseos content
 baseos:
   - baseos.yml
 
+# Definition of the firmware content and structure
 firmware:
   - firmware.yml
 
+# Definition of the bootloader toolchain
 bootloader:
   - bootloader.yml
 
+# Definition of the image structure
 image:
   - image.yml
 
+# Definition of the control to apply on the rootfs
 check:
-  -check_baseos.yml
+  - check_baseos.yml
 
+# Definition of the striiping rules (to remove extra packages, files etc.
 stripping:
   - stripping.yml
 
+# Definition of the additionalfactory setup to apply
 factory_setup:
   - factory_setup.yml
