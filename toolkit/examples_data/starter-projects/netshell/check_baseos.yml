@@ -21,30 +21,3 @@
 #
 #
 
-# ----------------------------------------------------------------------------
-#
-# Definition of the repositories to use
-#
-repositories:
-  - repositories.yml
-
-baseos:
-  - baseos.yml
-
-firmware:
-  - firmware.yml
-
-bootloader:
-  - bootloader.yml
-
-image:
-  - image.yml
-
-check:
-  -check_baseos.yml
-
-stripping:
-  - stripping.yml
-
-factory_setup:
-  - factory_setup.yml
