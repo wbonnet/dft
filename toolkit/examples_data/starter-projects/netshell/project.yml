@@ -72,36 +72,55 @@ configuration:
 #   The section can be defined in any order. But inside a definition, the 
 #   list of yml files is ordered. The files are loaded in the same order as
 #   the list. This mechanism is used to overload previous definitions
+#
+#   If a step is not defined (no yaml configuration file), it will be skipped
+#   As an example, if you only want to generate a rootfs and check its content
+#   you only have to define :
+#   - debootstrap-repository
+#   - repositories (if different from debootstrap-repository)
+#   - baseos
+#   - check
 # ----------------------------------------------------------------------------
+project-definition:
 
-# Definition of the repositories to use
-repositories:
-  - repositories.yml
+  # Definition of the repositories used for bootstrapping
+  # There can be only one repo, thus its url is defined here
+  debootstrap-repository:
+    - "http://ftp.de.debian.org/debian"
 
-# Definition of the baseos content
-baseos:
-  - baseos.yml
+  # Definition of the repositories to use
+  repositories:
+    - repositories.yml
 
-# Definition of the firmware content and structure
-firmware:
-  - firmware.yml
+  # Definition of the baseos content
+  baseos:
+    - baseos.yml
 
-# Definition of the bootloader toolchain
-bootloader:
-  - bootloader.yml
+  # Definition of the firmware content and structure
+  firmware:
+    - firmware.yml
 
-# Definition of the image structure
-image:
-  - image.yml
+  # Definition of the bootloader toolchain
+  bootloader:
+    - bootloader.yml
 
-# Definition of the control to apply on the rootfs
-check:
-  - check_baseos.yml
+  # Definition of the image structure
+  image:
+    - image.yml
 
-# Definition of the striiping rules (to remove extra packages, files etc.
-stripping:
-  - stripping.yml
+  # Definition of the control to apply on the rootfs
+  check:
+    - check_baseos.yml
 
-# Definition of the additionalfactory setup to apply
-factory_setup:
-  - factory_setup.yml
+  # Definition of the striiping rules (to remove extra packages, files etc.
+  stripping:
+    - stripping.yml
+
+  # Definition of the additionalfactory setup to apply
+  factory_setup:
+    - factory_setup.yml
+
+  # Definition of the list of target architectures. Firmware will be generated for 
+  # each of the architecture in this list
+  architecture:
+    - amd64
