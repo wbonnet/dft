@@ -21,3 +21,10 @@
 #
 #
 
+roles:
+  - dft-os-base
+  - dft-network-base
+  - dft-security-base
+  - dft-os-apt
+
+# TODO : add group_vars and host_vars
