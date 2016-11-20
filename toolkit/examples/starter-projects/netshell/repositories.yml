@@ -23,9 +23,9 @@
 
 # ----------------------------------------------------------------------------
 #
-# Definition of the distributions used to build rootfs
+# Definition of the distributions used to build rootf
 #
-distributions :
+distributions:
     # Debian 8.0 Jessie
     - name: 'jessie'
       architecture: [ 'amd64', 'i386', 'armel', 'armhf' ]

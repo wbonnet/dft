@@ -268,15 +268,15 @@ x strip_rootfs                     Strip down the rootfs before assembling the f
 
 
 		# Select the method to run according to the command
-		if   self.command == "assemble_firmware":            self.run_assemble_firmware()
-		elif self.command == "build_baseos":                 self.run_build_baseos()
-		elif self.command == "build_bootloader":             self.run_build_bootloader()
-		elif self.command == "build_image":                  self.run_build_image()
-		elif self.command == "build_firmware":               self.run_build_firmware()
-		elif self.command == "check_rootfs":                 self.run_check_rootfs()
-		elif self.command == "factory_setup":                self.run_factory_setup()
-		elif self.command == "generate_content_information": self.run_generate_content_information()
-		elif self.command == "strip_rootfs":                 self.run_strip_rootfs()
+		# if   self.command == "assemble_firmware":            self.run_assemble_firmware()
+		# elif self.command == "build_baseos":                 self.run_build_baseos()
+		# elif self.command == "build_bootloader":             self.run_build_bootloader()
+		# elif self.command == "build_image":                  self.run_build_image()
+		# elif self.command == "build_firmware":               self.run_build_firmware()
+		# elif self.command == "check_rootfs":                 self.run_check_rootfs()
+		# elif self.command == "factory_setup":                self.run_factory_setup()
+		# elif self.command == "generate_content_information": self.run_generate_content_information()
+		# elif self.command == "strip_rootfs":                 self.run_strip_rootfs()
 	
     # -------------------------------------------------------------------------
     #

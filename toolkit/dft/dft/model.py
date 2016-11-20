@@ -178,6 +178,27 @@ class ProjectDefinition :
 # TODO
       # Stores the path to the rootfs mountpoint used by debootstrap
       self.rootfs_mountpoint = self.rootfs_base_workdir + "/" + rootfs_image_name
+
+  # ---------------------------------------------------------------------------
+  #
+  # genereate_definition_file_path
+  #
+  #   This method generates the complete path to sub configuration files
+  #   This files are referenced in the project configuration file, and are
+  #   supposed to be in the same folder as the project file
+  #
+  #   A "project_path' can be defined in the project file. If defined, the 
+  #   files are loaded from this place. If not, they are loaded from the 
+  #   directory containing the project file being used.
+  #
+  # ---------------------------------------------------------------------------
+  def genereate_definition_file_path(self, filename):
+    
+    # Concatenate Project path and filename from the project file
+    filename = self.project_definition["configuration"]["project_path"] + "/" + filename
+
+    # Return what has been generated
+    return filename
   
   # ---------------------------------------------------------------------------
   #
@@ -191,6 +212,7 @@ class ProjectDefinition :
       self.filename = filename
       logging.debug("setting new project filename : " + self.filename)
 
+    # Need some debug output :)
     logging.debug("loading project : " + self.filename)
 
     # Enter a try except section. This is how we handle missing files, through
@@ -199,16 +221,72 @@ class ProjectDefinition :
     try:   
       # Load it
       with open(self.filename, 'r') as f:
-        doc = yaml.load(f)   
-        print(doc["baseos"])
+        self.project_definition = yaml.load(f)   
+        print(self.project_definition["project-definition"])
+
+      # Load the repositories sub configuration files
+      if "repositories" in self.project_definition["project-definition"]:
+        filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["repositories"][0])
+        with open(filename, 'r') as f:
+          self.repostories_definition = yaml.load(f)   
+          print (self.repostories_definition)
+
+      # Load the baseos sub configuration files
+      if "baseos" in self.project_definition["project-definition"]:
+        filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["baseos"][0])
+        with open(filename, 'r') as f:
+          self.baseos_definition = yaml.load(f)   
+          print (self.baseos_definition)
+      
+      # Load the firmware sub configuration files
+      if "firmware" in self.project_definition["project-definition"]:
+        filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["firmware"][0])
+        with open(filename, 'r') as f:
+          self.firmware_definition = yaml.load(f)   
+          print (self.firmware_definition)
+      
+      # Load the bootloader sub configuration files
+      if "bootloader" in self.project_definition["project-definition"]:
+        filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["bootloader"][0])
+        with open(filename, 'r') as f:
+          self.bootloader_definition = yaml.load(f)   
+          print (self.bootloader_definition)
+     
+      # Load the image sub configuration files
+      if "image" in self.project_definition["project-definition"]:
+        filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["image"][0])
+        with open(filename, 'r') as f:
+          self.image_definition = yaml.load(f)   
+          print (self.image_definition)
+
+      # Load the check sub configuration files
+      if "check" in self.project_definition["project-definition"]:
+        filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["check"][0])
+        with open(filename, 'r') as f:
+          self.check_definition = yaml.load(f)   
+          print (self.check_definition)
+
+      # Load the stripping sub configuration files
+      if "stripping" in self.project_definition["project-definition"]:
+        print(self.project_definition["project-definition"]["stripping"])            
+        filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["stripping"][0])
+        with open(filename, 'r') as f:
+          self.stripping_definition = yaml.load(f)   
+          print (self.stripping_definition)
+
+      # Load the factory_setup sub configuration files
+      if "factory_setup" in self.project_definition["project-definition"]:
+        filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["factory_setup"][0])
+        with open(filename, 'r') as f:
+          self.factory_setup_definition = yaml.load(f)   
+          print (self.factory_setup_definition)
+
 
     except FileNotFoundError as e:
         # Call clean up to umount /proc and /dev
         logging.critical("Error: %s - %s." % (e.filename, e.strerror))
         exit(1)
 
-    # Load the sub config files
-    pass
 #il faut
 #la liste des prod targets a faire
 #le repertoire de travail
