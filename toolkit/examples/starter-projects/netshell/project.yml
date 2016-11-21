@@ -85,8 +85,7 @@ project-definition:
 
   # Definition of the repositories used for bootstrapping
   # There can be only one repo, thus its url is defined here
-  debootstrap-repository:
-    - "http://ftp.de.debian.org/debian"
+  debootstrap-repository: "http://ftp.de.debian.org/debian"
 
   # Definition of the repositories to use
   repositories:

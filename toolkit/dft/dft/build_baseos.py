@@ -171,17 +171,18 @@ class BuildBaseOS:
                     distutils.dir_util.copy_tree(target_to_copy_path, os.path.join(dft_target_path, target_to_copy))
 
             # Copy the additional toolkit content to the target rootfs
-            for additional_path in self.project.dft_additional_path:
-                logging.debug("Copy the additional toolkit : preparing to copy from additional path " + additional_path)
-                for target_to_copy in os.listdir(additional_path):
-                    logging.debug("Copy the additional toolkit : preparing to copy " + target_to_copy)
-                    target_to_copy_path = os.path.join(additional_path, target_to_copy)
-                    if os.path.isfile(target_to_copy_path):
-                        logging.debug("copying file " + target_to_copy_path + " => " + dft_target_path)
-                        distutils.file_util.copy_file(target_to_copy_path, dft_target_path)
-                    else:
-                        logging.debug("copying tree " + target_to_copy_path + " => " + dft_target_path)
-                        distutils.dir_util.copy_tree(target_to_copy_path, os.path.join(dft_target_path, target_to_copy))
+            if "additional_roles" in self.project.project_definition["configuration"]
+                for additional_path in self.project.project_definition["configuration"]["additional_roles"]:
+                    logging.debug("Copy the additional toolkit : preparing to copy from additional path " + additional_path)
+                    for target_to_copy in os.listdir(additional_path):
+                        logging.debug("Copy the additional toolkit : preparing to copy " + target_to_copy)
+                        target_to_copy_path = os.path.join(additional_path, target_to_copy)
+                        if os.path.isfile(target_to_copy_path):
+                            logging.debug("copying file " + target_to_copy_path + " => " + dft_target_path)
+                            distutils.file_util.copy_file(target_to_copy_path, dft_target_path)
+                        else:
+                            logging.debug("copying tree " + target_to_copy_path + " => " + dft_target_path)
+                            distutils.dir_util.copy_tree(target_to_copy_path, os.path.join(dft_target_path, target_to_copy))
 
         except OSError as e:
             # Call clean up to umount /proc and /dev
@@ -405,7 +406,7 @@ class BuildBaseOS:
             logging.info("running debootstrap")
 
         # Add the target, mount point and repository url to the debootstrap command
-        debootstrap_command += " " +  self.project.target_version + " " + self.project.rootfs_mountpoint + " " + self.project.baseos.pkg_archive_url
+        debootstrap_command += " " +  self.project.target_version + " " + self.project.rootfs_mountpoint + " " + self.project.project_definition["project-definition"]["debootstrap-repository"]
 
         # Finally run the subprocess
         self.execute_command(debootstrap_command)
@@ -488,12 +489,27 @@ class BuildBaseOS:
         filepath = self.project.rootfs_mountpoint + "/etc/apt/sources.list"
 
         # Open the file and writes configuration in it
+        self.project.debian_mirror_url = self.project.project_definition["project-definition"]["debootstrap-repository"]
+
         with tempfile.NamedTemporaryFile(mode='w+', delete=False) as f:
-            f.write("deb " + self.project.baseos.debian_mirror_url + "/debian " + self.project.target_version + " main contrib non-free\n")
-            f.write("deb " + self.project.baseos.debian_mirror_url + "/debian-security " + self.project.target_version + "/updates main contrib non-free\n")
-            f.write("deb " + self.project.baseos.debian_mirror_url + "/debian " + self.project.target_version + "-updates main contrib non-free\n")
+            # Iterate the list of distributions loaded from the file
+            for distro in self.project.repositories_definition["distributions"]:
+                logging.debug(distro)
+                # Process only if it is the version we target
+                if distro["name"]== self.project.target_version:
+                    # Then iterate all the sources for this distro version
+                    for repo in distro["repositories"]:
+                        logging.debug(repo)
+                        # Generate the line in the sources.list file
+                        f.write("deb " + repo["url"] +" " + repo["suite"] + " ")                    
+                        for section in repo["sections"]:
+                            f.write(section + " ")                    
+                        f.write("\n")                    
+# TODO : generate deb-src ? not really sure... optionnal ?
+# TODO : add error if no distro found                    
         f.close()
 
+        # Finally move the temporary file under the rootfs tree
         sudo_command = "sudo mv -f " + f.name + " " + filepath
         self.execute_command(sudo_command)
 

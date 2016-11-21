@@ -231,8 +231,8 @@ x strip_rootfs                     Strip down the rootfs before assembling the f
 		# Override configuration with values passed on the commande line
 
 		if self.args.override_debian_mirror != None:
-			logging.debug("Overriding pkg_archive_url with CLI value : %s => %s",  self.project.baseos.pkg_archive_url, self.args.override_debian_mirror)
-			self.project.baseos.pkg_archive_url = self.args.override_debian_mirror
+			logging.debug("Overriding pkg_archive_url with CLI value : %s => %s",  self.project.pkg_archive_url, self.args.override_debian_mirror)
+			self.project.project_definition["project-definition"]["debootstrap-repository"] = self.args.override_debian_mirror
 		
 		if self.args.update_cache_archive != self.project.dft.update_cache_archive:
 			logging.debug("Overriding update_cache_archive with CLI value : %s => %s",  self.project.dft.update_cache_archive, self.args.update_cache_archive)
@@ -268,15 +268,15 @@ x strip_rootfs                     Strip down the rootfs before assembling the f
 
 
 		# Select the method to run according to the command
-		# if   self.command == "assemble_firmware":            self.run_assemble_firmware()
-		# elif self.command == "build_baseos":                 self.run_build_baseos()
-		# elif self.command == "build_bootloader":             self.run_build_bootloader()
-		# elif self.command == "build_image":                  self.run_build_image()
-		# elif self.command == "build_firmware":               self.run_build_firmware()
-		# elif self.command == "check_rootfs":                 self.run_check_rootfs()
-		# elif self.command == "factory_setup":                self.run_factory_setup()
-		# elif self.command == "generate_content_information": self.run_generate_content_information()
-		# elif self.command == "strip_rootfs":                 self.run_strip_rootfs()
+		if   self.command == "assemble_firmware":            self.run_assemble_firmware()
+		elif self.command == "build_baseos":                 self.run_build_baseos()
+		elif self.command == "build_bootloader":             self.run_build_bootloader()
+		elif self.command == "build_image":                  self.run_build_image()
+		elif self.command == "build_firmware":               self.run_build_firmware()
+		elif self.command == "check_rootfs":                 self.run_check_rootfs()
+		elif self.command == "factory_setup":                self.run_factory_setup()
+		elif self.command == "generate_content_information": self.run_generate_content_information()
+		elif self.command == "strip_rootfs":                 self.run_strip_rootfs()
 	
     # -------------------------------------------------------------------------
     #

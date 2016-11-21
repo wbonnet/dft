@@ -27,4 +27,10 @@ roles:
   - dft-security-base
   - dft-os-apt
 
-# TODO : add group_vars and host_vars
+# Definition of the list of target versions. Firmware will be generated for 
+# each of the versions in this list
+target-versions:
+  - stretch
+
+# Name of the target to produce
+target-name: "test"

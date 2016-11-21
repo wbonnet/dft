@@ -33,9 +33,23 @@ distributions:
         - url: 'http://ftp.fr.debian.org/debian/'
           suite: 'jessie'
           sections : [ 'main' , 'contrib' , 'non-free' ]
-        - url: 'http://security.debian.org/debian/'
+        - url: 'http://ftp.fr.debian.org/debian-security/'
           suite: 'jessie/updates'
           sections: [ 'main', 'contrib', 'non-free' ]
         - url: 'http://ftp.fr.debian.org/debian/'
           suite: 'jessie-updates'
+          sections: [ 'main', 'contrib', 'non-free' ]
+
+    # Debian 9.0 Stretch
+    - name: 'stretch'
+      architecture: [ 'amd64', 'i386', 'armel', 'armhf' ]
+      repositories:
+        - url: 'http://ftp.fr.debian.org/debian/'
+          suite: 'stretch'
+          sections : [ 'main' , 'contrib' , 'non-free' ]
+        - url: 'http://ftp.fr.debian.org/debian-security/'
+          suite: 'stretch/updates'
+          sections: [ 'main', 'contrib', 'non-free' ]
+        - url: 'http://ftp.fr.debian.org/debian/'
+          suite: 'stretch-updates'
           sections: [ 'main', 'contrib', 'non-free' ]

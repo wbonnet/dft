@@ -91,12 +91,17 @@ class DftConfiguration:
   #
   # ---------------------------------------------------------------------------
   def load_configuration(self, filename = None):
-    # Check that the filename has been passed either now or when calling init
-    # Check that the file exist
-    # Load it
-    pass
 
+    try:   
+      # Load it
+      with open(self.filename, 'r') as f:
+        self.dft_configuration = yaml.load(f)   
+        logging.debug(self.dft_configuration)
 
+    except FileNotFoundError as e:
+        # Call clean up to umount /proc and /dev
+        logging.critical("Error: %s - %s." % (e.filename, e.strerror))
+        exit(1)
 
 # -----------------------------------------------------------------------------
 #
@@ -138,46 +143,9 @@ class ProjectDefinition :
       # Create the object storing the DFT tool configuration
       self.dft = DftConfiguration()
 
-      # Create the object storing the baseos definition
-      self.baseos = BaseosDefinition()
-
-      # Create the object storing the firmware definition
-      self.firmware = FirmwareDefinition()
-
-
-
-
-
-      # Target version to use when building the debootstrap. It has to be
-      # a Debian version (jessie, stretch, etc.)
-      self.target_version = "stretch"
-
-      # Stores the target architecture
-# TODO should we have a list here ? 
-      self.target_arch = "amd64"
-
-      # Name of the current baseos being produced. Used in rootfs mount
-      # point path and archive name generation
 # TODO temporary values
-      self.target_name = "test"
-
-# TODO temporary values
-      self.dft_additional_path =  [ "/tmp/dft-additional" ]
-      self.dft_ansible_targets = [ "test" ]
-
-# TODO 
-      # Generate the cache archive filename
-      self.rootfs_generator_cachedir = "/tmp/dft"
-      self.rootfs_base_workdir = "/tmp/dft/rootfs_mountpoint"
-      self.archive_filename = self.rootfs_generator_cachedir + "/" + self.target_arch + "-" +  self.target_version + "-" +  self.target_name + ".tar"
-
-# TODO 
-      # Generates the path to the rootfs mountpoint
-      rootfs_image_name   = self.target_arch + "-" + self.target_version + "-" + self.timestamp
-
-# TODO
-      # Stores the path to the rootfs mountpoint used by debootstrap
-      self.rootfs_mountpoint = self.rootfs_base_workdir + "/" + rootfs_image_name
+#      self.dft_additional_path =  [ "/tmp/dft-additional" ]
+#      self.dft_ansible_targets = [ "test" ]
 
   # ---------------------------------------------------------------------------
   #
@@ -222,49 +190,49 @@ class ProjectDefinition :
       # Load it
       with open(self.filename, 'r') as f:
         self.project_definition = yaml.load(f)   
-        print(self.project_definition["project-definition"])
+        logging.debug(self.project_definition)
 
       # Load the repositories sub configuration files
       if "repositories" in self.project_definition["project-definition"]:
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["repositories"][0])
         with open(filename, 'r') as f:
-          self.repostories_definition = yaml.load(f)   
-          print (self.repostories_definition)
+          self.repositories_definition = yaml.load(f)   
+          logging.debug(self.repositories_definition)
 
       # Load the baseos sub configuration files
       if "baseos" in self.project_definition["project-definition"]:
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["baseos"][0])
         with open(filename, 'r') as f:
           self.baseos_definition = yaml.load(f)   
-          print (self.baseos_definition)
+          logging.debug(self.baseos_definition)
       
       # Load the firmware sub configuration files
       if "firmware" in self.project_definition["project-definition"]:
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["firmware"][0])
         with open(filename, 'r') as f:
           self.firmware_definition = yaml.load(f)   
-          print (self.firmware_definition)
+          logging.debug(self.firmware_definition)
       
       # Load the bootloader sub configuration files
       if "bootloader" in self.project_definition["project-definition"]:
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["bootloader"][0])
         with open(filename, 'r') as f:
           self.bootloader_definition = yaml.load(f)   
-          print (self.bootloader_definition)
+          logging.debug(self.bootloader_definition)
      
       # Load the image sub configuration files
       if "image" in self.project_definition["project-definition"]:
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["image"][0])
         with open(filename, 'r') as f:
           self.image_definition = yaml.load(f)   
-          print (self.image_definition)
+          logging.debug(self.image_definition)
 
       # Load the check sub configuration files
       if "check" in self.project_definition["project-definition"]:
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["check"][0])
         with open(filename, 'r') as f:
           self.check_definition = yaml.load(f)   
-          print (self.check_definition)
+          logging.debug(self.check_definition)
 
       # Load the stripping sub configuration files
       if "stripping" in self.project_definition["project-definition"]:
@@ -272,108 +240,56 @@ class ProjectDefinition :
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["stripping"][0])
         with open(filename, 'r') as f:
           self.stripping_definition = yaml.load(f)   
-          print (self.stripping_definition)
+          logging.debug(self.stripping_definition)
 
       # Load the factory_setup sub configuration files
       if "factory_setup" in self.project_definition["project-definition"]:
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["factory_setup"][0])
         with open(filename, 'r') as f:
           self.factory_setup_definition = yaml.load(f)   
-          print (self.factory_setup_definition)
+          logging.debug(self.factory_setup_definition)
+
+# TODO 
+      # Generate the cache archive filename
+      if "rootfs_generator_cachedir" in self.project_definition["configuration"]:
+        self.rootfs_generator_cachedir = self.project_definition["configuration"]["rootfs_generator_cachedir"]
+      else:
+        logging.warning("configuration/rootfs_generator_cachedir is not defined, using /tmp as default value")
+        self.rootfs_generator_cachedir = "/tmp/"
+
+      if "working_dir" in self.project_definition["configuration"]:
+        self.rootfs_base_workdir = self.project_definition["configuration"]["working_dir"] + "/rootfs"
+      else:
+        logging.warning("configuration/working_dir is not defined, using /tmp/dft as default value")
+        self.rootfs_generator_cachedir = "/tmp/dft"
+
+      # Retrieve the target architecture
+      # TODO : handle multiple archs
+      self.target_arch = self.project_definition["project-definition"]["architecture"][0]
+
+      # Target version to use when building the debootstrap. It has to be
+      # a Debian version (jessie, stretch, etc.)
+      # TODO : handle multiple version
+      self.target_version = self.baseos_definition["target-versions"][0]
+      
+      # Name of the current baseos being produced. Used in rootfs mount
+      # point path and archive name generation
+      self.target_name = self.baseos_definition["target-name"]
+
+      # Generate the archive filename
+      # TODO : handle multiple archs / version
+      self.archive_filename = self.rootfs_generator_cachedir + "/" + self.target_arch + "-" +  self.target_version + "-" +  self.target_name + ".tar"
+
+# TODO 
+      # Generates the path to the rootfs mountpoint
+      rootfs_image_name   = self.target_arch + "-" + self.target_version + "-" + self.timestamp
+
+# TODO
+      # Stores the path to the rootfs mountpoint used by debootstrap
+      self.rootfs_mountpoint = self.rootfs_base_workdir + "/" + rootfs_image_name
 
 
     except FileNotFoundError as e:
         # Call clean up to umount /proc and /dev
         logging.critical("Error: %s - %s." % (e.filename, e.strerror))
         exit(1)
-
-#il faut
-#la liste des prod targets a faire
-#le repertoire de travail
-#le repertoire de cache ?
-
-
-
-# -----------------------------------------------------------------------------
-#
-# BaseosDefinition
-#
-# -----------------------------------------------------------------------------
-class BaseosDefinition :
-  """This class contains the definition of a baseos rootfs. It includes
-  information about everything that is used either to configure its 
-  specific build environment, or about things to include inside the firmware
-  """ 
-
-  # ---------------------------------------------------------------------------
-  #
-  # __init__
-  #
-  # ---------------------------------------------------------------------------
-  def __init__(self, filename = None):
-    """
-    """
-
-    # Store the filename containing the baseos rootfs definition
-    # Filename is mandatory, and cannot be defaulted, but the same file
-    # can be use to initialize several objects
-    self.filename = filename
-
-    # Default mirror to use. It has to be the URL of a valid Debian mirror
-    # It is used by debootstrap as its sources of packages.
-    self.pkg_archive_url = "http://mirrors/debian"
-
-# TODO Temporary until file parsing is fixed
-# TODO Should be a list
-    self.debian_mirror_url  = "http://mirrors"
-
-  # ---------------------------------------------------------------------------
-  #
-  # load_definition
-  #
-  # ---------------------------------------------------------------------------
-  def load_definition(self, filename = None):
-    # Check that the filename has been passed either now or when calling init
-    # Check that the file exist
-    # Load it
-    pass
-
-
-# -----------------------------------------------------------------------------
-#
-# FirmwareDefinition
-#
-# -----------------------------------------------------------------------------
-class FirmwareDefinition :
-  """This class contains the definition of a firmware. It includes
-  information about which rootfs should be used, how many squashfs have to 
-  be produced, their content, generation option etc.
-
-  This class also defines the configuration of the /firmware loader/, which
-  is the tool used on the target to created the stacked overlayfs
-  """ 
-
-  # ---------------------------------------------------------------------------
-  #
-  # __init__
-  #
-  # ---------------------------------------------------------------------------
-  def __init__(self, filename = None):
-      """
-      """
-
-      # Store the filename containing the firmware definition
-      # Filename is mandatory, and cannot be defaulted, but the same file
-      # can be use to initialize several objects
-      self.filename = filename
-
-  # ---------------------------------------------------------------------------
-  #
-  # load_definition
-  #
-  # ---------------------------------------------------------------------------
-  def load_definition(self, filename = None):
-    # Check that the filename has been passed either now or when calling init
-    # Check that the file exist
-    # Load it
-    pass
