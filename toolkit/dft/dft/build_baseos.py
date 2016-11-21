@@ -194,14 +194,50 @@ class BuildBaseOS:
             self.cleanup_installation_files()
             logging.critical("Error: %s - %s." % (e.filename, e.strerror))
             exit(1)
+
+        # Flag if someroles has been foundand added to site.yml
+        role_has_been_found = False
      
-        # Copy the project roles to the target rootfs
+        # Generate the site file including all the roles from baseos 
+        # configuration, then move  roles to the target rootfs
+        with tempfile.NamedTemporaryFile(mode='w+', delete=False) as f:
+            # Generate file header
+            f.write("# Defines the role associated to the rootfs being generated\n")
+            f.write("---\n")
+            f.write("- hosts: local\n")
+            f.write("  roles:\n")
+
+            # Iterate the list of distributions loaded from the file
+            for role in self.project.baseos_definition["roles"]:
+                # At least one role has beenfound, flag it
+                role_has_been_found = True
+                logging.debug("Adding role " + role)
+                
+                # Process only if it is the version we target
+                if distro["name"]== self.project.target_version:
+                    # W have found a matching distro or not
+                    role_has_been_found = True
+                    f.write("  - " + role + "\n")
+        f.close()
+
+        # Generate the file path
+        filepath = self.project.rootfs_mountpoint + "/dft_bootstrap/site.yml"
+
+        # Finally move the temporary file under the rootfs tree
+        sudo_command = "sudo mv -f " + f.name + " " + filepath
+        self.execute_command(sudo_command)
+
+        # Warn the user if no role is found. In such case baseos will be same
+        # debotstrap, which is certainly not what is expected
+        if role_has_been_found == False:
+            logging.warning("No role has been found in baseos definiion. Rootfs is same as debootstrap output")
+            logging.error("You may wish to have a look to : " + self.project.genereate_definition_file_path(self.project.project_definition["project-definition"]["baseos"][0]) )
 
         # Execute Ansible
+        # TODO : multiple target ? not sure...
         logging.info("running ansible...")
-        for ansible_target in self.project.dft_ansible_targets:
-            sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint + " /bin/bash -c \"cd /dft_bootstrap && /usr/bin/ansible-playbook -i inventory.yml -c local " + ansible_target + ".yml\""
-            self.execute_command(sudo_command)
+        sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint + " /bin/bash -c \"cd /dft_bootstrap && /usr/bin/ansible-playbook -i inventory.yml -c local site.yml\""
+        self.execute_command(sudo_command)
         logging.info("ansible stage successfull")
     
 
@@ -491,12 +527,18 @@ class BuildBaseOS:
         # Open the file and writes configuration in it
         self.project.debian_mirror_url = self.project.project_definition["project-definition"]["debootstrap-repository"]
 
+        # Flag if we have found a matching distro or not
+        distro_has_been_found = False
+
+        # The open the temp file for output, and iterate the distro dictionnary
         with tempfile.NamedTemporaryFile(mode='w+', delete=False) as f:
             # Iterate the list of distributions loaded from the file
             for distro in self.project.repositories_definition["distributions"]:
                 logging.debug(distro)
                 # Process only if it is the version we target
                 if distro["name"]== self.project.target_version:
+                    # W have found a matching distro or not
+                    distro_has_been_found = True
                     # Then iterate all the sources for this distro version
                     for repo in distro["repositories"]:
                         logging.debug(repo)
@@ -504,9 +546,19 @@ class BuildBaseOS:
                         f.write("deb " + repo["url"] +" " + repo["suite"] + " ")                    
                         for section in repo["sections"]:
                             f.write(section + " ")                    
-                        f.write("\n")                    
-# TODO : generate deb-src ? not really sure... optionnal ?
-# TODO : add error if no distro found                    
+                        f.write("\n")           
+
+        # Warn the user if no matching distro is found. There will be an empty
+        # /etc/apt/sources.list and installation will faill
+        if distro_has_been_found == False:
+            self.cleanup_installation_files()
+            logging.error("No distribution matching " + self.project.target_version + "has been found.")
+            logging.error("Please check repositories definition for this project." )
+            logging.error("File in use is : " + self.project.genereate_definition_file_path(self.project.project_definition["project-definition"]["repositories"][0]) )
+            logging.critical("Cannot generate /etc/apt/sources.list under ootfs path. Operation is aborted !" )
+            exit(1)
+ 
+# TODO : generate deb-src ? not really sure... optionnal ?                   
         f.close()
 
         # Finally move the temporary file under the rootfs tree
