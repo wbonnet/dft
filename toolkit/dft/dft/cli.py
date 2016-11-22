@@ -231,7 +231,7 @@ x strip_rootfs                     Strip down the rootfs before assembling the f
 		# Override configuration with values passed on the commande line
 
 		if self.args.override_debian_mirror != None:
-			logging.debug("Overriding pkg_archive_url with CLI value : %s => %s",  self.project.pkg_archive_url, self.args.override_debian_mirror)
+			logging.debug("Overriding pkg_archive_url with CLI value : %s => %s",  self.project.project_definition["project-definition"]["debootstrap-repository"], self.args.override_debian_mirror)
 			self.project.project_definition["project-definition"]["debootstrap-repository"] = self.args.override_debian_mirror
 		
 		if self.args.update_cache_archive != self.project.dft.update_cache_archive:

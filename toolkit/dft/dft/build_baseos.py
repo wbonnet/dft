@@ -171,7 +171,7 @@ class BuildBaseOS:
                     distutils.dir_util.copy_tree(target_to_copy_path, os.path.join(dft_target_path, target_to_copy))
 
             # Copy the additional toolkit content to the target rootfs
-            if "additional_roles" in self.project.project_definition["configuration"]
+            if "additional_roles" in self.project.project_definition["configuration"]:
                 for additional_path in self.project.project_definition["configuration"]["additional_roles"]:
                     logging.debug("Copy the additional toolkit : preparing to copy from additional path " + additional_path)
                     for target_to_copy in os.listdir(additional_path):
@@ -536,7 +536,7 @@ class BuildBaseOS:
             for distro in self.project.repositories_definition["distributions"]:
                 logging.debug(distro)
                 # Process only if it is the version we target
-                if distro["name"]== self.project.target_version:
+                if distro["name"]== self.project.target_version and self.project.target_arch in distro["architectures"]:
                     # W have found a matching distro or not
                     distro_has_been_found = True
                     # Then iterate all the sources for this distro version

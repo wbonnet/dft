@@ -21,7 +21,7 @@
 #
 #
 
-import logging, yaml
+import logging, yaml, os
 from datetime import datetime
 
 # -----------------------------------------------------------------------------
@@ -95,6 +95,7 @@ class DftConfiguration:
     try:   
       # Load it
       with open(self.filename, 'r') as f:
+        logging.debug("loading dft configurtion : " + filename)
         self.dft_configuration = yaml.load(f)   
         logging.debug(self.dft_configuration)
 
@@ -162,8 +163,13 @@ class ProjectDefinition :
   # ---------------------------------------------------------------------------
   def genereate_definition_file_path(self, filename):
     
-    # Concatenate Project path and filename from the project file
-    filename = self.project_definition["configuration"]["project_path"] + "/" + filename
+    # Check if the project path is defined into the project file
+    if "project_path" in self.project_definition["configuration"]: 
+      # Concatenate Project path and filename from the project file
+      filename = self.project_definition["configuration"]["project_path"] + "/" + filename
+    # No, then assume it is stored in the same place as the project file
+    else:
+      filename = os.path.dirname(self.filename) + "/" + filename
 
     # Return what has been generated
     return filename
@@ -265,7 +271,7 @@ class ProjectDefinition :
 
       # Retrieve the target architecture
       # TODO : handle multiple archs
-      self.target_arch = self.project_definition["project-definition"]["architecture"][0]
+      self.target_arch = self.project_definition["project-definition"]["architectures"][0]
 
       # Target version to use when building the debootstrap. It has to be
       # a Debian version (jessie, stretch, etc.)
@@ -280,16 +286,14 @@ class ProjectDefinition :
       # TODO : handle multiple archs / version
       self.archive_filename = self.rootfs_generator_cachedir + "/" + self.target_arch + "-" +  self.target_version + "-" +  self.target_name + ".tar"
 
-# TODO 
       # Generates the path to the rootfs mountpoint
       rootfs_image_name   = self.target_arch + "-" + self.target_version + "-" + self.timestamp
 
-# TODO
       # Stores the path to the rootfs mountpoint used by debootstrap
       self.rootfs_mountpoint = self.rootfs_base_workdir + "/" + rootfs_image_name
 
-
+    # Handle exception that may occur when trying to open unknown files 
     except FileNotFoundError as e:
-        # Call clean up to umount /proc and /dev
+        # Just log and exit, nothing is mounted yet
         logging.critical("Error: %s - %s." % (e.filename, e.strerror))
         exit(1)
