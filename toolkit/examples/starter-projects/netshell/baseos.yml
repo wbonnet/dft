@@ -21,6 +21,7 @@
 #
 #
 
+# List of the Ansible role to apply to the baseos
 roles:
   - dft-os-base
   - dft-network-base

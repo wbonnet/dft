@@ -23,12 +23,12 @@
 
 # ----------------------------------------------------------------------------
 #
-# Definition of the distributions used to build rootf
+# Definition of the distributions used to build rootfs
 #
 distributions:
     # Debian 8.0 Jessie
     - name: 'jessie'
-      architecture: [ 'amd64', 'i386', 'armel', 'armhf' ]
+      architectures: [ 'amd64', 'i386', 'armel', 'armhf' ]
       repositories:
         - url: 'http://ftp.fr.debian.org/debian/'
           suite: 'jessie'
@@ -42,7 +42,7 @@ distributions:
 
     # Debian 9.0 Stretch
     - name: 'stretch'
-      architecture: [ 'amd64', 'i386', 'armel', 'armhf' ]
+      architectures: [ 'amd64', 'i386', 'armel', 'armhf' ]
       repositories:
         - url: 'http://ftp.fr.debian.org/debian/'
           suite: 'stretch'

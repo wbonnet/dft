@@ -121,5 +121,5 @@ project-definition:
 
   # Definition of the list of target architectures. Firmware will be generated for 
   # each of the architecture in this list
-  architecture:
+  architectures:
     - amd64
