@@ -211,13 +211,8 @@ class BuildBaseOS:
             for role in self.project.baseos_definition["roles"]:
                 # At least one role has beenfound, flag it
                 role_has_been_found = True
-                logging.debug("Adding role " + role)
-                
-                # Process only if it is the version we target
-                if distro["name"]== self.project.target_version:
-                    # W have found a matching distro or not
-                    role_has_been_found = True
-                    f.write("  - " + role + "\n")
+                logging.debug("Adding role " + role)               
+                f.write("  - " + role + "\n")
         f.close()
 
         # Generate the file path
