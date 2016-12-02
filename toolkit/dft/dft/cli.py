@@ -22,7 +22,8 @@
 #
 
 import argparse, textwrap, logging
-import build_baseos, model
+import build_baseos, model, assemble_firmware, build_bootloader, build_image
+import build_firmware, check_rootfs, generate_content_information, strip_rootfs
 
 # -----------------------------------------------------------------------------
 #
@@ -41,7 +42,7 @@ class Cli:
     # -------------------------------------------------------------------------
 	def __init__(self):
 		# Current version
-		self.version = "0.0.4"
+		self.version = "0.0.6"
 
 		# Create the internal parser from argparse
 		self.parser = argparse.ArgumentParser(description=textwrap.dedent('''\
@@ -50,15 +51,15 @@ Debian Firmware Toolkit v''' + self.version + '''
 DFT is a collection of tools used to create Debian based firmwares 
 					 			 
 Available commands are :
-x assemble_firmware                Create a firmware from a baseos and generate the configuration files used to loading after booting
+? assemble_firmware                Create a firmware from a baseos and generate the configuration files used to loading after booting
 . build_baseos                     Generate a debootstrap from a Debian repository, install and configure required packages
-x build_bootloader                 Build the bootloader toolchain (kernel, initramfs, grub or uboot)
-x build_image                      Build the disk image from the firmware (or rootfs) and bootloader toolchain
-x build_firmware                   Build the firmware configuration files and scripts used to load in memory the firmware
-x check_rootfs                     Control the content of the baseos rootfs after its generation (debsecan and openscap)
+? build_bootloader                 Build the bootloader toolchain (kernel, initramfs, grub or uboot)
+? build_image                      Build the disk image from the firmware (or rootfs) and bootloader toolchain
+? build_firmware                   Build the firmware configuration files and scripts used to load in memory the firmware
+? check_rootfs                     Control the content of the baseos rootfs after its generation (debsecan and openscap)
 x factory_setup                    Apply some extra factory setup before generating the firmware
-x generate_content_information     Generate a manifest identiyfing content and versions
-x strip_rootfs                     Strip down the rootfs before assembling the firmware'''),
+? generate_content_information     Generate a manifest identiyfing content and versions
+? strip_rootfs                     Strip down the rootfs before assembling the firmware'''),
 											  formatter_class=argparse.RawTextHelpFormatter)
 	
 		# Set the log level from the configuration
@@ -70,6 +71,7 @@ x strip_rootfs                     Strip down the rootfs before assembling the f
 		self.command = args
 
 		self.add_parser_option_common()
+# TODO command build project
 		
 		# According to the command, call the method dedicated to parse the arguments
 		if   self.command == "assemble_firmware":            self.add_parser_option_assemble_firmware()
@@ -89,31 +91,15 @@ x strip_rootfs                     Strip down the rootfs before assembling the f
 		self.args = self.parser.parse_args() 
 
 	def add_parser_option_assemble_firmware(self):
-		pass
+		# Add the arguments
+		self.parser.add_argument(	'assemble_firmware', 
+								 	help='Command to execute')
+
 
 	def add_parser_option_build_baseos(self):
 		# Add the arguments
 		self.parser.add_argument(	'build_baseos', 
 								 	help='Command to execute')
-
-		# Configuration file store the definition of baseos. Optioncan be 
-		# overriden by arguments on the command line (like --target-arch)
-		#
-		# Configuration file defines baseos and its modulation
-		self.parser.add_argument(	'--config-file',
-									action='store',
-                      				dest='config_file',
-                      				required=True,
-									help='baseos configuration file')	
-
-		# Project definition file defines environnement shared between
-		# the different DFT commands (such as path to diirectory storing)
-		# cache archives, temporary working dir, temp dir name patterns, etc.)
-		self.parser.add_argument(	'--project-file',
-									action='store',
-                      				dest='project_file',
-                      				default='project.yml',
-									help='project definition file')	
 
 		# Overrides the target architecture from the configuration file by
 		# limiting it to a given list of arch. Architectures not defined in 
@@ -180,38 +166,70 @@ x strip_rootfs                     Strip down the rootfs before assembling the f
 		# => not really sure about this...
 
 	def add_parser_option_build_bootloader(self):
-		pass
+		# Add the arguments
+		self.parser.add_argument(	'build_bootloader', 
+								 	help='Command to execute')
 
-	def add_parser_option_build_image(self):
-		pass
+
+	def add_parser_option_build_image(self):		# Add the arguments
+		# Add the arguments
+		self.parser.add_argument(	'build_image', 
+								 	help='Command to execute')
+
 
 	def add_parser_option_build_firmware(self):
-		#	Generate squashfs file
-		pass
+		# Add the arguments
+		self.parser.add_argument(	'build_firmware', 
+								 	help='Command to execute')
 
 	def add_parser_option_check_rootfs(self):
-		pass
+		# Add the arguments
+		self.parser.add_argument(	'build_check_rootfs', 
+								 	help='Command to execute')
+
 
 	def add_parser_option_factory_setup(self):
-		pass
+		# Add the arguments
+		self.parser.add_argument(	'factory_setup', 
+								 	help='Command to execute')
 
 	def add_parser_option_generate_content_information(self):
-		pass
+		# Add the arguments
+		self.parser.add_argument(	'generate_content_information', 
+								 	help='Command to execute')
 
 	def add_parser_option_strip_rootfs(self):
-		pass
+		# Add the arguments
+		self.parser.add_argument(	'strip_rootfs', 
+								 	help='Command to execute')
 
 	def add_parser_option_common(self):
-		# Activate the use of the rootfs cache archive. When building a baseos
-		# with debootstrap, having this option enable will make DFT look for
-		# an existing cache archive, an extract it instead of doing a fresh 
-		# debootstrap installation
+		# Configuration file store the definition of baseos. Optioncan be 
+		# overriden by arguments on the command line (like --target-arch)
+		#
+		# Configuration file defines baseos and its modulation
+		self.parser.add_argument(	'--config-file',
+									action='store',
+                      				dest='config_file',
+                      				default='dft.yml',
+									help='DFT configuration file')	
+
+		# Project definition file defines environnement shared between
+		# the different DFT commands (such as path to diirectory storing)
+		# cache archives, temporary working dir, temp dir name patterns, etc.)
+		self.parser.add_argument(	'--project-file',
+									action='store',
+                      				dest='project_file',
+                      				default='project.yml',
+                      				required=True,
+									help='project definition file')	
+
+		# Defines the level of the log to output
 		self.parser.add_argument(	'--log-level',
 									action='store',
                       				dest='log_level',
                                     choices=['debug', 'info', 'warning', 'error', 'critical'],
 									help="defines the minimal log level. Default value is  warning")
-
 
     # -------------------------------------------------------------------------
     #
@@ -223,6 +241,10 @@ x strip_rootfs                     Strip down the rootfs before assembling the f
 			command called from cli
 		"""
 
+		# Create the dft configuration object, and load its configuration
+		self.dft = model.DftConfiguration(self.args.config_file)
+# TODO		self.dft.load_configuration()
+
 		# Create the project definition object, and load its configuration
 		self.project = model.ProjectDefinition(self.args.project_file)
 		self.project.load_definition()
@@ -230,39 +252,39 @@ x strip_rootfs                     Strip down the rootfs before assembling the f
 		# ---------------------------------------------------------------------
 		# Override configuration with values passed on the commande line
 
-		if self.args.override_debian_mirror != None:
-			logging.debug("Overriding pkg_archive_url with CLI value : %s => %s",  self.project.project_definition["project-definition"]["debootstrap-repository"], self.args.override_debian_mirror)
-			self.project.project_definition["project-definition"]["debootstrap-repository"] = self.args.override_debian_mirror
+		# if self.args.override_debian_mirror != None:
+		# 	logging.debug("Overriding pkg_archive_url with CLI value : %s => %s",  self.project.project_definition["project-definition"]["debootstrap-repository"], self.args.override_debian_mirror)
+		# 	self.project.project_definition["project-definition"]["debootstrap-repository"] = self.args.override_debian_mirror
 		
-		if self.args.update_cache_archive != self.project.dft.update_cache_archive:
-			logging.debug("Overriding update_cache_archive with CLI value : %s => %s",  self.project.dft.update_cache_archive, self.args.update_cache_archive)
-			self.project.dft.update_cache_archive = self.args.update_cache_archive
+		# if self.args.update_cache_archive != self.project.dft.update_cache_archive:
+		# 	logging.debug("Overriding update_cache_archive with CLI value : %s => %s",  self.project.dft.update_cache_archive, self.args.update_cache_archive)
+		# 	self.project.dft.update_cache_archive = self.args.update_cache_archive
 
-		if self.args.use_cache_archive != self.project.dft.use_cache_archive:
-			logging.debug("Overriding use_cache_archive with CLI value : %s => %s",  self.project.dft.use_cache_archive, self.args.use_cache_archive)
-			self.project.dft.use_cache_archive = self.args.use_cache_archive
+		# if self.args.use_cache_archive != self.project.dft.use_cache_archive:
+		# 	logging.debug("Overriding use_cache_archive with CLI value : %s => %s",  self.project.dft.use_cache_archive, self.args.use_cache_archive)
+		# 	self.project.dft.use_cache_archive = self.args.use_cache_archive
 
-		if self.args.limit_target_version != None:
-			logging.debug("Overriding target_version with CLI value : %s => %s",  self.project.target_version, self.args.limit_target_version)
-			self.project.target_version = self.args.limit_target_version
+		# if self.args.limit_target_version != None:
+		# 	logging.debug("Overriding target_version with CLI value : %s => %s",  self.project.target_version, self.args.limit_target_version)
+		# 	self.project.target_version = self.args.limit_target_version
 
-		if self.args.limit_target_arch != None:
-			logging.debug("Overriding target_arch with CLI value : %s => %s",  self.project.target_arch, self.args.limit_target_arch)
-			self.project.target_arch = self.args.limit_target_arch
+		# if self.args.limit_target_arch != None:
+		# 	logging.debug("Overriding target_arch with CLI value : %s => %s",  self.project.target_arch, self.args.limit_target_arch)
+		# 	self.project.target_arch = self.args.limit_target_arch
 
-		if self.args.config_file != None:
-			logging.debug("Overriding config_file with CLI value : %s => %s",  self.project.dft.configuration_file, self.args.config_file)
-			self.project.dft.configuration_file = self.args.config_file
+		# if self.args.config_file != None:
+		# 	logging.debug("Overriding config_file with CLI value : %s => %s",  self.project.dft.configuration_file, self.args.config_file)
+		# 	self.project.dft.configuration_file = self.args.config_file
 
-		if self.args.log_level != None:
-			if self.args.log_level.upper() != self.project.dft.log_level.upper():
-				logging.debug("Overriding log_lvel with CLI value : %s => %s",  self.project.dft.log_level, self.args.log_level.upper())
-				self.project.dft.log_level = self.args.log_level.upper()
+		# if self.args.log_level != None:
+		# 	if self.args.log_level.upper() != self.project.dft.log_level.upper():
+		# 		logging.debug("Overriding log_lvel with CLI value : %s => %s",  self.project.dft.log_level, self.args.log_level.upper())
+		# 		self.project.dft.log_level = self.args.log_level.upper()
 
-		if self.args.keep_bootstrap_files != None:
-			if self.args.keep_bootstrap_files != self.project.dft.keep_bootstrap_files:
-				logging.debug("Overriding keep_bootstrap_files with CLI value : %s => %s",  self.project.dft.keep_bootstrap_files, self.args.keep_bootstrap_files)
-				self.project.dft.keep_bootstrap_files = self.args.keep_bootstrap_files
+		# if self.args.keep_bootstrap_files != None:
+		# 	if self.args.keep_bootstrap_files != self.project.dft.keep_bootstrap_files:
+		# 		logging.debug("Overriding keep_bootstrap_files with CLI value : %s => %s",  self.project.dft.keep_bootstrap_files, self.args.keep_bootstrap_files)
+		# 		self.project.dft.keep_bootstrap_files = self.args.keep_bootstrap_files
 
 		# ---------------------------------------------------------------------
 
@@ -284,7 +306,16 @@ x strip_rootfs                     Strip down the rootfs before assembling the f
     #
     # -------------------------------------------------------------------------
 	def run_assemble_firmware(self):
+		""" Method used to handle the assemble_firmware command. 
+			Create the business objet, then execute the entry point
+		"""
+		# Create the business object
+		command = assemble_firmware.AssembleFirmware(self.dft, self.project)
+
+		# Then
+		command.assemble_firmware()
 		pass
+
 
     # -------------------------------------------------------------------------
     #
@@ -296,7 +327,7 @@ x strip_rootfs                     Strip down the rootfs before assembling the f
 			Create the business objet, then execute the entry point
 		"""
 		# Create the business object
-		command = build_baseos.BuildBaseOS(self.project)
+		command = build_baseos.BuildBaseOS(self.dft, self.project)
 
 		# Then
 		command.install_baseos()
@@ -308,7 +339,16 @@ x strip_rootfs                     Strip down the rootfs before assembling the f
     #
     # -------------------------------------------------------------------------
 	def run_build_bootloader(self):
+		""" Method used to handle the build_bootloader command. 
+			Create the business objet, then execute the entry point
+		"""
+		# Create the business object
+		command = build_bootloader.BuildBootloader(self.dft, self.project)
+
+		# Then
+		command.build_bootloader()
 		pass
+
 
     # -------------------------------------------------------------------------
     #
@@ -316,6 +356,14 @@ x strip_rootfs                     Strip down the rootfs before assembling the f
     #
     # -------------------------------------------------------------------------
 	def run_build_image(self):
+		""" Method used to handle the build_image command. 
+			Create the business objet, then execute the entry point
+		"""
+		# Create the business object
+		command = build_image.BuildImage(self.dft, self.project)
+
+		# Then
+		command.build_image()
 		pass
 
     # -------------------------------------------------------------------------
@@ -324,6 +372,14 @@ x strip_rootfs                     Strip down the rootfs before assembling the f
     #
     # -------------------------------------------------------------------------
 	def run_build_firmware(self):
+		""" Method used to handle the build_firmware command. 
+			Create the business objet, then execute the entry point
+		"""
+		# Create the business object
+		command = build_firmware.BuildFirmware(self.dft, self.project)
+
+		# Then
+		command.build_firmware()
 		pass
 
     # -------------------------------------------------------------------------
@@ -332,6 +388,14 @@ x strip_rootfs                     Strip down the rootfs before assembling the f
     #
     # -------------------------------------------------------------------------
 	def run_check_rootfs(self):
+		""" Method used to handle the check_rootfs command. 
+			Create the business objet, then execute the entry point
+		"""
+		# Create the business object
+		command = check_rootfs.CheckRootFS(self.dft, self.project)
+
+		# Then
+		command.check_rootfs()
 		pass
 
     # -------------------------------------------------------------------------
@@ -347,7 +411,15 @@ x strip_rootfs                     Strip down the rootfs before assembling the f
     # run_content_information
     #
     # -------------------------------------------------------------------------
-	def run_content_information(self):
+	def run_generate_content_information(self):
+		""" Method used to handle the generate_content_information command. 
+			Create the business objet, then execute the entry point
+		"""
+		# Create the business object
+		command = generate_content_information.GenerateContentInformation(self.dft, self.project)
+
+		# Then
+		command.generate_content_information()
 		pass
 
     # -------------------------------------------------------------------------
@@ -356,4 +428,12 @@ x strip_rootfs                     Strip down the rootfs before assembling the f
     #
     # -------------------------------------------------------------------------
 	def run_strip_rootfs(self):
+		""" Method used to handle the strip_rootfs command. 
+			Create the business objet, then execute the entry point
+		"""
+		# Create the business object
+		command = strip_rootfs.StripRootFS(self.dft, self.project)
+
+		# Then
+		command.strip_rootfs()
 		pass
