@@ -23,11 +23,12 @@
 
 import logging, os, subprocess, tarfile, shutil, tempfile, distutils
 from distutils import dir_util, file_util
+from cli_command import CliCommand
 
 #
 #    Class BuildBaseOS
 #
-class BuildBaseOS: 
+class BuildBaseOS(CliCommand): 
     """This class implements method needed to create the base OS
 
        The "base OS" is the initial installation of Debian (debootstrap) which
@@ -46,14 +47,12 @@ class BuildBaseOS:
     # __init__
     #
     # -------------------------------------------------------------------------
-    def __init__(self, project):
+    def __init__(self, dft, project):
         """Default constructor
         """
 
-        # Object storing the project definition. Project holds all the 
-        # configuration and definition used by the different stage of 
-        # the toolchain, including baseos definition
-        self.project = project
+        # Initialize ancestor
+        super().__init__(dft, project)
 
         # Retrieve the architecture of the host
         self.host_arch = subprocess.check_output("dpkg --print-architecture", shell=True).decode('UTF-8').rstrip()
@@ -84,8 +83,8 @@ class BuildBaseOS:
     #
     # -------------------------------------------------------------------------
     def install_baseos(self):
-        """This method implement the logic of generating the rootfs. It calls
-        dedicated method for each step. The main steps are :
+        """This method implement the business logic of generating the rootfs.
+        It calls dedicated method for each step. The main steps are :
 
         . setting up configuration
         . extracting cache archive content or running debootstrap
@@ -93,19 +92,33 @@ class BuildBaseOS:
         . update cache if needed
         . deploy DFT Ansible templates, and run Ansible to do confiugration
         . cleanup installation files
-        . cleanup QEMU
+        . cleanup QEMU if needed
         """
 
         # Check that DFT path is valid
-        if os.path.isdir(self.project.dft.dft_source_path) == False:
-            logging.critical("Path to DFT installation is not valid : %s",  self.project.dft.dft_source_path)
+        if os.path.isdir(self.project.project_definition["configuration"]["dft_base"]) == False:
+            logging.critical("Path to DFT installation is not valid : %s",  self.project.project_definition["configuration"]["dft_base"])
             exit(1)
 
         # Ensure target rootfs mountpoint exists and is a dir
         if os.path.isdir(self.project.rootfs_mountpoint) == False:
             os.makedirs(self.project.rootfs_mountpoint)
         else:
-            logging.warn("target rootfs mount point already exists : " + self.project.rootfs_mountpoint)
+            if "keep_rootfs_history" in self.project.project_definition["configuration"] and self.project.project_definition["configuration"]["keep_rootfs_history"] == True:
+                logging.warn("target rootfs mount point already exists : " + self.project.rootfs_mountpoint)
+# TODO
+                logging.critical("TODO : handle history : " + self.project.rootfs_mountpoint)
+                exit(1)
+# il faut un lien simbolique vers current, et ca doit etre en option avec un overwrite à chaque factory_setup_definition
+# ca depend si on veut garder l'historique
+# le comportement pas defaut doit etre de ne pas garder l'historique
+            else:
+
+# TODO big security hole !!!!!
+# Protect path generation to avoid to remove / !!!
+                sudo_command = 'sudo rm -fr "' + self.project.rootfs_mountpoint +'"'
+                self.execute_command(sudo_command)
+                os.makedirs(self.project.rootfs_mountpoint)
 
         # Check if the archive has to be used instead of doing a debootstraping
         # for real. Only if the archive exist...
@@ -139,7 +152,7 @@ class BuildBaseOS:
 
     # -------------------------------------------------------------------------
     #
-    # run_ansible
+    # install_packages
     #
     # -------------------------------------------------------------------------
     def install_packages(self):
@@ -298,7 +311,7 @@ class BuildBaseOS:
     #
     # -------------------------------------------------------------------------
     def cleanup_installation_files(self):
-        """This method is incharge of cleaning processes after Ansible has been 
+        """This method is in charge of cleaning processes after Ansible has been 
         launched. In some case some daemons are still running inside the 
         chroot, and they have to be stopped manually, or even killed in order
         to be able to umount /dev/ and /proc from inside the chroot
