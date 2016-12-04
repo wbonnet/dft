@@ -51,7 +51,7 @@ packages:
     fixed-version: "2:8.0.0022-1"
     # This package is both mandatorry and forbidden, it should generate 
     # a warning during parsing and be ignored
-  - name: "both-mndatory-and-forbidden"
+  - name: "both-mandatory-and-forbidden"
   status: "allowed"
   - name: "vim"
     min-version: "7"
@@ -80,6 +80,11 @@ packages:
   - name: "vim-common"
     min-version: "9"
     max-version: "7"
+
+ne pas oublier le blacklisted !  on peut avoir des versions precises interdites
+fixed peut etre une liste
+et todo leur mettre des regexp
+
 #
 # The following section defines the list of files and their restriction.
 #
@@ -166,16 +171,16 @@ files:
     owner: "root"
     group: "root"
     mask: "0640"
-  - path: "/etc/hosts
+  - path: "/etc/hosts"
     owner: "root"
     group: "root"
     mask: "0644"
     # This test will fail since user group and masks are incorrect
-  - path: "/etc/hostname
+  - path: "/etc/hostname"
     owner: "dft"
     group: "dft"
     mask: "0666"
-  - path: "/tmp/does-not-exist-either
+  - path: "/tmp/does-not-exist-either"
     type: "directory"
     owner: "root"
     group: "root"
@@ -186,20 +191,20 @@ files:
     group: "root"
     mask: "0644"
     # This test will fail since owner, group and mask are incorrect
-  - path: "/etc/sysctl.d
+  - path: "/etc/sysctl.d"
     type: "directory"
     owner: "dft"
     group: "dft"
     mask: "0666"
-  - path: "/etc/group
+  - path: "/etc/group"
     empty: False
-  - path: "/etc/environment
+  - path: "/etc/environment"
     empty: True
     # This test will fail since it is not empty
-  - path: "/etc/gshadow
+  - path: "/etc/gshadow"
     empty: True
     # This test will fail sinc the file should be empty
-  - path: "/var/log/aptitue
+  - path: "/var/log/aptitude"
     empty: False
   - path: "/etc/mtab"
     type: "symlink"

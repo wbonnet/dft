@@ -56,7 +56,7 @@ configuration:
   project_path: "/home/william/Devel/dft/toolkit/examples/starter-projects/netshell"
 
   # Path to the dft installation directory
-  dft_base: "~/Devel/dft/toolkit/dft"
+  dft_base: "/home/williamo/Devel/dft/toolkit/dft"
 
   # Define a list of directories with additional content (roles, playbooks, etc)
   # which are copied to /dft_bootstrap during rootfs bootstrapping. These paths 

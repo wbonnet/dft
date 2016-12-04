@@ -32,6 +32,3 @@ roles:
 # each of the versions in this list
 target-versions:
   - stretch
-
-# Name of the target to produce
-target-name: "test"
