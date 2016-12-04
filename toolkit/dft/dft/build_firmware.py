@@ -54,9 +54,12 @@ class BuildFirmware(CliCommand):
         """This method implement the business logic of firmware generation.
         Firmware is  squashfs file containing the rootfs generated previoulsy. 
         
-        It calls dedicated method for each step. The main steps are :
-
-        . 
+        Current version produce only one squashfs file. Algorith is basic...
+        . Create target directory if missing
+        . Remove existing file
+        . Generate the mksquashfs command and add options
+        . That's all
+        
         """
 
         # Ensure firmware generation path exists and is a dir
