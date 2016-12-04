@@ -207,13 +207,13 @@ class ProjectDefinition :
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["repositories"][0])
         with open(filename, 'r') as f:
           self.repositories_definition = yaml.load(f)   
-          logging.debug(self.repositories_definition)
 
       # Load the baseos sub configuration files
       if "baseos" in self.project_definition["project-definition"]:
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["baseos"][0])
         with open(filename, 'r') as f:
           self.baseos_definition = yaml.load(f)   
+          logging.debug("baseos_definition")
           logging.debug(self.baseos_definition)
       
       # Load the firmware sub configuration files
@@ -221,6 +221,7 @@ class ProjectDefinition :
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["firmware"][0])
         with open(filename, 'r') as f:
           self.firmware_definition = yaml.load(f)   
+          logging.debug("firmware_definition")
           logging.debug(self.firmware_definition)
       
       # Load the bootloader sub configuration files
@@ -228,6 +229,7 @@ class ProjectDefinition :
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["bootloader"][0])
         with open(filename, 'r') as f:
           self.bootloader_definition = yaml.load(f)   
+          logging.debug("bootloader_definition")
           logging.debug(self.bootloader_definition)
      
       # Load the image sub configuration files
@@ -235,6 +237,7 @@ class ProjectDefinition :
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["image"][0])
         with open(filename, 'r') as f:
           self.image_definition = yaml.load(f)   
+          logging.debug("image_definition")
           logging.debug(self.image_definition)
 
       # Load the check sub configuration files
@@ -242,6 +245,7 @@ class ProjectDefinition :
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["check"][0])
         with open(filename, 'r') as f:
           self.check_definition = yaml.load(f)   
+          logging.debug("check_definition")
           logging.debug(self.check_definition)
 
       # Load the stripping sub configuration files
@@ -250,6 +254,7 @@ class ProjectDefinition :
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["stripping"][0])
         with open(filename, 'r') as f:
           self.stripping_definition = yaml.load(f)   
+          logging.debug("stripping_definition")
           logging.debug(self.stripping_definition)
 
       # Load the factory_setup sub configuration files
@@ -257,6 +262,7 @@ class ProjectDefinition :
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["factory_setup"][0])
         with open(filename, 'r') as f:
           self.factory_setup_definition = yaml.load(f)   
+          logging.debug("factory_setup_definition")
           logging.debug(self.factory_setup_definition)
 
       #

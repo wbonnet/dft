@@ -173,9 +173,9 @@ class BuildBaseOS(CliCommand):
                 os.makedirs(dft_target_path)
 
             # Copy the DFT toolkit content to the target rootfs
-            for target_to_copy in os.listdir(self.project.dft.dft_source_path):
+            for target_to_copy in os.listdir(self.project.project_definition["configuration"]["dft_base"]):
                 logging.debug("Copy the DFT toolkit : preparing to copy " + target_to_copy)
-                target_to_copy_path = os.path.join(self.project.dft.dft_source_path, target_to_copy)
+                target_to_copy_path = os.path.join(self.project.project_definition["configuration"]["dft_base"], target_to_copy)
                 if os.path.isfile(target_to_copy_path):
                     logging.debug("copying file " + target_to_copy_path + " => " + dft_target_path)
                     distutils.file_util.copy_file(target_to_copy_path, dft_target_path)
