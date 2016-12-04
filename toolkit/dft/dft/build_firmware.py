@@ -59,6 +59,15 @@ class BuildFirmware(CliCommand):
         . 
         """
 
+        # Ensure firmware generation path exists and is a dir
+        if os.path.isdir(self.project.squashfs_target_directory) == False:
+            os.makedirs(self.project.squashfs_target_directory)
+        else:
+#            sudo_command = 'sudo rm -fr "' + self.project.rootfs_mountpoint +'"'
+ #           self.execute_command(sudo_command)
+  #          os.makedirs(self.project.rootfs_mountpoint)
+
+
 # TODO
 # What is needed in the configuration file
 # production:

@@ -53,6 +53,26 @@ class CliCommand:
         # the toolchain, including baseos definition
         self.project = project
 
+        # Retrieve the architecture of the host
+        self.host_arch = subprocess.check_output("dpkg --print-architecture", shell=True).decode('UTF-8').rstrip()
+
+        # Boolean used to flag the use of QEMU static
+        self.use_qemu_static =  (self.host_arch != project.target_arch)
+
+        # Boolean used to flag if the cache archive is available. This value 
+        # is set by the setup_configuration method. Default is False, to 
+        # ensure it will be rebuild
+        self.cache_archive_is_available = False
+ 
+        # Flags used to remove 'mount bind' states
+        self.proc_is_mounted   = False
+        self.devpts_is_mounted = False
+        self.devshm_is_mounted = False
+
+        # Flag used to prevent multiple call to cleanup since cleanup is used
+        # in exception processing
+        self.doing_cleanup_installation_files = False
+
         # Set the log level from the configuration
         logging.basicConfig(level=project.dft.log_level)
 

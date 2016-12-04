@@ -54,26 +54,6 @@ class BuildBaseOS(CliCommand):
         # Initialize ancestor
         super().__init__(dft, project)
 
-        # Retrieve the architecture of the host
-        self.host_arch = subprocess.check_output("dpkg --print-architecture", shell=True).decode('UTF-8').rstrip()
-
-        # Boolean used to flag the use of QEMU static
-        self.use_qemu_static =  (self.host_arch != project.target_arch)
-
-        # Boolean used to flag if the cache archive is available. This value 
-        # is set by the setup_configuration method. Default is False, to 
-        # ensure it will be rebuild
-        self.cache_archive_is_available = False
- 
-        # Flags used to remove 'mount bind' states
-        self.proc_is_mounted   = False
-        self.devpts_is_mounted = False
-        self.devshm_is_mounted = False
-
-        # Flag used to prevent multiple call to cleanup since cleanup is used
-        # in exception processing
-        self.doing_cleanup_installation_files = False
-
         # Set the log level from the configuration
         logging.basicConfig(level=project.dft.log_level)
 
@@ -86,7 +66,7 @@ class BuildBaseOS(CliCommand):
         """This method implement the business logic of generating the rootfs.
         It calls dedicated method for each step. The main steps are :
 
-        . setting up configuration
+        . setting up working directory
         . extracting cache archive content or running debootstrap
         . setup QEMU and run stage 2 if needed
         . update cache if needed
@@ -109,12 +89,13 @@ class BuildBaseOS(CliCommand):
 # TODO
                 logging.critical("TODO : handle history : " + self.project.rootfs_mountpoint)
                 exit(1)
-# il faut un lien simbolique vers current, et ca doit etre en option avec un overwrite à chaque factory_setup_definition
-# ca depend si on veut garder l'historique
-# le comportement pas defaut doit etre de ne pas garder l'historique
+# It looks like i need to add a symlink from history to current
+# It should be optional with overwrite on factory_setup_definition
+# Depending on keeping history or not. So far not available
+# default behavior is not to keep history
             else:
 
-# TODO big security hole !!!!!
+# TODO security hole !!!!!
 # Protect path generation to avoid to remove / !!!
                 sudo_command = 'sudo rm -fr "' + self.project.rootfs_mountpoint +'"'
                 self.execute_command(sudo_command)
@@ -128,7 +109,7 @@ class BuildBaseOS(CliCommand):
             # In any other cases, do a real debootstrap call
             self.generate_debootstrap_rootfs()
 
-        # þest the archive has to be updated
+        # Test if the archive has to be updated
         if self.project.dft.update_cache_archive == True:
             # But only do it if we haven't bee using the cache, or it
             # would be extracted, then archived again.
