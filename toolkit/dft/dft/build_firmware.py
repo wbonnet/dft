@@ -77,6 +77,55 @@ class BuildFirmware(CliCommand):
         if "compressor" in self.project.firmware_definition["configuration"]:
             sudo_command += ' -comp ' + self.project.firmware_definition["configuration"]["compressor"]
 
+        if "no-exports" in self.project.firmware_definition["configuration"]:
+            if self.project.firmware_definition["configuration"]["no-exports"] == True:
+                sudo_command += ' -no-exports '
+
+        if "no-spare" in self.project.firmware_definition["configuration"]:
+            sudo_command += ' -no-spare '
+
+        if "xattrs" in self.project.firmware_definition["configuration"]:
+            if self.project.firmware_definition["configuration"]["xattrs"] == True:
+                sudo_command += ' -xattrs '
+            if self.project.firmware_definition["configuration"]["xattrs"] == False:
+                sudo_command += ' -no-xattrs '
+
+        if "no-inode-compression" in self.project.firmware_definition["configuration"]:
+            sudo_command += ' -noI '
+
+        if "no-datablock-compression" in self.project.firmware_definition["configuration"]:
+            sudo_command += ' -noD '
+
+        if "no-fragmentblock-compression" in self.project.firmware_definition["configuration"]:
+            sudo_command += ' -noF '
+
+        if "no-xattrs-compression" in self.project.firmware_definition["configuration"]:
+            sudo_command += ' -noX '
+
+        if "use-fragments" in self.project.firmware_definition["configuration"]:
+            if self.project.firmware_definition["configuration"]["use-fragments"] == True:
+                sudo_command += ' -always-use-fragments '
+            if self.project.firmware_definition["configuration"]["use-fragments"] == False:
+                sudo_command += ' -no-fragments '
+
+        if "no-duplicate-check" in self.project.firmware_definition["configuration"]:
+            if self.project.firmware_definition["configuration"]["no-duplicate-check"] == True:
+                sudo_command += ' -no-duplicates '
+
+        if "all-root" in self.project.firmware_definition["configuration"]:
+            if self.project.firmware_definition["configuration"]["all-root"] == True:
+                sudo_command += ' -all-root '
+
+        if "force-uid" in self.project.firmware_definition["configuration"]:
+            sudo_command += ' -force-uid ' + self.project.firmware_definition["configuration"]["force-uid"]
+
+        if "force-gid" in self.project.firmware_definition["configuration"]:
+            sudo_command += ' -force-gid ' + self.project.firmware_definition["configuration"]["force-gid"]
+
+        if "nopad" in self.project.firmware_definition["configuration"]:
+            if self.project.firmware_definition["configuration"]["nopad"] == True:
+                sudo_command += ' -nopad '
+
         self.execute_command(sudo_command)
 
 
@@ -87,54 +136,6 @@ class BuildFirmware(CliCommand):
 # #   option...
 # #   alternative to squashfs ? exploded maybe tarball with compression option
 # #   target path ?
-
-# # man mksquashfs
-
-#        -no-exports
-#            don't make the filesystem exportable via NFS.
-
-#        -no-sparse
-#            don't detect sparse files.
-
-#        -no-xattrs
-#            don't store extended attributes.
-
-#        -xattrs
-#            store extended attributes (default).
-
-#        -noI
-#            do not compress inode table.
-
-#        -noD
-#            do not compress data blocks.
-
-#        -noF
-#            do not compress fragment blocks.
-
-#        -noX
-#            do not compress extended attributes.
-
-#        -no-fragments
-#            do not use fragments.
-
-#        -always-use-fragments
-#            use fragment blocks for files larger than block size.
-
-#        -no-duplicates
-#            do not perform duplicate checking.
-
-#        -all-root
-#            make all files owned by root.
-
-#        -force-uid uid
-#            set all file uids to uid.
-
-#        -force-gid gid
-#            set all file gids to gid.
-
-#        -nopad
-#            do not pad filesystem to a multiple of 4K.
-
 
 #        -keep-as-directory
 #            if  one source directory is specified, create a root directory contain‐
@@ -170,70 +171,6 @@ class BuildFirmware(CliCommand):
 #            a  subdirectory in the new root called NAME, rather than adding the new
 #            source items to the original root.
 
-#    Mksquashfs runtime options:
-#        -version
-#            print version, licence and copyright message.
-
-#        -recover NAME
-#            recover filesystem data using recovery file NAME.
-
-#        -no-recovery
-#            don't generate a recovery file.
-
-#        -info
-#            print files written to filesystem.
-
-#        -no-progress
-#            don't display the progress bar.
-
-#        -processors NUMBER
-#            Use NUMBER processors. By default will use number of processors  avail‐
-#            able.
-
-#        -read-queue SIZE
-#            Set input queue to SIZE Mbytes. Default 64 Mbytes.
-
-#        -write-queue SIZE
-#            Set output queue to SIZE Mbytes. Default 512 Mbytes.
-
-#        -fragment-queue SIZE
-#            Set fragment queue to SIZE Mbytes. Default 64 Mbytes.
-
-#    Miscellaneous options
-#        -root-owned
-#            alternative name for -all-root.
-
-#        -noInodeCompression
-#            alternative name for -noI.
-
-#        -noDataCompression
-#            alternative name for -noD.
-
-#               -noFragmentCompression
-#                    alternative name for -noF.
-
-#                -noXattrCompression
-#                    alternative name for -noX.
-
-#            Compressors available and compressor specific options
-#                gzip (no options) (default)
-
-#                lzo (no options)
-
-#                xz
-
-#                -Xbcj filter1,filter2,...,filterN
-#                    Compress  using  filter1,filter2,...,filterN in turn (in addition to no
-#                    filter), and choose the best compression. Available filters: x86,  arm,
-#                    armthumb, powerpc, sparc, ia64.
-
-#                -Xdict-size DICT_SIZE
-#                    Use  DICT_SIZE  as  the  XZ dictionary size. The dictionary size can be
-#                    specified as a percentage of the block size, or as an  absolute  value.
-#                    The  dictionary  size  must be less than or equal to the block size and
-#                    8192 bytes or larger. It must also be storable  in  the  xz  header  as
-#                    either  2^n  or as 2^n+2^(n+1). Example dict-sizes are 75%, 50%, 37.5%,
-#                    25%, or 32K, 16K, 8K etc.
 
 
 # Later add the possibility to generate several squashfs out of a baseos, and do delta, time based ? 
