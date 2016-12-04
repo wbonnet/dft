@@ -58,11 +58,38 @@ class AssembleFirmware(CliCommand):
     def assemble_firmware(self):
         """This method implement the business logic of firmware assembling.
         
-        TBD
+        Assembling a firmware, use as input the firmware file created from a 
+        baseos and then generate the configuration files used to loading after 
+        booting. The configuration is used to define how the filesystems are
+        stacked, what should be the physical partitionning, ciphering, etc.
 
         It calls dedicated method for each step. The main steps are :
         . 
         """
 
+
+# What is needed in the configuration file
+# layout:
+#   use unionfs or overlayfs 
+#   defines mapping over squashfs
+#   => direct write ?
+#   - mountpoint:
+#     type: sqasuhfs , partition, tmpfs
+#     path:
+#     mount_option:
+#     auto_commit: False
+# stacking ? 
+# how to define cow ?
+
+# security:
+#   not at start, but need to check for hashes or signatures
+#   how to handle ciphering, keygen, secure storage
+
+# safety:
+#   at start single bank
+#   bank: 2
+
         logging.critical("Not yet available")
         exit(1)
+
+

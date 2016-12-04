@@ -91,9 +91,15 @@ class DftConfiguration:
 # TODO handle filename
     try:   
       # Load it
-      with open(self.configuration_file, 'r') as f:
+      with open(self.filename, 'r') as f:
         logging.debug("loading dft configuration : " + filename)
         self.dft_configuration = yaml.load(f)   
+        logging.debug(self.dft_configuration)
+
+        # Check if path starts with ~ and need expension
+        if self.dft_configuration["configuration"]["working_dir"][0] == "~" and self.dft_configuration["configuration"]["working_dir"][1] == "/":         
+          dft_configuration["configuration"]["working_dir"] = os.path.expanduser(dft_configuration["configuration"]["working_dir"])
+
         logging.debug(self.dft_configuration)
 
     except FileNotFoundError as e:
@@ -141,8 +147,6 @@ class ProjectDefinition :
       # Create the object storing the DFT tool configuration
       self.dft = DftConfiguration()
 
-
-
   # ---------------------------------------------------------------------------
   #
   # genereate_definition_file_path
@@ -160,11 +164,7 @@ class ProjectDefinition :
     
     # Check if the project path is defined into the project file
     if "project_path" in self.project_definition["configuration"]: 
-      # Concatenate Project path and filename from the project file
-      filename = self.project_definition["configuration"]["project_path"] + "/" + filename
-    # No, then assume it is stored in the same place as the project file
-    else:
-      filename = os.path.dirname(self.filename) + "/" + filename
+        filename = self.project_definition["configuration"]["project_path"] + "/" + filename
 
 # TODO add include in project file
 
@@ -196,7 +196,11 @@ class ProjectDefinition :
       #
       with open(self.filename, 'r') as f:
         self.project_definition = yaml.load(f)   
-        logging.debug(self.project_definition)
+
+        # Expand ~ in path since it is not done automagically by Python
+        for key in { "dft_base", "project_path", "working_dir" }:
+          if self.project_definition["configuration"][key][0] == "~" and self.project_definition["configuration"][key][1] == "/":         
+            self.project_definition["configuration"][key] = os.path.expanduser(self.project_definition["configuration"][key])
 
       # Load the repositories sub configuration files
       if "repositories" in self.project_definition["project-definition"]:
