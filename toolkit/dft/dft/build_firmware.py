@@ -60,12 +60,24 @@ class BuildFirmware(CliCommand):
         """
 
         # Ensure firmware generation path exists and is a dir
-        if os.path.isdir(self.project.squashfs_target_directory) == False:
-            os.makedirs(self.project.squashfs_target_directory)
-        else:
-#            sudo_command = 'sudo rm -fr "' + self.project.rootfs_mountpoint +'"'
- #           self.execute_command(sudo_command)
-  #          os.makedirs(self.project.rootfs_mountpoint)
+        if os.path.isdir(self.project.firmware_directory) == False:
+            os.makedirs(self.project.firmware_directory)
+
+        # Remove existing firmware is needed
+        if os.path.isfile(self.project.firmware_filename) == True:
+            os.remove(self.project.firmware_filename)
+
+        # Create a new squashfs file from the baseos path
+        sudo_command = 'mksquashfs "' +  self.project.rootfs_mountpoint + '" "' + self.project.firmware_filename + '"'
+
+        # Append arguments if defined in the configuration file
+        if "block_size" in self.project.firmware_definition["configuration"]:
+            sudo_command += ' -b ' + self.project.firmware_definition["configuration"]["block_size"]
+
+        if "compressor" in self.project.firmware_definition["configuration"]:
+            sudo_command += ' -comp ' + self.project.firmware_definition["configuration"]["compressor"]
+
+        self.execute_command(sudo_command)
 
 
 # TODO
@@ -77,14 +89,6 @@ class BuildFirmware(CliCommand):
 # #   target path ?
 
 # # man mksquashfs
-
-#    Filesystem build options
-#        -comp COMPRESSION
-#            select COMPRESSION compression. Compressors available: gzip  (default),
-#            lzo, xz.
-
-#        -b BLOCK_SIZE
-#            set data block to BLOCK_SIZE. Default 131072 bytes.
 
 #        -no-exports
 #            don't make the filesystem exportable via NFS.
@@ -233,9 +237,3 @@ class BuildFirmware(CliCommand):
 
 
 # Later add the possibility to generate several squashfs out of a baseos, and do delta, time based ? 
-
-        logging.critical("Not yet available")
-        exit(1)
-
-
-
