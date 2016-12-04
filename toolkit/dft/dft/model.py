@@ -66,10 +66,6 @@ class DftConfiguration:
 # TODO : default should be changed to INFO
     self.log_level = "DEBUG"
 
-    # Path to the installation of the DFT ansible roles
-# TODO : change to some place under /usr/share once packaging will be done
-    self.dft_source_path = "/home/william/Devel/dft/toolkit/ansible"
-
     # Debootstrap target to use (minbase or buildd)
     self.debootstrap_target = "minbase"
 
@@ -92,10 +88,11 @@ class DftConfiguration:
   # ---------------------------------------------------------------------------
   def load_configuration(self, filename = None):
 
+# TODO handle filename
     try:   
       # Load it
-      with open(self.filename, 'r') as f:
-        logging.debug("loading dft configurtion : " + filename)
+      with open(self.configuration_file, 'r') as f:
+        logging.debug("loading dft configuration : " + filename)
         self.dft_configuration = yaml.load(f)   
         logging.debug(self.dft_configuration)
 
@@ -144,9 +141,7 @@ class ProjectDefinition :
       # Create the object storing the DFT tool configuration
       self.dft = DftConfiguration()
 
-# TODO temporary values
-#      self.dft_additional_path =  [ "/tmp/dft-additional" ]
-#      self.dft_ansible_targets = [ "test" ]
+
 
   # ---------------------------------------------------------------------------
   #
@@ -171,6 +166,8 @@ class ProjectDefinition :
     else:
       filename = os.path.dirname(self.filename) + "/" + filename
 
+# TODO add include in project file
+
     # Return what has been generated
     return filename
   
@@ -193,7 +190,10 @@ class ProjectDefinition :
     # exception mecanism. If a FileNotFoundError is raised, then exit the 
     # program
     try:   
-      # Load it
+# TODO : load and merge several confiuration files in the same dictionnary
+      #
+      # Load all the ub configuration files from disk
+      #
       with open(self.filename, 'r') as f:
         self.project_definition = yaml.load(f)   
         logging.debug(self.project_definition)
@@ -255,7 +255,11 @@ class ProjectDefinition :
           self.factory_setup_definition = yaml.load(f)   
           logging.debug(self.factory_setup_definition)
 
-# TODO 
+      #
+      # Once configuration have been loaded, compute the values of some
+      # configuration variables
+      #
+
       # Generate the cache archive filename
       if "rootfs_generator_cachedir" in self.project_definition["configuration"]:
         self.rootfs_generator_cachedir = self.project_definition["configuration"]["rootfs_generator_cachedir"]
@@ -264,33 +268,34 @@ class ProjectDefinition :
         self.rootfs_generator_cachedir = "/tmp/"
 
       if "working_dir" in self.project_definition["configuration"]:
-        self.rootfs_base_workdir = self.project_definition["configuration"]["working_dir"] + "/rootfs"
+        self.project_base_workdir = self.project_definition["configuration"]["working_dir"] + "/" + self.project_definition["configuration"]["project_name"]
       else:
         logging.warning("configuration/working_dir is not defined, using /tmp/dft as default value")
-        self.rootfs_generator_cachedir = "/tmp/dft"
+        self.project_base_workdir = "/tmp/dft/" + self.project_definition["configuration"]["project_name"]
+
+      # Defines path for subcommand
+      self.rootfs_base_workdir     = self.project_base_workdir + "/rootfs"
+      self.image_base_workdir      = self.project_base_workdir + "/image"
+      self.bootloader_base_workdir = self.project_base_workdir + "/bootloader"
+      self.firmware_base_workdir   = self.project_base_workdir + "/firmware"
+      self.content_base_workdir    = self.project_base_workdir + "/content"
 
       # Retrieve the target architecture
-      # TODO : handle multiple archs
+# TODO : handle multiple archs
       self.target_arch = self.project_definition["project-definition"]["architectures"][0]
 
       # Target version to use when building the debootstrap. It has to be
       # a Debian version (jessie, stretch, etc.)
-      # TODO : handle multiple version
+# TODO : handle multiple version
       self.target_version = self.baseos_definition["target-versions"][0]
       
-      # Name of the current baseos being produced. Used in rootfs mount
-      # point path and archive name generation
-      self.target_name = self.baseos_definition["target-name"]
-
       # Generate the archive filename
-      # TODO : handle multiple archs / version
-      self.archive_filename = self.rootfs_generator_cachedir + "/" + self.target_arch + "-" +  self.target_version + "-" +  self.target_name + ".tar"
+# TODO : handle multiple archs / version
+      self.archive_filename = self.rootfs_generator_cachedir + "/" + self.target_arch + "-" +  self.target_version + "-" + self.project_definition["configuration"]["project_name"] + ".tar"
 
       # Generates the path to the rootfs mountpoint
-      rootfs_image_name   = self.target_arch + "-" + self.target_version + "-" + self.timestamp
-
       # Stores the path to the rootfs mountpoint used by debootstrap
-      self.rootfs_mountpoint = self.rootfs_base_workdir + "/" + rootfs_image_name
+      self.rootfs_mountpoint = self.rootfs_base_workdir + "/" + self.target_arch + "-" + self.target_version
 
     # Handle exception that may occur when trying to open unknown files 
     except FileNotFoundError as e:
