@@ -42,7 +42,7 @@ class Cli:
     # -------------------------------------------------------------------------
 	def __init__(self):
 		# Current version
-		self.version = "0.0.7"
+		self.version = "0.0.8"
 
 		# Create the internal parser from argparse
 		self.parser = argparse.ArgumentParser(description=textwrap.dedent('''\
@@ -55,7 +55,7 @@ Available commands are :
 . build_baseos                     Generate a debootstrap from a Debian repository, install and configure required packages
 ? build_bootloader                 Build the bootloader toolchain (kernel, initramfs, grub or uboot)
 ? build_image                      Build the disk image from the firmware (or rootfs) and bootloader toolchain
-? build_firmware                   Build the firmware configuration files and scripts used to load in memory the firmware
+. build_firmware                   Build the firmware configuration files and scripts used to load in memory the firmware
 ? check_rootfs                     Control the content of the baseos rootfs after its generation (debsecan and openscap)
 x factory_setup                    Apply some extra factory setup before generating the firmware
 ? generate_content_information     Generate a manifest identiyfing content and versions
