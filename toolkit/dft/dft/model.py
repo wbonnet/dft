@@ -213,40 +213,30 @@ class ProjectDefinition :
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["baseos"][0])
         with open(filename, 'r') as f:
           self.baseos_definition = yaml.load(f)   
-          logging.debug("baseos_definition")
-          logging.debug(self.baseos_definition)
       
       # Load the firmware sub configuration files
       if "firmware" in self.project_definition["project-definition"]:
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["firmware"][0])
         with open(filename, 'r') as f:
           self.firmware_definition = yaml.load(f)   
-          logging.debug("firmware_definition")
-          logging.debug(self.firmware_definition)
       
       # Load the bootloader sub configuration files
       if "bootloader" in self.project_definition["project-definition"]:
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["bootloader"][0])
         with open(filename, 'r') as f:
           self.bootloader_definition = yaml.load(f)   
-          logging.debug("bootloader_definition")
-          logging.debug(self.bootloader_definition)
      
       # Load the image sub configuration files
       if "image" in self.project_definition["project-definition"]:
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["image"][0])
         with open(filename, 'r') as f:
           self.image_definition = yaml.load(f)   
-          logging.debug("image_definition")
-          logging.debug(self.image_definition)
 
       # Load the check sub configuration files
       if "check" in self.project_definition["project-definition"]:
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["check"][0])
         with open(filename, 'r') as f:
           self.check_definition = yaml.load(f)   
-          logging.debug("check_definition")
-          logging.debug(self.check_definition)
 
       # Load the stripping sub configuration files
       if "stripping" in self.project_definition["project-definition"]:
@@ -254,17 +244,13 @@ class ProjectDefinition :
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["stripping"][0])
         with open(filename, 'r') as f:
           self.stripping_definition = yaml.load(f)   
-          logging.debug("stripping_definition")
-          logging.debug(self.stripping_definition)
 
-      # Load the factory_setup sub configuration files
-      if "factory_setup" in self.project_definition["project-definition"]:
-        filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["factory_setup"][0])
+      # Load the check sub configuration files
+      if "content-information" in self.project_definition["project-definition"]:
+        filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["content-information"][0])
         with open(filename, 'r') as f:
-          self.factory_setup_definition = yaml.load(f)   
-          logging.debug("factory_setup_definition")
-          logging.debug(self.factory_setup_definition)
-
+          self.content_information_definition = yaml.load(f)   
+          logging.debug(self.content_information_definition)
       #
       # Once configuration have been loaded, compute the values of some
       # configuration variables
