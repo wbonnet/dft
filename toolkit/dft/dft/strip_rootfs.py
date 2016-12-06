@@ -67,5 +67,17 @@ TODO
         . 
         """
 
-        logging.critical("Not yet available")
-        exit(1)
+        # First strip the packages
+        need_to_strip_apt = False
+
+
+        # Check if at some time the APT stuff has be caimed for removal
+        if need_to_strip_apt == True:
+        	# We now have to remove 
+            pass
+        # Next strip the directories
+
+        # Then strip the symlinks
+
+        # And finally strip the files
+
