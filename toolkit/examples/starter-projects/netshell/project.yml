@@ -115,9 +115,9 @@ project-definition:
   stripping:
     - stripping.yml
 
-  # Definition of the additionalfactory setup to apply
-  factory_setup:
-    - factory_setup.yml
+  # Definition of the content to generate
+  content-information:
+    - content.yml
 
   # Definition of the list of target architectures. Firmware will be generated for 
   # each of the architecture in this list
