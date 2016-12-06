@@ -131,54 +131,88 @@ class GenerateContentInformation(CliCommand):
 
     # Generate the dpkg command to retrieve the list of installed packages
     sudo_command  = "LANG=C sudo chroot " + self.project.rootfs_mountpoint + " dpkg -l | tail -n +6"
-    self.execute_command(sudo_command)
+    pkglist = self.execute_command(sudo_command)
 
-    # Test if we have to generate the package name in the output
-    if "generate-package-name" in self.project.content_information_definition["packages"]:
-      if self.project.content_information_definition["packages"]["generate-package-name"] == True:
-        logging.warning("TODO : generate-package-name")
+    # Iterate the output of the dpkg process:
+    for binaryline in pkglist.splitlines():
+      # Each fields is stored into a variable to easy manipulation and 
+      # simplify code. First get the array of words converted to UTF-8
+      line = binaryline.decode('utf-8').split()
 
-    # Test if we have to generate the package version in the output
-    if "generate-package-version" in self.project.content_information_definition["packages"]:
-      if self.project.content_information_definition["packages"]["generate-package-version"] == True:
-        logging.warning("TODO : generate-package-version")
+      # Extract each fields
+      pkg_status      = line[0]
+      pkg_name        = line[1]
+      pkg_version     = line[2]
+      pkg_arch        = line[3]
+      # space is used as a separator to rebuild the description
+      pkg_description = " ".join(line[4:])
 
-    # Test if we have to generate the package description in the output
-    if "generate-package-description" in self.project.content_information_definition["packages"]:
-      if self.project.content_information_definition["packages"]["generate-package-description"] == True:
-        logging.warning("TODO : generate-package-description")
+      # Flag used to know if we need a space separator between fields
+      add_spacer = False
+      
+      # Starts with empty output
+      output = ""
 
-    # Test if we have to generate the package status in the output
-    if "generate-package-status" in self.project.content_information_definition["packages"]:
-      if self.project.content_information_definition["packages"]["generate-package-status"] == True:
-        logging.warning("TODO : generate-package-status")
+      # Test if we have to generate the package status in the output
+      if "generate-package-status" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate-package-status"] == True:
+      # Test if we have to generate the package description in the output
+          output += pkg_status
+          add_spacer = True
 
-    # Test if we have to generate the package architecture in the output
-    if "generate-package-architecture" in self.project.content_information_definition["packages"]:
-      if self.project.content_information_definition["packages"]["generate-package-architecture"] == True:
-        logging.warning("TODO : generate-package-architecture")
+      # Test if we have to generate the package name in the output
+      if "generate-package-name" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate-package-name"] == True:
+          if add_spacer == True:
+            output += " "  
+          output += pkg_name
+          add_spacer = True
 
-    # Test if we have to generate the package md5 in the output
-    if "generate-package-md5" in self.project.content_information_definition["packages"]:
-      if self.project.content_information_definition["packages"]["generate-package-md5"] == True:
-        logging.warning("TODO : generate-package-md5")
+      # Test if we have to generate the package version in the output
+      if "generate-package-version" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate-package-version"] == True:
+          if add_spacer == True:
+            output += " "  
+          output += pkg_version
+          add_spacer = True
 
-    # Test if we have to generate the package sha256 in the output
-    if "generate-package-sha256" in self.project.content_information_definition["packages"]:
-      if self.project.content_information_definition["packages"]["generate-package-sha256"] == True:
-        logging.warning("TODO : generate-package-sha256")
+      # Test if we have to generate the package architecture in the output
+      if "generate-package-architecture" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate-package-architecture"] == True:
+          if add_spacer == True:
+            output += " "  
+          output += pkg_arch
+          add_spacer = True
 
-    # Test if we have to generate the package size in the output
-    if "generate-package-size" in self.project.content_information_definition["packages"]:
-      if self.project.content_information_definition["packages"]["generate-package-size"] == True:
-        logging.warning("TODO : generate-package-size")
+      # Test if we have to generate the package md5 in the output
+      if "generate-package-md5" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate-package-md5"] == True:
+          logging.warning("TODO : generate-package-md5")
 
-    # Test if we have to generate the package installed-size in the output
-    if "generate-package-installed-size" in self.project.content_information_definition["packages"]:
-      if self.project.content_information_definition["packages"]["generate-package-installed-size"] == True:
-        logging.warning("TODO : generate-package-installed-size")
+      # Test if we have to generate the package sha256 in the output
+      if "generate-package-sha256" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate-package-sha256"] == True:
+          logging.warning("TODO : generate-package-sha256")
 
+      # Test if we have to generate the package size in the output
+      if "generate-package-size" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate-package-size"] == True:
+          logging.warning("TODO : generate-package-size")
 
+      # Test if we have to generate the package installed-size in the output
+      if "generate-package-installed-size" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate-package-installed-size"] == True:
+          logging.warning("TODO : generate-package-installed-size")
+
+      # Test if we have to generate the package description in the output
+      if "generate-package-description" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate-package-description"] == True:
+          if add_spacer == True:
+            output += " "  
+          output += pkg_description
+          add_spacer = True
+
+      print(output)
 
   # -------------------------------------------------------------------------
   #

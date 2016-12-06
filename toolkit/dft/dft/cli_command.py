@@ -90,9 +90,15 @@ class CliCommand:
     in a helper object. It provides mutalisation of error handling
     """
 
+    logging.debug("running : " + command)
+      
     try:
-      logging.debug("running : " + command)
-      subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, check=True)
+      # Execute the subprocess, output en errors are piped
+      completed = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, 
+                                 shell=True, check=True, universal_newlines=False)
+
+      # Return the output of the process to the caller
+      return completed.stdout
 
     except subprocess.CalledProcessError as e:
       self.cleanup_installation_files()
