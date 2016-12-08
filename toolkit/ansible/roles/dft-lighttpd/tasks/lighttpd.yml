@@ -34,3 +34,11 @@
        install_recommends=no
   with_items:
     - lighttpd
+
+- name : DFT - Configure lighttpd.conf
+  template: src=templates/lighttpd.conf.j2 
+            dest=/etc/lighttpd/lighttpd.conf
+            owner=root 
+            group=root 
+            mode="u=rw,g=r,o=r"          
+

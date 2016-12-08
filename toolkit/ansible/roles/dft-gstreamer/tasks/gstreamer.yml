@@ -27,7 +27,7 @@
 #
 
 ---
-- name : DFT - Install gstreamer
+- name : DFT - Install GStreamer
   apt: name={{ item }} 
        state=installed 
        update_cache=true
@@ -35,5 +35,3 @@
   with_items:
     - gstreamer1.0-x
     - gstreamer1.0-plugins-good
-    - gstreamer1.0-plugins-bad
-    - gstreamer1.0-plugins-ugly
