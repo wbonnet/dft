@@ -24,6 +24,10 @@
 import logging, yaml, os
 from datetime import datetime
 
+
+# TODO: add a method to initialize all defaut value and not do it into the code 
+# TODO : add enum with key strings ?
+
 # -----------------------------------------------------------------------------
 #
 # class DftConfiguration
