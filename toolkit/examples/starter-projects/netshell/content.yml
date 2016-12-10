@@ -57,6 +57,48 @@ configuration:
   # Default is True
   # skip-on-missing-software: True
 
+  # The output dictionnary contains all the variable used to control 
+  output:
+    # This variable control the format of the output. The format available are :
+    # - csv
+    # - json
+    # - yaml
+    # - xml
+    # 
+    format: "csv"
+
+    # The target can be either "stdout" or a "file". When using a file target,
+    # the path variable must be defined. Files are stored under content in the
+    # project working dir, unless the path is absolute (which means relative 
+    # path goes under working_dir/content)
+    target: "file"
+
+    # Defines the path under which the oututis stored. If path is relative, 
+    # output goes to content directeory in the project tree. If the path is 
+    # absolute, then the absolute path is used.
+    #
+    # Default value is empty, which means all the output goes under content/
+    # path: 
+
+    # These three variables defines a prefix and suffix added to the filename, 
+    # and a replacement extension. The filename pattern is :
+    # <prefix><content-type><suffix>.<format-extension>
+    #
+    # content-type is one of :
+    # - packages
+    # - vulnerabilities
+    # - security
+    # - anti-virus
+    # - files
+    #
+    # default extension value is the formt, default suffix and prefix are empty
+    filename-prefix: "prefix"
+    filename-suffix: "suffix"
+    relace-extension: "dummy"
+
+    # Separtor is needed if the CSV file format is used. It defines the 
+    # character oused as field separator
+    field-separator: ";"
 #
 # The packages dictionnary control the list of fields that are included in the 
 # output. Default tool used for package information generation is dpkg.
