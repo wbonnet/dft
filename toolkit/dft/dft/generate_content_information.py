@@ -28,6 +28,91 @@ from cli_command import CliCommand
 # TODO classe de base
 
 #
+#    Class ContentInformationOutputWriter
+#
+class ContentInformationOutputWriter(CliCommand): 
+  """This class implements the writer in charge of doing real output to the
+  target defined in the configuration file. It can eithertarget a stream 
+  (stdout) or a file, using different format (csv yaml json xml).
+  """
+
+  # -------------------------------------------------------------------------
+  #
+  # __init__
+  #
+  # -------------------------------------------------------------------------
+  def __init__(self, configuration):
+    """Default constructor
+    """
+
+    # Store the configuration dictionnary
+    self.configuration = configuration
+    self.output_file = None
+
+  # -------------------------------------------------------------------------
+  #
+  # initialize
+  #
+  # -------------------------------------------------------------------------
+  def Initialize(self, target):
+    """This method initiliaze the output writer accorsing to the target
+    argument. Target is one of the kind of output (packages, files, etc). The
+    method does configuration checks, such as valid output format, target, 
+    etc. If configuration is valid, it opens the file or stream for output.
+    """
+
+    # Control output configuration parameters
+    if self.configuration["configuration"]["output"]["format"] == "csv":
+      logging.debug("Content information is output to CSV format")
+    elif self.configuration["configuration"]["output"]["format"] == "yaml":
+      logging.debug("Content information is output to YAM format")
+    elif self.configuration["configuration"]["output"]["format"] == "json":
+      logging.debug("Content information is output to JSON format")
+      logging.error("Format is not yet available")
+      exit(1)
+    elif self.configuration["configuration"]["output"]["format"] == "xml":
+      logging.debug("Content information is output to XML format")
+      logging.error("Format is not yet available")
+      exit(1)
+    else:
+      logging.error("Unknow output format " + self.configuration["configuration"]["output"]["format"])  
+      exit(1)
+
+    # Slect and create the output
+    if self.configuration["configuration"]["output"]["target"] == "file":
+      # Create a temporary file for output
+      self.output_file = tempfile.NamedTemporaryFile(mode='w+', delete=False)
+      logging.debug("Content information is output to a file")
+    elif self.configuration["configuration"]["output"]["target"] == "stdout":
+      logging.debug("Content information is output to stdout")
+      logging.error("Output to stdout is not yet available")
+      exit(1)
+    else:
+      logging.error("Unknow output TARGET " + self.configuration["configuration"]["output"]["target"])  
+      exit(1)
+ 
+  # -------------------------------------------------------------------------
+  #
+  # FlushAndClose
+  #
+  # -------------------------------------------------------------------------
+  def FlushAndClose(self):
+    """This method is in charg of flushing all the output and close opened 
+    files
+    """
+
+# TODO stream ?
+# TODO flush ?
+
+    # Test if the output file has been opened
+    if self.output_file != None:
+      # Yes then close it
+      self.output_file.close()
+      self.output_file = None
+    
+    # Move the target file to the right place ?
+    # Depends on how we handle temp files
+#
 #    Class GenerateContentInformation
 #
 class GenerateContentInformation(CliCommand): 
@@ -46,6 +131,11 @@ class GenerateContentInformation(CliCommand):
 
     # Initialize ancestor
     super().__init__(dft, project)
+
+    # Create the output writer object
+    self.OutputWriter = ContentInformationOutputWriter(self.project.content_information_definition)
+
+
 
   # -------------------------------------------------------------------------
   #
@@ -129,6 +219,9 @@ class GenerateContentInformation(CliCommand):
     It relies on calls to dpkg and apt-cache in the chrooted environment.
     """
 
+    # Initialize the output writer for packages content generation
+    self.OutputWriter.Initialize("packages")
+  
     # Generate the dpkg command to retrieve the list of installed packages
     sudo_command  = "LANG=C sudo chroot " + self.project.rootfs_mountpoint + " dpkg -l | tail -n +6"
     pkglist = self.execute_command(sudo_command)
@@ -214,6 +307,9 @@ class GenerateContentInformation(CliCommand):
 
       print(output)
 
+    # Flush all pending output and close stream or file
+    self.OutputWriter.FlushAndClose()
+  
   # -------------------------------------------------------------------------
   #
   # generate_files_information
@@ -224,8 +320,12 @@ class GenerateContentInformation(CliCommand):
     Informationare extracted from the host information, not the chroot.
     """
 
-    pass
+    # Initialize the output writer for packages content generation
+    self.OutputWriter.Initialize("files")
 
+    # Flush all pending output and close stream or file
+    self.OutputWriter.FlushAndClose()
+  
 
 
   # -------------------------------------------------------------------------
@@ -238,8 +338,12 @@ class GenerateContentInformation(CliCommand):
     analysis. It relies on call to an antivirus in the chrooted environment.
     """
 
-    pass
+    # Initialize the output writer for packages content generation
+    self.OutputWriter.Initialize("antivirus")
 
+    # Flush all pending output and close stream or file
+    self.OutputWriter.FlushAndClose()
+  
 
 
   # -------------------------------------------------------------------------
@@ -253,8 +357,13 @@ class GenerateContentInformation(CliCommand):
     """
 
     # TODO need purge ?
-    pass
 
+    # Initialize the output writer for packages content generation
+    self.OutputWriter.Initialize("security")
+
+    # Flush all pending output and close stream or file
+    self.OutputWriter.FlushAndClose()
+  
 
 
   # -------------------------------------------------------------------------
@@ -268,6 +377,9 @@ class GenerateContentInformation(CliCommand):
     chrooted environment.
     """
  
+     # Initialize the output writer for packages content generation
+    self.OutputWriter.Initialize("vulnerabilities")
+
     # Check if debsecan is installed in the chrooted environment
     if os.path.isfile( self.project.rootfs_mountpoint + "/usr/bin/debsecan") == False:
       # If not, test if it has to be installed, or should it fail ? 
@@ -332,3 +444,7 @@ class GenerateContentInformation(CliCommand):
       sudo_command  = "sudo chroot " + self.project.rootfs_mountpoint 
       sudo_command += " /usr/bin/apt-get remove --yes debsecan"
       self.execute_command(sudo_command)
+
+    # Flush all pending output and close stream or file
+    self.OutputWriter.FlushAndClose()
+  
