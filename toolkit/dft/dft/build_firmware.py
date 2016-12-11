@@ -63,6 +63,11 @@ class BuildFirmware(CliCommand):
         """
 
         # Ensure firmware generation path exists and is a dir
+        if os.path.isdir(self.project.rootfs_mountpoint) == False:
+            logging.critical("The rootfs directory does not exist (" + self.project.rootfs_mountpoint + ")")
+            exit(1)
+
+        # Ensure firmware generation path exists and is a dir
         if os.path.isdir(self.project.firmware_directory) == False:
             os.makedirs(self.project.firmware_directory)
 
