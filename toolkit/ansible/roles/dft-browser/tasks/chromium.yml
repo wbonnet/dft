@@ -50,7 +50,7 @@
         recurse=yes
         owner={{ dft_username }}
         group={{ dft_username }}
-
+  when: (ansible_architecture == "i386" or ansible_architecture == "x86_64")
 
 #
 # Create the chromium desktop entry used to start chromium when session opens
@@ -61,3 +61,4 @@
           owner={{ dft_username }}
           group={{ dft_username }}
           mode="u=rw,g=r,o=r"          
+  when: (ansible_architecture == "i386" or ansible_architecture == "x86_64")
