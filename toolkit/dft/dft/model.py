@@ -95,7 +95,7 @@ class DftConfiguration:
 # TODO handle filename
     try:   
       # Load it
-      with open(self.filename, 'r') as f:
+      with open(self.project_name, 'r') as f:
         logging.debug("loading dft configuration : " + filename)
         self.dft_configuration = yaml.load(f)   
         logging.debug(self.dft_configuration)
@@ -138,11 +138,11 @@ class ProjectDefinition :
       # Filename is mandatory, and is defaulted to project.yml if 
       # not defined
       if (filename == None):
-        self.filename = 'project.yml'
-        logging.debug("setting default project filename : " + self.filename)
+        self.project_name = 'project.yml'
+        logging.debug("setting default project filename : " + self.project_name)
       else:
-        self.filename = filename
-        logging.debug("setting new project filename : " + self.filename)
+        self.project_name = filename
+        logging.debug("setting new project filename : " + self.project_name)
 
       # Timestamp is used to produce distinct directory in case of several
       # run, and also used to produce the serial number (/etc/dft_version)
@@ -169,6 +169,8 @@ class ProjectDefinition :
     # Check if the project path is defined into the project file
     if "project_path" in self.project_definition["configuration"]: 
         filename = self.project_definition["configuration"]["project_path"] + "/" + filename
+    else:
+        filename = os.path.dirname(self.project_name) + "/" + filename
 
 # TODO add include in project file
 
@@ -184,11 +186,11 @@ class ProjectDefinition :
 
     # Test if the filename has been redefinied
     if (filename != None):
-      self.filename = filename
-      logging.debug("setting new project filename : " + self.filename)
+      self.project_name = filename
+      logging.debug("setting new project filename : " + self.project_name)
 
     # Need some debug output :)
-    logging.debug("loading project : " + self.filename)
+    logging.debug("loading project : " + self.project_name)
 
     # Enter a try except section. This is how we handle missing files, through
     # exception mecanism. If a FileNotFoundError is raised, then exit the 
@@ -198,13 +200,14 @@ class ProjectDefinition :
       #
       # Load all the ub configuration files from disk
       #
-      with open(self.filename, 'r') as f:
+      with open(self.project_name, 'r') as f:
         self.project_definition = yaml.load(f)   
 
         # Expand ~ in path since it is not done automagically by Python
-        for key in { "dft_base", "project_path", "working_dir" }:
-          if self.project_definition["configuration"][key][0] == "~" and self.project_definition["configuration"][key][1] == "/":         
-            self.project_definition["configuration"][key] = os.path.expanduser(self.project_definition["configuration"][key])
+        for key in { "dft_base", "project_path", "working_dir", "additional_roles" }:
+          if key in self.project_definition["configuration"]:
+            if self.project_definition["configuration"][key][0] == "~" and self.project_definition["configuration"][key][1] == "/":         
+              self.project_definition["configuration"][key] = os.path.expanduser(self.project_definition["configuration"][key])
 
       # Load the repositories sub configuration files
       if "repositories" in self.project_definition["project-definition"]:
