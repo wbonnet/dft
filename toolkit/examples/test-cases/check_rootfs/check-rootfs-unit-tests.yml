@@ -42,24 +42,31 @@ packages:
     - name: "base-files"
     - name: "vim"
       # The version is uselesss and should generate a warning during parsing
-      min-version: "7"
+      max-version: "2:7.0"
+    - name: "vim"
+      # The version is uselesss and should generate a warning during parsing
+      min-version: "2:7.0"
     - name: "vim-doc"
       # The version is uselesss and should generate a warning during parsing
-      max-version: "9"
+      max-version: "2:9.0"
     - name: "vim-common"
       # The version is uselesss and should generate a warning during parsing
-      fixed-version: "2:8.0.0022-1"
+      allowed-version: "2:8.0.0022-1"
       # This package is both mandatorry and forbidden, it should generate 
       # a warning during parsing and be ignored
     - name: "both-mandatory-and-forbidden"
   allowed:
-    - name: "vim"
-      min-version: "7"
-    - name: "vim-doc"
-      max-version: "9"
     - name: "vim-common"
-      min-version: "7"
-      max-version: "9"
+      min-version: "2:7.0"
+    - name: "vim-common"
+      max-version: "2:9.0"
+    - name: "vim-comon"
+      max-version: "2:7.0"
+    - name: "vim-common"
+      min-version: "2:9.0"
+    - name: "vim-common"
+      min-version: "2:7.0"
+      max-version: "2:9.0"
     - name: "vim-common"
       allowed-version: 
         - "2:8.0.0022-1"
