@@ -61,20 +61,25 @@ packages:
       min-version: "7"
       max-version: "9"
     - name: "vim-common"
-      fixed-version: "2:8.0.0022-1"
+      allowed-version: 
+        - "2:8.0.0022-1"
     - name: "vim-common"
-      fixed-version: "2:8.0.0022-1"
+      allowed-version: 
+        - "2:8.0.0022-1"
       max-version: "9"
     - name: "vim-common"
-      fixed-version: "2:8.0.0022-1"
+      allowed-version: 
+        - "2:8.0.0022-1"
       min-version: "7"
       # Max version is smaller than max, it should generate a warning during parsing and be ignored
     - name: "vim-common"
-      fixed-version: "2:8.0.0022-1"
+      allowed-version: 
+        - "2:8.0.0022-1"
       max-version: "7"
       # Min version is greater than fixed, it should generate a warning during parsing and be ignored
     - name: "vim-common"
-      fixed-version: "2:8.0.0022-1"
+      allowed-version: 
+        - "2:8.0.0022-1"
       min-version: "9"
       # Min version is greater than max, it should generate a warning during parsing and be ignored
     - name: "vim-common"
@@ -85,7 +90,11 @@ packages:
         - "amd64"
         - "all"
         - "arm64"
-    - name: "vim"
+    - name: "base-files"
+      allowed-arch:
+        - "all"
+        - "armhf"
+    - name: "base-files"
       allowed-arch:
         - "amd64"
         - "armhf"

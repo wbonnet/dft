@@ -125,8 +125,8 @@ class CheckRootFS(CliCommand):
     Version of packages can also be controlled. Available checks are :
     . min-version          => LOWER versions CAN'T be installed
     . max-version          => MORE RECENT versions CAN'T be installed
-    . fixed-version        => ONE of the given version MUST be installed
-                              it is a list
+    . allowed-version      => If installed, version MUST be onne of the given
+                              version in the list
     . blacklisted-version  => NONE of the given version CAN be installed
                               it is a list
     - allowed-arch         => The packages is allowed only on the given archs
@@ -181,7 +181,7 @@ class CheckRootFS(CliCommand):
     
     # First let's control that all keywords (key dictionnaires) are valid and know
     for keyword in pkg_rule:
-      if keyword not in "name" "min-version" "max-version" "fixed-version" "blacklisted-version" "allowed-arch" "blacklisted-arch":
+      if keyword not in "name" "min-version" "max-version" "allowed-version" "blacklisted-version" "allowed-arch" "blacklisted-arch":
         logging.error("Unknow keyword " + keyword + " when parsing packages rules. Rule is ignored")
 
     # Check if mandatory package is missing
@@ -198,31 +198,49 @@ class CheckRootFS(CliCommand):
 
     # Check version if higher or equal than min version
     if "min-version" in pkg_rule:
-      logging.debug("Checking min-version : " + pkg_rule["min-version"]) 
+      if pkg_rule["name"] in self.installed_packages: 
+        logging.debug("Checking min-version : " + pkg_rule["min-version"]) 
 
     # Check version if lower or equal than max version
     if "max-version" in pkg_rule:
-      logging.debug("Checking max-version : " + pkg_rule["max-version"]) 
+      if pkg_rule["name"] in self.installed_packages: 
+        logging.debug("Checking max-version : " + pkg_rule["max-version"]) 
 
     # Check that version is in the list of allowed-version
-    if "fixed-version" in pkg_rule:
-      logging.debug("Checking fixed-version : " + pkg_rule["fixed-version"]) 
+    if "allowed-version" in pkg_rule:
+      if pkg_rule["name"] in self.installed_packages: 
+        if self.installed_packages[pkg_rule["name"]]["version"] not in pkg_rule["allowed-version"]: 
+          logging.info("Version " + self.installed_packages[pkg_rule["name"]]["version"] + " of package " + pkg_rule["name"] + " is not allowed")
+          self.is_check_successfull = False
+        else:
+          logging.info("Version " + self.installed_packages[pkg_rule["name"]]["version"] + " of package " + pkg_rule["name"] + " is allowed")
 
     # Check that version is not in the list of blacklisted versions
     if "blacklisted-version" in pkg_rule:
-      logging.debug("Checking blacklisted-version : " + pkg_rule["blacklisted-version"]) 
+      if pkg_rule["name"] in self.installed_packages: 
+        if self.installed_packages[pkg_rule["name"]]["version"] in pkg_rule["blacklisted-arch"]: 
+          logging.info("Version " + self.installed_packages[pkg_rule["name"]]["version"] + " of package " + pkg_rule["name"] + " is blacklisted")
+          self.is_check_successfull = False
+        else:
+          logging.info("Version " + self.installed_packages[pkg_rule["name"]]["version"] + " of package " + pkg_rule["name"] + " is allowed")
 
     # Check that architecture is not in the list of blacklisted arch
     if "blacklisted-arch" in pkg_rule:
-      if self.installed_packages[pkg_rule["name"]]["arch"] in pkg_rule["blacklisted-arch"]: 
-        logging.info("Package " + pkg_rule["name"] + " is blacklisted on architecture " + self.installed_packages[pkg_rule["name"]]["arch"])
-        self.is_check_successfull = False
+      if pkg_rule["name"] in self.installed_packages: 
+        if self.installed_packages[pkg_rule["name"]]["arch"] in pkg_rule["blacklisted-arch"]: 
+          logging.info("Package " + pkg_rule["name"] + " is blacklisted on architecture " + self.installed_packages[pkg_rule["name"]]["arch"])
+          self.is_check_successfull = False
+        else:
+          logging.debug("Package " + pkg_rule["name"] + " is not blacklisted on architecture " + self.installed_packages[pkg_rule["name"]]["arch"])
 
     # Check that version is in the list of allowed arch
     if "allowed-arch" in pkg_rule:
-      if self.installed_packages[pkg_rule["name"]]["arch"] not in pkg_rule["allowed-arch"]: 
-        logging.info("Package " + pkg_rule["name"] + " is not allowed for architecture " + self.installed_packages[pkg_rule["name"]]["arch"])
-        self.is_check_successfull = False
+      if pkg_rule["name"] in self.installed_packages: 
+        if self.installed_packages[pkg_rule["name"]]["arch"] not in pkg_rule["allowed-arch"]: 
+          logging.info("Package " + pkg_rule["name"] + " is not allowed for architecture " + self.installed_packages[pkg_rule["name"]]["arch"])
+          self.is_check_successfull = False
+        else:
+          logging.debug("Package " + pkg_rule["name"] + " is allowed for architecture " + self.installed_packages[pkg_rule["name"]]["arch"])
 
 
 
