@@ -1,0 +1,7 @@
+PidFile=/var/run/zabbix/zabbix_agentd.pid
+LogFile=/var/log/zabbix-agent/zabbix_agentd.log
+LogFileSize=0
+Server={{ dft_zabbix_server }}
+ServerActive={{ dft_zabbix_server }}
+Hostname={{ dft_zabbix_server_hostname }}
+Include=/etc/zabbix/zabbix_agentd.conf.d/
