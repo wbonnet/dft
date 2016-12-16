@@ -257,7 +257,7 @@ class ProjectDefinition :
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["content-information"][0])
         with open(filename, 'r') as f:
           self.content_information_definition = yaml.load(f)   
-          logging.debug(self.content_information_definition)
+
       #
       # Once configuration have been loaded, compute the values of some
       # configuration variables
