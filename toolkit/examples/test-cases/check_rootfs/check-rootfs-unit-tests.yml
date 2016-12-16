@@ -26,70 +26,79 @@
 # use packages restriction check, and are also used as one of the dft tool test case
 #
 packages:
-  status: "mandatory"
+  mandatory:
     # This package exist and is installed 
-  - name: "base-files"
-    # This package does not exist and should generate an error 
-  - name: "missing-non-existent-package"
-    # This package is both mandatorry and forbidden, it should generate 
-    # a warning during parsing and be ignored
-  - name: "both-mndatory-and-forbidden"
-  status: "forbidden"
-    # This package does not exist, thus it cannot be installed
-  - name: "base-files"
-  - name: "missing-non-existent-package"
-    # This package exist and is installed, thus it will output an error 
-  - name: "base-files"
-  - name: "vim"
-    # The version is uselesss and should generate a warning during parsing
-    min-version: "7"
-  - name: "vim-doc"
-    # The version is uselesss and should generate a warning during parsing
-    max-version: "9"
-  - name: "vim-common"
-    # The version is uselesss and should generate a warning during parsing
-    fixed-version: "2:8.0.0022-1"
-    # This package is both mandatorry and forbidden, it should generate 
-    # a warning during parsing and be ignored
-  - name: "both-mandatory-and-forbidden"
-  status: "allowed"
-  - name: "vim"
-    min-version: "7"
-  - name: "vim-doc"
-    max-version: "9"
-  - name: "vim-common"
-    min-version: "7"
-    max-version: "9"
-  - name: "vim-common"
-    fixed-version: "2:8.0.0022-1"
-  - name: "vim-common"
-    fixed-version: "2:8.0.0022-1"
-    max-version: "9"
-  - name: "vim-common"
-    fixed-version: "2:8.0.0022-1"
-    min-version: "7"
-    # Max version is smaller than max, it should generate a warning during parsing and be ignored
-  - name: "vim-common"
-    fixed-version: "2:8.0.0022-1"
-    max-version: "7"
-    # Min version is greater than fixed, it should generate a warning during parsing and be ignored
-  - name: "vim-common"
-    fixed-version: "2:8.0.0022-1"
-    min-version: "9"
-    # Min version is greater than max, it should generate a warning during parsing and be ignored
-  - name: "vim-common"
-    min-version: "9"
-    max-version: "7"
+    - name: "base-files"
+      # This package does not exist and should generate an error 
+    - name: "missing-non-existent-package"
+      # This package is both mandatorry and forbidden, it should generate 
+      # a warning during parsing and be ignored
+    - name: "both-mandatory-and-forbidden"
+  forbidden:
+      # This package does not exist, thus it cannot be installed
+    - name: "base-files"
+    - name: "missing-non-existent-package"
+      # This package exist and is installed, thus it will output an error 
+    - name: "base-files"
+    - name: "vim"
+      # The version is uselesss and should generate a warning during parsing
+      min-version: "7"
+    - name: "vim-doc"
+      # The version is uselesss and should generate a warning during parsing
+      max-version: "9"
+    - name: "vim-common"
+      # The version is uselesss and should generate a warning during parsing
+      fixed-version: "2:8.0.0022-1"
+      # This package is both mandatorry and forbidden, it should generate 
+      # a warning during parsing and be ignored
+    - name: "both-mandatory-and-forbidden"
+  allowed:
+    - name: "vim"
+      min-version: "7"
+    - name: "vim-doc"
+      max-version: "9"
+    - name: "vim-common"
+      min-version: "7"
+      max-version: "9"
+    - name: "vim-common"
+      fixed-version: "2:8.0.0022-1"
+    - name: "vim-common"
+      fixed-version: "2:8.0.0022-1"
+      max-version: "9"
+    - name: "vim-common"
+      fixed-version: "2:8.0.0022-1"
+      min-version: "7"
+      # Max version is smaller than max, it should generate a warning during parsing and be ignored
+    - name: "vim-common"
+      fixed-version: "2:8.0.0022-1"
+      max-version: "7"
+      # Min version is greater than fixed, it should generate a warning during parsing and be ignored
+    - name: "vim-common"
+      fixed-version: "2:8.0.0022-1"
+      min-version: "9"
+      # Min version is greater than max, it should generate a warning during parsing and be ignored
+    - name: "vim-common"
+      min-version: "9"
+      max-version: "7"
+    - name: "vim-common"
+      blacklisted-arch:
+        - "amd64"
+        - "all"
+        - "arm64"
+    - name: "vim"
+      allowed-arch:
+        - "amd64"
+        - "armhf"
 
-ne pas oublier le blacklisted !  on peut avoir des versions precises interdites
-fixed peut etre une liste
-et todo leur mettre des regexp
+# ne pas oublier le blacklisted !  on peut avoir des versions precises interdites
+# fixed peut etre une liste
+# et todo leur mettre des regexp
 
 #
 # The following section defines the list of files and their restriction.
 #
 files:
-  status: "mandatory"
+  mandatory:
   - path: "/etc/fstab"
   - path: "/etc/"
     type: "directory"
@@ -140,11 +149,11 @@ files:
   - path: "/etc/do-no-exist4"
     type: "symlink"
     target: "/proc/self/mounts"
-    this test will succeed since the target does not exist and its forbidden
+    # this test will succeed since the target does not exist and its forbidden
   - path: "/etc/systemd/system/sshd.service"
     type: "symlink"
     target: "/lib/systemd/system/ssh.service"
-  status: "forbidden"
+  forbidden:
   - path: "/etc/hosts.equiv"
     # This file is mandatory also and wil produce a warning during parsing, then be ignored
   - path: "/tmp/both-mndatory-and-forbidden"
@@ -158,7 +167,7 @@ files:
   - path: "/etc/do-no-exist3"
     type: "symlink"
     target: "/proc/self/mounts"
-    this test will succeed since the target does not exist and its forbidden
+    # This test will succeed since the target does not exist and its forbidden
   - path: "/etc/mtab"
     type: "symlink"
     target: "/proc/self"
@@ -166,7 +175,7 @@ files:
   - path: "/etc/mtab"
     type: "symlink"
     target: "/proc/self/mounts"
-  status: "allowed"
+  allowed:
   - path: "/tmp/does-not-exist"
     owner: "root"
     group: "root"
@@ -185,7 +194,7 @@ files:
     owner: "root"
     group: "root"
     mask: "0644"
-  - path: "/etc/systemd
+  - path: "/etc/systemd"
     type: "directory"
     owner: "root"
     group: "root"
