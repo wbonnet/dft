@@ -155,14 +155,14 @@ class CheckRootFS(CliCommand):
       self.installed_packages[pkg_name] = { 'status': pkg_status , 'version': pkg_version , 'arch': pkg_arch }
 
     # Now iterate the list of rules to check against installed packages
-    for pkg_rule in self.project.check_definition["packages"]["mandatory"]:
-      self.check_package_rules(pkg_rule, mandatory=True)
+    for rule in self.project.check_definition["packages"]["mandatory"]:
+      self.check_package_rules(rule, mandatory=True)
 
-    for pkg_rule in self.project.check_definition["packages"]["forbidden"]:
-      self.check_package_rules(pkg_rule, forbidden=True)
+    for rule in self.project.check_definition["packages"]["forbidden"]:
+      self.check_package_rules(rule, forbidden=True)
 
-    for pkg_rule in self.project.check_definition["packages"]["allowed"]:
-      self.check_package_rules(pkg_rule, allowed=True)
+    for rule in self.project.check_definition["packages"]["allowed"]:
+      self.check_package_rules(rule, allowed=True)
 
 # TODO traiter les paquet en rc ?
 
@@ -171,36 +171,36 @@ class CheckRootFS(CliCommand):
   # check_package_rules
   #
   # -------------------------------------------------------------------------
-  def check_package_rules(self, pkg_rule, mandatory = None, forbidden = None, allowed = None):
+  def check_package_rules(self, rule, mandatory = None, forbidden = None, allowed = None):
     """This method is in charge of contolling if the rules defined for a
     given package are verified or not. It uses the same constraint definitions
     and structure as in chck_packages pethod.
     """
   
     # First let's control that all keywords (key dictionnaires) are valid and know
-    for keyword in pkg_rule:
+    for keyword in rule:
       if keyword not in "name" "min-version" "max-version" "allowed-version" "blacklisted-version" "allowed-arch" "blacklisted-arch":
         logging.error("Unknow keyword " + keyword + " when parsing packages rules. Rule is ignored")
 
     # Check if mandatory package is missing
-    if mandatory == True and pkg_rule["name"] not in self.installed_packages:
-      logging.info("Missing mandatory package : " + pkg_rule["name"])
+    if mandatory == True and rule["name"] not in self.installed_packages:
+      logging.info("Missing mandatory package : " + rule["name"])
       self.is_check_successfull = False
       return
 
     # Check if mandatory package is missing
-    if forbidden == True and pkg_rule["name"] in self.installed_packages:
-      logging.info("Forbidden package is installed : " + pkg_rule["name"])
+    if forbidden == True and rule["name"] in self.installed_packages:
+      logging.info("Forbidden package is installed : " + rule["name"])
       self.is_check_successfull = False
       return
 
     # Check version if higher or equal than min version
-    if "min-version" in pkg_rule:
+    if "min-version" in rule:
       return_code = 0
-      if pkg_rule["name"] in self.installed_packages: 
+      if rule["name"] in self.installed_packages: 
         # Generate the dpkg command to compare the versions
-        dpkg_command  = "dpkg --compare-versions " + pkg_rule["min-version"]
-        dpkg_command  += " lt " + self.installed_packages[pkg_rule["name"]]["version"] 
+        dpkg_command  = "dpkg --compare-versions " + rule["min-version"]
+        dpkg_command  += " lt " + self.installed_packages[rule["name"]]["version"] 
         
         # We have to protect the subprocess in a try except block since dpkg
         # will return 1 if the check is invalid
@@ -215,18 +215,18 @@ class CheckRootFS(CliCommand):
 
         # If the result is not ok, then output an info an go on checking next keyword
         if return_code > 0:
-          logging.info("Version " + self.installed_packages[pkg_rule["name"]]["version"] + " of package is older than minimum allowed version " + pkg_rule["min-version"])
+          logging.info("Version " + self.installed_packages[rule["name"]]["version"] + " of package is older than minimum allowed version " + rule["min-version"])
           self.is_check_successfull = False
         else:
-          logging.debug("Version " + self.installed_packages[pkg_rule["name"]]["version"] + " of package is newer than minimum allowed version " + pkg_rule["min-version"])
+          logging.debug("Version " + self.installed_packages[rule["name"]]["version"] + " of package is newer than minimum allowed version " + rule["min-version"])
 
     # Check version if lower or equal than max version
-    if "max-version" in pkg_rule:
+    if "max-version" in rule:
       return_code = 0
-      if pkg_rule["name"] in self.installed_packages: 
+      if rule["name"] in self.installed_packages: 
         # Generate the dpkg command to compare the versions
-        dpkg_command  = "dpkg --compare-versions " + pkg_rule["max-version"]
-        dpkg_command  += " gt " + self.installed_packages[pkg_rule["name"]]["version"]
+        dpkg_command  = "dpkg --compare-versions " + rule["max-version"]
+        dpkg_command  += " gt " + self.installed_packages[rule["name"]]["version"]
         
         # We have to protect the subprocess in a try except block since dpkg
         # will return 1 if the check is invalid
@@ -241,46 +241,46 @@ class CheckRootFS(CliCommand):
 
         # If the result is not ok, then output an info an go on checking next keyword
         if return_code > 0:
-          logging.info("Version " + self.installed_packages[pkg_rule["name"]]["version"] + " of package is newer than minimum allowed version " + pkg_rule["max-version"])
+          logging.info("Version " + self.installed_packages[rule["name"]]["version"] + " of package is newer than minimum allowed version " + rule["max-version"])
           self.is_check_successfull = False
         else:
-          logging.debug("Version " + self.installed_packages[pkg_rule["name"]]["version"] + " of package is older than minimum allowed version " + pkg_rule["max-version"])
+          logging.debug("Version " + self.installed_packages[rule["name"]]["version"] + " of package is older than minimum allowed version " + rule["max-version"])
 
     # Check that version is in the list of allowed-version
-    if "allowed-version" in pkg_rule:
-      if pkg_rule["name"] in self.installed_packages: 
-        if self.installed_packages[pkg_rule["name"]]["version"] not in pkg_rule["allowed-version"]: 
-          logging.info("Version " + self.installed_packages[pkg_rule["name"]]["version"] + " of package " + pkg_rule["name"] + " is not allowed")
+    if "allowed-version" in rule:
+      if rule["name"] in self.installed_packages: 
+        if self.installed_packages[rule["name"]]["version"] not in rule["allowed-version"]: 
+          logging.info("Version " + self.installed_packages[rule["name"]]["version"] + " of package " + rule["name"] + " is not allowed")
           self.is_check_successfull = False
         else:
-          logging.debug("Version " + self.installed_packages[pkg_rule["name"]]["version"] + " of package " + pkg_rule["name"] + " is allowed")
+          logging.debug("Version " + self.installed_packages[rule["name"]]["version"] + " of package " + rule["name"] + " is allowed")
 
     # Check that version is not in the list of blacklisted versions
-    if "blacklisted-version" in pkg_rule:
-      if pkg_rule["name"] in self.installed_packages: 
-        if self.installed_packages[pkg_rule["name"]]["version"] in pkg_rule["blacklisted-arch"]: 
-          logging.info("Version " + self.installed_packages[pkg_rule["name"]]["version"] + " of package " + pkg_rule["name"] + " is blacklisted")
+    if "blacklisted-version" in rule:
+      if rule["name"] in self.installed_packages: 
+        if self.installed_packages[rule["name"]]["version"] in rule["blacklisted-arch"]: 
+          logging.info("Version " + self.installed_packages[rule["name"]]["version"] + " of package " + rule["name"] + " is blacklisted")
           self.is_check_successfull = False
         else:
-          logging.debug("Version " + self.installed_packages[pkg_rule["name"]]["version"] + " of package " + pkg_rule["name"] + " is allowed")
+          logging.debug("Version " + self.installed_packages[rule["name"]]["version"] + " of package " + rule["name"] + " is allowed")
 
     # Check that architecture is not in the list of blacklisted arch
-    if "blacklisted-arch" in pkg_rule:
-      if pkg_rule["name"] in self.installed_packages: 
-        if self.installed_packages[pkg_rule["name"]]["arch"] in pkg_rule["blacklisted-arch"]: 
-          logging.info("Package " + pkg_rule["name"] + " is blacklisted on architecture " + self.installed_packages[pkg_rule["name"]]["arch"])
+    if "blacklisted-arch" in rule:
+      if rule["name"] in self.installed_packages: 
+        if self.installed_packages[rule["name"]]["arch"] in rule["blacklisted-arch"]: 
+          logging.info("Package " + rule["name"] + " is blacklisted on architecture " + self.installed_packages[rule["name"]]["arch"])
           self.is_check_successfull = False
         else:
-          logging.debug("Package " + pkg_rule["name"] + " is not blacklisted on architecture " + self.installed_packages[pkg_rule["name"]]["arch"])
+          logging.debug("Package " + rule["name"] + " is not blacklisted on architecture " + self.installed_packages[rule["name"]]["arch"])
 
     # Check that version is in the list of allowed arch
-    if "allowed-arch" in pkg_rule:
-      if pkg_rule["name"] in self.installed_packages: 
-        if self.installed_packages[pkg_rule["name"]]["arch"] not in pkg_rule["allowed-arch"]: 
-          logging.info("Package " + pkg_rule["name"] + " is not allowed for architecture " + self.installed_packages[pkg_rule["name"]]["arch"])
+    if "allowed-arch" in rule:
+      if rule["name"] in self.installed_packages: 
+        if self.installed_packages[rule["name"]]["arch"] not in rule["allowed-arch"]: 
+          logging.info("Package " + rule["name"] + " is not allowed for architecture " + self.installed_packages[rule["name"]]["arch"])
           self.is_check_successfull = False
         else:
-          logging.debug("Package " + pkg_rule["name"] + " is allowed for architecture " + self.installed_packages[pkg_rule["name"]]["arch"])
+          logging.debug("Package " + rule["name"] + " is allowed for architecture " + self.installed_packages[rule["name"]]["arch"])
 
 
 
@@ -322,5 +322,18 @@ class CheckRootFS(CliCommand):
 
     """
 # TODO controler le sha dans les tests unitaires
+
+    # Iterate the list of rules to check against installed packages
+    # Files will be checked on an individual basis, which is different of
+    # packages. Package list can be retrieved with a single call to dpkg.
+    # Retrieving the complete file list would cost too much
+    for rule in self.project.check_definition["packages"]["mandatory"]:
+      self.check_file_rules(rule, mandatory=True)
+
+    for rule in self.project.check_definition["packages"]["forbidden"]:
+      self.check_file_rules(rule, forbidden=True)
+
+    for rule in self.project.check_definition["packages"]["allowed"]:
+      self.check_file_rules(rule, allowed=True)
 
     logging.info("starting to check installed packages")
