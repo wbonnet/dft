@@ -93,7 +93,7 @@ class CheckRootFS(CliCommand):
     #
     if self.project.check_definition != None and "files" in self.project.check_definition:
       logging.debug("Files check is activated")
-      self.check_packages()
+      self.check_files()
     else:
       logging.info("Files check generation is deactivated")
 
@@ -174,7 +174,7 @@ class CheckRootFS(CliCommand):
   def check_package_rules(self, rule, mandatory = None, forbidden = None, allowed = None):
     """This method is in charge of contolling if the rules defined for a
     given package are verified or not. It uses the same constraint definitions
-    and structure as in chck_packages pethod.
+    and structure as in check_packages method.
     """
   
     # First let's control that all keywords (key dictionnaires) are valid and know
@@ -188,7 +188,7 @@ class CheckRootFS(CliCommand):
       self.is_check_successfull = False
       return
 
-    # Check if mandatory package is missing
+    # Check if forbidden package is installed
     if forbidden == True and rule["name"] in self.installed_packages:
       logging.info("Forbidden package is installed : " + rule["name"])
       self.is_check_successfull = False
@@ -323,17 +323,132 @@ class CheckRootFS(CliCommand):
     """
 # TODO controler le sha dans les tests unitaires
 
-    # Iterate the list of rules to check against installed packages
+    # Iterate the list of rules to check against installed files
     # Files will be checked on an individual basis, which is different of
     # packages. Package list can be retrieved with a single call to dpkg.
     # Retrieving the complete file list would cost too much
-    for rule in self.project.check_definition["packages"]["mandatory"]:
+    for rule in self.project.check_definition["files"]["mandatory"]:
       self.check_file_rules(rule, mandatory=True)
 
-    for rule in self.project.check_definition["packages"]["forbidden"]:
+    for rule in self.project.check_definition["files"]["forbidden"]:
       self.check_file_rules(rule, forbidden=True)
 
-    for rule in self.project.check_definition["packages"]["allowed"]:
+    for rule in self.project.check_definition["files"]["allowed"]:
       self.check_file_rules(rule, allowed=True)
 
     logging.info("starting to check installed packages")
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # check_file_rules
+  #
+  # -------------------------------------------------------------------------
+  def check_file_rules(self, rule, mandatory = None, forbidden = None, allowed = None):
+    """This method is in charge of contolling if the rules defined for a
+    given file, directory or symlink are verified or not. It uses the same 
+    constraint definitions and structure as in check_files method.
+    """
+  
+    # First let's control that all keywords (key dictionnaires) are valid and know
+    for keyword in rule:
+      if keyword not in "path" "type" "owner" "group" "mask" "target" "empty" "md5" "sha1" "sha256":
+        logging.error("Unknow keyword " + keyword + " when parsing packages rules. Rule is ignored")
+
+    # Let's check there is a path...
+    if "path" not in rule:
+      logging.error("Undefined path when parsing file rules. Rule is ignored")
+
+    print(rule)
+
+    # Check if mandatory package is missing
+    if mandatory == True:
+# TODO inverser les tests et skip derriere le cas qui marche, par defaut erreur
+        # Check for mandatoy directory
+        if os.path.isdir(rule["path"]) == False and rule["type"] == "directory":
+          logging.info("Missing mandatory directory : " + rule["path"])
+          self.is_check_successfull = False
+          return
+
+        # Check for mandatoy file
+        if os.path.isfile(rule["path"]) == False and rule["type"] == "file":
+          logging.info("Missing mandatory file : " + rule["path"])
+          self.is_check_successfull = False
+          return
+
+        # Check for mandatoy symlink
+        if os.path.issymlink(rule["path"]) == False and rule["type"] == "symlink":
+          logging.info("Missing mandatory symlink : " + rule["path"])
+          self.is_check_successfull = False
+          return
+
+    # Check if forbidden files are installed
+    if forbidden == True:
+        # Check for forbidden directory
+        if os.path.isdir(rule["path"]) == True and rule["type"] == "directory":
+          logging.info("Forbidden directory exists : " + rule["path"])
+          self.is_check_successfull = False
+          return
+
+        # Check for forbidden file
+        if os.path.isfile(rule["path"]) == True and rule["type"] == "file":
+          logging.info("Forbidden file exists : " + rule["path"])
+          self.is_check_successfull = False
+          return
+
+        # Check for forbidden symlink
+        if os.path.issymlink(rule["path"]) == True and rule["type"] == "symlink":
+          logging.info("Forbidden symlink exists : " + rule["path"])
+          self.is_check_successfull = False
+          return
+
+
+    # Check the type of the object (can be file directory or symlink)
+    if "type" in rule:
+      if os.path.isdir(rule["path"]) == False and rule["type"] == "directory":
+        logging.info("Object " + rule["path"] + " is not a directory")
+        self.is_check_successfull = False
+
+      # Check for mandatoy file
+      if os.path.isfile(rule["path"]) == False and rule["type"] == "file":
+        logging.info("Object " + rule["path"] + " is not a file")
+        self.is_check_successfull = False
+
+      # Check for mandatoy symlink
+      if os.path.issymlink(rule["path"]) == False and rule["type"] == "symlink":
+        logging.info("Object " + rule["path"] + " is not a symlink")
+        self.is_check_successfull = False
+
+    # Check the owner of the object
+    if "owner" in rule:
+      pass
+
+    # Check the group of the object
+    if "group" in rule:
+      pass
+
+    # Check the mask of the object
+    if "mask" in rule:
+      pass
+
+    # Check the target of the symlink
+    if "target" in rule:
+      pass
+
+    # Check the group of the object
+    if "empty" in rule:
+      pass
+
+    # Check the md5 hash of the target
+    if "md5" in rule:
+      pass
+
+    # Check the sha1 hash of the target
+    if "sha1" in rule:
+      pass
+
+    # Check the sha256 hash of the target
+    if "sha256" in rule:
+      pass
+    
