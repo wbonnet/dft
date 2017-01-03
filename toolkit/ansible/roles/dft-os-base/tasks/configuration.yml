@@ -28,4 +28,4 @@
 
 ---
 - name : DFT - Setup hostname
-  hostname: name={{ dft-hostname }} 
+  hostname: name={{ dft_hostname }} 
