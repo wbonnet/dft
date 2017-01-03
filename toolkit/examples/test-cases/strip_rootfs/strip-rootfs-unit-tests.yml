@@ -33,6 +33,7 @@ packages:
 # The following files, directories and symlinks will be removed from rootfs
 #
 files:
+  status: "absent"
     # Remove a directory
   - /usr/share/man
     # Remove a file
@@ -46,6 +47,7 @@ files:
     # This test will fail since it removes a non existing symlink
   - /etc/os-release2
 
+# TODO : empty directory content
 # TODO : regexp for files symlink and dirs
 # TODO : should i check for multiple definitions ?
 # TODO : ??? remove symlink target ?
