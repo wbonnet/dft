@@ -27,6 +27,7 @@ roles:
   - dft-network-base
   - dft-security-base
   - dft-os-apt
+  - dft-debian-package-building
 
 # Definition of the list of target versions. Firmware will be generated for 
 # each of the versions in this list
