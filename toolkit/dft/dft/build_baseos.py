@@ -438,10 +438,10 @@ class BuildBaseOS(CliCommand):
         # /etc/apt/sources.list and installation will faill
         if distro_has_been_found == False:
             self.cleanup_installation_files()
-            logging.error("No distribution matching " + self.project.target_version + "has been found.")
+            logging.error("No distribution matching " + self.project.target_version + " has been found.")
             logging.error("Please check repositories definition for this project." )
             logging.error("File in use is : " + self.project.genereate_definition_file_path(self.project.project_definition["project-definition"]["repositories"][0]) )
-            logging.critical("Cannot generate /etc/apt/sources.list under ootfs path. Operation is aborted !" )
+            logging.critical("Cannot generate /etc/apt/sources.list under rootfs path. Operation is aborted !" )
             exit(1)
  
 # TODO : generate deb-src ? not really sure... optionnal ?                   
