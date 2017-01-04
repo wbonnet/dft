@@ -26,3 +26,10 @@ dft_hostname: "dft-default"
 
 # Default locales
 #dft-locales-to-configure: 
+
+
+# Defines optionaly a password for root account (if this variable is defined)
+# dft_root_password: "{{ 'root' | password_hash('sha512') }}"
+
+#dft_users:
+#  - { name: "dft" , password: "dft" , createhome: True , groups: 'sudo' , group: 'zlika' , shell: '/bin/bash'}

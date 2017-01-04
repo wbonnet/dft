@@ -21,15 +21,24 @@
 #
 #
 
-# List of the Ansible role to apply to the baseos
-roles:
-  - dft-os-base
-  - dft-network-base
-  - dft-security-base
-  - dft-os-apt
-  - dft-debian-package-building
+#
+# Include the list of specific tasks. Tasks are separated into different
+# files, one file per functionnality.
+#
 
-# Definition of the list of target versions. Firmware will be generated for 
-# each of the versions in this list
-target-versions:
-  - stretch
+---
+- name : DFT - Update root password when the defined password
+  user: name=root
+        password="{{ dft_root_password }}"
+        update_password=always
+  when: dft_root_password is defined
+
+- name : DFT - Update root password with random value when no password is defined
+  shell: /usr/sbin/usermod root -p $(/usr/bin/openssl rand -base64 256)
+  when: dft_root_password is not defined
+
+- name: DFT - Create local users
+  user: name=root
+        password="{{ dft_root_password }}"
+        update_password=always
+  when: dft_users is defined

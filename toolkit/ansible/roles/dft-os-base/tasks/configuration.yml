@@ -26,6 +26,3 @@
 # files, one file per functionnality.
 #
 
----
-- name : DFT - Setup hostname
-  hostname: name={{ dft_hostname }} 
