@@ -53,7 +53,7 @@ configuration:
   # Defines the path to project configuration files. By default (undefined  
   # value) configuration files are searched in the same directory as the 
   # current project.yml file
-  project_path: "~/Devel/dft/toolkit/examples/starter-projects/netshell"
+  # project_path: "~/Devel/dft/toolkit/examples/starter-projects/package-builder"
 
   # Path to the dft installation directory
   dft_base: "~/Devel/dft/toolkit/ansible"
