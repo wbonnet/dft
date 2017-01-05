@@ -28,12 +28,23 @@
 distributions:
     # Debian 8.0 Jessie
     - name: 'jessie'
+      # The architectures contains the list of available architectures
       architectures: [ 'amd64' ]
+      # The repositories hash contains the list of the sources to be used
       repositories:
+        # The url key control the base url of the repository 
         - url: 'http://ftp.fr.debian.org/debian/'
+          # The suite key control the version of the distribution to be used
           suite: 'jessie'
+          # The list sections control the generation of sections on the deb
+          # and deb-src in the sources.list configuration file
           sections : [ 'main' , 'contrib' , 'non-free' ]
+          # The key generate-src control the generation of deb-src lines in
+          # the sources.list configuration file. Default value is False
           generate-src: True
+          # The key generate-deb control the generation of deb lines in
+          # the sources.list configuration file. Default value is True
+          generate-deb: True
         - url: 'http://ftp.fr.debian.org/debian-security/'
           suite: 'jessie/updates'
           sections: [ 'main', 'contrib', 'non-free' ]
