@@ -199,6 +199,21 @@ class BuildBaseOS(CliCommand):
             f.write("# Defines the role associated to the rootfs being generated\n")
             f.write("---\n")
             f.write("- hosts: local\n")
+            f.write("\n")
+
+            # Test if some variable files have to be included
+            if "variables" in self.project.project_definition["configuration"]:
+                # Yes, then output the vars_files marker
+                f.write("  vars_files:\n")
+
+                # And iterate the list of files containing variables
+                for vars_file in self.project.project_definition["configuration"]["variables"]:
+                    logging.debug("Adding variables file " + vars_file)
+                    f.write("  - " + vars_file + "\n")
+                
+                # Just some spacing for pretty printing                   
+                f.write("\n")
+
             f.write("  roles:\n")
 
             # Iterate the list of distributions loaded from the file
@@ -207,6 +222,8 @@ class BuildBaseOS(CliCommand):
                 role_has_been_found = True
                 logging.debug("Adding role " + role)               
                 f.write("  - " + role + "\n")
+
+        # We are done with file generation, close it now
         f.close()
 
         # Generate the file path
