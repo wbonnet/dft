@@ -258,6 +258,13 @@ class ProjectDefinition :
         with open(filename, 'r') as f:
           self.content_information_definition = yaml.load(f)   
 
+      # Load the list of variables files
+      if "variables" in self.project_definition["project-definition"]:
+        filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["variables"][0])
+        with open(filename, 'r') as f:
+          self.variables_definition = yaml.load(f)   
+     
+
       #
       # Once configuration have been loaded, compute the values of some
       # configuration variables
