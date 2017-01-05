@@ -34,7 +34,7 @@
   when: dft_root_password is defined
 
 - name : DFT - Update root password with random value when no password is defined
-  shell: /usr/sbin/usermod root -p $(/usr/bin/openssl rand -base64 256)
+  shell: /usr/sbin/usermod root -p $(/usr/bin/openssl rand -base64 32)
   when: dft_root_password is not defined
 
 - name: DFT - Create local users
