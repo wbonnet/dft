@@ -38,7 +38,12 @@
   when: dft_root_password is not defined
 
 - name: DFT - Create local users
-  user: name=root
-        password="{{ dft_root_password }}"
+  user: name="{{ item.name }}"
+        password="{{ item.password }}"
+        createhome={{ item.createhome }}
+        group="{{ item.group }}"
+        groups="{{ item.groups }}"
+        shell="{{ item.shell }}"
         update_password=always
+  with_items: "{{ dft_users }}"
   when: dft_users is defined

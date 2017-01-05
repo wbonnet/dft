@@ -31,5 +31,7 @@ dft_hostname: "dft-default"
 # Defines optionaly a password for root account (if this variable is defined)
 # dft_root_password: "{{ 'root' | password_hash('sha512') }}"
 
-#dft_users:
-#  - { name: "dft" , password: "dft" , createhome: True , groups: 'sudo' , group: 'zlika' , shell: '/bin/bash'}
+# Defines the list of users to create. By default, create a user named dft
+# and put it into sudo group
+dft_users:
+  - { name: "dft" , password: "dft" , createhome: True , groups: 'sudo' , group: 'sudo' , shell: '/bin/bash'}
