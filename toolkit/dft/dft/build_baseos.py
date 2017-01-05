@@ -428,11 +428,26 @@ class BuildBaseOS(CliCommand):
                     # Then iterate all the sources for this distro version
                     for repo in distro["repositories"]:
                         logging.debug(repo)
-                        # Generate the line in the sources.list file
-                        f.write("deb " + repo["url"] +" " + repo["suite"] + " ")                    
-                        for section in repo["sections"]:
-                            f.write(section + " ")                    
-                        f.write("\n")           
+
+                        # Test if deb line has to be generated
+                        if ("generate-deb" not in repo) or ("generate-deb" in repo and repo["generate-deb"] == True):
+                            # Will generate the deb line only if the key
+                            # generate-deb is present and set to True or the key
+                            # is not present
+                            f.write("deb " + repo["url"] +" " + repo["suite"] + " ")                    
+                            for section in repo["sections"]:
+                                f.write(section + " ")                    
+                            f.write("\n")           
+
+                        # Test if deb-src line has also to be generated
+                        if "generate-src" in repo:
+                            # Will generate the deb-src line only if the key
+                            # generate-src is present and set to True 
+                            if repo["generate-src"] == True:
+                                f.write("deb-src " + repo["url"] +" " + repo["suite"] + " ")                    
+                                for section in repo["sections"]:
+                                    f.write(section + " ")                    
+                                f.write("\n")           
 
         # Warn the user if no matching distro is found. There will be an empty
         # /etc/apt/sources.list and installation will faill
@@ -444,7 +459,7 @@ class BuildBaseOS(CliCommand):
             logging.critical("Cannot generate /etc/apt/sources.list under rootfs path. Operation is aborted !" )
             exit(1)
  
-# TODO : generate deb-src ? not really sure... optionnal ?                   
+        # Its done, now close the temporary file                  
         f.close()
 
         # Finally move the temporary file under the rootfs tree

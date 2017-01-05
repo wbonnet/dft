@@ -33,12 +33,15 @@ distributions:
         - url: 'http://ftp.fr.debian.org/debian/'
           suite: 'jessie'
           sections : [ 'main' , 'contrib' , 'non-free' ]
+          generate-src: True
         - url: 'http://ftp.fr.debian.org/debian-security/'
           suite: 'jessie/updates'
           sections: [ 'main', 'contrib', 'non-free' ]
+          generate-src: True
         - url: 'http://ftp.fr.debian.org/debian/'
           suite: 'jessie-updates'
           sections: [ 'main', 'contrib', 'non-free' ]
+          generate-src: True
 
     # Debian 9.0 Stretch
     - name: 'stretch'
@@ -47,9 +50,12 @@ distributions:
         - url: 'http://ftp.fr.debian.org/debian/'
           suite: 'stretch'
           sections : [ 'main' , 'contrib' , 'non-free' ]
+          generate-src: True
         - url: 'http://ftp.fr.debian.org/debian-security/'
           suite: 'stretch/updates'
           sections: [ 'main', 'contrib', 'non-free' ]
+          generate-src: True
         - url: 'http://ftp.fr.debian.org/debian/'
           suite: 'stretch-updates'
           sections: [ 'main', 'contrib', 'non-free' ]
+          generate-src: True
