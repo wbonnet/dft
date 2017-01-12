@@ -39,7 +39,7 @@
 
 - name: DFT - Create local users
   user: name="{{ item.name }}"
-        password="{{ item.password }}"
+        password="{{ item.password | password_hash('sha512') }}"
         createhome={{ item.createhome }}
         group="{{ item.group }}"
         groups="{{ item.groups }}"
