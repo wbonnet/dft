@@ -65,7 +65,7 @@ class ContentInformationOutputWriter(CliCommand):
     if self.configuration["configuration"]["output"]["format"] == "csv":
       logging.debug("Content information is output to CSV format")
     elif self.configuration["configuration"]["output"]["format"] == "yaml":
-      logging.debug("Content information is output to YAM format")
+      logging.debug("Content information is output to YAML format")
     elif self.configuration["configuration"]["output"]["format"] == "json":
       logging.debug("Content information is output to JSON format")
       logging.error("Format is not yet available")
