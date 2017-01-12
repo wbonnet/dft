@@ -27,8 +27,34 @@
 #
 
 ---
-- include: chromium.yml
-  when: (dft_browser == "chromium")
+#
+# Install firefox browser 
+#
+- name : DFT - Install firefox
+  apt: name={{ item }} 
+       state=installed 
+       update_cache=true
+       install_recommends=no
+  with_items:
+    - firefox
 
-- include: firefox.yml
-  when: (dft_browser == "firefox")
+#
+# Create the directory needed to store the firefox desktop entry
+#
+- name : DFT - Create desktop autostart directory
+  file: path=/home/{{ dft_username }}/.config/autostart
+        state=directory 
+        mode=0775 
+        recurse=yes
+        owner={{ dft_username }}
+        group={{ dft_username }}
+
+#
+# Create the chromium desktop entry used to start firefox when session opens
+#
+- name : DFT - Install firefox autostart
+  template: src=templates/firefox.desktop.j2
+          dest=/home/{{ dft_username }}/.config/autostart/firefox.desktop
+          owner={{ dft_username }}
+          group={{ dft_username }}
+          mode="u=rw,g=r,o=r"          
