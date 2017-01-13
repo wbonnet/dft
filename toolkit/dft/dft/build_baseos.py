@@ -202,15 +202,30 @@ class BuildBaseOS(CliCommand):
             f.write("\n")
 
             # Test if some variable files have to be included
-            if "variables" in self.project.project_definition["configuration"]:
+            if "variables" in self.project_definition["project-definition"]:
                 # Yes, then output the vars_files marker
                 f.write("  vars_files:\n")
 
                 # And iterate the list of files containing variables
-                for vars_file in self.project.project_definition["configuration"]["variables"]:
-                    logging.debug("Adding variables file " + vars_file)
+                for vars_file in self.project_definition["project-definition"]["variables"]:
+                    # Append the file to the site.yml file
                     f.write("  - " + vars_file + "\n")
-                
+                    logging.debug("Adding variables file " + vars_file)
+
+                    # Completethe path to have a full path on disk (in case of path local
+                    # to where is located the project file)
+                    vars_file = self.project.genereate_definition_file_path(vars_file)
+
+                    # Copy the variabes fies to the bootstrap directory                   
+                    logging.debug("Copy the additional file : preparing to copy " + vars_file)
+                    target_to_copy_path = os.path.join(additional_path, target_to_copy)
+                    if os.path.isfile(vars_file):
+                        logging.debug("copying file " + vars_file + " => " + dft_target_path)
+                        distutils.file_util.copy_file(vars_file, dft_target_path)
+                    else:
+                        logging.error("Variable files " + vars_file + " is not a file")
+                        logging.error("Skipping this file")
+
                 # Just some spacing for pretty printing                   
                 f.write("\n")
 
