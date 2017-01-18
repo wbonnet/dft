@@ -119,6 +119,10 @@ project-definition:
   content-information:
     - content.yml
 
+  # Definition of the variables to be passed to baseos creation
+  variables:
+    - variables.yml
+
   # Definition of the list of target architectures. Firmware will be generated for 
   # each of the architecture in this list
   architectures:

@@ -1,0 +1,4 @@
+dft_hostname: "netshell"
+dft_users:
+  - { name: "dft" , password: "dft" , createhome: True , groups: 'sudo' , group: 'sudo' , shell: '/bin/bash'}
+
