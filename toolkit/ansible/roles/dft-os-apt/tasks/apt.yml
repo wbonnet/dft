@@ -34,3 +34,13 @@
        install_recommends=no
   with_items:
     - aptitude
+
+- name : DFT - Deactivate repository expiration check
+  file: src=files/10no-check-valid-until
+        dest=/etc/apt/apt.conf.d/10no-check-valid-until
+        state=file
+        mode=0644 
+        owner=root
+        group=root
+  when: ( dft_apt_no_check_valid_until == True)
+
