@@ -136,6 +136,7 @@ class BuildFirmware(CliCommand):
 
         self.execute_command(sudo_command)
 
+# TODO : add control hash and signature according to configuration file options
 
 # TODO
 # What is needed in the configuration file
