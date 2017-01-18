@@ -42,5 +42,5 @@
         mode=0644 
         owner=root
         group=root
-  when: ( dft_apt_no_check_valid_until == True)
+  when: ( dft_apt_no_check_valid_until is defined and dft_apt_no_check_valid_until == True)
 
