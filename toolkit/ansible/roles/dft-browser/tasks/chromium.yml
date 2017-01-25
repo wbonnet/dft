@@ -49,8 +49,8 @@
         mode=0775 
         recurse=yes
         owner={{ dft_username }}
-        group={{ dft_username }}
-  when: (ansible_architecture == "i386" or ansible_architecture == "x86_64")
+        group={{ dft_usergroup }}
+  when: (ansible_architecture == "i386" or ansible_architecture == "x86_64") and (dft_browser_autologin is defined and dft_browser_autologin == True)
 
 #
 # Create the chromium desktop entry used to start chromium when session opens
@@ -59,6 +59,6 @@
   template: src=templates/chromium.desktop.j2
           dest=/home/{{ dft_username }}/.config/autostart/chromium.desktop
           owner={{ dft_username }}
-          group={{ dft_username }}
+          group={{ dft_usergroup }}
           mode="u=rw,g=r,o=r"          
-  when: (ansible_architecture == "i386" or ansible_architecture == "x86_64")
+  when: (ansible_architecture == "i386" or ansible_architecture == "x86_64") and (dft_browser_autologin is defined and dft_browser_autologin == True)

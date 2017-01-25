@@ -30,4 +30,5 @@
 - include: packages.yml
 - include: hostname.yml
 - include: locales.yml
+- include: groups.yml
 - include: users.yml
