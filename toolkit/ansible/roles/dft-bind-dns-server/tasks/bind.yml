@@ -37,14 +37,38 @@
 
 - name : DFT - Setup bind9 zones
   template: src=templates/zone.j2 
-            dest=/etc/bind/db.dft.org
+            dest=/etc/bind/db.{{ dft_dns_server["zone"]["filename"] }}
             owner=root 
             group=root 
-            mode="u=rw,g=r,o=r"          
+            mode="u=rw,g=r,o=r"
 
 - name : DFT - Setup bind9 reverse zones
   template: src=templates/reverse.j2 
-            dest=/etc/bind/reverse.dft.org
+            dest=/etc/bind/reverse.{{ dft_dns_server["zone"]["filename"] }}
             owner=root 
             group=root 
-            mode="u=rw,g=r,o=r"          
+            mode="u=rw,g=r,o=r"
+
+- name : DFT - Setup bind9 logging configuration
+  copy: src=files/named.conf.log
+        dest=/etc/bind/named.conf.log
+        owner=root 
+        group=root 
+        mode="u=rw,g=r,o=r"
+
+- name : DFT - Create bind9 logging directory
+  file: dest=/var/log/bind
+        state=directory
+        owner=bind
+        group=bind 
+        mode="u=rwx,g=rx,o=rx"
+
+- name: DFT - Add log configuration to named.conf
+  lineinfile: dest=/etc/bind/named.conf
+              state=present
+              line='include "/etc/bind/named.conf.log";'
+
+# TODO: Deplay zones in named.conf.local
+# TODO: Add template for file named.conf.options
+# TODO: Reload service
+# TODO: add tags

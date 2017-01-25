@@ -22,10 +22,13 @@
 #
 
 dft_dns_server:
-  zone: 
+  zone:
+    filename: "dft.org"
     primary_server_name: "dft.org."
     hostmaster_email: "dft.org."
-    serial: "1"
+    # Serial is optional, if not defined, the serial will be generated and set
+    # by default to epoch
+    # serial: "1"
     refresh: "86400"
     retry: "900"
     expire: "2419200"
