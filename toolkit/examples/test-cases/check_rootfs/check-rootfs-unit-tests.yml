@@ -140,6 +140,14 @@ packages:
         - "2:8.0.0022-1"
       # Test is supposed to succeed
       expected-result: True
+    # This package is allowed and has constraints on given versions, it
+    # should not succeed since none of the version are valid.
+    - name: "vim-common"
+      allowed-version: 
+        - "2:7.0"
+        - "2:7.1"
+      # Test is supposed to succeed
+      expected-result: False
     # This package is allowed and has constraints on given blacklisted
     # versions, it should succeed.
     - name: "vim-common"

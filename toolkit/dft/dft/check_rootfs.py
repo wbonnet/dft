@@ -207,6 +207,8 @@ class CheckRootFS(CliCommand):
     #
     print (self.project.check_definition["packages"]["allowed"])
     for rule in self.project.check_definition["packages"]["allowed"]:
+      print("BEGIN -------------------------------------------------------------")
+      print(rule)
       # Call the check package method
       self.check_package_rules(rule, allowed=True)
 
@@ -221,6 +223,9 @@ class CheckRootFS(CliCommand):
       if "expected-result" in rule:
         if rule["expected-result"] != self.is_package_check_successfull:
           logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_package_check_successfull))
+          print(rule)
+      print("end -------------------------------------------------------------")
+      print("")
 
 # TODO traiter les paquet en rc ?
 
@@ -286,11 +291,10 @@ class CheckRootFS(CliCommand):
     if "max-version" in rule:
       return_code = 0
       if rule["name"] in self.installed_packages: 
-        # Generate the dpkg command to compare the versions
+          # Generate the dpkg command to compare the versions
         dpkg_command  = "dpkg --compare-versions " + rule["max-version"]
         dpkg_command  += " gt " + self.installed_packages[rule["name"]]["version"]
-        print(dpkg_command)
-
+    
         # We have to protect the subprocess in a try except block since dpkg
         # will return 1 if the check is invalid
         try: 
@@ -300,7 +304,6 @@ class CheckRootFS(CliCommand):
 
         # Catch the execution exception and set return_code to something else than zero
         except subprocess.CalledProcessError as e:
-          print(e)
           return_code = 1
 
         # If the result is not ok, then output an info an go on checking next keyword
@@ -322,7 +325,7 @@ class CheckRootFS(CliCommand):
     # Check that version is not in the list of blacklisted versions
     if "blacklisted-version" in rule:
       if rule["name"] in self.installed_packages: 
-        if self.installed_packages[rule["name"]]["version"] in rule["blacklisted-arch"]: 
+        if self.installed_packages[rule["name"]]["version"] in rule["blacklisted-version"]: 
           logging.error("Version " + self.installed_packages[rule["name"]]["version"] + " of package " + rule["name"] + " is blacklisted")
           self.is_package_check_successfull = False
         else:
