@@ -52,10 +52,17 @@ class CheckRootFS(CliCommand):
     # Initialize a dictionnary to hold the list of installed packages
     self.installed_packages = { }
 
-    # By default thecheckis successfull since not rules were checked
+    # By default the check is successfull since not rules were checked
     # This boolean will be set to False (meaning check failed) as soon as a
-    # rule verificationwill fail
-    self.is_check_successfull = False
+    # rule verification will fail
+    self.is_check_successfull = True
+    
+    # This two variables are used to store the result of a single rule check
+    # The variables value are reset for each loop, while the scope of the 
+    # previous one is the whole execution
+    self.is_package_check_successfull = True
+    self.is_file_check_successfull = True
+
 
 
   # -------------------------------------------------------------------------
@@ -125,7 +132,7 @@ class CheckRootFS(CliCommand):
     Version of packages can also be controlled. Available checks are :
     . min-version          => LOWER versions CAN'T be installed
     . max-version          => MORE RECENT versions CAN'T be installed
-    . allowed-version      => If installed, version MUST be onne of the given
+    . allowed-version      => If installed, version MUST be one of the given
                               version in the list
     . blacklisted-version  => NONE of the given version CAN be installed
                               it is a list
@@ -154,15 +161,63 @@ class CheckRootFS(CliCommand):
       # Build a dictionnary, using package name as main key
       self.installed_packages[pkg_name] = { 'status': pkg_status , 'version': pkg_version , 'arch': pkg_arch }
 
+    #
     # Now iterate the list of rules to check against installed packages
+    # Process the "allowed" rules group
+    #
     for rule in self.project.check_definition["packages"]["mandatory"]:
+      # Reset the package result. This is used mostly for unit testting and 
+      # to track if the result was the expected one
+      self.is_package_check_successfull = True
+      # Call the check package method
       self.check_package_rules(rule, mandatory=True)
+      # If the test was negative, then change the global result to false
+      if self.is_package_check_successfull == False:
+        self.is_check_successfull = False
+      # If the expected result variable has been defined, the compare it value
+      # to the actual method result, and output a critical if different
+      # expected-result value is used in unit testing context, and it should 
+      # never be different unless something nasty is lurking inthe dark
+      if "expected-result" in rule:
+        if rule["expected-result"] != self.is_package_check_successfull:
+          logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_package_check_successfull))
+          print(rule)
 
+    #
+    # Process the "forbidden" rules group
+    #
     for rule in self.project.check_definition["packages"]["forbidden"]:
+      # Reset the package result. This is used mostly for unit testting and 
+      # to track if the result was the expected one
+      self.is_package_check_successfull = True
+      # Call the check package method
       self.check_package_rules(rule, forbidden=True)
+      # If the expected result variable has been defined, the compare it value
+      # to the actual method result, and output a critical if different
+      # expected-result value is used in unit testing context, and it should 
+      # never be different unless something nasty is lurking inthe dark
+      if "expected-result" in rule:
+        if rule["expected-result"] != self.is_package_check_successfull:
+          logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_package_check_successfull))
+          print(rule)
 
+    #
+    # Process the "allowed" rules group
+    #
     for rule in self.project.check_definition["packages"]["allowed"]:
+      # Reset the package result. This is used mostly for unit testting and 
+      # to track if the result was the expected one
+      self.is_package_check_successfull = True
+      # Call the check package method
       self.check_package_rules(rule, allowed=True)
+      # If the expected result variable has been defined, the compare it value
+      # to the actual method result, and output a critical if different
+      # expected-result value is used in unit testing context, and it should 
+      # never be different unless something nasty is lurking inthe dark
+      if "expected-result" in rule:
+        if rule["expected-result"] != self.is_package_check_successfull:
+          logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_package_check_successfull))
+          print(rule)
 
 # TODO traiter les paquet en rc ?
 
@@ -179,19 +234,19 @@ class CheckRootFS(CliCommand):
   
     # First let's control that all keywords (key dictionnaires) are valid and know
     for keyword in rule:
-      if keyword not in "name" "min-version" "max-version" "allowed-version" "blacklisted-version" "allowed-arch" "blacklisted-arch":
+      if keyword not in "name" "min-version" "max-version" "allowed-version" "blacklisted-version" "allowed-arch" "blacklisted-arch" "expected-result":
         logging.error("Unknow keyword " + keyword + " when parsing packages rules. Rule is ignored")
 
     # Check if mandatory package is missing
     if mandatory == True and rule["name"] not in self.installed_packages:
-      logging.info("Missing mandatory package : " + rule["name"])
-      self.is_check_successfull = False
+      logging.error("Missing mandatory package : " + rule["name"])
+      self.is_package_check_successfull = False
       return
 
     # Check if forbidden package is installed
     if forbidden == True and rule["name"] in self.installed_packages:
-      logging.info("Forbidden package is installed : " + rule["name"])
-      self.is_check_successfull = False
+      logging.error("Forbidden package is installed : " + rule["name"])
+      self.is_package_check_successfull = False
       return
 
     # Check version if higher or equal than min version
@@ -215,8 +270,8 @@ class CheckRootFS(CliCommand):
 
         # If the result is not ok, then output an info an go on checking next keyword
         if return_code > 0:
-          logging.info("Version " + self.installed_packages[rule["name"]]["version"] + " of package is older than minimum allowed version " + rule["min-version"])
-          self.is_check_successfull = False
+          logging.error("Version " + self.installed_packages[rule["name"]]["version"] + " of package is older than minimum allowed version " + rule["min-version"])
+          self.is_package_check_successfull = False
         else:
           logging.debug("Version " + self.installed_packages[rule["name"]]["version"] + " of package is newer than minimum allowed version " + rule["min-version"])
 
@@ -241,8 +296,8 @@ class CheckRootFS(CliCommand):
 
         # If the result is not ok, then output an info an go on checking next keyword
         if return_code > 0:
-          logging.info("Version " + self.installed_packages[rule["name"]]["version"] + " of package is newer than minimum allowed version " + rule["max-version"])
-          self.is_check_successfull = False
+          logging.error("Version " + self.installed_packages[rule["name"]]["version"] + " of package is newer than minimum allowed version " + rule["max-version"])
+          self.is_package_check_successfull = False
         else:
           logging.debug("Version " + self.installed_packages[rule["name"]]["version"] + " of package is older than minimum allowed version " + rule["max-version"])
 
@@ -250,8 +305,8 @@ class CheckRootFS(CliCommand):
     if "allowed-version" in rule:
       if rule["name"] in self.installed_packages: 
         if self.installed_packages[rule["name"]]["version"] not in rule["allowed-version"]: 
-          logging.info("Version " + self.installed_packages[rule["name"]]["version"] + " of package " + rule["name"] + " is not allowed")
-          self.is_check_successfull = False
+          logging.error("Version " + self.installed_packages[rule["name"]]["version"] + " of package " + rule["name"] + " is not allowed")
+          self.is_package_check_successfull = False
         else:
           logging.debug("Version " + self.installed_packages[rule["name"]]["version"] + " of package " + rule["name"] + " is allowed")
 
@@ -259,8 +314,8 @@ class CheckRootFS(CliCommand):
     if "blacklisted-version" in rule:
       if rule["name"] in self.installed_packages: 
         if self.installed_packages[rule["name"]]["version"] in rule["blacklisted-arch"]: 
-          logging.info("Version " + self.installed_packages[rule["name"]]["version"] + " of package " + rule["name"] + " is blacklisted")
-          self.is_check_successfull = False
+          logging.error("Version " + self.installed_packages[rule["name"]]["version"] + " of package " + rule["name"] + " is blacklisted")
+          self.is_package_check_successfull = False
         else:
           logging.debug("Version " + self.installed_packages[rule["name"]]["version"] + " of package " + rule["name"] + " is allowed")
 
@@ -268,8 +323,8 @@ class CheckRootFS(CliCommand):
     if "blacklisted-arch" in rule:
       if rule["name"] in self.installed_packages: 
         if self.installed_packages[rule["name"]]["arch"] in rule["blacklisted-arch"]: 
-          logging.info("Package " + rule["name"] + " is blacklisted on architecture " + self.installed_packages[rule["name"]]["arch"])
-          self.is_check_successfull = False
+          logging.error("Package " + rule["name"] + " is blacklisted on architecture " + self.installed_packages[rule["name"]]["arch"])
+          self.is_package_check_successfull = False
         else:
           logging.debug("Package " + rule["name"] + " is not blacklisted on architecture " + self.installed_packages[rule["name"]]["arch"])
 
@@ -277,8 +332,8 @@ class CheckRootFS(CliCommand):
     if "allowed-arch" in rule:
       if rule["name"] in self.installed_packages: 
         if self.installed_packages[rule["name"]]["arch"] not in rule["allowed-arch"]: 
-          logging.info("Package " + rule["name"] + " is not allowed for architecture " + self.installed_packages[rule["name"]]["arch"])
-          self.is_check_successfull = False
+          logging.error("Package " + rule["name"] + " is not allowed for architecture " + self.installed_packages[rule["name"]]["arch"])
+          self.is_package_check_successfull = False
         else:
           logging.debug("Package " + rule["name"] + " is allowed for architecture " + self.installed_packages[rule["name"]]["arch"])
 
@@ -368,19 +423,19 @@ class CheckRootFS(CliCommand):
         # Check for mandatoy directory
         if os.path.isdir(rule["path"]) == False and rule["type"] == "directory":
           logging.info("Missing mandatory directory : " + rule["path"])
-          self.is_check_successfull = False
+          self.is_file_check_successfull = False
           return
 
         # Check for mandatoy file
         if os.path.isfile(rule["path"]) == False and rule["type"] == "file":
           logging.info("Missing mandatory file : " + rule["path"])
-          self.is_check_successfull = False
+          self.is_file_check_successfull = False
           return
 
         # Check for mandatoy symlink
         if os.path.issymlink(rule["path"]) == False and rule["type"] == "symlink":
           logging.info("Missing mandatory symlink : " + rule["path"])
-          self.is_check_successfull = False
+          self.is_file_check_successfull = False
           return
 
     # Check if forbidden files are installed
@@ -388,19 +443,19 @@ class CheckRootFS(CliCommand):
         # Check for forbidden directory
         if os.path.isdir(rule["path"]) == True and rule["type"] == "directory":
           logging.info("Forbidden directory exists : " + rule["path"])
-          self.is_check_successfull = False
+          self.is_file_check_successfull = False
           return
 
         # Check for forbidden file
         if os.path.isfile(rule["path"]) == True and rule["type"] == "file":
           logging.info("Forbidden file exists : " + rule["path"])
-          self.is_check_successfull = False
+          self.is_file_check_successfull = False
           return
 
         # Check for forbidden symlink
         if os.path.issymlink(rule["path"]) == True and rule["type"] == "symlink":
           logging.info("Forbidden symlink exists : " + rule["path"])
-          self.is_check_successfull = False
+          self.is_file_check_successfull = False
           return
 
 
@@ -408,17 +463,17 @@ class CheckRootFS(CliCommand):
     if "type" in rule:
       if os.path.isdir(rule["path"]) == False and rule["type"] == "directory":
         logging.info("Object " + rule["path"] + " is not a directory")
-        self.is_check_successfull = False
+        self.is_file_check_successfull = False
 
       # Check for mandatoy file
       if os.path.isfile(rule["path"]) == False and rule["type"] == "file":
         logging.info("Object " + rule["path"] + " is not a file")
-        self.is_check_successfull = False
+        self.is_file_check_successfull = False
 
       # Check for mandatoy symlink
       if os.path.issymlink(rule["path"]) == False and rule["type"] == "symlink":
         logging.info("Object " + rule["path"] + " is not a symlink")
-        self.is_check_successfull = False
+        self.is_file_check_successfull = False
 
     # Check the owner of the object
     if "owner" in rule:

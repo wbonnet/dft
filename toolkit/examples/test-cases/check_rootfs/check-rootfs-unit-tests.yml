@@ -23,122 +23,221 @@
 
 #
 # The following packages definition are provided as an example of how to use 
-# use packages restriction check, and are also used as one of the dft tool test case
+# use packages restriction check, and are also used as one of the dft tool 
+# test case
 #
 packages:
+  #
+  # Mandatory packages
+  #
   mandatory:
     # This package exist and is installed 
     - name: "base-files"
-      # This package does not exist and should generate an error 
+      # Test is supposed to succeed
+      expected-result: True
+    # This package does not exist and should generate an error 
     - name: "missing-non-existent-package"
-      # This package is both mandatorry and forbidden, it should generate 
-      # a warning during parsing and be ignored
-    - name: "both-mandatory-and-forbidden"
-  forbidden:
-      # This package does not exist, thus it cannot be installed
-    - name: "base-files"
-    - name: "missing-non-existent-package"
-      # This package exist and is installed, thus it will output an error 
-    - name: "base-files"
-    - name: "vim"
-      # The version is uselesss and should generate a warning during parsing
+      # Test is supposed to fail
+      expected-result: False
+    # This package has to be installed with a constraint on minimum version 
+    - name: "vim-tiny"
+      min-version: "2:7.0"
+      # Test is supposed to succeed
+      expected-result: True
+    # This package has to be installed with a constraint on maximum version
+    - name: "vim-tiny"
+      max-version: "2:9.0"
+      # Test is supposed to succeed
+      expected-result: True
+    # This package has to be installed with a constraint on minimum version
+    - name: "vim-tiny"
       max-version: "2:7.0"
-    - name: "vim"
-      # The version is uselesss and should generate a warning during parsing
-      min-version: "2:7.0"
-    - name: "vim-doc"
-      # The version is uselesss and should generate a warning during parsing
-      max-version: "2:9.0"
+      # Test is supposed to fail
+      expected-result: False
+    # This package has to be installed with a constraint on maximum version
+    - name: "vim-tiny"
+      min-version: "2:9.0"
+      # Test is supposed to succeed
+      expected-result: False
+    # This package has to be installed with a given version 
     - name: "vim-common"
-      # The version is uselesss and should generate a warning during parsing
-      allowed-version: "2:8.0.0022-1"
-      # This package is both mandatorry and forbidden, it should generate 
-      # a warning during parsing and be ignored
-    - name: "both-mandatory-and-forbidden"
+      allowed-version: "2:8.0.0134-1"
+      # Test is supposed to succeed
+      expected-result: True
+    # This package has to be installed with a given version 
+    - name: "vim-common"
+      allowed-version: 
+        - "2:8.0.0022-1"
+        - "2:8.0.0134-1"
+      # Test is supposed to succeed
+      expected-result: True
+    # This package has to be installed with a given version
+    - name: "vim-common"
+      allowed-version: "2:9.0"
+      # Test is supposed to fail
+      expected-result: False
+  #
+  # Forbidden packages
+  #
+  forbidden:
+    # This package exist and is installed, thus it will output an error
+    - name: "base-files"
+      # Test is supposed to fail
+      expected-result: False
+    # This package does exist and of course is not installed
+    - name: "non-installed-package"
+      # Test is supposed to succeed
+      expected-result: True
+  #
+  # Allowed packages
+  #
   allowed:
+    # This package is allowed and installed
+    - name: "vim-tiny"
+      # Test is supposed to succeed
+      expected-result: True
+      # This package is allowed and not installed
+      # Test is supposed to succeed
+      expected-result: True
+    # This package is allowed and has a constraint on version
     - name: "vim-common"
       min-version: "2:7.0"
+      # Test is supposed to succeed
+      expected-result: True
+    # This package is allowed and has a constraint on version
     - name: "vim-common"
       max-version: "2:9.0"
+      # Test is supposed to succeed
+      expected-result: True
+    # This package is allowed and has a constraint on version
     - name: "vim-comon"
       max-version: "2:7.0"
+      # Test is supposed to fail
+      expected-result: False
+    # This package is allowed and has a constraint on version
     - name: "vim-common"
       min-version: "2:9.0"
+      # Test is supposed to fail
+      expected-result: False
+    # This package is allowed and has several constraints on version
     - name: "vim-common"
       min-version: "2:7.0"
       max-version: "2:9.0"
-    - name: "vim-common"
-      allowed-version: 
-        - "2:8.0.0022-1"
-    - name: "vim-common"
-      allowed-version: 
-        - "2:8.0.0022-1"
-      max-version: "9"
-    - name: "vim-common"
-      allowed-version: 
-        - "2:8.0.0022-1"
-      min-version: "7"
-      # Max version is smaller than max, it should generate a warning during parsing and be ignored
-    - name: "vim-common"
-      allowed-version: 
-        - "2:8.0.0022-1"
-      max-version: "7"
-      # Min version is greater than fixed, it should generate a warning during parsing and be ignored
-    - name: "vim-common"
-      allowed-version: 
-        - "2:8.0.0022-1"
-      min-version: "9"
-      # Min version is greater than max, it should generate a warning during parsing and be ignored
+      # Test is supposed to succeed
+      expected-result: True
+    # This package is allowed and has several constraints on version
     - name: "vim-common"
       min-version: "9"
       max-version: "7"
+      # Test is supposed to fail
+      expected-result: False
+    # This package is allowed and has constraints on given versions, it
+    # should succeed. But it may fails depending on the Debian version
+    # you use ;) just change versions
+    - name: "vim-common"
+      allowed-version: 
+        - "2:8.0.0134-1"
+        - "2:8.0.0022-1"
+      # Test is supposed to succeed
+      expected-result: True
+    # This package is allowed and has constraints on given blacklisted
+    # versions, it should succeed.
+    - name: "vim-common"
+      blacklisted-version: 
+        - "2:9.0.0134-1"
+        - "2:9.0.0022-1"
+      # Test is supposed to succeed
+      expected-result: True
+    # This package is allowed and has constraints on given blacklisted
+    # versions, it should fail.
+    - name: "vim-common"
+      blacklisted-version: 
+        - "2:9.0.0134-1"
+        - "2:9.0.0022-1"
+      # Test is supposed to fail
+      expected-result: False
+    # This package is allowed and has constraints on blacklisted arch,
+    # it should succeed
+    - name: "vim-common"
+      blacklisted-arch:
+        - "arm64"
+      # Test is supposed to succeed
+      expected-result: True
+    # This package is allowed and has several constraints on blacklisted 
+    # arch, it should succeed
+    - name: "vim-common"
+      blacklisted-arch:
+        - "arm64"
+        - "armhf"
+        - "armel"
+      # Test is supposed to succeed
+      expected-result: True
+    # This package is allowed and has constraints on blacklisted arch,
+    # it should fail
+    - name: "vim-common"
+      blacklisted-arch:
+        - "all"
+      # Test is supposed to fail
+      expected-result: False
+    # This package is allowed and has several constraints on blacklisted
+    # arch, it should fail
     - name: "vim-common"
       blacklisted-arch:
         - "amd64"
         - "all"
         - "arm64"
+      # Test is supposed to fail
+      expected-result: False
+    # This package is allowed on several arch but not amd64 it should fail 
     - name: "base-files"
       allowed-arch:
         - "all"
         - "armhf"
+      # Test is supposed to fail
+      expected-result: False
+    # This package is allowed on amd64 it should succeed
     - name: "base-files"
       allowed-arch:
         - "amd64"
         - "armhf"
-
-# ne pas oublier le blacklisted !  on peut avoir des versions precises interdites
-# fixed peut etre une liste
-# et todo leur mettre des regexp
-
+      # Test is supposed to succeed
+      expected-result: True
+# TODO handle regex on versions
 #
 # The following section defines the list of files and their restriction.
 #
 files:
+  #
+  # MAndatory objects
+  #
   mandatory:
+    #
+    # Files
+    #
+    # Mandatory single file
   - path: "/etc/fstab"
-  - path: "/etc/"
-    type: "directory"
+    # Object with an unknow type
   - path: "/var/"
     type: "unknown"
-  - path: "/etc/network"
-    type: "directory"
-    owner: "root"
-    group: "root"
-    mask: "0644"
-  - path: "/lib"
-    type: "directory"
-    owner: "dft"
-    group: "dft"
-    mask: "0777"
+    # Mandatory non existing file
+  - path: "/missing-non-existent-file"
+    # Mandatory file but it is a directory
+  - path: "/etc/"
+    type: "file"
+    # Mandatory single but it is a symlink
+  - path: "/var/lock"
+    type: "file"
+    # File with valid type owner group and mask
   - path: "/etc/passwd"
     type: "file"
     owner: "root"
     group: "root"
     mask: "0644"
+    # File with no type and with valid type owner group and mask
   - path: "/etc/passwd"
     owner: "root"
     group: "root"
-    mask: "0640"
+    mask: "0644"
     # This definition will produce an error on file attributes
   - path: "/etc/passwd"
     owner: "root"
@@ -151,25 +250,76 @@ files:
     mask: "0640"
     # This definition will produce an error on owner
   - path: "/etc/passwd"
-    owner: "root"
+    owner: "dft"
     group: "root"
     mask: "0640"
     # This definition will produce an error on everything
   - path: "/etc/passwd"
+    owner: "dft"
+    group: "dftt"
+    mask: "0666"
+#TODO check for sticky bits etc/
+    #
+    # Directories
+    #
+    # Mandatory directory
+  - path: "/etc/"
+    type: "directory"
+    # Unreadable missing object
+  - path: "/root/unreadable-and does-not exist"
+    type: "directory"
+    # Unreadable existing object 
+  - path: "/root/.aptitude"
+    type: "directory"
+    # Mandatory non existing directory
+  - path: "/missing-non-existent-directory"
+    type: "directory"
+    # Mandatory directory, but it is a file
+  - path: "/etc/fstab"
+    type: "directory"
+    # Mandatory directory, but it is a symlink
+  - path: "/var/lock"
+    type: "directory"
+    # Directory with valid type owner group and mask
+  - path: "/etc/network"
+    type: "directory"
     owner: "root"
     group: "root"
-    mask: "0640"
-    # This file is forbidden also and wil produce a warning during parsing, then be ignored
-  - path: "/tmp/both-mndatory-and-forbidden"
-    # This test will fail since it does not exist
-  - path: "/etc/do-no-exist4"
+    mask: "0644"
+    # Directory with invalid type owner group and mask
+  - path: "/lib"
+    type: "directory"
+    owner: "dft"
+    group: "dft"
+    mask: "0777"
+    #
+    # Symlinks
+    #
+    # Existing symlink without target nor type
+  - path: "/etc/systemd/system/sshd.service"
+    # Existing symlink without target
+  - path: "/etc/systemd/system/sshd.service"
     type: "symlink"
-    target: "/proc/self/mounts"
-    # this test will succeed since the target does not exist and its forbidden
+    # Existing symlink with existing target
   - path: "/etc/systemd/system/sshd.service"
     type: "symlink"
     target: "/lib/systemd/system/ssh.service"
+    # Existing symlink with missing target
+  - path: "/etc/systemd/system/sshd.service"
+    type: "symlink"
+    target: "/lib/systemd/system/ssh.service.missing"
+    # This test will succeed since the target does not exist and its forbidden
+  - path: "/etc/systemd/system/sshd.service"
+    type: "symlink"
+    target: "/lib/systemd/system/ssh.service"
+  # 
+  # Forbidden objects
+  #
   forbidden:
+    #
+    #
+    #
+    #
   - path: "/etc/hosts.equiv"
     # This file is mandatory also and wil produce a warning during parsing, then be ignored
   - path: "/tmp/both-mndatory-and-forbidden"
