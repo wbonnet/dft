@@ -106,11 +106,11 @@ packages:
       expected-result: True
     # This package is allowed and has a constraint on version
     - name: "vim-common"
-      max-version: "2:9.0"
+      max-version: "2:8.1"
       # Test is supposed to succeed
-      expected-result: True
+      expected-result: True      
     # This package is allowed and has a constraint on version
-    - name: "vim-comon"
+    - name: "vim-common"
       max-version: "2:7.0"
       # Test is supposed to fail
       expected-result: False

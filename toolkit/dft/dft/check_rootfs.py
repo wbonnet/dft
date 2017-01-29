@@ -166,14 +166,13 @@ class CheckRootFS(CliCommand):
     # Process the "allowed" rules group
     #
     for rule in self.project.check_definition["packages"]["mandatory"]:
-      # Reset the package result. This is used mostly for unit testting and 
-      # to track if the result was the expected one
-      self.is_package_check_successfull = True
       # Call the check package method
       self.check_package_rules(rule, mandatory=True)
+
       # If the test was negative, then change the global result to false
       if self.is_package_check_successfull == False:
         self.is_check_successfull = False
+
       # If the expected result variable has been defined, the compare it value
       # to the actual method result, and output a critical if different
       # expected-result value is used in unit testing context, and it should 
@@ -187,11 +186,13 @@ class CheckRootFS(CliCommand):
     # Process the "forbidden" rules group
     #
     for rule in self.project.check_definition["packages"]["forbidden"]:
-      # Reset the package result. This is used mostly for unit testting and 
-      # to track if the result was the expected one
-      self.is_package_check_successfull = True
       # Call the check package method
       self.check_package_rules(rule, forbidden=True)
+
+      # If the test was negative, then change the global result to false
+      if self.is_package_check_successfull == False:
+        self.is_check_successfull = False
+
       # If the expected result variable has been defined, the compare it value
       # to the actual method result, and output a critical if different
       # expected-result value is used in unit testing context, and it should 
@@ -204,12 +205,15 @@ class CheckRootFS(CliCommand):
     #
     # Process the "allowed" rules group
     #
+    print (self.project.check_definition["packages"]["allowed"])
     for rule in self.project.check_definition["packages"]["allowed"]:
-      # Reset the package result. This is used mostly for unit testting and 
-      # to track if the result was the expected one
-      self.is_package_check_successfull = True
       # Call the check package method
       self.check_package_rules(rule, allowed=True)
+
+      # If the test was negative, then change the global result to false
+      if self.is_package_check_successfull == False:
+        self.is_check_successfull = False
+
       # If the expected result variable has been defined, the compare it value
       # to the actual method result, and output a critical if different
       # expected-result value is used in unit testing context, and it should 
@@ -217,7 +221,6 @@ class CheckRootFS(CliCommand):
       if "expected-result" in rule:
         if rule["expected-result"] != self.is_package_check_successfull:
           logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_package_check_successfull))
-          print(rule)
 
 # TODO traiter les paquet en rc ?
 
@@ -232,6 +235,10 @@ class CheckRootFS(CliCommand):
     and structure as in check_packages method.
     """
   
+    # Reset the package result. This is used mostly for unit testting and 
+    # to track if the result was the expected one
+    self.is_package_check_successfull = True
+
     # First let's control that all keywords (key dictionnaires) are valid and know
     for keyword in rule:
       if keyword not in "name" "min-version" "max-version" "allowed-version" "blacklisted-version" "allowed-arch" "blacklisted-arch" "expected-result":
@@ -282,7 +289,8 @@ class CheckRootFS(CliCommand):
         # Generate the dpkg command to compare the versions
         dpkg_command  = "dpkg --compare-versions " + rule["max-version"]
         dpkg_command  += " gt " + self.installed_packages[rule["name"]]["version"]
-        
+        print(dpkg_command)
+
         # We have to protect the subprocess in a try except block since dpkg
         # will return 1 if the check is invalid
         try: 
@@ -292,14 +300,15 @@ class CheckRootFS(CliCommand):
 
         # Catch the execution exception and set return_code to something else than zero
         except subprocess.CalledProcessError as e:
+          print(e)
           return_code = 1
 
         # If the result is not ok, then output an info an go on checking next keyword
         if return_code > 0:
-          logging.error("Version " + self.installed_packages[rule["name"]]["version"] + " of package is newer than minimum allowed version " + rule["max-version"])
+          logging.error("Version " + self.installed_packages[rule["name"]]["version"] + " of package is newer than maximum allowed version " + rule["max-version"])
           self.is_package_check_successfull = False
         else:
-          logging.debug("Version " + self.installed_packages[rule["name"]]["version"] + " of package is older than minimum allowed version " + rule["max-version"])
+          logging.debug("Version " + self.installed_packages[rule["name"]]["version"] + " of package is older than maximum allowed version " + rule["max-version"])
 
     # Check that version is in the list of allowed-version
     if "allowed-version" in rule:
