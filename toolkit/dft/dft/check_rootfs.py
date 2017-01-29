@@ -21,7 +21,7 @@
 #
 #
 
-import logging, os, subprocess, tarfile, shutil, tempfile, distutils
+import logging, os, subprocess, tarfile, shutil, tempfile, distutils, hashlib
 from distutils import dir_util, file_util
 from cli_command import CliCommand
 
@@ -63,7 +63,8 @@ class CheckRootFS(CliCommand):
     self.is_package_check_successfull = True
     self.is_file_check_successfull = True
 
-
+    # Size of block used to read files whencomputing hashes
+    self.block_size = 65536
 
   # -------------------------------------------------------------------------
   #
@@ -374,7 +375,7 @@ class CheckRootFS(CliCommand):
     . type           file, directory or symlink. Default is file
     . owner          since owner and group can be either numric or text,   
     . group          it has to be checked inside the chrooted environment
-    . mask
+    . mode           files attributes and mode (rwx)
     . target         only if type is symlink
     . empty          only for files and directories (zero sized for file, 
                      and no centent at all for directories)
@@ -415,13 +416,33 @@ class CheckRootFS(CliCommand):
   
     # First let's control that all keywords (key dictionnaires) are valid and know
     for keyword in rule:
-      if keyword not in "path" "type" "owner" "group" "mask" "target" "empty" "md5" "sha1" "sha256":
+      if keyword not in "path" "type" "owner" "group" "mode" "target" "empty" "md5" "sha1" "sha256":
         logging.error("Unknow keyword " + keyword + " when parsing packages rules. Rule is ignored")
 
     # Let's check there is a path...
     if "path" not in rule:
       logging.error("Undefined path when parsing file rules. Rule is ignored")
 
+    #
+    # Set some default values if they are missing from the rule
+    #
+
+    # Default type is file
+    if "type" not in rule:
+      rule["type"] = "file"
+
+    # Default type is file
+    if "type" not in rule:
+      rule["type"] = "file"
+
+    # Target path is not an attribute, but a computed variable. It contains
+    # the path to file or directory ultimatly pointed by symlinks. Computing
+    # This variable has to be recursive since a link can point to a link
+    rule["target_path"] = rule["path"]
+    while os.path.islink(rule["target_path"]):
+      rule["target_path"] = os.readlink(rule["target_path"])
+
+# TODO add a target
     print(rule)
 
     # Check if mandatory package is missing
@@ -440,7 +461,7 @@ class CheckRootFS(CliCommand):
           return
 
         # Check for mandatoy symlink
-        if os.path.issymlink(rule["path"]) == False and rule["type"] == "symlink":
+        if os.path.islink(rule["path"]) == False and rule["type"] == "symlink":
           logging.info("Missing mandatory symlink : " + rule["path"])
           self.is_file_check_successfull = False
           return
@@ -460,7 +481,7 @@ class CheckRootFS(CliCommand):
           return
 
         # Check for forbidden symlink
-        if os.path.issymlink(rule["path"]) == True and rule["type"] == "symlink":
+        if os.path.islink(rule["path"]) == True and rule["type"] == "symlink":
           logging.info("Forbidden symlink exists : " + rule["path"])
           self.is_file_check_successfull = False
           return
@@ -478,39 +499,123 @@ class CheckRootFS(CliCommand):
         self.is_file_check_successfull = False
 
       # Check for mandatoy symlink
-      if os.path.issymlink(rule["path"]) == False and rule["type"] == "symlink":
+      if os.path.islink(rule["path"]) == False and rule["type"] == "symlink":
         logging.info("Object " + rule["path"] + " is not a symlink")
         self.is_file_check_successfull = False
 
     # Check the owner of the object
     if "owner" in rule:
-      pass
+      # Retrieve the uid from the stat call
+      uid = os.stat(rule["path"]).st_uid
+
+      # Compare it to the owner from the rule
+      if uid != rule["owner"]:
+          logging.error("File " + rule["path"] + " owner is invalid. UID is " + str(uid) + " instead of " + rule["owner"])
+          self.is_file_check_successfull = False
 
     # Check the group of the object
     if "group" in rule:
-      pass
+      # Retrieve the gid from the stat call
+      gid = os.stat(rule["path"]).st_gid
 
-    # Check the mask of the object
-    if "mask" in rule:
-      pass
+      # Compare it to the owner from the rule
+      if gid != rule["group"]:
+          logging.error("File " + rule["path"] + " group is invalid. GID is " + str(gid) + " instead of " + rule["group"])
+          self.is_file_check_successfull = False
+
+    # Check the mode of the object
+    if "mode" in rule:
+      # Retrieve the mode from the stat call
+      mode = os.stat(rule["path"]).st_mode
+
+      # Compare it to the owner from the rule
+      if mode != rule["mode"]:
+          logging.error("File " + rule["path"] + " mode is invalid. Mode is " + str(mode) + " instead of " + rule["mode"])
+          self.is_file_check_successfull = False
 
     # Check the target of the symlink
     if "target" in rule:
-      pass
+      print ("TODO target")
 
     # Check the group of the object
     if "empty" in rule:
-      pass
+      # Retrieve the size from the stat call
+      size = os.stat(rule["size"]).st_mode
+#TODO handle symlinks
+      # Compare it to the owner from the rule
+      if rule["empty"] == True and size != 0:
+          logging.error("File " + rule["path"] + " is not empty. Size is " + str(size) + " instead of 0")
+          self.is_file_check_successfull = False
 
     # Check the md5 hash of the target
     if "md5" in rule:
-      pass
+      # Create the hasher used to parse file and compute hash
+      hasher = hashlib.md5()
+
+      # Open file in read binary mode
+      with open(rule["path"], 'rb') as file_to_hash:
+
+        # Create the buffer for file reading
+        buffer = file_to_hash.read(self.block_size)
+
+        # Iterate the file reading. Each time it loops, it updates the hasher 
+        # buffer, appending data just read
+        while len(buffer) > 0:
+          hasher.update(buffer)
+          buffer = afile.read(self.block_size)
+
+        # Compare the hash to the rule, and set the check flag if needed
+        if rule["md5"] != hasher.hexdigest():
+            logging.error("File " + rule["path"] + " has an invalid MD5 hash. MD5 is " + hasher.hexdigest() + " instead of " + rule["md5"])
+            self.is_file_check_successfull = False
+          
+      print(hasher.hexdigest())
 
     # Check the sha1 hash of the target
     if "sha1" in rule:
-      pass
+      # Create the hasher used to parse file and compute hash
+      hasher = hashlib.sha1()
+
+      # Open file in read binary mode
+      with open(rule["path"], 'rb') as file_to_hash:
+
+        # Create the buffer for file reading
+        buffer = file_to_hash.read(self.block_size)
+
+        # Iterate the file reading. Each time it loops, it updates the hasher 
+        # buffer, appending data just read
+        while len(buffer) > 0:
+          hasher.update(buffer)
+          buffer = afile.read(self.block_size)
+
+        # Compare the hash to the rule, and set the check flag if needed
+        if rule["sha1"] != hasher.hexdigest():
+            logging.error("File " + rule["path"] + " has an invalid SHA1 hash. SHA1 is " + hasher.hexdigest() + " instead of " + rule["sha1"])
+            self.is_file_check_successfull = False
+          
+      print(hasher.hexdigest())
 
     # Check the sha256 hash of the target
     if "sha256" in rule:
-      pass
+      # Create the hasher used to parse file and compute hash
+      hasher = hashlib.sha256()
+
+      # Open file in read binary mode
+      with open(rule["path"], 'rb') as file_to_hash:
+
+        # Create the buffer for file reading
+        buffer = file_to_hash.read(self.block_size)
+
+        # Iterate the file reading. Each time it loops, it updates the hasher 
+        # buffer, appending data just read
+        while len(buffer) > 0:
+          hasher.update(buffer)
+          buffer = afile.read(self.block_size)
+
+        # Compare the hash to the rule, and set the check flag if needed
+        if rule["sha256"] != hasher.hexdigest():
+            logging.error("File " + rule["path"] + " has an invalid SHA256 hash. SHA256 is " + hasher.hexdigest() + " instead of " + rule["sha256"])
+            self.is_file_check_successfull = False
+            
+        print(hasher.hexdigest())
     

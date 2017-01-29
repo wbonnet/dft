@@ -235,37 +235,37 @@ files:
     # Mandatory single but it is a symlink
   - path: "/var/lock"
     type: "file"
-    # File with valid type owner group and mask
+    # File with valid type owner group and mode
   - path: "/etc/passwd"
     type: "file"
     owner: "root"
     group: "root"
-    mask: "0644"
-    # File with no type and with valid type owner group and mask
+    mode: "0644"
+    # File with no type and with valid type owner group and mode
   - path: "/etc/passwd"
     owner: "root"
     group: "root"
-    mask: "0644"
+    mode: "0644"
     # This definition will produce an error on file attributes
   - path: "/etc/passwd"
     owner: "root"
     group: "root"
-    mask: "0666"
+    mode: "0666"
     # This definition will produce an error on group
   - path: "/etc/passwd"
     owner: "root"
     group: "staff"
-    mask: "0640"
+    mode: "0640"
     # This definition will produce an error on owner
   - path: "/etc/passwd"
     owner: "dft"
     group: "root"
-    mask: "0640"
+    mode: "0640"
     # This definition will produce an error on everything
   - path: "/etc/passwd"
     owner: "dft"
     group: "dftt"
-    mask: "0666"
+    mode: "0666"
 #TODO check for sticky bits etc/
     #
     # Directories
@@ -288,18 +288,18 @@ files:
     # Mandatory directory, but it is a symlink
   - path: "/var/lock"
     type: "directory"
-    # Directory with valid type owner group and mask
+    # Directory with valid type owner group and mode
   - path: "/etc/network"
     type: "directory"
     owner: "root"
     group: "root"
-    mask: "0644"
-    # Directory with invalid type owner group and mask
+    mode: "0644"
+    # Directory with invalid type owner group and mode
   - path: "/lib"
     type: "directory"
     owner: "dft"
     group: "dft"
-    mask: "0777"
+    mode: "0777"
     #
     # Symlinks
     #
@@ -337,7 +337,7 @@ files:
   - path: "/etc/passwd"
     owner: "root"
     group: "root"
-    mask: "0640"
+    mode: "0640"
   - path: "/etc/do-no-exist3"
     type: "symlink"
     target: "/proc/self/mounts"
@@ -353,32 +353,32 @@ files:
   - path: "/tmp/does-not-exist"
     owner: "root"
     group: "root"
-    mask: "0640"
+    mode: "0640"
   - path: "/etc/hosts"
     owner: "root"
     group: "root"
-    mask: "0644"
-    # This test will fail since user group and masks are incorrect
+    mode: "0644"
+    # This test will fail since user group and modes are incorrect
   - path: "/etc/hostname"
     owner: "dft"
     group: "dft"
-    mask: "0666"
+    mode: "0666"
   - path: "/tmp/does-not-exist-either"
     type: "directory"
     owner: "root"
     group: "root"
-    mask: "0644"
+    mode: "0644"
   - path: "/etc/systemd"
     type: "directory"
     owner: "root"
     group: "root"
-    mask: "0644"
-    # This test will fail since owner, group and mask are incorrect
+    mode: "0644"
+    # This test will fail since owner, group and mode are incorrect
   - path: "/etc/sysctl.d"
     type: "directory"
     owner: "dft"
     group: "dft"
-    mask: "0666"
+    mode: "0666"
   - path: "/etc/group"
     empty: False
   - path: "/etc/environment"
