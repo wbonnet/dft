@@ -207,8 +207,6 @@ class CheckRootFS(CliCommand):
     #
     print (self.project.check_definition["packages"]["allowed"])
     for rule in self.project.check_definition["packages"]["allowed"]:
-      print("BEGIN -------------------------------------------------------------")
-      print(rule)
       # Call the check package method
       self.check_package_rules(rule, allowed=True)
 
@@ -223,9 +221,6 @@ class CheckRootFS(CliCommand):
       if "expected-result" in rule:
         if rule["expected-result"] != self.is_package_check_successfull:
           logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_package_check_successfull))
-          print(rule)
-      print("end -------------------------------------------------------------")
-      print("")
 
 # TODO traiter les paquet en rc ?
 
