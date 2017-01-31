@@ -540,7 +540,7 @@ class CheckRootFS(CliCommand):
     # Check the group of the object
     if "empty" in rule:
       # Retrieve the size from the stat call
-      size = os.stat(rule["size"]).st_mode
+      size = os.stat(rule["path"]).st_mode
 #TODO handle symlinks
       # Compare it to the owner from the rule
       if rule["empty"] == True and size != 0:
