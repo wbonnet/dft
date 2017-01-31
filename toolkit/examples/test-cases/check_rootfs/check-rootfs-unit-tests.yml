@@ -326,8 +326,8 @@ files:
     #
     # Existing symlink without target nor type
   - path: "/dft/unittests/existing/link"
-    # Test is supposed to succeed
-    expected-result: True
+    # Test is supposed to fail since by default it should be a file
+    expected-result: False
     # Existing symlink without target
   - path: "/dft/unittests/existing/link"
     type: "symlink"
@@ -339,26 +339,23 @@ files:
     target: "/dft/unittests/existing/link-target"
     # Test is supposed to succeed
     expected-result: True
-    # Existing symlink with existing target and without type
-  - path: "/dft/unittests/existing/link"
+    # Existing symlink to symlink with existing target
+  - path: "/dft/unittests/existing/link-to-link-to-link"
+    type: "symlink"
     target: "/dft/unittests/existing/link-target"
     # Test is supposed to succeed
     expected-result: True
     # Existing symlink with missing target
   - path: "/dft/unittests/existing/link"
     type: "symlink"
-    target: "/lib/systemd/system/ssh.service.missing"
+    target: "/dft/unittests/missing/target-not-exist"
     # Test is supposed to fail
     expected-result: False
-    # Existing symlink with missing target and without type
-  - path: "/dft/unittests/existing/link"
-    target: "/lib/systemd/system/ssh.service.missing"
+    # Missing symlink with missing target 
+  - path: "/dft/unittests/missing/link"
+    target: "/dft/unittests/missing/target-not-exist"
     # Test is supposed to fail
     expected-result: False
-    # This test will succeed since the target does not exist and its forbidden
-  - path: "/dft/unittests/existing/etc/systemd/system/sshd.service"
-    type: "symlink"
-    target: "/lib/systemd/system/ssh.service"
   # 
   # Forbidden objects
   #
@@ -402,7 +399,7 @@ files:
   #
   # Directory
   #
-  # This diretory does not and is forbidden
+  # This diretory does not exist and is forbidden
   - path: "/dft/unittests/missing/not-existing"
     type: "directory"
     # Test is supposed to succeed
@@ -441,17 +438,17 @@ files:
   # this path to be forbidden whatever is the type, dont set the type :)
   # This link exist but is forbidden
   #
-  - path: "/dft/unittests/existing/etc/passwd"
+  - path: "/dft/unittests/existing/link"
     type: "file"
     # Test is supposed to succeed
     expected-result: True
   # This link exist but is forbidden as a directory (authorized otherwise)
-  - path: "/dft/unittests/existing/etc/passwd"
+  - path: "/dft/unittests/existing/link"
     type: "dirctory"
     # Test is supposed to succeed
     expected-result: True
   # This file exist but is forbidden as a symlink (authorized otherwise)
-  - path: "/dft/unittests/existing/etc/passwd"
+  - path: "/dft/unittests/existing/link"
     type: "symlink"
     # Test is supposed to fail
     expected-result: False
@@ -470,6 +467,12 @@ files:
     target: "link-target-does-not exist"
     # Test is supposed to succeed
     expected-result: True
+    # Existing symlink to symlink with existing target
+  - path: "/dft/unittests/existing/link-to-link-to-link"
+    type: "symlink"
+    target: "/dft/unittests/existing/link-target"
+    # Test is supposed to fail
+    expected-result: False
   #
   # Allowed objects
   #
@@ -560,11 +563,35 @@ files:
     #
     # Directories
     #
-    # Test the md5 sum of a directory without type, thus a file
+    # Test a missing directory which can be optional
   - path: "/dft/unittests/missing/etc"
     type: "directory"
     # Test is supposed to succeed since missing but optional
     expected-result: True
+  # Test that a directory is not empty 
+  - path: "/dft/unittests/existing/empty-directory"
+    type: "directory"
+    empty: False
+    # Test is supposed to fail
+    expected-result: False
+  # Test that a directory is not empty 
+  - path: "/dft/unittests/existing/non-empty-directory"
+    type: "directory"
+    empty: False
+    # Test is supposed to succeed
+    expected-result: True
+  # Test that a directory is empty
+  - path: "/dft/unittests/existing/empty-directory"
+    type: "directory"
+    empty: True
+    # Test is supposed to succeed
+    expected-result: True
+  # Test that a directory is empty
+  - path: "/dft/unittests/existing/non-empty-directory"
+    type: "directory"
+    empty: True
+    # Test is supposed to fail
+    expected-result: False
     #
     # Symlinks
     #
@@ -619,9 +646,55 @@ files:
     type: "symlink"
     # Test is supposed to fail
     expected-result: True
-
+  # Test that a link to a directory is not empty 
+  - path: "/dft/unittests/existing/link-to-empty-directory"
+    type: "symlink"
+    empty: False
+    # Test is supposed to fail
+    expected-result: False
+  # Test that a link to a directory is not empty 
+  - path: "/dft/unittests/existing/link-to-non-empty-directory"
+    type: "symlink"
+    empty: False
+    # Test is supposed to succeed
+    expected-result: True
+  # Test that a link to a directory is empty
+  - path: "/dft/unittests/existing/link-to-empty-directory"
+    type: "symlink"
+    empty: True
+    # Test is supposed to succeed
+    expected-result: True
+  # Test that a link to a directory is empty
+  - path: "/dft/unittests/existing/link-to-non-empty-directory"
+    type: "symlink"
+    empty: True
+    # Test is supposed to fail
+    expected-result: False
+  # Test that a link to a file is not empty 
+  - path: "/dft/unittests/existing/link-to-empty-file"
+    type: "symlink"
+    empty: False
+    # Test is supposed to fail
+    expected-result: False
+  # Test that a link to a file is not empty 
+  - path: "/dft/unittests/existing/link-to-non-empty-file"
+    type: "symlink"
+    empty: False
+    # Test is supposed to succeed
+    expected-result: True
+  # Test that a link to a file is empty
+  - path: "/dft/unittests/existing/link-to-empty-file"
+    type: "symlink"
+    empty: True
+    # Test is supposed to succeed
+    expected-result: True
+  # Test that a link to a file is empty
+  - path: "/dft/unittests/existing/link-to-non-empty-file"
+    type: "symlink"
+    empty: True
+    # Test is supposed to fail
+    expected-result: False
 
 # TODO : regexp for files and dirs
-# TODO : should i check for multiple definitions ?
 # TODO : contains ?
 # TODO : add unit tests on sticky bit
