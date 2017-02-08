@@ -223,30 +223,30 @@ files:
     # Files
     #
     # Mandatory single file
-  - path: "/dft/unittests/existing/empty-file"
-    # Test is supposed to succeed
+  - path: "/dft/existing/empty-file"
+    # Test is supp  osed to succeed
     expected-result: True
     # Object with an unknow type
-  - path: "/dft/unittests/existing/var/"
+  - path: "/dft/existing/var/"
     type: "unknown"
     # Test is supposed to fail
     expected-result: False
     # Mandatory non existing file
-  - path: "/dft/unittests/misssing/empty-file"
+  - path: "/dft/misssing/empty-file"
     # Test is supposed to fail
     expected-result: False
     # Mandatory file but it is a directory
-  - path: "/dft/unittests/existing/etc"
+  - path: "/dft/existing/etc"
     type: "file"
     # Test is supposed to fail
     expected-result: False  
     # Mandatory single but it is a symlink
-  - path: "/dft/unittests/existing/link"
+  - path: "/dft/existing/link"
     type: "file"
     # Test is supposed to fail
     expected-result: False
     # File with valid type owner group and mode
-  - path: "/dft/unittests/existing/etc/passwd"
+  - path: "/dft/existing/etc/passwd"
     type: "file"
     owner: "root"
     group: "root"
@@ -254,28 +254,28 @@ files:
     # Test is supposed to succeed
     expected-result: True
     # This definition will produce an error on file attributes
-  - path: "/dft/unittests/existing/etc/passwd"
+  - path: "/dft/existing/etc/passwd"
     owner: "root"
     group: "root"
     mode: "0666"
     # Test is supposed to fail
     expected-result: False
     # This definition will produce an error on group
-  - path: "/dft/unittests/existing/etc/passwd"
+  - path: "/dft/existing/etc/passwd"
     owner: "root"
     group: "staff"
     mode: "0640"
     # Test is supposed to fail
     expected-result: False
     # This definition will produce an error on owner
-  - path: "/dft/unittests/existing/etc/passwd"
+  - path: "/dft/existing/etc/passwd"
     owner: "dft"
     group: "root"
     mode: "0640"
     # Test is supposed to fail
     expected-result: False
     # This definition will produce an error on everything
-  - path: "/dft/unittests/existing/etc/passwd"
+  - path: "/dft/existing/etc/passwd"
     owner: "dft"
     group: "dft"
     mode: "0666"
@@ -286,27 +286,27 @@ files:
     # Directories
     #
     # Mandatory directory
-  - path: "/dft/unittests/existing/etc/"
+  - path: "/dft/existing/etc/"
     type: "directory"
     # Test is supposed to succeed
     expected-result: True
     # Unreadable missing object
-  - path: "/dft/unittests/missing/does-not exist"
+  - path: "/dft/missing/does-not exist"
     type: "directory"
     # Test is supposed to fail
     expected-result: False
     # Mandatory directory, but it is a file
-  - path: "/dft/unittests/existing/etc/passwd"
+  - path: "/dft/existing/etc/passwd"
     type: "directory"
     # Test is supposed to fail
     expected-result: False
     # Mandatory directory, but it is a symlink
-  - path: "/dft/unittests/existing/link"
+  - path: "/dft/existing/link"
     type: "directory"
     # Test is supposed to fail
     expected-result: False
     # Directory with valid type owner group and mode
-  - path: "/dft/unittests/existing/etc/network"
+  - path: "/dft/existing/etc/network"
     type: "directory"
     owner: "root"
     group: "root"
@@ -314,7 +314,7 @@ files:
     # Test is supposed to succeed
     expected-result: True
     # Directory with invalid type owner group and mode
-  - path: "/dft/unittests/existing/etc/network"
+  - path: "/dft/existing/etc/network"
     type: "directory"
     owner: "dft"
     group: "dft"
@@ -325,35 +325,35 @@ files:
     # Symlinks
     #
     # Existing symlink without target nor type
-  - path: "/dft/unittests/existing/link"
+  - path: "/dft/existing/link"
     # Test is supposed to fail since by default it should be a file
     expected-result: False
     # Existing symlink without target
-  - path: "/dft/unittests/existing/link"
+  - path: "/dft/existing/link"
     type: "symlink"
     # Test is supposed to succeed
     expected-result: True
     # Existing symlink with existing target
-  - path: "/dft/unittests/existing/link"
+  - path: "/dft/existing/link"
     type: "symlink"
-    target: "/dft/unittests/existing/link-target"
+    target: "/dft/existing/link-target"
     # Test is supposed to succeed
     expected-result: True
     # Existing symlink to symlink with existing target
-  - path: "/dft/unittests/existing/link-to-link-to-link"
+  - path: "/dft/existing/link-to-link-to-link"
     type: "symlink"
-    target: "/dft/unittests/existing/link-target"
+    target: "/dft/existing/link-target"
     # Test is supposed to succeed
     expected-result: True
     # Existing symlink with missing target
-  - path: "/dft/unittests/existing/link"
+  - path: "/dft/existing/link"
     type: "symlink"
-    target: "/dft/unittests/missing/target-not-exist"
+    target: "/dft/missing/target-not-exist"
     # Test is supposed to fail
     expected-result: False
     # Missing symlink with missing target 
-  - path: "/dft/unittests/missing/link"
-    target: "/dft/unittests/missing/target-not-exist"
+  - path: "/dft/missing/link"
+    target: "/dft/missing/target-not-exist"
     # Test is supposed to fail
     expected-result: False
   # 
@@ -364,15 +364,15 @@ files:
   # Files
   #
   # This file exist but is forbidden, without type it defaults to a file
-  - path: "/dft/unittests/existing/etc/passwd"
+  - path: "/dft/existing/etc/passwd"
     # Test is supposed to fail
     expected-result: False
   # This file does not and is forbidden
-  - path: "/dft/unittests/missing/not-existing"
+  - path: "/dft/missing/not-existing"
     # Test is supposed to succeed
     expected-result: True
   # This file does not and is forbidden
-  - path: "/dft/unittests/missing/not-existing"
+  - path: "/dft/missing/not-existing"
     type: "file"
     # Test is supposed to succeed
     expected-result: True
@@ -382,17 +382,17 @@ files:
   # this path to be forbidden whatever is the type, dont set the type :)
   # This file exist but is forbidden, with type info => file
   #
-  - path: "/dft/unittests/existing/etc/passwd"
+  - path: "/dft/existing/etc/passwd"
     type: "file"
     # Test is supposed to fail
     expected-result: False
   # This file exist but is forbidden as a directory (authorized otherwise)
-  - path: "/dft/unittests/existing/etc/passwd"
+  - path: "/dft/existing/etc/passwd"
     type: "directory"
     # Test is supposed to succeed
     expected-result: True
   # This file exist but is forbidden as a symlink (authorized otherwise)
-  - path: "/dft/unittests/existing/etc/passwd"
+  - path: "/dft/existing/etc/passwd"
     type: "symlink"
     # Test is supposed to succeed
     expected-result: True
@@ -400,7 +400,7 @@ files:
   # Directory
   #
   # This diretory does not exist and is forbidden
-  - path: "/dft/unittests/missing/not-existing"
+  - path: "/dft/missing/not-existing"
     type: "directory"
     # Test is supposed to succeed
     expected-result: True
@@ -410,17 +410,17 @@ files:
   # this path to be forbidden whatever is the type, dont set the type :)
   # This dir exist but is forbidden
   #
-  - path: "/dft/unittests/existing/etc/"
+  - path: "/dft/existing/etc/"
     type: "file"
     # Test is supposed to succeed
     expected-result: True
   # This dir exist but is forbidden as a directory (authorized otherwise)
-  - path: "/dft/unittests/existing/etc"
+  - path: "/dft/existing/etc"
     type: "directory"
     # Test is supposed to fail
     expected-result: False
   # This dir exist but is forbidden as a symlink (authorized otherwise)
-  - path: "/dft/unittests/existing/etc/passwd"
+  - path: "/dft/existing/etc/passwd"
     type: "symlink"
     # Test is supposed to succeed
     expected-result: True
@@ -428,7 +428,7 @@ files:
   # Symlinks
   #
   # This diretory does not and is forbidden
-  - path: "/dft/unittests/missing/not-existing"
+  - path: "/dft/missing/not-existing"
     type: "symlink"
     # Test is supposed to succeed
     expected-result: True
@@ -438,39 +438,39 @@ files:
   # this path to be forbidden whatever is the type, dont set the type :)
   # This link exist but is forbidden
   #
-  - path: "/dft/unittests/existing/link"
+  - path: "/dft/existing/link"
     type: "file"
     # Test is supposed to succeed
     expected-result: True
   # This link exist but is forbidden as a directory (authorized otherwise)
-  - path: "/dft/unittests/existing/link"
-    type: "dirctory"
+  - path: "/dft/existing/link"
+    type: "directory"
     # Test is supposed to succeed
     expected-result: True
   # This file exist but is forbidden as a symlink (authorized otherwise)
-  - path: "/dft/unittests/existing/link"
+  - path: "/dft/existing/link"
     type: "symlink"
     # Test is supposed to fail
     expected-result: False
   # This link point is forbidden. Since the target exist, the target becomes
   # forbidden (link target not file itself). If you need to test the link not
   # its target, do not specify atarget value.
-  - path: "/dft/unittests/existing/link"
+  - path: "/dft/existing/link"
     type: "symlink"
     target: "link-target"
     # Test is supposed to fail
     expected-result: False
   # This link point is forbidden. Even if the target does not exist, the 
   # target becomes forbidden (link target not file itself)
-  - path: "/dft/unittests/existing/link"
+  - path: "/dft/existing/link"
     type: "symlink"
     target: "link-target-does-not exist"
     # Test is supposed to succeed
     expected-result: True
     # Existing symlink to symlink with existing target
-  - path: "/dft/unittests/existing/link-to-link-to-link"
+  - path: "/dft/existing/link-to-link-to-link"
     type: "symlink"
-    target: "/dft/unittests/existing/link-target"
+    target: "/dft/existing/link-target"
     # Test is supposed to fail
     expected-result: False
   #
@@ -481,113 +481,113 @@ files:
     # Files
     #
   # Test that a file is not empty (not type means file by efault)
-  - path: "/dft/unittests/existing/empty-file"
+  - path: "/dft/existing/empty-file"
     empty: False
     # Test is supposed to fail
     expected-result: False
   # Test that a file is not empty (not type means file by efault)
-  - path: "/dft/unittests/existing/non-empty-file"
+  - path: "/dft/existing/non-empty-file"
     empty: False
     # Test is supposed to succeed
     expected-result: True
   # Test that a file is empty (not type means file by efault)
-  - path: "/dft/unittests/existing/empty-file"
+  - path: "/dft/existing/empty-file"
     empty: True
     # Test is supposed to succeed
     expected-result: True
   # Test that a file is empty (not type means file by efault)
-  - path: "/dft/unittests/existing/non-empty-file"
+  - path: "/dft/existing/non-empty-file"
     empty: True
     # Test is supposed to fail
     expected-result: False
   # Test the md5 sum of a file
-  - path: "/dft/unittests/existing/non-empty-file"
-    md5sum: "very_unlikely_hash_value"
+  - path: "/dft/existing/non-empty-file"
+    md5: "very_unlikely_hash_value"
     # Test is supposed to fail
     expected-result: False
   # Test the md5 sum of a file
-  - path: "/dft/unittests/existing/non-empty-file"
-    md5sum: "570a5adf1578c95aa27207632c74dacd"
+  - path: "/dft/existing/non-empty-file"
+    md5: "570a5adf1578c95aa27207632c74dacd"
     # Test is supposed to fail
     expected-result: True
   # Test the sha1 sum of a file
-  - path: "/dft/unittests/existing/non-empty-file"
-    sha1sum: "very_unlikely_hash_value"
+  - path: "/dft/existing/non-empty-file"
+    sha1: "very_unlikely_hash_value"
     # Test is supposed to fail
     expected-result: False
   # Test the sha1 sum of a file
-  - path: "/dft/unittests/existing/non-empty-file"
-    sa1sum: "99b6f3cb04c2b9f027928869a2a1872ef4fe3246"
+  - path: "/dft/existing/non-empty-file"
+    sa1: "99b6f3cb04c2b9f027928869a2a1872ef4fe3246"
     # Test is supposed to fail
     expected-result: True
   # Test the sha256 sum of a file
-  - path: "/dft/unittests/existing/non-empty-file"
-    sha256sum: "very_unlikely_hash_value"
+  - path: "/dft/existing/non-empty-file"
+    sha256: "very_unlikely_hash_value"
     # Test is supposed to fail
     expected-result: False
   # Test the sha256 sum of a file
-  - path: "/dft/unittests/existing/non-empty-file"
-    sha256sum: "d1cfe74689e00a44e66f743c57fe7a0fa622f9b560ee8fabc7adc332edaf0941"
+  - path: "/dft/existing/non-empty-file"
+    sha256: "d1cfe74689e00a44e66f743c57fe7a0fa622f9b560ee8fabc7adc332edaf0941"
     # Test is supposed to fail
     expected-result: True
   # Test the md5 sum of a directory
-  - path: "/dft/unittests/etc"
-    md5sum: "very_unlikely_hash_value"
+  - path: "/dft/etc"
+    md5: "very_unlikely_hash_value"
     # Test is supposed to fail
     expected-result: False
   # Test the sha1 sum of a directory
-  - path: "/dft/unittests/etc"
-    sha1sum: "very_unlikely_hash_value"
+  - path: "/dft/etc"
+    sha1: "very_unlikely_hash_value"
     # Test is supposed to fail
     expected-result: False
   # Test the sha256 sum of a directory
-  - path: "/dft/unittests/existing/non-empty-file"
-    sha256sum: "very_unlikely_hash_value"
+  - path: "/dft/existing/non-empty-file"
+    sha256: "very_unlikely_hash_value"
     # Test is supposed to fail
     expected-result: False
   # Test the md5 sum of a directory without type, thus a file
-  - path: "/dft/unittests/existing/etc"
-    md5sum: "very_unlikely_hash_value"
+  - path: "/dft/existing/etc"
+    md5: "very_unlikely_hash_value"
     # Test is supposed to fail
     expected-result: False
   # Test the md5 sum of a diretory without type, thus a file
-  - path: "/dft/unittests/existing/etc"
-    sha1sum: "very_unlikely_hash_value"
+  - path: "/dft/existing/etc"
+    sha1: "very_unlikely_hash_value"
     # Test is supposed to fail
     expected-result: False
     # Test the md5 sum of a directory without type, thus a file
-  - path: "/dft/unittests/existing/etc"
-    sha256sum: "very_unlikely_hash_value"
+  - path: "/dft/existing/etc"
+    sha256: "very_unlikely_hash_value"
     # Test is supposed to fail
     expected-result: False
     #
     # Directories
     #
     # Test a missing directory which can be optional
-  - path: "/dft/unittests/missing/etc"
+  - path: "/dft/missing/etc"
     type: "directory"
     # Test is supposed to succeed since missing but optional
     expected-result: True
   # Test that a directory is not empty 
-  - path: "/dft/unittests/existing/empty-directory"
+  - path: "/dft/existing/empty-directory"
     type: "directory"
     empty: False
     # Test is supposed to fail
     expected-result: False
   # Test that a directory is not empty 
-  - path: "/dft/unittests/existing/non-empty-directory"
+  - path: "/dft/existing/non-empty-directory"
     type: "directory"
     empty: False
     # Test is supposed to succeed
     expected-result: True
   # Test that a directory is empty
-  - path: "/dft/unittests/existing/empty-directory"
+  - path: "/dft/existing/empty-directory"
     type: "directory"
     empty: True
     # Test is supposed to succeed
     expected-result: True
   # Test that a directory is empty
-  - path: "/dft/unittests/existing/non-empty-directory"
+  - path: "/dft/existing/non-empty-directory"
     type: "directory"
     empty: True
     # Test is supposed to fail
@@ -596,100 +596,100 @@ files:
     # Symlinks
     #
   # Test the md5 sum of a symlink without type, thus a file
-  - path: "/dft/unittests/existing/link-to-non-empty-file"
-    md5sum: "very_unlikely_hash_value"
+  - path: "/dft/existing/link-to-non-empty-file"
+    md5: "very_unlikely_hash_value"
     # Test is supposed to fail
     expected-result: False
   # Test the md5 sum of a symlink without type, thus a file
-  - path: "/dft/unittests/existing/link-to-non-empty-file"
-    sha1sum: "very_unlikely_hash_value"
+  - path: "/dft/existing/link-to-non-empty-file"
+    sha1: "very_unlikely_hash_value"
     # Test is supposed to fail
     expected-result: False
     # Test the md5 sum of a symlink without type, thus a file
-  - path: "/dft/unittests/existing/link-to-non-empty-file"
-    sha256sum: "very_unlikely_hash_value"
+  - path: "/dft/existing/link-to-non-empty-file"
+    sha256: "very_unlikely_hash_value"
     # Test is supposed to fail
     expected-result: False
   # Test the md5 sum of a link to a file
-  - path: "/dft/unittests/existing/link-to-non-empty-file"
-    md5sum: "very_unlikely_hash_value"
+  - path: "/dft/existing/link-to-non-empty-file"
+    md5: "very_unlikely_hash_value"
     type: "symlink"
     # Test is supposed to fail
     expected-result: False
   # Test the md5 sum of a link to a file
-  - path: "/dft/unittests/existing/link-to-non-empty-file"
-    md5sum: "570a5adf1578c95aa27207632c74dacd"
+  - path: "/dft/existing/link-to-non-empty-file"
+    md5: "570a5adf1578c95aa27207632c74dacd"
     type: "symlink"
     # Test is supposed to fail
     expected-result: True
   # Test the sha1 sum of a link to a file
-  - path: "/dft/unittests/existing/link-to-non-empty-file"
-    sha1sum: "very_unlikely_hash_value"
+  - path: "/dft/existing/link-to-non-empty-file"
+    sha1: "very_unlikely_hash_value"
     type: "symlink"
     # Test is supposed to fail
     expected-result: False
   # Test the sha1 sum of a link to a file
-  - path: "/dft/unittests/existing/link-to-non-empty-file"
-    sa1sum: "99b6f3cb04c2b9f027928869a2a1872ef4fe3246"
+  - path: "/dft/existing/link-to-non-empty-file"
+    sa1: "99b6f3cb04c2b9f027928869a2a1872ef4fe3246"
     type: "symlink"
     # Test is supposed to fail
     expected-result: True
   # Test the sha256 sum of a link to a file
-  - path: "/dft/unittests/existing/link-to-non-empty-file"
-    sha256sum: "very_unlikely_hash_value"
+  - path: "/dft/existing/link-to-non-empty-file"
+    sha256: "very_unlikely_hash_value"
     type: "symlink"
     # Test is supposed to fail
     expected-result: False
   # Test the sha256 sum of a link to a file
-  - path: "/dft/unittests/existing/link-to-non-empty-file"
-    sha256sum: "d1cfe74689e00a44e66f743c57fe7a0fa622f9b560ee8fabc7adc332edaf0941"
+  - path: "/dft/existing/link-to-non-empty-file"
+    sha256: "d1cfe74689e00a44e66f743c57fe7a0fa622f9b560ee8fabc7adc332edaf0941"
     type: "symlink"
     # Test is supposed to fail
     expected-result: True
   # Test that a link to a directory is not empty 
-  - path: "/dft/unittests/existing/link-to-empty-directory"
+  - path: "/dft/existing/link-to-empty-directory"
     type: "symlink"
     empty: False
     # Test is supposed to fail
     expected-result: False
   # Test that a link to a directory is not empty 
-  - path: "/dft/unittests/existing/link-to-non-empty-directory"
+  - path: "/dft/existing/link-to-non-empty-directory"
     type: "symlink"
     empty: False
     # Test is supposed to succeed
     expected-result: True
   # Test that a link to a directory is empty
-  - path: "/dft/unittests/existing/link-to-empty-directory"
+  - path: "/dft/existing/link-to-empty-directory"
     type: "symlink"
     empty: True
     # Test is supposed to succeed
     expected-result: True
   # Test that a link to a directory is empty
-  - path: "/dft/unittests/existing/link-to-non-empty-directory"
+  - path: "/dft/existing/link-to-non-empty-directory"
     type: "symlink"
     empty: True
     # Test is supposed to fail
     expected-result: False
   # Test that a link to a file is not empty 
-  - path: "/dft/unittests/existing/link-to-empty-file"
+  - path: "/dft/existing/link-to-empty-file"
     type: "symlink"
     empty: False
     # Test is supposed to fail
     expected-result: False
   # Test that a link to a file is not empty 
-  - path: "/dft/unittests/existing/link-to-non-empty-file"
+  - path: "/dft/existing/link-to-non-empty-file"
     type: "symlink"
     empty: False
     # Test is supposed to succeed
     expected-result: True
   # Test that a link to a file is empty
-  - path: "/dft/unittests/existing/link-to-empty-file"
+  - path: "/dft/existing/link-to-empty-file"
     type: "symlink"
     empty: True
     # Test is supposed to succeed
     expected-result: True
   # Test that a link to a file is empty
-  - path: "/dft/unittests/existing/link-to-non-empty-file"
+  - path: "/dft/existing/link-to-non-empty-file"
     type: "symlink"
     empty: True
     # Test is supposed to fail
