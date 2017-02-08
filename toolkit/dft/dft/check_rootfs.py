@@ -57,11 +57,11 @@ class CheckRootFS(CliCommand):
     # rule verification will fail
     self.is_check_successfull = True
     
-    # This two variables are used to store the result of a single rule check
-    # The variables value are reset for each loop, while the scope of the 
+    # This variable is used to store the result of a single rule check
+    # The variable value is reset for each loop, while the scope of the 
     # previous one is the whole execution
-    self.is_package_check_successfull = True
-    self.is_file_check_successfull = True
+    self.is_rule_check_successfull = True
+    self.is_rule_check_successfull = True
 
     # Size of block used to read files whencomputing hashes
     self.block_size = 65536
@@ -140,6 +140,20 @@ class CheckRootFS(CliCommand):
     - allowed-arch         => The packages is allowed only on the given archs
     - blacklisted-arch     => The packages is blacklisted on the given archs
     """
+
+    # Rule counter used to display the total number of checked rules
+    rule_counter = 0
+    
+    # Counter used to display the number of successful rules
+    rule_successfull_counter = 0
+
+    # Counter used to display the number of failed rules
+    rule_failed_counter = 0
+
+    # Counter used to display the number of rules matching expected result
+    # either failed of successfull, but as expected (handy for unit tests)
+    rule_as_expected_counter = 0
+
     logging.info("starting to check installed packages")
 
     # Generate the dpkg command to retrieve the list of installed packages
@@ -164,66 +178,127 @@ class CheckRootFS(CliCommand):
 
     #
     # Now iterate the list of rules to check against installed packages
-    # Process the "allowed" rules group
+    # Process the "mandatory" rules group
     #
     for rule in self.project.check_definition["packages"]["mandatory"]:
+      # Rule counter used to display the total number of checked rules
+      rule_counter += 1
+
       # Call the check package method
       self.check_package_rules(rule, mandatory=True)
 
       # If the test was negative, then change the global result to false
-      if self.is_package_check_successfull == False:
+      if self.is_rule_check_successfull == False:
+        # Set the global failure flag
         self.is_check_successfull = False
-
+        # Counter used to display the number of failed rules
+        rule_failed_counter += 1
+      else:
+        # Counter used to display the number of successful rules
+        rule_successfull_counter += 1
+        
       # If the expected result variable has been defined, the compare it value
       # to the actual method result, and output a critical if different
       # expected-result value is used in unit testing context, and it should 
       # never be different unless something nasty is lurking inthe dark
       if "expected-result" in rule:
-        if rule["expected-result"] != self.is_package_check_successfull:
-          logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_package_check_successfull))
+        if rule["expected-result"] != self.is_rule_check_successfull:
+          logging.critical("-----------------------------------------------------------------------------")
+          logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_rule_check_successfull))
           print(rule)
+          logging.critical("-----------------------------------------------------------------------------")
+        else: 
+          # Counter used to display the number of rules matching expected result
+          # either failed of successfull, but as expected (handy for unit tests)
+          rule_as_expected_counter += 1
 
     #
     # Process the "forbidden" rules group
     #
     for rule in self.project.check_definition["packages"]["forbidden"]:
+      # Rule counter used to display the total number of checked rules
+      rule_counter += 1
+
       # Call the check package method
       self.check_package_rules(rule, forbidden=True)
 
       # If the test was negative, then change the global result to false
-      if self.is_package_check_successfull == False:
+      if self.is_rule_check_successfull == False:
+         # Set the global failure flag
         self.is_check_successfull = False
+        # Counter used to display the number of failed rules
+        rule_failed_counter += 1
+      else:
+        # Counter used to display the number of successful rules
+        rule_successfull_counter += 1
 
       # If the expected result variable has been defined, the compare it value
       # to the actual method result, and output a critical if different
       # expected-result value is used in unit testing context, and it should 
       # never be different unless something nasty is lurking inthe dark
       if "expected-result" in rule:
-        if rule["expected-result"] != self.is_package_check_successfull:
-          logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_package_check_successfull))
+        if rule["expected-result"] != self.is_rule_check_successfull:
+          logging.critical("-----------------------------------------------------------------------------")
+          logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_rule_check_successfull))
           print(rule)
+          logging.critical("-----------------------------------------------------------------------------")
+        else: 
+          # Counter used to display the number of rules matching expected result
+          # either failed of successfull, but as expected (handy for unit tests)
+          rule_as_expected_counter += 1
 
     #
     # Process the "allowed" rules group
     #
-    print (self.project.check_definition["packages"]["allowed"])
     for rule in self.project.check_definition["packages"]["allowed"]:
+      # Rule counter used to display the total number of checked rules
+      rule_counter += 1
+
       # Call the check package method
       self.check_package_rules(rule, allowed=True)
 
       # If the test was negative, then change the global result to false
-      if self.is_package_check_successfull == False:
+      if self.is_rule_check_successfull == False:
+        # Set the global failure flag
         self.is_check_successfull = False
+        # Counter used to display the number of failed rules
+        rule_failed_counter += 1
+      else:
+        # Counter used to display the number of successful rules
+        rule_successfull_counter += 1
 
       # If the expected result variable has been defined, the compare it value
       # to the actual method result, and output a critical if different
       # expected-result value is used in unit testing context, and it should 
       # never be different unless something nasty is lurking inthe dark
       if "expected-result" in rule:
-        if rule["expected-result"] != self.is_package_check_successfull:
-          logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_package_check_successfull))
+        if rule["expected-result"] != self.is_rule_check_successfull:
+          logging.critical("-----------------------------------------------------------------------------")
+          logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_rule_check_successfull))
+          print(rule)
+          logging.critical("-----------------------------------------------------------------------------")
+        else: 
+          # Counter used to display the number of rules matching expected result
+          # either failed of successfull, but as expected (handy for unit tests)
+          rule_as_expected_counter += 1
 
 # TODO traiter les paquet en rc ?
+
+    # Output the execution summary
+# TODO handle plural
+# TODO handle none for expected in case the  is no unit tests
+    logging.info("")
+    logging.info("-----------------------------------------------------------------------------")
+    logging.info("")
+    logging.info("Package check execution summary")
+    logging.info("")
+    logging.info("Processed " + str(rule_counter) + " rules")
+    logging.info(str(rule_successfull_counter) + " were successfull")
+    logging.info(str(rule_failed_counter) + " failed")
+    logging.info(str(rule_as_expected_counter) + " ran as expected")
+    logging.info("-----------------------------------------------------------------------------")
+    logging.info("") 
+
 
   # -------------------------------------------------------------------------
   #
@@ -238,7 +313,7 @@ class CheckRootFS(CliCommand):
   
     # Reset the package result. This is used mostly for unit testting and 
     # to track if the result was the expected one
-    self.is_package_check_successfull = True
+    self.is_rule_check_successfull = True
 
     # First let's control that all keywords (key dictionnaires) are valid and know
     for keyword in rule:
@@ -248,13 +323,13 @@ class CheckRootFS(CliCommand):
     # Check if mandatory package is missing
     if mandatory == True and rule["name"] not in self.installed_packages:
       logging.error("Missing mandatory package : " + rule["name"])
-      self.is_package_check_successfull = False
+      self.is_rule_check_successfull = False
       return
 
     # Check if forbidden package is installed
     if forbidden == True and rule["name"] in self.installed_packages:
       logging.error("Forbidden package is installed : " + rule["name"])
-      self.is_package_check_successfull = False
+      self.is_rule_check_successfull = False
       return
 
     # Check version if higher or equal than min version
@@ -279,7 +354,7 @@ class CheckRootFS(CliCommand):
         # If the result is not ok, then output an info an go on checking next keyword
         if return_code > 0:
           logging.error("Version " + self.installed_packages[rule["name"]]["version"] + " of package is older than minimum allowed version " + rule["min-version"])
-          self.is_package_check_successfull = False
+          self.is_rule_check_successfull = False
         else:
           logging.debug("Version " + self.installed_packages[rule["name"]]["version"] + " of package is newer than minimum allowed version " + rule["min-version"])
 
@@ -305,7 +380,7 @@ class CheckRootFS(CliCommand):
         # If the result is not ok, then output an info an go on checking next keyword
         if return_code > 0:
           logging.error("Version " + self.installed_packages[rule["name"]]["version"] + " of package is newer than maximum allowed version " + rule["max-version"])
-          self.is_package_check_successfull = False
+          self.is_rule_check_successfull = False
         else:
           logging.debug("Version " + self.installed_packages[rule["name"]]["version"] + " of package is older than maximum allowed version " + rule["max-version"])
 
@@ -314,7 +389,7 @@ class CheckRootFS(CliCommand):
       if rule["name"] in self.installed_packages: 
         if self.installed_packages[rule["name"]]["version"] not in rule["allowed-version"]: 
           logging.error("Version " + self.installed_packages[rule["name"]]["version"] + " of package " + rule["name"] + " is not allowed")
-          self.is_package_check_successfull = False
+          self.is_rule_check_successfull = False
         else:
           logging.debug("Version " + self.installed_packages[rule["name"]]["version"] + " of package " + rule["name"] + " is allowed")
 
@@ -323,7 +398,7 @@ class CheckRootFS(CliCommand):
       if rule["name"] in self.installed_packages: 
         if self.installed_packages[rule["name"]]["version"] in rule["blacklisted-version"]: 
           logging.error("Version " + self.installed_packages[rule["name"]]["version"] + " of package " + rule["name"] + " is blacklisted")
-          self.is_package_check_successfull = False
+          self.is_rule_check_successfull = False
         else:
           logging.debug("Version " + self.installed_packages[rule["name"]]["version"] + " of package " + rule["name"] + " is allowed")
 
@@ -332,7 +407,7 @@ class CheckRootFS(CliCommand):
       if rule["name"] in self.installed_packages: 
         if self.installed_packages[rule["name"]]["arch"] in rule["blacklisted-arch"]: 
           logging.error("Package " + rule["name"] + " is blacklisted on architecture " + self.installed_packages[rule["name"]]["arch"])
-          self.is_package_check_successfull = False
+          self.is_rule_check_successfull = False
         else:
           logging.debug("Package " + rule["name"] + " is not blacklisted on architecture " + self.installed_packages[rule["name"]]["arch"])
 
@@ -341,7 +416,7 @@ class CheckRootFS(CliCommand):
       if rule["name"] in self.installed_packages: 
         if self.installed_packages[rule["name"]]["arch"] not in rule["allowed-arch"]: 
           logging.error("Package " + rule["name"] + " is not allowed for architecture " + self.installed_packages[rule["name"]]["arch"])
-          self.is_package_check_successfull = False
+          self.is_rule_check_successfull = False
         else:
           logging.debug("Package " + rule["name"] + " is allowed for architecture " + self.installed_packages[rule["name"]]["arch"])
 
@@ -384,23 +459,136 @@ class CheckRootFS(CliCommand):
     . sha256         file (or symlink target) checksum computed with SHA256
 
     """
-# TODO controler le sha dans les tests unitaires
+
+    # Rule counter used to display the total number of checked rules
+    rule_counter = 0
+    
+    # Counter used to display the number of successful rules
+    rule_successfull_counter = 0
+
+    # Counter used to display the number of failed rules
+    rule_failed_counter = 0
+
+    # Counter used to display the number of rules matching expected result
+    # either failed of successfull, but as expected (handy for unit tests)
+    rule_as_expected_counter = 0
 
     # Iterate the list of rules to check against installed files
     # Files will be checked on an individual basis, which is different of
     # packages. Package list can be retrieved with a single call to dpkg.
     # Retrieving the complete file list would cost too much
     for rule in self.project.check_definition["files"]["mandatory"]:
+      # Rule counter used to display the total number of checked rules
+      rule_counter += 1
+
       self.check_file_rules(rule, mandatory=True)
 
+      # If the test was negative, then change the global result to false
+      if self.is_rule_check_successfull == False:
+        # Set the global failure flag
+        self.is_check_successfull = False
+        # Counter used to display the number of failed rules
+        rule_failed_counter += 1
+      else:
+        # Counter used to display the number of successful rules
+        rule_successfull_counter += 1
+
+      # If the expected result variable has been defined, the compare it value
+      # to the actual method result, and output a critical if different
+      # expected-result value is used in unit testing context, and it should 
+      # never be different unless something nasty is lurking inthe dark
+      if "expected-result" in rule:
+        if rule["expected-result"] != self.is_rule_check_successfull:
+          logging.critical("-----------------------------------------------------------------------------")
+          logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_rule_check_successfull))
+          print(rule)
+          logging.critical("-----------------------------------------------------------------------------")
+        else: 
+          # Counter used to display the number of rules matching expected result
+          # either failed of successfull, but as expected (handy for unit tests)
+          rule_as_expected_counter += 1
+
+    #
+    # Process the "forbidden" rules group
+    #
     for rule in self.project.check_definition["files"]["forbidden"]:
+      # Rule counter used to display the total number of checked rules
+      rule_counter += 1
+
       self.check_file_rules(rule, forbidden=True)
 
+      # If the test was negative, then change the global result to false
+      if self.is_rule_check_successfull == False:
+        # Set the global failure flag
+        self.is_check_successfull = False
+        # Counter used to display the number of failed rules
+        rule_failed_counter += 1
+      else:
+        # Counter used to display the number of successful rules
+        rule_successfull_counter += 1
+
+      # If the expected result variable has been defined, the compare it value
+      # to the actual method result, and output a critical if different
+      # expected-result value is used in unit testing context, and it should 
+      # never be different unless something nasty is lurking inthe dark
+      if "expected-result" in rule:
+        if rule["expected-result"] != self.is_rule_check_successfull:
+          logging.critical("-----------------------------------------------------------------------------")
+          logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_rule_check_successfull))
+          print(rule)
+          logging.critical("-----------------------------------------------------------------------------")
+        else: 
+          # Counter used to display the number of rules matching expected result
+          # either failed of successfull, but as expected (handy for unit tests)
+          rule_as_expected_counter += 1
+
+    #
+    # Process the "allowed" rules group
+    #
     for rule in self.project.check_definition["files"]["allowed"]:
+      # Rule counter used to display the total number of checked rules
+      rule_counter += 1
+
       self.check_file_rules(rule, allowed=True)
 
-    logging.info("starting to check installed packages")
+      # If the test was negative, then change the global result to false
+      if self.is_rule_check_successfull == False:
+        # Set the global failure flag
+        self.is_check_successfull = False
+        # Counter used to display the number of failed rules
+        rule_failed_counter += 1
+      else:
+        # Counter used to display the number of successful rules
+        rule_successfull_counter += 1
 
+      # If the expected result variable has been defined, the compare it value
+      # to the actual method result, and output a critical if different
+      # expected-result value is used in unit testing context, and it should 
+      # never be different unless something nasty is lurking inthe dark
+      if "expected-result" in rule:
+        if rule["expected-result"] != self.is_rule_check_successfull:
+          logging.critical("-----------------------------------------------------------------------------")
+          logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_rule_check_successfull))
+          print(rule)
+          logging.critical("-----------------------------------------------------------------------------")
+        else: 
+          # Counter used to display the number of rules matching expected result
+          # either failed of successfull, but as expected (handy for unit tests)
+          rule_as_expected_counter += 1
+
+# TODO handle plural
+# TODO handle none for expected in case the  is no unit tests
+    logging.info("")
+    logging.info("-----------------------------------------------------------------------------")
+    logging.info("")
+    logging.info("Package check execution summary")
+    logging.info("")
+    logging.info("Processed " + str(rule_counter) + " rules")
+    logging.info(str(rule_successfull_counter) + " were successfull")
+    logging.info(str(rule_failed_counter) + " failed")
+    logging.info(str(rule_as_expected_counter) + " ran as expected")
+    logging.info("-----------------------------------------------------------------------------")
+    logging.info("")
 
 
   # -------------------------------------------------------------------------
@@ -414,11 +602,16 @@ class CheckRootFS(CliCommand):
     constraint definitions and structure as in check_files method.
     """
   
+    # Reset the package result. This is used mostly for unit testting and 
+    # to track if the result was the expected one
+    self.is_rule_check_successfull = True
+
     # First let's control that all keywords (key dictionnaires) are valid and know
     for keyword in rule:
-      if keyword not in "path" "type" "owner" "group" "mode" "target" "empty" "md5" "sha1" "sha256":
-        logging.error("Unknow keyword " + keyword + " when parsing packages rules. Rule is ignored")
-
+      if keyword not in "path" "type" "owner" "group" "mode" "target" "empty" "md5" "sha1" "sha256" "expected-result" :
+        logging.error("Unknow keyword " + keyword + " when parsing filess rules. Rule is ignored")
+        logging.error("Rule is " + str(rule))
+        
     # Let's check there is a path...
     if "path" not in rule:
       logging.error("Undefined path when parsing file rules. Rule is ignored")
@@ -430,20 +623,20 @@ class CheckRootFS(CliCommand):
     # Default type is file
     if "type" not in rule:
       rule["type"] = "file"
-
-    # Default type is file
-    if "type" not in rule:
-      rule["type"] = "file"
+    else:
+      if rule["type"] not in "file" "directory" "symlink":
+        logging.error("Unknow type " + rule["type"] + " when parsing file rule. Rule is ignored")
+        logging.error("Rule is "+ str(rule))
+        self.is_rule_check_successfull = False
+        return      
 
     # Target path is not an attribute, but a computed variable. It contains
     # the path to file or directory ultimatly pointed by symlinks. Computing
     # This variable has to be recursive since a link can point to a link
+    rule["path"] = self.project.rootfs_mountpoint + rule["path"] 
     rule["target_path"] = rule["path"]
     while os.path.islink(rule["target_path"]):
       rule["target_path"] = os.readlink(rule["target_path"])
-
-# TODO add a target
-    print(rule)
 
     # Check if mandatory package is missing
     if mandatory == True:
@@ -451,19 +644,19 @@ class CheckRootFS(CliCommand):
         # Check for mandatoy directory
         if os.path.isdir(rule["path"]) == False and rule["type"] == "directory":
           logging.info("Missing mandatory directory : " + rule["path"])
-          self.is_file_check_successfull = False
-          return
-
-        # Check for mandatoy file
-        if os.path.isfile(rule["path"]) == False and rule["type"] == "file":
-          logging.info("Missing mandatory file : " + rule["path"])
-          self.is_file_check_successfull = False
+          self.is_rule_check_successfull = False
           return
 
         # Check for mandatoy symlink
         if os.path.islink(rule["path"]) == False and rule["type"] == "symlink":
           logging.info("Missing mandatory symlink : " + rule["path"])
-          self.is_file_check_successfull = False
+          self.is_rule_check_successfull = False
+          return
+
+        # Check for mandatoy file
+        if os.path.isfile(rule["path"]) == False and rule["type"] == "file":
+          logging.info("Missing mandatory file : " + rule["path"])
+          self.is_rule_check_successfull = False
           return
 
     # Check if forbidden files are installed
@@ -471,37 +664,36 @@ class CheckRootFS(CliCommand):
         # Check for forbidden directory
         if os.path.isdir(rule["path"]) == True and rule["type"] == "directory":
           logging.info("Forbidden directory exists : " + rule["path"])
-          self.is_file_check_successfull = False
-          return
-
-        # Check for forbidden file
-        if os.path.isfile(rule["path"]) == True and rule["type"] == "file":
-          logging.info("Forbidden file exists : " + rule["path"])
-          self.is_file_check_successfull = False
+          self.is_rule_check_successfull = False
           return
 
         # Check for forbidden symlink
         if os.path.islink(rule["path"]) == True and rule["type"] == "symlink":
           logging.info("Forbidden symlink exists : " + rule["path"])
-          self.is_file_check_successfull = False
+          self.is_rule_check_successfull = False
           return
 
+        # Check for forbidden file
+        if os.path.isfile(rule["path"]) == True and rule["type"] == "file":
+          logging.info("Forbidden file exists : " + rule["path"])
+          self.is_rule_check_successfull = False
+          return
 
     # Check the type of the object (can be file directory or symlink)
     if "type" in rule:
       if os.path.isdir(rule["path"]) == False and rule["type"] == "directory":
         logging.info("Object " + rule["path"] + " is not a directory")
-        self.is_file_check_successfull = False
-
-      # Check for mandatoy file
-      if os.path.isfile(rule["path"]) == False and rule["type"] == "file":
-        logging.info("Object " + rule["path"] + " is not a file")
-        self.is_file_check_successfull = False
+        self.is_rule_check_successfull = False
 
       # Check for mandatoy symlink
       if os.path.islink(rule["path"]) == False and rule["type"] == "symlink":
         logging.info("Object " + rule["path"] + " is not a symlink")
-        self.is_file_check_successfull = False
+        self.is_rule_check_successfull = False
+
+      # Check for mandatoy file
+      if os.path.isfile(rule["path"]) == False and rule["type"] == "file":
+        logging.info("Object " + rule["path"] + " is not a file")
+        self.is_rule_check_successfull = False
 
     # Check the owner of the object
     if "owner" in rule:
@@ -511,7 +703,7 @@ class CheckRootFS(CliCommand):
       # Compare it to the owner from the rule
       if uid != rule["owner"]:
           logging.error("File " + rule["path"] + " owner is invalid. UID is " + str(uid) + " instead of " + rule["owner"])
-          self.is_file_check_successfull = False
+          self.is_rule_check_successfull = False
 
     # Check the group of the object
     if "group" in rule:
@@ -521,7 +713,7 @@ class CheckRootFS(CliCommand):
       # Compare it to the owner from the rule
       if gid != rule["group"]:
           logging.error("File " + rule["path"] + " group is invalid. GID is " + str(gid) + " instead of " + rule["group"])
-          self.is_file_check_successfull = False
+          self.is_rule_check_successfull = False
 
     # Check the mode of the object
     if "mode" in rule:
@@ -531,7 +723,7 @@ class CheckRootFS(CliCommand):
       # Compare it to the owner from the rule
       if mode != rule["mode"]:
           logging.error("File " + rule["path"] + " mode is invalid. Mode is " + str(mode) + " instead of " + rule["mode"])
-          self.is_file_check_successfull = False
+          self.is_rule_check_successfull = False
 
     # Check the target of the symlink
     if "target" in rule:
@@ -539,16 +731,34 @@ class CheckRootFS(CliCommand):
 
     # Check the group of the object
     if "empty" in rule:
+      # Check if the file exist. Use the target path to expand symlinks
+      if os.path.isfile(rule["target_path"]) == False:
+        logging.info("Missing target file : " + rule["target_path"])
+        self.is_rule_check_successfull = False
+        return
+
       # Retrieve the size from the stat call
-      size = os.stat(rule["path"]).st_mode
-#TODO handle symlinks
+      size = os.stat(rule["target_path"]).st_mode
+
+      # Check if the file exist. Use the target path to expand symlinks
+      if os.path.isfile(rule["target_path"]) == False:
+        logging.info("Missing target file : " + rule["target_path"])
+        self.is_rule_check_successfull = False
+        return
       # Compare it to the owner from the rule
       if rule["empty"] == True and size != 0:
           logging.error("File " + rule["path"] + " is not empty. Size is " + str(size) + " instead of 0")
-          self.is_file_check_successfull = False
+          self.is_rule_check_successfull = False
 
     # Check the md5 hash of the target
     if "md5" in rule:
+
+      # Check if the file exist. Use the target path to expand symlinks
+      if os.path.isfile(rule["target_path"]) == False:
+        logging.info("Missing target file : " + rule["target_path"])
+        self.is_rule_check_successfull = False
+        return
+
       # Create the hasher used to parse file and compute hash
       hasher = hashlib.md5()
 
@@ -562,17 +772,22 @@ class CheckRootFS(CliCommand):
         # buffer, appending data just read
         while len(buffer) > 0:
           hasher.update(buffer)
-          buffer = afile.read(self.block_size)
+          buffer = file_to_hash.read(self.block_size)
 
         # Compare the hash to the rule, and set the check flag if needed
         if rule["md5"] != hasher.hexdigest():
             logging.error("File " + rule["path"] + " has an invalid MD5 hash. MD5 is " + hasher.hexdigest() + " instead of " + rule["md5"])
-            self.is_file_check_successfull = False
+            self.is_rule_check_successfull = False
           
-      print(hasher.hexdigest())
-
     # Check the sha1 hash of the target
     if "sha1" in rule:
+
+      # Check if the file exist. Use the target path to expand symlinks
+      if os.path.isfile(rule["target_path"]) == False:
+        logging.info("Missing target file : " + rule["target_path"])
+        self.is_rule_check_successfull = False
+        return
+
       # Create the hasher used to parse file and compute hash
       hasher = hashlib.sha1()
 
@@ -586,17 +801,22 @@ class CheckRootFS(CliCommand):
         # buffer, appending data just read
         while len(buffer) > 0:
           hasher.update(buffer)
-          buffer = afile.read(self.block_size)
+          buffer = file_to_hash.read(self.block_size)
 
         # Compare the hash to the rule, and set the check flag if needed
         if rule["sha1"] != hasher.hexdigest():
             logging.error("File " + rule["path"] + " has an invalid SHA1 hash. SHA1 is " + hasher.hexdigest() + " instead of " + rule["sha1"])
-            self.is_file_check_successfull = False
+            self.is_rule_check_successfull = False
           
-      print(hasher.hexdigest())
-
     # Check the sha256 hash of the target
     if "sha256" in rule:
+
+      # Check if the file exist. Use the target path to expand symlinks
+      if os.path.isfile(rule["target_path"]) == False:
+        logging.info("Missing target file : " + rule["target_path"])
+        self.is_rule_check_successfull = False
+        return
+
       # Create the hasher used to parse file and compute hash
       hasher = hashlib.sha256()
 
@@ -610,12 +830,10 @@ class CheckRootFS(CliCommand):
         # buffer, appending data just read
         while len(buffer) > 0:
           hasher.update(buffer)
-          buffer = afile.read(self.block_size)
+          buffer = file_to_hash.read(self.block_size)
 
         # Compare the hash to the rule, and set the check flag if needed
         if rule["sha256"] != hasher.hexdigest():
             logging.error("File " + rule["path"] + " has an invalid SHA256 hash. SHA256 is " + hasher.hexdigest() + " instead of " + rule["sha256"])
-            self.is_file_check_successfull = False
-            
-        print(hasher.hexdigest())
+            self.is_rule_check_successfull = False
     
