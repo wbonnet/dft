@@ -33,39 +33,47 @@ packages:
   mandatory:
     # This package exist and is installed 
     - name: "base-files"
+      label: "Testing that mandatory package base-file is installed (when it is installed)"
       # Test is supposed to succeed
       expected-result: True
     # This package does not exist and should generate an error 
     - name: "missing-non-existent-package"
+      label: "Testing that mandatory package missing-nonexistent-package (when it is not installed)"
       # Test is supposed to fail
       expected-result: False
     # This package has to be installed with a constraint on minimum version 
     - name: "vim-tiny"
+      label: "Testing minimum version of a mandatory package (when installed version is higher than minimum)"
       min-version: "2:7.0"
       # Test is supposed to succeed
       expected-result: True
     # This package has to be installed with a constraint on maximum version
     - name: "vim-tiny"
+      label: "Testing maximum version of a mandatory package (when installed version is lower than maximum)"
       max-version: "2:9.0"
       # Test is supposed to succeed
       expected-result: True
     # This package has to be installed with a constraint on minimum version
     - name: "vim-tiny"
+      label: "Testing maximum version of a mandatory (when installed version is higher than maximum)"
       max-version: "2:7.0"
       # Test is supposed to fail
       expected-result: False
     # This package has to be installed with a constraint on maximum version
     - name: "vim-tiny"
+      label: "Testing minimum version of a mandatory package (when installed version is lower than minimum)"
       min-version: "2:9.0"
       # Test is supposed to succeed
       expected-result: False
     # This package has to be installed with a given version 
     - name: "vim-common"
+      label: "Testing allowed version of a mandatory package (when installed version is the allowed version)"
       allowed-version: "2:8.0.0134-1"
       # Test is supposed to succeed
       expected-result: True
     # This package has to be installed with a given version 
     - name: "vim-common"
+      label: "Testing a list of allowed versions of a mandatory package(when installed version is in the list)"
       allowed-version: 
         - "2:8.0.0022-1"
         - "2:8.0.0134-1"
@@ -73,7 +81,16 @@ packages:
       expected-result: True
     # This package has to be installed with a given version
     - name: "vim-common"
+      label: "Testing allowed version of a mandatory package (when installed version is not allowed)"
       allowed-version: "2:9.0"
+      # Test is supposed to fail
+      expected-result: False
+    # This package has to be installed with a given version
+    - name: "vim-common"
+      label: "Testing a list of allowed versions of a mandatory package (when installed version is not in the list)"
+      allowed-version: 
+        - "2:9.0"
+        - "2:9.1"
       # Test is supposed to fail
       expected-result: False
   #
@@ -82,10 +99,12 @@ packages:
   forbidden:
     # This package exist and is installed, thus it will output an error
     - name: "base-files"
+      label: "Testing that forbidden package is not installed (when it is installed)"
       # Test is supposed to fail
       expected-result: False
     # This package does exist and of course is not installed
     - name: "non-installed-package"
+      label: "Testing that forbidden package is not installed (when it is not installed)"
       # Test is supposed to succeed
       expected-result: True
   #
@@ -94,39 +113,43 @@ packages:
   allowed:
     # This package is allowed and installed
     - name: "vim-tiny"
-      # Test is supposed to succeed
-      expected-result: True
-      # This package is allowed and not installed
+      label: "Testing that optionnal package is installed (when it is installed)"
       # Test is supposed to succeed
       expected-result: True
     # This package is allowed and has a constraint on version
     - name: "vim-common"
+      label: "Testing minimum version of an optionnal package (when installed version is higher than minimum)"
       min-version: "2:7.0"
       # Test is supposed to succeed
       expected-result: True
     # This package is allowed and has a constraint on version
     - name: "vim-common"
+      label: "Testing maximum version of an optionnal package (when installed version is lower than maximum)"
       max-version: "2:8.1"
       # Test is supposed to succeed
       expected-result: True      
     # This package is allowed and has a constraint on version
     - name: "vim-common"
+      label: "Testing maximum version of an optionnal package (when installed version is higher than maximum)"
       max-version: "2:7.0"
       # Test is supposed to fail
       expected-result: False
     # This package is allowed and has a constraint on version
     - name: "vim-common"
+      label: "Testing minimum version of an optionnal package (when installed version is lower than minimum)"
       min-version: "2:9.0"
       # Test is supposed to fail
       expected-result: False
     # This package is allowed and has several constraints on version
     - name: "vim-common"
+      label: "Testing both minimum and maximum version of an optionnal package (when installed version is in the range)"
       min-version: "2:7.0"
       max-version: "2:9.0"
       # Test is supposed to succeed
       expected-result: True
     # This package is allowed and has several constraints on version
     - name: "vim-common"
+      label: "Testing both minimum and maximum version of an optionnal package (when installed version is not in the range)"
       min-version: "9"
       max-version: "7"
       # Test is supposed to fail
@@ -135,6 +158,7 @@ packages:
     # should succeed. But it may fails depending on the Debian version
     # you use ;) just change versions
     - name: "vim-common"
+      label: "Testing a list of allowed versions of an optionnal package (when installed version is in the list)"
       allowed-version: 
         - "2:8.0.0134-1"
         - "2:8.0.0022-1"
@@ -143,6 +167,7 @@ packages:
     # This package is allowed and has constraints on given versions, it
     # should not succeed since none of the version are valid.
     - name: "vim-common"
+      label: "Testing a list of allowed versions of an optionnal package (when installed version is not in the list)"
       allowed-version: 
         - "2:7.0"
         - "2:7.1"
@@ -151,6 +176,7 @@ packages:
     # This package is allowed and has constraints on given blacklisted
     # versions, it should succeed.
     - name: "vim-common"
+      label: "Testing a list of blacklisted versions of an optionnal package (when installed version is not in the list)"
       blacklisted-version: 
         - "2:9.0.0134-1"
         - "2:9.0.0022-1"
@@ -159,6 +185,7 @@ packages:
     # This package is allowed and has constraints on given blacklisted
     # versions, it should fail.
     - name: "vim-common"
+      label: "Testing a list of blacklisted versions of an optionnal package (when installed version is in the list)"
       blacklisted-version: 
         - "2:9.0.0134-1"
         - "2:9.0.0022-1"
@@ -167,6 +194,7 @@ packages:
     # This package is allowed and has constraints on blacklisted arch,
     # it should succeed
     - name: "vim-common"
+      label: "Testing a list of blacklisted architectures of an optionnal package (when installed version is not in the list)"
       blacklisted-arch:
         - "arm64"
       # Test is supposed to succeed
@@ -174,6 +202,7 @@ packages:
     # This package is allowed and has several constraints on blacklisted 
     # arch, it should succeed
     - name: "vim-common"
+      label: "Testing a list of several blacklisted architectures of an optionnal package (when installed version is not in the list)"
       blacklisted-arch:
         - "arm64"
         - "armhf"
@@ -183,6 +212,7 @@ packages:
     # This package is allowed and has constraints on blacklisted arch,
     # it should fail
     - name: "vim-common"
+      label: "Testing a list of blacklisted architectures of an optionnal package (when installed version is in the list)"
       blacklisted-arch:
         - "all"
       # Test is supposed to fail
@@ -190,6 +220,7 @@ packages:
     # This package is allowed and has several constraints on blacklisted
     # arch, it should fail
     - name: "vim-common"
+      label: "Testing a list of several blacklisted architectures of an optionnal package (when installed version is in the list)"
       blacklisted-arch:
         - "amd64"
         - "all"
@@ -198,6 +229,7 @@ packages:
       expected-result: False
     # This package is allowed on several arch but not amd64 it should fail 
     - name: "base-files"
+      label: "Testing a list of allowed architectures of an optionnal package (when installed version is not in the list)"
       allowed-arch:
         - "all"
         - "armhf"
@@ -205,6 +237,7 @@ packages:
       expected-result: False
     # This package is allowed on amd64 it should succeed
     - name: "base-files"
+      label: "Testing a list of allowed architectures of an optionnal package (when installed version is in the list)"
       allowed-arch:
         - "amd64"
         - "armhf"
@@ -224,29 +257,35 @@ files:
     #
     # Mandatory single file
   - path: "/dft/existing/empty-file"
+    label: "Testing that a mandatory file exist (when the file exist)"
     # Test is supp  osed to succeed
     expected-result: True
     # Object with an unknow type
   - path: "/dft/existing/var/"
+    label: "Testing that a mandatory file exist (when the file exist but the type is unknown)"
     type: "unknown"
     # Test is supposed to fail
     expected-result: False
     # Mandatory non existing file
   - path: "/dft/misssing/empty-file"
+    label: "Testing that a mandatory file exist (when the file does not exist)"
     # Test is supposed to fail
     expected-result: False
     # Mandatory file but it is a directory
   - path: "/dft/existing/etc"
+    label: "Testing that a mandatory file exist (when it is not a file but a directory)"
     type: "file"
     # Test is supposed to fail
     expected-result: False  
     # Mandatory single but it is a symlink
   - path: "/dft/existing/link"
+    label: "Testing that a mandatory file exist (when it is not a file but a symlink)"
     type: "file"
     # Test is supposed to fail
     expected-result: False
     # File with valid type owner group and mode
   - path: "/dft/existing/etc/passwd"
+    label: "Testing owner group and mode of a mandatory file exist (when the values are correct)"
     type: "file"
     owner: "root"
     group: "root"
@@ -255,6 +294,7 @@ files:
     expected-result: True
     # This definition will produce an error on file attributes
   - path: "/dft/existing/etc/passwd"
+    label: "Testing owner group and mode of a mandatory file exist (when the mode is not correct)"
     owner: "root"
     group: "root"
     mode: "0666"
@@ -262,6 +302,7 @@ files:
     expected-result: False
     # This definition will produce an error on group
   - path: "/dft/existing/etc/passwd"
+    label: "Testing owner group and mode of a mandatory file exist (when the group is not correct)"
     owner: "root"
     group: "staff"
     mode: "0640"
@@ -269,6 +310,7 @@ files:
     expected-result: False
     # This definition will produce an error on owner
   - path: "/dft/existing/etc/passwd"
+    label: "Testing owner group and mode of a mandatory file exist (when the owner is not correct)"
     owner: "dft"
     group: "root"
     mode: "0640"
@@ -276,6 +318,7 @@ files:
     expected-result: False
     # This definition will produce an error on everything
   - path: "/dft/existing/etc/passwd"
+    label: "Testing owner group and mode of a mandatory file exist (when none of the values is correct)"
     owner: "dft"
     group: "dft"
     mode: "0666"
@@ -287,26 +330,31 @@ files:
     #
     # Mandatory directory
   - path: "/dft/existing/etc/"
+    label: "Testing that a mandatory directory exist (when the directory exist)"
     type: "directory"
     # Test is supposed to succeed
     expected-result: True
     # Unreadable missing object
   - path: "/dft/missing/does-not exist"
+    label: "Testing that a mandatory directory exist (when the directory does not exist)"
     type: "directory"
     # Test is supposed to fail
     expected-result: False
     # Mandatory directory, but it is a file
   - path: "/dft/existing/etc/passwd"
+    label: "Testing that a mandatory directory exist (when it is not a directory but a file)"
     type: "directory"
     # Test is supposed to fail
     expected-result: False
     # Mandatory directory, but it is a symlink
   - path: "/dft/existing/link"
+    label: "Testing that a mandatory directory exist (when it is not a directory but a symlink)"
     type: "directory"
     # Test is supposed to fail
     expected-result: False
     # Directory with valid type owner group and mode
   - path: "/dft/existing/etc/network"
+    label: "Testing owner group and mode of a mandatory directory (when the values are correct)"
     type: "directory"
     owner: "root"
     group: "root"
@@ -315,6 +363,7 @@ files:
     expected-result: True
     # Directory with invalid type owner group and mode
   - path: "/dft/existing/etc/network"
+    label: "Testing owner group and mode of a mandatory directory (when none of the values is correct)"
     type: "directory"
     owner: "dft"
     group: "dft"
@@ -326,33 +375,39 @@ files:
     #
     # Existing symlink without target nor type
   - path: "/dft/existing/link"
+    label: "Testing that a mandatory symlink exist (when it exist, but the type is not defined, thus default to a file)"
     # Test is supposed to fail since by default it should be a file
     expected-result: False
     # Existing symlink without target
   - path: "/dft/existing/link"
+    label: "Testing that a mandatory symlink exist (when it exist)"
     type: "symlink"
     # Test is supposed to succeed
     expected-result: True
     # Existing symlink with existing target
   - path: "/dft/existing/link"
+    label: "Testing that a mandatory symlink and its target both exist (when they exist)"
     type: "symlink"
     target: "/dft/existing/link-target"
     # Test is supposed to succeed
     expected-result: True
     # Existing symlink to symlink with existing target
   - path: "/dft/existing/link-to-link-to-link"
+    label: "Testing that a mandatory symlink and its target both exist, including several links indirection (when they exist)"
     type: "symlink"
     target: "/dft/existing/link-target"
     # Test is supposed to succeed
     expected-result: True
     # Existing symlink with missing target
   - path: "/dft/existing/link"
+    label: "Testing that a mandatory symlink and its target both exist (when the target does not exist)"
     type: "symlink"
     target: "/dft/missing/target-not-exist"
     # Test is supposed to fail
     expected-result: False
     # Missing symlink with missing target 
   - path: "/dft/missing/link"
+    label: "Testing that a mandatory symlink and its target both exist (when the target does not exist and type is not defined)"
     target: "/dft/missing/target-not-exist"
     # Test is supposed to fail
     expected-result: False
@@ -365,14 +420,17 @@ files:
   #
   # This file exist but is forbidden, without type it defaults to a file
   - path: "/dft/existing/etc/passwd"
+    label: "Testing that a forbidden file does exist (when the file exist)"
     # Test is supposed to fail
     expected-result: False
   # This file does not and is forbidden
   - path: "/dft/missing/not-existing"
+    label: "Testing that a forbidden file does exist (when the file does not exist and type is not defined)"
     # Test is supposed to succeed
     expected-result: True
   # This file does not and is forbidden
   - path: "/dft/missing/not-existing"
+    label: "Testing that a forbidden file does exist (when the file does exist)"
     type: "file"
     # Test is supposed to succeed
     expected-result: True
@@ -383,16 +441,19 @@ files:
   # This file exist but is forbidden, with type info => file
   #
   - path: "/dft/existing/etc/passwd"
+    label: "Testing that a forbidden file does exist (when the file exist)"
     type: "file"
     # Test is supposed to fail
     expected-result: False
   # This file exist but is forbidden as a directory (authorized otherwise)
   - path: "/dft/existing/etc/passwd"
+    label: "Testing that a forbidden directory does not exist (when the path exist as a file)"
     type: "directory"
     # Test is supposed to succeed
     expected-result: True
   # This file exist but is forbidden as a symlink (authorized otherwise)
   - path: "/dft/existing/etc/passwd"
+    label: "Testing that a forbidden symlink does not exist (when the path exist as a file)"
     type: "symlink"
     # Test is supposed to succeed
     expected-result: True
@@ -401,6 +462,7 @@ files:
   #
   # This diretory does not exist and is forbidden
   - path: "/dft/missing/not-existing"
+    label: "Testing that a forbidden directory does not exist (when it doe not exist)"
     type: "directory"
     # Test is supposed to succeed
     expected-result: True
@@ -411,16 +473,19 @@ files:
   # This dir exist but is forbidden
   #
   - path: "/dft/existing/etc/"
+    label: "Testing that a forbidden file does not exist (when the path exist as a directory)"
     type: "file"
     # Test is supposed to succeed
     expected-result: True
   # This dir exist but is forbidden as a directory (authorized otherwise)
   - path: "/dft/existing/etc"
+    label: "Testing that a forbidden file does not exist (when it does exist)"
     type: "directory"
     # Test is supposed to fail
     expected-result: False
   # This dir exist but is forbidden as a symlink (authorized otherwise)
   - path: "/dft/existing/etc/passwd"
+    label: "Testing that a forbidden symlink does not exist (when the path exist as a file)"
     type: "symlink"
     # Test is supposed to succeed
     expected-result: True
@@ -429,6 +494,7 @@ files:
   #
   # This diretory does not and is forbidden
   - path: "/dft/missing/not-existing"
+    label: "Testing that a forbidden symlink does not exist (when it does not exist)"
     type: "symlink"
     # Test is supposed to succeed
     expected-result: True
@@ -439,16 +505,19 @@ files:
   # This link exist but is forbidden
   #
   - path: "/dft/existing/link"
+    label: "Testing that a forbidden file does not exist (when the path exist as a symlink)"
     type: "file"
     # Test is supposed to succeed
     expected-result: True
   # This link exist but is forbidden as a directory (authorized otherwise)
   - path: "/dft/existing/link"
+    label: "Testing that a forbidden directory does not exist (when the path exist as a directory)"
     type: "directory"
     # Test is supposed to succeed
     expected-result: True
   # This file exist but is forbidden as a symlink (authorized otherwise)
   - path: "/dft/existing/link"
+    label: "Testing that a forbidden symlinkk does not exist (when it does exist)"
     type: "symlink"
     # Test is supposed to fail
     expected-result: False
@@ -456,6 +525,7 @@ files:
   # forbidden (link target not file itself). If you need to test the link not
   # its target, do not specify atarget value.
   - path: "/dft/existing/link"
+    label: "Testing that a forbidden symlink target does not exist (when it exist)"
     type: "symlink"
     target: "link-target"
     # Test is supposed to fail
@@ -463,12 +533,14 @@ files:
   # This link point is forbidden. Even if the target does not exist, the 
   # target becomes forbidden (link target not file itself)
   - path: "/dft/existing/link"
+    label: "Testing that a forbidden symlink target does not exist (when the target does not exist)"
     type: "symlink"
     target: "link-target-does-not exist"
     # Test is supposed to succeed
     expected-result: True
     # Existing symlink to symlink with existing target
   - path: "/dft/existing/link-to-link-to-link"
+    label: "Testing that a forbidden symlink taget does not exist (when it exist with cascading links)"
     type: "symlink"
     target: "/dft/existing/link-target"
     # Test is supposed to fail
@@ -482,81 +554,79 @@ files:
     #
   # Test that a file is not empty (not type means file by efault)
   - path: "/dft/existing/empty-file"
+    label: "Testing that a file is not empty (when the file is empty)"
     empty: False
     # Test is supposed to fail
     expected-result: False
   # Test that a file is not empty (not type means file by efault)
   - path: "/dft/existing/non-empty-file"
+    label: "Testing that a file is not empty (when the file is not empty)"
     empty: False
     # Test is supposed to succeed
     expected-result: True
   # Test that a file is empty (not type means file by efault)
   - path: "/dft/existing/empty-file"
+    label: "Testing that a file is empty (when the file is empty)"
     empty: True
     # Test is supposed to succeed
     expected-result: True
   # Test that a file is empty (not type means file by efault)
   - path: "/dft/existing/non-empty-file"
+    label: "Testing that a file is empty (when the file is not empty)"
     empty: True
     # Test is supposed to fail
     expected-result: False
   # Test the md5 sum of a file
   - path: "/dft/existing/non-empty-file"
+    label: "Testing md5 of a file (when the hash is wrong)"
     md5: "very_unlikely_hash_value"
     # Test is supposed to fail
     expected-result: False
   # Test the md5 sum of a file
   - path: "/dft/existing/non-empty-file"
+    label: "Testing md5 of a file (when the hash is wrong)"
     md5: "570a5adf1578c95aa27207632c74dacd"
     # Test is supposed to fail
     expected-result: True
   # Test the sha1 sum of a file
   - path: "/dft/existing/non-empty-file"
+    label: "Testing sha1 of a file (when the hash is wrong)"
     sha1: "very_unlikely_hash_value"
     # Test is supposed to fail
     expected-result: False
   # Test the sha1 sum of a file
   - path: "/dft/existing/non-empty-file"
-    sa1: "99b6f3cb04c2b9f027928869a2a1872ef4fe3246"
+    label: "Testing sha1 of a file (when the hash is correct)"
+    sha1: "99b6f3cb04c2b9f027928869a2a1872ef4fe3246"
     # Test is supposed to fail
     expected-result: True
   # Test the sha256 sum of a file
   - path: "/dft/existing/non-empty-file"
-    sha256: "very_unlikely_hash_value"
-    # Test is supposed to fail
-    expected-result: False
-  # Test the sha256 sum of a file
-  - path: "/dft/existing/non-empty-file"
+    label: "Testing sha256 of a file (when the hash is correct)"
     sha256: "d1cfe74689e00a44e66f743c57fe7a0fa622f9b560ee8fabc7adc332edaf0941"
     # Test is supposed to fail
     expected-result: True
-  # Test the md5 sum of a directory
-  - path: "/dft/etc"
-    md5: "very_unlikely_hash_value"
-    # Test is supposed to fail
-    expected-result: False
-  # Test the sha1 sum of a directory
-  - path: "/dft/etc"
-    sha1: "very_unlikely_hash_value"
-    # Test is supposed to fail
-    expected-result: False
-  # Test the sha256 sum of a directory
+  # Test the sha256 sum of a file
   - path: "/dft/existing/non-empty-file"
+    label: "Testing sha256 of a file (when the hash is wrong)"
     sha256: "very_unlikely_hash_value"
     # Test is supposed to fail
     expected-result: False
   # Test the md5 sum of a directory without type, thus a file
   - path: "/dft/existing/etc"
+    label: "Testing md5 of a file (when the target is not a file but a directory)"
     md5: "very_unlikely_hash_value"
     # Test is supposed to fail
     expected-result: False
   # Test the md5 sum of a diretory without type, thus a file
   - path: "/dft/existing/etc"
+    label: "Testing sha1 of a file (when the target is not a file but a directory)"
     sha1: "very_unlikely_hash_value"
     # Test is supposed to fail
     expected-result: False
     # Test the md5 sum of a directory without type, thus a file
   - path: "/dft/existing/etc"
+    label: "Testing sha256 of a file (when the target is not a file but a directory)"
     sha256: "very_unlikely_hash_value"
     # Test is supposed to fail
     expected-result: False
@@ -565,29 +635,41 @@ files:
     #
     # Test a missing directory which can be optional
   - path: "/dft/missing/etc"
+    label: "Testing that an optional directory may exist (when the directory does not exist)"
     type: "directory"
     # Test is supposed to succeed since missing but optional
     expected-result: True
   # Test that a directory is not empty 
   - path: "/dft/existing/empty-directory"
+    label: "Testing that a directory is not empty (when the directory is empty)"
     type: "directory"
     empty: False
     # Test is supposed to fail
     expected-result: False
   # Test that a directory is not empty 
   - path: "/dft/existing/non-empty-directory"
+    label: "Testing that a directory is not empty (when the directory is not empty)"
     type: "directory"
     empty: False
     # Test is supposed to succeed
     expected-result: True
   # Test that a directory is empty
   - path: "/dft/existing/empty-directory"
+    label: "Testing that a directory is empty (when the directory is empty)"
     type: "directory"
     empty: True
     # Test is supposed to succeed
     expected-result: True
   # Test that a directory is empty
   - path: "/dft/existing/non-empty-directory"
+    label: "Testing that a directory is empty (when the directory is not empty)"
+    type: "directory"
+    empty: True
+    # Test is supposed to fail
+    expected-result: False
+  # Test that a directory is empty
+  - path: "/dft/existing/non-empty-directory"
+    label: "Testing that a directory is empty (when the directory does not exist)"
     type: "directory"
     empty: True
     # Test is supposed to fail
@@ -597,99 +679,116 @@ files:
     #
   # Test the md5 sum of a symlink without type, thus a file
   - path: "/dft/existing/link-to-non-empty-file"
+    label: "Testing md5 of a symlink to a non empty file (when the type is wrong and defaults to a file)"
     md5: "very_unlikely_hash_value"
     # Test is supposed to fail
     expected-result: False
-  # Test the md5 sum of a symlink without type, thus a file
+  # Test the sha1 sum of a symlink without type, thus a file
   - path: "/dft/existing/link-to-non-empty-file"
+    label: "Testing sha1 of a symlink to a non empty file (when the type is wrong and defaults to a file)"
     sha1: "very_unlikely_hash_value"
     # Test is supposed to fail
     expected-result: False
-    # Test the md5 sum of a symlink without type, thus a file
+    # Test the sha256 sum of a symlink without type, thus a file
   - path: "/dft/existing/link-to-non-empty-file"
+    label: "Testing sha256 of a symlink to a non empty file (when the type is wrong and defaults to a file)"
     sha256: "very_unlikely_hash_value"
     # Test is supposed to fail
     expected-result: False
   # Test the md5 sum of a link to a file
   - path: "/dft/existing/link-to-non-empty-file"
+    label: "Testing md5 of a symlink to a non empty file (when the md5 is wrong)"
     md5: "very_unlikely_hash_value"
     type: "symlink"
     # Test is supposed to fail
     expected-result: False
   # Test the md5 sum of a link to a file
   - path: "/dft/existing/link-to-non-empty-file"
+    label: "Testing md5 of a symlink to a non empty file (when the md5 is correct)"
     md5: "570a5adf1578c95aa27207632c74dacd"
     type: "symlink"
     # Test is supposed to fail
     expected-result: True
   # Test the sha1 sum of a link to a file
   - path: "/dft/existing/link-to-non-empty-file"
+    label: "Testing sha1 of a symlink to a non empty file (when the sha1 is wrong)"
     sha1: "very_unlikely_hash_value"
     type: "symlink"
     # Test is supposed to fail
     expected-result: False
   # Test the sha1 sum of a link to a file
   - path: "/dft/existing/link-to-non-empty-file"
-    sa1: "99b6f3cb04c2b9f027928869a2a1872ef4fe3246"
+    label: "Testing sha1 of a symlink to a non empty file (when the sha1 is correct)"
+    sha1: "99b6f3cb04c2b9f027928869a2a1872ef4fe3246"
     type: "symlink"
     # Test is supposed to fail
     expected-result: True
   # Test the sha256 sum of a link to a file
   - path: "/dft/existing/link-to-non-empty-file"
+    label: "Testing sha256 of a symlink to a non empty file (when the sha256 is wrong)"
     sha256: "very_unlikely_hash_value"
     type: "symlink"
     # Test is supposed to fail
     expected-result: False
   # Test the sha256 sum of a link to a file
   - path: "/dft/existing/link-to-non-empty-file"
+    label: "Testing sha256 of a symlink to a non empty file (when the sha256 is correct)"
     sha256: "d1cfe74689e00a44e66f743c57fe7a0fa622f9b560ee8fabc7adc332edaf0941"
     type: "symlink"
     # Test is supposed to fail
     expected-result: True
   # Test that a link to a directory is not empty 
   - path: "/dft/existing/link-to-empty-directory"
+    label: "Testing symlink to an empty directory (when expecting the directory to be not empty)"
     type: "symlink"
     empty: False
     # Test is supposed to fail
     expected-result: False
   # Test that a link to a directory is not empty 
   - path: "/dft/existing/link-to-non-empty-directory"
+    label: "Testing symlink to a non empty directory (when expecting the directory to be not empty)"
     type: "symlink"
     empty: False
     # Test is supposed to succeed
     expected-result: True
   # Test that a link to a directory is empty
   - path: "/dft/existing/link-to-empty-directory"
+    label: "Testing symlink to an empty directory (when expecting the directory to be empty)"
     type: "symlink"
     empty: True
     # Test is supposed to succeed
     expected-result: True
   # Test that a link to a directory is empty
   - path: "/dft/existing/link-to-non-empty-directory"
+    label: "Testing symlink to a non empty directory (when expecting the directory to be empty)"
     type: "symlink"
     empty: True
     # Test is supposed to fail
     expected-result: False
   # Test that a link to a file is not empty 
   - path: "/dft/existing/link-to-empty-file"
+    label: "Testing symlink to an empty file (when expecting the file to be not empty)"
     type: "symlink"
     empty: False
     # Test is supposed to fail
     expected-result: False
   # Test that a link to a file is not empty 
   - path: "/dft/existing/link-to-non-empty-file"
+    label: "Testing symlink to a non empty file (when expecting the file to be not empty)"
     type: "symlink"
     empty: False
     # Test is supposed to succeed
     expected-result: True
   # Test that a link to a file is empty
   - path: "/dft/existing/link-to-empty-file"
+    label: "Testing symlink to an empty file (when expecting the file to be empty)"
     type: "symlink"
     empty: True
     # Test is supposed to succeed
     expected-result: True
   # Test that a link to a file is empty
   - path: "/dft/existing/link-to-non-empty-file"
+    label: "Testing symlink to a non empty file (when expecting the file to be empty)"
     type: "symlink"
     empty: True
     # Test is supposed to fail
