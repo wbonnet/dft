@@ -63,8 +63,75 @@ class CheckRootFS(CliCommand):
     self.is_rule_check_successfull = True
     self.is_rule_check_successfull = True
 
+    # Rule counter used to display the total number of checked rules
+    self.rule_counter = 0
+    
+    # Counter used to display the number of successful rules
+    self.rule_successfull_counter = 0
+
+    # Counter used to display the number of failed rules
+    self.rule_failed_counter = 0
+
     # Size of block used to read files whencomputing hashes
     self.block_size = 65536
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # process_rule_checking_output
+  #
+  # ------------------------------------------------------------------------- 
+  def process_rule_checking_output(self):
+    """This method implement the process the results of a check rule call.
+    It provides statitistics counter update, expected-result handling and
+    label output method.
+
+    All this code has been isolated in a single method since it is called from
+    both package and file rule checking, several time each (one cal for 
+    mandatory, forbidden and allowed items).
+    """
+
+    # If the test was negative, then change the global result to false
+    if self.is_rule_check_successfull == False:
+      # Set the global failure flag
+      self.is_check_successfull = False
+      # Counter used to display the number of failed rules
+      self.rule_failed_counter += 1
+    else:
+      # Counter used to display the number of successful rules
+      self.rule_successfull_counter += 1
+      
+    # If the expected result variable has been defined, the compare it value
+    # to the actual method result, and output a critical if different
+    # expected-result value is used in unit testing context, and it should 
+    # never be different unless something nasty is lurking inthe dark
+    if "expected-result" in rule:
+      if rule["expected-result"] != self.is_rule_check_successfull:
+        logging.critical("-----------------------------------------------------------------------------")
+        logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_rule_check_successfull))
+        print(rule)
+        logging.critical("-----------------------------------------------------------------------------")
+      else: 
+        # Counter used to display the number of rules matching expected result
+        # either failed of successfull, but as expected (handy for unit tests)
+        rule_as_expected_counter += 1
+
+    # Test if the label field is defined, if yes we have to output a message
+    # for this rule with the result of the check
+    if "label" in rule:
+      # Define an empty result
+      label_check_result = ""
+      # If the check is successful, set the label to OK
+      if self.is_rule_check_successfull == False:
+        label_check_result = "[ OK ]"
+      else:
+        # Otherwise set it to fail
+        label_check_result = "[FAIL]"
+      # And print the test number, label and result to stdout
+      print(label_check_result + " " + rule["label"])
+
+
 
   # -------------------------------------------------------------------------
   #
@@ -142,13 +209,13 @@ class CheckRootFS(CliCommand):
     """
 
     # Rule counter used to display the total number of checked rules
-    rule_counter = 0
+    self.rule_counter = 0
     
     # Counter used to display the number of successful rules
-    rule_successfull_counter = 0
+    self.rule_successfull_counter = 0
 
     # Counter used to display the number of failed rules
-    rule_failed_counter = 0
+    self.rule_failed_counter = 0
 
     # Counter used to display the number of rules matching expected result
     # either failed of successfull, but as expected (handy for unit tests)
@@ -182,56 +249,20 @@ class CheckRootFS(CliCommand):
     #
     for rule in self.project.check_definition["packages"]["mandatory"]:
       # Rule counter used to display the total number of checked rules
-      rule_counter += 1
+      self.rule_counter += 1
 
       # Call the check package method
       self.check_package_rules(rule, mandatory=True)
 
-      # If the test was negative, then change the global result to false
-      if self.is_rule_check_successfull == False:
-        # Set the global failure flag
-        self.is_check_successfull = False
-        # Counter used to display the number of failed rules
-        rule_failed_counter += 1
-      else:
-        # Counter used to display the number of successful rules
-        rule_successfull_counter += 1
-        
-      # If the expected result variable has been defined, the compare it value
-      # to the actual method result, and output a critical if different
-      # expected-result value is used in unit testing context, and it should 
-      # never be different unless something nasty is lurking inthe dark
-      if "expected-result" in rule:
-        if rule["expected-result"] != self.is_rule_check_successfull:
-          logging.critical("-----------------------------------------------------------------------------")
-          logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_rule_check_successfull))
-          print(rule)
-          logging.critical("-----------------------------------------------------------------------------")
-        else: 
-          # Counter used to display the number of rules matching expected result
-          # either failed of successfull, but as expected (handy for unit tests)
-          rule_as_expected_counter += 1
-
-      # Test if the label field is defined, if yes we have to output a message
-      # for this rule with the result of the check
-      if "label" in rule:
-        # Define an empty result
-        label_check_result = ""
-        # If the check is successful, set the label to OK
-        if self.is_rule_check_successfull == False:
-          label_check_result = "[ OK ]"
-        else:
-          # Otherwise set it to fail
-          label_check_result = "[FAIL]"
-        # And print the test number, label and result to stdout
-        print(label_check_result + " " + rule["label"])
+      # Process the check results (update counters and output information)
+      self.process_rule_checking_output()
 
     #
     # Process the "forbidden" rules group
     #
     for rule in self.project.check_definition["packages"]["forbidden"]:
       # Rule counter used to display the total number of checked rules
-      rule_counter += 1
+      self.rule_counter += 1
 
       # Call the check package method
       self.check_package_rules(rule, forbidden=True)
@@ -241,10 +272,10 @@ class CheckRootFS(CliCommand):
          # Set the global failure flag
         self.is_check_successfull = False
         # Counter used to display the number of failed rules
-        rule_failed_counter += 1
+        self.rule_failed_counter += 1
       else:
         # Counter used to display the number of successful rules
-        rule_successfull_counter += 1
+        self.rule_successfull_counter += 1
 
       # If the expected result variable has been defined, the compare it value
       # to the actual method result, and output a critical if different
@@ -280,7 +311,7 @@ class CheckRootFS(CliCommand):
     #
     for rule in self.project.check_definition["packages"]["allowed"]:
       # Rule counter used to display the total number of checked rules
-      rule_counter += 1
+      self.rule_counter += 1
 
       # Call the check package method
       self.check_package_rules(rule, allowed=True)
@@ -290,10 +321,10 @@ class CheckRootFS(CliCommand):
         # Set the global failure flag
         self.is_check_successfull = False
         # Counter used to display the number of failed rules
-        rule_failed_counter += 1
+        self.rule_failed_counter += 1
       else:
         # Counter used to display the number of successful rules
-        rule_successfull_counter += 1
+        self.rule_successfull_counter += 1
 
       # If the expected result variable has been defined, the compare it value
       # to the actual method result, and output a critical if different
@@ -331,9 +362,9 @@ class CheckRootFS(CliCommand):
 # TODO handle none for expected in case the  is no unit tests
     print("")
     print("Package check execution summary")
-    print(". Processed " + str(rule_counter) + " rules")
-    print(". " + str(rule_successfull_counter) + " were successfull")
-    print(". " + str(rule_failed_counter) + " failed")
+    print(". Processed " + str(self.rule_counter) + " rules")
+    print(". " + str(self.rule_successfull_counter) + " were successfull")
+    print(". " + str(self.rule_failed_counter) + " failed")
     print(". " + str(rule_as_expected_counter) + " ran as expected")
     print("")
 
@@ -499,13 +530,13 @@ class CheckRootFS(CliCommand):
     """
 
     # Rule counter used to display the total number of checked rules
-    rule_counter = 0
+    self.rule_counter = 0
     
     # Counter used to display the number of successful rules
-    rule_successfull_counter = 0
+    self.rule_successfull_counter = 0
 
     # Counter used to display the number of failed rules
-    rule_failed_counter = 0
+    self.rule_failed_counter = 0
 
     # Counter used to display the number of rules matching expected result
     # either failed of successfull, but as expected (handy for unit tests)
@@ -517,7 +548,7 @@ class CheckRootFS(CliCommand):
     # Retrieving the complete file list would cost too much
     for rule in self.project.check_definition["files"]["mandatory"]:
       # Rule counter used to display the total number of checked rules
-      rule_counter += 1
+      self.rule_counter += 1
 
       self.check_file_rules(rule, mandatory=True)
 
@@ -526,10 +557,10 @@ class CheckRootFS(CliCommand):
         # Set the global failure flag
         self.is_check_successfull = False
         # Counter used to display the number of failed rules
-        rule_failed_counter += 1
+        self.rule_failed_counter += 1
       else:
         # Counter used to display the number of successful rules
-        rule_successfull_counter += 1
+        self.rule_successfull_counter += 1
 
       # If the expected result variable has been defined, the compare it value
       # to the actual method result, and output a critical if different
@@ -565,7 +596,7 @@ class CheckRootFS(CliCommand):
     #
     for rule in self.project.check_definition["files"]["forbidden"]:
       # Rule counter used to display the total number of checked rules
-      rule_counter += 1
+      self.rule_counter += 1
 
       self.check_file_rules(rule, forbidden=True)
 
@@ -574,10 +605,10 @@ class CheckRootFS(CliCommand):
         # Set the global failure flag
         self.is_check_successfull = False
         # Counter used to display the number of failed rules
-        rule_failed_counter += 1
+        self.rule_failed_counter += 1
       else:
         # Counter used to display the number of successful rules
-        rule_successfull_counter += 1
+        self.rule_successfull_counter += 1
 
       # If the expected result variable has been defined, the compare it value
       # to the actual method result, and output a critical if different
@@ -613,7 +644,7 @@ class CheckRootFS(CliCommand):
     #
     for rule in self.project.check_definition["files"]["allowed"]:
       # Rule counter used to display the total number of checked rules
-      rule_counter += 1
+      self.rule_counter += 1
 
       self.check_file_rules(rule, allowed=True)
 
@@ -622,10 +653,10 @@ class CheckRootFS(CliCommand):
         # Set the global failure flag
         self.is_check_successfull = False
         # Counter used to display the number of failed rules
-        rule_failed_counter += 1
+        self.rule_failed_counter += 1
       else:
         # Counter used to display the number of successful rules
-        rule_successfull_counter += 1
+        self.rule_successfull_counter += 1
 
       # If the expected result variable has been defined, the compare it value
       # to the actual method result, and output a critical if different
@@ -661,9 +692,9 @@ class CheckRootFS(CliCommand):
 
     print("")
     print("File check execution summary")
-    print(". Processed " + str(rule_counter) + " rules")
-    print(". " + str(rule_successfull_counter) + " were successfull")
-    print(". " + str(rule_failed_counter) + " failed")
+    print(". Processed " + str(self.rule_counter) + " rules")
+    print(". " + str(self.rule_successfull_counter) + " were successfull")
+    print(". " + str(self.rule_failed_counter) + " failed")
     print(". " + str(rule_as_expected_counter) + " ran as expected")
     print("")
 
