@@ -72,6 +72,11 @@ class CheckRootFS(CliCommand):
     # Counter used to display the number of failed rules
     self.rule_failed_counter = 0
 
+    # Counter used to display the number of rules matching expected result
+    # either failed of successfull, but as expected (handy for unit tests)
+    self.rule_as_expected_counter = 0
+
+
     # Size of block used to read files whencomputing hashes
     self.block_size = 65536
 
@@ -82,7 +87,7 @@ class CheckRootFS(CliCommand):
   # process_rule_checking_output
   #
   # ------------------------------------------------------------------------- 
-  def process_rule_checking_output(self):
+  def process_rule_checking_output(self, rule):
     """This method implement the process the results of a check rule call.
     It provides statitistics counter update, expected-result handling and
     label output method.
@@ -115,7 +120,7 @@ class CheckRootFS(CliCommand):
       else: 
         # Counter used to display the number of rules matching expected result
         # either failed of successfull, but as expected (handy for unit tests)
-        rule_as_expected_counter += 1
+        self.rule_as_expected_counter += 1
 
     # Test if the label field is defined, if yes we have to output a message
     # for this rule with the result of the check
@@ -219,7 +224,7 @@ class CheckRootFS(CliCommand):
 
     # Counter used to display the number of rules matching expected result
     # either failed of successfull, but as expected (handy for unit tests)
-    rule_as_expected_counter = 0
+    self.rule_as_expected_counter = 0
 
     logging.info("starting to check installed packages")
 
@@ -255,7 +260,7 @@ class CheckRootFS(CliCommand):
       self.check_package_rules(rule, mandatory=True)
 
       # Process the check results (update counters and output information)
-      self.process_rule_checking_output()
+      self.process_rule_checking_output(rule)
 
     #
     # Process the "forbidden" rules group
@@ -290,7 +295,7 @@ class CheckRootFS(CliCommand):
         else: 
           # Counter used to display the number of rules matching expected result
           # either failed of successfull, but as expected (handy for unit tests)
-          rule_as_expected_counter += 1
+          self.rule_as_expected_counter += 1
 
       # Test if the label field is defined, if yes we have to output a message
       # for this rule with the result of the check
@@ -339,7 +344,7 @@ class CheckRootFS(CliCommand):
         else: 
           # Counter used to display the number of rules matching expected result
           # either failed of successfull, but as expected (handy for unit tests)
-          rule_as_expected_counter += 1
+          self.rule_as_expected_counter += 1
 
       # Test if the label field is defined, if yes we have to output a message
       # for this rule with the result of the check
@@ -365,7 +370,7 @@ class CheckRootFS(CliCommand):
     print(". Processed " + str(self.rule_counter) + " rules")
     print(". " + str(self.rule_successfull_counter) + " were successfull")
     print(". " + str(self.rule_failed_counter) + " failed")
-    print(". " + str(rule_as_expected_counter) + " ran as expected")
+    print(". " + str(self.rule_as_expected_counter) + " ran as expected")
     print("")
 
 
@@ -540,7 +545,7 @@ class CheckRootFS(CliCommand):
 
     # Counter used to display the number of rules matching expected result
     # either failed of successfull, but as expected (handy for unit tests)
-    rule_as_expected_counter = 0
+    self.rule_as_expected_counter = 0
 
     # Iterate the list of rules to check against installed files
     # Files will be checked on an individual basis, which is different of
@@ -575,7 +580,7 @@ class CheckRootFS(CliCommand):
         else: 
           # Counter used to display the number of rules matching expected result
           # either failed of successfull, but as expected (handy for unit tests)
-          rule_as_expected_counter += 1
+          self.rule_as_expected_counter += 1
 
       # Test if the label field is defined, if yes we have to output a message
       # for this rule with the result of the check
@@ -623,7 +628,7 @@ class CheckRootFS(CliCommand):
         else: 
           # Counter used to display the number of rules matching expected result
           # either failed of successfull, but as expected (handy for unit tests)
-          rule_as_expected_counter += 1
+          self.rule_as_expected_counter += 1
 
       # Test if the label field is defined, if yes we have to output a message
       # for this rule with the result of the check
@@ -671,7 +676,7 @@ class CheckRootFS(CliCommand):
         else: 
           # Counter used to display the number of rules matching expected result
           # either failed of successfull, but as expected (handy for unit tests)
-          rule_as_expected_counter += 1
+          self.rule_as_expected_counter += 1
 
       # Test if the label field is defined, if yes we have to output a message
       # for this rule with the result of the check
@@ -695,7 +700,7 @@ class CheckRootFS(CliCommand):
     print(". Processed " + str(self.rule_counter) + " rules")
     print(". " + str(self.rule_successfull_counter) + " were successfull")
     print(". " + str(self.rule_failed_counter) + " failed")
-    print(". " + str(rule_as_expected_counter) + " ran as expected")
+    print(". " + str(self.rule_as_expected_counter) + " ran as expected")
     print("")
 
 
