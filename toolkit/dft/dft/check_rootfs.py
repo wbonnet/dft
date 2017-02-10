@@ -81,6 +81,28 @@ class CheckRootFS(CliCommand):
     self.block_size = 65536
 
 
+  # -------------------------------------------------------------------------
+  #
+  # reset_rule_check_statistics
+  #
+  # ------------------------------------------------------------------------- 
+  def reset_rule_check_statistics(self):
+    """This method reset all the rules checking statitics. It has to be called
+    at the begining of the file rule processing loop (not in a rule 
+    implentation, but in the top level loop)
+    """
+    # Rule counter used to display the total number of checked rules
+    self.rule_counter = 0
+    
+    # Counter used to display the number of successful rules
+    self.rule_successfull_counter = 0
+
+    # Counter used to display the number of failed rules
+    self.rule_failed_counter = 0
+
+    # Counter used to display the number of rules matching expected result
+    # either failed of successfull, but as expected (handy for unit tests)
+    self.rule_as_expected_counter = 0
 
   # -------------------------------------------------------------------------
   #
@@ -96,6 +118,9 @@ class CheckRootFS(CliCommand):
     both package and file rule checking, several time each (one cal for 
     mandatory, forbidden and allowed items).
     """
+
+    # Rule counter used to display the total number of checked rules
+    self.rule_counter += 1
 
     # If the test was negative, then change the global result to false
     if self.is_rule_check_successfull == False:
@@ -213,19 +238,6 @@ class CheckRootFS(CliCommand):
     - blacklisted-arch     => The packages is blacklisted on the given archs
     """
 
-    # Rule counter used to display the total number of checked rules
-    self.rule_counter = 0
-    
-    # Counter used to display the number of successful rules
-    self.rule_successfull_counter = 0
-
-    # Counter used to display the number of failed rules
-    self.rule_failed_counter = 0
-
-    # Counter used to display the number of rules matching expected result
-    # either failed of successfull, but as expected (handy for unit tests)
-    self.rule_as_expected_counter = 0
-
     logging.info("starting to check installed packages")
 
     # Generate the dpkg command to retrieve the list of installed packages
@@ -248,14 +260,14 @@ class CheckRootFS(CliCommand):
       # Build a dictionnary, using package name as main key
       self.installed_packages[pkg_name] = { 'status': pkg_status , 'version': pkg_version , 'arch': pkg_arch }
 
+    # Reset the rules statistics before starting to itare the list of rules
+    self.reset_rule_check_statistics()
+
     #
     # Now iterate the list of rules to check against installed packages
     # Process the "mandatory" rules group
     #
     for rule in self.project.check_definition["packages"]["mandatory"]:
-      # Rule counter used to display the total number of checked rules
-      self.rule_counter += 1
-
       # Call the check package method
       self.check_package_rules(rule, mandatory=True)
 
@@ -266,99 +278,21 @@ class CheckRootFS(CliCommand):
     # Process the "forbidden" rules group
     #
     for rule in self.project.check_definition["packages"]["forbidden"]:
-      # Rule counter used to display the total number of checked rules
-      self.rule_counter += 1
-
       # Call the check package method
       self.check_package_rules(rule, forbidden=True)
 
-      # If the test was negative, then change the global result to false
-      if self.is_rule_check_successfull == False:
-         # Set the global failure flag
-        self.is_check_successfull = False
-        # Counter used to display the number of failed rules
-        self.rule_failed_counter += 1
-      else:
-        # Counter used to display the number of successful rules
-        self.rule_successfull_counter += 1
-
-      # If the expected result variable has been defined, the compare it value
-      # to the actual method result, and output a critical if different
-      # expected-result value is used in unit testing context, and it should 
-      # never be different unless something nasty is lurking inthe dark
-      if "expected-result" in rule:
-        if rule["expected-result"] != self.is_rule_check_successfull:
-          logging.critical("-----------------------------------------------------------------------------")
-          logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_rule_check_successfull))
-          print(rule)
-          logging.critical("-----------------------------------------------------------------------------")
-        else: 
-          # Counter used to display the number of rules matching expected result
-          # either failed of successfull, but as expected (handy for unit tests)
-          self.rule_as_expected_counter += 1
-
-      # Test if the label field is defined, if yes we have to output a message
-      # for this rule with the result of the check
-      if "label" in rule:
-        # Define an empty result
-        label_check_result = ""
-        # If the check is successful, set the label to OK
-        if self.is_rule_check_successfull == False:
-          label_check_result = "[ OK ]"
-        else:
-          # Otherwise set it to fail
-          label_check_result = "[FAIL]"
-        # And print the test number, label and result to stdout
-        print(label_check_result + " " + rule["label"])
+      # Process the check results (update counters and output information)
+      self.process_rule_checking_output(rule)
 
     #
     # Process the "allowed" rules group
     #
     for rule in self.project.check_definition["packages"]["allowed"]:
-      # Rule counter used to display the total number of checked rules
-      self.rule_counter += 1
-
       # Call the check package method
       self.check_package_rules(rule, allowed=True)
 
-      # If the test was negative, then change the global result to false
-      if self.is_rule_check_successfull == False:
-        # Set the global failure flag
-        self.is_check_successfull = False
-        # Counter used to display the number of failed rules
-        self.rule_failed_counter += 1
-      else:
-        # Counter used to display the number of successful rules
-        self.rule_successfull_counter += 1
-
-      # If the expected result variable has been defined, the compare it value
-      # to the actual method result, and output a critical if different
-      # expected-result value is used in unit testing context, and it should 
-      # never be different unless something nasty is lurking inthe dark
-      if "expected-result" in rule:
-        if rule["expected-result"] != self.is_rule_check_successfull:
-          logging.critical("-----------------------------------------------------------------------------")
-          logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_rule_check_successfull))
-          print(rule)
-          logging.critical("-----------------------------------------------------------------------------")
-        else: 
-          # Counter used to display the number of rules matching expected result
-          # either failed of successfull, but as expected (handy for unit tests)
-          self.rule_as_expected_counter += 1
-
-      # Test if the label field is defined, if yes we have to output a message
-      # for this rule with the result of the check
-      if "label" in rule:
-        # Define an empty result
-        label_check_result = ""
-        # If the check is successful, set the label to OK
-        if self.is_rule_check_successfull == False:
-          label_check_result = "[ OK ]"
-        else:
-          # Otherwise set it to fail
-          label_check_result = "[FAIL]"
-        # And print the test number, label and result to stdout
-        print(label_check_result + " " + rule["label"])
+      # Process the check results (update counters and output information)
+      self.process_rule_checking_output(rule)
 
 # TODO traiter les paquet en rc ?
 
@@ -534,163 +468,39 @@ class CheckRootFS(CliCommand):
 
     """
 
-    # Rule counter used to display the total number of checked rules
-    self.rule_counter = 0
-    
-    # Counter used to display the number of successful rules
-    self.rule_successfull_counter = 0
-
-    # Counter used to display the number of failed rules
-    self.rule_failed_counter = 0
-
-    # Counter used to display the number of rules matching expected result
-    # either failed of successfull, but as expected (handy for unit tests)
-    self.rule_as_expected_counter = 0
+    # Reset the rules statistics before starting to itare the list of rules
+    self.reset_rule_check_statistics()
 
     # Iterate the list of rules to check against installed files
     # Files will be checked on an individual basis, which is different of
     # packages. Package list can be retrieved with a single call to dpkg.
     # Retrieving the complete file list would cost too much
     for rule in self.project.check_definition["files"]["mandatory"]:
-      # Rule counter used to display the total number of checked rules
-      self.rule_counter += 1
-
+      # Call the check package method
       self.check_file_rules(rule, mandatory=True)
 
-      # If the test was negative, then change the global result to false
-      if self.is_rule_check_successfull == False:
-        # Set the global failure flag
-        self.is_check_successfull = False
-        # Counter used to display the number of failed rules
-        self.rule_failed_counter += 1
-      else:
-        # Counter used to display the number of successful rules
-        self.rule_successfull_counter += 1
-
-      # If the expected result variable has been defined, the compare it value
-      # to the actual method result, and output a critical if different
-      # expected-result value is used in unit testing context, and it should 
-      # never be different unless something nasty is lurking inthe dark
-      if "expected-result" in rule:
-        if rule["expected-result"] != self.is_rule_check_successfull:
-          logging.critical("-----------------------------------------------------------------------------")
-          logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_rule_check_successfull))
-          print(rule)
-          logging.critical("-----------------------------------------------------------------------------")
-        else: 
-          # Counter used to display the number of rules matching expected result
-          # either failed of successfull, but as expected (handy for unit tests)
-          self.rule_as_expected_counter += 1
-
-      # Test if the label field is defined, if yes we have to output a message
-      # for this rule with the result of the check
-      if "label" in rule:
-        # Define an empty result
-        label_check_result = ""
-        # If the check is successful, set the label to OK
-        if self.is_rule_check_successfull == False:
-          label_check_result = "[ OK ]"
-        else:
-          # Otherwise set it to fail
-          label_check_result = "[FAIL]"
-        # And print the test number, label and result to stdout
-        print(label_check_result + " " + rule["label"])
+      # Process the check results (update counters and output information)
+      self.process_rule_checking_output(rule)
 
     #
     # Process the "forbidden" rules group
     #
     for rule in self.project.check_definition["files"]["forbidden"]:
-      # Rule counter used to display the total number of checked rules
-      self.rule_counter += 1
-
+      # Call the check package method
       self.check_file_rules(rule, forbidden=True)
 
-      # If the test was negative, then change the global result to false
-      if self.is_rule_check_successfull == False:
-        # Set the global failure flag
-        self.is_check_successfull = False
-        # Counter used to display the number of failed rules
-        self.rule_failed_counter += 1
-      else:
-        # Counter used to display the number of successful rules
-        self.rule_successfull_counter += 1
-
-      # If the expected result variable has been defined, the compare it value
-      # to the actual method result, and output a critical if different
-      # expected-result value is used in unit testing context, and it should 
-      # never be different unless something nasty is lurking inthe dark
-      if "expected-result" in rule:
-        if rule["expected-result"] != self.is_rule_check_successfull:
-          logging.critical("-----------------------------------------------------------------------------")
-          logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_rule_check_successfull))
-          print(rule)
-          logging.critical("-----------------------------------------------------------------------------")
-        else: 
-          # Counter used to display the number of rules matching expected result
-          # either failed of successfull, but as expected (handy for unit tests)
-          self.rule_as_expected_counter += 1
-
-      # Test if the label field is defined, if yes we have to output a message
-      # for this rule with the result of the check
-      if "label" in rule:
-        # Define an empty result
-        label_check_result = ""
-        # If the check is successful, set the label to OK
-        if self.is_rule_check_successfull == False:
-          label_check_result = "[ OK ]"
-        else:
-          # Otherwise set it to fail
-          label_check_result = "[FAIL]"
-        # And print the test number, label and result to stdout
-        print(label_check_result + " " + rule["label"])
+      # Process the check results (update counters and output information)
+      self.process_rule_checking_output(rule)
 
     #
     # Process the "allowed" rules group
     #
     for rule in self.project.check_definition["files"]["allowed"]:
-      # Rule counter used to display the total number of checked rules
-      self.rule_counter += 1
-
+      # Call the check package method
       self.check_file_rules(rule, allowed=True)
 
-      # If the test was negative, then change the global result to false
-      if self.is_rule_check_successfull == False:
-        # Set the global failure flag
-        self.is_check_successfull = False
-        # Counter used to display the number of failed rules
-        self.rule_failed_counter += 1
-      else:
-        # Counter used to display the number of successful rules
-        self.rule_successfull_counter += 1
-
-      # If the expected result variable has been defined, the compare it value
-      # to the actual method result, and output a critical if different
-      # expected-result value is used in unit testing context, and it should 
-      # never be different unless something nasty is lurking inthe dark
-      if "expected-result" in rule:
-        if rule["expected-result"] != self.is_rule_check_successfull:
-          logging.critical("-----------------------------------------------------------------------------")
-          logging.critical("Unit test failed ! Expected result was " + str(rule["expected-result"]) + " and we got " + str(self.is_rule_check_successfull))
-          print(rule)
-          logging.critical("-----------------------------------------------------------------------------")
-        else: 
-          # Counter used to display the number of rules matching expected result
-          # either failed of successfull, but as expected (handy for unit tests)
-          self.rule_as_expected_counter += 1
-
-      # Test if the label field is defined, if yes we have to output a message
-      # for this rule with the result of the check
-      if "label" in rule:
-        # Define an empty result
-        label_check_result = ""
-        # If the check is successful, set the label to OK
-        if self.is_rule_check_successfull == False:
-          label_check_result = "[ OK ]"
-        else:
-          # Otherwise set it to fail
-          label_check_result = "[FAIL]"
-        # And print the test number, label and result to stdout
-        print(label_check_result + " " + rule["label"])
+      # Process the check results (update counters and output information)
+      self.process_rule_checking_output(rule)
 
 # TODO handle plural
 # TODO handle none for expected in case the  is no unit tests
