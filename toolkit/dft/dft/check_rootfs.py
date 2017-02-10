@@ -212,6 +212,20 @@ class CheckRootFS(CliCommand):
           # either failed of successfull, but as expected (handy for unit tests)
           rule_as_expected_counter += 1
 
+      # Test if the label field is defined, if yes we have to output a message
+      # for this rule with the result of the check
+      if "label" in rule:
+        # Define an empty result
+        label_check_result = ""
+        # If the check is successful, set the label to OK
+        if self.is_rule_check_successfull == False:
+          label_check_result = "[ OK ]"
+        else:
+          # Otherwise set it to fail
+          label_check_result = "[FAIL]"
+        # And print the test number, label and result to stdout
+        print(label_check_result + " " + rule["label"])
+
     #
     # Process the "forbidden" rules group
     #
@@ -246,6 +260,20 @@ class CheckRootFS(CliCommand):
           # Counter used to display the number of rules matching expected result
           # either failed of successfull, but as expected (handy for unit tests)
           rule_as_expected_counter += 1
+
+      # Test if the label field is defined, if yes we have to output a message
+      # for this rule with the result of the check
+      if "label" in rule:
+        # Define an empty result
+        label_check_result = ""
+        # If the check is successful, set the label to OK
+        if self.is_rule_check_successfull == False:
+          label_check_result = "[ OK ]"
+        else:
+          # Otherwise set it to fail
+          label_check_result = "[FAIL]"
+        # And print the test number, label and result to stdout
+        print(label_check_result + " " + rule["label"])
 
     #
     # Process the "allowed" rules group
@@ -282,22 +310,32 @@ class CheckRootFS(CliCommand):
           # either failed of successfull, but as expected (handy for unit tests)
           rule_as_expected_counter += 1
 
+      # Test if the label field is defined, if yes we have to output a message
+      # for this rule with the result of the check
+      if "label" in rule:
+        # Define an empty result
+        label_check_result = ""
+        # If the check is successful, set the label to OK
+        if self.is_rule_check_successfull == False:
+          label_check_result = "[ OK ]"
+        else:
+          # Otherwise set it to fail
+          label_check_result = "[FAIL]"
+        # And print the test number, label and result to stdout
+        print(label_check_result + " " + rule["label"])
+
 # TODO traiter les paquet en rc ?
 
     # Output the execution summary
 # TODO handle plural
 # TODO handle none for expected in case the  is no unit tests
-    logging.info("")
-    logging.info("-----------------------------------------------------------------------------")
-    logging.info("")
-    logging.info("Package check execution summary")
-    logging.info("")
-    logging.info("Processed " + str(rule_counter) + " rules")
-    logging.info(str(rule_successfull_counter) + " were successfull")
-    logging.info(str(rule_failed_counter) + " failed")
-    logging.info(str(rule_as_expected_counter) + " ran as expected")
-    logging.info("-----------------------------------------------------------------------------")
-    logging.info("") 
+    print("")
+    print("Package check execution summary")
+    print(". Processed " + str(rule_counter) + " rules")
+    print(". " + str(rule_successfull_counter) + " were successfull")
+    print(". " + str(rule_failed_counter) + " failed")
+    print(". " + str(rule_as_expected_counter) + " ran as expected")
+    print("")
 
 
   # -------------------------------------------------------------------------
@@ -317,7 +355,7 @@ class CheckRootFS(CliCommand):
 
     # First let's control that all keywords (key dictionnaires) are valid and know
     for keyword in rule:
-      if keyword not in "name" "min-version" "max-version" "allowed-version" "blacklisted-version" "allowed-arch" "blacklisted-arch" "expected-result":
+      if keyword not in "name" "min-version" "max-version" "allowed-version" "blacklisted-version" "allowed-arch" "blacklisted-arch" "expected-result" "label":
         logging.error("Unknow keyword " + keyword + " when parsing packages rules. Rule is ignored")
 
     # Check if mandatory package is missing
@@ -508,6 +546,20 @@ class CheckRootFS(CliCommand):
           # either failed of successfull, but as expected (handy for unit tests)
           rule_as_expected_counter += 1
 
+      # Test if the label field is defined, if yes we have to output a message
+      # for this rule with the result of the check
+      if "label" in rule:
+        # Define an empty result
+        label_check_result = ""
+        # If the check is successful, set the label to OK
+        if self.is_rule_check_successfull == False:
+          label_check_result = "[ OK ]"
+        else:
+          # Otherwise set it to fail
+          label_check_result = "[FAIL]"
+        # And print the test number, label and result to stdout
+        print(label_check_result + " " + rule["label"])
+
     #
     # Process the "forbidden" rules group
     #
@@ -541,6 +593,20 @@ class CheckRootFS(CliCommand):
           # Counter used to display the number of rules matching expected result
           # either failed of successfull, but as expected (handy for unit tests)
           rule_as_expected_counter += 1
+
+      # Test if the label field is defined, if yes we have to output a message
+      # for this rule with the result of the check
+      if "label" in rule:
+        # Define an empty result
+        label_check_result = ""
+        # If the check is successful, set the label to OK
+        if self.is_rule_check_successfull == False:
+          label_check_result = "[ OK ]"
+        else:
+          # Otherwise set it to fail
+          label_check_result = "[FAIL]"
+        # And print the test number, label and result to stdout
+        print(label_check_result + " " + rule["label"])
 
     #
     # Process the "allowed" rules group
@@ -576,19 +642,30 @@ class CheckRootFS(CliCommand):
           # either failed of successfull, but as expected (handy for unit tests)
           rule_as_expected_counter += 1
 
+      # Test if the label field is defined, if yes we have to output a message
+      # for this rule with the result of the check
+      if "label" in rule:
+        # Define an empty result
+        label_check_result = ""
+        # If the check is successful, set the label to OK
+        if self.is_rule_check_successfull == False:
+          label_check_result = "[ OK ]"
+        else:
+          # Otherwise set it to fail
+          label_check_result = "[FAIL]"
+        # And print the test number, label and result to stdout
+        print(label_check_result + " " + rule["label"])
+
 # TODO handle plural
 # TODO handle none for expected in case the  is no unit tests
-    logging.info("")
-    logging.info("-----------------------------------------------------------------------------")
-    logging.info("")
-    logging.info("Package check execution summary")
-    logging.info("")
-    logging.info("Processed " + str(rule_counter) + " rules")
-    logging.info(str(rule_successfull_counter) + " were successfull")
-    logging.info(str(rule_failed_counter) + " failed")
-    logging.info(str(rule_as_expected_counter) + " ran as expected")
-    logging.info("-----------------------------------------------------------------------------")
-    logging.info("")
+
+    print("")
+    print("File check execution summary")
+    print(". Processed " + str(rule_counter) + " rules")
+    print(". " + str(rule_successfull_counter) + " were successfull")
+    print(". " + str(rule_failed_counter) + " failed")
+    print(". " + str(rule_as_expected_counter) + " ran as expected")
+    print("")
 
 
   # -------------------------------------------------------------------------
