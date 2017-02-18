@@ -248,6 +248,7 @@ x factory_setup                    Apply some extra factory setup before generat
     # ---------------------------------------------------------------------
     # Override configuration with values passed on the commande line
 
+    # TODO : use a config file for log definition
     # Get the log_level from command line
     if self.args.log_level != None:
         self.project.dft.log_level = self.args.log_level.upper()
