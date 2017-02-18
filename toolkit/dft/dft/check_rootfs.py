@@ -531,7 +531,7 @@ class CheckRootFS(CliCommand):
 
     # First let's control that all keywords (key dictionnaires) are valid and know
     for keyword in rule:
-      if keyword not in "path" "type" "owner" "group" "mode" "target" "empty" "md5" "sha1" "sha256" "expected-result" :
+      if keyword not in "path" "type" "owner" "group" "mode" "target" "empty" "md5" "sha1" "sha256" "expected-result" "label":
         logging.error("Unknow keyword " + keyword + " when parsing filess rules. Rule is ignored")
         logging.error("Rule is " + str(rule))
         
