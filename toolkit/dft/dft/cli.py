@@ -253,7 +253,7 @@ x factory_setup                    Apply some extra factory setup before generat
         self.project.dft.log_level = self.args.log_level.upper()
     # If not command line value, defaults to log
     else:
-        self.project.dft.log_level = "LOG"
+        self.project.dft.log_level = "INFO"
 
     # Create the logger object
     logging.basicConfig(level=self.project.dft.log_level)
