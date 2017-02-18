@@ -187,7 +187,7 @@ packages:
     - name: "vim-common"
       label: "Testing a list of blacklisted versions of an optionnal package (when installed version is in the list)"
       blacklisted-version: 
-        - "2:9.0.0134-1"
+        - "2:8.0.0134-1"
         - "2:9.0.0022-1"
       # Test is supposed to fail
       expected-result: False
@@ -693,7 +693,7 @@ files:
   - path: "/dft/existing/link-to-non-empty-file"
     label: "Testing sha256 of a symlink to a non empty file (when the type is wrong and defaults to a file)"
     sha256: "very_unlikely_hash_value"
-    # Test is supposed to fail
+    # Test is supposed to true
     expected-result: False
   # Test the md5 sum of a link to a file
   - path: "/dft/existing/link-to-non-empty-file"

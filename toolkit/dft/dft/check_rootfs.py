@@ -151,9 +151,9 @@ class CheckRootFS(CliCommand):
     # for this rule with the result of the check
     if "label" in rule:
       # Define an empty result
-      label_check_result = ""
+      label_check_result = ""      
       # If the check is successful, set the label to OK
-      if self.is_rule_check_successfull == False:
+      if self.is_rule_check_successfull == True:
         label_check_result = "[ OK ]"
       else:
         # Otherwise set it to fail
@@ -206,7 +206,6 @@ class CheckRootFS(CliCommand):
     # since some cleanup tasks could need QEMU
     if self.use_qemu_static == True:
       self.cleanup_qemu()
-
 
     # Check the final status and return an error if necessary
     if self.is_check_successfull == False:
@@ -290,7 +289,7 @@ class CheckRootFS(CliCommand):
     for rule in self.project.check_definition["packages"]["allowed"]:
       # Call the check package method
       self.check_package_rules(rule, allowed=True)
-
+      
       # Process the check results (update counters and output information)
       self.process_rule_checking_output(rule)
 
@@ -319,6 +318,9 @@ class CheckRootFS(CliCommand):
     and structure as in check_packages method.
     """
   
+    self.project.logging.debug("")
+    self.project.logging.debug("Enter check_packkage_rules")
+
     # Reset the package result. This is used mostly for unit testting and 
     # to track if the result was the expected one
     self.is_rule_check_successfull = True
@@ -428,6 +430,8 @@ class CheckRootFS(CliCommand):
         else:
           self.project.logging.debug("Package " + rule["name"] + " is allowed for architecture " + self.installed_packages[rule["name"]]["arch"])
 
+    self.project.logging.debug("Method check_package_rules returns " + str(self.is_rule_check_successfull))
+    self.project.logging.debug("")
 
 
   # -------------------------------------------------------------------------
@@ -560,6 +564,8 @@ class CheckRootFS(CliCommand):
     rule["target_path"] = rule["path"]
     while os.path.islink(rule["target_path"]):
       rule["target_path"] = os.readlink(rule["target_path"])
+
+    self.project.logging.debug("After expension target_path " + rule["path"] + " became " + rule["target_path"])
 
     # Check if mandatory package is missing
     if mandatory == True:
@@ -759,4 +765,6 @@ class CheckRootFS(CliCommand):
         if rule["sha256"] != hasher.hexdigest():
             self.project.logging.error("File " + rule["path"] + " has an invalid SHA256 hash. SHA256 is " + hasher.hexdigest() + " instead of " + rule["sha256"])
             self.is_rule_check_successfull = False
+        else:
+            self.project.logging.debug("File " + rule["path"] + " has an valid SHA256 hash. SHA256 is " + hasher.hexdigest() + " instead of " + rule["sha256"])
     
