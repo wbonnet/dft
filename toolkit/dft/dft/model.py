@@ -66,10 +66,6 @@ class DftConfiguration:
     # after doing a real debootstrap installation
     self.update_cache_archive = False
 
-    # Current log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-# TODO : default should be changed to INFO
-    self.log_level = "DEBUG"
-
     # Debootstrap target to use (minbase or buildd)
     self.debootstrap_target = "minbase"
 
@@ -96,19 +92,19 @@ class DftConfiguration:
     try:   
       # Load it
       with open(self.project_name, 'r') as f:
-        logging.debug("loading dft configuration : " + filename)
+        self.logging.debug("loading dft configuration : " + filename)
         self.dft_configuration = yaml.load(f)   
-        logging.debug(self.dft_configuration)
+        self.logging.debug(self.dft_configuration)
 
         # Check if path starts with ~ and need expension
         if self.dft_configuration["configuration"]["working_dir"][0] == "~" and self.dft_configuration["configuration"]["working_dir"][1] == "/":         
           dft_configuration["configuration"]["working_dir"] = os.path.expanduser(dft_configuration["configuration"]["working_dir"])
 
-        logging.debug(self.dft_configuration)
+        self.logging.debug(self.dft_configuration)
 
     except FileNotFoundError as e:
         # Call clean up to umount /proc and /dev
-        logging.critical("Error: %s - %s." % (e.filename, e.strerror))
+        self.logging.critical("Error: %s - %s." % (e.filename, e.strerror))
         exit(1)
 
 # -----------------------------------------------------------------------------
@@ -131,25 +127,26 @@ class ProjectDefinition :
   #
   # ---------------------------------------------------------------------------
   def __init__(self, filename = None):
-      """
-      """
+    """
+    """
 
-      # Store the filename containing the whole project definition
-      # Filename is mandatory, and is defaulted to project.yml if 
-      # not defined
-      if (filename == None):
-        self.project_name = 'project.yml'
-        logging.debug("setting default project filename : " + self.project_name)
-      else:
-        self.project_name = filename
-        logging.debug("setting new project filename : " + self.project_name)
+    # Create the logger object
+    self.logging = logging.getLogger()
 
-      # Timestamp is used to produce distinct directory in case of several
-      # run, and also used to produce the serial number (/etc/dft_version)
-      self.timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    # Store the filename containing the whole project definition
+    # Filename is mandatory, and is defaulted to project.yml if 
+    # not defined
+    if (filename == None):
+      self.project_name = 'project.yml'
+    else:
+      self.project_name = filename
 
-      # Create the object storing the DFT tool configuration
-      self.dft = DftConfiguration()
+    # Timestamp is used to produce distinct directory in case of several
+    # run, and also used to produce the serial number (/etc/dft_version)
+    self.timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+
+    # Create the object storing the DFT tool configuration
+    self.dft = DftConfiguration()
 
   # ---------------------------------------------------------------------------
   #
@@ -187,10 +184,10 @@ class ProjectDefinition :
     # Test if the filename has been redefinied
     if (filename != None):
       self.project_name = filename
-      logging.debug("setting new project filename : " + self.project_name)
+      self.logging.debug("setting new project filename : " + self.project_name)
 
     # Need some debug output :)
-    logging.debug("loading project : " + self.project_name)
+    self.logging.debug("loading project : " + self.project_name)
 
     # Enter a try except section. This is how we handle missing files, through
     # exception mecanism. If a FileNotFoundError is raised, then exit the 
@@ -274,13 +271,13 @@ class ProjectDefinition :
       if "rootfs_generator_cachedir" in self.project_definition["configuration"]:
         self.rootfs_generator_cachedir = self.project_definition["configuration"]["rootfs_generator_cachedir"]
       else:
-        logging.warning("configuration/rootfs_generator_cachedir is not defined, using /tmp as default value")
+        self.logging.warning("configuration/rootfs_generator_cachedir is not defined, using /tmp as default value")
         self.rootfs_generator_cachedir = "/tmp/"
 
       if "working_dir" in self.project_definition["configuration"]:
         self.project_base_workdir = self.project_definition["configuration"]["working_dir"] + "/" + self.project_definition["configuration"]["project_name"]
       else:
-        logging.warning("configuration/working_dir is not defined, using /tmp/dft as default value")
+        self.logging.warning("configuration/working_dir is not defined, using /tmp/dft as default value")
         self.project_base_workdir = "/tmp/dft/" + self.project_definition["configuration"]["project_name"]
 
       # Defines path for subcommand
@@ -314,5 +311,5 @@ class ProjectDefinition :
     # Handle exception that may occur when trying to open unknown files 
     except FileNotFoundError as e:
         # Just log and exit, nothing is mounted yet
-        logging.critical("Error: %s - %s." % (e.filename, e.strerror))
+        self.logging.critical("Error: %s - %s." % (e.filename, e.strerror))
         exit(1)

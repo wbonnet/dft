@@ -62,10 +62,6 @@ x factory_setup                    Apply some extra factory setup before generat
 ? strip_rootfs                     Strip down the rootfs before assembling the firmware'''),
                         formatter_class=argparse.RawTextHelpFormatter)
   
-    # Set the log level from the configuration
-# TODO globalize logging
-    logging.basicConfig(level="DEBUG")
-
   def parse(self, args):
     # Stores the argument in the instance
     self.command = args
@@ -93,7 +89,7 @@ x factory_setup                    Apply some extra factory setup before generat
   def add_parser_option_assemble_firmware(self):
     # Add the arguments
     self.parser.add_argument(  'assemble_firmware', 
-                   help='Command to execute')
+                     help='Command to execute')
 
 
   def add_parser_option_build_baseos(self):
@@ -227,8 +223,8 @@ x factory_setup                    Apply some extra factory setup before generat
     # Defines the level of the log to output
     self.parser.add_argument(  '--log-level',
                   action='store',
-                              dest='log_level',
-                                    choices=['debug', 'info', 'warning', 'error', 'critical'],
+                  dest='log_level',
+                  choices=['debug', 'info', 'warning', 'error', 'critical'],
                   help="defines the minimal log level. Default value is  warning")
 
     # -------------------------------------------------------------------------
@@ -252,14 +248,21 @@ x factory_setup                    Apply some extra factory setup before generat
     # ---------------------------------------------------------------------
     # Override configuration with values passed on the commande line
 
-    if self.args.config_file != None:
-      logging.debug("Overriding config_file with CLI value : %s => %s",  self.project.dft.configuration_file, self.args.config_file)
-      self.project.dft.configuration_file = self.args.config_file
-
+    # Get the log_level from command line
     if self.args.log_level != None:
-      if self.args.log_level.upper() != self.project.dft.log_level.upper():
-        logging.debug("Overriding log_lvel with CLI value : %s => %s",  self.project.dft.log_level, self.args.log_level.upper())
         self.project.dft.log_level = self.args.log_level.upper()
+    # If not command line value, defaults to log
+    else:
+        self.project.dft.log_level = "LOG"
+
+    # Create the logger object
+    logging.basicConfig(level=self.project.dft.log_level)
+    self.project.logging = logging.getLogger()
+
+    # Get the config file from command line
+    if self.args.config_file != None:
+      self.project.logging.debug("Overriding config_file with CLI value : %s => %s",  self.project.dft.configuration_file, self.args.config_file)
+      self.project.dft.configuration_file = self.args.config_file
 
     # ---------------------------------------------------------------------
 
@@ -306,32 +309,32 @@ x factory_setup                    Apply some extra factory setup before generat
 
     if self.args.keep_bootstrap_files != None:
       if self.args.keep_bootstrap_files != self.project.dft.keep_bootstrap_files:
-        logging.debug("Overriding keep_bootstrap_files with CLI value : %s => %s",  self.project.dft.keep_bootstrap_files, self.args.keep_bootstrap_files)
+        self.project.logging.debug("Overriding keep_bootstrap_files with CLI value : %s => %s",  self.project.dft.keep_bootstrap_files, self.args.keep_bootstrap_files)
         self.project.dft.keep_bootstrap_files = self.args.keep_bootstrap_files
 
     if self.args.override_debian_mirror != None:
       if self.args.override_debian_mirror != self.project.project_definition["project-definition"]["debootstrap-repository"]:
-        logging.debug("Overriding pkg_archive_url with CLI value : %s => %s",  self.project.project_definition["project-definition"]["debootstrap-repository"], self.args.override_debian_mirror)
+        self.project.logging.debug("Overriding pkg_archive_url with CLI value : %s => %s",  self.project.project_definition["project-definition"]["debootstrap-repository"], self.args.override_debian_mirror)
         self.project.project_definition["project-definition"]["debootstrap-repository"] = self.args.override_debian_mirror
     
     if self.args.update_cache_archive != None:
       if self.args.update_cache_archive != self.project.dft.update_cache_archive:
-        logging.debug("Overriding update_cache_archive with CLI value : %s => %s",  self.project.dft.update_cache_archive, self.args.update_cache_archive)
+        self.project.logging.debug("Overriding update_cache_archive with CLI value : %s => %s",  self.project.dft.update_cache_archive, self.args.update_cache_archive)
         self.project.dft.update_cache_archive = self.args.update_cache_archive
 
     if self.args.use_cache_archive != None:
       if self.args.use_cache_archive != self.project.dft.use_cache_archive:
-        logging.debug("Overriding use_cache_archive with CLI value : %s => %s",  self.project.dft.use_cache_archive, self.args.use_cache_archive)
+        self.project.logging.debug("Overriding use_cache_archive with CLI value : %s => %s",  self.project.dft.use_cache_archive, self.args.use_cache_archive)
         self.project.dft.use_cache_archive = self.args.use_cache_archive
 
     if self.args.limit_target_version != None:
       if self.args.limit_target_version != self.project.target_version:
-        logging.debug("Overriding target_version with CLI value : %s => %s",  self.project.target_version, self.args.limit_target_version)
+        self.project.logging.debug("Overriding target_version with CLI value : %s => %s",  self.project.target_version, self.args.limit_target_version)
         self.project.target_version = self.args.limit_target_version
 
     if self.args.limit_target_arch != None:
       if self.args.limit_target_arch != self.project.target_arch:
-        logging.debug("Overriding target_arch with CLI value : %s => %s",  self.project.target_arch, self.args.limit_target_arch)
+        self.project.logging.debug("Overriding target_arch with CLI value : %s => %s",  self.project.target_arch, self.args.limit_target_arch)
         self.project.target_arch = self.args.limit_target_arch
 
     # Create the business object

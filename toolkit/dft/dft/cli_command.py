@@ -73,10 +73,6 @@ class CliCommand:
     # in exception processing
     self.doing_cleanup_installation_files = False
 
-    # Set the log level from the configuration
-    logging.basicConfig(level=project.dft.log_level)
-#TODO faire remonter dans clase de base
-
   # -------------------------------------------------------------------------
   #
   # execute_command
@@ -90,7 +86,7 @@ class CliCommand:
     in a helper object. It provides mutalisation of error handling
     """
 
-    logging.debug("running : " + command)
+    self.project.logging.debug("running : " + command)
       
     try:
       # Execute the subprocess, output en errors are piped
@@ -102,11 +98,11 @@ class CliCommand:
 
     except subprocess.CalledProcessError as e:
       self.cleanup_installation_files()
-      logging.critical("Error %d occured when executing %s" % (e.returncode, e.cmd))
-      logging.debug("stdout")
-      logging.debug("%s" % (e.stdout.decode('UTF-8')))
-      logging.debug("stderr")
-      logging.debug("%s" % (e.stderr.decode('UTF-8')))
+      self.project.logging.critical("Error %d occured when executing %s" % (e.returncode, e.cmd))
+      self.project.logging.debug("stdout")
+      self.project.logging.debug("%s" % (e.stdout.decode('UTF-8')))
+      self.project.logging.debug("stderr")
+      self.project.logging.debug("%s" % (e.stderr.decode('UTF-8')))
       exit(1)
 
 
@@ -130,7 +126,7 @@ class CliCommand:
     elif self.project.target_arch == "armel":   qemu_target_arch = "arm"
     else:                                       qemu_target_arch = self.project.target_arch
 
-    logging.info("setting up QEMU for arch " + self.project.target_arch + " (using /usr/bin/qemu-" + qemu_target_arch + "-static)")
+    self.project.logging.info("setting up QEMU for arch " + self.project.target_arch + " (using /usr/bin/qemu-" + qemu_target_arch + "-static)")
     sudo_command = "sudo cp /usr/bin/qemu-"  + qemu_target_arch + "-static " + self.project.rootfs_mountpoint + "/usr/bin/"
     self.execute_command(sudo_command)
 
@@ -150,7 +146,7 @@ class CliCommand:
       return
 
     if self.project.dft.keep_bootstrap_files == True:
-      logging.debug("keep_bootstrap_files is activated, keeping QEMU in " + self.project.rootfs_mountpoint)
+      self.project.logging.debug("keep_bootstrap_files is activated, keeping QEMU in " + self.project.rootfs_mountpoint)
       return
 
     # Copy the QEMU binary to the target, using root privileges
@@ -159,7 +155,7 @@ class CliCommand:
     else:                                       qemu_target_arch = self.project.target_arch
     
     # Execute the file removal with root privileges
-    logging.info("cleaning QEMU for arch " + self.project.target_arch + "(/usr/bin/qemu-" + qemu_target_arch + "-static)")
+    self.project.logging.info("cleaning QEMU for arch " + self.project.target_arch + "(/usr/bin/qemu-" + qemu_target_arch + "-static)")
     os.system("sudo rm " + self.project.rootfs_mountpoint + "/usr/bin/qemu-" + qemu_target_arch + "-static")
 
   # -------------------------------------------------------------------------
@@ -173,7 +169,7 @@ class CliCommand:
     chroot, and they have to be stopped manually, or even killed in order
     to be able to umount /dev/ and /proc from inside the chroot
     """
-    logging.info("starting to cleanup installation files")
+    self.project.logging.info("starting to cleanup installation files")
 
     # Are we already doing a cleanup ? this may happens if an exception
     # occurs when cleaning up. It prevents multiple call and loop in
@@ -206,4 +202,4 @@ class CliCommand:
       if os.path.isdir(self.project.rootfs_mountpoint + "/dft_bootstrap"):
         shutil.rmtree(self.project.rootfs_mountpoint + "/dft_bootstrap")
     else:
-      logging.debug("keep_bootstrap_files is activated, keeping DFT bootstrap files in " + self.project.rootfs_mountpoint + "/dft_bootstrap")
+      self.project.logging.debug("keep_bootstrap_files is activated, keeping DFT bootstrap files in " + self.project.rootfs_mountpoint + "/dft_bootstrap")
