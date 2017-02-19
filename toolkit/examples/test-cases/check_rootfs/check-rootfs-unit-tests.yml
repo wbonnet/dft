@@ -399,10 +399,10 @@ files:
     # Test is supposed to succeed
     expected-result: True
     # Existing symlink with missing target
-  - path: "/dft/existing/link"
+  - path: "/dft/existing/broken-link"
     label: "Testing that a mandatory symlink and its target both exist (when the target does not exist)"
     type: "symlink"
-    target: "/dft/missing/target-not-exist"
+    target: "/dft/missing/does-not-exist"
     # Test is supposed to fail
     expected-result: False
     # Missing symlink with missing target 
@@ -456,7 +456,7 @@ files:
     label: "Testing that a forbidden symlink does not exist (when the path exist as a file)"
     type: "symlink"
     # Test is supposed to fail
-    expected-result: False
+    expected-result: True
   #
   # Directory
   #
@@ -508,13 +508,13 @@ files:
     label: "Testing that a forbidden file does not exist (when the path exist as a symlink)"
     type: "file"
     # Test is supposed to succeed
-    expected-result: True
+    expected-result: False
   # This link exist but is forbidden as a directory (authorized otherwise)
-  - path: "/dft/existing/link"
+  - path: "/dft/existing/link-to-empty-directory"
     label: "Testing that a forbidden directory does not exist (when the path exist as a directory)"
     type: "directory"
     # Test is supposed to succeed
-    expected-result: True
+    expected-result: False
   # This file exist but is forbidden as a symlink (authorized otherwise)
   - path: "/dft/existing/link"
     label: "Testing that a forbidden symlinkk does not exist (when it does exist)"
@@ -537,7 +537,7 @@ files:
     type: "symlink"
     target: "link-target-does-not exist"
     # Test is supposed to succeed
-    expected-result: True
+    expected-result: False
     # Existing symlink to symlink with existing target
   - path: "/dft/existing/link-to-link-to-link"
     label: "Testing that a forbidden symlink taget does not exist (when it exist with cascading links)"
@@ -638,7 +638,7 @@ files:
     label: "Testing that an optional directory may exist (when the directory does not exist)"
     type: "directory"
     # Test is supposed to succeed since missing but optional
-    expected-result: True
+    expected-result: False
   # Test that a directory is not empty 
   - path: "/dft/existing/empty-directory"
     label: "Testing that a directory is not empty (when the directory is empty)"

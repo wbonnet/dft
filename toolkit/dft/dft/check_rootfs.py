@@ -600,6 +600,13 @@ class CheckRootFS(CliCommand):
           self.is_rule_check_successfull = False
           return
 
+        # If target is defined, we have to check that it does not exist either
+        if "target" in rule:
+          if os.path.isdir(rule["path"]) == False and os.path.islink(rule["path"]) == False and os.path.isfile(rule["path"]) == False:
+            self.project.logging.info("Missing mandatory target : " + rule["target_path"])
+            self.is_rule_check_successfull = False
+            return
+
     # Check if forbidden files are installed
     if forbidden == True:
         # Check for forbidden directory
@@ -621,7 +628,7 @@ class CheckRootFS(CliCommand):
           return
 
     # Check the type of the object (can be file directory or symlink)
-    if "type" in rule:
+    if allowed == True:
       if os.path.isdir(rule["path"]) == False and rule["type"] == "directory":
         self.project.logging.info("Object " + rule["path"] + " is not a directory")
         self.is_rule_check_successfull = False
@@ -646,7 +653,7 @@ class CheckRootFS(CliCommand):
 
       # Compare it to the owner from the rule
       if str(uid) != rule["owner"]:
-          self.project.logging.error("File " + rule["path"] + " owner is invalid. UID is " + str(uid) + " instead of " + rule["owner"])
+          self.project.logging.info("File " + rule["path"] + " owner is invalid. UID is " + str(uid) + " instead of " + rule["owner"])
           self.is_rule_check_successfull = False
           return
 
@@ -657,7 +664,7 @@ class CheckRootFS(CliCommand):
 
       # Compare it to the owner from the rule
       if str(gid) != rule["group"]:
-          self.project.logging.error("File " + rule["path"] + " group is invalid. GID is " + str(gid) + " instead of " + rule["group"])
+          self.project.logging.info("File " + rule["path"] + " group is invalid. GID is " + str(gid) + " instead of " + rule["group"])
           self.is_rule_check_successfull = False
           return
 
@@ -674,14 +681,14 @@ class CheckRootFS(CliCommand):
 
       # Compare it to the owner from the rule
       if mode != rule["mode"]:
-          self.project.logging.error("File " + rule["path"] + " mode is invalid. Mode is " + str(mode) + " instead of " + rule["mode"])
+          self.project.logging.info("File " + rule["path"] + " mode is invalid. Mode is " + str(mode) + " instead of " + rule["mode"])
           self.is_rule_check_successfull = False
           return
 
     # Check the target of the symlink
     if "target" in rule:
       if os.path.isdir(rule["target_path"]) == False and os.path.islink(rule["target_path"]) == False and os.path.isfile(rule["target_path"]) == False:
-        self.project.logging.error("Target " + rule["target_path"] + " does not exist")
+        self.project.logging.info("Target " + rule["target_path"] + " does not exist")
         self.is_rule_check_successfull = False
         return
 
@@ -694,12 +701,12 @@ class CheckRootFS(CliCommand):
 
         # Compare it to the owner from the rule
         if rule["empty"] == True and size != 0:
-            self.project.logging.error("File " + rule["target_path"] + " is not empty. Size is " + str(size) + " instead of 0")
+            self.project.logging.info("File " + rule["target_path"] + " is not empty. Size is " + str(size) + " instead of 0")
             self.is_rule_check_successfull = False
             return
 
         if rule["empty"] == False and size == 0:
-            self.project.logging.error("File " + rule["target_path"] + " is not empty. Size is " + str(size) + " instead of 0")
+            self.project.logging.info("File " + rule["target_path"] + " is not empty. Size is " + str(size) + " instead of 0")
             self.is_rule_check_successfull = False
             return
       else:
@@ -709,12 +716,12 @@ class CheckRootFS(CliCommand):
 
           # Compare it to the owner from the rule
           if rule["empty"] == True and size != 0:
-              self.project.logging.error("File " + rule["target_path"] + " is not empty. Size is " + str(size) + " instead of 0")
+              self.project.logging.info("File " + rule["target_path"] + " is not empty. Size is " + str(size) + " instead of 0")
               self.is_rule_check_successfull = False
               return
 
           if rule["empty"] == False and size == 0:
-              self.project.logging.error("File " + rule["target_path"] + " is not empty. Size is " + str(size) + " instead of 0")
+              self.project.logging.info("File " + rule["target_path"] + " is not empty. Size is " + str(size) + " instead of 0")
               self.is_rule_check_successfull = False
               return
 
@@ -751,7 +758,7 @@ class CheckRootFS(CliCommand):
 
         # Compare the hash to the rule, and set the check flag if needed
         if rule["md5"] != hasher.hexdigest():
-            self.project.logging.error("File " + rule["path"] + " has an invalid MD5 hash. MD5 is " + hasher.hexdigest() + " instead of " + rule["md5"])
+            self.project.logging.info("File " + rule["path"] + " has an invalid MD5 hash. MD5 is " + hasher.hexdigest() + " instead of " + rule["md5"])
             self.is_rule_check_successfull = False
             return
         
@@ -781,7 +788,7 @@ class CheckRootFS(CliCommand):
 
         # Compare the hash to the rule, and set the check flag if needed
         if rule["sha1"] != hasher.hexdigest():
-            self.project.logging.error("File " + rule["path"] + " has an invalid SHA1 hash. SHA1 is " + hasher.hexdigest() + " instead of " + rule["sha1"])
+            self.project.logging.info("File " + rule["path"] + " has an invalid SHA1 hash. SHA1 is " + hasher.hexdigest() + " instead of " + rule["sha1"])
             self.is_rule_check_successfull = False
             return
         
@@ -811,7 +818,7 @@ class CheckRootFS(CliCommand):
 
         # Compare the hash to the rule, and set the check flag if needed
         if rule["sha256"] != hasher.hexdigest():
-            self.project.logging.error("File " + rule["path"] + " has an invalid SHA256 hash. SHA256 is " + hasher.hexdigest() + " instead of " + rule["sha256"])
+            self.project.logging.info("File " + rule["path"] + " has an invalid SHA256 hash. SHA256 is " + hasher.hexdigest() + " instead of " + rule["sha256"])
             self.is_rule_check_successfull = False
             return
         else:
