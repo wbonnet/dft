@@ -21,7 +21,8 @@
 #
 #
 
-import logging, os, subprocess, tarfile, shutil, tempfile, distutils, hashlib
+import logging, os, subprocess, tarfile, shutil, tempfile
+import stat, distutils, hashlib
 from distutils import dir_util, file_util
 from cli_command import CliCommand
 
@@ -319,7 +320,7 @@ class CheckRootFS(CliCommand):
     """
   
     self.project.logging.debug("")
-    self.project.logging.debug("Enter check_packkage_rules")
+    self.project.logging.debug("Enter check_package_rules")
 
     # Reset the package result. This is used mostly for unit testting and 
     # to track if the result was the expected one
@@ -363,8 +364,9 @@ class CheckRootFS(CliCommand):
 
         # If the result is not ok, then output an info an go on checking next keyword
         if return_code > 0:
-          self.project.logging.error("Version " + self.installed_packages[rule["name"]]["version"] + " of package is older than minimum allowed version " + rule["min-version"])
-          self.is_rule_check_successfull = False
+          self.project.logging.error("Version " + self.installed_packages[rule["name"]]["version"] + " of package is older than minimum allowed version " + rule["min-version"])        
+          return
+
         else:
           self.project.logging.debug("Version " + self.installed_packages[rule["name"]]["version"] + " of package is newer than minimum allowed version " + rule["min-version"])
 
@@ -391,6 +393,7 @@ class CheckRootFS(CliCommand):
         if return_code > 0:
           self.project.logging.error("Version " + self.installed_packages[rule["name"]]["version"] + " of package is newer than maximum allowed version " + rule["max-version"])
           self.is_rule_check_successfull = False
+          return
         else:
           self.project.logging.debug("Version " + self.installed_packages[rule["name"]]["version"] + " of package is older than maximum allowed version " + rule["max-version"])
 
@@ -400,6 +403,7 @@ class CheckRootFS(CliCommand):
         if self.installed_packages[rule["name"]]["version"] not in rule["allowed-version"]: 
           self.project.logging.error("Version " + self.installed_packages[rule["name"]]["version"] + " of package " + rule["name"] + " is not allowed")
           self.is_rule_check_successfull = False
+          return
         else:
           self.project.logging.debug("Version " + self.installed_packages[rule["name"]]["version"] + " of package " + rule["name"] + " is allowed")
 
@@ -409,6 +413,7 @@ class CheckRootFS(CliCommand):
         if self.installed_packages[rule["name"]]["version"] in rule["blacklisted-version"]: 
           self.project.logging.error("Version " + self.installed_packages[rule["name"]]["version"] + " of package " + rule["name"] + " is blacklisted")
           self.is_rule_check_successfull = False
+          return
         else:
           self.project.logging.debug("Version " + self.installed_packages[rule["name"]]["version"] + " of package " + rule["name"] + " is allowed")
 
@@ -418,6 +423,7 @@ class CheckRootFS(CliCommand):
         if self.installed_packages[rule["name"]]["arch"] in rule["blacklisted-arch"]: 
           self.project.logging.error("Package " + rule["name"] + " is blacklisted on architecture " + self.installed_packages[rule["name"]]["arch"])
           self.is_rule_check_successfull = False
+          return          
         else:
           self.project.logging.debug("Package " + rule["name"] + " is not blacklisted on architecture " + self.installed_packages[rule["name"]]["arch"])
 
@@ -427,6 +433,7 @@ class CheckRootFS(CliCommand):
         if self.installed_packages[rule["name"]]["arch"] not in rule["allowed-arch"]: 
           self.project.logging.error("Package " + rule["name"] + " is not allowed for architecture " + self.installed_packages[rule["name"]]["arch"])
           self.is_rule_check_successfull = False
+          return
         else:
           self.project.logging.debug("Package " + rule["name"] + " is allowed for architecture " + self.installed_packages[rule["name"]]["arch"])
 
@@ -563,7 +570,12 @@ class CheckRootFS(CliCommand):
     rule["path"] = self.project.rootfs_mountpoint + rule["path"] 
     rule["target_path"] = rule["path"]
     while os.path.islink(rule["target_path"]):
-      rule["target_path"] = os.readlink(rule["target_path"])
+      self.project.logging.debug("Processing link " + rule["target_path"])
+      rule["target_path"] = os.path.dirname(rule["target_path"]) + "/" + os.readlink(rule["target_path"])
+      self.project.logging.debug("Expended to " + rule["target_path"])
+
+    # Finally get the absolute path
+    rule["target_path"] = os.path.realpath(rule["target_path"])
 
     self.project.logging.debug("After expension target_path " + rule["path"] + " became " + rule["target_path"])
 
@@ -613,16 +625,19 @@ class CheckRootFS(CliCommand):
       if os.path.isdir(rule["path"]) == False and rule["type"] == "directory":
         self.project.logging.info("Object " + rule["path"] + " is not a directory")
         self.is_rule_check_successfull = False
+        return
 
       # Check for mandatoy symlink
       if os.path.islink(rule["path"]) == False and rule["type"] == "symlink":
         self.project.logging.info("Object " + rule["path"] + " is not a symlink")
         self.is_rule_check_successfull = False
+        return
 
       # Check for mandatoy file
       if os.path.isfile(rule["path"]) == False and rule["type"] == "file":
         self.project.logging.info("Object " + rule["path"] + " is not a file")
         self.is_rule_check_successfull = False
+        return
 
     # Check the owner of the object
     if "owner" in rule:
@@ -630,9 +645,10 @@ class CheckRootFS(CliCommand):
       uid = os.stat(rule["path"]).st_uid
 
       # Compare it to the owner from the rule
-      if uid != rule["owner"]:
+      if str(uid) != rule["owner"]:
           self.project.logging.error("File " + rule["path"] + " owner is invalid. UID is " + str(uid) + " instead of " + rule["owner"])
           self.is_rule_check_successfull = False
+          return
 
     # Check the group of the object
     if "group" in rule:
@@ -640,44 +656,74 @@ class CheckRootFS(CliCommand):
       gid = os.stat(rule["path"]).st_gid
 
       # Compare it to the owner from the rule
-      if gid != rule["group"]:
+      if str(gid) != rule["group"]:
           self.project.logging.error("File " + rule["path"] + " group is invalid. GID is " + str(gid) + " instead of " + rule["group"])
           self.is_rule_check_successfull = False
+          return
 
     # Check the mode of the object
     if "mode" in rule:
       # Retrieve the mode from the stat call
       mode = os.stat(rule["path"]).st_mode
 
+      # Convert to octal with same representation as filesystem
+      mode = oct(stat.S_IMODE(mode))
+
+      # Replace initial 0o by 0 in order to match filesystem representation
+      mode = str(mode).replace("0o", "0")
+
       # Compare it to the owner from the rule
       if mode != rule["mode"]:
           self.project.logging.error("File " + rule["path"] + " mode is invalid. Mode is " + str(mode) + " instead of " + rule["mode"])
           self.is_rule_check_successfull = False
+          return
 
     # Check the target of the symlink
     if "target" in rule:
-      print ("TODO target")
+      if os.path.isdir(rule["target_path"]) == False and os.path.islink(rule["target_path"]) == False and os.path.isfile(rule["target_path"]) == False:
+        self.project.logging.error("Target " + rule["target_path"] + " does not exist")
+        self.is_rule_check_successfull = False
+        return
 
     # Check the group of the object
     if "empty" in rule:
       # Check if the file exist. Use the target path to expand symlinks
-      if os.path.isfile(rule["target_path"]) == False:
-        self.project.logging.info("Missing target file : " + rule["target_path"])
-        self.is_rule_check_successfull = False
-        return
+      if os.path.isfile(rule["target_path"]) == True:
+        # Retrieve the size from the stat call
+        size = os.stat(rule["target_path"]).st_size
 
-      # Retrieve the size from the stat call
-      size = os.stat(rule["target_path"]).st_mode
+        # Compare it to the owner from the rule
+        if rule["empty"] == True and size != 0:
+            self.project.logging.error("File " + rule["target_path"] + " is not empty. Size is " + str(size) + " instead of 0")
+            self.is_rule_check_successfull = False
+            return
 
-      # Check if the file exist. Use the target path to expand symlinks
-      if os.path.isfile(rule["target_path"]) == False:
-        self.project.logging.info("Missing target file : " + rule["target_path"])
-        self.is_rule_check_successfull = False
-        return
-      # Compare it to the owner from the rule
-      if rule["empty"] == True and size != 0:
-          self.project.logging.error("File " + rule["path"] + " is not empty. Size is " + str(size) + " instead of 0")
+        if rule["empty"] == False and size == 0:
+            self.project.logging.error("File " + rule["target_path"] + " is not empty. Size is " + str(size) + " instead of 0")
+            self.is_rule_check_successfull = False
+            return
+      else:
+        if os.path.isdir(rule["target_path"]) == True:
+          # Retrieve the list of files
+          size = len(os.listdir(rule["target_path"]))
+
+          # Compare it to the owner from the rule
+          if rule["empty"] == True and size != 0:
+              self.project.logging.error("File " + rule["target_path"] + " is not empty. Size is " + str(size) + " instead of 0")
+              self.is_rule_check_successfull = False
+              return
+
+          if rule["empty"] == False and size == 0:
+              self.project.logging.error("File " + rule["target_path"] + " is not empty. Size is " + str(size) + " instead of 0")
+              self.is_rule_check_successfull = False
+              return
+
+
+          self.project.logging.debug("Directory " + rule["target_path"] + " contains " + str(size) + " files")
+        else:
+          self.project.logging.info("Unknown target (" + rule["type"] + ") " + rule["target_path"])
           self.is_rule_check_successfull = False
+          return
 
     # Check the md5 hash of the target
     if "md5" in rule:
@@ -707,7 +753,8 @@ class CheckRootFS(CliCommand):
         if rule["md5"] != hasher.hexdigest():
             self.project.logging.error("File " + rule["path"] + " has an invalid MD5 hash. MD5 is " + hasher.hexdigest() + " instead of " + rule["md5"])
             self.is_rule_check_successfull = False
-          
+            return
+        
     # Check the sha1 hash of the target
     if "sha1" in rule:
 
@@ -736,7 +783,8 @@ class CheckRootFS(CliCommand):
         if rule["sha1"] != hasher.hexdigest():
             self.project.logging.error("File " + rule["path"] + " has an invalid SHA1 hash. SHA1 is " + hasher.hexdigest() + " instead of " + rule["sha1"])
             self.is_rule_check_successfull = False
-          
+            return
+        
     # Check the sha256 hash of the target
     if "sha256" in rule:
 
@@ -765,6 +813,7 @@ class CheckRootFS(CliCommand):
         if rule["sha256"] != hasher.hexdigest():
             self.project.logging.error("File " + rule["path"] + " has an invalid SHA256 hash. SHA256 is " + hasher.hexdigest() + " instead of " + rule["sha256"])
             self.is_rule_check_successfull = False
+            return
         else:
             self.project.logging.debug("File " + rule["path"] + " has an valid SHA256 hash. SHA256 is " + hasher.hexdigest() + " instead of " + rule["sha256"])
     

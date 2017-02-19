@@ -282,45 +282,45 @@ files:
     label: "Testing that a mandatory file exist (when it is not a file but a symlink)"
     type: "file"
     # Test is supposed to fail
-    expected-result: False
+    expected-result: True
     # File with valid type owner group and mode
   - path: "/dft/existing/etc/passwd"
     label: "Testing owner group and mode of a mandatory file exist (when the values are correct)"
     type: "file"
-    owner: "root"
-    group: "root"
+    owner: "0"
+    group: "0"
     mode: "0644"
     # Test is supposed to succeed
     expected-result: True
     # This definition will produce an error on file attributes
   - path: "/dft/existing/etc/passwd"
     label: "Testing owner group and mode of a mandatory file exist (when the mode is not correct)"
-    owner: "root"
-    group: "root"
+    owner: "0"
+    group: "0"
     mode: "0666"
     # Test is supposed to fail
     expected-result: False
     # This definition will produce an error on group
   - path: "/dft/existing/etc/passwd"
     label: "Testing owner group and mode of a mandatory file exist (when the group is not correct)"
-    owner: "root"
-    group: "staff"
+    owner: "0"
+    group: "10"
     mode: "0640"
     # Test is supposed to fail
     expected-result: False
     # This definition will produce an error on owner
   - path: "/dft/existing/etc/passwd"
     label: "Testing owner group and mode of a mandatory file exist (when the owner is not correct)"
-    owner: "dft"
-    group: "root"
+    owner: "100"
+    group: "0"
     mode: "0640"
     # Test is supposed to fail
     expected-result: False
     # This definition will produce an error on everything
   - path: "/dft/existing/etc/passwd"
     label: "Testing owner group and mode of a mandatory file exist (when none of the values is correct)"
-    owner: "dft"
-    group: "dft"
+    owner: "100"
+    group: "100"
     mode: "0666"
     # Test is supposed to fail
     expected-result: False
@@ -356,17 +356,17 @@ files:
   - path: "/dft/existing/etc/network"
     label: "Testing owner group and mode of a mandatory directory (when the values are correct)"
     type: "directory"
-    owner: "root"
-    group: "root"
-    mode: "0644"
+    owner: "0"
+    group: "0"
+    mode: "0755"
     # Test is supposed to succeed
     expected-result: True
     # Directory with invalid type owner group and mode
   - path: "/dft/existing/etc/network"
     label: "Testing owner group and mode of a mandatory directory (when none of the values is correct)"
     type: "directory"
-    owner: "dft"
-    group: "dft"
+    owner: "100"
+    group: "100"
     mode: "0777"
     # Test is supposed to fail
     expected-result: False
@@ -377,7 +377,7 @@ files:
   - path: "/dft/existing/link"
     label: "Testing that a mandatory symlink exist (when it exist, but the type is not defined, thus default to a file)"
     # Test is supposed to fail since by default it should be a file
-    expected-result: False
+    expected-result: True
     # Existing symlink without target
   - path: "/dft/existing/link"
     label: "Testing that a mandatory symlink exist (when it exist)"
@@ -455,8 +455,8 @@ files:
   - path: "/dft/existing/etc/passwd"
     label: "Testing that a forbidden symlink does not exist (when the path exist as a file)"
     type: "symlink"
-    # Test is supposed to succeed
-    expected-result: True
+    # Test is supposed to fail
+    expected-result: False
   #
   # Directory
   #
