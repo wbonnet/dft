@@ -42,7 +42,7 @@ class Cli:
     # -------------------------------------------------------------------------
   def __init__(self):
     # Current version
-    self.version = "0.0.9"
+    self.version = "0.1.0"
 
     # Create the internal parser from argparse
     self.parser = argparse.ArgumentParser(description=textwrap.dedent('''\
@@ -56,7 +56,7 @@ Available commands are :
 ? build_bootloader                 Build the bootloader toolchain (kernel, initramfs, grub or uboot)
 ? build_image                      Build the disk image from the firmware (or rootfs) and bootloader toolchain
 . build_firmware                   Build the firmware configuration files and scripts used to load in memory the firmware
-? check_rootfs                     Control the content of the baseos rootfs after its generation (debsecan and openscap)
+. check_rootfs                     Control the content of the baseos rootfs after its generation (debsecan and openscap)
 x factory_setup                    Apply some extra factory setup before generating the firmware
 ? generate_content_information     Generate a manifest identiyfing content and versions
 ? strip_rootfs                     Strip down the rootfs before assembling the firmware'''),
