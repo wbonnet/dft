@@ -21,11 +21,8 @@
 #
 #
 
-import logging, os, subprocess, tarfile, shutil, tempfile
-import stat, distutils, hashlib
-from distutils import dir_util, file_util
+import os, subprocess, stat, hashlib
 from cli_command import CliCommand
-
 
 #
 #    Class CheckRootFS
