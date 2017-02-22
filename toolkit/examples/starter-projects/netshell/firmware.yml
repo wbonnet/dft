@@ -21,6 +21,74 @@
 #
 #
 
+
+
+# ----------------------------------------------------------------------------
+#
+# Definition of the firmware layout
+#
+# ----------------------------------------------------------------------------
+layout:
+  # Method to use to assembl the systm in memory. Can be either unionfs 
+  # or overlayfs
+  method: unionfs
+
+  # Definition of the different things to stack to assemble the firmware
+  stack_definition:
+  -  stack_item:
+      # Type of the 'source' to use for this mountpoint. It can be :
+      # squashfs, partition, or tmpfs. This information is mandatory
+      type: squashfs
+
+      # Path to th squashfs file to mount
+      # This information is ignored if type is ot squashfs
+      # Default value is generated based upon the project information
+      # squashfs_file:
+
+      # Name of the partition device to mount when type is partition
+      # This information is ignored if type is not partition
+      # There is no default vallue ( it'stoo dangerous too guess that  :) )
+      # partition:
+
+      # Path under which this objct has to be mounted
+      # This information is mandatory
+      mountpoint: /
+
+      # Options to pass to the mount command.
+      # Default is TODO
+      # mount_option:
+
+# TODO name + stack_over ?
+
+# TODO global ?
+  auto_commit: False
+#   defines mapping over squashfs
+#   => direct write ?
+# stacking ? 
+# how to define cow ?
+
+# ----------------------------------------------------------------------------
+#
+# Definition of the firmware security parameters
+#
+# ----------------------------------------------------------------------------
+security:
+  # Defines security paramters such as the use of hash, digital ignature, etc.
+  # TODO  not at start, but need to check for hashes or signatures
+  # TODO  how to handle ciphering, keygen, secure storage
+  hash-method: none
+
+# ----------------------------------------------------------------------------
+#
+# Definition of the firmware resilience and safety parameters
+#
+# Remember that Safety is not security  
+#
+# ----------------------------------------------------------------------------
+resilience:
+  # Number of banks used ifor firmware installation
+  banks: 1
+
 # ----------------------------------------------------------------------------
 #
 # Definition of the squashfs parameters

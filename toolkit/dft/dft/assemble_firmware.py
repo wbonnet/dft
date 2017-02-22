@@ -67,28 +67,6 @@ class AssembleFirmware(CliCommand):
         . 
         """
 
-
-# What is needed in the configuration file
-# layout:
-#   use unionfs or overlayfs 
-#   defines mapping over squashfs
-#   => direct write ?
-#   - mountpoint:
-#     type: sqasuhfs , partition, tmpfs
-#     path:
-#     mount_option:
-#     auto_commit: False
-# stacking ? 
-# how to define cow ?
-
-# security:
-#   not at start, but need to check for hashes or signatures
-#   how to handle ciphering, keygen, secure storage
-
-# safety:
-#   at start single bank
-#   bank: 2
-
         logging.critical("Not yet available")
         exit(1)
 
