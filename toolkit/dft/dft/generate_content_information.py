@@ -224,10 +224,10 @@ class GenerateContentInformation(CliCommand):
   
     # Generate the dpkg command to retrieve the list of installed packages
     sudo_command  = "LANG=C sudo chroot " + self.project.rootfs_mountpoint + " dpkg -l | tail -n +6"
-    pkglist = self.execute_command(sudo_command)
+    sudo_command_output = self.execute_command(sudo_command)
 
     # Iterate the output of the dpkg process:
-    for binaryline in pkglist.splitlines():
+    for binaryline in sudo_command_output.splitlines():
       # Each fields is stored into a variable to easy manipulation and 
       # simplify code. First get the array of words converted to UTF-8
       line = binaryline.decode('utf-8').split()
@@ -280,22 +280,54 @@ class GenerateContentInformation(CliCommand):
       # Test if we have to generate the package md5 in the output
       if "generate-package-md5" in self.project.content_information_definition["packages"]:
         if self.project.content_information_definition["packages"]["generate-package-md5"] == True:
-          logging.warning("TODO : generate-package-md5")
+          # Generate the apt-cache show command to retrieve the MD5sum
+          # Grp the keyword and print second word
+          sudo_command   = "LANG=C sudo chroot " + self.project.rootfs_mountpoint 
+          sudo_command  += " apt-cache show " + pkg_name + " | grep ^MD5sum | awk '{ print $2 }'"
+          sudo_command_output = self.execute_command(sudo_command)
+          if add_spacer == True:
+            output += " "  
+          output += sudo_command_output.decode('utf-8')
+          add_spacer = True
 
       # Test if we have to generate the package sha256 in the output
       if "generate-package-sha256" in self.project.content_information_definition["packages"]:
         if self.project.content_information_definition["packages"]["generate-package-sha256"] == True:
-          logging.warning("TODO : generate-package-sha256")
+          # Generate the apt-cache show command to retrieve the SHA256
+          # Grp the keyword and print second word
+          sudo_command   = "LANG=C sudo chroot " + self.project.rootfs_mountpoint 
+          sudo_command  += " apt-cache show " + pkg_name + " | grep ^SHA256 | awk '{ print $2 }'"
+          sudo_command_output = self.execute_command(sudo_command)
+          if add_spacer == True:
+            output += " "  
+          output += sudo_command_output.decode('utf-8')
+          add_spacer = True
 
       # Test if we have to generate the package size in the output
       if "generate-package-size" in self.project.content_information_definition["packages"]:
         if self.project.content_information_definition["packages"]["generate-package-size"] == True:
-          logging.warning("TODO : generate-package-size")
+          # Generate the apt-cache show command to retrieve the Size
+          # Grp the keyword and print second word
+          sudo_command   = "LANG=C sudo chroot " + self.project.rootfs_mountpoint 
+          sudo_command  += " apt-cache show " + pkg_name + " | grep ^Size | awk '{ print $2 }'"
+          sudo_command_output = self.execute_command(sudo_command)
+          if add_spacer == True:
+            output += " "  
+          output += sudo_command_output.decode('utf-8')
+          add_spacer = True
 
       # Test if we have to generate the package installed-size in the output
       if "generate-package-installed-size" in self.project.content_information_definition["packages"]:
         if self.project.content_information_definition["packages"]["generate-package-installed-size"] == True:
-          logging.warning("TODO : generate-package-installed-size")
+          # Generate the apt-cache show command to retrieve the Installed-SizeMD5sum
+          # Grp the keyword and print second word
+          sudo_command   = "LANG=C sudo chroot " + self.project.rootfs_mountpoint 
+          sudo_command  += " apt-cache show " + pkg_name + " | grep ^Installed-Size | awk '{ print $2 }'"
+          sudo_command_output = self.execute_command(sudo_command)
+          if add_spacer == True:
+            output += " "  
+          output += sudo_command_output.decode('utf-8')
+          add_spacer = True
 
       # Test if we have to generate the package description in the output
       if "generate-package-description" in self.project.content_information_definition["packages"]:
