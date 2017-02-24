@@ -35,10 +35,4 @@
   with_items:
     - fail2ban
 
-- name : DFT - Configure fail2ban.conf
-  template: src=templates/fail2ban.conf.j2 
-            dest=/etc/fail2ban/fail2ban.conf
-            owner=root 
-            group=root 
-            mode="u=rw,g=r,o=r"          
-
+# TODO activate jail on ssh ?

@@ -35,10 +35,10 @@
   with_items:
     - clamav
 
-# - name : DFT - Configure clamav
-#   template: src=templates/clamav.comf.j2 
-#             dest=/etc/clamav/clamav.conf
-#             owner=root 
-#             group=root 
-#             mode="u=rw,g=r,o=r"          
+- name : DFT - Configure clamav
+  template: src=templates/freshclam.comf.j2 
+            dest=/etc/clamav/freshclam.conf
+            owner=root 
+            group=root 
+            mode="u=rw,g=r,o=r"          
 
