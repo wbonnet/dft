@@ -142,8 +142,8 @@ x factory_setup                    Apply some extra factory setup before generat
     self.parser.add_argument(  '--override-debian-mirror',
                   action='store',
                               dest='override_debian_mirror',
-                  help="override the list of mirrors defined in the configuration file. This option \n"
-                     "defines a single mirror, not a full list of mirrors. Thus the list of mirrors \n"
+                  help="override the list of mirrors defined in the configuration file. This option\n"
+                     "defines a single mirror, not a full list of mirrors. Thus the list of mirrors\n"
                      "will be replaced by a single one")
     
     # During installation ansible files from DFT toolkit are copied to 
@@ -152,7 +152,7 @@ x factory_setup                    Apply some extra factory setup before generat
     # replay an playbooks at will
     self.parser.add_argument(  '--keep-bootstrap-files',
                   action='store_true',
-                              dest='keep_bootstrap_files',
+                  dest='keep_bootstrap_files',
                   help='do not delete DFT bootstrap files after instalaltion (debug purpose)')  
 
     # delete work dir
@@ -193,6 +193,41 @@ x factory_setup                    Apply some extra factory setup before generat
     # Add the arguments
     self.parser.add_argument(  'generate_content_information', 
                    help='Command to execute')
+
+    # Activate the generation of the packages information.
+    # Default behavior is to generate everything if no generate_xxx_information
+    # flag is set. If at least one fag is set, then the user has to set every 
+    # needed flag
+    self.parser.add_argument(  '--generate-packages-information',
+                              action='store_true',
+                              dest='generate_packages_information',
+                              help="generate the information about packages. If at least one of the\n" 
+                                   "generate_something_information is set,then it deactivatethe 'generate all'\n"
+                                   "default behavior, and each information source has to be set.\n")
+
+    # Activate the generation of information about vulnerabilities
+    self.parser.add_argument(  '--generate-vulnerabilities-information',
+                              action='store_true',
+                              dest='generate_vulnerabilities_information',
+                              help="generate the information about vulnerabilities.\n")
+
+    # Activate the generation of information about security
+    self.parser.add_argument(  '--generate-security-information',
+                              action='store_true',
+                              dest='generate_security_information',
+                              help="generate the information about security.\n")
+
+    # Activate the generation of information about files.
+    self.parser.add_argument(  '--generate-files-information',
+                              action='store_true',
+                              dest='generate_files_information',
+                              help="generate the information about files.\n")
+
+    # Activate the generation of information about the anti-virus execution.
+    self.parser.add_argument(  '--generate-antivirus-information',
+                              action='store_true',
+                              dest='generate_antivirus_information',
+                              help="generate the information about anti-virus execution.\n")
 
   def add_parser_option_strip_rootfs(self):
     # Add the arguments
@@ -427,6 +462,57 @@ x factory_setup                    Apply some extra factory setup before generat
     """ Method used to handle the generate_content_information command. 
       Create the business objet, then execute the entry point
     """
+
+    # Check if we have to do a 'generate all' or if some more specific flags
+    # have ben set to reduce output. Default is generate all to true and all
+    # other flags to false
+    self.project.dft.generate_all_information = True
+    self.project.dft.generate_packages_information = False
+    self.project.dft.generate_files_information = False
+    self.project.dft.generate_antivirus_information = False
+    self.project.dft.generate_vulnerabilities_information = False
+    self.project.dft.generate_security_information = False
+
+    # Check if the packages are needed
+    if self.args.generate_packages_information != None:
+      # Flag is defined, then copy it
+      self.project.dft.generate_packages_information = self.args.generate_packages_information
+      # If flag is true, then generate all as to be false
+      if self.project.dft.generate_packages_information == True:
+        self.project.dft.generate_all_information = False
+
+    # Check if the files are needed
+    if self.args.generate_files_information != None:
+      # Flag is defined, then copy it
+      self.project.dft.generate_files_information = self.args.generate_files_information
+      # If flag is true, then generate all as to be false
+      if self.project.dft.generate_files_information == True:
+        self.project.dft.generate_all_information = False
+
+    # Check if the vulnerabilties are needed
+    if self.args.generate_vulnerabilities_information != None:
+      # Flag is defined, then copy it
+      self.project.dft.generate_vulnerabilities_information = self.args.generate_vulnerabilities_information
+      # If flag is true, then generate all as to be false
+      if self.project.dft.generate_vulnerabilities_information == True:
+        self.project.dft.generate_all_information = False
+
+    # Check if the antivirus are needed
+    if self.args.generate_antivirus_information != None:
+      # Flag is defined, then copy it
+      self.project.dft.generate_antivirus_information = self.args.generate_antivirus_information
+      # If flag is true, then generate all as to be false
+      if self.project.dft.generate_antivirus_information == True:
+        self.project.dft.generate_all_information = False
+
+    # Check if the security are needed
+    if self.args.generate_security_information != None:
+      # Flag is defined, then copy it
+      self.project.dft.generate_security_information = self.args.generate_security_information
+      # If flag is true, then generate all as to be false
+      if self.project.dft.generate_security_information == True:
+        self.project.dft.generate_all_information = False
+
     # Create the business object
     command = generate_content_information.GenerateContentInformation(self.dft, self.project)
 
