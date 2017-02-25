@@ -162,47 +162,52 @@ class GenerateContentInformation(CliCommand):
     #
     # Generate the packages information 
     #
-    if "packages" in self.project.content_information_definition:
-      logging.debug("Packages information generation is activated")
-      self.generate_packages_information()
-    else:
-      logging.info("Packages information generation is deactivated")
+    if self.project.dft.generate_all_information == True or self.project.dft.generate_packages_information == True: 
+      if "packages" in self.project.content_information_definition:
+        logging.debug("Packages information generation is activated")
+        self.generate_packages_information()
+      else:
+        logging.info("Packages information generation is deactivated")
 
     #
     # Generate the vulnerabilities information 
     #
-    if "vulnerabilities" in self.project.content_information_definition:
-      logging.debug("Vulnerabilities information generation is activated")
-      self.generate_vulnerabilities_information()
-    else:
-      logging.info("Vulnerabilities information generation is deactivated")
+    if self.project.dft.generate_all_information == True or self.project.dft.generate_vulnerabilities_information == True: 
+      if "vulnerabilities" in self.project.content_information_definition:
+        logging.debug("Vulnerabilities information generation is activated")
+        self.generate_vulnerabilities_information()
+      else:
+        logging.info("Vulnerabilities information generation is deactivated")
 
     #
     # Generate the security information 
     #
-    if "security" in self.project.content_information_definition:
-      logging.debug("Security information generation is activated")
-      self.generate_security_information()
-    else:
-      logging.info("Security information generation is deactivated")
+    if self.project.dft.generate_all_information == True or self.project.dft.generate_security_information == True: 
+      if "security" in self.project.content_information_definition:
+        logging.debug("Security information generation is activated")
+        self.generate_security_information()
+      else:
+        logging.info("Security information generation is deactivated")
 
     #
     # Generate the files information 
     #
-    if "files" in self.project.content_information_definition:
-      logging.debug("File information generation is activated")
-      self.generate_files_information()
-    else:
-      logging.info("Files information generation is deactivated")
+    if self.project.dft.generate_all_information == True or self.project.dft.generate_files_information == True: 
+      if "files" in self.project.content_information_definition:
+        logging.debug("File information generation is activated")
+        self.generate_files_information()
+      else:
+        logging.info("Files information generation is deactivated")
 
     #
     # Generate the anti-virus information 
     #
-    if "anti-virus" in self.project.content_information_definition:
-      logging.debug("Anti-virus information generation is activated")
-      self.generate_antivirus_information()
-    else:
-      logging.info("Anti-virus information generation is deactivated")
+    if self.project.dft.generate_all_information == True or self.project.dft.generate_antivirus_information == True: 
+      if "anti-virus" in self.project.content_information_definition:
+        logging.debug("Anti-virus information generation is activated")
+        self.generate_antivirus_information()
+      else:
+        logging.info("Anti-virus information generation is deactivated")
 
     # Remove QEMU if it has been isntalled. It has to be done in the end
     # since some cleanup tasks could need QEMU
