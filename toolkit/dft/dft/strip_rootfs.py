@@ -8,11 +8,11 @@
 # License.
 #
 #
-# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).  
+# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
 # Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
 #
 #
 # Contributors list :
@@ -21,63 +21,56 @@
 #
 #
 
-import logging, os, subprocess, shutil, distutils
-from distutils import dir_util, file_util
+import logging
 from cli_command import CliCommand
-
-# TODO heriter classe de base
 
 #
 #    Class StripRootFS
 #
-class StripRootFS(CliCommand): 
-    """This class implements the methods needed to strip the base OS
+class StripRootFS(CliCommand):
+  """This class implements the methods needed to strip the base OS
 
-    Stripping the base OS is the task to remove extra packages and files
-    that should not be included inthe firmware. These files may come from
-    different sources (istalled packages, manual creation, etc.)
+  Stripping the base OS is the task to remove extra packages and files
+  that should not be included inthe firmware. These files may come from
+  different sources (istalled packages, manual creation, etc.)
+  """
+
+  # -------------------------------------------------------------------------
+  #
+  # __init__
+  #
+  # -------------------------------------------------------------------------
+  def __init__(self, dft, project):
+    """Default constructor
     """
 
-    # -------------------------------------------------------------------------
-    #
-    # __init__
-    #
-    # -------------------------------------------------------------------------
-    def __init__(self, dft, project):
-        """Default constructor
-        """
+    # Initialize ancestor
+    CliCommand.__init__(self, dft, project)
 
-        # Initialize ancestor
-        super().__init__(dft, project)
-
-        # Set the log level from the configuration
-        logging.basicConfig(level=project.dft.log_level)
+    # Set the log level from the configuration
+    logging.basicConfig(level=project.dft.log_level)
 
 
-    # -------------------------------------------------------------------------
-    #
-    # strip_rootfs
-    #
-    # -------------------------------------------------------------------------
-    def strip_rootfs(self):
-        """This method implement the business logic of rootfs stripping.
-        
-TODO
-        It calls dedicated method for each step. The main steps are :
-        . 
-        """
+  # -------------------------------------------------------------------------
+  #
+  # strip_rootfs
+  #
+  # -------------------------------------------------------------------------
+  def strip_rootfs(self):
+    """This method implement the business logic of rootfs stripping.
 
-        # First strip the packages
-        need_to_strip_apt = False
+    TODO
+    It calls dedicated method for each step. The main steps are :
+    .
+    """
 
+    # First strip the packages
+    need_to_strip_apt = False
 
-        # Check if at some time the APT stuff has be caimed for removal
-        if need_to_strip_apt == True:
-        	# We now have to remove 
-            pass
-        # Next strip the directories
-
-        # Then strip the symlinks
-
-        # And finally strip the files
-
+    # Check if at some time the APT stuff has be caimed for removal
+    if need_to_strip_apt:
+      # We now have to remove
+      pass
+# Next strip the directories
+# Then strip the symlinks
+# And finally strip the files
