@@ -8,11 +8,11 @@
 # License.
 #
 #
-# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).  
+# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
 # Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
 #
 #
 # Contributors list :
@@ -21,8 +21,13 @@
 #
 #
 
-import logging, os, subprocess, shutil, distutils
-from distutils import dir_util, file_util
+import logging
+import os
+import subprocess
+import shutil
+import distutils
+from distutils import file_util
+from distutils import dir_util
 
 #
 #    Class CliCommand
@@ -145,7 +150,7 @@ class CliCommand:
     if self.use_qemu_static != True:
       return
 
-    if self.project.dft.keep_bootstrap_files == True:
+    if self.project.dft.keep_bootstrap_files:
       self.project.logging.debug("keep_bootstrap_files is activated, keeping QEMU in " + self.project.rootfs_mountpoint)
       return
 
@@ -174,31 +179,31 @@ class CliCommand:
     # Are we already doing a cleanup ? this may happens if an exception
     # occurs when cleaning up. It prevents multiple call and loop in
     # exception processing
-    if self.doing_cleanup_installation_files == True:
+    if self.doing_cleanup_installation_files:
       return
 
     # Set the flag used to prevent multiple call
     self.doing_cleanup_installation_files = True
 
     # Check if /proc is mounted, then umount it
-    if self.proc_is_mounted == True:
+    if self.proc_is_mounted:
       sudo_command = "sudo umount " + self.project.rootfs_mountpoint + "/dev/pts"
       self.execute_command(sudo_command)
 
     # Check if /dev/shm is mounted, then umount it
-    if self.devshm_is_mounted == True:
+    if self.devshm_is_mounted:
       sudo_command = "sudo umount " + self.project.rootfs_mountpoint + "/dev/shm"
       self.execute_command(sudo_command)
 
     # Check if /dev/pts is mounted, then umount it
-    if self.devpts_is_mounted == True:
+    if self.devpts_is_mounted:
       sudo_command = "sudo umount " + self.project.rootfs_mountpoint + "/proc"
       self.execute_command(sudo_command)
 
     self.doing_cleanup_installation_files = False
 
     # Delete the DFT files from the rootfs
-    if self.project.dft.keep_bootstrap_files == False:
+    if not self.project.dft.keep_bootstrap_files:
       if os.path.isdir(self.project.rootfs_mountpoint + "/dft_bootstrap"):
         shutil.rmtree(self.project.rootfs_mountpoint + "/dft_bootstrap")
     else:

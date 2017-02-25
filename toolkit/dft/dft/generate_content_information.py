@@ -8,11 +8,11 @@
 # License.
 #
 #
-# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).  
+# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
 # Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
 #
 #
 # Contributors list :
@@ -21,8 +21,9 @@
 #
 #
 
-import logging, os, subprocess, shutil, tempfile, distutils
-from distutils import dir_util, file_util
+import logging
+import os
+import tempfile
 from cli_command import CliCommand
 
 # TODO classe de base
@@ -30,9 +31,9 @@ from cli_command import CliCommand
 #
 #    Class ContentInformationOutputWriter
 #
-class ContentInformationOutputWriter(CliCommand): 
+class ContentInformationOutputWriter(CliCommand):
   """This class implements the writer in charge of doing real output to the
-  target defined in the configuration file. It can eithertarget a stream 
+  target defined in the configuration file. It can eithertarget a stream
   (stdout) or a file, using different format (csv yaml json xml).
   """
 
@@ -44,6 +45,9 @@ class ContentInformationOutputWriter(CliCommand):
   def __init__(self, configuration):
     """Default constructor
     """
+
+    # Initialize ancestor
+#    CliCommand.__init__(self, dft, project)
 
     # Store the configuration dictionnary
     self.configuration = configuration
@@ -57,7 +61,7 @@ class ContentInformationOutputWriter(CliCommand):
   def Initialize(self, target):
     """This method initiliaze the output writer accorsing to the target
     argument. Target is one of the kind of output (packages, files, etc). The
-    method does configuration checks, such as valid output format, target, 
+    method does configuration checks, such as valid output format, target,
     etc. If configuration is valid, it opens the file or stream for output.
     """
 
@@ -75,7 +79,8 @@ class ContentInformationOutputWriter(CliCommand):
       logging.error("Format is not yet available")
       exit(1)
     else:
-      logging.error("Unknow output format " + self.configuration["configuration"]["output"]["format"])  
+      logging.error("Unknow output format " +
+                    self.configuration["configuration"]["output"]["format"])
       exit(1)
 
     # Slect and create the output
@@ -88,16 +93,17 @@ class ContentInformationOutputWriter(CliCommand):
       logging.error("Output to stdout is not yet available")
       exit(1)
     else:
-      logging.error("Unknow output TARGET " + self.configuration["configuration"]["output"]["target"])  
+      logging.error("Unknow output TARGET " +
+                    self.configuration["configuration"]["output"]["target"])
       exit(1)
- 
+
   # -------------------------------------------------------------------------
   #
   # FlushAndClose
   #
   # -------------------------------------------------------------------------
   def FlushAndClose(self):
-    """This method is in charg of flushing all the output and close opened 
+    """This method is in charg of flushing all the output and close opened
     files
     """
 
@@ -109,13 +115,13 @@ class ContentInformationOutputWriter(CliCommand):
       # Yes then close it
       self.output_file.close()
       self.output_file = None
-    
+
     # Move the target file to the right place ?
     # Depends on how we handle temp files
 #
 #    Class GenerateContentInformation
 #
-class GenerateContentInformation(CliCommand): 
+class GenerateContentInformation(CliCommand):
   """This class implements the methods needed to generate the output desribing
   rootfs content
   """
@@ -130,7 +136,7 @@ class GenerateContentInformation(CliCommand):
     """
 
     # Initialize ancestor
-    super().__init__(dft, project)
+    CliCommand.__init__(self, dft, project)
 
     # Create the output writer object
     self.OutputWriter = ContentInformationOutputWriter(self.project.content_information_definition)
@@ -154,15 +160,15 @@ class GenerateContentInformation(CliCommand):
     . Generate antivirus execution report
     """
 
-    # Check if we are working with foreign arch, then ... 
-    if self.use_qemu_static == True:
+    # Check if we are working with foreign arch, then ...
+    if self.use_qemu_static:
       # QEMU is used, and we have to install it into the target
       self.setup_qemu()
 
     #
-    # Generate the packages information 
+    # Generate the packages information
     #
-    if self.project.dft.generate_all_information == True or self.project.dft.generate_packages_information == True: 
+    if self.project.dft.generate_all_information or self.project.dft.generate_packages_information:
       if "packages" in self.project.content_information_definition:
         logging.debug("Packages information generation is activated")
         self.generate_packages_information()
@@ -170,9 +176,9 @@ class GenerateContentInformation(CliCommand):
         logging.info("Packages information generation is deactivated")
 
     #
-    # Generate the vulnerabilities information 
+    # Generate the vulnerabilities information
     #
-    if self.project.dft.generate_all_information == True or self.project.dft.generate_vulnerabilities_information == True: 
+    if self.project.dft.generate_all_information or self.project.dft.generate_vulnerabilities_information:
       if "vulnerabilities" in self.project.content_information_definition:
         logging.debug("Vulnerabilities information generation is activated")
         self.generate_vulnerabilities_information()
@@ -180,9 +186,9 @@ class GenerateContentInformation(CliCommand):
         logging.info("Vulnerabilities information generation is deactivated")
 
     #
-    # Generate the security information 
+    # Generate the security information
     #
-    if self.project.dft.generate_all_information == True or self.project.dft.generate_security_information == True: 
+    if self.project.dft.generate_all_information or self.project.dft.generate_security_information:
       if "security" in self.project.content_information_definition:
         logging.debug("Security information generation is activated")
         self.generate_security_information()
@@ -190,9 +196,9 @@ class GenerateContentInformation(CliCommand):
         logging.info("Security information generation is deactivated")
 
     #
-    # Generate the files information 
+    # Generate the files information
     #
-    if self.project.dft.generate_all_information == True or self.project.dft.generate_files_information == True: 
+    if self.project.dft.generate_all_information or self.project.dft.generate_files_information:
       if "files" in self.project.content_information_definition:
         logging.debug("File information generation is activated")
         self.generate_files_information()
@@ -200,9 +206,9 @@ class GenerateContentInformation(CliCommand):
         logging.info("Files information generation is deactivated")
 
     #
-    # Generate the anti-virus information 
+    # Generate the anti-virus information
     #
-    if self.project.dft.generate_all_information == True or self.project.dft.generate_antivirus_information == True: 
+    if self.project.dft.generate_all_information or self.project.dft.generate_antivirus_information:
       if "anti-virus" in self.project.content_information_definition:
         logging.debug("Anti-virus information generation is activated")
         self.generate_antivirus_information()
@@ -211,7 +217,7 @@ class GenerateContentInformation(CliCommand):
 
     # Remove QEMU if it has been isntalled. It has to be done in the end
     # since some cleanup tasks could need QEMU
-    if self.use_qemu_static == True:
+    if self.use_qemu_static:
       self.cleanup_qemu()
 
   # -------------------------------------------------------------------------
@@ -226,119 +232,119 @@ class GenerateContentInformation(CliCommand):
 
     # Initialize the output writer for packages content generation
     self.OutputWriter.Initialize("packages")
-  
+
     # Generate the dpkg command to retrieve the list of installed packages
-    sudo_command  = "LANG=C sudo chroot " + self.project.rootfs_mountpoint + " dpkg -l | tail -n +6"
+    sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint + " dpkg -l | tail -n +6"
     sudo_command_output = self.execute_command(sudo_command)
 
     # Iterate the output of the dpkg process:
     for binaryline in sudo_command_output.splitlines():
-      # Each fields is stored into a variable to easy manipulation and 
+      # Each fields is stored into a variable to easy manipulation and
       # simplify code. First get the array of words converted to UTF-8
       line = binaryline.decode('utf-8').split()
 
       # Extract each fields
-      pkg_status      = line[0]
-      pkg_name        = line[1]
-      pkg_version     = line[2]
-      pkg_arch        = line[3]
+      pkg_status = line[0]
+      pkg_name = line[1]
+      pkg_version = line[2]
+      pkg_arch = line[3]
       # space is used as a separator to rebuild the description
       pkg_description = " ".join(line[4:])
 
       # Flag used to know if we need a space separator between fields
       add_spacer = False
-      
+
       # Starts with empty output
       output = ""
 
       # Test if we have to generate the package status in the output
       if "generate-package-status" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-status"] == True:
+        if self.project.content_information_definition["packages"]["generate-package-status"]:
       # Test if we have to generate the package description in the output
           output += pkg_status
           add_spacer = True
 
       # Test if we have to generate the package name in the output
       if "generate-package-name" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-name"] == True:
-          if add_spacer == True:
-            output += " "  
+        if self.project.content_information_definition["packages"]["generate-package-name"]:
+          if add_spacer:
+            output += " "
           output += pkg_name
           add_spacer = True
 
       # Test if we have to generate the package version in the output
       if "generate-package-version" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-version"] == True:
-          if add_spacer == True:
-            output += " "  
+        if self.project.content_information_definition["packages"]["generate-package-version"]:
+          if add_spacer:
+            output += " "
           output += pkg_version
           add_spacer = True
 
       # Test if we have to generate the package architecture in the output
       if "generate-package-architecture" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-architecture"] == True:
-          if add_spacer == True:
-            output += " "  
+        if self.project.content_information_definition["packages"]["generate-package-architecture"]:
+          if add_spacer:
+            output += " "
           output += pkg_arch
           add_spacer = True
 
       # Test if we have to generate the package md5 in the output
       if "generate-package-md5" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-md5"] == True:
+        if self.project.content_information_definition["packages"]["generate-package-md5"]:
           # Generate the apt-cache show command to retrieve the MD5sum
           # Grp the keyword and print second word
-          sudo_command   = "LANG=C sudo chroot " + self.project.rootfs_mountpoint 
-          sudo_command  += " apt-cache show " + pkg_name + " | grep ^MD5sum | awk '{ print $2 }'"
+          sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
+          sudo_command += " apt-cache show " + pkg_name + " | grep ^MD5sum | awk '{ print $2 }'"
           sudo_command_output = self.execute_command(sudo_command)
-          if add_spacer == True:
-            output += " "  
+          if add_spacer:
+            output += " "
           output += sudo_command_output.decode('utf-8')
           add_spacer = True
 
       # Test if we have to generate the package sha256 in the output
       if "generate-package-sha256" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-sha256"] == True:
+        if self.project.content_information_definition["packages"]["generate-package-sha256"]:
           # Generate the apt-cache show command to retrieve the SHA256
           # Grp the keyword and print second word
-          sudo_command   = "LANG=C sudo chroot " + self.project.rootfs_mountpoint 
-          sudo_command  += " apt-cache show " + pkg_name + " | grep ^SHA256 | awk '{ print $2 }'"
+          sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
+          sudo_command += " apt-cache show " + pkg_name + " | grep ^SHA256 | awk '{ print $2 }'"
           sudo_command_output = self.execute_command(sudo_command)
-          if add_spacer == True:
-            output += " "  
+          if add_spacer:
+            output += " "
           output += sudo_command_output.decode('utf-8')
           add_spacer = True
 
       # Test if we have to generate the package size in the output
       if "generate-package-size" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-size"] == True:
+        if self.project.content_information_definition["packages"]["generate-package-size"]:
           # Generate the apt-cache show command to retrieve the Size
           # Grp the keyword and print second word
-          sudo_command   = "LANG=C sudo chroot " + self.project.rootfs_mountpoint 
-          sudo_command  += " apt-cache show " + pkg_name + " | grep ^Size | awk '{ print $2 }'"
+          sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
+          sudo_command += " apt-cache show " + pkg_name + " | grep ^Size | awk '{ print $2 }'"
           sudo_command_output = self.execute_command(sudo_command)
-          if add_spacer == True:
-            output += " "  
+          if add_spacer:
+            output += " "
           output += sudo_command_output.decode('utf-8')
           add_spacer = True
 
       # Test if we have to generate the package installed-size in the output
       if "generate-package-installed-size" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-installed-size"] == True:
+        if self.project.content_information_definition["packages"]["generate-package-installed-size"]:
           # Generate the apt-cache show command to retrieve the Installed-SizeMD5sum
           # Grp the keyword and print second word
-          sudo_command   = "LANG=C sudo chroot " + self.project.rootfs_mountpoint 
-          sudo_command  += " apt-cache show " + pkg_name + " | grep ^Installed-Size | awk '{ print $2 }'"
+          sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
+          sudo_command += " apt-cache show " + pkg_name + " | grep ^Installed-Size | awk '{ print $2 }'"
           sudo_command_output = self.execute_command(sudo_command)
-          if add_spacer == True:
-            output += " "  
+          if add_spacer:
+            output += " "
           output += sudo_command_output.decode('utf-8')
           add_spacer = True
 
       # Test if we have to generate the package description in the output
       if "generate-package-description" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-description"] == True:
-          if add_spacer == True:
-            output += " "  
+        if self.project.content_information_definition["packages"]["generate-package-description"]:
+          if add_spacer:
+            output += " "
           output += pkg_description
           add_spacer = True
 
@@ -346,7 +352,7 @@ class GenerateContentInformation(CliCommand):
 
     # Flush all pending output and close stream or file
     self.OutputWriter.FlushAndClose()
-  
+
   # -------------------------------------------------------------------------
   #
   # generate_files_information
@@ -362,7 +368,7 @@ class GenerateContentInformation(CliCommand):
 
     # Flush all pending output and close stream or file
     self.OutputWriter.FlushAndClose()
-  
+
 
 
   # -------------------------------------------------------------------------
@@ -378,9 +384,16 @@ class GenerateContentInformation(CliCommand):
     # Initialize the output writer for packages content generation
     self.OutputWriter.Initialize("antivirus")
 
+# Todo install clamav
+
+    # Generate the dpkg command to retrieve the list of installed packages
+    sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
+    sudo_command += " clamscan --infected --recursive"
+    sudo_command_output = self.execute_command(sudo_command)
+
     # Flush all pending output and close stream or file
     self.OutputWriter.FlushAndClose()
-  
+
 
 
   # -------------------------------------------------------------------------
@@ -400,7 +413,7 @@ class GenerateContentInformation(CliCommand):
 
     # Flush all pending output and close stream or file
     self.OutputWriter.FlushAndClose()
-  
+
 
 
   # -------------------------------------------------------------------------
@@ -409,21 +422,21 @@ class GenerateContentInformation(CliCommand):
   #
   # -------------------------------------------------------------------------
   def generate_vulnerabilities_information(self):
-    """This method implement the generation of information about 
-    vulnerabilities. It relies on call to debsecan and apt-cache in the 
+    """This method implement the generation of information about
+    vulnerabilities. It relies on call to debsecan and apt-cache in the
     chrooted environment.
     """
- 
+
      # Initialize the output writer for packages content generation
     self.OutputWriter.Initialize("vulnerabilities")
 
     # Check if debsecan is installed in the chrooted environment
-    if os.path.isfile( self.project.rootfs_mountpoint + "/usr/bin/debsecan") == False:
-      # If not, test if it has to be installed, or should it fail ? 
+    if not os.path.isfile(self.project.rootfs_mountpoint + "/usr/bin/debsecan"):
+      # If not, test if it has to be installed, or should it fail ?
       # Default behavior is to install debsecan if missing and to remove
       # it if it has been installed in thismethod context (and not in the
       # baseos)
-      # If key is not defined, then set its default value      
+      # If key is not defined, then set its default value
       if self.project.content_information_definition["configuration"] != None:
         if "install-missing-software" not in self.project.content_information_definition["configuration"]:
           logging.debug("Setting default value of install-missing-software to False")
@@ -432,16 +445,16 @@ class GenerateContentInformation(CliCommand):
         logging.debug("Setting default value of install-missing-software to False")
         self.project.content_information_definition["configuration"] = {'install-missing-software': False}
 
-      if self.project.content_information_definition["configuration"]["install-missing-software"] == True:
+      if self.project.content_information_definition["configuration"]["install-missing-software"]:
         logging.info("Installing debsecan in rootfs")
 
         # Install missing packages into the chroot
-        sudo_command  = "sudo chroot " + self.project.rootfs_mountpoint 
+        sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
         sudo_command += " /usr/bin/apt-get install --no-install-recommends"
         sudo_command += " --yes --allow-unauthenticated debsecan"
         self.execute_command(sudo_command)
 
-        # Set the flag used tomark that we install debsecan and we have to 
+        # Set the flag used tomark that we install debsecan and we have to
         # remove it before exiting the application
         need_to_remove_debsecan = True
 
@@ -458,27 +471,27 @@ class GenerateContentInformation(CliCommand):
           self.project.content_information_definition["configuration"] = {'skip-on-missing-software': True}
 
         # Check if skipping is allowed or not
-        if self.project.content_information_definition["configuration"]["skip-on-missing-software"] == True:
+        if self.project.content_information_definition["configuration"]["skip-on-missing-software"]:
           logging.warning("Skipping vulnerabilities content generation. Debsecan is missing and instalation not allowed by configuration file.")
           return
         else:
-          # Skipping is deactivated, so is installation, thus it fails             
+          # Skipping is deactivated, so is installation, thus it fails
           logging.error("Debsecan is missing and instalation not allowed by configuration file.")
           logging.error("Please consider to add skip-on-on-missing-software or install-mising-software in configuration file")
           logging.critical("Generation canot continue, execution is aborted.")
           exit(1)
 
     # Generate the debsecan execution command
-    sudo_command  = "sudo chroot " + self.project.rootfs_mountpoint 
+    sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
     sudo_command += " /usr/bin/debsecan"
     self.execute_command(sudo_command)
 
     # Test if debsecan has to be removed
-    if need_to_remove_debsecan == True:
+    if need_to_remove_debsecan:
       logging.info("Removing debsecan in rootfs")
 
       # Remove extra packages into the chroot
-      sudo_command  = "sudo chroot " + self.project.rootfs_mountpoint 
+      sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
       sudo_command += " /usr/bin/apt-get remove --yes debsecan"
       self.execute_command(sudo_command)
 

@@ -8,11 +8,11 @@
 # License.
 #
 #
-# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).  
+# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
 # Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
 #
 #
 # Contributors list :
@@ -21,11 +21,13 @@
 #
 #
 
-import logging, yaml, os
+import logging
+import os
 from datetime import datetime
+import yaml
 
 
-# TODO: add a method to initialize all defaut value and not do it into the code 
+# TODO: add a method to initialize all defaut value and not do it into the code
 # TODO : add enum with key strings ?
 
 # -----------------------------------------------------------------------------
@@ -33,13 +35,13 @@ from datetime import datetime
 # class DftConfiguration
 #
 # -----------------------------------------------------------------------------
-class DftConfiguration: 
+class DftConfiguration:
   """This class defines default configuration for the DFT toolchain
 
-  The tool configuration contains environment variables used to define 
+  The tool configuration contains environment variables used to define
   information such as default root working path, cache directories, etc.
 
-  The values stored in this object are read from the following sources, 
+  The values stored in this object are read from the following sources,
   in order of priority (from the highest priority to the lowest).
   """
 
@@ -48,7 +50,7 @@ class DftConfiguration:
   # __init__
   #
   # ---------------------------------------------------------------------------
-  def __init__(self, filename = None):
+  def __init__(self, filename=None):
     """
     """
 
@@ -58,7 +60,7 @@ class DftConfiguration:
     else:
       self.configuration_file = filename
 
-    # Boolean used to flag if the cache archive should used instead 
+    # Boolean used to flag if the cache archive should used instead
     # of doing a real debootstrap installation
     self.use_cache_archive = False
 
@@ -75,9 +77,9 @@ class DftConfiguration:
 # a mandatory value in the config file ? => change to None
     self.working_directory = None
 
-    # During installation ansible files from DFT toolkit are copied to 
+    # During installation ansible files from DFT toolkit are copied to
     # /dft_bootstrap in the target rootfs. This falgs prevents DFT from
-    # removing these files if set to True. This is useful to debug 
+    # removing these files if set to True. This is useful to debug
     # ansible stuff and replay an playbooks at will
     self.keep_bootstrap_files = False
 
@@ -86,33 +88,33 @@ class DftConfiguration:
   # load_configuration
   #
   # ---------------------------------------------------------------------------
-  def load_configuration(self, filename = None):
+  def load_configuration(self, filename=None):
 
 # TODO handle filename
-    try:   
+    try:
       # Load it
       with open(self.project_name, 'r') as f:
         self.logging.debug("loading dft configuration : " + filename)
-        self.dft_configuration = yaml.load(f)   
+        self.dft_configuration = yaml.load(f)
         self.logging.debug(self.dft_configuration)
 
         # Check if path starts with ~ and need expension
-        if self.dft_configuration["configuration"]["working_dir"][0] == "~" and self.dft_configuration["configuration"]["working_dir"][1] == "/":         
+        if self.dft_configuration["configuration"]["working_dir"][0] == "~" and self.dft_configuration["configuration"]["working_dir"][1] == "/":
           dft_configuration["configuration"]["working_dir"] = os.path.expanduser(dft_configuration["configuration"]["working_dir"])
 
         self.logging.debug(self.dft_configuration)
 
     except FileNotFoundError as e:
-        # Call clean up to umount /proc and /dev
-        self.logging.critical("Error: %s - %s." % (e.filename, e.strerror))
-        exit(1)
+      # Call clean up to umount /proc and /dev
+      self.logging.critical("Error: %s - %s." % (e.filename, e.strerror))
+      exit(1)
 
 # -----------------------------------------------------------------------------
 #
 # Class ProjectDefinition
 #
 # -----------------------------------------------------------------------------
-class ProjectDefinition :
+class ProjectDefinition:
   """This class defines a project. A project holds all the information used
   to produce the different object created by DFT (baseos, modulations, 
   firmware, bootlader, etc.).
@@ -147,6 +149,14 @@ class ProjectDefinition :
 
     # Create the object storing the DFT tool configuration
     self.dft = DftConfiguration()
+
+    # Defines path for subcommand
+    self.rootfs_base_workdir     = ""
+    self.image_base_workdir      = ""
+    self.bootloader_base_workdir = ""
+    self.firmware_base_workdir   = ""
+    self.content_base_workdir    = ""
+
 
   # ---------------------------------------------------------------------------
   #
@@ -309,7 +319,7 @@ class ProjectDefinition :
       self.firmware_filename =  self.firmware_directory + "/" + self.project_definition["configuration"]["project_name"] + ".squashfs"
 
     # Handle exception that may occur when trying to open unknown files 
-    except FileNotFoundError as e:
+    except FileNotFoundError as exception:
         # Just log and exit, nothing is mounted yet
-        self.logging.critical("Error: %s - %s." % (e.filename, e.strerror))
+        self.logging.critical("Error: %s - %s." % (exception.filename, exception.strerror))
         exit(1)

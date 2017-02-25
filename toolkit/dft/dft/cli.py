@@ -8,11 +8,11 @@
 # License.
 #
 #
-# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).  
+# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
 # Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
 #
 #
 # Contributors list :
@@ -21,9 +21,18 @@
 #
 #
 
-import argparse, textwrap, logging
-import build_baseos, model, assemble_firmware, build_bootloader, build_image
-import build_firmware, check_rootfs, generate_content_information, strip_rootfs
+import argparse
+import textwrap
+import logging
+import build_baseos
+import model
+import assemble_firmware
+import build_bootloader
+import build_image
+import build_firmware
+import check_rootfs
+import generate_content_information
+import strip_rootfs
 
 # -----------------------------------------------------------------------------
 #
@@ -478,7 +487,7 @@ x factory_setup                    Apply some extra factory setup before generat
       # Flag is defined, then copy it
       self.project.dft.generate_packages_information = self.args.generate_packages_information
       # If flag is true, then generate all as to be false
-      if self.project.dft.generate_packages_information == True:
+      if self.project.dft.generate_packages_information:
         self.project.dft.generate_all_information = False
 
     # Check if the files are needed
@@ -486,7 +495,7 @@ x factory_setup                    Apply some extra factory setup before generat
       # Flag is defined, then copy it
       self.project.dft.generate_files_information = self.args.generate_files_information
       # If flag is true, then generate all as to be false
-      if self.project.dft.generate_files_information == True:
+      if self.project.dft.generate_files_information:
         self.project.dft.generate_all_information = False
 
     # Check if the vulnerabilties are needed
@@ -494,7 +503,7 @@ x factory_setup                    Apply some extra factory setup before generat
       # Flag is defined, then copy it
       self.project.dft.generate_vulnerabilities_information = self.args.generate_vulnerabilities_information
       # If flag is true, then generate all as to be false
-      if self.project.dft.generate_vulnerabilities_information == True:
+      if self.project.dft.generate_vulnerabilities_information:
         self.project.dft.generate_all_information = False
 
     # Check if the antivirus are needed
@@ -502,7 +511,7 @@ x factory_setup                    Apply some extra factory setup before generat
       # Flag is defined, then copy it
       self.project.dft.generate_antivirus_information = self.args.generate_antivirus_information
       # If flag is true, then generate all as to be false
-      if self.project.dft.generate_antivirus_information == True:
+      if self.project.dft.generate_antivirus_information:
         self.project.dft.generate_all_information = False
 
     # Check if the security are needed
@@ -510,7 +519,7 @@ x factory_setup                    Apply some extra factory setup before generat
       # Flag is defined, then copy it
       self.project.dft.generate_security_information = self.args.generate_security_information
       # If flag is true, then generate all as to be false
-      if self.project.dft.generate_security_information == True:
+      if self.project.dft.generate_security_information:
         self.project.dft.generate_all_information = False
 
     # Create the business object

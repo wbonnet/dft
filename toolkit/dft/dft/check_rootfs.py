@@ -8,11 +8,11 @@
 # License.
 #
 #
-# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).  
+# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
 # Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
 #
 #
 # Contributors list :
@@ -21,7 +21,10 @@
 #
 #
 
-import os, subprocess, stat, hashlib
+import os
+import subprocess
+import stat
+import hashlib
 from cli_command import CliCommand
 
 #
@@ -45,7 +48,7 @@ class CheckRootFS(CliCommand):
     """
 
     # Initialize ancestor
-    super().__init__(dft, project)
+    CliCommand.__init__(self, dft, project)
 
     # Initialize a dictionnary to hold the list of installed packages
     self.installed_packages = { }
@@ -121,7 +124,7 @@ class CheckRootFS(CliCommand):
     self.rule_counter += 1
 
     # If the test was negative, then change the global result to false
-    if self.is_rule_check_successfull == False:
+    if not self.is_rule_check_successfull:
       # Set the global failure flag
       self.is_check_successfull = False
       # Counter used to display the number of failed rules
@@ -151,7 +154,7 @@ class CheckRootFS(CliCommand):
       # Define an empty result
       label_check_result = ""      
       # If the check is successful, set the label to OK
-      if self.is_rule_check_successfull == True:
+      if self.is_rule_check_successfull:
         label_check_result = "[ OK ]"
       else:
         # Otherwise set it to fail
@@ -178,7 +181,7 @@ class CheckRootFS(CliCommand):
     """
 
     # Check if we are working with foreign arch, then ... 
-    if self.use_qemu_static == True:
+    if self.use_qemu_static:
       # QEMU is used, and we have to install it into the target
       self.setup_qemu()
 
@@ -202,11 +205,11 @@ class CheckRootFS(CliCommand):
 
     # Remove QEMU if it has been isntalled. It has to be done in the end
     # since some cleanup tasks could need QEMU
-    if self.use_qemu_static == True:
+    if self.use_qemu_static:
       self.cleanup_qemu()
 
     # Check the final status and return an error if necessary
-    if self.is_check_successfull == False:
+    if not self.is_check_successfull:
       print("At least one rule failed, the check is UNSUCCESSFULL")
       exit(1)
         
@@ -329,13 +332,13 @@ class CheckRootFS(CliCommand):
         self.project.logging.error("Unknow keyword " + keyword + " when parsing packages rules. Rule is ignored")
 
     # Check if mandatory package is missing
-    if mandatory == True and rule["name"] not in self.installed_packages:
+    if mandatory and rule["name"] not in self.installed_packages:
       self.project.logging.error("Missing mandatory package : " + rule["name"])
       self.is_rule_check_successfull = False
       return
 
     # Check if forbidden package is installed
-    if forbidden == True and rule["name"] in self.installed_packages:
+    if forbidden and rule["name"] in self.installed_packages:
       self.project.logging.error("Forbidden package is installed : " + rule["name"])
       self.is_rule_check_successfull = False
       return
@@ -577,68 +580,68 @@ class CheckRootFS(CliCommand):
     self.project.logging.debug("After expension target_path " + rule["path"] + " became " + rule["target_path"])
 
     # Check if mandatory package is missing
-    if mandatory == True:
+    if mandatory:
 # TODO inverser les tests et skip derriere le cas qui marche, par defaut erreur
         # Check for mandatoy directory
-        if os.path.isdir(rule["path"]) == False and rule["type"] == "directory":
+        if not os.path.isdir(rule["path"]) and rule["type"] == "directory":
           self.project.logging.info("Missing mandatory directory : " + rule["path"])
           self.is_rule_check_successfull = False
           return
 
         # Check for mandatoy symlink
-        if os.path.islink(rule["path"]) == False and rule["type"] == "symlink":
+        if not os.path.islink(rule["path"]) and rule["type"] == "symlink":
           self.project.logging.info("Missing mandatory symlink : " + rule["path"])
           self.is_rule_check_successfull = False
           return
 
         # Check for mandatoy file
-        if os.path.isfile(rule["path"]) == False and rule["type"] == "file":
+        if not os.path.isfile(rule["path"]) and rule["type"] == "file":
           self.project.logging.info("Missing mandatory file : " + rule["path"])
           self.is_rule_check_successfull = False
           return
 
         # If target is defined, we have to check that it does not exist either
         if "target" in rule:
-          if os.path.isdir(rule["path"]) == False and os.path.islink(rule["path"]) == False and os.path.isfile(rule["path"]) == False:
+          if not os.path.isdir(rule["path"]) and not os.path.islink(rule["path"]) and not os.path.isfile(rule["path"]):
             self.project.logging.info("Missing mandatory target : " + rule["target_path"])
             self.is_rule_check_successfull = False
             return
 
     # Check if forbidden files are installed
-    if forbidden == True:
+    if forbidden:
         # Check for forbidden directory
-        if os.path.isdir(rule["path"]) == True and rule["type"] == "directory":
+        if os.path.isdir(rule["path"]) and rule["type"] == "directory":
           self.project.logging.info("Forbidden directory exists : " + rule["path"])
           self.is_rule_check_successfull = False
           return
 
         # Check for forbidden symlink
-        if os.path.islink(rule["path"]) == True and rule["type"] == "symlink":
+        if os.path.islink(rule["path"]) and rule["type"] == "symlink":
           self.project.logging.info("Forbidden symlink exists : " + rule["path"])
           self.is_rule_check_successfull = False
           return
 
         # Check for forbidden file
-        if os.path.isfile(rule["path"]) == True and rule["type"] == "file":
+        if os.path.isfile(rule["path"]) and rule["type"] == "file":
           self.project.logging.info("Forbidden file exists : " + rule["path"])
           self.is_rule_check_successfull = False
           return
 
     # Check the type of the object (can be file directory or symlink)
-    if allowed == True:
-      if os.path.isdir(rule["path"]) == False and rule["type"] == "directory":
+    if allowed:
+      if not os.path.isdir(rule["path"]) and rule["type"] == "directory":
         self.project.logging.info("Object " + rule["path"] + " is not a directory")
         self.is_rule_check_successfull = False
         return
 
       # Check for mandatoy symlink
-      if os.path.islink(rule["path"]) == False and rule["type"] == "symlink":
+      if not os.path.islink(rule["path"]) and rule["type"] == "symlink":
         self.project.logging.info("Object " + rule["path"] + " is not a symlink")
         self.is_rule_check_successfull = False
         return
 
       # Check for mandatoy file
-      if os.path.isfile(rule["path"]) == False and rule["type"] == "file":
+      if not os.path.isfile(rule["path"]) and rule["type"] == "file":
         self.project.logging.info("Object " + rule["path"] + " is not a file")
         self.is_rule_check_successfull = False
         return
@@ -684,7 +687,7 @@ class CheckRootFS(CliCommand):
 
     # Check the target of the symlink
     if "target" in rule:
-      if os.path.isdir(rule["target_path"]) == False and os.path.islink(rule["target_path"]) == False and os.path.isfile(rule["target_path"]) == False:
+      if not os.path.isdir(rule["target_path"]) and not os.path.islink(rule["target_path"]) and not os.path.isfile(rule["target_path"]):
         self.project.logging.info("Target " + rule["target_path"] + " does not exist")
         self.is_rule_check_successfull = False
         return
@@ -692,32 +695,32 @@ class CheckRootFS(CliCommand):
     # Check the group of the object
     if "empty" in rule:
       # Check if the file exist. Use the target path to expand symlinks
-      if os.path.isfile(rule["target_path"]) == True:
+      if os.path.isfile(rule["target_path"]):
         # Retrieve the size from the stat call
         size = os.stat(rule["target_path"]).st_size
 
         # Compare it to the owner from the rule
-        if rule["empty"] == True and size != 0:
+        if rule["empty"] and size != 0:
             self.project.logging.info("File " + rule["target_path"] + " is not empty. Size is " + str(size) + " instead of 0")
             self.is_rule_check_successfull = False
             return
 
-        if rule["empty"] == False and size == 0:
+        if not rule["empty"] and size == 0:
             self.project.logging.info("File " + rule["target_path"] + " is not empty. Size is " + str(size) + " instead of 0")
             self.is_rule_check_successfull = False
             return
       else:
-        if os.path.isdir(rule["target_path"]) == True:
+        if os.path.isdir(rule["target_path"]):
           # Retrieve the list of files
           size = len(os.listdir(rule["target_path"]))
 
           # Compare it to the owner from the rule
-          if rule["empty"] == True and size != 0:
+          if rule["empty"] and size != 0:
               self.project.logging.info("File " + rule["target_path"] + " is not empty. Size is " + str(size) + " instead of 0")
               self.is_rule_check_successfull = False
               return
 
-          if rule["empty"] == False and size == 0:
+          if not rule["empty"] and size == 0:
               self.project.logging.info("File " + rule["target_path"] + " is not empty. Size is " + str(size) + " instead of 0")
               self.is_rule_check_successfull = False
               return
@@ -733,7 +736,7 @@ class CheckRootFS(CliCommand):
     if "md5" in rule:
 
       # Check if the file exist. Use the target path to expand symlinks
-      if os.path.isfile(rule["target_path"]) == False:
+      if not os.path.isfile(rule["target_path"]):
         self.project.logging.info("Missing target file : " + rule["target_path"])
         self.is_rule_check_successfull = False
         return
@@ -763,7 +766,7 @@ class CheckRootFS(CliCommand):
     if "sha1" in rule:
 
       # Check if the file exist. Use the target path to expand symlinks
-      if os.path.isfile(rule["target_path"]) == False:
+      if not os.path.isfile(rule["target_path"]):
         self.project.logging.info("Missing target file : " + rule["target_path"])
         self.is_rule_check_successfull = False
         return
@@ -793,7 +796,7 @@ class CheckRootFS(CliCommand):
     if "sha256" in rule:
 
       # Check if the file exist. Use the target path to expand symlinks
-      if os.path.isfile(rule["target_path"]) == False:
+      if not os.path.isfile(rule["target_path"]):
         self.project.logging.info("Missing target file : " + rule["target_path"])
         self.is_rule_check_successfull = False
         return

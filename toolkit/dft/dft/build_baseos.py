@@ -8,11 +8,11 @@
 # License.
 #
 #
-# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).  
+# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
 # Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
 #
 #
 # Contributors list :
@@ -21,8 +21,15 @@
 #
 #
 
-import logging, os, subprocess, tarfile, shutil, tempfile, distutils
-from distutils import dir_util, file_util
+import logging
+import os
+import subprocess
+import tarfile
+import shutil
+import tempfile
+import distutils
+from distutils import file_util
+from distutils import dir_util
 from cli_command import CliCommand
 
 #
@@ -52,7 +59,7 @@ class BuildBaseOS(CliCommand):
         """
 
         # Initialize ancestor
-        super().__init__(dft, project)
+        CliCommand.__init__(self, dft, project)
 
         # Set the log level from the configuration
         logging.basicConfig(level=project.dft.log_level)
@@ -76,15 +83,15 @@ class BuildBaseOS(CliCommand):
         """
 
         # Check that DFT path is valid
-        if os.path.isdir(self.project.project_definition["configuration"]["dft_base"]) == False:
+        if not os.path.isdir(self.project.project_definition["configuration"]["dft_base"]):
             logging.critical("Path to DFT installation is not valid : %s",  self.project.project_definition["configuration"]["dft_base"])
             exit(1)
 
         # Ensure target rootfs mountpoint exists and is a dir
-        if os.path.isdir(self.project.rootfs_mountpoint) == False:
+        if not os.path.isdir(self.project.rootfs_mountpoint):
             os.makedirs(self.project.rootfs_mountpoint)
         else:
-            if "keep_rootfs_history" in self.project.project_definition["configuration"] and self.project.project_definition["configuration"]["keep_rootfs_history"] == True:
+            if "keep_rootfs_history" in self.project.project_definition["configuration"] and self.project.project_definition["configuration"]["keep_rootfs_history"]:
                 logging.warn("target rootfs mount point already exists : " + self.project.rootfs_mountpoint)
 # TODO
                 logging.critical("TODO : handle history : " + self.project.rootfs_mountpoint)
@@ -103,17 +110,17 @@ class BuildBaseOS(CliCommand):
 
         # Check if the archive has to be used instead of doing a debootstraping
         # for real. Only if the archive exist...
-        if self.project.dft.use_cache_archive == True and self.cache_archive_is_available == True:
+        if self.project.dft.use_cache_archive and self.cache_archive_is_available:
             self.fake_generate_debootstrap_rootfs()
         else:
             # In any other cases, do a real debootstrap call
             self.generate_debootstrap_rootfs()
 
         # Test if the archive has to be updated
-        if self.project.dft.update_cache_archive == True:
+        if self.project.dft.update_cache_archive:
             # But only do it if we haven't bee using the cache, or it
             # would be extracted, then archived again.
-            if self.project.dft.use_cache_archive == True:
+            if self.project.dft.use_cache_archive:
                 self.update_rootfs_archive()
 
         # Launch Ansible to install roles identified in configuration file
@@ -126,7 +133,7 @@ class BuildBaseOS(CliCommand):
 
         # Remove QEMU if it has been isntalled. It has to be done in the end
         # since some cleanup tasks could need QEMU
-        if self.use_qemu_static == True:
+        if self.use_qemu_static:
             self.cleanup_qemu()
 
 
@@ -249,7 +256,7 @@ class BuildBaseOS(CliCommand):
 
         # Warn the user if no role is found. In such case baseos will be same
         # debotstrap, which is certainly not what is expected
-        if role_has_been_found == False:
+        if not role_has_been_found:
             logging.warning("No role has been found in baseos definiion. Rootfs is same as debootstrap output")
             logging.error("You may wish to have a look to : " + self.project.genereate_definition_file_path(self.project.project_definition["project-definition"]["baseos"][0]) )
 
@@ -298,7 +305,7 @@ class BuildBaseOS(CliCommand):
 
         # Remove existing archive before generating the new one
         try:
-            if os.path.isfile(self.project.archive_filename) == True:
+            if os.path.isfile(self.project.archive_filename):
                 logging.info("removing previous archive file : " + self.project.archive_filename)
                 os.remove(self.project.archive_filename)
 
@@ -324,7 +331,7 @@ class BuildBaseOS(CliCommand):
         logging.info("starting to fake generate debootstrap rootfs")
 
         # Check that the archive exists
-        if os.path.isfile(self.project.archive_filename) == False:
+        if not os.path.isfile(self.project.archive_filename):
             logging.warning("cache has been activate and archive file does not exist : " + self.archive_filename)
             return False
 
@@ -352,7 +359,7 @@ class BuildBaseOS(CliCommand):
 
         # Add the foreign and arch only if they are different from host, and
         # thus if use_qemu_static is True
-        if self.use_qemu_static == True:
+        if self.use_qemu_static:
             logging.info("running debootstrap stage 1")
             debootstrap_command += " --foreign --arch=" + self.project.target_arch 
         else:
@@ -365,7 +372,7 @@ class BuildBaseOS(CliCommand):
         self.execute_command(debootstrap_command)
 
         # Check if we are working with foreign arch, then ... 
-        if self.use_qemu_static == True:
+        if self.use_qemu_static:
             # QEMU is used, and we have to install it into the target
             self.setup_qemu()
 
@@ -461,7 +468,7 @@ class BuildBaseOS(CliCommand):
                         logging.debug(repo)
 
                         # Test if deb line has to be generated
-                        if ("generate-deb" not in repo) or ("generate-deb" in repo and repo["generate-deb"] == True):
+                        if ("generate-deb" not in repo) or ("generate-deb" in repo and repo["generate-deb"]):
                             # Will generate the deb line only if the key
                             # generate-deb is present and set to True or the key
                             # is not present
@@ -474,7 +481,7 @@ class BuildBaseOS(CliCommand):
                         if "generate-src" in repo:
                             # Will generate the deb-src line only if the key
                             # generate-src is present and set to True 
-                            if repo["generate-src"] == True:
+                            if repo["generate-src"]:
                                 f.write("deb-src " + repo["url"] +" " + repo["suite"] + " ")                    
                                 for section in repo["sections"]:
                                     f.write(section + " ")                    
@@ -482,7 +489,7 @@ class BuildBaseOS(CliCommand):
 
         # Warn the user if no matching distro is found. There will be an empty
         # /etc/apt/sources.list and installation will faill
-        if distro_has_been_found == False:
+        if not distro_has_been_found:
             self.cleanup_installation_files()
             logging.error("No distribution matching " + self.project.target_version + " has been found.")
             logging.error("Please check repositories definition for this project." )

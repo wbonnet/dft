@@ -8,11 +8,11 @@
 # License.
 #
 #
-# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).  
+# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
 # Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
 #
 #
 # Contributors list :
@@ -21,43 +21,50 @@
 #
 #
 
-import logging, os, subprocess, tarfile, shutil, tempfile, distutils
-from distutils import dir_util, file_util
+import logging
+import os
+import subprocess
+import tarfile
+import shutil
+import tempfile
+import distutils
+from distutils import file_util
+from distutils import dir_util
 from cli_command import CliCommand
 
 #
 #    Class BuildImage
 #
 class BuildImage(CliCommand): 
-    """This class implements method needed to build the image which will be
-    written in flash memory or on a SD card.
+  """This class implements method needed to build the image which will be
+  written in flash memory or on a SD card.
+  """
+
+  # -------------------------------------------------------------------------
+  #
+  # __init__
+  #
+  # -------------------------------------------------------------------------
+  def __init__(self, dft, project):
+    """Default constructor
     """
 
-    # -------------------------------------------------------------------------
-    #
-    # __init__
-    #
-    # -------------------------------------------------------------------------
-    def __init__(self, dft, project):
-        """Default constructor
-        """
+    # Initialize ancestor
+    CliCommand.__init__(self, dft, project)
 
-        # Initialize ancestor
-        super().__init__(dft, project)
+  # -------------------------------------------------------------------------
+  #
+  # build_image
+  #
+  # -------------------------------------------------------------------------
+  def build_image(self):
+    """This method implement the business logic of image generation. Image
+    is a file containing the dump of what will be copied on the target 
+    storage device (harddisk or flash for example). It calls dedicated 
+    method for each step. The main steps are :
 
-    # -------------------------------------------------------------------------
-    #
-    # build_image
-    #
-    # -------------------------------------------------------------------------
-    def build_image(self):
-        """This method implement the business logic of image generation. Image
-        is a file containing the dump of what will be copied on the target 
-        storage device (harddisk or flash for example). It calls dedicated 
-        method for each step. The main steps are :
+    .
+    """
 
-        . 
-        """
-
-        logging.critical("Not yet available")
-        exit(1)
+    logging.critical("Not yet available")
+    exit(1)
