@@ -8,11 +8,11 @@
 # License.
 #
 #
-# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).  
+# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
 # Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
 #
 #
 # Contributors list :
@@ -21,120 +21,124 @@
 #
 #
 
-import logging, os, subprocess, tarfile, shutil, tempfile, distutils
-from distutils import dir_util, file_util
+import logging
+import os
 from cli_command import CliCommand
 
 #
 #    Class BuildFirmware
 #
-class BuildFirmware(CliCommand): 
-    """This class implements method needed to create the squashfs file(s) used
-    to storefirmware content
+class BuildFirmware(CliCommand):
+  """This class implements method needed to create the squashfs file(s) used
+  to storefirmware content
+  """
+
+  # -------------------------------------------------------------------------
+  #
+  # __init__
+  #
+  # -------------------------------------------------------------------------
+  def __init__(self, dft, project):
+    """Default constructor
     """
 
-    # -------------------------------------------------------------------------
-    #
-    # __init__
-    #
-    # -------------------------------------------------------------------------
-    def __init__(self, dft, project):
-        """Default constructor
-        """
+    # Initialize ancestor
+    CliCommand.__init__(self, dft, project)
 
-        # Initialize ancestor
-        super().__init__(dft, project)
+  # -------------------------------------------------------------------------
+  #
+  # build_firmware
+  #
+  # -------------------------------------------------------------------------
+  def build_firmware(self):
+    """This method implement the business logic of firmware generation.
+    Firmware is  squashfs file containing the rootfs generated previously.
 
-    # -------------------------------------------------------------------------
-    #
-    # build_firmware
-    #
-    # -------------------------------------------------------------------------
-    def build_firmware(self):
-        """This method implement the business logic of firmware generation.
-        Firmware is  squashfs file containing the rootfs generated previoulsy. 
-        
-        Current version produce only one squashfs file. Algorith is basic...
-        . Create target directory if missing
-        . Remove existing file
-        . Generate the mksquashfs command and add options
-        . That's all
-        
-        """
+    Current version produce only one squashfs file. Algorith is basic...
+      . Create target directory if missing
+      . Remove existing file
+      . Generate the mksquashfs command and add options
+      . That's all
 
-        # Ensure firmware generation path exists and is a dir
-        if os.path.isdir(self.project.rootfs_mountpoint) == False:
-            logging.critical("The rootfs directory does not exist (" + self.project.rootfs_mountpoint + ")")
-            exit(1)
+    """
 
-        # Ensure firmware generation path exists and is a dir
-        if os.path.isdir(self.project.firmware_directory) == False:
-            os.makedirs(self.project.firmware_directory)
+    # Ensure firmware generation path exists and is a dir
+    if not os.path.isdir(self.project.rootfs_mountpoint):
+      logging.critical("The rootfs directory does not exist (" +
+                       self.project.rootfs_mountpoint + ")")
+      exit(1)
 
-        # Remove existing firmware is needed
-        if os.path.isfile(self.project.firmware_filename) == True:
-            os.remove(self.project.firmware_filename)
+    # Ensure firmware generation path exists and is a dir
+    if not os.path.isdir(self.project.firmware_directory):
+      os.makedirs(self.project.firmware_directory)
 
-        # Create a new squashfs file from the baseos path
-        sudo_command = 'mksquashfs "' +  self.project.rootfs_mountpoint + '" "' + self.project.firmware_filename + '"'
+    # Remove existing firmware is needed
+    if os.path.isfile(self.project.firmware_filename):
+      os.remove(self.project.firmware_filename)
 
-        # Append arguments if defined in the configuration file
-        if "block_size" in self.project.firmware_definition["configuration"]:
-            sudo_command += ' -b ' + self.project.firmware_definition["configuration"]["block_size"]
+    # Create a new squashfs file from the baseos path
+    sudo_command = 'mksquashfs "' +  self.project.rootfs_mountpoint + '" "'
+    sudo_command += self.project.firmware_filename + '"'
 
-        if "compressor" in self.project.firmware_definition["configuration"]:
-            sudo_command += ' -comp ' + self.project.firmware_definition["configuration"]["compressor"]
+    # Append arguments if defined in the configuration file
+    if "block_size" in self.project.firmware_definition["configuration"]:
+      sudo_command += ' -b ' + self.project.firmware_definition["configuration"]["block_size"]
 
-        if "no-exports" in self.project.firmware_definition["configuration"]:
-            if self.project.firmware_definition["configuration"]["no-exports"] == True:
-                sudo_command += ' -no-exports '
+    if "compressor" in self.project.firmware_definition["configuration"]:
+      sudo_command += ' -comp ' + self.project.firmware_definition["configuration"]["compressor"]
 
-        if "no-spare" in self.project.firmware_definition["configuration"]:
-            sudo_command += ' -no-spare '
+    if "no-exports" in self.project.firmware_definition["configuration"]:
+      if self.project.firmware_definition["configuration"]["no-exports"]:
+        sudo_command += ' -no-exports '
 
-        if "xattrs" in self.project.firmware_definition["configuration"]:
-            if self.project.firmware_definition["configuration"]["xattrs"] == True:
-                sudo_command += ' -xattrs '
-            if self.project.firmware_definition["configuration"]["xattrs"] == False:
-                sudo_command += ' -no-xattrs '
+    if "no-spare" in self.project.firmware_definition["configuration"]:
+      sudo_command += ' -no-spare '
 
-        if "no-inode-compression" in self.project.firmware_definition["configuration"]:
-            sudo_command += ' -noI '
+    if "xattrs" in self.project.firmware_definition["configuration"]:
+      if self.project.firmware_definition["configuration"]["xattrs"]:
+        sudo_command += ' -xattrs '
+      if not self.project.firmware_definition["configuration"]["xattrs"]:
+        sudo_command += ' -no-xattrs '
 
-        if "no-datablock-compression" in self.project.firmware_definition["configuration"]:
-            sudo_command += ' -noD '
+    if "no-inode-compression" in self.project.firmware_definition["configuration"]:
+      sudo_command += ' -noI '
 
-        if "no-fragmentblock-compression" in self.project.firmware_definition["configuration"]:
-            sudo_command += ' -noF '
+    if "no-datablock-compression" in self.project.firmware_definition["configuration"]:
+      sudo_command += ' -noD '
 
-        if "no-xattrs-compression" in self.project.firmware_definition["configuration"]:
-            sudo_command += ' -noX '
+    if "no-fragmentblock-compression" in self.project.firmware_definition["configuration"]:
+      sudo_command += ' -noF '
 
-        if "use-fragments" in self.project.firmware_definition["configuration"]:
-            if self.project.firmware_definition["configuration"]["use-fragments"] == True:
-                sudo_command += ' -always-use-fragments '
-            if self.project.firmware_definition["configuration"]["use-fragments"] == False:
-                sudo_command += ' -no-fragments '
+    if "no-xattrs-compression" in self.project.firmware_definition["configuration"]:
+      sudo_command += ' -noX '
 
-        if "no-duplicate-check" in self.project.firmware_definition["configuration"]:
-            if self.project.firmware_definition["configuration"]["no-duplicate-check"] == True:
-                sudo_command += ' -no-duplicates '
+    if "use-fragments" in self.project.firmware_definition["configuration"]:
+      if self.project.firmware_definition["configuration"]["use-fragments"]:
+        sudo_command += ' -always-use-fragments '
+      if not self.project.firmware_definition["configuration"]["use-fragments"]:
+        sudo_command += ' -no-fragments '
 
-        if "all-root" in self.project.firmware_definition["configuration"]:
-            if self.project.firmware_definition["configuration"]["all-root"] == True:
-                sudo_command += ' -all-root '
+    if "no-duplicate-check" in self.project.firmware_definition["configuration"]:
+      if self.project.firmware_definition["configuration"]["no-duplicate-check"]:
+        sudo_command += ' -no-duplicates '
 
-        if "force-uid" in self.project.firmware_definition["configuration"]:
-            sudo_command += ' -force-uid ' + self.project.firmware_definition["configuration"]["force-uid"]
+    if "all-root" in self.project.firmware_definition["configuration"]:
+      if self.project.firmware_definition["configuration"]["all-root"]:
+        sudo_command += ' -all-root '
 
-        if "force-gid" in self.project.firmware_definition["configuration"]:
-            sudo_command += ' -force-gid ' + self.project.firmware_definition["configuration"]["force-gid"]
+    if "force-uid" in self.project.firmware_definition["configuration"]:
+      sudo_command += ' -force-uid '
+      sudo_command += self.project.firmware_definition["configuration"]["force-uid"]
 
-        if "nopad" in self.project.firmware_definition["configuration"]:
-            if self.project.firmware_definition["configuration"]["nopad"] == True:
-                sudo_command += ' -nopad '
+    if "force-gid" in self.project.firmware_definition["configuration"]:
+      sudo_command += ' -force-gid '
+      sudo_command += self.project.firmware_definition["configuration"]["force-gid"]
 
-        self.execute_command(sudo_command)
+    if "nopad" in self.project.firmware_definition["configuration"]:
+      if self.project.firmware_definition["configuration"]["nopad"]:
+        sudo_command += ' -nopad '
+
+    self.execute_command(sudo_command)
 
 # TODO : add control hash and signature according to configuration file options
 
@@ -182,4 +186,4 @@ class BuildFirmware(CliCommand):
 
 
 
-# Later add the possibility to generate several squashfs out of a baseos, and do delta, time based ? 
+# Later add the possibility to generate several squashfs out of a baseos, and do delta, time based ?
