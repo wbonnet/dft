@@ -26,16 +26,26 @@ set -e
 
 # Defines the working directories
 workdir="./unionfs-test"
-lowerdir="${workdir}/lowerdir"
-upperdir="${workdir}/upperdir"
-mergedir="${workdir}/mergedir"
+configdir="${workdir}/config"
+systemdir="${workdir}/system"
+secretdir="${workdir}/secret"
+varlogdir="${workdir}/varlog"
+datadir="${workdir}/data"
+mountdir="${workdir}/mount"
 
 # Make sure the directories exist
 mkdir -p "${workdir}"
-mkdir -p "${lowerdir}"
-mkdir -p "${upperdir}"
-mkdir -p "${mergedir}"
+mkdir -p "${configdir}"
+mkdir -p "${systemdir}"
+mkdir -p "${secretdir}"
+mkdir -p "${varlogdir}"
+mkdir -p "${datadir}"
+mkdir -p "${mountdir}"
 
-# Mount and stack the layers
-sudo mount -t squashfs dft-test.squashfs "${lowerdir}" -o loop
-sudo mount -t unionfs -o dirs=${upperdir}=rw:${lowerdir}=ro unionfs ${mergedir}
+# Mount the squashfs files to a loop device
+sudo mount -t squashfs config.fw "${configdir}" -o loop
+sudo mount -t squashfs system.fw "${systemdir}" -o loop
+sudo mount -t squashfs secret.fw "${secretdir}" -o loop
+
+# Stacks the layers
+sudo mount -t aufs -o dirs=${secretdir}=ro:${configdir}=ro:${systemdir}=ro aufs ${mountdir}
