@@ -21,6 +21,10 @@
 #
 #
 
+""" This module is in charge of outputing information about the baseos (or rootfs)
+content. Information ca be output to different format such as csv, yaml, xml, or json.
+"""
+
 import logging
 import os
 import tempfile

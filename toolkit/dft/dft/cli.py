@@ -21,6 +21,12 @@
 #
 #
 
+""" This module contains the class and method used to crate parsers dedicated to the
+different words of command supported by DFT.
+
+The module will do actual processing and run the associated worker method (run method)
+"""
+
 import argparse
 import textwrap
 import logging
@@ -39,7 +45,7 @@ import strip_rootfs
 #  Class Cli
 #
 # -----------------------------------------------------------------------------
-class Cli:
+class Cli(object):
   """This class represent the command line parser for this tool. It brings
   methods used to parse command line arguments then run the program itself
   """
@@ -70,6 +76,19 @@ x factory_setup                    Apply some extra factory setup before generat
 ? generate_content_information     Generate a manifest identiyfing content and versions
 ? strip_rootfs                     Strip down the rootfs before assembling the firmware'''),
                                           formatter_class=argparse.RawTextHelpFormatter)
+
+    # Storesthe arguments from the parser
+    self.args = None
+
+    # Stores the argument in the instance
+    self.command = None
+
+    # Stores the dft configuration object
+    self.dft = None
+
+    # Stores the project definition object
+    self.project = None
+
 
   def parse(self, args):
     # Stores the argument in the instance
@@ -460,7 +479,7 @@ x factory_setup                    Apply some extra factory setup before generat
 
     # Then
     command.build_image()
-  
+
 
 
   # -------------------------------------------------------------------------
@@ -477,7 +496,7 @@ x factory_setup                    Apply some extra factory setup before generat
 
     # Then
     command.build_firmware()
-  
+
 
 
   # -------------------------------------------------------------------------
@@ -494,7 +513,7 @@ x factory_setup                    Apply some extra factory setup before generat
 
     # Then
     command.check_rootfs()
-  
+
 
 
   # -------------------------------------------------------------------------
@@ -571,7 +590,7 @@ x factory_setup                    Apply some extra factory setup before generat
 
     # Then
     command.generate_content_information()
-  
+
 
   # -------------------------------------------------------------------------
   #
@@ -579,7 +598,7 @@ x factory_setup                    Apply some extra factory setup before generat
   #
   # -------------------------------------------------------------------------
   def run_strip_rootfs(self):
-    """ Method used to handle the strip_rootfs command. 
+    """ Method used to handle the strip_rootfs command.
       Create the business objet, then execute the entry point
     """
     # Create the business object

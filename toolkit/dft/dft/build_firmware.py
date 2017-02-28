@@ -21,6 +21,11 @@
 #
 #
 
+""" This module contains the functionnalities needed to create a squashfs compressed file
+from a baseos. The squashfs file contains hte operating system, or configuration files, or
+anything you decide. They can be stacked in memory to create the read only operating system.
+"""
+
 import logging
 import os
 from cli_command import CliCommand

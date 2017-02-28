@@ -21,6 +21,10 @@
 #
 #
 
+""" This modules implements the functionnalities used to create the initramfs in charge of
+setting up the firmware in memory at system boot.
+"""
+
 import logging
 from cli_command import CliCommand
 

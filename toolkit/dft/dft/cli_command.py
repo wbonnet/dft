@@ -21,18 +21,18 @@
 #
 #
 
-import logging
+""" This module implements The base class and functionnalities used by all the
+cli targets.
+"""
+
 import os
 import subprocess
 import shutil
-import distutils
-from distutils import file_util
-from distutils import dir_util
 
 #
 #    Class CliCommand
 #
-class CliCommand: 
+class CliCommand(object):
   """This class implements the base class used for all command fro cli
 
      It provides method used in all the derivated command, such has
@@ -48,29 +48,30 @@ class CliCommand:
     """Default constructor
     """
 
-    # Object storing the tool configuration. This object holds all the 
+    # Object storing the tool configuration. This object holds all the
     # definition of global configuration variales, such as tool installation
     # path, archive use, log level, etc
     self.dft = dft
 
-    # Object storing the project definition. Project holds all the 
-    # configuration and definition used by the different stage of 
+    # Object storing the project definition. Project holds all the
+    # configuration and definition used by the different stage of
     # the toolchain, including baseos definition
     self.project = project
 
     # Retrieve the architecture of the host
-    self.host_arch = subprocess.check_output("dpkg --print-architecture", shell=True).decode('UTF-8').rstrip()
+    self.host_arch = subprocess.check_output("dpkg --print-architecture",
+                                             shell=True).decode('UTF-8').rstrip()
 
     # Boolean used to flag the use of QEMU static
-    self.use_qemu_static =  (self.host_arch != project.target_arch)
+    self.use_qemu_static = (self.host_arch != project.target_arch)
 
-    # Boolean used to flag if the cache archive is available. This value 
-    # is set by the setup_configuration method. Default is False, to 
+    # Boolean used to flag if the cache archive is available. This value
+    # is set by the setup_configuration method. Default is False, to
     # ensure it will be rebuild
     self.cache_archive_is_available = False
 
     # Flags used to remove 'mount bind' states
-    self.proc_is_mounted   = False
+    self.proc_is_mounted = False
     self.devpts_is_mounted = False
     self.devshm_is_mounted = False
 
@@ -84,7 +85,7 @@ class CliCommand:
   #
   # -------------------------------------------------------------------------
   def execute_command(self, command):
-    """ This method run a command as a subprocess. Typical use case is 
+    """ This method run a command as a subprocess. Typical use case is
     running sudo commands.
 
     This method is a wrapper to subprocess.run , and will be moved soon
@@ -92,22 +93,23 @@ class CliCommand:
     """
 
     self.project.logging.debug("running : " + command)
-      
+
     try:
       # Execute the subprocess, output en errors are piped
-      completed = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, 
+      completed = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                  shell=True, check=True, universal_newlines=False)
 
       # Return the output of the process to the caller
       return completed.stdout
 
-    except subprocess.CalledProcessError as e:
+    except subprocess.CalledProcessError as exception:
       self.cleanup_installation_files()
-      self.project.logging.critical("Error %d occured when executing %s" % (e.returncode, e.cmd))
+      self.project.logging.critical("Error %d occured when executing %s", 
+                                    exception.returncode, exception.cmd)
       self.project.logging.debug("stdout")
-      self.project.logging.debug("%s" % (e.stdout.decode('UTF-8')))
+      self.project.logging.debug("%s" % (completed.stdout.decode('UTF-8')))
       self.project.logging.debug("stderr")
-      self.project.logging.debug("%s" % (e.stderr.decode('UTF-8')))
+      self.project.logging.debug("%s" % (completed.stderr.decode('UTF-8')))
       exit(1)
 
 
@@ -117,22 +119,29 @@ class CliCommand:
   #
   # -------------------------------------------------------------------------
   def setup_qemu(self):
-    """This method remove the QEMU static binary which has been previously 
-    copied to the target 
+    """This method remove the QEMU static binary which has been previously
+    copied to the target
     """
 
-    # We should not execute if the flag is not set. Should have already 
+    # We should not execute if the flag is not set. Should have already
     # been tested, but double check by security
     if self.use_qemu_static != True:
       return
 
     # Copy the QEMU binary to the target, using root privileges
-    if   self.project.target_arch == "armhf":   qemu_target_arch = "arm"
-    elif self.project.target_arch == "armel":   qemu_target_arch = "arm"
-    else:                                       qemu_target_arch = self.project.target_arch
+    if   self.project.target_arch == "armhf":
+      qemu_target_arch = "arm"
+    elif self.project.target_arch == "armel":
+      qemu_target_arch = "arm"
+    else:
+      qemu_target_arch = self.project.target_arch
 
-    self.project.logging.info("setting up QEMU for arch " + self.project.target_arch + " (using /usr/bin/qemu-" + qemu_target_arch + "-static)")
-    sudo_command = "sudo cp /usr/bin/qemu-"  + qemu_target_arch + "-static " + self.project.rootfs_mountpoint + "/usr/bin/"
+    self.project.logging.info("setting up QEMU for arch " +
+                              self.project.target_arch +
+                              " (using /usr/bin/qemu-" +
+                              qemu_target_arch + "-static)")
+    sudo_command = "sudo cp /usr/bin/qemu-"  + qemu_target_arch + "-static "
+    sudo_command += self.project.rootfs_mountpoint + "/usr/bin/"
     self.execute_command(sudo_command)
 
 
@@ -142,26 +151,32 @@ class CliCommand:
   #
   # -------------------------------------------------------------------------
   def cleanup_qemu(self):
-    """This method copy the QEMU static binary to the target 
+    """This method copy the QEMU static binary to the target
     """
 
-    # We should not execute if the flag is not set. Should have already 
+    # We should not execute if the flag is not set. Should have already
     # been tested, but double check by security
     if self.use_qemu_static != True:
       return
 
     if self.project.dft.keep_bootstrap_files:
-      self.project.logging.debug("keep_bootstrap_files is activated, keeping QEMU in " + self.project.rootfs_mountpoint)
+      self.project.logging.debug("keep_bootstrap_files is activated, keeping QEMU in " +
+                                 self.project.rootfs_mountpoint)
       return
 
     # Copy the QEMU binary to the target, using root privileges
-    if   self.project.target_arch == "armhf":   qemu_target_arch = "arm"
-    elif self.project.target_arch == "armel":   qemu_target_arch = "arm"
-    else:                                       qemu_target_arch = self.project.target_arch
-    
+    if   self.project.target_arch == "armhf":
+      qemu_target_arch = "arm"
+    elif self.project.target_arch == "armel":
+      qemu_target_arch = "arm"
+    else:
+      qemu_target_arch = self.project.target_arch
+
     # Execute the file removal with root privileges
-    self.project.logging.info("cleaning QEMU for arch " + self.project.target_arch + "(/usr/bin/qemu-" + qemu_target_arch + "-static)")
-    os.system("sudo rm " + self.project.rootfs_mountpoint + "/usr/bin/qemu-" + qemu_target_arch + "-static")
+    self.project.logging.info("cleaning QEMU for arch " + self.project.target_arch +
+                              "(/usr/bin/qemu-" + qemu_target_arch + "-static)")
+    os.system("sudo rm " + self.project.rootfs_mountpoint + "/usr/bin/qemu-" +
+              qemu_target_arch + "-static")
 
   # -------------------------------------------------------------------------
   #
@@ -169,8 +184,8 @@ class CliCommand:
   #
   # -------------------------------------------------------------------------
   def cleanup_installation_files(self):
-    """This method is in charge of cleaning processes after Ansible has 
-    been launched. In some case some daemons are still running inside the 
+    """This method is in charge of cleaning processes after Ansible has
+    been launched. In some case some daemons are still running inside the
     chroot, and they have to be stopped manually, or even killed in order
     to be able to umount /dev/ and /proc from inside the chroot
     """
@@ -207,4 +222,5 @@ class CliCommand:
       if os.path.isdir(self.project.rootfs_mountpoint + "/dft_bootstrap"):
         shutil.rmtree(self.project.rootfs_mountpoint + "/dft_bootstrap")
     else:
-      self.project.logging.debug("keep_bootstrap_files is activated, keeping DFT bootstrap files in " + self.project.rootfs_mountpoint + "/dft_bootstrap")
+      self.project.logging.debug("keep_bootstrap_files is activated, keeping DFT bootstrap " +
+                                 "files in " + self.project.rootfs_mountpoint + "/dft_bootstrap")

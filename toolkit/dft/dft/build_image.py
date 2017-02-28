@@ -21,21 +21,17 @@
 #
 #
 
+""" This module provides functionnalities used to create a binary image of a media from
+the baseos and bootchain.
+"""
+
 import logging
-import os
-import subprocess
-import tarfile
-import shutil
-import tempfile
-import distutils
-from distutils import file_util
-from distutils import dir_util
 from cli_command import CliCommand
 
 #
 #    Class BuildImage
 #
-class BuildImage(CliCommand): 
+class BuildImage(CliCommand):
   """This class implements method needed to build the image which will be
   written in flash memory or on a SD card.
   """
@@ -59,8 +55,8 @@ class BuildImage(CliCommand):
   # -------------------------------------------------------------------------
   def build_image(self):
     """This method implement the business logic of image generation. Image
-    is a file containing the dump of what will be copied on the target 
-    storage device (harddisk or flash for example). It calls dedicated 
+    is a file containing the dump of what will be copied on the target
+    storage device (harddisk or flash for example). It calls dedicated
     method for each step. The main steps are :
 
     .

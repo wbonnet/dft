@@ -21,21 +21,17 @@
 #
 #
 
+""" This module implements the functionnalities needed to build the bootloader chain.
+This chain contains uboot, kernel; initramfs and DTB. 
+"""
+
 import logging
-import os
-import subprocess
-import tarfile
-import shutil
-import tempfile
-import distutils
-from distutils import file_util
-from distutils import dir_util
 from cli_command import CliCommand
 
 #
 #    Class BuildBootloader
 #
-class BuildBootloader(CliCommand): 
+class BuildBootloader(CliCommand):
   """This class implements method needed to generate the Bootloaer chain.
 
   This chain includes :

@@ -21,6 +21,11 @@
 #
 #
 
+""" This modules implements the functionnalities used to strip a baseos (or rootfs)
+according to the rules defined in a Yaml configuration file. Stripping a baseos is made
+of removing files and packages.
+"""
+
 import logging
 from cli_command import CliCommand
 
