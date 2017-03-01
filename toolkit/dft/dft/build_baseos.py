@@ -93,7 +93,8 @@ class BuildBaseOS(CliCommand):
     if not os.path.isdir(self.project.rootfs_mountpoint):
       os.makedirs(self.project.rootfs_mountpoint)
     else:
-      if "keep_rootfs_history" in self.project.project_definition["configuration"] and self.project.project_definition["configuration"]["keep_rootfs_history"]:
+      if ("keep_rootfs_history" in self.project.project_definition["configuration"] and
+          self.project.project_definition["configuration"]["keep_rootfs_history"]):
         logging.warn("target rootfs mount point already exists : " + self.project.rootfs_mountpoint)
 # TODO
         logging.critical("TODO : handle history : " + self.project.rootfs_mountpoint)
@@ -162,39 +163,39 @@ class BuildBaseOS(CliCommand):
         os.makedirs(dft_target_path)
 
       # Copy the DFT toolkit content to the target rootfs
-      for target_to_copy in os.listdir(self.project.project_definition["configuration"]["dft_base"]):
-        logging.debug("Copy the DFT toolkit : preparing to copy " + target_to_copy)
-        target_to_copy_path = os.path.join(self.project.project_definition["configuration"]["dft_base"], target_to_copy)
-        if os.path.isfile(target_to_copy_path):
-          logging.debug("copying file " + target_to_copy_path + " => " + dft_target_path)
-          distutils.file_util.copy_file(target_to_copy_path, dft_target_path)
+      for copy_target in os.listdir(self.project.project_definition["configuration"]["dft_base"]):
+        logging.debug("Copy the DFT toolkit : preparing to copy " + copy_target)
+        copy_target_path = os.path.join(self.project.project_definition["configuration"]["dft_base"], copy_target)
+        if os.path.isfile(copy_target_path):
+          logging.debug("copying file " + copy_target_path + " => " + dft_target_path)
+          distutils.file_util.copy_file(copy_target_path, dft_target_path)
         else:
-          logging.debug("copying tree " + target_to_copy_path + " => " + dft_target_path)
-          distutils.dir_util.copy_tree(target_to_copy_path, os.path.join(dft_target_path, target_to_copy))
+          logging.debug("copying tree " + copy_target_path + " => " + dft_target_path)
+          distutils.dir_util.copy_tree(copy_target_path, os.path.join(dft_target_path, copy_target))
 
       # Copy the additional toolkit content to the target rootfs
       if "additional_roles" in self.project.project_definition["configuration"]:
         for additional_path in self.project.project_definition["configuration"]["additional_roles"]:
           logging.debug("Copy the additional toolkit : preparing to copy from additional path " + additional_path)
-          for target_to_copy in os.listdir(additional_path):
-            logging.debug("Copy the additional toolkit : preparing to copy " + target_to_copy)
-            target_to_copy_path = os.path.join(additional_path, target_to_copy)
-            if os.path.isfile(target_to_copy_path):
-              logging.debug("copying file " + target_to_copy_path + " => " + dft_target_path)
-              distutils.file_util.copy_file(target_to_copy_path, dft_target_path)
+          for copy_target in os.listdir(additional_path):
+            logging.debug("Copy the additional toolkit : preparing to copy " + copy_target)
+            copy_target_path = os.path.join(additional_path, copy_target)
+            if os.path.isfile(copy_target_path):
+              logging.debug("copying file " + copy_target_path + " => " + dft_target_path)
+              distutils.file_util.copy_file(copy_target_path, dft_target_path)
             else:
-              logging.debug("copying tree " + target_to_copy_path + " => " + dft_target_path)
-              distutils.dir_util.copy_tree(target_to_copy_path, os.path.join(dft_target_path, target_to_copy))
+              logging.debug("copying tree " + copy_target_path + " => " + dft_target_path)
+              distutils.dir_util.copy_tree(copy_target_path, os.path.join(dft_target_path, copy_target))
 
     except OSError as exception:
       # Call clean up to umount /proc and /dev
       self.cleanup_installation_files()
-      logging.critical("Error: %s - %s." % (exception.filename, exception.strerror))
+      logging.critical("Error: %s - %s.", exception.filename, exception.strerror)
       exit(1)
 
     except shutil.Error as exception:
       self.cleanup_installation_files()
-      logging.critical("Error: %s - %s." % (exception.filename, exception.strerror))
+      logging.critical("Error: %s - %s.", exception.filename, exception.strerror)
       exit(1)
 
     # Flag if someroles has been foundand added to site.yml
@@ -202,22 +203,22 @@ class BuildBaseOS(CliCommand):
 
     # Generate the site file including all the roles from baseos
     # configuration, then move  roles to the target rootfs
-    with tempfile.NamedTemporaryFile(mode='w+', delete=False) as file:
+    with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
       # Generate file header
-      file.write("# Defines the role associated to the rootfs being generated\n")
-      file.write("---\n")
-      file.write("- hosts: local\n")
-      file.write("\n")
+      working_file.write("# Defines the role associated to the rootfs being generated\n")
+      working_file.write("---\n")
+      working_file.write("- hosts: local\n")
+      working_file.write("\n")
 
       # Test if some variable files have to be included
       if "variables" in self.project.project_definition["project-definition"]:
         # Yes, then output the vars_files marker
-        file.write("  vars_files:\n")
+        working_file.write("  vars_files:\n")
 
         # And iterate the list of files containing variables
         for vars_file in self.project.project_definition["project-definition"]["variables"]:
           # Append the file to the site.yml file
-          file.write("  - " + vars_file + "\n")
+          working_file.write("  - " + vars_file + "\n")
           logging.debug("Adding variables file " + vars_file)
 
           # Completethe path to have a full path on disk (in case of path local
@@ -234,25 +235,25 @@ class BuildBaseOS(CliCommand):
             logging.error("Skipping this file")
 
         # Just some spacing for pretty printing
-        file.write("\n")
+        working_file.write("\n")
 
-      file.write("  roles:\n")
+      working_file.write("  roles:\n")
 
       # Iterate the list of distributions loaded from the file
       for role in self.project.baseos_definition["roles"]:
         # At least one role has beenfound, flag it
         role_has_been_found = True
         logging.debug("Adding role " + role)
-        file.write("  - " + role + "\n")
+        working_file.write("  - " + role + "\n")
 
     # We are done with file generation, close it now
-    file.close()
+    working_file.close()
 
     # Generate the file path
     filepath = self.project.rootfs_mountpoint + "/dft_bootstrap/site.yml"
 
     # Finally move the temporary file under the rootfs tree
-    sudo_command = "sudo mv -f " + file.name + " " + filepath
+    sudo_command = "sudo mv -f " + working_file.name + " " + filepath
     self.execute_command(sudo_command)
 
     # Warn the user if no role is found. In such case baseos will be same
@@ -283,11 +284,11 @@ class BuildBaseOS(CliCommand):
 
     # Open the file and writes the timestamp in it
     filepath = self.project.rootfs_mountpoint + "/etc/dft_version"
-    with tempfile.NamedTemporaryFile(mode='w+', delete=False) as file:
-      file.write("DFT-" + self.project.timestamp + "\n")
-    file.close()
+    with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
+      working_file.write("DFT-" + self.project.timestamp + "\n")
+    working_file.close()
 
-    sudo_command = "sudo mv -f " + file.name + " " + filepath
+    sudo_command = "sudo mv -f " + working_file.name + " " + filepath
     self.execute_command(sudo_command)
 
 
@@ -312,7 +313,7 @@ class BuildBaseOS(CliCommand):
 
     # Catch file removal exceptions
     except OSError as exception:
-      logging.critical("Error: %s - %s." % (exception.filename, exception.strerror))
+      logging.critical("Error: %s - %s.", exception.filename, exception.strerror)
       self.cleanup_installation_files()
       exit(1)
 
@@ -329,13 +330,14 @@ class BuildBaseOS(CliCommand):
   #
   # -------------------------------------------------------------------------
   def fake_generate_debootstrap_rootfs(self):
-    """
+    """ This method simulates the deboootstrap call by extracting the content
+    of a cache archive.
     """
     logging.info("starting to fake generate debootstrap rootfs")
 
     # Check that the archive exists
     if not os.path.isfile(self.project.archive_filename):
-      logging.warning("cache has been activate and archive file does not exist : " + self.archive_filename)
+      logging.warning("cache has been activate and archive file does not exist : " + self.project.archive_filename)
       return False
 
     # Extract tar file to rootfs mountpoint
@@ -352,7 +354,7 @@ class BuildBaseOS(CliCommand):
   #
   # -------------------------------------------------------------------------
   def generate_debootstrap_rootfs(self):
-    """
+    """ This method run deboostrap to create the initial rootfs.
     """
 
     logging.info("starting to generate debootstrap rootfs")
@@ -444,9 +446,9 @@ class BuildBaseOS(CliCommand):
     filepath = self.project.rootfs_mountpoint + "/etc/apt/apt.conf.d/10no-check-valid-until"
 
     # Open the file and writes configuration in it
-    with tempfile.NamedTemporaryFile(mode='w+', delete=False) as file:
-      file.write("Acquire::Check-Valid-Until \"0\";\n")
-    file.close()
+    with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
+      working_file.write("Acquire::Check-Valid-Until \"0\";\n")
+    working_file.close()
 
     sudo_command = "sudo mv -f " + file.name + " " + filepath
     self.execute_command(sudo_command)
