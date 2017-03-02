@@ -26,6 +26,8 @@ setting up the firmware in memory at system boot.
 """
 
 import logging
+import os
+import tempfile
 from cli_command import CliCommand
 
 #
@@ -70,5 +72,59 @@ class AssembleFirmware(CliCommand):
     .
     """
 
-    logging.critical("Not yet available")
-    exit(1)
+    # Ensure firmware generation path exists and is a dir
+    if not os.path.isdir(self.project.firmware_directory):
+      os.makedirs(self.project.firmware_directory)
+
+    # Ensure firmware exists
+    # TODO : iterate the list of squashfs files
+    if not os.path.isfile(self.project.firmware_filename):
+      logging.critical("The firmware does not exist (" +
+                       self.project.firmware_filename + ")")
+      exit(1)
+  
+    # Remove existing initscript if needed
+    if os.path.isfile(self.project.init_filename):
+      os.remove(self.project.init_filename)
+
+    # Copy the init script to the target directory
+
+    # Generate the stacking script
+    self.generate_stack_script()
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # generate_stack_script
+  #
+  # -------------------------------------------------------------------------
+  def generate_stack_script(self):
+    """This method implement the generation of the stacking script
+
+    The stacking script is called in the initramfs by the init script. Stacking
+    script is a shell scipt generated using the firmware.yml configuration
+    as input. It provides th specific cod used to mount and stack the filesystms
+    (using aufs or overlayfs). 
+    """
+
+    # Generate the stacking script
+        # configuration, then move  roles to the target rootfs
+    with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
+      # Generate file header
+      working_file.write("#\n")
+      working_file.write("# This script is in charge of tacking the differnt items of the firmware.\n")
+      working_file.write("#\n")
+      working_file.write("# Generation date : TODO\n")
+      working_file.write("#\n")
+      working_file.write("\n")
+
+    # We are done with file generation, close it now
+    working_file.close()
+
+    # Generate the file path
+    filepath = self.project.stacking_script_filename
+
+    # Finally move the temporary file under the rootfs tree
+    sudo_command = "mv -f " + working_file.name + " " + filepath
+    self.execute_command(sudo_command)

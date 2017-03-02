@@ -77,7 +77,7 @@ class BuildFirmware(CliCommand):
     if not os.path.isdir(self.project.firmware_directory):
       os.makedirs(self.project.firmware_directory)
 
-    # Remove existing firmware is needed
+    # Remove existing firmware if needed
     if os.path.isfile(self.project.firmware_filename):
       os.remove(self.project.firmware_filename)
 

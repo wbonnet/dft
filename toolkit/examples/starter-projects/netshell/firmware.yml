@@ -29,25 +29,28 @@
 #
 # ----------------------------------------------------------------------------
 layout:
-  # Method to use to assembl the systm in memory. Can be either unionfs 
+  # Method to use to assembl the systm in memory. Can be either aufs 
   # or overlayfs
-  method: unionfs
+  method: aufs
 
   # Definition of the different things to stack to assemble the firmware
   stack_definition:
-  -  stack_item:
+    # Stack items are individual element of the stack. They are processed
+    # and added to the aufs o overlayfs according to their order of
+    # definition
+  - stack_item:
       # Type of the 'source' to use for this mountpoint. It can be :
       # squashfs, partition, or tmpfs. This information is mandatory
       type: squashfs
 
-      # Path to th squashfs file to mount
+      # Path to the squashfs file to mount
       # This information is ignored if type is ot squashfs
       # Default value is generated based upon the project information
       # squashfs_file:
 
       # Name of the partition device to mount when type is partition
       # This information is ignored if type is not partition
-      # There is no default vallue ( it'stoo dangerous too guess that  :) )
+      # There is no default vallue ( it's too dangerous too guess that  :) )
       # partition:
 
       # Path under which this objct has to be mounted
@@ -57,6 +60,11 @@ layout:
       # Options to pass to the mount command.
       # Default is TODO
       # mount_option:
+
+    # Defines a tmpfs to stack over the root 
+  - stack_item:
+      type: tmpfs
+      mountpoint: /
 
 # TODO name + stack_over ?
 

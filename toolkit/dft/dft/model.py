@@ -175,7 +175,9 @@ class ProjectDefinition(object):
     self.rootfs_mountpoint = None
     self.firmware_directory = None
     self.firmware_filename = None
-
+    self.init_filename = None
+    self.stacking_script_filename = None
+    
     self.baseos_definition = None
     self.bootloader_definition = None
     self.check_definition = None
@@ -365,6 +367,9 @@ class ProjectDefinition(object):
       self.firmware_filename = self.firmware_directory + "/"
       self.firmware_filename += self.project_definition["configuration"]["project_name"]
       self.firmware_filename += ".squashfs"
+
+      self.init_filename = self.firmware_directory + "/init"
+      self.stacking_script_filename = self.firmware_directory + "/dft_create_stack.sh"
 
     # Handle exception that may occur when trying to open unknown files
     except OSError as exception:
