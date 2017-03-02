@@ -21,6 +21,21 @@
 #
 #
 
+# The following variables defines the lobal behavior of the check_rootfs util
+# These are top level rules which defines what to do when a package is not 
+# listed in any section. It also defines restriction such as "mandatory only"
+configuration:
+  # This variable defines the constraint upon installation strategy
+  # allowed values are :
+  # - mandatory-only  (only packages listed in the the mandatory section can
+  #                    be installed)
+  # - allow-optional  (only listed packages can be installed aither mandatory
+  #                    or optional)
+  # - no-constraint   (any packages can b installed even if not listed)
+  #
+  # default value is no-constraint
+  installation-constraint: allow-optional
+
 #
 # The following packages definition are provided as an example of how to use 
 # use packages restriction check, and are also used as one of the dft tool 
@@ -243,6 +258,8 @@ packages:
         - "armhf"
       # Test is supposed to succeed
       expected-result: True
+    # Simple package dclared for installation constraint checks
+    - name: debian-archive-keyring
 # TODO handle regex on versions
 #
 # The following section defines the list of files and their restriction.

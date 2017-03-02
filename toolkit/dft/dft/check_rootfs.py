@@ -272,6 +272,9 @@ class CheckRootFS(CliCommand):
                                            'version':pkg_version,
                                            'arch':pkg_arch}
 
+    # Check the installation constraint (mandatory-only, allow-optional or no-constraint)
+    self.check_installation_constraint()
+
     # Reset the rules statistics before starting to itare the list of rules
     self.reset_rule_check_statistics()
 
@@ -318,6 +321,70 @@ class CheckRootFS(CliCommand):
     print(". " + str(self.rule_failed_counter) + " failed")
     print(". " + str(self.rule_as_expected_counter) + " ran as expected")
     print("")
+
+  # -------------------------------------------------------------------------
+  #
+  # check_installation_constraint
+  #
+  # -------------------------------------------------------------------------
+  def check_installation_constraint(self):
+    """This method is in charge of chcking that the installed packages are 
+    compliant with the constaint defined in the configuration section. 
+    Constraint can be :
+    - mandatory-only  (only packages listed in the the mandatory section can
+                       be installed)
+    - allow-optional  (only listed packages can be installed aither mandatory
+                       or optional)
+    - no-constraint   (any packages can b installed even if not listed)
+  
+    default value is no-constraint
+
+    The method first build a dictionnary of allowed packages from the set 
+    of rules, then for each installed package, it checks if the packaeg is in
+    the list.
+    """
+
+    # Initialize the local variable containing the list of allowed packages
+    list_allowed_packages = {}
+
+    # Checks that the configuration section is defined
+    if "configuration" in self.project.check_definition:
+      # And that constraint is defined
+      if "installation-constraint" in self.project.check_definition["configuration"]:
+        # Now check the defined contraint is valid (ie: no gizmo value)
+        if self.project.check_definition["configuration"]["installation-constraint"] not in "mandatory-only" "allow-optional" "no-constraint":
+          self.project.logging.error("unknown installation constraint " + self.project.check_definition["configuration"]["installation-constraint"])
+          return False
+        # If we reach this code, then there is a valid constaint defined
+        else:
+          # IF constraint is no-constraint there is nothing to do
+          if self.project.check_definition["configuration"]["installation-constraint"] == "no-constaint":
+            self.project.logging.debug("installation constraint is " + self.project.check_definition["configuration"]["installation-constraint"])
+            return True
+
+          # Build the list of packages defined in the mandatory section. They
+          # will be inthe list whatever is the constraint
+          for rule in self.project.check_definition["packages"]["mandatory"]:
+            list_allowed_packages[rule["name"]] = True
+
+          # Check if the optional packages are allowed, if yes add then to the list
+          if self.project.check_definition["configuration"]["installation-constraint"] == "allow-optional":
+            for rule in self.project.check_definition["packages"]["allowed"]:
+              list_allowed_packages[rule["name"]] = True
+      else:
+        self.project.logging.debug("no installation-constraint")
+    else:
+      self.project.logging.debug("no configuration section")
+
+    # Iterate the list of installed packages and check if they belong to the 
+    # list of allowed packages
+    for pkg in self.installed_packages:
+      if pkg not in list_allowed_packages:
+        # No... thus set the global failure flag
+        self.is_check_successfull = False
+        self.project.logging.info("Package " + pkg +
+                                  " is installed but not allowed by installation constraint.")
+      
 
 
   # -------------------------------------------------------------------------
