@@ -223,7 +223,20 @@ class AssembleFirmware(CliCommand):
 
         # Complete the mount command
         working_file.write(item["stack-item"]["squashfs-file"] + " /mnt/dft/" +
-                           item["stack-item"]["name"] + " -o loop \n")
+                           item["stack-item"]["name"] + " -o loop\n")
+
+      # Generate the tmpfs specific mount command
+      if item["stack-item"]["type"] == "partition":
+        working_file.write("mount ")
+
+        # Is there some defined options ?
+        if "mount-options" in item["stack-item"]:
+          # Yes, then append the options to the command
+          working_file.write("-o " + item["stack-item"]["mount-options"] + " ")
+
+        # Complete the mount command
+        working_file.write(item["stack-item"]["partition"] + " /mnt/dft/" +
+                           item["stack-item"]["name"] + "\n")
 
       working_file.write("\n")
 
