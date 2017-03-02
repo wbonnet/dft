@@ -84,9 +84,9 @@ class BuildBaseOS(CliCommand):
     """
 
     # Check that DFT path is valid
-    if not os.path.isdir(self.project.project_definition["configuration"]["dft_base"]):
+    if not os.path.isdir(self.project.project_definition["configuration"]["dft-base"]):
       logging.critical("Path to DFT installation is not valid : %s",
-                       self.project.project_definition["configuration"]["dft_base"])
+                       self.project.project_definition["configuration"]["dft-base"])
       exit(1)
 
     # Ensure target rootfs mountpoint exists and is a dir
@@ -163,9 +163,9 @@ class BuildBaseOS(CliCommand):
         os.makedirs(dft_target_path)
 
       # Copy the DFT toolkit content to the target rootfs
-      for copy_target in os.listdir(self.project.project_definition["configuration"]["dft_base"]):
+      for copy_target in os.listdir(self.project.project_definition["configuration"]["dft-base"]):
         logging.debug("Copy the DFT toolkit : preparing to copy " + copy_target)
-        copy_target_path = os.path.join(self.project.project_definition["configuration"]["dft_base"], copy_target)
+        copy_target_path = os.path.join(self.project.project_definition["configuration"]["dft-base"], copy_target)
         if os.path.isfile(copy_target_path):
           logging.debug("copying file " + copy_target_path + " => " + dft_target_path)
           distutils.file_util.copy_file(copy_target_path, dft_target_path)
@@ -174,8 +174,8 @@ class BuildBaseOS(CliCommand):
           distutils.dir_util.copy_tree(copy_target_path, os.path.join(dft_target_path, copy_target))
 
       # Copy the additional toolkit content to the target rootfs
-      if "additional_roles" in self.project.project_definition["configuration"]:
-        for additional_path in self.project.project_definition["configuration"]["additional_roles"]:
+      if "additional-roles" in self.project.project_definition["configuration"]:
+        for additional_path in self.project.project_definition["configuration"]["additional-roles"]:
           logging.debug("Copy the additional toolkit : preparing to copy from additional path " + additional_path)
           for copy_target in os.listdir(additional_path):
             logging.debug("Copy the additional toolkit : preparing to copy " + copy_target)

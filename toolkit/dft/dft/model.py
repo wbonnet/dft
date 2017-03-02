@@ -110,8 +110,8 @@ class DftConfiguration(object):
         self.logging.debug(self.dft_configuration)
 
         # Check if path starts with ~ and need expension
-        if self.dft_configuration["configuration"]["working_dir"][0] == "~" and self.dft_configuration["configuration"]["working_dir"][1] == "/":
-          self.dft_configuration["configuration"]["working_dir"] = os.path.expanduser(self.dft_configuration["configuration"]["working_dir"])
+        if self.dft_configuration["configuration"]["working-dir"][0] == "~" and self.dft_configuration["configuration"]["working-dir"][1] == "/":
+          self.dft_configuration["configuration"]["working-dir"] = os.path.expanduser(self.dft_configuration["configuration"]["working-dir"])
 
         self.logging.debug(self.dft_configuration)
 
@@ -187,7 +187,7 @@ class ProjectDefinition(object):
     self.project_base_workdir = None
     self.project_definition = None
     self.repositories_definition = None
-    self.rootfs_generator_cachedir = None
+    self.rootfs_generator_cachedirname = None
     self.stripping_definition = None
     self.variables_definition = None
 
@@ -201,21 +201,21 @@ class ProjectDefinition(object):
   #   This files are referenced in the project configuration file, and are
   #   supposed to be in the same folder as the project file
   #
-  #   A "project_path' can be defined in the project file. If defined, the
+  #   A "project-path' can be defined in the project file. If defined, the
   #   files are loaded from this place. If not, they are loaded from the
   #   directory containing the project file being used.
   #
   # ---------------------------------------------------------------------------
   def genereate_definition_file_path(self, filename):
     """ This method generate the path to a configuration file. Generated path is
-    relative to project_path if this variable has been set in the ain project file.
+    relative to project-path if this variable has been set in the ain project file.
     If the variable has not been set, configuration files are searched in the same
     directory as project.yml (main project file).
     """
 
     # Check if the project path is defined into the project file
-    if "project_path" in self.project_definition["configuration"]:
-      filename = self.project_definition["configuration"]["project_path"] + "/" + filename
+    if "project-path" in self.project_definition["configuration"]:
+      filename = self.project_definition["configuration"]["project-path"] + "/" + filename
     else:
       filename = os.path.dirname(self.project_name) + "/" + filename
 
@@ -255,7 +255,7 @@ class ProjectDefinition(object):
         self.project_definition = yaml.load(working_file)
 
         # Expand ~ in path since it is not done automagically by Python
-        for key in {"dft_base", "project_path", "working_dir", "additional_roles"}:
+        for key in {"dft-base", "project-path", "working-dir", "additional-roles"}:
           if key in self.project_definition["configuration"]:
             if self.project_definition["configuration"][key][0] == "~" and self.project_definition["configuration"][key][1] == "/":
               self.project_definition["configuration"][key] = os.path.expanduser(self.project_definition["configuration"][key])
@@ -321,17 +321,17 @@ class ProjectDefinition(object):
       #
 
       # Generate the cache archive filename
-      if "rootfs_generator_cachedir" in self.project_definition["configuration"]:
-        self.rootfs_generator_cachedir = self.project_definition["configuration"]["rootfs_generator_cachedir"]
+      if "rootfs-generator-cachedirname" in self.project_definition["configuration"]:
+        self.rootfs_generator_cachedirname = self.project_definition["configuration"]["rootfs-generator-cachedirname"]
       else:
-        self.logging.warning("configuration/rootfs_generator_cachedir is not defined, using /tmp as default value")
-        self.rootfs_generator_cachedir = "/tmp/"
+        self.logging.warning("configuration/rootfs-generator-cachedirname is not defined, using /tmp as default value")
+        self.rootfs_generator_cachedirname = "/tmp/"
 
-      if "working_dir" in self.project_definition["configuration"]:
-        self.project_base_workdir = self.project_definition["configuration"]["working_dir"] + "/" + self.project_definition["configuration"]["project_name"]
+      if "working-dir" in self.project_definition["configuration"]:
+        self.project_base_workdir = self.project_definition["configuration"]["working-dir"] + "/" + self.project_definition["configuration"]["project-name"]
       else:
-        self.logging.warning("configuration/working_dir is not defined, using /tmp/dft as default value")
-        self.project_base_workdir = "/tmp/dft/" + self.project_definition["configuration"]["project_name"]
+        self.logging.warning("configuration/working-dir is not defined, using /tmp/dft as default value")
+        self.project_base_workdir = "/tmp/dft/" + self.project_definition["configuration"]["project-name"]
 
       # Defines path for subcommand
       self.rootfs_base_workdir = self.project_base_workdir + "/rootfs"
@@ -351,9 +351,9 @@ class ProjectDefinition(object):
 
       # Generate the archive filename
 # TODO : handle multiple archs / version
-      self.archive_filename = self.rootfs_generator_cachedir + "/" + self.target_arch
+      self.archive_filename = self.rootfs_generator_cachedirname + "/" + self.target_arch
       self.archive_filename += "-" +  self.target_version + "-"
-      self.archive_filename += self.project_definition["configuration"]["project_name"]
+      self.archive_filename += self.project_definition["configuration"]["project-name"]
       self.archive_filename += ".tar"
 
       # Generates the path to the rootfs mountpoint
@@ -365,7 +365,7 @@ class ProjectDefinition(object):
       self.firmware_directory += self.target_arch + "-" + self.target_version
 
       self.firmware_filename = self.firmware_directory + "/"
-      self.firmware_filename += self.project_definition["configuration"]["project_name"]
+      self.firmware_filename += self.project_definition["configuration"]["project-name"]
       self.firmware_filename += ".squashfs"
 
       self.init_filename = self.firmware_directory + "/init"

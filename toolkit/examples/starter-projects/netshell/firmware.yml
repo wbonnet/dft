@@ -34,11 +34,15 @@ layout:
   method: aufs
 
   # Definition of the different things to stack to assemble the firmware
-  stack_definition:
+  stack-definition:
     # Stack items are individual element of the stack. They are processed
     # and added to the aufs o overlayfs according to their order of
     # definition
-  - stack_item:
+  - stack-item:
+      # Name under which the item is known and used in the scripts
+      # Name is used to mount the item in host filesystem under /mnt/dft/name
+      name: system
+
       # Type of the 'source' to use for this mountpoint. It can be :
       # squashfs, partition, or tmpfs. This information is mandatory
       type: squashfs
@@ -46,30 +50,39 @@ layout:
       # Path to the squashfs file to mount
       # This information is ignored if type is ot squashfs
       # Default value is generated based upon the project information
-      # squashfs_file:
+      squashfs-file: system.fw
 
       # Name of the partition device to mount when type is partition
       # This information is ignored if type is not partition
       # There is no default vallue ( it's too dangerous too guess that  :) )
       # partition:
 
-      # Path under which this objct has to be mounted
+      # Path under which this object has to be mounted in the host file 
       # This information is mandatory
       mountpoint: /
 
       # Options to pass to the mount command.
       # Default is TODO
-      # mount_option:
+      # mount-options:
 
     # Defines a tmpfs to stack over the root 
-  - stack_item:
+  - stack-item:
+      # Name of the mount point
+      name: volatile
+
+      # Item type (tmpfs, partition or squashfs)
       type: tmpfs
+
+      # Target mount point
       mountpoint: /
+
+      # Specify the size of the tmpfs 
+      mount-options: "size=1G,nr_inodes=10k,mode=700"
 
 # TODO name + stack_over ?
 
-# TODO global ?
-  auto_commit: False
+# TODO globa  l ?
+  auto-commit: False
 #   defines mapping over squashfs
 #   => direct write ?
 # stacking ? 
@@ -105,7 +118,7 @@ resilience:
 configuration:
 
   # Defines the block size. Default is 131072 bytes
-  block_size: "256K"
+  block-size: "256K"
 
   # Compressors available are gzip (default), lzo, xz
   compressor: "xz"

@@ -29,7 +29,7 @@
 configuration:
 
   # Defines the block size. Default is 131072 bytes
-  block_size: "256K"
+  block-size: "256K"
 
   # Compressors available are gzip (default), lzo, xz
   compressor: "xz"

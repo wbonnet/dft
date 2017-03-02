@@ -86,7 +86,7 @@ class BuildFirmware(CliCommand):
     sudo_command += self.project.firmware_filename + '"'
 
     # Append arguments if defined in the configuration file
-    if "block_size" in self.project.firmware_definition["configuration"]:
+    if "block-size" in self.project.firmware_definition["configuration"]:
       sudo_command += ' -b ' + self.project.firmware_definition["configuration"]["block_size"]
 
     if "compressor" in self.project.firmware_definition["configuration"]:
