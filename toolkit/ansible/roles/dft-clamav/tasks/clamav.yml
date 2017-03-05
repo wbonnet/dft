@@ -36,7 +36,7 @@
     - clamav
 
 - name : DFT - Configure clamav
-  template: src=templates/freshclam.comf.j2 
+  template: src=templates/freshclam.conf.j2 
             dest=/etc/clamav/freshclam.conf
             owner=root 
             group=root 
