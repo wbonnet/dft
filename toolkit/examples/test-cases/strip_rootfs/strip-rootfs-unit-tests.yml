@@ -25,7 +25,7 @@
 # The following packages wi beremoved from the rootfs
 #
 packages:
-  status: "absent"
+  absent:
   - htop
   - iotop
   - non-existing-package
@@ -41,7 +41,7 @@ files:
   #
   # The following files, directories and symlinks will be removed from rootfs
   #
-  status: "absent"
+  absent:
  
   #
   # Testing file targets : will be removed from rootfs

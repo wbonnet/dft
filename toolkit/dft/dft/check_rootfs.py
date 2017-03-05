@@ -83,9 +83,9 @@ class CheckRootFS(CliCommand):
     # either failed of successfull, but as expected (handy for unit tests)
     self.rule_as_expected_counter = 0
 
-
-    # Size of block used to read files whencomputing hashes
+    # Size of block used to read files when computing hashes
     self.block_size = 65536
+    
 
 
   # -------------------------------------------------------------------------

@@ -106,10 +106,10 @@ class CliCommand(object):
       self.cleanup_installation_files()
       self.project.logging.critical("Error %d occured when executing %s", 
                                     exception.returncode, exception.cmd)
-      self.project.logging.debug("stdout")
-      self.project.logging.debug("%s" % (completed.stdout.decode('UTF-8')))
-      self.project.logging.debug("stderr")
-      self.project.logging.debug("%s" % (completed.stderr.decode('UTF-8')))
+#TODO      self.project.logging.debug("stdout")
+#      self.project.logging.debug("%s" , completed.stdout.decode('UTF-8'))
+#      self.project.logging.debug("stderr")
+#      self.project.logging.debug("%s", completed.stderr.decode('UTF-8'))
       exit(1)
 
 

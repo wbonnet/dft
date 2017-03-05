@@ -23,4 +23,44 @@
 #
 #
 
+
+#
+# start_firmware
+#
+#   This function is in charge of starting the firmware after the stack
+#   has been created. All the filesystems are mounted under /mnt/dft/<fs>
+#   The stak itself is created under /mnt/dft/firmware. This is the directory
+#   used as the pvit_root target.
+#
+start_firmware() {
+  # Change directory to the firmware root
+  cd /mnt/dft/firmware
+
+  # Execute pivot_root to change the root of the system
+  pivot_root . /
+
+# TODO : need some mount bind ?
+#  mount --bind /sys  /mnt/dft/firmware/sys
+#  mount --bind /proc /mnt/dft/firmware/proc
+#  mount --bind /dev  /mnt/dft/firmware/dev
+
+  # Execute the init script from the new root and umount old root
+  exec chroot . sh -c 'umount / ; exec /sbin/init' < dev/console > dev/console 2>&1
+}
+
+# Stop execution when an error is encountered
+set -e
+
+# Be verbose during execution (will be removed soon)
+set -x
+
+# Load the script in charge of mouting and stacking all the file systems
 source dft_create_stack.sh
+
+# Start the firmware from the file systems stack
+start_firmware
+
+
+# TODO : upgrade method ? is it in this script ?
+# TODO : mount the actual target root
+# TODO : handme ciphered devices. Should check for an external script, if it exist, run it

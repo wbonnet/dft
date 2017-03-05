@@ -25,42 +25,57 @@
 # The following packages wi beremoved from the rootfs
 #
 packages:
-  status: "absent"
+  absent:
+  - htop
+  - iotop
+  - non-existing-package
 
 #
-# The following files, directories and symlinks will be removed from rootfs
+# The following files and symlinks will be removed from rootfs
 #
 files:
-  status: "absent"
-#     # Remove a directory
+  # This section defines the list of files to remove
+  absent:
+    # Remove a file
+    - /etc/deian_version
+    # Remove a symlink
+    - /etc/os-release
+    # This test will fail since it removes a non existing file
+    - /etc/deian_version2
+    # This test will fail since it removes a non existing symlink
+    - /etc/os-release2
 
-# #
-# # The following packages wi beremoved from the rootfs
-# #
-# packages:
-#   status: "absent"
-#   - htop
-#   - iotop
-#   - non-existing-package
-# #
-# # The following files, directories and symlinks will be removed from rootfs
-# #
-# files:
-#   status: "absent"
-#     # Remove a directory
-#   - /usr/share/man
-#     # Remove a file
-#   - /etc/deian_version
-#     # Remove a symlink
-#   - /etc/os-release
-#     # This test will fail since it removes a non existing directory
-#   - /usr/share/man222
-#     # This test will fail since it removes a non existing file
-#   - /etc/deian_version2
-#     # This test will fail since it removes a non existing symlink
-#   - /etc/os-release2
+  # This section defines the list of files to truncate (or empty)
+  empty:
+    # Empty an existing file
+    - /root/empty-me
+    # Empty a non existing file
+    - /root/do-not-exist
 
-# # TODO : empty directory content
-# # TODO : regexp for files symlink and dirs
-# # TODO : should i check for multiple definitions ?
-# # TODO : ??? remove symlink target ?
+#
+# The following directories and symlinks will be removed from rootfs
+#
+directories:
+  # This section defines the list of files to remove
+  absent:
+    # Remove a directory
+    - /usr/share/man
+    # Remove a symlink
+    - /etc/os-release
+    # This test will fail since it removes a non existing directory
+    - /usr/share/man222
+    # This test will fail since it removes a non existing symlink
+    - /etc/os-release2
+  
+  # This section defines the list of dirctories to empty
+  # Emptying a directory is removing the files it contains, not removing
+  # the structure of subdirectories. To remove the structure also, used remove
+  # command
+  empty:
+    # Remove an existing directory
+    - /etc/openssh
+    # Remove a non existing directory
+    - /etc/do-not-exist
+
+# TODO : regexp for files symlink and dirs
+# TODO : ??? remove symlink target ?

@@ -298,7 +298,6 @@ class ProjectDefinition(object):
 
       # Load the stripping sub configuration files
       if "stripping" in self.project_definition["project-definition"]:
-        print(self.project_definition["project-definition"]["stripping"])
         filename = self.genereate_definition_file_path(self.project_definition["project-definition"]["stripping"][0])
         with open(filename, 'r') as working_file:
           self.stripping_definition = yaml.load(working_file)

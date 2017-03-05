@@ -286,7 +286,7 @@ class AssembleFirmware(CliCommand):
     working_file = open(working_file_name, "a")
 
     working_file.write("generate_aufs_stacking\n")
-# sudo mount -t aufs -o br:${systemdir}=rr -o udba=reval none ${mountdir}
+# sudo mount -t aufs -o noatime,nodiratime,br:${systemdir}=rr -o udba=reval none ${mountdir}
 
     # We are done here, now close the file
     working_file.close()
