@@ -277,3 +277,7 @@ class StripRootFS(CliCommand):
     """
 
     self.project.logging.debug("Empty directory : " + target)
+    sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
+    sudo_command += " bash -c '[ -d " + target + " ] && find " + target
+    sudo_command += " -type f | xargs rm -f || true'"
+    self.execute_command(sudo_command)

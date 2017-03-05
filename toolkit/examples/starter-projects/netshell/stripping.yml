@@ -73,7 +73,7 @@ directories:
   # command
   empty:
     # Remove an existing directory
-    - /etc/openssh
+    - /etc/ssh
     # Remove a non existing directory
     - /etc/do-not-exist
 
