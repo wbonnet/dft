@@ -57,7 +57,7 @@ class Cli(object):
   # -------------------------------------------------------------------------
   def __init__(self):
     # Current version
-    self.version = "0.1.1"
+    self.version = "0.1.2"
 
     # Create the internal parser from argparse
     self.parser = argparse.ArgumentParser(description=textwrap.dedent('''\
@@ -74,7 +74,7 @@ Available commands are :
 . check_rootfs                     Control the content of the baseos rootfs after its generation (debsecan and openscap)
 x factory_setup                    Apply some extra factory setup before generating the firmware
 ? generate_content_information     Generate a manifest identiyfing content and versions
-? strip_rootfs                     Strip down the rootfs before assembling the firmware'''),
+. strip_rootfs                     Strip down the rootfs before assembling the firmware'''),
                                           formatter_class=argparse.RawTextHelpFormatter)
 
     # Storesthe arguments from the parser
