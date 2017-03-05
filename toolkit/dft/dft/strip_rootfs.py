@@ -236,7 +236,7 @@ class StripRootFS(CliCommand):
     # Test if the fileexist before trying to trucate it
     sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
     sudo_command += " bash -c '[ -f " + target + " ] && truncate " + target
-    sudo_command += " --size 0'"
+    sudo_command += " --size 0 || true'"
     self.execute_command(sudo_command)
 
 
