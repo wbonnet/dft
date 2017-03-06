@@ -30,7 +30,8 @@ import os
 import tarfile
 import shutil
 import tempfile
-import distutils
+from distutils import dir_util
+from distutils import file_util
 from cli_command import CliCommand
 
 #
@@ -168,10 +169,10 @@ class BuildBaseOS(CliCommand):
         copy_target_path = os.path.join(self.project.project_definition["configuration"]["dft-base"], copy_target)
         if os.path.isfile(copy_target_path):
           logging.debug("copying file " + copy_target_path + " => " + dft_target_path)
-          distutils.file_util.copy_file(copy_target_path, dft_target_path)
+          file_util.copy_file(copy_target_path, dft_target_path)
         else:
           logging.debug("copying tree " + copy_target_path + " => " + dft_target_path)
-          distutils.dir_util.copy_tree(copy_target_path, os.path.join(dft_target_path, copy_target))
+          dir_util.copy_tree(copy_target_path, os.path.join(dft_target_path, copy_target))
 
       # Copy the additional toolkit content to the target rootfs
       if "additional-roles" in self.project.project_definition["configuration"]:
@@ -182,10 +183,10 @@ class BuildBaseOS(CliCommand):
             copy_target_path = os.path.join(additional_path, copy_target)
             if os.path.isfile(copy_target_path):
               logging.debug("copying file " + copy_target_path + " => " + dft_target_path)
-              distutils.file_util.copy_file(copy_target_path, dft_target_path)
+              file_util.copy_file(copy_target_path, dft_target_path)
             else:
               logging.debug("copying tree " + copy_target_path + " => " + dft_target_path)
-              distutils.dir_util.copy_tree(copy_target_path, os.path.join(dft_target_path, copy_target))
+              dir_util.copy_tree(copy_target_path, os.path.join(dft_target_path, copy_target))
 
     except OSError as exception:
       # Call clean up to umount /proc and /dev
@@ -229,7 +230,7 @@ class BuildBaseOS(CliCommand):
           logging.debug("Copy the variables file : preparing to copy " + vars_file)
           if os.path.isfile(vars_file):
             logging.debug("copying file " + vars_file + " => " + dft_target_path)
-            distutils.file_util.copy_file(vars_file, dft_target_path)
+            file_util.copy_file(vars_file, dft_target_path)
           else:
             logging.error("Variable files " + vars_file + " is not a file")
             logging.error("Skipping this file")
@@ -450,7 +451,7 @@ class BuildBaseOS(CliCommand):
       working_file.write("Acquire::Check-Valid-Until \"0\";\n")
     working_file.close()
 
-    sudo_command = "sudo mv -f " + file.name + " " + filepath
+    sudo_command = "sudo mv -f " + working_file.name + " " + filepath
     self.execute_command(sudo_command)
 
     # Generate the file path
@@ -463,7 +464,7 @@ class BuildBaseOS(CliCommand):
     distro_has_been_found = False
 
     # The open the temp file for output, and iterate the distro dictionnary
-    with tempfile.NamedTemporaryFile(mode='w+', delete=False) as file:
+    with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
       # Iterate the list of distributions loaded from the file
       for distro in self.project.repositories_definition["distributions"]:
         logging.debug(distro)
@@ -480,20 +481,20 @@ class BuildBaseOS(CliCommand):
               # Will generate the deb line only if the key
               # generate-deb is present and set to True or the key
               # is not present
-              file.write("deb " + repo["url"] +" " + repo["suite"] + " ")
+              working_file.write("deb " + repo["url"] +" " + repo["suite"] + " ")
               for section in repo["sections"]:
-                file.write(section + " ")
-              file.write("\n")
+                working_file.write(section + " ")
+              working_file.write("\n")
 
             # Test if deb-src line has also to be generated
             if "generate-src" in repo:
               # Will generate the deb-src line only if the key
               # generate-src is present and set to True
               if repo["generate-src"]:
-                file.write("deb-src " + repo["url"] +" " + repo["suite"] + " ")
+                working_file.write("deb-src " + repo["url"] +" " + repo["suite"] + " ")
                 for section in repo["sections"]:
-                  file.write(section + " ")
-                file.write("\n")
+                  working_file.write(section + " ")
+                working_file.write("\n")
 
     # Warn the user if no matching distro is found. There will be an empty
     # /etc/apt/sources.list and installation will faill
@@ -506,8 +507,8 @@ class BuildBaseOS(CliCommand):
       exit(1)
 
     # Its done, now close the temporary file
-    file.close()
+    working_file.close()
 
     # Finally move the temporary file under the rootfs tree
-    sudo_command = "sudo mv -f " + file.name + " " + filepath
+    sudo_command = "sudo mv -f " + working_file.name + " " + filepath
     self.execute_command(sudo_command)
