@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 #
 # The contents of this file are subject to the Apache 2.0 license you may not
 # use this file except in compliance with the License.
@@ -24,3 +23,49 @@
 
 # Fails on error
 set -e
+
+# Defines the working directories
+testdir="./overlayfs-test"
+configdir="${testdir}/config"
+systemdir="${testdir}/system"
+secretdir="${testdir}/secret"
+varlogdir="${testdir}/varlog"
+datadir="${testdir}/data"
+volatiledir="${testdir}/volatile"
+mountdir="${testdir}/mount"
+workdir="${testdir}/workdir"
+
+# Make sure the directories exist
+mkdir -p "${testdir}"
+mkdir -p "${configdir}"
+mkdir -p "${systemdir}"
+mkdir -p "${secretdir}"
+mkdir -p "${varlogdir}"
+mkdir -p "${volatiledir}"
+mkdir -p "${datadir}"
+mkdir -p "${workdir}"
+
+# Make sure the volatile directories exist
+mkdir -p "${mountdir}"
+
+# Mount the squashfs files to a loop device
+sudo mount -t tmpfs -o size=1G,nr_inodes=10k,mode=700 tmpfs "${volatiledir}"
+sudo mount -t squashfs config.fw "${configdir}" -o loop
+# sudo mount -t squashfs system.fw "${systemdir}" -o loop
+sudo mount -t squashfs system.fw "${mountdir}" -o loop
+sudo mount -t squashfs secret.fw "${secretdir}" -o loop
+
+# Stacks the layers
+sudo mount -t overlay overlay -olowerdir=${configdir}:${mountdir}/etc ${mountdir}/etc
+sudo mount -t overlay overlay -olowerdir=${secretdir}:${mountdir}/etc/ ${mountdir}/etc/
+sudo mount -t overlay overlay -olowerdir=${mountdir}/var/log,upperdir=${varlogdir},workdir=${workdir} ${mountdir}/var/log/
+sudo mount -t overlay overlay -olowerdir=${mountdir}/mnt,upperdir=${datadir},workdir=${workdir} ${mountdir}/mnt/
+# sudo mount -t overlay overlay -olowerdir=${mountdir},upperdir=${volatiledir},workdir=${workdir} ${mountdir}
+
+
+# mkdir -p /tmp/olay /tmp/sfs
+# mount -t tmpfs none /tmp/olay
+# mkdir /tmp/olay/up /tmp/olay/wrk
+# mount ./my.sfs /tmp/sfs
+# mount -t overlay overlay -olowerdir=/tmp/sfs,upperdir=/tmp/olay/up,workdir=/tmp/olay/‌​workdir /tmp/olay
+

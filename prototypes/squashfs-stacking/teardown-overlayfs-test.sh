@@ -21,5 +21,26 @@
 #
 #
 
-# Fails on error
-set -e
+# Defines the working directories
+workdir="/home/william/Devel/dft/prototypes/squashfs-stacking/overlayfs-test"
+configdir="${workdir}/config"
+systemdir="${workdir}/system"
+secretdir="${workdir}/secret"
+varlogdir="${workdir}/varlog"
+datadir="${workdir}/data"
+volatiledir="${workdir}/volatile"
+mountdir="${workdir}/mount"
+
+# Unstack the layers
+
+# Mount the squashfs files to a loop device
+sudo umount "${mountdir}/mnt/"
+sudo umount "${mountdir}/var/log"
+sudo umount "${mountdir}/etc"
+sudo umount "${mountdir}/etc"
+sudo umount "${mountdir}"
+sudo umount "${configdir}" 
+# sudo umount "${systemdir}" 
+sudo umount "${secretdir}" 
+sudo umount "${volatiledir}" 
+
