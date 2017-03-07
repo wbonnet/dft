@@ -35,23 +35,25 @@ volatiledir="${testdir}/volatile"
 mountdir="${testdir}/mount"
 workdir="${testdir}/workdir"
 
+
 # Make sure the directories exist
 mkdir -p "${testdir}"
-mkdir -p "${configdir}"
-mkdir -p "${systemdir}"
-mkdir -p "${secretdir}"
-mkdir -p "${varlogdir}"
-mkdir -p "${volatiledir}"
-mkdir -p "${datadir}"
-mkdir -p "${workdir}"
+
+sudo mount -t tmpfs -o size=1G,nr_inodes=10k,mode=700 tmpfs "${testdir}"
+
+sudo mkdir -p "${configdir}"
+sudo mkdir -p "${systemdir}"
+sudo mkdir -p "${secretdir}"
+sudo mkdir -p "${varlogdir}"
+sudo mkdir -p "${volatiledir}"
+sudo mkdir -p "${datadir}"
+sudo mkdir -p "${workdir}"
 
 # Make sure the volatile directories exist
-mkdir -p "${mountdir}"
+sudo mkdir -p "${mountdir}"
 
 # Mount the squashfs files to a loop device
-sudo mount -t tmpfs -o size=1G,nr_inodes=10k,mode=700 tmpfs "${volatiledir}"
 sudo mount -t squashfs config.fw "${configdir}" -o loop
-# sudo mount -t squashfs system.fw "${systemdir}" -o loop
 sudo mount -t squashfs system.fw "${mountdir}" -o loop
 sudo mount -t squashfs secret.fw "${secretdir}" -o loop
 
