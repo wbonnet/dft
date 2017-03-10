@@ -1,0 +1,216 @@
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).  
+# All rights reserved. Use is subject to license terms.
+#
+# Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
+#
+#
+# Contributors list :
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#
+#
+
+
+
+# ----------------------------------------------------------------------------
+#
+# Definition of the firmware layout
+#
+# ----------------------------------------------------------------------------
+layout:
+  # Method to use to assembl the systm in memory. Can be either aufs 
+  # or overlayfs
+  method: overlayfs
+
+  # Definition of the different things to stack to assemble the firmware
+  stack-definition:
+    # Stack items are individual element of the stack. They are processed
+    # and added to the aufs o overlayfs according to their order of
+    # definition
+  - stack-item:
+      # Name under which the item is known and used in the scripts
+      # Name is used to mount the item in host filesystem under /mnt/dft/name
+      name: system
+
+      # Type of the 'source' to use for this mountpoint. It can be :
+      # squashfs, partition, or tmpfs. This information is mandatory
+      type: squashfs
+
+      # Path to the squashfs file to mount
+      # This information is ignored if type is ot squashfs
+      # Default value is generated based upon the project information
+      squashfs-file: system.fw
+
+      # Name of the partition device to mount when type is partition
+      # This information is ignored if type is not partition
+      # There is no default vallue ( it's too dangerous too guess that  :) )
+      # partition:
+
+      # Path under which this object has to be mounted in the host file 
+      # This information is mandatory
+      mountpoint: /
+
+      # Options to pass to the mount command.
+      # Default is TODO
+      # mount-options:
+
+    # Defines a tmpfs to stack over the root 
+  - stack-item:
+      # Name of the mount point
+      name: volatile
+
+      # Item type (tmpfs, partition or squashfs)
+      type: tmpfs
+
+      # Target mount point
+      mountpoint: /
+
+      # Specify the size of the tmpfs 
+      mount-options: "size=1G,nr_inodes=10k,mode=777"
+
+    # Defines a tmpfs to stack over the root 
+  - stack-item:
+      # Name of the mount point
+      name: data
+
+      # Item type (tmpfs, partition or squashfs)
+      type: partition
+
+      # Partition to mount
+      partition: /dev/sda1
+
+      # Target mount point
+      mountpoint: /
+
+      # Specify the size of the tmpfs 
+      mount-options: "noatime,nodiratime"
+
+
+# TODO name + stack_over ?
+
+# TODO globa  l ?
+  auto-commit: False
+#   defines mapping over squashfs
+#   => direct write ?
+# stacking ? 
+# how to define cow ?
+
+# ----------------------------------------------------------------------------
+#
+# Definition of the firmware security parameters
+#
+# ----------------------------------------------------------------------------
+security:
+  # Defines security paramters such as the use of hash, digital ignature, etc.
+  # TODO  not at start, but need to check for hashes or signatures
+  # TODO  how to handle ciphering, keygen, secure storage
+  hash-method: sha256
+
+# ----------------------------------------------------------------------------
+#
+# Definition of the firmware resilience and safety parameters
+#
+# Remember that Safety is not security  
+#
+# ----------------------------------------------------------------------------
+resilience:
+  # Number of banks used ifor firmware installation
+  banks: 1
+
+# ----------------------------------------------------------------------------
+#
+# Definition of the squashfs parameters
+#
+# ----------------------------------------------------------------------------
+configuration:
+
+  # Defines the block size. Default is 131072 bytes
+  block-size: "256K"
+
+  # Compressors available are gzip (default), lzo, xz
+  compressor: "xz"
+
+  # Don't make the filesystem exportable via NFS. 
+  # no-exports: True
+
+  # Don't detect sparse files. Default is False
+  # no-sparse: True
+
+  # Store or not extended attributes. Default is True
+  # xattrs: False
+
+  # Do not compress inode table. Default is False
+  # no-inode-compression: True
+
+  # Do not compress data blocks. Default is False
+  # no-datablock-compression: True
+
+  # Do not compress fragment blocks. Default is False
+  # no-fragment-compression: True
+
+  # Do not compress extended attributes. Default is False
+  # no-xattrs-compression: True
+
+  # Use or not fragments.
+  # use-fragments: True
+
+  # Do not perform duplicate checking.
+  # no-duplicates-check: True
+
+  # Make all files owned by root.
+  # all-root: False
+
+  # Set all file uids to uid.
+  # force-uid: "1234"
+
+  # Set all file gids to gid.
+  # force-gid: "1234"
+
+  # Do not pad filesystem to a multiple of 4K.
+  # nopad: True
+
+
+#        -keep-as-directory
+#            if  one source directory is specified, create a root directory contain‐
+#            ing that directory, rather than the contents of the directory.
+
+#    Filesystem filter options
+#        -p PSEUDO_DEFINITION
+#            Add pseudo file definition.
+
+#        -pf PSEUDO_FILE
+#            Add list of pseudo file definitions.
+
+#        -sort SORT_FILE
+#            sort files according to priorities in SORT_FILE. One file or  dir  with
+#            priority per line. Priority -32768 to 32767, default priority 0.
+
+#        -ef EXCLUDE_FILE
+#            list of exclude dirs/files. One per line.
+
+#        -wildcards
+#            Allow  extended  shell  wildcards  (globbing)  to  be  used  in exclude
+#            dirs/files
+
+#        -regex
+#            Allow POSIX regular expressions to be used in exclude dirs/files.
+
+#    Filesystem append options
+#        -noappend
+#            do not append to existing filesystem.
+
+#        -root-becomes NAME
+#            when appending source files/directories, make the original root  become
+#            a  subdirectory in the new root called NAME, rather than adding the new
+#            source items to the original root.
