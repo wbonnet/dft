@@ -77,7 +77,7 @@ layout:
       mountpoint: /
 
       # Specify the size of the tmpfs 
-      mount-options: "size=1G,nr_inodes=10k,mode=700"
+      mount-options: "size=1G,nr_inodes=10k,mode=777"
 
     # Defines a tmpfs to stack over the root 
   - stack-item:
