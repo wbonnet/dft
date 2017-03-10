@@ -67,9 +67,9 @@ function setup() {
 
 function teardown() {
   # Mount the squashfs files to a loop device
-  sudo umount "${mountdir}"
   sudo umount "${mountdir}/mnt/"
   sudo umount "${mountdir}/var/log"
+  sudo umount "${mountdir}"
   sudo umount "${mountdir}/etc"
   sudo umount "${mountdir}/etc"
   sudo umount "${configdir}" 
