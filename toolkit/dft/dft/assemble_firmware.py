@@ -180,13 +180,18 @@ class AssembleFirmware(CliCommand):
     method only do output, the file is closed after the method returns.
     """
 
-    # Reopenthe working file
+    # Reopen the working file
     working_file = open(working_file_name, "a")
 
     # Check that the stack definition is in the configuration file
     if "stack-definition" not in self.project.firmware_definition["layout"]:
       self.project.logging.critical("The stack definition is not in the configuration file")
       exit(1)
+
+    # Create the workdir
+    working_file.write("# Create the workdir directory\n")
+    working_file.write("mkdir -p /mnt/dft/workdir\n")
+    working_file.write("\n")
 
     # Iterates the stack items
     for item in self.project.firmware_definition["layout"]["stack-definition"]:
@@ -211,6 +216,8 @@ class AssembleFirmware(CliCommand):
 
         # Complete the mount command
         working_file.write("tmpfs /mnt/dft/" + item["stack-item"]["name"] + "\n")
+        working_file.write("mkdir /mnt/dft/" + item["stack-item"]["name"] + "/workdir\n")
+        working_file.write("mkdir /mnt/dft/" + item["stack-item"]["name"] + "/mountpoint\n")
 
       # Generate the tmpfs specific mount command
       if item["stack-item"]["type"] == "squashfs":
@@ -262,7 +269,51 @@ class AssembleFirmware(CliCommand):
     working_file = open(working_file_name, "a")
 
 
+    working_file.write("\n")
+    working_file.write("---------------------------------------------------------\n")
     working_file.write("generate_overlayfs_stacking\n")
+    working_file.write("---------------------------------------------------------\n")
+    working_file.write("\n")
+
+
+
+    # Reopen the working file
+    working_file = open(working_file_name, "a")
+
+    # Check that the stack definition is in the configuration file
+    if "stack-definition" not in self.project.firmware_definition["layout"]:
+      self.project.logging.critical("The stack definition is not in the configuration file")
+      exit(1)
+
+    # Iterates the stack items
+    for item in self.project.firmware_definition["layout"]["stack-definition"]:
+      # Generate the mount point creation code
+      working_file.write("# Stack the   " + item["stack-item"]["type"] +
+                         " '" + item["stack-item"]["name"] + "'\n")
+
+      # Generate the tmpfs specific mount command
+      if item["stack-item"]["type"] == "tmpfs":
+        working_file.write("mount -t overlay overlay -olowerdir=")
+        working_file.write(item["stack-item"]["mountpoint"] + ",upperdir=/mnt/dft/")
+        working_file.write(item["stack-item"]["name"] + "/mountpoint")
+        working_file.write(",workdir=/mnt/dft/" + item["stack-item"]["name"] + "/workdir\n")
+        working_file.write(" " + item["stack-item"]["mountpoint"] + "\n")
+
+      # Generate the tmpfs specific mount command
+      if item["stack-item"]["type"] == "squashfs":
+        working_file.write("mount -t overlay overlay -olowerdir=/mnt/dft/")
+        working_file.write(item["stack-item"]["name"] + ":" + item["stack-item"]["mountpoint"])
+        working_file.write(" " + item["stack-item"]["mountpoint"] + "\n")
+
+      # Generate the tmpfs specific mount command
+      if item["stack-item"]["type"] == "partition":
+        working_file.write("mount -t overlay overlay -olowerdir=")
+        working_file.write(item["stack-item"]["mountpoint"] + ",upperdir=/mnt/dft/")
+        working_file.write(item["stack-item"]["name"])
+        working_file.write(",workdir=/mnt/dft/workdir\n")
+        working_file.write(" " + item["stack-item"]["mountpoint"] + "\n")
+
+      working_file.write("\n")
 
     # We are done here, now close the file
     working_file.close()

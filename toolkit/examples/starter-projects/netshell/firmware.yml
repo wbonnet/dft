@@ -31,7 +31,7 @@
 layout:
   # Method to use to assembl the systm in memory. Can be either aufs 
   # or overlayfs
-  method: aufs
+  method: overlayfs
 
   # Definition of the different things to stack to assemble the firmware
   stack-definition:
