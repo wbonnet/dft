@@ -47,7 +47,7 @@
         mode=0775 
         recurse=yes
         owner={{ dft_username }}
-        group={{ dft_username }}
+        group={{ dft_usergroup }}
 
 #
 # Create the chromium desktop entry used to start firefox when session opens
@@ -56,5 +56,5 @@
   template: src=templates/firefox.desktop.j2
           dest=/home/{{ dft_username }}/.config/autostart/firefox.desktop
           owner={{ dft_username }}
-          group={{ dft_username }}
+          group={{ dft_usergroup }}
           mode="u=rw,g=r,o=r"          
