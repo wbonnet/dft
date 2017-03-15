@@ -10,8 +10,8 @@
 #
 {% for export in dft_nfs_server_exports %}
 {% if export.active == true %}
-{{ export.path }}	{% for host in host.access_list %} {{ host.hostname }}({{ host.options }}) {% endfor %}
+{{ export.path }}	{% for host in export.access_list %} {{ host.hostname }}({{ host.options }}) {% endfor %} 
 {% else %}
-# {{ export.path }}	{% for host in host.access_list %} {{ host.hostname }}({{ host.options }}) {% endfor %}
+# {{ export.path }}	{% for host in export.access_list %} {{ host.hostname }}({{ host.options }}) {% endfor %} 
 {% endif %}
 {% endfor %}
