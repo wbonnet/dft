@@ -49,7 +49,7 @@ configuration:
   # (debsecan). This flag control automatic installation. Default is yes
   # If the packages are installed, they are automatically removed at the end
   # of execution (unless already installed in the baseos). Default is False
-  # install-missing-software: False
+  install-missing-software: True
 
   # In some case it is useful to skip a generation step if software is missing
   # and rootfs modification is not allowed. Setting this variable to True will
