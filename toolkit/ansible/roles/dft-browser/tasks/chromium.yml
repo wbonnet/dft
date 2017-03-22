@@ -38,9 +38,7 @@
        install_recommends=no
   with_items:
     - chromium
-  when: (ansible_architecture == "i386" or ansible_architecture == "x86_64")
-
-#
+  #
 # Create the directory needed to store the chromium desktop entry
 #
 - name : DFT - Create desktop autostart directory
@@ -50,7 +48,7 @@
         recurse=yes
         owner={{ dft_username }}
         group={{ dft_usergroup }}
-  when: (ansible_architecture == "i386" or ansible_architecture == "x86_64") and (dft_browser_autologin is defined and dft_browser_autologin == True)
+  when: dft_browser_autologin is defined and dft_browser_autologin == True
 
 #
 # Create the chromium desktop entry used to start chromium when session opens
@@ -61,4 +59,4 @@
           owner={{ dft_username }}
           group={{ dft_usergroup }}
           mode="u=rw,g=r,o=r"          
-  when: (ansible_architecture == "i386" or ansible_architecture == "x86_64") and (dft_browser_autologin is defined and dft_browser_autologin == True)
+  when: dft_browser_autologin is defined and dft_browser_autologin == True
