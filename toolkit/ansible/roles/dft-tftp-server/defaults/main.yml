@@ -1,0 +1,5 @@
+dft_tftp_server:
+  username: tftp
+  directory: /srv/tftp
+  address: 0.0.0.0:69
+  options: --secure
