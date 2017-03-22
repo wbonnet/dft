@@ -34,7 +34,7 @@
         owner=root
         group=root
 
-- name : DFT - Setup etc/exports
+- name : DFT - Setup /etc/exports
   template: src=templates/exports.j2 
             dest=/etc/exports
             owner=root 
