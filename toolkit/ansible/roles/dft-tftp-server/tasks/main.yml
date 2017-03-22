@@ -27,4 +27,5 @@
 #
 
 ---
-- include: tftp.yml
+- include: packages.yml
+- include: configuration.yml
