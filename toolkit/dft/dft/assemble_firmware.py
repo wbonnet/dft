@@ -75,7 +75,7 @@ class AssembleFirmware(CliCommand):
     """
 
     # Check that there is a firmware configuration file first
-    if self.project.firmware_definition is not None:
+    if self.project.firmware_definition is None:
       self.project.logging.critical("The firmware configuration file is not defined in project file")
       exit(1)
 

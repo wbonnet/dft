@@ -165,8 +165,7 @@ class GenerateContentInformation(CliCommand):
     """
 
     # Check that there is a content definition file first
-    print (self.project)
-    if self.project.content_information_definition is not None:
+    if self.project.content_information_definition is None:
       self.project.logging.critical("The content generation file is not defined in project file")
       exit(1)
 
