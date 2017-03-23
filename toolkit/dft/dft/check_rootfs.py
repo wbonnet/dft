@@ -118,7 +118,7 @@ class CheckRootFS(CliCommand):
   # -------------------------------------------------------------------------
   def process_rule_checking_output(self, rule):
     """This method implement the process the results of a check rule call.
-    It provides statitistics counter update, expected-result handling and
+    It provides statitistics counter update, expected_result handling and
     label output method.
 
     All this code has been isolated in a single method since it is called from
@@ -141,13 +141,13 @@ class CheckRootFS(CliCommand):
 
     # If the expected result variable has been defined, the compare it value
     # to the actual method result, and output a critical if different
-    # expected-result value is used in unit testing context, and it should
+    # expected_result value is used in unit testing context, and it should
     # never be different unless something nasty is lurking inthe dark
-    if "expected-result" in rule:
-      if rule["expected-result"] != self.is_rule_check_successfull:
+    if "expected_result" in rule:
+      if rule["expected_result"] != self.is_rule_check_successfull:
         self.project.logging.critical("-----------------------------------------------------------------------------")
         self.project.logging.critical("Unit test failed ! Expected result was " +
-                                      str(rule["expected-result"]) +
+                                      str(rule["expected_result"]) +
                                       " and we got " +
                                       str(self.is_rule_check_successfull))
         print(rule)
@@ -237,14 +237,14 @@ class CheckRootFS(CliCommand):
     . forbidden  =>  it CAN'T be installed
 
     Version of packages can also be controlled. Available checks are :
-    . min-version          => LOWER versions CAN'T be installed
-    . max-version          => MORE RECENT versions CAN'T be installed
-    . allowed-version      => If installed, version MUST be one of the given
+    . min_version          => LOWER versions CAN'T be installed
+    . max_version          => MORE RECENT versions CAN'T be installed
+    . allowed_version      => If installed, version MUST be one of the given
                               version in the list
-    . blacklisted-version  => NONE of the given version CAN be installed
+    . blacklisted_version  => NONE of the given version CAN be installed
                               it is a list
-    - allowed-arch         => The packages is allowed only on the given archs
-    - blacklisted-arch     => The packages is blacklisted on the given archs
+    - allowed_arch         => The packages is allowed only on the given archs
+    - blacklisted_arch     => The packages is blacklisted on the given archs
     """
 
     self.project.logging.info("starting to check installed packages")
@@ -350,16 +350,16 @@ class CheckRootFS(CliCommand):
     # Checks that the configuration section is defined
     if "configuration" in self.project.check_definition:
       # And that constraint is defined
-      if "installation-constraint" in self.project.check_definition["configuration"]:
+      if "installation_constraint" in self.project.check_definition["configuration"]:
         # Now check the defined contraint is valid (ie: no gizmo value)
-        if self.project.check_definition["configuration"]["installation-constraint"] not in "mandatory-only" "allow-optional" "no-constraint":
-          self.project.logging.error("unknown installation constraint " + self.project.check_definition["configuration"]["installation-constraint"])
+        if self.project.check_definition["configuration"]["installation_constraint"] not in "mandatory-only" "allow-optional" "no-constraint":
+          self.project.logging.error("unknown installation constraint " + self.project.check_definition["configuration"]["installation_constraint"])
           return False
         # If we reach this code, then there is a valid constaint defined
         else:
           # IF constraint is no-constraint there is nothing to do
-          if self.project.check_definition["configuration"]["installation-constraint"] == "no-constaint":
-            self.project.logging.debug("installation constraint is " + self.project.check_definition["configuration"]["installation-constraint"])
+          if self.project.check_definition["configuration"]["installation_constraint"] == "no-constaint":
+            self.project.logging.debug("installation constraint is " + self.project.check_definition["configuration"]["installation_constraint"])
             return True
 
           # Build the list of packages defined in the mandatory section. They
@@ -368,11 +368,11 @@ class CheckRootFS(CliCommand):
             list_allowed_packages[rule["name"]] = True
 
           # Check if the optional packages are allowed, if yes add then to the list
-          if self.project.check_definition["configuration"]["installation-constraint"] == "allow-optional":
+          if self.project.check_definition["configuration"]["installation_constraint"] == "allow-optional":
             for rule in self.project.check_definition["packages"]["allowed"]:
               list_allowed_packages[rule["name"]] = True
       else:
-        self.project.logging.debug("no installation-constraint")
+        self.project.logging.debug("no installation_constraint")
     else:
       self.project.logging.debug("no configuration section")
 
@@ -407,8 +407,8 @@ class CheckRootFS(CliCommand):
 
     # First let's control that all keywords (key dictionnaires) are valid and know
     for keyword in rule:
-      if keyword not in "name" "min-version" "max-version" "allowed-version" "blacklisted-version" "allowed-arch" "blacklisted-arch" "expected-result" "label":
-        self.project.logging.error("Unknow keyword " + keyword +
+      if keyword not in "name" "min_version" "max_version" "allowed_version" "blacklisted_version" "allowed_arch" "blacklisted_arch" "expected_result" "label":
+        self.project.logging.error("Unknown keyword " + keyword +
                                    " when parsing packages rules. Rule is ignored")
 
     # Check if mandatory package is missing
@@ -424,11 +424,11 @@ class CheckRootFS(CliCommand):
       return
 
     # Check version if higher or equal than min version
-    if "min-version" in rule:
+    if "min_version" in rule:
       return_code = 0
       if rule["name"] in self.installed_packages:
         # Generate the dpkg command to compare the versions
-        dpkg_command = "dpkg --compare-versions " + rule["min-version"]
+        dpkg_command = "dpkg --compare-versions " + rule["min_version"]
         dpkg_command += " lt " + self.installed_packages[rule["name"]]["version"]
 
         # We have to protect the subprocess in a try except block since dpkg
@@ -447,20 +447,20 @@ class CheckRootFS(CliCommand):
         if return_code > 0:
           self.project.logging.error("Version " + self.installed_packages[rule["name"]]["version"] +
                                      " of package is older than minimum allowed version " +
-                                     rule["min-version"])
+                                     rule["min_version"])
           return
 
         else:
           self.project.logging.debug("Version " + self.installed_packages[rule["name"]]["version"] +
                                      " of package is newer than minimum allowed version " +
-                                     rule["min-version"])
+                                     rule["min_version"])
 
     # Check version if lower or equal than max version
-    if "max-version" in rule:
+    if "max_version" in rule:
       return_code = 0
       if rule["name"] in self.installed_packages:
           # Generate the dpkg command to compare the versions
-        dpkg_command = "dpkg --compare-versions " + rule["max-version"]
+        dpkg_command = "dpkg --compare-versions " + rule["max_version"]
         dpkg_command += " gt " + self.installed_packages[rule["name"]]["version"]
 
         # We have to protect the subprocess in a try except block since dpkg
@@ -479,18 +479,18 @@ class CheckRootFS(CliCommand):
         if return_code > 0:
           self.project.logging.error("Version " + self.installed_packages[rule["name"]]["version"] +
                                      " of package is newer than maximum allowed version " +
-                                     rule["max-version"])
+                                     rule["max_version"])
           self.is_rule_check_successfull = False
           return
         else:
           self.project.logging.debug("Version " + self.installed_packages[rule["name"]]["version"] +
                                      " of package is older than maximum allowed version " +
-                                     rule["max-version"])
+                                     rule["max_version"])
 
-    # Check that version is in the list of allowed-version
-    if "allowed-version" in rule:
+    # Check that version is in the list of allowed_version
+    if "allowed_version" in rule:
       if rule["name"] in self.installed_packages:
-        if self.installed_packages[rule["name"]]["version"] not in rule["allowed-version"]:
+        if self.installed_packages[rule["name"]]["version"] not in rule["allowed_version"]:
           self.project.logging.error("Version " + self.installed_packages[rule["name"]]["version"] +
                                      " of package " + rule["name"] + " is not allowed")
           self.is_rule_check_successfull = False
@@ -500,9 +500,9 @@ class CheckRootFS(CliCommand):
                                      " of package " + rule["name"] + " is allowed")
 
     # Check that version is not in the list of blacklisted versions
-    if "blacklisted-version" in rule:
+    if "blacklisted_version" in rule:
       if rule["name"] in self.installed_packages:
-        if self.installed_packages[rule["name"]]["version"] in rule["blacklisted-version"]:
+        if self.installed_packages[rule["name"]]["version"] in rule["blacklisted_version"]:
           self.project.logging.error("Version " + self.installed_packages[rule["name"]]["version"] +
                                      " of package " + rule["name"] + " is blacklisted")
           self.is_rule_check_successfull = False
@@ -512,9 +512,9 @@ class CheckRootFS(CliCommand):
                                      " of package " + rule["name"] + " is allowed")
 
     # Check that architecture is not in the list of blacklisted arch
-    if "blacklisted-arch" in rule:
+    if "blacklisted_arch" in rule:
       if rule["name"] in self.installed_packages:
-        if self.installed_packages[rule["name"]]["arch"] in rule["blacklisted-arch"]:
+        if self.installed_packages[rule["name"]]["arch"] in rule["blacklisted_arch"]:
           self.project.logging.error("Package " + rule["name"] +
                                      " is blacklisted on architecture " +
                                      self.installed_packages[rule["name"]]["arch"])
@@ -526,9 +526,9 @@ class CheckRootFS(CliCommand):
                                      self.installed_packages[rule["name"]]["arch"])
 
     # Check that version is in the list of allowed arch
-    if "allowed-arch" in rule:
+    if "allowed_arch" in rule:
       if rule["name"] in self.installed_packages:
-        if self.installed_packages[rule["name"]]["arch"] not in rule["allowed-arch"]:
+        if self.installed_packages[rule["name"]]["arch"] not in rule["allowed_arch"]:
           self.project.logging.error("Package " + rule["name"] +
                                      " is not allowed for architecture " +
                                      self.installed_packages[rule["name"]]["arch"])
@@ -645,8 +645,8 @@ class CheckRootFS(CliCommand):
 
     # First let's control that all keywords (key dictionnaires) are valid and know
     for keyword in rule:
-      if keyword not in "path" "type" "owner" "group" "mode" "target" "empty" "md5" "sha1" "sha256" "expected-result" "label":
-        self.project.logging.error("Unknow keyword " + keyword + 
+      if keyword not in "path" "type" "owner" "group" "mode" "target" "empty" "md5" "sha1" "sha256" "expected_result" "label":
+        self.project.logging.error("Unknown keyword " + keyword + 
                                    " when parsing filess rules. Rule is ignored")
         self.project.logging.error("Rule is " + str(rule))
 
@@ -663,7 +663,7 @@ class CheckRootFS(CliCommand):
       rule["type"] = "file"
     else:
       if rule["type"] not in "file" "directory" "symlink":
-        self.project.logging.error("Unknow type " + rule["type"] +
+        self.project.logging.error("Unknown type " + rule["type"] +
                                    " when parsing file rule. Rule is ignored")
         self.project.logging.error("Rule is "+ str(rule))
         self.is_rule_check_successfull = False

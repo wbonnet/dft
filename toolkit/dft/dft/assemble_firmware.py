@@ -74,6 +74,11 @@ class AssembleFirmware(CliCommand):
     .
     """
 
+    # Check that there is a firmware configuration file first
+    if self.project.firmware_definition is not None:
+      self.project.logging.critical("The firmware configuration file is not defined in project file")
+      exit(1)
+
     # Check that the layout is available from the firmware configuration file
     if "layout" not in self.project.firmware_definition:
       self.project.logging.critical("The firmware layout is not defined in configuration file")
@@ -184,7 +189,7 @@ class AssembleFirmware(CliCommand):
     working_file = open(working_file_name, "a")
 
     # Check that the stack definition is in the configuration file
-    if "stack-definition" not in self.project.firmware_definition["layout"]:
+    if "stack_definition" not in self.project.firmware_definition["layout"]:
       self.project.logging.critical("The stack definition is not in the configuration file")
       exit(1)
 
@@ -194,56 +199,56 @@ class AssembleFirmware(CliCommand):
     working_file.write("\n")
 
     # Iterates the stack items
-    for item in self.project.firmware_definition["layout"]["stack-definition"]:
+    for item in self.project.firmware_definition["layout"]["stack_definition"]:
       # Generate the mount point creation code
-      working_file.write("# Create the mount point for " + item["stack-item"]["type"] +
-                         " '" + item["stack-item"]["name"] + "'\n")
-      working_file.write("mkdir -p /mnt/dft/" + item["stack-item"]["name"] + "\n")
+      working_file.write("# Create the mount point for " + item["stack_item"]["type"] +
+                         " '" + item["stack_item"]["name"] + "'\n")
+      working_file.write("mkdir -p /mnt/dft/" + item["stack_item"]["name"] + "\n")
       working_file.write("\n")
 
       # Generate the mount commands
-      working_file.write("# Mount item " + item["stack-item"]["type"] + " '" +
-                         item["stack-item"]["name"] + "'\n")
+      working_file.write("# Mount item " + item["stack_item"]["type"] + " '" +
+                         item["stack_item"]["name"] + "'\n")
 
       # Generate the tmpfs specific mount command
-      if item["stack-item"]["type"] == "tmpfs":
+      if item["stack_item"]["type"] == "tmpfs":
         working_file.write("mount -t tmpfs ")
 
         # Is there some defined options ?
-        if "mount-options" in item["stack-item"]:
+        if "mount_options" in item["stack_item"]:
           # Yes, then append the options to the command
-          working_file.write("-o " + item["stack-item"]["mount-options"] + " ")
+          working_file.write("-o " + item["stack_item"]["mount_options"] + " ")
 
         # Complete the mount command
-        working_file.write("tmpfs /mnt/dft/" + item["stack-item"]["name"] + "\n")
-        working_file.write("mkdir /mnt/dft/" + item["stack-item"]["name"] + "/workdir\n")
-        working_file.write("mkdir /mnt/dft/" + item["stack-item"]["name"] + "/mountpoint\n")
+        working_file.write("tmpfs /mnt/dft/" + item["stack_item"]["name"] + "\n")
+        working_file.write("mkdir /mnt/dft/" + item["stack_item"]["name"] + "/workdir\n")
+        working_file.write("mkdir /mnt/dft/" + item["stack_item"]["name"] + "/mountpoint\n")
 
       # Generate the tmpfs specific mount command
-      if item["stack-item"]["type"] == "squashfs":
+      if item["stack_item"]["type"] == "squashfs":
         working_file.write("mount -t squashfs ")
 
         # Is there some defined options ?
-        if "mount-options" in item["stack-item"]:
+        if "mount-options" in item["stack_item"]:
           # Yes, then append the options to the command
-          working_file.write("-o " + item["stack-item"]["mount-options"] + " ")
+          working_file.write("-o " + item["stack_item"]["mount_options"] + " ")
 
         # Complete the mount command
-        working_file.write(item["stack-item"]["squashfs-file"] + " /mnt/dft/" +
-                           item["stack-item"]["name"] + " -o loop\n")
+        working_file.write(item["stack_item"]["squashfs_file"] + " /mnt/dft/" +
+                           item["stack_item"]["name"] + " -o loop\n")
 
       # Generate the tmpfs specific mount command
-      if item["stack-item"]["type"] == "partition":
+      if item["stack_item"]["type"] == "partition":
         working_file.write("mount ")
 
         # Is there some defined options ?
-        if "mount-options" in item["stack-item"]:
+        if "mount-options" in item["stack_item"]:
           # Yes, then append the options to the command
-          working_file.write("-o " + item["stack-item"]["mount-options"] + " ")
+          working_file.write("-o " + item["stack_item"]["mount-options"] + " ")
 
         # Complete the mount command
-        working_file.write(item["stack-item"]["partition"] + " /mnt/dft/" +
-                           item["stack-item"]["name"] + "\n")
+        working_file.write(item["stack_item"]["partition"] + " /mnt/dft/" +
+                           item["stack_item"]["name"] + "\n")
 
       working_file.write("\n")
 
@@ -281,37 +286,37 @@ class AssembleFirmware(CliCommand):
     working_file = open(working_file_name, "a")
 
     # Check that the stack definition is in the configuration file
-    if "stack-definition" not in self.project.firmware_definition["layout"]:
+    if "stack_definition" not in self.project.firmware_definition["layout"]:
       self.project.logging.critical("The stack definition is not in the configuration file")
       exit(1)
 
     # Iterates the stack items
-    for item in self.project.firmware_definition["layout"]["stack-definition"]:
+    for item in self.project.firmware_definition["layout"]["stack_definition"]:
       # Generate the mount point creation code
-      working_file.write("# Stack the   " + item["stack-item"]["type"] +
-                         " '" + item["stack-item"]["name"] + "'\n")
+      working_file.write("# Stack the   " + item["stack_item"]["type"] +
+                         " '" + item["stack_item"]["name"] + "'\n")
 
       # Generate the tmpfs specific mount command
-      if item["stack-item"]["type"] == "tmpfs":
+      if item["stack_item"]["type"] == "tmpfs":
         working_file.write("mount -t overlay overlay -olowerdir=")
-        working_file.write(item["stack-item"]["mountpoint"] + ",upperdir=/mnt/dft/")
-        working_file.write(item["stack-item"]["name"] + "/mountpoint")
-        working_file.write(",workdir=/mnt/dft/" + item["stack-item"]["name"] + "/workdir\n")
-        working_file.write(" " + item["stack-item"]["mountpoint"] + "\n")
+        working_file.write(item["stack_item"]["mountpoint"] + ",upperdir=/mnt/dft/")
+        working_file.write(item["stack_item"]["name"] + "/mountpoint")
+        working_file.write(",workdir=/mnt/dft/" + item["stack_item"]["name"] + "/workdir\n")
+        working_file.write(" " + item["stack_item"]["mountpoint"] + "\n")
 
       # Generate the tmpfs specific mount command
-      if item["stack-item"]["type"] == "squashfs":
+      if item["stack_item"]["type"] == "squashfs":
         working_file.write("mount -t overlay overlay -olowerdir=/mnt/dft/")
-        working_file.write(item["stack-item"]["name"] + ":" + item["stack-item"]["mountpoint"])
-        working_file.write(" " + item["stack-item"]["mountpoint"] + "\n")
+        working_file.write(item["stack_item"]["name"] + ":" + item["stack_item"]["mountpoint"])
+        working_file.write(" " + item["stack_item"]["mountpoint"] + "\n")
 
       # Generate the tmpfs specific mount command
-      if item["stack-item"]["type"] == "partition":
+      if item["stack_item"]["type"] == "partition":
         working_file.write("mount -t overlay overlay -olowerdir=")
-        working_file.write(item["stack-item"]["mountpoint"] + ",upperdir=/mnt/dft/")
-        working_file.write(item["stack-item"]["name"])
+        working_file.write(item["stack_item"]["mountpoint"] + ",upperdir=/mnt/dft/")
+        working_file.write(item["stack_item"]["name"])
         working_file.write(",workdir=/mnt/dft/workdir\n")
-        working_file.write(" " + item["stack-item"]["mountpoint"] + "\n")
+        working_file.write(" " + item["stack_item"]["mountpoint"] + "\n")
 
       working_file.write("\n")
 

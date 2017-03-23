@@ -164,6 +164,12 @@ class GenerateContentInformation(CliCommand):
     . Generate antivirus execution report
     """
 
+    # Check that there is a content definition file first
+    print (self.project)
+    if self.project.content_information_definition is not None:
+      self.project.logging.critical("The content generation file is not defined in project file")
+      exit(1)
+
     # Check if we are working with foreign arch, then ...
     if self.use_qemu_static:
       # QEMU is used, and we have to install it into the target
@@ -213,7 +219,7 @@ class GenerateContentInformation(CliCommand):
     # Generate the anti-virus information
     #
     if self.project.dft.generate_all_information or self.project.dft.generate_antivirus_information:
-      if "anti-virus" in self.project.content_information_definition:
+      if "anti_virus" in self.project.content_information_definition:
         logging.debug("Anti-virus information generation is activated")
         self.generate_antivirus_information()
       else:
@@ -262,39 +268,39 @@ class GenerateContentInformation(CliCommand):
       output = ""
 
       # Test if we have to generate the package status in the output
-      if "generate-package-status" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-status"]:
+      if "generate_package_status" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate_package_status"]:
       # Test if we have to generate the package description in the output
           output += pkg_status
           add_spacer = True
 
       # Test if we have to generate the package name in the output
-      if "generate-package-name" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-name"]:
+      if "generate_package_name" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate_package_name"]:
           if add_spacer:
             output += " "
           output += pkg_name
           add_spacer = True
 
       # Test if we have to generate the package version in the output
-      if "generate-package-version" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-version"]:
+      if "generate_package_version" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate_package_version"]:
           if add_spacer:
             output += " "
           output += pkg_version
           add_spacer = True
 
       # Test if we have to generate the package architecture in the output
-      if "generate-package-architecture" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-architecture"]:
+      if "generate_package_architecture" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate_package_architecture"]:
           if add_spacer:
             output += " "
           output += pkg_arch
           add_spacer = True
 
       # Test if we have to generate the package md5 in the output
-      if "generate-package-md5" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-md5"]:
+      if "generate_package_md5" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate_package_md5"]:
           # Generate the apt-cache show command to retrieve the MD5sum
           # Grp the keyword and print second word
           sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
@@ -306,8 +312,8 @@ class GenerateContentInformation(CliCommand):
           add_spacer = True
 
       # Test if we have to generate the package sha256 in the output
-      if "generate-package-sha256" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-sha256"]:
+      if "generate_package_sha256" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate_package_sha256"]:
           # Generate the apt-cache show command to retrieve the SHA256
           # Grp the keyword and print second word
           sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
@@ -319,8 +325,8 @@ class GenerateContentInformation(CliCommand):
           add_spacer = True
 
       # Test if we have to generate the package size in the output
-      if "generate-package-size" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-size"]:
+      if "generate_package_size" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate_package_size"]:
           # Generate the apt-cache show command to retrieve the Size
           # Grp the keyword and print second word
           sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
@@ -332,8 +338,8 @@ class GenerateContentInformation(CliCommand):
           add_spacer = True
 
       # Test if we have to generate the package installed-size in the output
-      if "generate-package-installed-size" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-installed-size"]:
+      if "generate_package_installed_size" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate_package_installed_size"]:
           # Generate the apt-cache show command to retrieve the Installed-SizeMD5sum
           # Grp the keyword and print second word
           sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
@@ -345,8 +351,8 @@ class GenerateContentInformation(CliCommand):
           add_spacer = True
 
       # Test if we have to generate the package description in the output
-      if "generate-package-description" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-description"]:
+      if "generate_package_description" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate_package_description"]:
           if add_spacer:
             output += " "
           output += pkg_description
@@ -442,14 +448,14 @@ class GenerateContentInformation(CliCommand):
       # baseos)
       # If key is not defined, then set its default value
       if self.project.content_information_definition["configuration"] != None:
-        if "install-missing-software" not in self.project.content_information_definition["configuration"]:
-          logging.debug("Setting default value of install-missing-software to False")
-          self.project.content_information_definition["configuration"]["install-missing-software"] = False
+        if "install_missing_software" not in self.project.content_information_definition["configuration"]:
+          logging.debug("Setting default value of install_missing_software to False")
+          self.project.content_information_definition["configuration"]["install_missing_software"] = False
       else:
         logging.debug("Setting default value of install-missing-software to False")
-        self.project.content_information_definition["configuration"] = {'install-missing-software': False}
+        self.project.content_information_definition["configuration"] = {'install_missing_software': False}
 
-      if self.project.content_information_definition["configuration"]["install-missing-software"]:
+      if self.project.content_information_definition["configuration"]["install_missing_software"]:
         logging.info("Installing debsecan in rootfs")
 
         # Install missing packages into the chroot
@@ -467,21 +473,21 @@ class GenerateContentInformation(CliCommand):
       else:
         # If key is not defined, then set its default value
         if self.project.content_information_definition["configuration"] != None:
-          if "skip-on-missing-software" not in self.project.content_information_definition["configuration"]:
-            logging.debug("Setting default value of skip-on-missing-software to False")
-            self.project.content_information_definition["configuration"]["skip-on-missing-software"] = True
+          if "skip_on_missing_software" not in self.project.content_information_definition["configuration"]:
+            logging.debug("Setting default value of skip_on_missing_software to False")
+            self.project.content_information_definition["configuration"]["skip_on_missing_software"] = True
         else:
-          logging.debug("Setting default value of skip-on-missing-software to False")
-          self.project.content_information_definition["configuration"] = {'skip-on-missing-software': True}
+          logging.debug("Setting default value of skip_on_missing_software to False")
+          self.project.content_information_definition["configuration"] = {'skip_on_missing_software': True}
 
         # Check if skipping is allowed or not
-        if self.project.content_information_definition["configuration"]["skip-on-missing-software"]:
+        if self.project.content_information_definition["configuration"]["skip_on_missing_software"]:
           logging.warning("Skipping vulnerabilities content generation. Debsecan is missing and instalation not allowed by configuration file.")
           return
         else:
           # Skipping is deactivated, so is installation, thus it fails
           logging.error("Debsecan is missing and instalation not allowed by configuration file.")
-          logging.error("Please consider to add skip-on-on-missing-software or install-mising-software in configuration file")
+          logging.error("Please consider to add skip_on_missing_software or install_mising_software in configuration file")
           logging.critical("Generation canot continue, execution is aborted.")
           exit(1)
 

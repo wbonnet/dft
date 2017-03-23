@@ -85,9 +85,9 @@ class BuildBaseOS(CliCommand):
     """
 
     # Check that DFT path is valid
-    if not os.path.isdir(self.project.project_definition["configuration"]["dft-base"]):
+    if not os.path.isdir(self.project.project_definition["configuration"]["dft_base"]):
       logging.critical("Path to DFT installation is not valid : %s",
-                       self.project.project_definition["configuration"]["dft-base"])
+                       self.project.project_definition["configuration"]["dft_base"])
       exit(1)
 
     # Ensure target rootfs mountpoint exists and is a dir
@@ -164,9 +164,9 @@ class BuildBaseOS(CliCommand):
         os.makedirs(dft_target_path)
 
       # Copy the DFT toolkit content to the target rootfs
-      for copy_target in os.listdir(self.project.project_definition["configuration"]["dft-base"]):
+      for copy_target in os.listdir(self.project.project_definition["configuration"]["dft_base"]):
         logging.debug("Copy the DFT toolkit : preparing to copy " + copy_target)
-        copy_target_path = os.path.join(self.project.project_definition["configuration"]["dft-base"], copy_target)
+        copy_target_path = os.path.join(self.project.project_definition["configuration"]["dft_base"], copy_target)
         if os.path.isfile(copy_target_path):
           logging.debug("copying file " + copy_target_path + " => " + dft_target_path)
           file_util.copy_file(copy_target_path, dft_target_path)
@@ -175,8 +175,8 @@ class BuildBaseOS(CliCommand):
           dir_util.copy_tree(copy_target_path, os.path.join(dft_target_path, copy_target))
 
       # Copy the additional toolkit content to the target rootfs
-      if "additional-roles" in self.project.project_definition["configuration"]:
-        for additional_path in self.project.project_definition["configuration"]["additional-roles"]:
+      if "additional_roles" in self.project.project_definition["configuration"]:
+        for additional_path in self.project.project_definition["configuration"]["additional_roles"]:
           logging.debug("Copy the additional toolkit : preparing to copy from additional path " + additional_path)
           for copy_target in os.listdir(additional_path):
             logging.debug("Copy the additional toolkit : preparing to copy " + copy_target)
@@ -212,12 +212,12 @@ class BuildBaseOS(CliCommand):
       working_file.write("\n")
 
       # Test if some variable files have to be included
-      if "variables" in self.project.project_definition["project-definition"]:
+      if "variables" in self.project.project_definition["project_definition"]:
         # Yes, then output the vars_files marker
         working_file.write("  vars_files:\n")
 
         # And iterate the list of files containing variables
-        for vars_file in self.project.project_definition["project-definition"]["variables"]:
+        for vars_file in self.project.project_definition["project_definition"]["variables"]:
           # Append the file to the site.yml file
           working_file.write("  - " + vars_file + "\n")
           logging.debug("Adding variables file " + vars_file)
@@ -260,8 +260,8 @@ class BuildBaseOS(CliCommand):
     # Warn the user if no role is found. In such case baseos will be same
     # debotstrap, which is certainly not what is expected
     if not role_has_been_found:
-      logging.warning("No role has been found in baseos definiion. Rootfs is same as debootstrap output")
-      logging.error("You may wish to have a look to : " + self.project.genereate_definition_file_path(self.project.project_definition["project-definition"]["baseos"][0]))
+      logging.warning("No role has been found in baseos definition. Rootfs is same as debootstrap output")
+      logging.error("You may wish to have a look to : " + self.project.genereate_definition_file_path(self.project.project_definition["project_definition"]["baseos"][0]))
 
     # Execute Ansible
     # TODO : multiple target ? not sure...
@@ -374,7 +374,7 @@ class BuildBaseOS(CliCommand):
     # Add the target, mount point and repository url to the debootstrap command
     debootstrap_command += " " +  self.project.target_version + " "
     debootstrap_command += self.project.rootfs_mountpoint + " "
-    debootstrap_command += self.project.project_definition["project-definition"]["debootstrap-repository"]
+    debootstrap_command += self.project.project_definition["project_definition"]["debootstrap_repository"]
 
     # Finally run the subprocess
     self.execute_command(debootstrap_command)
@@ -458,7 +458,7 @@ class BuildBaseOS(CliCommand):
     filepath = self.project.rootfs_mountpoint + "/etc/apt/sources.list"
 
     # Open the file and writes configuration in it
-    self.project.debian_mirror_url = self.project.project_definition["project-definition"]["debootstrap-repository"]
+    self.project.debian_mirror_url = self.project.project_definition["project_definition"]["debootstrap_repository"]
 
     # Flag if we have found a matching distro or not
     distro_has_been_found = False
@@ -477,7 +477,7 @@ class BuildBaseOS(CliCommand):
             logging.debug(repo)
 
             # Test if deb line has to be generated
-            if ("generate-deb" not in repo) or ("generate-deb" in repo and repo["generate-deb"]):
+            if ("generate_deb" not in repo) or ("generate_deb" in repo and repo["generate_deb"]):
               # Will generate the deb line only if the key
               # generate-deb is present and set to True or the key
               # is not present
@@ -487,10 +487,10 @@ class BuildBaseOS(CliCommand):
               working_file.write("\n")
 
             # Test if deb-src line has also to be generated
-            if "generate-src" in repo:
+            if "generate_src" in repo:
               # Will generate the deb-src line only if the key
               # generate-src is present and set to True
-              if repo["generate-src"]:
+              if repo["generate_src"]:
                 working_file.write("deb-src " + repo["url"] +" " + repo["suite"] + " ")
                 for section in repo["sections"]:
                   working_file.write(section + " ")
@@ -502,7 +502,7 @@ class BuildBaseOS(CliCommand):
       self.cleanup_installation_files()
       logging.error("No distribution matching " + self.project.target_version + " has been found.")
       logging.error("Please check repositories definition for this project.")
-      logging.error("File in use is : " + self.project.genereate_definition_file_path(self.project.project_definition["project-definition"]["repositories"][0]))
+      logging.error("File in use is : " + self.project.genereate_definition_file_path(self.project.project_definition["project_definition"]["repositories"][0]))
       logging.critical("Cannot generate /etc/apt/sources.list under rootfs path. Operation is aborted !")
       exit(1)
 

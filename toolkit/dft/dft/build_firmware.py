@@ -86,17 +86,17 @@ class BuildFirmware(CliCommand):
     sudo_command += self.project.firmware_filename + '"'
 
     # Append arguments if defined in the configuration file
-    if "block-size" in self.project.firmware_definition["configuration"]:
-      sudo_command += ' -b ' + self.project.firmware_definition["configuration"]["block-size"]
+    if "block_size" in self.project.firmware_definition["configuration"]:
+      sudo_command += ' -b ' + self.project.firmware_definition["configuration"]["block_size"]
 
     if "compressor" in self.project.firmware_definition["configuration"]:
       sudo_command += ' -comp ' + self.project.firmware_definition["configuration"]["compressor"]
 
-    if "no-exports" in self.project.firmware_definition["configuration"]:
-      if self.project.firmware_definition["configuration"]["no-exports"]:
+    if "no_exports" in self.project.firmware_definition["configuration"]:
+      if self.project.firmware_definition["configuration"]["no_exports"]:
         sudo_command += ' -no-exports '
 
-    if "no-spare" in self.project.firmware_definition["configuration"]:
+    if "no_spare" in self.project.firmware_definition["configuration"]:
       sudo_command += ' -no-spare '
 
     if "xattrs" in self.project.firmware_definition["configuration"]:
@@ -105,39 +105,39 @@ class BuildFirmware(CliCommand):
       if not self.project.firmware_definition["configuration"]["xattrs"]:
         sudo_command += ' -no-xattrs '
 
-    if "no-inode-compression" in self.project.firmware_definition["configuration"]:
+    if "no_inode_compression" in self.project.firmware_definition["configuration"]:
       sudo_command += ' -noI '
 
-    if "no-datablock-compression" in self.project.firmware_definition["configuration"]:
+    if "no_datablock_compression" in self.project.firmware_definition["configuration"]:
       sudo_command += ' -noD '
 
-    if "no-fragmentblock-compression" in self.project.firmware_definition["configuration"]:
+    if "no_fragmentblock_compression" in self.project.firmware_definition["configuration"]:
       sudo_command += ' -noF '
 
-    if "no-xattrs-compression" in self.project.firmware_definition["configuration"]:
+    if "no_xattrs_compression" in self.project.firmware_definition["configuration"]:
       sudo_command += ' -noX '
 
-    if "use-fragments" in self.project.firmware_definition["configuration"]:
-      if self.project.firmware_definition["configuration"]["use-fragments"]:
-        sudo_command += ' -always-use-fragments '
-      if not self.project.firmware_definition["configuration"]["use-fragments"]:
-        sudo_command += ' -no-fragments '
+    if "use_fragments" in self.project.firmware_definition["configuration"]:
+      if self.project.firmware_definition["configuration"]["use_fragments"]:
+        sudo_command += ' -always_use_fragments '
+      if not self.project.firmware_definition["configuration"]["use_fragments"]:
+        sudo_command += ' -no_fragments '
 
-    if "no-duplicate-check" in self.project.firmware_definition["configuration"]:
-      if self.project.firmware_definition["configuration"]["no-duplicate-check"]:
+    if "no_duplicate_check" in self.project.firmware_definition["configuration"]:
+      if self.project.firmware_definition["configuration"]["no_duplicate_check"]:
         sudo_command += ' -no-duplicates '
 
-    if "all-root" in self.project.firmware_definition["configuration"]:
-      if self.project.firmware_definition["configuration"]["all-root"]:
+    if "all_root" in self.project.firmware_definition["configuration"]:
+      if self.project.firmware_definition["configuration"]["all_root"]:
         sudo_command += ' -all-root '
 
-    if "force-uid" in self.project.firmware_definition["configuration"]:
+    if "force_uid" in self.project.firmware_definition["configuration"]:
       sudo_command += ' -force-uid '
-      sudo_command += self.project.firmware_definition["configuration"]["force-uid"]
+      sudo_command += self.project.firmware_definition["configuration"]["force_uid"]
 
-    if "force-gid" in self.project.firmware_definition["configuration"]:
+    if "force_gid" in self.project.firmware_definition["configuration"]:
       sudo_command += ' -force-gid '
-      sudo_command += self.project.firmware_definition["configuration"]["force-gid"]
+      sudo_command += self.project.firmware_definition["configuration"]["force_gid"]
 
     if "nopad" in self.project.firmware_definition["configuration"]:
       if self.project.firmware_definition["configuration"]["nopad"]:
