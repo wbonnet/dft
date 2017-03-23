@@ -67,6 +67,11 @@ class BuildFirmware(CliCommand):
 
     """
 
+    # Check that there is a firmware configuration file first
+    if self.project.firmware_definition is None:
+      self.project.logging.critical("The firmware configuration file is not defined in project file")
+      exit(1)
+
     # Ensure firmware generation path exists and is a dir
     if not os.path.isdir(self.project.rootfs_mountpoint):
       logging.critical("The rootfs directory does not exist (" +
