@@ -111,7 +111,7 @@ project-definition:
   check:
     - check_baseos.yml
 
-  # Definition of the striiping rules (to remove extra packages, files etc.
+  # Definition of the stripping rules (to remove extra packages, files etc.)
   stripping:
     - stripping.yml
 
