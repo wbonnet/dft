@@ -371,9 +371,6 @@ class GenerateContentInformation(CliCommand):
 
 # shoud it be run locally ? 
 
-    # Initialize the output writer for packages content generation
-    self.output_writer.initialize("antivirus")
-
     # Check if clamscan is installed in the chrooted environment
     if not os.path.isfile(self.project.rootfs_mountpoint + "/usr/bin/clamscan"):
       # If not, test if it has to be installed, or should it fail ?
@@ -425,6 +422,9 @@ class GenerateContentInformation(CliCommand):
           logging.error("Please consider to add skip_on_missing_software or install_mising_software in configuration file")
           logging.critical("Generation canot continue, execution is aborted.")
           exit(1)
+
+    # Initialize the output writer for packages content generation
+    self.output_writer.initialize("antivirus")
 
 
     # Generate the dpkg command to retrieve the list of installed packages
