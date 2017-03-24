@@ -100,13 +100,15 @@ class DftConfiguration(object):
   #
   # ---------------------------------------------------------------------------
   def load_configuration(self, filename=None):
+    """ This method load the tool configuration from the given YAML file
+    """
 
 # TODO handle filename
     try:
       # Load it
-      with open(self.project_name, 'r') as file:
+      with open(self.project_name, 'r') as working_file:
         self.logging.debug("loading dft configuration : " + filename)
-        self.dft_configuration = yaml.load(file)
+        self.dft_configuration = yaml.load(working_file)
         self.logging.debug(self.dft_configuration)
 
         # Check if path starts with ~ and need expension
@@ -114,6 +116,9 @@ class DftConfiguration(object):
           self.dft_configuration["configuration"]["working_dir"] = os.path.expanduser(self.dft_configuration["configuration"]["working_dir"])
 
         self.logging.debug(self.dft_configuration)
+
+      # Close file when reading is done
+#TODO      close(working_file)
 
     except OSError as exception:
       # Call clean up to umount /proc and /dev
@@ -177,7 +182,7 @@ class ProjectDefinition(object):
     self.firmware_filename = None
     self.init_filename = None
     self.stacking_script_filename = None
-    
+
     self.baseos_definition = None
     self.bootloader_definition = None
     self.check_definition = None
@@ -340,11 +345,13 @@ class ProjectDefinition(object):
         self.logging.warning("configuration/rootfs-generator-cachedirname is not defined, using /tmp as default value")
         self.rootfs_generator_cachedirname = "/tmp/"
 
-      if "working_dir" in self.project_definition["configuration"]:
-        self.project_base_workdir = self.project_definition["configuration"]["working_dir"] + "/" + self.project_definition["configuration"]["project_name"]
+      if "working-dir" in self.project_definition["configuration"]:
+        self.project_base_workdir = self.project_definition["configuration"]["working-dir"] 
+        self.project_base_workdir += "/" + self.project_definition["configuration"]["project-name"]
       else:
-        self.logging.warning("configuration/working_dir is not defined, using /tmp/dft as default value")
-        self.project_base_workdir = "/tmp/dft/" + self.project_definition["configuration"]["project_name"]
+        self.logging.warning("configuration/working-dir is not defined, using /tmp/dft as default value")
+        self.project_base_workdir = "/tmp/dft/"
+        self.project_base_workdir += self.project_definition["configuration"]["project-name"]
 
       # Defines path for subcommand
       self.rootfs_base_workdir = self.project_base_workdir + "/rootfs"
@@ -371,7 +378,8 @@ class ProjectDefinition(object):
 
       # Generates the path to the rootfs mountpoint
       # Stores the path to the rootfs mountpoint used by debootstrap
-      self.rootfs_mountpoint = self.rootfs_base_workdir + "/" + self.target_arch + "-" + self.target_version
+      self.rootfs_mountpoint = self.rootfs_base_workdir + "/" + self.target_arch
+      self.rootfs_mountpoint += "-" + self.target_version
 
       # Generate the path where to store generated squashfs files
       self.firmware_directory = self.firmware_base_workdir + "/"
