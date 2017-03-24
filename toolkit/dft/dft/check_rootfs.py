@@ -23,7 +23,7 @@
 
 """ This module provides functionnalities used to control the content of th baseos (or rootfs)
 according to a set of rules defined in a Yaml configuration file. Rules can be used to define
-mandatory ites (files or packages), forbidden or optional ones, and a set of check upon 
+mandatory ites (files or packages), forbidden or optional ones, and a set of check upon
 attributes and content.
 """
 
@@ -85,7 +85,7 @@ class CheckRootFS(CliCommand):
 
     # Size of block used to read files when computing hashes
     self.block_size = 65536
-    
+
 
 
   # -------------------------------------------------------------------------
@@ -143,15 +143,15 @@ class CheckRootFS(CliCommand):
     # to the actual method result, and output a critical if different
     # expected_result value is used in unit testing context, and it should
     # never be different unless something nasty is lurking inthe dark
-    if "expected_result" in rule:
-      if rule["expected_result"] != self.is_rule_check_successfull:
-        self.project.logging.critical("-----------------------------------------------------------------------------")
+    if "expected-result" in rule:
+      if rule["expected-result"] != self.is_rule_check_successfull:
+        self.project.logging.critical("--------------------------------------------------------")
         self.project.logging.critical("Unit test failed ! Expected result was " +
                                       str(rule["expected_result"]) +
                                       " and we got " +
                                       str(self.is_rule_check_successfull))
-        print(rule)
-        self.project.logging.critical("-----------------------------------------------------------------------------")
+        self.project.logging.debug(rule)
+        self.project.logging.critical("--------------------------------------------------------")
       else:
         # Counter used to display the number of rules matching expected result
         # either failed of successfull, but as expected (handy for unit tests)
@@ -328,18 +328,18 @@ class CheckRootFS(CliCommand):
   #
   # -------------------------------------------------------------------------
   def check_installation_constraint(self):
-    """This method is in charge of chcking that the installed packages are 
-    compliant with the constaint defined in the configuration section. 
+    """This method is in charge of chcking that the installed packages are
+    compliant with the constaint defined in the configuration section.
     Constraint can be :
     - mandatory-only  (only packages listed in the the mandatory section can
                        be installed)
     - allow-optional  (only listed packages can be installed aither mandatory
                        or optional)
     - no-constraint   (any packages can b installed even if not listed)
-  
+
     default value is no-constraint
 
-    The method first build a dictionnary of allowed packages from the set 
+    The method first build a dictionnary of allowed packages from the set
     of rules, then for each installed package, it checks if the packaeg is in
     the list.
     """
@@ -376,7 +376,7 @@ class CheckRootFS(CliCommand):
     else:
       self.project.logging.debug("no configuration section")
 
-    # Iterate the list of installed packages and check if they belong to the 
+    # Iterate the list of installed packages and check if they belong to the
     # list of allowed packages
     for pkg in self.installed_packages:
       if pkg not in list_allowed_packages:
@@ -384,7 +384,7 @@ class CheckRootFS(CliCommand):
         self.is_check_successfull = False
         self.project.logging.info("Package " + pkg +
                                   " is installed but not allowed by installation constraint.")
-      
+
 
 
   # -------------------------------------------------------------------------
@@ -645,8 +645,8 @@ class CheckRootFS(CliCommand):
 
     # First let's control that all keywords (key dictionnaires) are valid and know
     for keyword in rule:
-      if keyword not in "path" "type" "owner" "group" "mode" "target" "empty" "md5" "sha1" "sha256" "expected_result" "label":
-        self.project.logging.error("Unknown keyword " + keyword + 
+      if keyword not in "path" "type" "owner" "group" "mode" "target" "empty" "md5" "sha1" "sha256" "expected-result" "label":
+        self.project.logging.error("Unknow keyword " + keyword +
                                    " when parsing filess rules. Rule is ignored")
         self.project.logging.error("Rule is " + str(rule))
 
@@ -832,7 +832,7 @@ class CheckRootFS(CliCommand):
 
           # Compare it to the owner from the rule
           if rule["empty"] and size != 0:
-            self.project.logging.info("File " + rule["target_path"] + 
+            self.project.logging.info("File " + rule["target_path"] +
                                       " is not empty. Size is " +
                                       str(size) + " instead of 0")
             self.is_rule_check_successfull = False
