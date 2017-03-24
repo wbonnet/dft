@@ -165,9 +165,10 @@ files:
 
 
 #
+# The antivirus section desfines the behavior of the antivirus. Current
+# antivirus is clamav. In the future more software will be supported
 #
-#
-anti-virus:
+anti_virus:
   # If this is set to True (default is True), package name will be included 
   # in the information generated
   generate: True
