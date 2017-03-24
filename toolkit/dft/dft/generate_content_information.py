@@ -30,8 +30,6 @@ import os
 import tempfile
 from cli_command import CliCommand
 
-# TODO classe de base
-
 #
 #    Class ContentInformationOutputWriter
 #
@@ -56,6 +54,12 @@ class ContentInformationOutputWriter(CliCommand):
     # Store the configuration dictionnary
     self.configuration = configuration
     self.output_file = None
+
+    # Defines the object storing the items used for output. This variable is
+    # a list of dictionnaries. Each item in the list is a line to output. The
+    # item content is a dictionnaries. The keys are used when producing output
+    # to format such as XML, JSON or YAML
+    self.output_buffer = list()
 
   # -------------------------------------------------------------------------
   #
@@ -113,6 +117,7 @@ class ContentInformationOutputWriter(CliCommand):
 
 # TODO stream ?
 # TODO flush ?
+    print(self.output_buffer)
 
     # Test if the output file has been opened
     if self.output_file != None:
@@ -257,45 +262,33 @@ class GenerateContentInformation(CliCommand):
       pkg_name = line[1]
       pkg_version = line[2]
       pkg_arch = line[3]
-      # space is used as a separator to rebuild the description
+
+      # Space is used as a separator to rebuild the description
       pkg_description = " ".join(line[4:])
 
-      # Flag used to know if we need a space separator between fields
-      add_spacer = False
-
-      # Starts with empty output
-      output = ""
+      # Initialize and empty dictionnaries. It is use to stores the key/value
+      # pair used processed during output
+      output_item = dict()
 
       # Test if we have to generate the package status in the output
-      if "generate_package_status" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate_package_status"]:
-      # Test if we have to generate the package description in the output
-          output += pkg_status
-          add_spacer = True
+      if "generate-package-status" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate-package-status"]:
+          output_item["status"] = pkg_status
 
       # Test if we have to generate the package name in the output
-      if "generate_package_name" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate_package_name"]:
-          if add_spacer:
-            output += " "
-          output += pkg_name
-          add_spacer = True
+      if "generate-package-name" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate-package-name"]:
+          output_item["name"] = pkg_name
 
       # Test if we have to generate the package version in the output
-      if "generate_package_version" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate_package_version"]:
-          if add_spacer:
-            output += " "
-          output += pkg_version
-          add_spacer = True
+      if "generate-package-version" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate-package-version"]:
+            output_item["version"] = pkg_version
 
       # Test if we have to generate the package architecture in the output
-      if "generate_package_architecture" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate_package_architecture"]:
-          if add_spacer:
-            output += " "
-          output += pkg_arch
-          add_spacer = True
+      if "generate-package-architecture" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate-package-architecture"]:
+          output_item["architecture"] = pkg_arch
 
       # Test if we have to generate the package md5 in the output
       if "generate_package_md5" in self.project.content_information_definition["packages"]:
@@ -305,10 +298,7 @@ class GenerateContentInformation(CliCommand):
           sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
           sudo_command += " apt-cache show " + pkg_name + " | grep ^MD5sum | awk '{ print $2 }'"
           sudo_command_output = self.execute_command(sudo_command)
-          if add_spacer:
-            output += " "
-          output += sudo_command_output.decode('utf-8')
-          add_spacer = True
+          output_item["md5"] = sudo_command_output.decode('utf-8')
 
       # Test if we have to generate the package sha256 in the output
       if "generate_package_sha256" in self.project.content_information_definition["packages"]:
@@ -318,10 +308,7 @@ class GenerateContentInformation(CliCommand):
           sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
           sudo_command += " apt-cache show " + pkg_name + " | grep ^SHA256 | awk '{ print $2 }'"
           sudo_command_output = self.execute_command(sudo_command)
-          if add_spacer:
-            output += " "
-          output += sudo_command_output.decode('utf-8')
-          add_spacer = True
+          output_item["sha256"] = sudo_command_output.decode('utf-8')
 
       # Test if we have to generate the package size in the output
       if "generate_package_size" in self.project.content_information_definition["packages"]:
@@ -331,10 +318,7 @@ class GenerateContentInformation(CliCommand):
           sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
           sudo_command += " apt-cache show " + pkg_name + " | grep ^Size | awk '{ print $2 }'"
           sudo_command_output = self.execute_command(sudo_command)
-          if add_spacer:
-            output += " "
-          output += sudo_command_output.decode('utf-8')
-          add_spacer = True
+          output_item["size"] = sudo_command_output.decode('utf-8')
 
       # Test if we have to generate the package installed-size in the output
       if "generate_package_installed_size" in self.project.content_information_definition["packages"]:
@@ -344,20 +328,15 @@ class GenerateContentInformation(CliCommand):
           sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
           sudo_command += " apt-cache show " + pkg_name + " | grep ^Installed-Size | awk '{ print $2 }'"
           sudo_command_output = self.execute_command(sudo_command)
-          if add_spacer:
-            output += " "
-          output += sudo_command_output.decode('utf-8')
-          add_spacer = True
+          output_item["installed-size"] = sudo_command_output.decode('utf-8')
 
       # Test if we have to generate the package description in the output
-      if "generate_package_description" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate_package_description"]:
-          if add_spacer:
-            output += " "
-          output += pkg_description
-          add_spacer = True
+      if "generate-package-description" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate-package-description"]:
+          output_item["description"] = pkg_description
 
-      print(output)
+      # print(output)
+      self.OutputWriter.output_buffer.append(output_item)
 
     # Flush all pending output and close stream or file
     self.OutputWriter.FlushAndClose()
