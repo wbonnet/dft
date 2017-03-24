@@ -636,7 +636,7 @@ x factory_setup                    Apply some extra factory setup before generat
     command = generate_content_information.GenerateContentInformation(self.dft, self.project)
 
     # Then
-    command.generate_content_information()
+    command.gen_content_info()
 
 
   # -------------------------------------------------------------------------

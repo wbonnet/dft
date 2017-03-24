@@ -339,19 +339,19 @@ class ProjectDefinition(object):
       #
 
       # Generate the cache archive filename
-      if "rootfs-generator-cachedirname" in self.project_definition["configuration"]:
-        self.rootfs_generator_cachedirname = self.project_definition["configuration"]["rootfs-generator-cachedirname"]
+      if "rootfs_generator_cachedirname" in self.project_definition["configuration"]:
+        self.rootfs_generator_cachedirname = self.project_definition["configuration"]["rootfs_generator_cachedirname"]
       else:
-        self.logging.warning("configuration/rootfs-generator-cachedirname is not defined, using /tmp as default value")
+        self.logging.warning("configuration/rootfs_generator_cachedirname is not defined, using /tmp as default value")
         self.rootfs_generator_cachedirname = "/tmp/"
 
-      if "working-dir" in self.project_definition["configuration"]:
-        self.project_base_workdir = self.project_definition["configuration"]["working-dir"] 
-        self.project_base_workdir += "/" + self.project_definition["configuration"]["project-name"]
+      if "working_dir" in self.project_definition["configuration"]:
+        self.project_base_workdir = self.project_definition["configuration"]["working_dir"] 
+        self.project_base_workdir += "/" + self.project_definition["configuration"]["project_name"]
       else:
-        self.logging.warning("configuration/working-dir is not defined, using /tmp/dft as default value")
+        self.logging.warning("configuration/working_dir is not defined, using /tmp/dft as default value")
         self.project_base_workdir = "/tmp/dft/"
-        self.project_base_workdir += self.project_definition["configuration"]["project-name"]
+        self.project_base_workdir += self.project_definition["configuration"]["project_name"]
 
       # Defines path for subcommand
       self.rootfs_base_workdir = self.project_base_workdir + "/rootfs"
