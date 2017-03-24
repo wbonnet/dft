@@ -56,6 +56,9 @@ class Cli(object):
   #
   # -------------------------------------------------------------------------
   def __init__(self):
+    """Default constructor
+    """
+
     # Current version
     self.version = "0.1.4"
 
@@ -91,6 +94,10 @@ x factory_setup                    Apply some extra factory setup before generat
 
 
   def parse(self, args):
+    """ This method build the parser, add all options and run it. The result of
+    parser execution is stored in a member variable.
+    """
+
     # Stores the argument in the instance
     self.command = args
 
@@ -124,12 +131,18 @@ x factory_setup                    Apply some extra factory setup before generat
     self.args = self.parser.parse_args()
 
   def add_parser_option_assemble_firmware(self):
+    """ This method add parser options specific to assemble_firmware command
+    """
+
     # Add the arguments
     self.parser.add_argument('assemble_firmware',
                              help='Command to execute')
 
 
   def add_parser_option_build_baseos(self):
+    """ This method add parser options specific to build_baseos command
+    """
+
     # Add the arguments
     self.parser.add_argument('build_baseos',
                              help='Command to execute')
@@ -195,13 +208,20 @@ x factory_setup                    Apply some extra factory setup before generat
 
 
   def add_parser_option_build_bootloader(self):
+    """ This method add parser options specific to build_bootloader command
+    """
+
     # Add the arguments
     self.parser.add_argument('build_bootloader',
                              help='Command to execute')
 
 
 
-  def add_parser_option_build_image(self):    # Add the arguments
+  def add_parser_option_build_image(self):
+    """ This method add parser options specific to build_image command
+    """
+
+
     # Add the arguments
     self.parser.add_argument('build_image',
                              help='Command to execute')
@@ -209,6 +229,9 @@ x factory_setup                    Apply some extra factory setup before generat
 
 
   def add_parser_option_build_firmware(self):
+    """ This method add parser options specific to build_firmware command
+    """
+
     # Add the arguments
     self.parser.add_argument('build_firmware',
                              help='Command to execute')
@@ -216,6 +239,9 @@ x factory_setup                    Apply some extra factory setup before generat
 
 
   def add_parser_option_check_rootfs(self):
+    """ This method add parser options specific to check_rootfs command
+    """
+
     # Add the arguments
     self.parser.add_argument('build_check_rootfs',
                              help='Command to execute')
@@ -223,6 +249,9 @@ x factory_setup                    Apply some extra factory setup before generat
 
 
   def add_parser_option_factory_setup(self):
+    """ This method add parser options specific to factory_setup command
+    """
+
     # Add the arguments
     self.parser.add_argument('factory_setup',
                              help='Command to execute')
@@ -230,6 +259,10 @@ x factory_setup                    Apply some extra factory setup before generat
 
 
   def add_parser_option_generate_content_information(self):
+    """ This method add parser options specific to generate_content_information
+    command
+    """
+
     # Add the arguments
     self.parser.add_argument('generate_content_information',
                              help='Command to execute')
@@ -272,6 +305,9 @@ x factory_setup                    Apply some extra factory setup before generat
 
 
   def add_parser_option_strip_rootfs(self):
+    """ This method add parser options specific to strip_rootfs command
+    """
+
     # Add the arguments
     self.parser.add_argument('strip_rootfs',
                              help='Command to execute')
@@ -279,9 +315,11 @@ x factory_setup                    Apply some extra factory setup before generat
 
 
   def add_parser_option_common(self):
-    # Configuration file store the definition of baseos. Optioncan be
-    # overriden by arguments on the command line (like --target-arch)
-    #
+    """ This method add parser options common to all command
+    Configuration file store the definition of baseos. Option can be
+    overriden by arguments on the command line (like --target-arch)
+    """
+
     # Configuration file defines baseos and its modulation
     self.parser.add_argument('--config-file',
                              action='store',
@@ -375,8 +413,9 @@ x factory_setup                    Apply some extra factory setup before generat
   # -------------------------------------------------------------------------
   def run_assemble_firmware(self):
     """ Method used to handle the assemble_firmware command.
-      Create the business objet, then execute the entry point
+    Create the business objet, then execute the entry point
     """
+
     # Create the business object
     command = assemble_firmware.AssembleFirmware(self.dft, self.project)
 
@@ -455,8 +494,9 @@ x factory_setup                    Apply some extra factory setup before generat
   # -------------------------------------------------------------------------
   def run_build_bootloader(self):
     """ Method used to handle the build_bootloader command.
-      Create the business objet, then execute the entry point
+    Create the business objet, then execute the entry point.
     """
+
     # Create the business object
     command = build_bootloader.BuildBootloader(self.dft, self.project)
 
@@ -472,8 +512,9 @@ x factory_setup                    Apply some extra factory setup before generat
   # -------------------------------------------------------------------------
   def run_build_image(self):
     """ Method used to handle the build_image command.
-      Create the business objet, then execute the entry point
+    Create the business objet, then execute the entry point.
     """
+
     # Create the business object
     command = build_image.BuildImage(self.dft, self.project)
 
@@ -489,8 +530,9 @@ x factory_setup                    Apply some extra factory setup before generat
   # -------------------------------------------------------------------------
   def run_build_firmware(self):
     """ Method used to handle the build_firmware command.
-      Create the business objet, then execute the entry point
+    Create the business objet, then execute the entry point.
     """
+
     # Create the business object
     command = build_firmware.BuildFirmware(self.dft, self.project)
 
@@ -506,8 +548,9 @@ x factory_setup                    Apply some extra factory setup before generat
   # -------------------------------------------------------------------------
   def run_check_rootfs(self):
     """ Method used to handle the check_rootfs command.
-      Create the business objet, then execute the entry point
+    Create the business objet, then execute the entry point
     """
+
     # Create the business object
     command = check_rootfs.CheckRootFS(self.dft, self.project)
 
@@ -522,6 +565,10 @@ x factory_setup                    Apply some extra factory setup before generat
   #
   # -------------------------------------------------------------------------
   def run_factory_setup(self):
+    """ Method used to handle the factory_setup command.
+    Its behavior is still to define.
+    """
+
     pass
 
 
@@ -532,7 +579,7 @@ x factory_setup                    Apply some extra factory setup before generat
   # -------------------------------------------------------------------------
   def run_generate_content_information(self):
     """ Method used to handle the generate_content_information command.
-      Create the business objet, then execute the entry point
+    Create the business objet, then execute the entry point
     """
 
     # Check if we have to do a 'generate all' or if some more specific flags
@@ -601,6 +648,7 @@ x factory_setup                    Apply some extra factory setup before generat
     """ Method used to handle the strip_rootfs command.
       Create the business objet, then execute the entry point
     """
+
     # Create the business object
     command = strip_rootfs.StripRootFS(self.dft, self.project)
 

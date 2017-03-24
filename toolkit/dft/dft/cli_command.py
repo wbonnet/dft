@@ -104,7 +104,7 @@ class CliCommand(object):
 
     except subprocess.CalledProcessError as exception:
       self.cleanup_installation_files()
-      self.project.logging.critical("Error %d occured when executing %s", 
+      self.project.logging.critical("Error %d occured when executing %s",
                                     exception.returncode, exception.cmd)
 #TODO      self.project.logging.debug("stdout")
 #      self.project.logging.debug("%s" , completed.stdout.decode('UTF-8'))
