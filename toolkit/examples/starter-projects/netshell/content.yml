@@ -146,7 +146,7 @@ packages:
 # Default tool used for package information generation is debsecan.
 #
 vulnerabilities:
-  generate: False
+  generate: True
 
   
 #
@@ -154,19 +154,19 @@ vulnerabilities:
 # Default tool used for package information generation is opnscap.
 #
 security:
-  generate: False
+  generate: True
 
 
 #
 #
 #  
 files:
-  generate: False
+  generate: True
 
 
 #
 #
 #
 anti-virus:
-  generate: False
+  generate: True
 
