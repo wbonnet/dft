@@ -31,9 +31,9 @@ import tempfile
 from cli_command import CliCommand
 
 #
-#    Class ContentInformationOutputWriter
+#    Class ContentInformationoutput_writer
 #
-class ContentInformationOutputWriter(CliCommand):
+class ContentInformationoutput_writer(CliCommand):
   """This class implements the writer in charge of doing real output to the
   target defined in the configuration file. It can eithertarget a stream
   (stdout) or a file, using different format (csv yaml json xml).
@@ -66,7 +66,7 @@ class ContentInformationOutputWriter(CliCommand):
   # initialize
   #
   # -------------------------------------------------------------------------
-  def Initialize(self, target):
+  def initialize(self, target):
     """This method initiliaze the output writer accorsing to the target
     argument. Target is one of the kind of output (packages, files, etc). The
     method does configuration checks, such as valid output format, target,
@@ -107,10 +107,10 @@ class ContentInformationOutputWriter(CliCommand):
 
   # -------------------------------------------------------------------------
   #
-  # FlushAndClose
+  # flush_and_close
   #
   # -------------------------------------------------------------------------
-  def FlushAndClose(self):
+  def flush_and_close(self):
     """This method is in charg of flushing all the output and close opened
     files
     """
@@ -148,16 +148,16 @@ class GenerateContentInformation(CliCommand):
     CliCommand.__init__(self, dft, project)
 
     # Create the output writer object
-    self.OutputWriter = ContentInformationOutputWriter(self.project.content_information_definition)
+    self.output_writer = ContentInformationoutput_writer(self.project.content_information_definition)
 
 
 
   # -------------------------------------------------------------------------
   #
-  # generate_content_information
+  # gen_content_info
   #
   # -------------------------------------------------------------------------
-  def generate_content_information(self):
+  def gen_content_info(self):
     """This method implement the business logic of content generation.
     Information provided is the list of packages, TBD
 
@@ -182,50 +182,50 @@ class GenerateContentInformation(CliCommand):
     #
     # Generate the packages information
     #
-    if self.project.dft.generate_all_information or self.project.dft.generate_packages_information:
+    if self.project.dft.generate_all_information or self.project.dft.gen_packages_info:
       if "packages" in self.project.content_information_definition:
         logging.debug("Packages information generation is activated")
-        self.generate_packages_information()
+        self.gen_packages_info()
       else:
         logging.info("Packages information generation is deactivated")
 
     #
     # Generate the vulnerabilities information
     #
-    if self.project.dft.generate_all_information or self.project.dft.generate_vulnerabilities_information:
+    if self.project.dft.generate_all_information or self.project.dft.gen_vulnerabilities_info:
       if "vulnerabilities" in self.project.content_information_definition:
         logging.debug("Vulnerabilities information generation is activated")
-        self.generate_vulnerabilities_information()
+        self.gen_vulnerabilities_info()
       else:
         logging.info("Vulnerabilities information generation is deactivated")
 
     #
     # Generate the security information
     #
-    if self.project.dft.generate_all_information or self.project.dft.generate_security_information:
+    if self.project.dft.generate_all_information or self.project.dft.gen_security_info:
       if "security" in self.project.content_information_definition:
         logging.debug("Security information generation is activated")
-        self.generate_security_information()
+        self.gen_security_info()
       else:
         logging.info("Security information generation is deactivated")
 
     #
     # Generate the files information
     #
-    if self.project.dft.generate_all_information or self.project.dft.generate_files_information:
+    if self.project.dft.generate_all_information or self.project.dft.gen_files_info:
       if "files" in self.project.content_information_definition:
         logging.debug("File information generation is activated")
-        self.generate_files_information()
+        self.gen_files_info()
       else:
         logging.info("Files information generation is deactivated")
 
     #
     # Generate the anti-virus information
     #
-    if self.project.dft.generate_all_information or self.project.dft.generate_antivirus_information:
-      if "anti_virus" in self.project.content_information_definition:
+    if self.project.dft.generate_all_information or self.project.dft.gen_antivirus_info:
+      if "anti-virus" in self.project.content_information_definition:
         logging.debug("Anti-virus information generation is activated")
-        self.generate_antivirus_information()
+        self.gen_antivirus_info()
       else:
         logging.info("Anti-virus information generation is deactivated")
 
@@ -236,16 +236,16 @@ class GenerateContentInformation(CliCommand):
 
   # -------------------------------------------------------------------------
   #
-  # generate_packages_information
+  # gen_packages_info
   #
   # -------------------------------------------------------------------------
-  def generate_packages_information(self):
+  def gen_packages_info(self):
     """This method implement the generation of information about packages.
     It relies on calls to dpkg and apt-cache in the chrooted environment.
     """
 
     # Initialize the output writer for packages content generation
-    self.OutputWriter.Initialize("packages")
+    self.output_writer.initialize("packages")
 
     # Generate the dpkg command to retrieve the list of installed packages
     sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint + " dpkg -l | tail -n +6"
@@ -283,7 +283,7 @@ class GenerateContentInformation(CliCommand):
       # Test if we have to generate the package version in the output
       if "generate-package-version" in self.project.content_information_definition["packages"]:
         if self.project.content_information_definition["packages"]["generate-package-version"]:
-            output_item["version"] = pkg_version
+          output_item["version"] = pkg_version
 
       # Test if we have to generate the package architecture in the output
       if "generate-package-architecture" in self.project.content_information_definition["packages"]:
@@ -336,60 +336,153 @@ class GenerateContentInformation(CliCommand):
           output_item["description"] = pkg_description
 
       # print(output)
-      self.OutputWriter.output_buffer.append(output_item)
+      self.output_writer.output_buffer.append(output_item)
 
     # Flush all pending output and close stream or file
-    self.OutputWriter.FlushAndClose()
+    self.output_writer.flush_and_close()
 
   # -------------------------------------------------------------------------
   #
-  # generate_files_information
+  # gen_files_info
   #
   # -------------------------------------------------------------------------
-  def generate_files_information(self):
+  def gen_files_info(self):
     """This method implement the generation of information about files.
     Informationare extracted from the host information, not the chroot.
     """
 
     # Initialize the output writer for packages content generation
-    self.OutputWriter.Initialize("files")
+    self.output_writer.initialize("files")
 
     # Flush all pending output and close stream or file
-    self.OutputWriter.FlushAndClose()
+    self.output_writer.flush_and_close()
 
 
 
   # -------------------------------------------------------------------------
   #
-  # generate_antivirus_information
+  # gen_antivirus_info
   #
   # -------------------------------------------------------------------------
-  def generate_antivirus_information(self):
+  def gen_antivirus_info(self):
     """This method implement the generation of information aboutanti-virus
     analysis. It relies on call to an antivirus in the chrooted environment.
     """
 
-    # Initialize the output writer for packages content generation
-    self.OutputWriter.Initialize("antivirus")
 
-# Todo install clamav
+gruuuu   trier les executions locales ou pas 
+
+
+    # Initialize the output writer for packages content generation
+    self.output_writer.initialize("antivirus")
+
+    # Check if clamscan is installed in the chrooted environment
+    if not os.path.isfile(self.project.rootfs_mountpoint + "/usr/bin/clamscan"):
+      # If not, test if it has to be installed, or should it fail ?
+      # Default behavior is to install clamav if missing and to remove
+      # it if it has been installed in this method context (and not in the
+      # baseos)
+      # If key is not defined, then set its default value
+      if self.project.content_information_definition["configuration"] != None:
+        if "install-missing-software" not in self.project.content_information_definition["configuration"]:
+          logging.debug("Setting default value of install-missing-software to False")
+          self.project.content_information_definition["configuration"]["install-missing-software"] = False
+      else:
+        logging.debug("Setting default value of install-missing-software to False")
+        self.project.content_information_definition["configuration"] = {'install-missing-software': False}
+
+      if self.project.content_information_definition["configuration"]["install-missing-software"]:
+        logging.info("Installing clamav in rootfs")
+
+        # Install missing packages into the chroot
+        sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
+        sudo_command += " /usr/bin/apt-get install --no-install-recommends"
+        sudo_command += " --yes --allow-unauthenticated clamav"
+        self.execute_command(sudo_command)
+#TODO remove and purge it after execution
+
+        # Set the flag used tomark that we install debsecan and we have to
+        # remove it before exiting the application
+        need_to_remove_clamav = True
+
+      # The tool is missing and installation is not allowed,thus either we
+      # allowed to skip this stage, or we fail and exit
+      else:
+        # If key is not defined, then set its default value
+        if self.project.content_information_definition["configuration"] != None:
+          if "skip-on-missing-software" not in self.project.content_information_definition["configuration"]:
+            logging.debug("Setting default value of skip-on-missing-software to False")
+            self.project.content_information_definition["configuration"]["skip-on-missing-software"] = True
+        else:
+          logging.debug("Setting default value of skip-on-missing-software to False")
+          self.project.content_information_definition["configuration"] = {'skip-on-missing-software': True}
+
+        # Check if skipping is allowed or not
+        if self.project.content_information_definition["configuration"]["skip-on-missing-software"]:
+          logging.warning("Skipping vulnerabilities content generation. Clamav is missing and instalation not allowed by configuration file.")
+          return
+        else:
+          # Skipping is deactivated, so is installation, thus it fails
+          logging.error("Clamav is missing and instalation not allowed by configuration file.")
+          logging.error("Please consider to add skip-on-on-missing-software or install-mising-software in configuration file")
+          logging.critical("Generation canot continue, execution is aborted.")
+          exit(1)
+
 
     # Generate the dpkg command to retrieve the list of installed packages
     sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
-    sudo_command += " clamscan --infected --recursive"
+    sudo_command += " clamscan --version"
+    sudo_command_output = self.execute_command(sudo_command)
+
+    # Generate the dpkg command to retrieve the list of installed packages
+# TODO scan everything
+# TODO is scanning from rootfs mandatory ? or cn host do it ?   
+    sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
+    sudo_command += " clamscan --infected --recursive /bin"
     sudo_command_output = self.execute_command(sudo_command)
 
     # Flush all pending output and close stream or file
-    self.OutputWriter.FlushAndClose()
+    self.output_writer.flush_and_close()
+
+
+
+
+  # Generate the dpkg command to retrieve the list of installed packages
+    sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint + " dpkg -l | tail -n +6"
+    sudo_command_output = self.execute_command(sudo_command)
+
+    # Iterate the output of the dpkg process:
+    for binaryline in sudo_command_output.splitlines():
+      # Each fields is stored into a variable to easy manipulation and
+      # simplify code. First get the array of words converted to UTF-8
+      line = binaryline.decode('utf-8').split()
+
+      # Extract each fields
+      pkg_status = line[0]
+      pkg_name = line[1]
+      pkg_version = line[2]
+      pkg_arch = line[3]
+
+      # Space is used as a separator to rebuild the description
+      pkg_description = " ".join(line[4:])
+
+      # Initialize and empty dictionnaries. It is use to stores the key/value
+      # pair used processed during output
+      output_item = dict()
+
+      # Test if we have to generate the package status in the output
+      if "generate-package-status" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate-package-status"]:
+          output_item["status"] = pkg_status
 
 
 
   # -------------------------------------------------------------------------
   #
-  # generate_security_information
+  # gen_security_info
   #
   # -------------------------------------------------------------------------
-  def generate_security_information(self):
+  def gen_security_info(self):
     """This method implement the generation of information about security.
     It relies on call to openscap in the chrooted environment.
     """
@@ -397,32 +490,32 @@ class GenerateContentInformation(CliCommand):
     # TODO need purge ?
 
     # Initialize the output writer for packages content generation
-    self.OutputWriter.Initialize("security")
+    self.output_writer.initialize("security")
 
     # Flush all pending output and close stream or file
-    self.OutputWriter.FlushAndClose()
+    self.output_writer.flush_and_close()
 
 
 
   # -------------------------------------------------------------------------
   #
-  # generate_vulnerabilities_information
+  # gen_vulnerabilities_info
   #
   # -------------------------------------------------------------------------
-  def generate_vulnerabilities_information(self):
+  def gen_vulnerabilities_info(self):
     """This method implement the generation of information about
     vulnerabilities. It relies on call to debsecan and apt-cache in the
     chrooted environment.
     """
 
      # Initialize the output writer for packages content generation
-    self.OutputWriter.Initialize("vulnerabilities")
+    self.output_writer.initialize("vulnerabilities")
 
     # Check if debsecan is installed in the chrooted environment
     if not os.path.isfile(self.project.rootfs_mountpoint + "/usr/bin/debsecan"):
       # If not, test if it has to be installed, or should it fail ?
       # Default behavior is to install debsecan if missing and to remove
-      # it if it has been installed in thismethod context (and not in the
+      # it if it has been installed in this method context (and not in the
       # baseos)
       # If key is not defined, then set its default value
       if self.project.content_information_definition["configuration"] != None:
@@ -441,6 +534,7 @@ class GenerateContentInformation(CliCommand):
         sudo_command += " /usr/bin/apt-get install --no-install-recommends"
         sudo_command += " --yes --allow-unauthenticated debsecan"
         self.execute_command(sudo_command)
+#TODO remove and purge it after execution
 
         # Set the flag used tomark that we install debsecan and we have to
         # remove it before exiting the application
@@ -484,5 +578,5 @@ class GenerateContentInformation(CliCommand):
       self.execute_command(sudo_command)
 
     # Flush all pending output and close stream or file
-    self.OutputWriter.FlushAndClose()
+    self.output_writer.flush_and_close()
   
