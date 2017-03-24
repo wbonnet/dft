@@ -22,7 +22,7 @@
 #
 
 """ This module implements the functionnalities needed to build the bootloader chain.
-This chain contains uboot, kernel; initramfs and DTB. 
+This chain contains uboot, kernel; initramfs and DTB.
 """
 
 import logging
