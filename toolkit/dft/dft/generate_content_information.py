@@ -369,9 +369,7 @@ class GenerateContentInformation(CliCommand):
     analysis. It relies on call to an antivirus in the chrooted environment.
     """
 
-
-gruuuu   trier les executions locales ou pas 
-
+# shoud it be run locally ? 
 
     # Initialize the output writer for packages content generation
     self.output_writer.initialize("antivirus")
