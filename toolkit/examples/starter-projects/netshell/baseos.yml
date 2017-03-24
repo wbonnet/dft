@@ -30,5 +30,5 @@ roles:
 
 # Definition of the list of target versions. Firmware will be generated for 
 # each of the versions in this list
-target-versions:
+target_versions:
   - stretch
