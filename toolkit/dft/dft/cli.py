@@ -273,7 +273,7 @@ x factory_setup                    Apply some extra factory setup before generat
     # needed flag
     self.parser.add_argument('--generate-packages-information',
                              action='store_true',
-                             dest='generate_packages_information',
+                             dest='gen_packages_info',
                              help="generate the information about packages. If at least one of the\n"
                              "generate_something_information is set,then it deactivatethe 'generate all'\n"
                              "default behavior, and each information source has to be set.\n")
@@ -281,25 +281,25 @@ x factory_setup                    Apply some extra factory setup before generat
     # Activate the generation of information about vulnerabilities
     self.parser.add_argument('--generate-vulnerabilities-information',
                              action='store_true',
-                             dest='generate_vulnerabilities_information',
+                             dest='gen_vulnerabilities_info',
                              help="generate the information about vulnerabilities.\n")
 
     # Activate the generation of information about security
     self.parser.add_argument('--generate-security-information',
                              action='store_true',
-                             dest='generate_security_information',
+                             dest='gen_security_info',
                              help="generate the information about security.\n")
 
     # Activate the generation of information about files.
     self.parser.add_argument('--generate-files-information',
                              action='store_true',
-                             dest='generate_files_information',
+                             dest='gen_files_info',
                              help="generate the information about files.\n")
 
     # Activate the generation of information about the anti-virus execution.
     self.parser.add_argument('--generate-antivirus-information',
                              action='store_true',
-                             dest='generate_antivirus_information',
+                             dest='gen_antivirus_info',
                              help="generate the information about anti-virus execution.\n")
 
 
@@ -586,50 +586,50 @@ x factory_setup                    Apply some extra factory setup before generat
     # have ben set to reduce output. Default is generate all to true and all
     # other flags to false
     self.project.dft.generate_all_information = True
-    self.project.dft.generate_packages_information = False
-    self.project.dft.generate_files_information = False
-    self.project.dft.generate_antivirus_information = False
-    self.project.dft.generate_vulnerabilities_information = False
-    self.project.dft.generate_security_information = False
+    self.project.dft.gen_packages_info = False
+    self.project.dft.gen_files_info = False
+    self.project.dft.gen_antivirus_info = False
+    self.project.dft.gen_vulnerabilities_info = False
+    self.project.dft.gen_security_info = False
 
     # Check if the packages are needed
-    if self.args.generate_packages_information != None:
+    if self.args.gen_packages_info != None:
       # Flag is defined, then copy it
-      self.project.dft.generate_packages_information = self.args.generate_packages_information
+      self.project.dft.gen_packages_info = self.args.gen_packages_info
       # If flag is true, then generate all as to be false
-      if self.project.dft.generate_packages_information:
+      if self.project.dft.gen_packages_info:
         self.project.dft.generate_all_information = False
 
     # Check if the files are needed
-    if self.args.generate_files_information != None:
+    if self.args.gen_files_info != None:
       # Flag is defined, then copy it
-      self.project.dft.generate_files_information = self.args.generate_files_information
+      self.project.dft.gen_files_info = self.args.gen_files_info
       # If flag is true, then generate all as to be false
-      if self.project.dft.generate_files_information:
+      if self.project.dft.gen_files_info:
         self.project.dft.generate_all_information = False
 
     # Check if the vulnerabilties are needed
-    if self.args.generate_vulnerabilities_information != None:
+    if self.args.gen_vulnerabilities_info != None:
       # Flag is defined, then copy it
-      self.project.dft.generate_vulnerabilities_information = self.args.generate_vulnerabilities_information
+      self.project.dft.gen_vulnerabilities_info = self.args.gen_vulnerabilities_info
       # If flag is true, then generate all as to be false
-      if self.project.dft.generate_vulnerabilities_information:
+      if self.project.dft.gen_vulnerabilities_info:
         self.project.dft.generate_all_information = False
 
     # Check if the antivirus are needed
-    if self.args.generate_antivirus_information != None:
+    if self.args.gen_antivirus_info != None:
       # Flag is defined, then copy it
-      self.project.dft.generate_antivirus_information = self.args.generate_antivirus_information
+      self.project.dft.gen_antivirus_info = self.args.gen_antivirus_info
       # If flag is true, then generate all as to be false
-      if self.project.dft.generate_antivirus_information:
+      if self.project.dft.gen_antivirus_info:
         self.project.dft.generate_all_information = False
 
     # Check if the security are needed
-    if self.args.generate_security_information != None:
+    if self.args.gen_security_info != None:
       # Flag is defined, then copy it
-      self.project.dft.generate_security_information = self.args.generate_security_information
+      self.project.dft.gen_security_info = self.args.gen_security_info
       # If flag is true, then generate all as to be false
-      if self.project.dft.generate_security_information:
+      if self.project.dft.gen_security_info:
         self.project.dft.generate_all_information = False
 
     # Create the business object

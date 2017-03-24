@@ -223,7 +223,7 @@ class GenerateContentInformation(CliCommand):
     # Generate the anti-virus information
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_antivirus_info:
-      if "anti_virus" in self.project.content_information_definition:
+      if "antivirus" in self.project.content_information_definition:
         logging.debug("Anti-virus information generation is activated")
         self.gen_antivirus_info()
       else:
@@ -341,6 +341,8 @@ class GenerateContentInformation(CliCommand):
     # Flush all pending output and close stream or file
     self.output_writer.flush_and_close()
 
+
+
   # -------------------------------------------------------------------------
   #
   # gen_files_info
@@ -369,7 +371,29 @@ class GenerateContentInformation(CliCommand):
     analysis. It relies on call to an antivirus in the chrooted environment.
     """
 
+# TODO at the beginning of each method, generate add the globl check and goes deeper
+# no need to recheck everything in each method. Call sould be ended before
+   
+   # We have to generate part of the command used to run the antivirus, depending
+   # on the environment. It is called the antivus_cmd_prefix. It will be used
+   # in the coming sudo command.
+   antivirus_cmd_prefix = ""
+
+    # Check if the antivirus should be run from the host or the target system
+    # then generate the command prefix to  use to append clamav command. So
+    # far only clamav is supported.
+    if "use_host_antivirus" in self.project.content_information_definition["configuration"]["antivirus"]:
+      if self.project.content_information_definition["configuration"]["antivirus"]["use_host_antivirus"]:
+        antivirus_cmd_prefix = gen_host_antivus_cmd_prefix()
+      else:
+        antivirus_cmd_prefix = gen_target_antivus_cmd_prefix()
+    else:
+        antivirus_cmd_prefix = gen_host_antivus_cmd_prefix()
+
 # shoud it be run locally ? 
+XXX reprendre le reste pour la generation de la commande local ou pas
+
+
 
     # Check if clamscan is installed in the chrooted environment
     if not os.path.isfile(self.project.rootfs_mountpoint + "/usr/bin/clamscan"):
@@ -386,7 +410,7 @@ class GenerateContentInformation(CliCommand):
         logging.debug("Setting default value of install-missing-software to False")
         self.project.content_information_definition["configuration"] = {'install_missing_software': False}
 
-      if self.project.content_information_definition["configuration"]["instal_missing_software"]:
+      if self.project.content_information_definition["configuration"]["install_missing_software"]:
         logging.info("Installing clamav in rootfs")
 
         # Install missing packages into the chroot
@@ -423,9 +447,10 @@ class GenerateContentInformation(CliCommand):
           logging.critical("Generation canot continue, execution is aborted.")
           exit(1)
 
+
+
     # Initialize the output writer for packages content generation
     self.output_writer.initialize("antivirus")
-
 
     # Generate the dpkg command to retrieve the list of installed packages
     sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint

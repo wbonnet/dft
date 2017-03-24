@@ -115,7 +115,7 @@ class BuildBaseOS(CliCommand):
       # Check if the archive has to be used instead of doing a debootstraping
       # for real. Only if the archive exist...
     if self.project.dft.use_cache_archive and self.cache_archive_is_available:
-      self.fake_generate_debootstrap_rootfs()
+      self.fake_debootstrap_rootfs()
     else:
       # In any other cases, do a real debootstrap call
       self.generate_debootstrap_rootfs()
@@ -327,10 +327,10 @@ class BuildBaseOS(CliCommand):
 
   # -------------------------------------------------------------------------
   #
-  # fake_generate_debootstrap_rootfs
+  # fake_debootstrap_rootfs
   #
   # -------------------------------------------------------------------------
-  def fake_generate_debootstrap_rootfs(self):
+  def fake_debootstrap_rootfs(self):
     """ This method simulates the deboootstrap call by extracting the content
     of a cache archive.
     """
@@ -407,7 +407,7 @@ class BuildBaseOS(CliCommand):
     self.devshm_is_mounted = True
 
     # Update the APT sources
-    self.generate_apt_sources_configuration()
+    self.generate_apt_sources()
 
     # Then update the list of packages
     apt_command = "sudo chroot " + self.project.rootfs_mountpoint + " /usr/bin/apt-get update"
@@ -424,10 +424,10 @@ class BuildBaseOS(CliCommand):
 
   # -------------------------------------------------------------------------
   #
-  # generate_apt_sources_configuration
+  # generate_apt_sources
   #
   # -------------------------------------------------------------------------
-  def generate_apt_sources_configuration(self):
+  def generate_apt_sources(self):
     """ This method has two functions, configure APT sources and configure
     apt to ignore validity check on expired repositories
 
