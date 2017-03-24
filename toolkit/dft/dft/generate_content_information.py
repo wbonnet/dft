@@ -223,7 +223,7 @@ class GenerateContentInformation(CliCommand):
     # Generate the anti-virus information
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_antivirus_info:
-      if "anti-virus" in self.project.content_information_definition:
+      if "anti_virus" in self.project.content_information_definition:
         logging.debug("Anti-virus information generation is activated")
         self.gen_antivirus_info()
       else:
@@ -271,23 +271,23 @@ class GenerateContentInformation(CliCommand):
       output_item = dict()
 
       # Test if we have to generate the package status in the output
-      if "generate-package-status" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-status"]:
+      if "generate_package_status" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate_package_status"]:
           output_item["status"] = pkg_status
 
       # Test if we have to generate the package name in the output
-      if "generate-package-name" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-name"]:
+      if "generate_package_name" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate_package_name"]:
           output_item["name"] = pkg_name
 
       # Test if we have to generate the package version in the output
-      if "generate-package-version" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-version"]:
+      if "generate_package_version" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate_package_version"]:
           output_item["version"] = pkg_version
 
       # Test if we have to generate the package architecture in the output
-      if "generate-package-architecture" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-architecture"]:
+      if "generate_package_architecture" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate_package_architecture"]:
           output_item["architecture"] = pkg_arch
 
       # Test if we have to generate the package md5 in the output
@@ -331,8 +331,8 @@ class GenerateContentInformation(CliCommand):
           output_item["installed-size"] = sudo_command_output.decode('utf-8')
 
       # Test if we have to generate the package description in the output
-      if "generate-package-description" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-description"]:
+      if "generate_package_description" in self.project.content_information_definition["packages"]:
+        if self.project.content_information_definition["packages"]["generate_package_description"]:
           output_item["description"] = pkg_description
 
       # print(output)
@@ -382,14 +382,14 @@ class GenerateContentInformation(CliCommand):
       # baseos)
       # If key is not defined, then set its default value
       if self.project.content_information_definition["configuration"] != None:
-        if "install-missing-software" not in self.project.content_information_definition["configuration"]:
-          logging.debug("Setting default value of install-missing-software to False")
-          self.project.content_information_definition["configuration"]["install-missing-software"] = False
+        if "install_missing_software" not in self.project.content_information_definition["configuration"]:
+          logging.debug("Setting default value of install_missing_software to False")
+          self.project.content_information_definition["configuration"]["install_missing_software"] = False
       else:
         logging.debug("Setting default value of install-missing-software to False")
-        self.project.content_information_definition["configuration"] = {'install-missing-software': False}
+        self.project.content_information_definition["configuration"] = {'install_missing_software': False}
 
-      if self.project.content_information_definition["configuration"]["install-missing-software"]:
+      if self.project.content_information_definition["configuration"]["instal_missing_software"]:
         logging.info("Installing clamav in rootfs")
 
         # Install missing packages into the chroot
@@ -408,21 +408,21 @@ class GenerateContentInformation(CliCommand):
       else:
         # If key is not defined, then set its default value
         if self.project.content_information_definition["configuration"] != None:
-          if "skip-on-missing-software" not in self.project.content_information_definition["configuration"]:
-            logging.debug("Setting default value of skip-on-missing-software to False")
-            self.project.content_information_definition["configuration"]["skip-on-missing-software"] = True
+          if "skip_on_missing_software" not in self.project.content_information_definition["configuration"]:
+            logging.debug("Setting default value of skip_on_missing_software to False")
+            self.project.content_information_definition["configuration"]["skip_on_missing_software"] = True
         else:
-          logging.debug("Setting default value of skip-on-missing-software to False")
-          self.project.content_information_definition["configuration"] = {'skip-on-missing-software': True}
+          logging.debug("Setting default value of skip_on_missing_software to False")
+          self.project.content_information_definition["configuration"] = {'skip_on_missing_software': True}
 
         # Check if skipping is allowed or not
-        if self.project.content_information_definition["configuration"]["skip-on-missing-software"]:
+        if self.project.content_information_definition["configuration"]["skip_on_missing_software"]:
           logging.warning("Skipping vulnerabilities content generation. Clamav is missing and instalation not allowed by configuration file.")
           return
         else:
           # Skipping is deactivated, so is installation, thus it fails
           logging.error("Clamav is missing and instalation not allowed by configuration file.")
-          logging.error("Please consider to add skip-on-on-missing-software or install-mising-software in configuration file")
+          logging.error("Please consider to add skip_on_missing_software or install_mising_software in configuration file")
           logging.critical("Generation canot continue, execution is aborted.")
           exit(1)
 
@@ -445,33 +445,35 @@ class GenerateContentInformation(CliCommand):
 
 
 
+
+
   # Generate the dpkg command to retrieve the list of installed packages
     sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint + " dpkg -l | tail -n +6"
     sudo_command_output = self.execute_command(sudo_command)
 
-    # Iterate the output of the dpkg process:
-    for binaryline in sudo_command_output.splitlines():
-      # Each fields is stored into a variable to easy manipulation and
-      # simplify code. First get the array of words converted to UTF-8
-      line = binaryline.decode('utf-8').split()
+    # # Iterate the output of the dpkg process:
+    # for binaryline in sudo_command_output.splitlines():
+    #   # Each fields is stored into a variable to easy manipulation and
+    #   # simplify code. First get the array of words converted to UTF-8
+    #   line = binaryline.decode('utf-8').split()
 
-      # Extract each fields
-      pkg_status = line[0]
-      pkg_name = line[1]
-      pkg_version = line[2]
-      pkg_arch = line[3]
+    #   # Extract each fields
+    #   pkg_status = line[0]
+    #   pkg_name = line[1]
+    #   pkg_version = line[2]
+    #   pkg_arch = line[3]
 
-      # Space is used as a separator to rebuild the description
-      pkg_description = " ".join(line[4:])
+    #   # Space is used as a separator to rebuild the description
+    #   pkg_description = " ".join(line[4:])
 
-      # Initialize and empty dictionnaries. It is use to stores the key/value
-      # pair used processed during output
-      output_item = dict()
+    #   # Initialize and empty dictionnaries. It is use to stores the key/value
+    #   # pair used processed during output
+    #   output_item = dict()
 
-      # Test if we have to generate the package status in the output
-      if "generate-package-status" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate-package-status"]:
-          output_item["status"] = pkg_status
+    #   # Test if we have to generate the package status in the output
+    #   if "generate-package-status" in self.project.content_information_definition["packages"]:
+    #     if self.project.content_information_definition["packages"]["generate-package-status"]:
+    #       output_item["status"] = pkg_status
 
 
 

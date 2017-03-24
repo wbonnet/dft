@@ -49,7 +49,7 @@ configuration:
   # (debsecan). This flag control automatic installation. Default is yes
   # If the packages are installed, they are automatically removed at the end
   # of execution (unless already installed in the baseos). Default is False
-  install-missing-software: True
+  install_missing_software: True
 
   # In some case it is useful to skip a generation step if software is missing
   # and rootfs modification is not allowed. Setting this variable to True will
@@ -92,13 +92,13 @@ configuration:
     # - files
     #
     # default extension value is the formt, default suffix and prefix are empty
-    filename-prefix: "prefix"
-    filename-suffix: "suffix"
-    relace-extension: "dummy"
+    filename_prefix: "prefix"
+    filename_suffix: "suffix"
+    relace_extension: "dummy"
 
     # Separtor is needed if the CSV file format is used. It defines the 
     # character oused as field separator
-    field-separator: ";"
+    field_separator: ";"
 #
 # The packages dictionnary control the list of fields that are included in the 
 # output. Default tool used for package information generation is dpkg.
@@ -106,39 +106,39 @@ configuration:
 packages:
   # If this is set to True (default is True), package name will be included in
   # the information generated
-  generate-package-name: True
+  generate_package_name: True
 
   # If this is set to True (default is True), package version will be included
   # in the information generated
-  generate-package-version: True
+  generate_package_version: True
 
   # If this is set to True (default is False), package version will be included
   # in the information generated
-  generate-package-description: True
+  generate_package_description: True
 
   # If this is set to True (default is False), package status will be included
   # in the information generated
-  generate-package-status: True
+  generate_package_status: True
 
   # If this is set to True (default is False), package architecture will be 
   # included inthe information generated
-  generate-package-architecture: True
+  generate_package_architecture: True
 
   # If this is set to True (default is False), package md5sum (from catalog)
   # will be included inthe information generated
-  generate-package-md5: True
+  generate_package_md5: True
 
   # If this is set to True (default is False), package SHA256 (from catalog)
   # will be included inthe information generated
-  generate-package-sha256: True
+  generate_package_sha256: True
 
   # If this is set to True (default is False), package size (from catalog)
   # will be included inthe information generated
-  generate-package-size: True
+  generate_package_size: True
 
   # If this is set to True (default is False), package installed-size (from
   # catalog) will be included inthe information generated
-  generate-package-installed-size: True
+  generate_package_installed_size: True
 
 
 #
@@ -168,5 +168,12 @@ files:
 #
 #
 anti-virus:
+  # If this is set to True (default is True), package name will be included 
+  # in the information generated
   generate: True
 
+  # If this is set to True (default is True), the antivirus will be run from
+  # the host; Otherwise it will be run from the target chroot (and installed
+  # if necessary). If the antivirus is missing from the host it will NEVER be 
+  # installed automatically.
+  use_host_antivirus: True
