@@ -951,4 +951,3 @@ class CheckRootFS(CliCommand):
         else:
           self.project.logging.debug("File " + rule["path"] + " has an valid SHA256 hash. SHA256 is " +
                                      hasher.hexdigest() + " instead of " + rule["sha256"])
-    

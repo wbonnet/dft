@@ -183,24 +183,24 @@ class ProjectDefinition(object):
     self.init_filename = None
     self.stacking_script_filename = None
 
-    self.baseos_definition = None
-    self.bootloader_definition = None
-    self.check_definition = None
-    self.content_information_definition = None
-    self.firmware_definition = None
-    self.image_definition = None
+    self.baseos_def = None
+    self.bootloader_def = None
+    self.check_def = None
+    self.content_information_def = None
+    self.firmware_def = None
+    self.image_def = None
     self.project_base_workdir = None
-    self.project_definition = None
-    self.repositories_definition = None
+    self.project_def = None
+    self.repositories_def = None
     self.rootfs_generator_cachedirname = None
-    self.stripping_definition = None
-    self.variables_definition = None
+    self.stripping_def = None
+    self.variables_def = None
 
 
 
   # ---------------------------------------------------------------------------
   #
-  # genereate_definition_file_path
+  # genereate_def_file_path
   #
   #   This method generates the complete path to sub configuration files
   #   This files are referenced in the project configuration file, and are
@@ -211,7 +211,7 @@ class ProjectDefinition(object):
   #   directory containing the project file being used.
   #
   # ---------------------------------------------------------------------------
-  def genereate_definition_file_path(self, filename):
+  def genereate_def_file_path(self, filename):
     """ This method generate the path to a configuration file. Generated path is
     relative to project-path if this variable has been set in the ain project file.
     If the variable has not been set, configuration files are searched in the same
@@ -219,8 +219,8 @@ class ProjectDefinition(object):
     """
 
     # Check if the project path is defined into the project file
-    if "project_path" in self.project_definition["configuration"]:
-      filename = self.project_definition["configuration"]["project_path"] + "/" + filename
+    if "project_path" in self.project_def["configuration"]:
+      filename = self.project_def["configuration"]["project_path"] + "/" + filename
     else:
       filename = os.path.dirname(self.project_name) + "/" + filename
 
@@ -257,81 +257,81 @@ class ProjectDefinition(object):
       # Load all the ub configuration files from disk
       #
       with open(self.project_name, 'r') as working_file:
-        self.project_definition = yaml.load(working_file)
+        self.project_def = yaml.load(working_file)
 
         # Expand ~ in path since it is not done automagically by Python
         for key in {"dft_base", "project_path", "working_dir"}:
           # For iterate the key and check they are defined in the config file
-          if key in self.project_definition["configuration"]:
+          if key in self.project_def["configuration"]:
             # Then chek if the single value field starts by "~/"
-            if self.project_definition["configuration"][key][0] == "~" and self.project_definition["configuration"][key][1] == "/":
+            if self.project_def["configuration"][key][0] == "~" and self.project_def["configuration"][key][1] == "/":
               # If yes modifiy its value using expenduser ( replace ~ by /home/foo)
-              self.project_definition["configuration"][key] = os.path.expanduser(self.project_definition["configuration"][key])
+              self.project_def["configuration"][key] = os.path.expanduser(self.project_def["configuration"][key])
 
         # Expand ~ in path since it is not done automagically by Python
         for key in {"additional_roles"}:
           # For iterate the key and check they are defined in the config file
-          if key in self.project_definition["configuration"]:
+          if key in self.project_def["configuration"]:
             # Then iterate the list of values it contains
-            for counter in range(len(self.project_definition["configuration"][key])):
+            for counter in range(len(self.project_def["configuration"][key])):
               # Then chek if the valuestarts by "~/"
-              if self.project_definition["configuration"][key][counter][0] == "~" and self.project_definition["configuration"][key][counter][1] == "/":
+              if self.project_def["configuration"][key][counter][0] == "~" and self.project_def["configuration"][key][counter][1] == "/":
                 # If yes modifiy its value using expenduser ( replace ~ by /home/foo)
-                self.project_definition["configuration"][key][counter] = os.path.expanduser(self.project_definition["configuration"][key][counter])
-  
+                self.project_def["configuration"][key][counter] = os.path.expanduser(self.project_def["configuration"][key][counter])
+
       # Load the repositories sub configuration files
-      if "repositories" in self.project_definition["project_definition"]:
-        filename = self.genereate_definition_file_path(self.project_definition["project_definition"]["repositories"][0])
+      if "repositories" in self.project_def["project_definition"]:
+        filename = self.genereate_def_file_path(self.project_def["project_definition"]["repositories"][0])
         with open(filename, 'r') as working_file:
-          self.repositories_definition = yaml.load(working_file)
+          self.repositories_def = yaml.load(working_file)
 
       # Load the baseos sub configuration files
-      if "baseos" in self.project_definition["project_definition"]:
-        filename = self.genereate_definition_file_path(self.project_definition["project_definition"]["baseos"][0])
+      if "baseos" in self.project_def["project_definition"]:
+        filename = self.genereate_def_file_path(self.project_def["project_definition"]["baseos"][0])
         with open(filename, 'r') as working_file:
-          self.baseos_definition = yaml.load(working_file)
+          self.baseos_def = yaml.load(working_file)
 
       # Load the firmware sub configuration files
-      if "firmware" in self.project_definition["project_definition"]:
-        filename = self.genereate_definition_file_path(self.project_definition["project_definition"]["firmware"][0])
+      if "firmware" in self.project_def["project_definition"]:
+        filename = self.genereate_def_file_path(self.project_def["project_definition"]["firmware"][0])
         with open(filename, 'r') as working_file:
-          self.firmware_definition = yaml.load(working_file)
+          self.firmware_def = yaml.load(working_file)
 
       # Load the bootloader sub configuration files
-      if "bootloader" in self.project_definition["project_definition"]:
-        filename = self.genereate_definition_file_path(self.project_definition["project_definition"]["bootloader"][0])
+      if "bootloader" in self.project_def["project_definition"]:
+        filename = self.genereate_def_file_path(self.project_def["project_definition"]["bootloader"][0])
         with open(filename, 'r') as working_file:
-          self.bootloader_definition = yaml.load(working_file)
+          self.bootloader_def = yaml.load(working_file)
 
       # Load the image sub configuration files
-      if "image" in self.project_definition["project_definition"]:
-        filename = self.genereate_definition_file_path(self.project_definition["project_definition"]["image"][0])
+      if "image" in self.project_def["project_definition"]:
+        filename = self.genereate_def_file_path(self.project_def["project_definition"]["image"][0])
         with open(filename, 'r') as working_file:
-          self.image_definition = yaml.load(working_file)
+          self.image_def = yaml.load(working_file)
 
       # Load the check sub configuration files
-      if "check" in self.project_definition["project_definition"]:
-        filename = self.genereate_definition_file_path(self.project_definition["project_definition"]["check"][0])
+      if "check" in self.project_def["project_definition"]:
+        filename = self.genereate_def_file_path(self.project_def["project_definition"]["check"][0])
         with open(filename, 'r') as working_file:
-          self.check_definition = yaml.load(working_file)
+          self.check_def = yaml.load(working_file)
 
       # Load the stripping sub configuration files
-      if "stripping" in self.project_definition["project_definition"]:
-        filename = self.genereate_definition_file_path(self.project_definition["project_definition"]["stripping"][0])
+      if "stripping" in self.project_def["project_definition"]:
+        filename = self.genereate_def_file_path(self.project_def["project_definition"]["stripping"][0])
         with open(filename, 'r') as working_file:
-          self.stripping_definition = yaml.load(working_file)
+          self.stripping_def = yaml.load(working_file)
 
       # Load the check sub configuration files
-      if "content_information" in self.project_definition["project_definition"]:
-        filename = self.genereate_definition_file_path(self.project_definition["project_definition"]["content_information"][0])
+      if "content_information" in self.project_def["project_definition"]:
+        filename = self.genereate_def_file_path(self.project_def["project_definition"]["content_information"][0])
         with open(filename, 'r') as working_file:
-          self.content_information_definition = yaml.load(working_file)
+          self.content_information_def = yaml.load(working_file)
 
       # Load the list of variables files
-      if "variables" in self.project_definition["project_definition"]:
-        filename = self.genereate_definition_file_path(self.project_definition["project_definition"]["variables"][0])
+      if "variables" in self.project_def["project_definition"]:
+        filename = self.genereate_def_file_path(self.project_def["project_definition"]["variables"][0])
         with open(filename, 'r') as working_file:
-          self.variables_definition = yaml.load(working_file)
+          self.variables_def = yaml.load(working_file)
 
       #
       # Once configuration have been loaded, compute the values of some
@@ -339,19 +339,19 @@ class ProjectDefinition(object):
       #
 
       # Generate the cache archive filename
-      if "rootfs_generator_cachedirname" in self.project_definition["configuration"]:
-        self.rootfs_generator_cachedirname = self.project_definition["configuration"]["rootfs_generator_cachedirname"]
+      if "rootfs_generator_cachedirname" in self.project_def["configuration"]:
+        self.rootfs_generator_cachedirname = self.project_def["configuration"]["rootfs_generator_cachedirname"]
       else:
         self.logging.warning("configuration/rootfs_generator_cachedirname is not defined, using /tmp as default value")
         self.rootfs_generator_cachedirname = "/tmp/"
 
-      if "working_dir" in self.project_definition["configuration"]:
-        self.project_base_workdir = self.project_definition["configuration"]["working_dir"] 
-        self.project_base_workdir += "/" + self.project_definition["configuration"]["project_name"]
+      if "working_dir" in self.project_def["configuration"]:
+        self.project_base_workdir = self.project_def["configuration"]["working_dir"]
+        self.project_base_workdir += "/" + self.project_def["configuration"]["project_name"]
       else:
         self.logging.warning("configuration/working_dir is not defined, using /tmp/dft as default value")
         self.project_base_workdir = "/tmp/dft/"
-        self.project_base_workdir += self.project_definition["configuration"]["project_name"]
+        self.project_base_workdir += self.project_def["configuration"]["project_name"]
 
       # Defines path for subcommand
       self.rootfs_base_workdir = self.project_base_workdir + "/rootfs"
@@ -362,18 +362,18 @@ class ProjectDefinition(object):
 
       # Retrieve the target architecture
 # TODO : handle multiple archs
-      self.target_arch = self.project_definition["project_definition"]["architectures"][0]
+      self.target_arch = self.project_def["project_definition"]["architectures"][0]
 
       # Target version to use when building the debootstrap. It has to be
       # a Debian version (jessie, stretch, etc.)
 # TODO : handle multiple version
-      self.target_version = self.baseos_definition["target_versions"][0]
+      self.target_version = self.baseos_def["target_versions"][0]
 
       # Generate the archive filename
 # TODO : handle multiple archs / version
       self.archive_filename = self.rootfs_generator_cachedirname + "/" + self.target_arch
       self.archive_filename += "-" +  self.target_version + "-"
-      self.archive_filename += self.project_definition["configuration"]["project_name"]
+      self.archive_filename += self.project_def["configuration"]["project_name"]
       self.archive_filename += ".tar"
 
       # Generates the path to the rootfs mountpoint
@@ -386,7 +386,7 @@ class ProjectDefinition(object):
       self.firmware_directory += self.target_arch + "-" + self.target_version
 
       self.firmware_filename = self.firmware_directory + "/"
-      self.firmware_filename += self.project_definition["configuration"]["project_name"]
+      self.firmware_filename += self.project_def["configuration"]["project_name"]
       self.firmware_filename += ".squashfs"
 
       self.init_filename = self.firmware_directory + "/init"

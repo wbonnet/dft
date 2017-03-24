@@ -31,9 +31,9 @@ import tempfile
 from cli_command import CliCommand
 
 #
-#    Class ContentInformationoutput_writer
+#    Class ContentOutputWriter
 #
-class ContentInformationoutput_writer(CliCommand):
+class ContentOutputWriter(object):
   """This class implements the writer in charge of doing real output to the
   target defined in the configuration file. It can eithertarget a stream
   (stdout) or a file, using different format (csv yaml json xml).
@@ -47,9 +47,6 @@ class ContentInformationoutput_writer(CliCommand):
   def __init__(self, configuration):
     """Default constructor
     """
-
-    # Initialize ancestor
-#    CliCommand.__init__(self, dft, project)
 
     # Store the configuration dictionnary
     self.configuration = configuration
@@ -115,8 +112,6 @@ class ContentInformationoutput_writer(CliCommand):
     files
     """
 
-# TODO stream ?
-# TODO flush ?
     print(self.output_buffer)
 
     # Test if the output file has been opened
@@ -148,7 +143,7 @@ class GenerateContentInformation(CliCommand):
     CliCommand.__init__(self, dft, project)
 
     # Create the output writer object
-    self.output_writer = ContentInformationoutput_writer(self.project.content_information_definition)
+    self.output_writer = ContentOutputWriter(self.project.content_information_def)
 
 
 
@@ -170,7 +165,7 @@ class GenerateContentInformation(CliCommand):
     """
 
     # Check that there is a content definition file first
-    if self.project.content_information_definition is None:
+    if self.project.content_information_def is None:
       self.project.logging.critical("The content generation file is not defined in project file")
       exit(1)
 
@@ -183,7 +178,7 @@ class GenerateContentInformation(CliCommand):
     # Generate the packages information
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_packages_info:
-      if "packages" in self.project.content_information_definition:
+      if "packages" in self.project.content_information_def:
         logging.debug("Packages information generation is activated")
         self.gen_packages_info()
       else:
@@ -193,7 +188,7 @@ class GenerateContentInformation(CliCommand):
     # Generate the vulnerabilities information
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_vulnerabilities_info:
-      if "vulnerabilities" in self.project.content_information_definition:
+      if "vulnerabilities" in self.project.content_information_def:
         logging.debug("Vulnerabilities information generation is activated")
         self.gen_vulnerabilities_info()
       else:
@@ -203,7 +198,7 @@ class GenerateContentInformation(CliCommand):
     # Generate the security information
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_security_info:
-      if "security" in self.project.content_information_definition:
+      if "security" in self.project.content_information_def:
         logging.debug("Security information generation is activated")
         self.gen_security_info()
       else:
@@ -213,7 +208,7 @@ class GenerateContentInformation(CliCommand):
     # Generate the files information
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_files_info:
-      if "files" in self.project.content_information_definition:
+      if "files" in self.project.content_information_def:
         logging.debug("File information generation is activated")
         self.gen_files_info()
       else:
@@ -223,7 +218,7 @@ class GenerateContentInformation(CliCommand):
     # Generate the anti-virus information
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_antivirus_info:
-      if "antivirus" in self.project.content_information_definition:
+      if "antivirus" in self.project.content_information_def:
         logging.debug("Anti-virus information generation is activated")
         self.gen_antivirus_info()
       else:
@@ -271,28 +266,28 @@ class GenerateContentInformation(CliCommand):
       output_item = dict()
 
       # Test if we have to generate the package status in the output
-      if "generate_package_status" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate_package_status"]:
+      if "output_pkg_status" in self.project.content_information_def["packages"]:
+        if self.project.content_information_def["packages"]["output_pkg_status"]:
           output_item["status"] = pkg_status
 
       # Test if we have to generate the package name in the output
-      if "generate_package_name" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate_package_name"]:
+      if "output_pkg_name" in self.project.content_information_def["packages"]:
+        if self.project.content_information_def["packages"]["output_pkg_name"]:
           output_item["name"] = pkg_name
 
       # Test if we have to generate the package version in the output
-      if "generate_package_version" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate_package_version"]:
+      if "output_pkg_version" in self.project.content_information_def["packages"]:
+        if self.project.content_information_def["packages"]["output_pkg_version"]:
           output_item["version"] = pkg_version
 
       # Test if we have to generate the package architecture in the output
-      if "generate_package_architecture" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate_package_architecture"]:
+      if "output_pkg_architecture" in self.project.content_information_def["packages"]:
+        if self.project.content_information_def["packages"]["output_pkg_architecture"]:
           output_item["architecture"] = pkg_arch
 
       # Test if we have to generate the package md5 in the output
-      if "generate_package_md5" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate_package_md5"]:
+      if "output_pkg_md5" in self.project.content_information_def["packages"]:
+        if self.project.content_information_def["packages"]["output_pkg_md5"]:
           # Generate the apt-cache show command to retrieve the MD5sum
           # Grp the keyword and print second word
           sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
@@ -301,8 +296,8 @@ class GenerateContentInformation(CliCommand):
           output_item["md5"] = sudo_command_output.decode('utf-8')
 
       # Test if we have to generate the package sha256 in the output
-      if "generate_package_sha256" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate_package_sha256"]:
+      if "output_pkg_sha256" in self.project.content_information_def["packages"]:
+        if self.project.content_information_def["packages"]["output_pkg_sha256"]:
           # Generate the apt-cache show command to retrieve the SHA256
           # Grp the keyword and print second word
           sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
@@ -311,8 +306,8 @@ class GenerateContentInformation(CliCommand):
           output_item["sha256"] = sudo_command_output.decode('utf-8')
 
       # Test if we have to generate the package size in the output
-      if "generate_package_size" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate_package_size"]:
+      if "output_pkg_size" in self.project.content_information_def["packages"]:
+        if self.project.content_information_def["packages"]["output_pkg_size"]:
           # Generate the apt-cache show command to retrieve the Size
           # Grp the keyword and print second word
           sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
@@ -321,18 +316,19 @@ class GenerateContentInformation(CliCommand):
           output_item["size"] = sudo_command_output.decode('utf-8')
 
       # Test if we have to generate the package installed-size in the output
-      if "generate_package_installed_size" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate_package_installed_size"]:
+      if "output_pkg_installed_size" in self.project.content_information_def["packages"]:
+        if self.project.content_information_def["packages"]["output_pkg_installed_size"]:
           # Generate the apt-cache show command to retrieve the Installed-SizeMD5sum
           # Grp the keyword and print second word
           sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
-          sudo_command += " apt-cache show " + pkg_name + " | grep ^Installed-Size | awk '{ print $2 }'"
+          sudo_command += " apt-cache show " + pkg_name
+          sudo_command += " | grep ^Installed-Size | awk '{ print $2 }'"
           sudo_command_output = self.execute_command(sudo_command)
           output_item["installed-size"] = sudo_command_output.decode('utf-8')
 
       # Test if we have to generate the package description in the output
-      if "generate_package_description" in self.project.content_information_definition["packages"]:
-        if self.project.content_information_definition["packages"]["generate_package_description"]:
+      if "output_pkg_description" in self.project.content_information_def["packages"]:
+        if self.project.content_information_def["packages"]["output_pkg_description"]:
           output_item["description"] = pkg_description
 
       # print(output)
@@ -373,132 +369,161 @@ class GenerateContentInformation(CliCommand):
 
 # TODO at the beginning of each method, generate add the globl check and goes deeper
 # no need to recheck everything in each method. Call sould be ended before
-   
-   # We have to generate part of the command used to run the antivirus, depending
-   # on the environment. It is called the antivus_cmd_prefix. It will be used
-   # in the coming sudo command.
-   antivirus_cmd_prefix = ""
+
+    # We have to generate part of the command used to run the antivirus, depending
+    # on the environment. It is called the antivus_cmd_prefix. It will be used
+    # in the coming sudo command.
+    antivirus_cmd_version = ""
+    antivirus_cmd_update = ""
+    antivirus_cmd_scan = ""
 
     # Check if the antivirus should be run from the host or the target system
-    # then generate the command prefix to  use to append clamav command. So
-    # far only clamav is supported.
-    if "use_host_antivirus" in self.project.content_information_definition["configuration"]["antivirus"]:
-      if self.project.content_information_definition["configuration"]["antivirus"]["use_host_antivirus"]:
-        antivirus_cmd_prefix = gen_host_antivus_cmd_prefix()
-      else:
-        antivirus_cmd_prefix = gen_target_antivus_cmd_prefix()
+    # then generate the command for both version output and clamav execution.
+    # So far only clamav is supported.
+    use_host_av = True
+    if "use_host_av" in self.project.content_information_def["antivirus"]:
+      if not self.project.content_information_def["antivirus"]["use_host_av"]:
+        use_host_av = False
+
+    # Now generation platform is identfied, we can generation the coommands
+    if use_host_av:
+      # Generate the version command
+      antivirus_cmd_version = "LANG=C sudo clamscan --version"
+
+      # Generate the update command
+      antivirus_cmd_version = "LANG=C sudo freshclam"
+
+      # Generate the scan command
+      antivirus_cmd_scan = "LANG=C sudo clamscan --infected --recursive "
+      antivirus_cmd_scan += self.project.rootfs_mountpoint
     else:
-        antivirus_cmd_prefix = gen_host_antivus_cmd_prefix()
+      # Generate the version command
+      antivirus_cmd_version = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
+      antivirus_cmd_version += " clamscan --version"
 
-# shoud it be run locally ? 
-XXX reprendre le reste pour la generation de la commande local ou pas
+      # Generate the update command
+      antivirus_cmd_version = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
+      antivirus_cmd_version += " freshclam"
 
+      # Generate the scan command
+      antivirus_cmd_scan = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
+      antivirus_cmd_scan += " clamscan --infected --recursive /"
 
 
     # Check if clamscan is installed in the chrooted environment
-    if not os.path.isfile(self.project.rootfs_mountpoint + "/usr/bin/clamscan"):
-      # If not, test if it has to be installed, or should it fail ?
-      # Default behavior is to install clamav if missing and to remove
-      # it if it has been installed in this method context (and not in the
-      # baseos)
-      # If key is not defined, then set its default value
-      if self.project.content_information_definition["configuration"] != None:
-        if "install_missing_software" not in self.project.content_information_definition["configuration"]:
+    need_to_remove_clamav = False
+    if not use_host_av:
+      if not os.path.isfile(self.project.rootfs_mountpoint + "/usr/bin/clamscan"):
+        # If not, test if it has to be installed, or should it fail ?
+        # Default behavior is to install clamav if missing and to remove
+        # it if it has been installed in this method context (and not in the
+        # baseos)
+
+        # If install_missing_software key is not defined, then set its default value
+        if "install_missing_software" not in self.project.content_information_def["configuration"]:
           logging.debug("Setting default value of install_missing_software to False")
-          self.project.content_information_definition["configuration"]["install_missing_software"] = False
-      else:
-        logging.debug("Setting default value of install-missing-software to False")
-        self.project.content_information_definition["configuration"] = {'install_missing_software': False}
+          self.project.content_information_def["configuration"]["install_missing_software"] = False
 
-      if self.project.content_information_definition["configuration"]["install_missing_software"]:
-        logging.info("Installing clamav in rootfs")
+        # If skip_missing_software key is not defined, then set its default value
+        if "skip_missing_software" not in self.project.content_information_def["configuration"]:
+          logging.debug("Setting default value of skip_missing_software to False")
+          self.project.content_information_def["configuration"]["skip_missing_software"] = True
 
-        # Install missing packages into the chroot
-        sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
-        sudo_command += " /usr/bin/apt-get install --no-install-recommends"
-        sudo_command += " --yes --allow-unauthenticated clamav"
-        self.execute_command(sudo_command)
+        # Check if installation is authorized sinc the software is missing
+        if self.project.content_information_def["configuration"]["install_missing_software"]:
+          logging.info("Installing clamav in rootfs")
+
+          # Update the catalog before installing
+          sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
+          sudo_command += " /usr/bin/apt-get update --allow-unauthenticated"
+          self.execute_command(sudo_command)
+
+          # Install missing packages into the chroot
+          sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
+          sudo_command += " /usr/bin/apt-get install --no-install-recommends"
+          sudo_command += " --yes --allow-unauthenticated clamav"
+          self.execute_command(sudo_command)
 #TODO remove and purge it after execution
 
-        # Set the flag used tomark that we install debsecan and we have to
-        # remove it before exiting the application
-        need_to_remove_clamav = True
+          # Set the flag used tomark that we install clamav and we have to
+          # remove it before exiting the application
+          need_to_remove_clamav = True
 
-      # The tool is missing and installation is not allowed,thus either we
-      # allowed to skip this stage, or we fail and exit
-      else:
-        # If key is not defined, then set its default value
-        if self.project.content_information_definition["configuration"] != None:
-          if "skip_on_missing_software" not in self.project.content_information_definition["configuration"]:
-            logging.debug("Setting default value of skip_on_missing_software to False")
-            self.project.content_information_definition["configuration"]["skip_on_missing_software"] = True
+        # Not installed and not allowed to install missing software
         else:
-          logging.debug("Setting default value of skip_on_missing_software to False")
-          self.project.content_information_definition["configuration"] = {'skip_on_missing_software': True}
+          # Check if skipping is allowed or not
+          if self.project.content_information_def["configuration"]["skip_missing_software"]:
+            logging.warning("Skipping vulnerabilities content generation. Clamav is missing\
+                            and instalation not allowed by configuration file.")
+            return
+          else:
+            # Skipping is deactivated, so is installation, thus it fails
+            logging.error("Clamav is missing and installation not allowed by configuration file.")
+            logging.error("Please consider to add skip_missing_software or \
+                          install_mising_software in configuration file")
+            logging.critical("Generation cannot continue, execution is aborted.")
+            exit(1)
+    # This is the case which we use the host antivirus
+    else:
+      # Check if antivirus is present on the host. If not, nothin
+      if not os.path.isfile("/usr/bin/clamscan"):
+        logging.error("Clamav is missing and installation not allowed on host (only on target).")
+        logging.error("Please consider to install it or switch to target execution")
+        logging.critical("Generation cannot continue, execution is aborted.")
+        exit(1)
 
-        # Check if skipping is allowed or not
-        if self.project.content_information_definition["configuration"]["skip_on_missing_software"]:
-          logging.warning("Skipping vulnerabilities content generation. Clamav is missing and instalation not allowed by configuration file.")
-          return
-        else:
-          # Skipping is deactivated, so is installation, thus it fails
-          logging.error("Clamav is missing and instalation not allowed by configuration file.")
-          logging.error("Please consider to add skip_on_missing_software or install_mising_software in configuration file")
-          logging.critical("Generation canot continue, execution is aborted.")
-          exit(1)
-
-
+    #
+    # Checking and installation section is done. Now execute thee antivirus
+    #
 
     # Initialize the output writer for packages content generation
     self.output_writer.initialize("antivirus")
 
-    # Generate the dpkg command to retrieve the list of installed packages
-    sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
-    sudo_command += " clamscan --version"
-    sudo_command_output = self.execute_command(sudo_command)
+    # Check if the database update is authorized by configuration (can be off for offline systems)
+    if "update_database" not in self.project.content_information_def["antivirus"]:
+      self.project.content_information_def["antivirus"]["update_database"] = True
+
+    # Check if we have to update the database. Default is True. But it can be switched to False
+    # for offline systems
+    if self.project.content_information_def["antivirus"]["update_database"]:
+      logging.debug("Starting to update Clamav database")
+      sudo_command_output = self.execute_command(antivirus_cmd_update)
+
+      print(sudo_command_output)
+
+      # Parse the results and add lines to the output buffer
+      for binaryline in sudo_command_output.splitlines():
+        # Each fields is stored into a variable to easy manipulation and
+        # simplify code. First get the array of words converted to UTF-8
+        line = binaryline.decode('utf-8')
+        print(line)
+
+        # Initialize and empty dictionnaries. It is use to stores the key/value
+        # pair used processed during output
+        output_item = dict()
+
+        # Test if we have to generate the package status in the output
+        output_item["update database"] += line
+
+    # Just output de debug log when deactivated
+    else:
+      logging.debug("Clamav database update is deactivated")
 
     # Generate the dpkg command to retrieve the list of installed packages
-# TODO scan everything
-# TODO is scanning from rootfs mandatory ? or cn host do it ?   
-    sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
-    sudo_command += " clamscan --infected --recursive /bin"
-    sudo_command_output = self.execute_command(sudo_command)
+    sudo_command_output = self.execute_command(antivirus_cmd_version)
+
+    # Generate the dpkg command to retrieve the list of installed packages
+    sudo_command_output = self.execute_command(antivirus_cmd_scan)
 
     # Flush all pending output and close stream or file
     self.output_writer.flush_and_close()
 
-
-
-
-
-
-  # Generate the dpkg command to retrieve the list of installed packages
-    sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint + " dpkg -l | tail -n +6"
-    sudo_command_output = self.execute_command(sudo_command)
-
-    # # Iterate the output of the dpkg process:
-    # for binaryline in sudo_command_output.splitlines():
-    #   # Each fields is stored into a variable to easy manipulation and
-    #   # simplify code. First get the array of words converted to UTF-8
-    #   line = binaryline.decode('utf-8').split()
-
-    #   # Extract each fields
-    #   pkg_status = line[0]
-    #   pkg_name = line[1]
-    #   pkg_version = line[2]
-    #   pkg_arch = line[3]
-
-    #   # Space is used as a separator to rebuild the description
-    #   pkg_description = " ".join(line[4:])
-
-    #   # Initialize and empty dictionnaries. It is use to stores the key/value
-    #   # pair used processed during output
-    #   output_item = dict()
-
-    #   # Test if we have to generate the package status in the output
-    #   if "generate-package-status" in self.project.content_information_definition["packages"]:
-    #     if self.project.content_information_definition["packages"]["generate-package-status"]:
-    #       output_item["status"] = pkg_status
+    # Remove ClamAV if it has been installled in the chroooted environnement
+    if need_to_remove_clamav:
+      logging.debug("Starting to remove Clamav")
+      sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
+      sudo_command += " /usr/bin/apt-get --purge --yes autoremove clamav"
+      self.execute_command(sudo_command)
 
 
 
@@ -543,15 +568,15 @@ XXX reprendre le reste pour la generation de la commande local ou pas
       # it if it has been installed in this method context (and not in the
       # baseos)
       # If key is not defined, then set its default value
-      if self.project.content_information_definition["configuration"] != None:
-        if "install_missing_software" not in self.project.content_information_definition["configuration"]:
+      if self.project.content_information_def["configuration"] != None:
+        if "install_missing_software" not in self.project.content_information_def["configuration"]:
           logging.debug("Setting default value of install_missing_software to False")
-          self.project.content_information_definition["configuration"]["install_missing_software"] = False
+          self.project.content_information_def["configuration"]["install_missing_software"] = False
       else:
         logging.debug("Setting default value of install-missing-software to False")
-        self.project.content_information_definition["configuration"] = {'install_missing_software': False}
+        self.project.content_information_def["configuration"] = {'install_missing_software': False}
 
-      if self.project.content_information_definition["configuration"]["install_missing_software"]:
+      if self.project.content_information_def["configuration"]["install_missing_software"]:
         logging.info("Installing debsecan in rootfs")
 
         # Install missing packages into the chroot
@@ -569,23 +594,25 @@ XXX reprendre le reste pour la generation de la commande local ou pas
       # allowed to skip this stage, or we fail and exit
       else:
         # If key is not defined, then set its default value
-        if self.project.content_information_definition["configuration"] != None:
-          if "skip_on_missing_software" not in self.project.content_information_definition["configuration"]:
-            logging.debug("Setting default value of skip_on_missing_software to False")
-            self.project.content_information_definition["configuration"]["skip_on_missing_software"] = True
+        if self.project.content_information_def["configuration"] != None:
+          if "skip_missing_software" not in self.project.content_information_def["configuration"]:
+            logging.debug("Setting default value of skip_missing_software to False")
+            self.project.content_information_def["configuration"]["skip_missing_software"] = True
         else:
-          logging.debug("Setting default value of skip_on_missing_software to False")
-          self.project.content_information_definition["configuration"] = {'skip_on_missing_software': True}
+          logging.debug("Setting default value of skip_missing_software to False")
+          self.project.content_information_def["configuration"] = {'skip_missing_software': True}
 
         # Check if skipping is allowed or not
-        if self.project.content_information_definition["configuration"]["skip_on_missing_software"]:
-          logging.warning("Skipping vulnerabilities content generation. Debsecan is missing and instalation not allowed by configuration file.")
+        if self.project.content_information_def["configuration"]["skip_missing_software"]:
+          logging.warning("Skipping vulnerabilities content generation. Debsecan is missing and \
+                          instalation not allowed by configuration file.")
           return
         else:
           # Skipping is deactivated, so is installation, thus it fails
-          logging.error("Debsecan is missing and instalation not allowed by configuration file.")
-          logging.error("Please consider to add skip_on_missing_software or install_mising_software in configuration file")
-          logging.critical("Generation canot continue, execution is aborted.")
+          logging.error("Debsecan is missing and installation not allowed by configuration file.")
+          logging.error("Please consider to add skip_missing_software or \
+                        install_mising_software in configuration file")
+          logging.critical("Generation cannot continue, execution is aborted.")
           exit(1)
 
     # Generate the debsecan execution command
@@ -599,9 +626,8 @@ XXX reprendre le reste pour la generation de la commande local ou pas
 
       # Remove extra packages into the chroot
       sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
-      sudo_command += " /usr/bin/apt-get remove --yes debsecan"
+      sudo_command += " /usr/bin/apt-get autoremove --purge --yes debsecan"
       self.execute_command(sudo_command)
 
     # Flush all pending output and close stream or file
     self.output_writer.flush_and_close()
-  

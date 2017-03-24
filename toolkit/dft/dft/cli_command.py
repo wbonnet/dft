@@ -100,7 +100,7 @@ class CliCommand(object):
                                  shell=True, check=True, universal_newlines=False)
 
       # Return the output of the process to the caller
-      return completed.stdout
+      return completed.stderr
 
     except subprocess.CalledProcessError as exception:
       self.cleanup_installation_files()
@@ -224,3 +224,6 @@ class CliCommand(object):
     else:
       self.project.logging.debug("keep_bootstrap_files is activated, keeping DFT bootstrap " +
                                  "files in " + self.project.rootfs_mountpoint + "/dft_bootstrap")
+
+
+#TODO create method to add and remove packages

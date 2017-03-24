@@ -66,8 +66,8 @@ class Cli(object):
     self.parser = argparse.ArgumentParser(description=textwrap.dedent('''\
 Debian Firmware Toolkit v''' + self.version + '''
 
-DFT is a collection of tools used to create Debian based firmwares 
-                  
+DFT is a collection of tools used to create Debian based firmwares
+
 Available commands are :
 ? assemble_firmware                Create a firmware from a baseos and generate the configuration files used to loading after booting
 . build_baseos                     Generate a debootstrap from a Debian repository, install and configure required packages
@@ -654,4 +654,3 @@ x factory_setup                    Apply some extra factory setup before generat
 
     # Then
     command.strip_rootfs()
-  
