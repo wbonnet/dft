@@ -75,17 +75,17 @@ class AssembleFirmware(CliCommand):
     """
 
     # Check that there is a firmware configuration file first
-    if self.project.firmware_definition is None:
+    if self.project.firmware_def is None:
       self.project.logging.critical("The firmware configuration file is not defined in project file")
       exit(1)
 
     # Check that the layout is available from the firmware configuration file
-    if "layout" not in self.project.firmware_definition:
+    if "layout" not in self.project.firmware_def:
       self.project.logging.critical("The firmware layout is not defined in configuration file")
       exit(1)
 
     # Check that the stacking method is available from the firmware configuration file
-    if "method" not in self.project.firmware_definition["layout"]:
+    if "method" not in self.project.firmware_def["layout"]:
       self.project.logging.critical("The firmware stacking method is not defined")
       exit(1)
 
@@ -148,16 +148,16 @@ class AssembleFirmware(CliCommand):
     self.generate_common_mount(working_file.name)
 
     # Call the method dedicated to the selected stacking method
-    if self.project.firmware_definition["layout"]["method"] == "aufs":
+    if self.project.firmware_def["layout"]["method"] == "aufs":
       # Generate aufs stuff
       self.generate_aufs_stacking(working_file.name)
-    elif self.project.firmware_definition["layout"]["method"] == "overlayfs":
+    elif self.project.firmware_def["layout"]["method"] == "overlayfs":
       # Generate overlayfs stuff
       self.generate_overlayfs_stacking(working_file.name)
     else:
       # If we reach this code, then method was unknown
       self.project.logging.critical("Unknown stacking method " +
-                                    self.project.firmware_definition["layout"]["method"])
+                                    self.project.firmware_def["layout"]["method"])
       exit(1)
 
     # We are done with file generation, close it now
@@ -165,9 +165,12 @@ class AssembleFirmware(CliCommand):
     # Generate the file path
     filepath = self.project.stacking_script_filename
 
-    # Finally move the temporary file under the rootfs tree
+    # And now we can move the temporary file under the rootfs tree
     sudo_command = "mv -f " + working_file.name + " " + filepath
     self.execute_command(sudo_command)
+
+    # Final log
+    logging.info("Firmware stacking has been successfully generated into : " + filepath)
 
 
 
@@ -189,7 +192,7 @@ class AssembleFirmware(CliCommand):
     working_file = open(working_file_name, "a")
 
     # Check that the stack definition is in the configuration file
-    if "stack_definition" not in self.project.firmware_definition["layout"]:
+    if "stack_definition" not in self.project.firmware_def["layout"]:
       self.project.logging.critical("The stack definition is not in the configuration file")
       exit(1)
 
@@ -199,7 +202,7 @@ class AssembleFirmware(CliCommand):
     working_file.write("\n")
 
     # Iterates the stack items
-    for item in self.project.firmware_definition["layout"]["stack_definition"]:
+    for item in self.project.firmware_def["layout"]["stack_definition"]:
       # Generate the mount point creation code
       working_file.write("# Create the mount point for " + item["stack_item"]["type"] +
                          " '" + item["stack_item"]["name"] + "'\n")
@@ -286,12 +289,12 @@ class AssembleFirmware(CliCommand):
     working_file = open(working_file_name, "a")
 
     # Check that the stack definition is in the configuration file
-    if "stack_definition" not in self.project.firmware_definition["layout"]:
+    if "stack_definition" not in self.project.firmware_def["layout"]:
       self.project.logging.critical("The stack definition is not in the configuration file")
       exit(1)
 
     # Iterates the stack items
-    for item in self.project.firmware_definition["layout"]["stack_definition"]:
+    for item in self.project.firmware_def["layout"]["stack_definition"]:
       # Generate the mount point creation code
       working_file.write("# Stack the   " + item["stack_item"]["type"] +
                          " '" + item["stack_item"]["name"] + "'\n")

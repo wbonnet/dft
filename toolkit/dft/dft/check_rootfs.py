@@ -197,7 +197,7 @@ class CheckRootFS(CliCommand):
     #
     # Check the packages
     #
-    if self.project.check_definition != None and "packages" in self.project.check_definition:
+    if self.project.check_def != None and "packages" in self.project.check_def:
       self.project.logging.debug("Packages check is activated")
       self.check_packages()
     else:
@@ -206,7 +206,7 @@ class CheckRootFS(CliCommand):
     #
     # Check the files
     #
-    if self.project.check_definition != None and "files" in self.project.check_definition:
+    if self.project.check_def != None and "files" in self.project.check_def:
       self.project.logging.debug("Files check is activated")
       self.check_files()
     else:
@@ -282,7 +282,7 @@ class CheckRootFS(CliCommand):
     # Now iterate the list of rules to check against installed packages
     # Process the "mandatory" rules group
     #
-    for rule in self.project.check_definition["packages"]["mandatory"]:
+    for rule in self.project.check_def["packages"]["mandatory"]:
       # Call the check package method
       self.check_package_rules(rule, mandatory=True)
 
@@ -292,7 +292,7 @@ class CheckRootFS(CliCommand):
     #
     # Process the "forbidden" rules group
     #
-    for rule in self.project.check_definition["packages"]["forbidden"]:
+    for rule in self.project.check_def["packages"]["forbidden"]:
       # Call the check package method
       self.check_package_rules(rule, forbidden=True)
 
@@ -302,7 +302,7 @@ class CheckRootFS(CliCommand):
     #
     # Process the "allowed" rules group
     #
-    for rule in self.project.check_definition["packages"]["allowed"]:
+    for rule in self.project.check_def["packages"]["allowed"]:
       # Call the check package method
       self.check_package_rules(rule, allowed=True)
 
@@ -348,28 +348,28 @@ class CheckRootFS(CliCommand):
     list_allowed_packages = {}
 
     # Checks that the configuration section is defined
-    if "configuration" in self.project.check_definition:
+    if "configuration" in self.project.check_def:
       # And that constraint is defined
-      if "installation_constraint" in self.project.check_definition["configuration"]:
+      if "installation_constraint" in self.project.check_def["configuration"]:
         # Now check the defined contraint is valid (ie: no gizmo value)
-        if self.project.check_definition["configuration"]["installation_constraint"] not in "mandatory-only" "allow-optional" "no-constraint":
-          self.project.logging.error("unknown installation constraint " + self.project.check_definition["configuration"]["installation_constraint"])
+        if self.project.check_def["configuration"]["installation_constraint"] not in "mandatory-only" "allow-optional" "no-constraint":
+          self.project.logging.error("unknown installation constraint " + self.project.check_def["configuration"]["installation_constraint"])
           return False
         # If we reach this code, then there is a valid constaint defined
         else:
           # IF constraint is no-constraint there is nothing to do
-          if self.project.check_definition["configuration"]["installation_constraint"] == "no-constaint":
-            self.project.logging.debug("installation constraint is " + self.project.check_definition["configuration"]["installation_constraint"])
+          if self.project.check_def["configuration"]["installation_constraint"] == "no-constaint":
+            self.project.logging.debug("installation constraint is " + self.project.check_def["configuration"]["installation_constraint"])
             return True
 
           # Build the list of packages defined in the mandatory section. They
           # will be inthe list whatever is the constraint
-          for rule in self.project.check_definition["packages"]["mandatory"]:
+          for rule in self.project.check_def["packages"]["mandatory"]:
             list_allowed_packages[rule["name"]] = True
 
           # Check if the optional packages are allowed, if yes add then to the list
-          if self.project.check_definition["configuration"]["installation_constraint"] == "allow-optional":
-            for rule in self.project.check_definition["packages"]["allowed"]:
+          if self.project.check_def["configuration"]["installation_constraint"] == "allow-optional":
+            for rule in self.project.check_def["packages"]["allowed"]:
               list_allowed_packages[rule["name"]] = True
       else:
         self.project.logging.debug("no installation_constraint")
@@ -589,7 +589,7 @@ class CheckRootFS(CliCommand):
     # Files will be checked on an individual basis, which is different of
     # packages. Package list can be retrieved with a single call to dpkg.
     # Retrieving the complete file list would cost too much
-    for rule in self.project.check_definition["files"]["mandatory"]:
+    for rule in self.project.check_def["files"]["mandatory"]:
       # Call the check package method
       self.check_file_rules(rule, mandatory=True)
 
@@ -599,7 +599,7 @@ class CheckRootFS(CliCommand):
     #
     # Process the "forbidden" rules group
     #
-    for rule in self.project.check_definition["files"]["forbidden"]:
+    for rule in self.project.check_def["files"]["forbidden"]:
       # Call the check package method
       self.check_file_rules(rule, forbidden=True)
 
@@ -609,7 +609,7 @@ class CheckRootFS(CliCommand):
     #
     # Process the "allowed" rules group
     #
-    for rule in self.project.check_definition["files"]["allowed"]:
+    for rule in self.project.check_def["files"]["allowed"]:
       # Call the check package method
       self.check_file_rules(rule, allowed=True)
 
