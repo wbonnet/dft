@@ -22,7 +22,7 @@
 #
 
 """ This module provides functionnalities used to create a binary image of a media from
-the baseos and bootchain.
+the rootfs and bootchain.
 """
 
 import logging

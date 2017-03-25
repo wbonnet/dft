@@ -8,11 +8,11 @@
 # License.
 #
 #
-# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).  
+# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
 # Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
 #
 #
 # Contributors list :
@@ -26,32 +26,32 @@
 #
 # Definition of the project working directories
 #
-#   The value define hereafter overrides tools default configuration. This 
+#   The value define hereafter overrides tools default configuration. This
 #   mechanism is use to have custom working directories, dedicated to a given
 #   project.
-# 
-#   Directories can be defined completly, or partially at project scope. This 
+#
+#   Directories can be defined completly, or partially at project scope. This
 #   means that only some of the directories can be redefined. Undefined ones
 #   default to the values defined in dft tool configuration
 #
 #   Some values contains a list of dirctories, for instance 'additional_roles'
-#   The list is used to defined exta roles and playbooks, within scope project 
+#   The list is used to defined exta roles and playbooks, within scope project
 #   (thus which are not in the dft open-source scope). Additional directories
 #   content is copied to /dft_bootstrap during bootstrap phase, and can be used
 #   to install additional oftware nd configuration to the firmware.
 #
 # ----------------------------------------------------------------------------
 configuration:
-  # Defines the root of the working directories. A dirctory named after 
-  # project name will be created under this path, and subdirectories used to 
-  # store baseos, bootloader, image, etc will be created
+  # Defines the root of the working directories. A dirctory named after
+  # project name will be created under this path, and subdirectories used to
+  # store rootfs, bootloader, image, etc will be created
   working_dir: "~/Devel/dft/working_dir"
 
   # Defines the project name. Mostly used for output and directories creation
   project_name: "netshell"
 
-  # Defines the path to project configuration files. By default (undefined  
-  # value) configuration files are searched in the same directory as the 
+  # Defines the path to project configuration files. By default (undefined
+  # value) configuration files are searched in the same directory as the
   # current project.yml file
   project_path: "~/Devel/dft/toolkit/examples/starter-projects/netshell"
 
@@ -59,17 +59,17 @@ configuration:
   dft_base: "~/Devel/dft/toolkit/ansible"
 
   # Define a list of directories with additional content (roles, playbooks, etc)
-  # which are copied to /dft_bootstrap during rootfs bootstrapping. These paths 
-  # contains project specific definition (which are not included in the dft 
+  # which are copied to /dft_bootstrap during rootfs bootstrapping. These paths
+  # contains project specific definition (which are not included in the dft
   # open-source tool)
   # additional_roles:
   # - "~/Devel/dft/toolkit/"
 
 # ----------------------------------------------------------------------------
 #
-# Definition of the sub configuration files (for baseos, repositorie, etc.)
+# Definition of the sub configuration files (for rootfs, repositorie, etc.)
 #
-#   The section can be defined in any order. But inside a definition, the 
+#   The section can be defined in any order. But inside a definition, the
 #   list of yml files is ordered. The files are loaded in the same order as
 #   the list. This mechanism is used to overload previous definitions
 #
@@ -78,7 +78,7 @@ configuration:
 #   you only have to define :
 #   - debootstrap-repository
 #   - repositories (if different from debootstrap-repository)
-#   - baseos
+#   - rootfs
 #   - check
 # ----------------------------------------------------------------------------
 project_definition:
@@ -91,9 +91,9 @@ project_definition:
   repositories:
     - repositories.yml
 
-  # Definition of the baseos content
-  baseos:
-    - baseos.yml
+  # Definition of the rootfs content
+  rootfs:
+    - rootfs.yml
 
   # Definition of the firmware content and structure
   firmware:
@@ -109,7 +109,7 @@ project_definition:
 
   # Definition of the control to apply on the rootfs
   check:
-    - check_baseos.yml
+    - check_rootfs.yml
 
   # Definition of the stripping rules (to remove extra packages, files etc.)
   stripping:
@@ -119,11 +119,11 @@ project_definition:
   content_information:
     - content.yml
 
-  # Definition of the variables to be passed to baseos creation
+  # Definition of the variables to be passed to rootfs creation
   variables:
     - variables.yml
 
-  # Definition of the list of target architectures. Firmware will be generated for 
+  # Definition of the list of target architectures. Firmware will be generated for
   # each of the architecture in this list
   architectures:
     - amd64

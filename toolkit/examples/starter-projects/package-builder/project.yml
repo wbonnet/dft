@@ -44,7 +44,7 @@
 configuration:
   # Defines the root of the working directories. A dirctory named after 
   # project name will be created under this path, and subdirectories used to 
-  # store baseos, bootloader, image, etc will be created
+  # store rootfs, bootloader, image, etc will be created
   working_dir: "~/Devel/dft/working_dir"
 
   # Defines the project name. Mostly used for output and directories creation
@@ -67,7 +67,7 @@ configuration:
 
 # ----------------------------------------------------------------------------
 #
-# Definition of the sub configuration files (for baseos, repositorie, etc.)
+# Definition of the sub configuration files (for rootfs, repositorie, etc.)
 #
 #   The section can be defined in any order. But inside a definition, the 
 #   list of yml files is ordered. The files are loaded in the same order as
@@ -78,7 +78,7 @@ configuration:
 #   you only have to define :
 #   - debootstrap-repository
 #   - repositories (if different from debootstrap-repository)
-#   - baseos
+#   - rootfs
 #   - check
 # ----------------------------------------------------------------------------
 project-definition:
@@ -91,9 +91,9 @@ project-definition:
   repositories:
     - repositories.yml
 
-  # Definition of the baseos content
-  baseos:
-    - baseos.yml
+  # Definition of the rootfs content
+  rootfs:
+    - rootfs.yml
 
   # Definition of the firmware content and structure
   firmware:

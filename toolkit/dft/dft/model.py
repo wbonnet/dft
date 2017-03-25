@@ -132,7 +132,7 @@ class DftConfiguration(object):
 # -----------------------------------------------------------------------------
 class ProjectDefinition(object):
   """This class defines a project. A project holds all the information used
-  to produce the different object created by DFT (baseos, modulations,
+  to produce the different object created by DFT (rootfs, modulations,
   firmware, bootlader, etc.).
 
   Project is an aggregation of several dedicated configuration and
@@ -183,7 +183,7 @@ class ProjectDefinition(object):
     self.init_filename = None
     self.stacking_script_filename = None
 
-    self.baseos_def = None
+    self.rootfs_def = None
     self.bootloader_def = None
     self.check_def = None
     self.content_information_def = None
@@ -200,7 +200,7 @@ class ProjectDefinition(object):
 
   # ---------------------------------------------------------------------------
   #
-  # genereate_def_file_path
+  # generate_def_file_path
   #
   #   This method generates the complete path to sub configuration files
   #   This files are referenced in the project configuration file, and are
@@ -211,7 +211,7 @@ class ProjectDefinition(object):
   #   directory containing the project file being used.
   #
   # ---------------------------------------------------------------------------
-  def genereate_def_file_path(self, filename):
+  def generate_def_file_path(self, filename):
     """ This method generate the path to a configuration file. Generated path is
     relative to project-path if this variable has been set in the ain project file.
     If the variable has not been set, configuration files are searched in the same
@@ -281,55 +281,55 @@ class ProjectDefinition(object):
 
       # Load the repositories sub configuration files
       if "repositories" in self.project_def["project_definition"]:
-        filename = self.genereate_def_file_path(self.project_def["project_definition"]["repositories"][0])
+        filename = self.generate_def_file_path(self.project_def["project_definition"]["repositories"][0])
         with open(filename, 'r') as working_file:
           self.repositories_def = yaml.load(working_file)
 
-      # Load the baseos sub configuration files
-      if "baseos" in self.project_def["project_definition"]:
-        filename = self.genereate_def_file_path(self.project_def["project_definition"]["baseos"][0])
+      # Load the rootfs sub configuration files
+      if "rootfs" in self.project_def["project_definition"]:
+        filename = self.generate_def_file_path(self.project_def["project_definition"]["rootfs"][0])
         with open(filename, 'r') as working_file:
-          self.baseos_def = yaml.load(working_file)
+          self.rootfs_def = yaml.load(working_file)
 
       # Load the firmware sub configuration files
       if "firmware" in self.project_def["project_definition"]:
-        filename = self.genereate_def_file_path(self.project_def["project_definition"]["firmware"][0])
+        filename = self.generate_def_file_path(self.project_def["project_definition"]["firmware"][0])
         with open(filename, 'r') as working_file:
           self.firmware_def = yaml.load(working_file)
 
       # Load the bootloader sub configuration files
       if "bootloader" in self.project_def["project_definition"]:
-        filename = self.genereate_def_file_path(self.project_def["project_definition"]["bootloader"][0])
+        filename = self.generate_def_file_path(self.project_def["project_definition"]["bootloader"][0])
         with open(filename, 'r') as working_file:
           self.bootloader_def = yaml.load(working_file)
 
       # Load the image sub configuration files
       if "image" in self.project_def["project_definition"]:
-        filename = self.genereate_def_file_path(self.project_def["project_definition"]["image"][0])
+        filename = self.generate_def_file_path(self.project_def["project_definition"]["image"][0])
         with open(filename, 'r') as working_file:
           self.image_def = yaml.load(working_file)
 
       # Load the check sub configuration files
       if "check" in self.project_def["project_definition"]:
-        filename = self.genereate_def_file_path(self.project_def["project_definition"]["check"][0])
+        filename = self.generate_def_file_path(self.project_def["project_definition"]["check"][0])
         with open(filename, 'r') as working_file:
           self.check_def = yaml.load(working_file)
 
       # Load the stripping sub configuration files
       if "stripping" in self.project_def["project_definition"]:
-        filename = self.genereate_def_file_path(self.project_def["project_definition"]["stripping"][0])
+        filename = self.generate_def_file_path(self.project_def["project_definition"]["stripping"][0])
         with open(filename, 'r') as working_file:
           self.stripping_def = yaml.load(working_file)
 
       # Load the check sub configuration files
       if "content_information" in self.project_def["project_definition"]:
-        filename = self.genereate_def_file_path(self.project_def["project_definition"]["content_information"][0])
+        filename = self.generate_def_file_path(self.project_def["project_definition"]["content_information"][0])
         with open(filename, 'r') as working_file:
           self.content_information_def = yaml.load(working_file)
 
       # Load the list of variables files
       if "variables" in self.project_def["project_definition"]:
-        filename = self.genereate_def_file_path(self.project_def["project_definition"]["variables"][0])
+        filename = self.generate_def_file_path(self.project_def["project_definition"]["variables"][0])
         with open(filename, 'r') as working_file:
           self.variables_def = yaml.load(working_file)
 
@@ -367,7 +367,7 @@ class ProjectDefinition(object):
       # Target version to use when building the debootstrap. It has to be
       # a Debian version (jessie, stretch, etc.)
 # TODO : handle multiple version
-      self.target_version = self.baseos_def["target_versions"][0]
+      self.target_version = self.rootfs_def["target_versions"][0]
 
       # Generate the archive filename
 # TODO : handle multiple archs / version

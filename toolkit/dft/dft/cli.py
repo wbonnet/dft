@@ -30,7 +30,7 @@ The module will do actual processing and run the associated worker method (run m
 import argparse
 import textwrap
 import logging
-import build_baseos
+import build_rootfs
 import model
 import assemble_firmware
 import build_bootloader
@@ -60,7 +60,7 @@ class Cli(object):
     """
 
     # Current version
-    self.version = "0.1.4"
+    self.version = "0.2.0"
 
     # Create the internal parser from argparse
     self.parser = argparse.ArgumentParser(description=textwrap.dedent('''\
@@ -69,12 +69,12 @@ Debian Firmware Toolkit v''' + self.version + '''
 DFT is a collection of tools used to create Debian based firmwares
 
 Available commands are :
-? assemble_firmware                Create a firmware from a baseos and generate the configuration files used to loading after booting
-. build_baseos                     Generate a debootstrap from a Debian repository, install and configure required packages
+? assemble_firmware                Create a firmware from a rootfs and generate the configuration files used to loading after booting
+. build_rootfs                     Generate a debootstrap from a Debian repository, install and configure required packages
 ? build_bootloader                 Build the bootloader toolchain (kernel, initramfs, grub or uboot)
 ? build_image                      Build the disk image from the firmware (or rootfs) and bootloader toolchain
 . build_firmware                   Build the firmware configuration files and scripts used to load in memory the firmware
-. check_rootfs                     Control the content of the baseos rootfs after its generation (debsecan and openscap)
+. check_rootfs                     Control the content of the rootfs rootfs after its generation (debsecan and openscap)
 x factory_setup                    Apply some extra factory setup before generating the firmware
 ? generate_content_information     Generate a manifest identiyfing content and versions
 . strip_rootfs                     Strip down the rootfs before assembling the firmware'''),
@@ -107,8 +107,8 @@ x factory_setup                    Apply some extra factory setup before generat
     # According to the command, call the method dedicated to parse the arguments
     if   self.command == "assemble_firmware":
       self.add_parser_option_assemble_firmware()
-    elif self.command == "build_baseos":
-      self.add_parser_option_build_baseos()
+    elif self.command == "build_rootfs":
+      self.add_parser_option_build_rootfs()
     elif self.command == "build_bootloader":
       self.add_parser_option_build_bootloader()
     elif self.command == "build_image":
@@ -139,12 +139,12 @@ x factory_setup                    Apply some extra factory setup before generat
                              help='Command to execute')
 
 
-  def add_parser_option_build_baseos(self):
-    """ This method add parser options specific to build_baseos command
+  def add_parser_option_build_rootfs(self):
+    """ This method add parser options specific to build_rootfs command
     """
 
     # Add the arguments
-    self.parser.add_argument('build_baseos',
+    self.parser.add_argument('build_rootfs',
                              help='Command to execute')
 
     # Overrides the target architecture from the configuration file by
@@ -156,7 +156,7 @@ x factory_setup                    Apply some extra factory setup before generat
                              dest='limit_target_arch',
                              help='limit the list of target arch to process (comma separated list of arch eg: arch1,arch2)')
 
-    # Overrides the target version used to build the baseos. Version to
+    # Overrides the target version used to build the rootfs. Version to
     # use is limited it to a given list of arch. Versions not defined
     # in the configuration file can be added with this parameter
 # TODO: parse the list of argument. So far only one value is handled
@@ -165,7 +165,7 @@ x factory_setup                    Apply some extra factory setup before generat
                              dest='limit_target_version',
                              help='limit the list of target version to process (comma separated list of versions eg: jessie,stretch)')
 
-    # Activate the use of the rootfs cache archive. When building a baseos
+    # Activate the use of the rootfs cache archive. When building a rootfs
     # with debootstrap, having this option enable will make DFT look for
     # an existing cache archive, an extract it instead of doing a fresh
     # debootstrap installation
@@ -176,14 +176,14 @@ x factory_setup                    Apply some extra factory setup before generat
                              "This option does nothing if the cache archive do no exist. In this case, debootstrap will be \n"
                              "launched and the missing archive will not be created")
 
-    # Activate the use of the rootfs cache archive. When building a baseos
+    # Activate the use of the rootfs cache archive. When building a rootfs
     # with debootstrap, having this option enable will make DFT look for
     # an existing cache archive, an extract it instead of doing a fresh
     # debootstrap installation
     self.parser.add_argument('--update-cache-archive',
                              action='store_true',
                              dest='update_cache_archive',
-                             help="update the cache archive after building a baseos with debootstrap. Existing archive will\n"
+                             help="update the cache archive after building a rootfs with debootstrap. Existing archive will\n"
                              "be deleted if it already exist, or it will be created if missing")
 
     # Override the list of mirrors defined in the configuration file.
@@ -316,11 +316,11 @@ x factory_setup                    Apply some extra factory setup before generat
 
   def add_parser_option_common(self):
     """ This method add parser options common to all command
-    Configuration file store the definition of baseos. Option can be
+    Configuration file store the definition of rootfs. Option can be
     overriden by arguments on the command line (like --target-arch)
     """
 
-    # Configuration file defines baseos and its modulation
+    # Configuration file defines rootfs and its modulation
     self.parser.add_argument('--config-file',
                              action='store',
                              dest='config_file',
@@ -389,8 +389,8 @@ x factory_setup                    Apply some extra factory setup before generat
     # Select the method to run according to the command
     if self.command == "assemble_firmware":
       self.run_assemble_firmware()
-    elif self.command == "build_baseos":
-      self.run_build_baseos()
+    elif self.command == "build_rootfs":
+      self.run_build_rootfs()
     elif self.command == "build_bootloader":
       self.run_build_bootloader()
     elif self.command == "build_image":
@@ -426,11 +426,11 @@ x factory_setup                    Apply some extra factory setup before generat
 
   # -------------------------------------------------------------------------
   #
-  # run_build_baseos
+  # run_build_rootfs
   #
   # -------------------------------------------------------------------------
-  def run_build_baseos(self):
-    """ Method used to handle the build_baseos command.
+  def run_build_rootfs(self):
+    """ Method used to handle the build_rootfs command.
       Create the business objet, then execute the entry point
     """
 
@@ -480,10 +480,10 @@ x factory_setup                    Apply some extra factory setup before generat
         self.project.target_arch = self.args.limit_target_arch
 
     # Create the business object
-    command = build_baseos.BuildBaseOS(self.dft, self.project)
+    command = build_rootfs.BuildRootFS(self.dft, self.project)
 
     # Then
-    command.install_baseos()
+    command.install_rootfs()
 
 
 

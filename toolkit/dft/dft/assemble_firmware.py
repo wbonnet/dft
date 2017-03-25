@@ -66,7 +66,7 @@ class AssembleFirmware(CliCommand):
     """This method implement the business logic of firmware assembling.
 
     Assembling a firmware, use as input the firmware file created from a
-    baseos and then generate the configuration files used to loading after
+    rootfs and then generate the configuration files used to loading after
     booting. The configuration is used to define how the filesystems are
     stacked, what should be the physical partitionning, ciphering, etc.
 

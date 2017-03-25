@@ -21,7 +21,7 @@
 #
 #
 
-""" This module provides functionnalities used to control the content of th baseos (or rootfs)
+""" This module provides functionnalities used to control the content of the rootfs
 according to a set of rules defined in a Yaml configuration file. Rules can be used to define
 mandatory ites (files or packages), forbidden or optional ones, and a set of check upon
 attributes and content.

@@ -21,7 +21,7 @@
 #
 #
 
-""" This modules iplements the functionnalities needed to create a baseos installation
+""" This modules iplements the functionnalities needed to create a rootfs installation
 based upon the definition stored in a configuration file and a set of Ansible roles.
 """
 
@@ -35,12 +35,12 @@ from distutils import file_util
 from cli_command import CliCommand
 
 #
-#    Class BuildBaseOS
+#    Class BuildRootFS
 #
-class BuildBaseOS(CliCommand):
-  """This class implements method needed to create the base OS
+class BuildRootFS(CliCommand):
+  """This class implements method needed to create the Root FileSystem
 
-  The "base OS" is the initial installation of Debian (debootstrap) which
+  The "RootFS" is the initial installation of Debian (debootstrap) which
   is used to apply ansible playbooks.
 
   The methods implemented in this class provides what is needed to :
@@ -68,10 +68,10 @@ class BuildBaseOS(CliCommand):
 
   # -------------------------------------------------------------------------
   #
-  # install_baseos
+  # install_rootfs
   #
   # -------------------------------------------------------------------------
-  def install_baseos(self):
+  def install_rootfs(self):
     """This method implement the business logic of generating the rootfs.
     It calls dedicated method for each step. The main steps are :
 
@@ -85,17 +85,17 @@ class BuildBaseOS(CliCommand):
     """
 
     # Check that DFT path is valid
-    if not os.path.isdir(self.project.project_definition["configuration"]["dft_base"]):
+    if not os.path.isdir(self.project.project_def["configuration"]["dft_base"]):
       logging.critical("Path to DFT installation is not valid : %s",
-                       self.project.project_definition["configuration"]["dft_base"])
+                       self.project.project_def["configuration"]["dft_base"])
       exit(1)
 
     # Ensure target rootfs mountpoint exists and is a dir
     if not os.path.isdir(self.project.rootfs_mountpoint):
       os.makedirs(self.project.rootfs_mountpoint)
     else:
-      if ("keep_rootfs_history" in self.project.project_definition["configuration"] and
-          self.project.project_definition["configuration"]["keep_rootfs_history"]):
+      if ("keep_rootfs_history" in self.project.project_def["configuration"] and
+          self.project.project_def["configuration"]["keep_rootfs_history"]):
         logging.warn("target rootfs mount point already exists : " + self.project.rootfs_mountpoint)
 # TODO
         logging.critical("TODO : handle history : " + self.project.rootfs_mountpoint)
@@ -140,6 +140,8 @@ class BuildBaseOS(CliCommand):
     if self.use_qemu_static:
       self.cleanup_qemu()
 
+    # Final log
+    logging.info("RootFS has been successfully generated into : " + self.project.rootfs_mountpoint)
 
   # -------------------------------------------------------------------------
   #
@@ -164,9 +166,10 @@ class BuildBaseOS(CliCommand):
         os.makedirs(dft_target_path)
 
       # Copy the DFT toolkit content to the target rootfs
-      for copy_target in os.listdir(self.project.project_definition["configuration"]["dft_base"]):
+      for copy_target in os.listdir(self.project.project_def["configuration"]["dft_base"]):
         logging.debug("Copy the DFT toolkit : preparing to copy " + copy_target)
-        copy_target_path = os.path.join(self.project.project_definition["configuration"]["dft_base"], copy_target)
+        copy_target_path = os.path.join(self.project.project_def["configuration"]["dft_base"],
+                                        copy_target)
         if os.path.isfile(copy_target_path):
           logging.debug("copying file " + copy_target_path + " => " + dft_target_path)
           file_util.copy_file(copy_target_path, dft_target_path)
@@ -175,9 +178,10 @@ class BuildBaseOS(CliCommand):
           dir_util.copy_tree(copy_target_path, os.path.join(dft_target_path, copy_target))
 
       # Copy the additional toolkit content to the target rootfs
-      if "additional_roles" in self.project.project_definition["configuration"]:
-        for additional_path in self.project.project_definition["configuration"]["additional_roles"]:
-          logging.debug("Copy the additional toolkit : preparing to copy from additional path " + additional_path)
+      if "additional_roles" in self.project.project_def["configuration"]:
+        for additional_path in self.project.project_def["configuration"]["additional_roles"]:
+          logging.debug("Copy the additional toolkit : preparing to copy from additional path "
+                        + additional_path)
           for copy_target in os.listdir(additional_path):
             logging.debug("Copy the additional toolkit : preparing to copy " + copy_target)
             copy_target_path = os.path.join(additional_path, copy_target)
@@ -202,7 +206,7 @@ class BuildBaseOS(CliCommand):
     # Flag if someroles has been foundand added to site.yml
     role_has_been_found = False
 
-    # Generate the site file including all the roles from baseos
+    # Generate the site file including all the roles from rootfs
     # configuration, then move  roles to the target rootfs
     with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
       # Generate file header
@@ -212,19 +216,19 @@ class BuildBaseOS(CliCommand):
       working_file.write("\n")
 
       # Test if some variable files have to be included
-      if "variables" in self.project.project_definition["project_definition"]:
+      if "variables" in self.project.project_def["project_definition"]:
         # Yes, then output the vars_files marker
         working_file.write("  vars_files:\n")
 
         # And iterate the list of files containing variables
-        for vars_file in self.project.project_definition["project_definition"]["variables"]:
+        for vars_file in self.project.project_def["project_definition"]["variables"]:
           # Append the file to the site.yml file
           working_file.write("  - " + vars_file + "\n")
           logging.debug("Adding variables file " + vars_file)
 
-          # Completethe path to have a full path on disk (in case of path local
+          # Complete the path to have a full path on disk (in case of path local
           # to where is located the project file)
-          vars_file = self.project.genereate_definition_file_path(vars_file)
+          vars_file = self.project.generate_def_file_path(vars_file)
 
           # Copy the variabes fies to the bootstrap directory
           logging.debug("Copy the variables file : preparing to copy " + vars_file)
@@ -241,7 +245,7 @@ class BuildBaseOS(CliCommand):
       working_file.write("  roles:\n")
 
       # Iterate the list of distributions loaded from the file
-      for role in self.project.baseos_definition["roles"]:
+      for role in self.project.rootfs_def["roles"]:
         # At least one role has beenfound, flag it
         role_has_been_found = True
         logging.debug("Adding role " + role)
@@ -257,16 +261,18 @@ class BuildBaseOS(CliCommand):
     sudo_command = "sudo mv -f " + working_file.name + " " + filepath
     self.execute_command(sudo_command)
 
-    # Warn the user if no role is found. In such case baseos will be same
+    # Warn the user if no role is found. In such case rootfs will be same
     # debotstrap, which is certainly not what is expected
     if not role_has_been_found:
-      logging.warning("No role has been found in baseos definition. Rootfs is same as debootstrap output")
-      logging.error("You may wish to have a look to : " + self.project.genereate_definition_file_path(self.project.project_definition["project_definition"]["baseos"][0]))
+      logging.warning("No role has been found in rootfs definition. Rootfs is same as debootstrap output")
+      logging.error("You may wish to have a look to : " + self.project.generate_def_file_path(self.project.project_def["project_definition"]["rootfs"][0]))
 
     # Execute Ansible
     # TODO : multiple target ? not sure...
     logging.info("running ansible...")
-    sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint + " /bin/bash -c \"cd /dft_bootstrap && /usr/bin/ansible-playbook -i inventory.yml -c local site.yml\""
+    sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
+    sudo_command += " /bin/bash -c \"cd /dft_bootstrap && /usr/bin/ansible-playbook -i"
+    sudo_command += " inventory.yml -c local site.yml\""
     self.execute_command(sudo_command)
     logging.info("ansible stage successfull")
 
@@ -338,7 +344,8 @@ class BuildBaseOS(CliCommand):
 
     # Check that the archive exists
     if not os.path.isfile(self.project.archive_filename):
-      logging.warning("cache has been activate and archive file does not exist : " + self.project.archive_filename)
+      logging.warning("cache has been activate and archive file does not exist : "
+                      + self.project.archive_filename)
       return False
 
     # Extract tar file to rootfs mountpoint
@@ -374,7 +381,7 @@ class BuildBaseOS(CliCommand):
     # Add the target, mount point and repository url to the debootstrap command
     debootstrap_command += " " +  self.project.target_version + " "
     debootstrap_command += self.project.rootfs_mountpoint + " "
-    debootstrap_command += self.project.project_definition["project_definition"]["debootstrap_repository"]
+    debootstrap_command += self.project.project_def["project_definition"]["debootstrap_repository"]
 
     # Finally run the subprocess
     self.execute_command(debootstrap_command)
@@ -392,17 +399,20 @@ class BuildBaseOS(CliCommand):
 
 
     # Mount bind /proc into the rootfs mountpoint
-    sudo_command = "sudo mount --bind --make-rslave /proc " + self.project.rootfs_mountpoint + "/proc"
+    sudo_command = "sudo mount --bind --make-rslave /proc " + self.project.rootfs_mountpoint
+    sudo_command += "/proc"
     self.execute_command(sudo_command)
     self.proc_is_mounted = True
 
     # Mount bind /dev/pts into the rootfs mountpoint
-    sudo_command = "sudo mount --bind --make-rslave /dev/pts " + self.project.rootfs_mountpoint + "/dev/pts"
+    sudo_command = "sudo mount --bind --make-rslave /dev/pts " + self.project.rootfs_mountpoint
+    sudo_command += "/dev/pts"
     self.execute_command(sudo_command)
     self.devpts_is_mounted = True
 
     # Mount bind /dev/shm into the rootfs mountpoint
-    sudo_command = "sudo mount --bind --make-rslave /dev/shm " + self.project.rootfs_mountpoint + "/dev/shm"
+    sudo_command = "sudo mount --bind --make-rslave /dev/shm " + self.project.rootfs_mountpoint
+    sudo_command += "/dev/shm"
     self.execute_command(sudo_command)
     self.devshm_is_mounted = True
 
@@ -414,7 +424,8 @@ class BuildBaseOS(CliCommand):
     self.execute_command(apt_command)
 
     # Install extra packages into the chroot
-    apt_command = "sudo chroot " + self.project.rootfs_mountpoint + " /usr/bin/apt-get install --no-install-recommends --yes --allow-unauthenticated apt-utils ansible"
+    apt_command = "sudo chroot " + self.project.rootfs_mountpoint + " /usr/bin/apt-get install"
+    apt_command += " --no-install-recommends --yes --allow-unauthenticated apt-utils ansible"
     self.execute_command(apt_command)
 
     # Generate a unique build timestamp into /etc/dft_version
@@ -458,7 +469,7 @@ class BuildBaseOS(CliCommand):
     filepath = self.project.rootfs_mountpoint + "/etc/apt/sources.list"
 
     # Open the file and writes configuration in it
-    self.project.debian_mirror_url = self.project.project_definition["project_definition"]["debootstrap_repository"]
+    self.project.debian_mirror_url = self.project.project_def["project_definition"]["debootstrap_repository"]
 
     # Flag if we have found a matching distro or not
     distro_has_been_found = False
@@ -466,7 +477,7 @@ class BuildBaseOS(CliCommand):
     # The open the temp file for output, and iterate the distro dictionnary
     with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
       # Iterate the list of distributions loaded from the file
-      for distro in self.project.repositories_definition["distributions"]:
+      for distro in self.project.repositories_def["distributions"]:
         logging.debug(distro)
         # Process only if it is the version we target
         if distro["name"] == self.project.target_version and self.project.target_arch in distro["architectures"]:
@@ -502,7 +513,7 @@ class BuildBaseOS(CliCommand):
       self.cleanup_installation_files()
       logging.error("No distribution matching " + self.project.target_version + " has been found.")
       logging.error("Please check repositories definition for this project.")
-      logging.error("File in use is : " + self.project.genereate_definition_file_path(self.project.project_definition["project_definition"]["repositories"][0]))
+      logging.error("File in use is : " + self.project.generate_def_file_path(self.project.project_def["project_definition"]["repositories"][0]))
       logging.critical("Cannot generate /etc/apt/sources.list under rootfs path. Operation is aborted !")
       exit(1)
 

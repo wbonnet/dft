@@ -55,7 +55,7 @@ class CliCommand(object):
 
     # Object storing the project definition. Project holds all the
     # configuration and definition used by the different stage of
-    # the toolchain, including baseos definition
+    # the toolchain, including rootfs definition
     self.project = project
 
     # Retrieve the architecture of the host

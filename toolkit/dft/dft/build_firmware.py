@@ -22,7 +22,7 @@
 #
 
 """ This module contains the functionnalities needed to create a squashfs compressed file
-from a baseos. The squashfs file contains hte operating system, or configuration files, or
+from a rootfs. The squashfs file contains hte operating system, or configuration files, or
 anything you decide. They can be stacked in memory to create the read only operating system.
 """
 
@@ -68,8 +68,8 @@ class BuildFirmware(CliCommand):
     """
 
     # Check that there is a firmware configuration file first
-    if self.project.firmware_definition is None:
-      self.project.logging.critical("The firmware configuration file is not defined in project file")
+    if self.project.firmware_def is None:
+      self.project.logging.critical("The firmware configuration file is not defined in project")
       exit(1)
 
     # Ensure firmware generation path exists and is a dir
@@ -86,69 +86,73 @@ class BuildFirmware(CliCommand):
     if os.path.isfile(self.project.firmware_filename):
       os.remove(self.project.firmware_filename)
 
-    # Create a new squashfs file from the baseos path
+    # Create a new squashfs file from the rootfs path
     sudo_command = 'mksquashfs "' +  self.project.rootfs_mountpoint + '" "'
     sudo_command += self.project.firmware_filename + '"'
 
     # Append arguments if defined in the configuration file
-    if "block_size" in self.project.firmware_definition["configuration"]:
-      sudo_command += ' -b ' + self.project.firmware_definition["configuration"]["block_size"]
+    if "block_size" in self.project.firmware_def["configuration"]:
+      sudo_command += ' -b ' + self.project.firmware_def["configuration"]["block_size"]
 
-    if "compressor" in self.project.firmware_definition["configuration"]:
-      sudo_command += ' -comp ' + self.project.firmware_definition["configuration"]["compressor"]
+    if "compressor" in self.project.firmware_def["configuration"]:
+      sudo_command += ' -comp ' + self.project.firmware_def["configuration"]["compressor"]
 
-    if "no_exports" in self.project.firmware_definition["configuration"]:
-      if self.project.firmware_definition["configuration"]["no_exports"]:
+    if "no_exports" in self.project.firmware_def["configuration"]:
+      if self.project.firmware_def["configuration"]["no_exports"]:
         sudo_command += ' -no-exports '
 
-    if "no_spare" in self.project.firmware_definition["configuration"]:
+    if "no_spare" in self.project.firmware_def["configuration"]:
       sudo_command += ' -no-spare '
 
-    if "xattrs" in self.project.firmware_definition["configuration"]:
-      if self.project.firmware_definition["configuration"]["xattrs"]:
+    if "xattrs" in self.project.firmware_def["configuration"]:
+      if self.project.firmware_def["configuration"]["xattrs"]:
         sudo_command += ' -xattrs '
-      if not self.project.firmware_definition["configuration"]["xattrs"]:
+      if not self.project.firmware_def["configuration"]["xattrs"]:
         sudo_command += ' -no-xattrs '
 
-    if "no_inode_compression" in self.project.firmware_definition["configuration"]:
+    if "no_inode_compression" in self.project.firmware_def["configuration"]:
       sudo_command += ' -noI '
 
-    if "no_datablock_compression" in self.project.firmware_definition["configuration"]:
+    if "no_datablock_compression" in self.project.firmware_def["configuration"]:
       sudo_command += ' -noD '
 
-    if "no_fragmentblock_compression" in self.project.firmware_definition["configuration"]:
+    if "no_fragmentblock_compression" in self.project.firmware_def["configuration"]:
       sudo_command += ' -noF '
 
-    if "no_xattrs_compression" in self.project.firmware_definition["configuration"]:
+    if "no_xattrs_compression" in self.project.firmware_def["configuration"]:
       sudo_command += ' -noX '
 
-    if "use_fragments" in self.project.firmware_definition["configuration"]:
-      if self.project.firmware_definition["configuration"]["use_fragments"]:
+    if "use_fragments" in self.project.firmware_def["configuration"]:
+      if self.project.firmware_def["configuration"]["use_fragments"]:
         sudo_command += ' -always_use_fragments '
-      if not self.project.firmware_definition["configuration"]["use_fragments"]:
+      if not self.project.firmware_def["configuration"]["use_fragments"]:
         sudo_command += ' -no_fragments '
 
-    if "no_duplicate_check" in self.project.firmware_definition["configuration"]:
-      if self.project.firmware_definition["configuration"]["no_duplicate_check"]:
+    if "no_duplicate_check" in self.project.firmware_def["configuration"]:
+      if self.project.firmware_def["configuration"]["no_duplicate_check"]:
         sudo_command += ' -no-duplicates '
 
-    if "all_root" in self.project.firmware_definition["configuration"]:
-      if self.project.firmware_definition["configuration"]["all_root"]:
+    if "all_root" in self.project.firmware_def["configuration"]:
+      if self.project.firmware_def["configuration"]["all_root"]:
         sudo_command += ' -all-root '
 
-    if "force_uid" in self.project.firmware_definition["configuration"]:
+    if "force_uid" in self.project.firmware_def["configuration"]:
       sudo_command += ' -force-uid '
-      sudo_command += self.project.firmware_definition["configuration"]["force_uid"]
+      sudo_command += self.project.firmware_def["configuration"]["force_uid"]
 
-    if "force_gid" in self.project.firmware_definition["configuration"]:
+    if "force_gid" in self.project.firmware_def["configuration"]:
       sudo_command += ' -force-gid '
-      sudo_command += self.project.firmware_definition["configuration"]["force_gid"]
+      sudo_command += self.project.firmware_def["configuration"]["force_gid"]
 
-    if "nopad" in self.project.firmware_definition["configuration"]:
-      if self.project.firmware_definition["configuration"]["nopad"]:
+    if "nopad" in self.project.firmware_def["configuration"]:
+      if self.project.firmware_def["configuration"]["nopad"]:
         sudo_command += ' -nopad '
 
     self.execute_command(sudo_command)
+
+    # Final log
+    logging.info("Firmware has been successfully generated into : "\
+                 + self.project.firmware_filename)
 
 # TODO : add control hash and signature according to configuration file options
 
@@ -196,4 +200,4 @@ class BuildFirmware(CliCommand):
 
 
 
-# Later add the possibility to generate several squashfs out of a baseos, and do delta, time based ?
+# Later add the possibility to generate several squashfs out of a rootfs, and do delta, time based ?

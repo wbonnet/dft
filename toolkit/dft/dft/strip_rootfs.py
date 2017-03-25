@@ -21,8 +21,8 @@
 #
 #
 
-""" This modules implements the functionnalities used to strip a baseos (or rootfs)
-according to the rules defined in a Yaml configuration file. Stripping a baseos is made
+""" This modules implements the functionnalities used to strip a roootfs (or rootfs)
+according to the rules defined in a Yaml configuration file. Stripping a rootfs is made
 of removing files and packages.
 """
 

@@ -21,7 +21,7 @@
 #
 #
 
-""" This module is in charge of outputing information about the baseos (or rootfs)
+""" This module is in charge of outputing information about the rootfs (or rootfs)
 content. Information ca be output to different format such as csv, yaml, xml, or json.
 """
 
@@ -417,7 +417,7 @@ class GenerateContentInformation(CliCommand):
         # If not, test if it has to be installed, or should it fail ?
         # Default behavior is to install clamav if missing and to remove
         # it if it has been installed in this method context (and not in the
-        # baseos)
+        # rootfs)
 
         # If install_missing_software key is not defined, then set its default value
         if "install_missing_software" not in self.project.content_information_def["configuration"]:
@@ -566,7 +566,7 @@ class GenerateContentInformation(CliCommand):
       # If not, test if it has to be installed, or should it fail ?
       # Default behavior is to install debsecan if missing and to remove
       # it if it has been installed in this method context (and not in the
-      # baseos)
+      # rootfs)
       # If key is not defined, then set its default value
       if self.project.content_information_def["configuration"] != None:
         if "install_missing_software" not in self.project.content_information_def["configuration"]:

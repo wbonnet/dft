@@ -21,3 +21,14 @@
 #
 #
 
+# List of the Ansible role to apply to the rootfs
+roles:
+  - dft-os-base
+  - dft-network-base
+  - dft-security-base
+  - dft-os-apt
+
+# Definition of the list of target versions. Firmware will be generated for 
+# each of the versions in this list
+target-versions:
+  - stretch
