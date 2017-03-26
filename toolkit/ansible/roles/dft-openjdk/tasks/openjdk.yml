@@ -34,7 +34,7 @@
        install_recommends=no
   with_items:
     - openjdk-8-jdk
-  when: (ansible_distribution == "Debian" and ansible_distribution_major_version == "testing")
+  when: (ansible_distribution == "Debian" and ansible_distribution_major_version == "9")
 
 - name : DFT - Install openjdk7
   apt: name={{ item }} 
@@ -43,4 +43,4 @@
        install_recommends=no
   with_items:
     - openjdk-7-jdk
-  when: (ansible_distribution == "Debian" and ansible_distribution_major_version <= "8")
+  when: (ansible_distribution == "Debian" and ansible_distribution_major_version == "8")
