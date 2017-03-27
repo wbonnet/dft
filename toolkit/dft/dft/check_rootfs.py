@@ -352,14 +352,19 @@ class CheckRootFS(CliCommand):
       # And that constraint is defined
       if "installation_constraint" in self.project.check_def["configuration"]:
         # Now check the defined contraint is valid (ie: no gizmo value)
-        if self.project.check_def["configuration"]["installation_constraint"] not in "mandatory-only" "allow-optional" "no-constraint":
-          self.project.logging.error("unknown installation constraint " + self.project.check_def["configuration"]["installation_constraint"])
+        if self.project.check_def["configuration"]["installation_constraint"] not in\
+          "mandatory-only" "allow-optional" "no-constraint":
+          self.project.logging.error("unknown installation constraint " + \
+                                     self.project.check_def["configuration"]\
+                                     ["installation_constraint"])
           return False
         # If we reach this code, then there is a valid constaint defined
         else:
           # IF constraint is no-constraint there is nothing to do
           if self.project.check_def["configuration"]["installation_constraint"] == "no-constaint":
-            self.project.logging.debug("installation constraint is " + self.project.check_def["configuration"]["installation_constraint"])
+            self.project.logging.debug("installation constraint is " + \
+                                       self.project.check_def["configuration"]\
+                                                             ["installation_constraint"])
             return True
 
           # Build the list of packages defined in the mandatory section. They
@@ -407,7 +412,8 @@ class CheckRootFS(CliCommand):
 
     # First let's control that all keywords (key dictionnaires) are valid and know
     for keyword in rule:
-      if keyword not in "name" "min_version" "max_version" "allowed_version" "blacklisted_version" "allowed_arch" "blacklisted_arch" "expected_result" "label":
+      if keyword not in "name" "min_version" "max_version" "allowed_version" "blacklisted_version"\
+                        "allowed_arch" "blacklisted_arch" "expected_result" "label":
         self.project.logging.error("Unknown keyword " + keyword +
                                    " when parsing packages rules. Rule is ignored")
 
@@ -472,7 +478,7 @@ class CheckRootFS(CliCommand):
           return_code = compare_result.returncode
 
         # Catch the execution exception and set return_code to something else than zero
-        except subprocess.CalledProcessError as exception:
+        except subprocess.CalledProcessError:
           return_code = 1
 
         # If the result is not ok, then output an info an go on checking next keyword
@@ -645,7 +651,8 @@ class CheckRootFS(CliCommand):
 
     # First let's control that all keywords (key dictionnaires) are valid and know
     for keyword in rule:
-      if keyword not in "path" "type" "owner" "group" "mode" "target" "empty" "md5" "sha1" "sha256" "expected-result" "label":
+      if keyword not in "path" "type" "owner" "group" "mode" "target" "empty" "md5" "sha1" "sha256"\
+                        "expected-result" "label":
         self.project.logging.error("Unknow keyword " + keyword +
                                    " when parsing filess rules. Rule is ignored")
         self.project.logging.error("Rule is " + str(rule))
@@ -710,9 +717,9 @@ class CheckRootFS(CliCommand):
 
       # If target is defined, we have to check that it does not exist either
       if "target" in rule:
-        if not os.path.isdir(rule["path"]) and not os.path.islink(rule["path"]) and not os.path.isfile(rule["path"]):
-          self.project.logging.info("Missing mandatory target : " +
-                                    rule["target_path"])
+        if not os.path.isdir(rule["path"]) and not os.path.islink(rule["path"]) and \
+           not os.path.isfile(rule["path"]):
+          self.project.logging.info("Missing mandatory target : " + rule["target_path"])
           self.is_rule_check_successfull = False
           return
 
@@ -799,7 +806,8 @@ class CheckRootFS(CliCommand):
 
     # Check the target of the symlink
     if "target" in rule:
-      if not os.path.isdir(rule["target_path"]) and not os.path.islink(rule["target_path"]) and not os.path.isfile(rule["target_path"]):
+      if not os.path.isdir(rule["target_path"]) and not os.path.islink(rule["target_path"]) and \
+         not os.path.isfile(rule["target_path"]):
         self.project.logging.info("Target " + rule["target_path"] + " does not exist")
         self.is_rule_check_successfull = False
         return
@@ -880,7 +888,7 @@ class CheckRootFS(CliCommand):
 
         # Compare the hash to the rule, and set the check flag if needed
         if rule["md5"] != hasher.hexdigest():
-          self.project.logging.info("File " + rule["path"] + " has an invalid MD5 hash. MD5 is " +
+          self.project.logging.info("File " + rule["path"] + " has an invalid MD5 hash. hash is " +
                                     hasher.hexdigest() + " instead of " + rule["md5"])
           self.is_rule_check_successfull = False
           return
@@ -911,7 +919,7 @@ class CheckRootFS(CliCommand):
 
         # Compare the hash to the rule, and set the check flag if needed
         if rule["sha1"] != hasher.hexdigest():
-          self.project.logging.info("File " + rule["path"] + " has an invalid SHA1 hash. SHA1 is " +
+          self.project.logging.info("File " + rule["path"] + " has an invalid SHA1 hash. hash is " +
                                     hasher.hexdigest() + " instead of " + rule["sha1"])
           self.is_rule_check_successfull = False
           return
@@ -949,5 +957,5 @@ class CheckRootFS(CliCommand):
           self.is_rule_check_successfull = False
           return
         else:
-          self.project.logging.debug("File " + rule["path"] + " has an valid SHA256 hash. SHA256 is " +
+          self.project.logging.debug("File " + rule["path"] + " has a valid SHA256 hash. hash is " +
                                      hasher.hexdigest() + " instead of " + rule["sha256"])
