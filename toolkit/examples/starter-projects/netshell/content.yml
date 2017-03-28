@@ -174,9 +174,9 @@ antivirus:
   # the host; Otherwise it will be run from the target chroot (and installed
   # if necessary). If the antivirus is missing from the host it will NEVER be
   # installed automatically.
-  use_host_av: False
+  use_host_av: True
 
   # This flag control the database update before execution. If set to True (its the
   # default value), then the antivirus update command is executed. If set to false
   # it is skipped)
-  # update_database: True
+  update_database: False

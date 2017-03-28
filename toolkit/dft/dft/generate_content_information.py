@@ -385,13 +385,16 @@ class GenerateContentInformation(CliCommand):
       if not self.project.content_information_def["antivirus"]["use_host_av"]:
         use_host_av = False
 
+    # Log which AV we are going to use
+    logging.debug("Using host antivirus : " + str(use_host_av))
+
     # Now generation platform is identfied, we can generation the coommands
     if use_host_av:
       # Generate the version command
       antivirus_cmd_version = "LANG=C sudo clamscan --version"
 
       # Generate the update command
-      antivirus_cmd_version = "LANG=C sudo freshclam"
+      antivirus_cmd_update = "LANG=C sudo freshclam"
 
       # Generate the scan command
       antivirus_cmd_scan = "LANG=C sudo clamscan --infected --recursive "
@@ -402,13 +405,17 @@ class GenerateContentInformation(CliCommand):
       antivirus_cmd_version += " clamscan --version"
 
       # Generate the update command
-      antivirus_cmd_version = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
-      antivirus_cmd_version += " freshclam"
+      antivirus_cmd_update = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
+      antivirus_cmd_update += " freshclam"
 
       # Generate the scan command
       antivirus_cmd_scan = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
       antivirus_cmd_scan += " clamscan --infected --recursive /"
 
+    # Log the generated commands
+    logging.debug("Antivirus version command : " + antivirus_cmd_version)
+    logging.debug("Antivirus update command  : " + antivirus_cmd_update)
+    logging.debug("Antivirus scan command    : " + antivirus_cmd_scan)
 
     # Check if clamscan is installed in the chrooted environment
     need_to_remove_clamav = False
@@ -421,7 +428,6 @@ class GenerateContentInformation(CliCommand):
 
         # If install_missing_software key is not defined, then set its default value
         if "install_missing_software" not in self.project.content_information_def["configuration"]:
-          logging.debug("Setting default value of install_missing_software to False")
           self.project.content_information_def["configuration"]["install_missing_software"] = False
 
         # If skip_missing_software key is not defined, then set its default value
@@ -476,6 +482,10 @@ class GenerateContentInformation(CliCommand):
     # Checking and installation section is done. Now execute thee antivirus
     #
 
+    # Initialize and empty dictionnaries. It is use to stores the key/value
+    # pair used processed during output
+    output_item = dict()
+
     # Initialize the output writer for packages content generation
     self.output_writer.initialize("antivirus")
 
@@ -489,18 +499,12 @@ class GenerateContentInformation(CliCommand):
       logging.debug("Starting to update Clamav database")
       sudo_command_output = self.execute_command(antivirus_cmd_update)
 
-      print(sudo_command_output)
-
       # Parse the results and add lines to the output buffer
       for binaryline in sudo_command_output.splitlines():
         # Each fields is stored into a variable to easy manipulation and
         # simplify code. First get the array of words converted to UTF-8
         line = binaryline.decode('utf-8')
         print(line)
-
-        # Initialize and empty dictionnaries. It is use to stores the key/value
-        # pair used processed during output
-        output_item = dict()
 
         # Test if we have to generate the package status in the output
         output_item["update database"] += line
@@ -510,10 +514,17 @@ class GenerateContentInformation(CliCommand):
       logging.debug("Clamav database update is deactivated")
 
     # Generate the dpkg command to retrieve the list of installed packages
+    logging.debug("Starting Clamav version command")
     sudo_command_output = self.execute_command(antivirus_cmd_version)
+    output_item["version"] = sudo_command_output.decode('UTF-8')
 
     # Generate the dpkg command to retrieve the list of installed packages
+    logging.debug("Starting Clamav scan")
     sudo_command_output = self.execute_command(antivirus_cmd_scan)
+    output_item["scan"] = sudo_command_output.decode('UTF-8')
+
+    # print(output)
+    self.output_writer.output_buffer.append(output_item)
 
     # Flush all pending output and close stream or file
     self.output_writer.flush_and_close()
