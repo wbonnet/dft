@@ -342,14 +342,14 @@ class ProjectDefinition(object):
       if "rootfs_generator_cachedirname" in self.project_def["configuration"]:
         self.rootfs_generator_cachedirname = self.project_def["configuration"]["rootfs_generator_cachedirname"]
       else:
-        self.logging.warning("configuration/rootfs_generator_cachedirname is not defined, using /tmp as default value")
+        self.logging.debug("configuration/rootfs_generator_cachedirname is not defined, using /tmp as default value")
         self.rootfs_generator_cachedirname = "/tmp/"
 
       if "working_dir" in self.project_def["configuration"]:
         self.project_base_workdir = self.project_def["configuration"]["working_dir"]
         self.project_base_workdir += "/" + self.project_def["configuration"]["project_name"]
       else:
-        self.logging.warning("configuration/working_dir is not defined, using /tmp/dft as default value")
+        self.logging.debug("configuration/working_dir is not defined, using /tmp/dft as default value")
         self.project_base_workdir = "/tmp/dft/"
         self.project_base_workdir += self.project_def["configuration"]["project_name"]
 
