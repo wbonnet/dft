@@ -532,9 +532,7 @@ class GenerateContentInformation(CliCommand):
     # Remove ClamAV if it has been installled in the chroooted environnement
     if need_to_remove_clamav:
       logging.debug("Starting to remove Clamav")
-      sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
-      sudo_command += " /usr/bin/apt-get --purge --yes autoremove clamav"
-      self.execute_command(sudo_command)
+      self.remove_package("clamav")
 
 
 
@@ -591,11 +589,7 @@ class GenerateContentInformation(CliCommand):
         logging.info("Installing debsecan in rootfs")
 
         # Install missing packages into the chroot
-        sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
-        sudo_command += " /usr/bin/apt-get install --no-install-recommends"
-        sudo_command += " --yes --allow-unauthenticated debsecan"
-        self.execute_command(sudo_command)
-#TODO remove and purge it after execution
+        self.install_package("debsecan")
 
         # Set the flag used tomark that we install debsecan and we have to
         # remove it before exiting the application
@@ -636,9 +630,7 @@ class GenerateContentInformation(CliCommand):
       logging.info("Removing debsecan in rootfs")
 
       # Remove extra packages into the chroot
-      sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
-      sudo_command += " /usr/bin/apt-get autoremove --purge --yes debsecan"
-      self.execute_command(sudo_command)
+      self.remove_package("debsecan")
 
     # Flush all pending output and close stream or file
     self.output_writer.flush_and_close()

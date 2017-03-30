@@ -222,4 +222,42 @@ class CliCommand(object):
                                  "files in " + self.project.rootfs_mountpoint + "/dft_bootstrap")
 
 
-#TODO create method to add and remove packages
+
+  # -------------------------------------------------------------------------
+  #
+  # remove_package
+  #
+  # -------------------------------------------------------------------------
+  def remove_package(self, target):
+    """This method deinstall a package or a list of packages from the target
+    rootfs, and purge its configuration file. It will remove anything
+    necessary to prevent having packages in the 'rc' state.
+
+    This command is executed inside the chrooted environment and may need to
+    have qemu installed.
+    """
+
+    self.project.logging.debug("Remove package : " + target)
+    sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
+    sudo_command += " /usr/bin/apt-get autoremove --purge --yes " + target
+    self.execute_command(sudo_command)
+
+
+  # -------------------------------------------------------------------------
+  #
+  # install_package
+  #
+  # -------------------------------------------------------------------------
+  def install_package(self, target):
+    """This method install a package or a list of packages into the target
+    rootfs.
+
+    This command is executed inside the chrooted environment and may need to
+    have qemu installed.
+    """
+
+    self.project.logging.debug("Install package(s) : " + target)
+    sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
+    sudo_command += " /usr/bin/apt-get install --no-install-recommends --yes "
+    sudo_command += " --allow-unauthenticated  " + target
+    self.execute_command(sudo_command)

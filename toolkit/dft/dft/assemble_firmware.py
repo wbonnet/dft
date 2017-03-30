@@ -76,7 +76,8 @@ class AssembleFirmware(CliCommand):
 
     # Check that there is a firmware configuration file first
     if self.project.firmware_def is None:
-      self.project.logging.critical("The firmware configuration file is not defined in project file")
+      self.project.logging.critical("The firmware configuration file is not defined in \
+                                     project file")
       exit(1)
 
     # Check that the layout is available from the firmware configuration file

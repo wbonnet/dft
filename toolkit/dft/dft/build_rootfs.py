@@ -97,13 +97,7 @@ class BuildRootFS(CliCommand):
       if ("keep_rootfs_history" in self.project.project_def["configuration"] and
           self.project.project_def["configuration"]["keep_rootfs_history"]):
         logging.warn("target rootfs mount point already exists : " + self.project.rootfs_mountpoint)
-# TODO
-        logging.critical("TODO : handle history : " + self.project.rootfs_mountpoint)
         exit(1)
-# It looks like i need to add a symlink from history to current
-# It should be optional with overwrite on factory_setup_definition
-# Depending on keeping history or not. So far not available
-# default behavior is not to keep history
       else:
 
 # TODO security hole !!!!!
@@ -269,8 +263,10 @@ class BuildRootFS(CliCommand):
     # Warn the user if no role is found. In such case rootfs will be same
     # debotstrap, which is certainly not what is expected
     if not role_has_been_found:
-      logging.warning("No role has been found in rootfs definition. Rootfs is same as debootstrap output")
-      logging.error("You may wish to have a look to : " + self.project.generate_def_file_path(self.project.project_def["project_definition"]["rootfs"][0]))
+      logging.warning("No role has been found in rootfs definition. Rootfs is same as debootstrap \
+                       output")
+      logging.error("You may wish to have a look to : " + self.project.generate_def_file_path(\
+                                       self.project.project_def["project_definition"]["rootfs"][0]))
 
     # Execute Ansible
     # TODO : multiple target ? not sure...
@@ -429,9 +425,7 @@ class BuildRootFS(CliCommand):
     self.execute_command(apt_command)
 
     # Install extra packages into the chroot
-    apt_command = "sudo chroot " + self.project.rootfs_mountpoint + " /usr/bin/apt-get install"
-    apt_command += " --no-install-recommends --yes --allow-unauthenticated apt-utils ansible"
-    self.execute_command(apt_command)
+    self.install_package("apt-utils ansible")
 
     # Generate a unique build timestamp into /etc/dft_version
     self.generate_build_number()
@@ -474,7 +468,8 @@ class BuildRootFS(CliCommand):
     filepath = self.project.rootfs_mountpoint + "/etc/apt/sources.list"
 
     # Open the file and writes configuration in it
-    self.project.debian_mirror_url = self.project.project_def["project_definition"]["debootstrap_repository"]
+    self.project.debian_mirror_url = self.project.project_def["project_definition"]\
+                                                             ["debootstrap_repository"]
 
     # Flag if we have found a matching distro or not
     distro_has_been_found = False
@@ -485,7 +480,8 @@ class BuildRootFS(CliCommand):
       for distro in self.project.repositories_def["distributions"]:
         logging.debug(distro)
         # Process only if it is the version we target
-        if distro["name"] == self.project.target_version and self.project.target_arch in distro["architectures"]:
+        if distro["name"] == self.project.target_version and self.project.target_arch in \
+                                                                          distro["architectures"]:
           # W have found a matching distro or not
           distro_has_been_found = True
           # Then iterate all the sources for this distro version
@@ -518,8 +514,10 @@ class BuildRootFS(CliCommand):
       self.cleanup_installation_files()
       logging.error("No distribution matching " + self.project.target_version + " has been found.")
       logging.error("Please check repositories definition for this project.")
-      logging.error("File in use is : " + self.project.generate_def_file_path(self.project.project_def["project_definition"]["repositories"][0]))
-      logging.critical("Cannot generate /etc/apt/sources.list under rootfs path. Operation is aborted !")
+      logging.error("File in use is : " + self.project.generate_def_file_path(\
+                                self.project.project_def["project_definition"]["repositories"][0]))
+      logging.critical("Cannot generate /etc/apt/sources.list under rootfs path. Operation is \
+                        aborted !")
       exit(1)
 
     # Its done, now close the temporary file

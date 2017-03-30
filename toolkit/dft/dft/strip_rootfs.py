@@ -178,25 +178,6 @@ class StripRootFS(CliCommand):
 # Then strip the symlinks
 # And finally strip the files
 
-  # -------------------------------------------------------------------------
-  #
-  # remove_package
-  #
-  # -------------------------------------------------------------------------
-  def remove_package(self, target):
-    """This method deinstall a package from the target rootfs, and purge its
-    configuration file. It will remove anything necessary to prevent having
-    packages in the 'rc' state.
-
-    This command is executed inside the chrooted environment and may need to
-    have qemu installed.
-    """
-
-    self.project.logging.debug("Remove package : " + target)
-    sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
-    sudo_command += " /usr/bin/apt-get remove " + target
-    self.execute_command(sudo_command)
-
 
 
   # -------------------------------------------------------------------------
