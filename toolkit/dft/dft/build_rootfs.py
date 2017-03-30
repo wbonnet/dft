@@ -112,6 +112,11 @@ class BuildRootFS(CliCommand):
         self.execute_command(sudo_command)
         os.makedirs(self.project.rootfs_mountpoint)
 
+        # Create the bootstrap directory
+        dft_target_path = self.project.rootfs_mountpoint + "/dft_bootstrap/"
+        if not os.path.exists(dft_target_path):
+          os.makedirs(dft_target_path)
+
       # Check if the archive has to be used instead of doing a debootstraping
       # for real. Only if the archive exist...
     if self.project.dft.use_cache_archive and self.cache_archive_is_available:
