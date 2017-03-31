@@ -444,9 +444,6 @@ x factory_setup                    Apply some extra factory setup before generat
     # ---------------------------------------------------------------------
     # Override configuration with values passed on the commande line
 
-    print(self.project)
-    exit(0)
-
     if self.args.keep_bootstrap_files != None:
       if self.args.keep_bootstrap_files != self.project.dft.keep_bootstrap_files:
         self.project.logging.debug("Overriding keep_bootstrap_files with CLI value : %s => %s",
