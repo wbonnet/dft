@@ -60,7 +60,7 @@ class Cli(object):
     """
 
     # Current version
-    self.version = "0.2.0"
+    self.version = "0.2.1"
 
     # Create the internal parser from argparse
     self.parser = argparse.ArgumentParser(description=textwrap.dedent('''\
@@ -444,6 +444,9 @@ x factory_setup                    Apply some extra factory setup before generat
     # ---------------------------------------------------------------------
     # Override configuration with values passed on the commande line
 
+    print(self.project)
+    exit(0)
+
     if self.args.keep_bootstrap_files != None:
       if self.args.keep_bootstrap_files != self.project.dft.keep_bootstrap_files:
         self.project.logging.debug("Overriding keep_bootstrap_files with CLI value : %s => %s",
@@ -452,13 +455,13 @@ x factory_setup                    Apply some extra factory setup before generat
         self.project.dft.keep_bootstrap_files = self.args.keep_bootstrap_files
 
     if self.args.override_debian_mirror != None:
-      if self.args.override_debian_mirror != self.project.project_definition["project-definition"]\
-                                             ["debootstrap-repository"]:
+      if self.args.override_debian_mirror != self.project.project_def["project-definition"]\
+                                                                     ["debootstrap-repository"]:
         self.project.logging.debug("Overriding pkg_archive_url with CLI value : %s => %s",
-                                   self.project.project_definition["project-definition"]\
-                                                                  ["debootstrap-repository"],
+                                   self.project.project_def["project-definition"]\
+                                                           ["debootstrap-repository"],
                                    self.args.override_debian_mirror)
-        self.project.project_definition["project-definition"]["debootstrap-repository"] = \
+        self.project.project_def["project-definition"]["debootstrap-repository"] = \
                                    self.args.override_debian_mirror
 
     if self.args.update_cache_archive != None:

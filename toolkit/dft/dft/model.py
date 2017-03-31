@@ -118,9 +118,6 @@ class DftConfiguration(object):
 
         self.logging.debug(self.dft_configuration)
 
-      # Close file when reading is done
-      close(working_file)
-
     except OSError as exception:
       # Call clean up to umount /proc and /dev
       self.logging.critical("Error: %s - %s." % (exception.filename, exception.strerror))

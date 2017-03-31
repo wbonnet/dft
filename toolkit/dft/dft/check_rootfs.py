@@ -68,7 +68,6 @@ class CheckRootFS(CliCommand):
     # The variable value is reset for each loop, while the scope of the
     # previous one is the whole execution
     self.is_rule_check_successfull = True
-    self.is_rule_check_successfull = True
 
     # Rule counter used to display the total number of checked rules
     self.rule_counter = 0
