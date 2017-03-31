@@ -163,7 +163,11 @@ class BuildRootFS(CliCommand):
       # time as the mountpoint. This test check for both bootstrap and mountpoint.
       dft_target_path = self.project.rootfs_mountpoint + "/dft_bootstrap/"
       if not os.path.exists(dft_target_path):
+        logging.debug("creating dft_bootstrap under " + dft_target_path + "...")
         os.makedirs(dft_target_path)
+        logging.debug("created !")
+      else:
+        logging.debug("dft_bootstrap already exist under " + dft_target_path)
 
       # Copy the DFT toolkit content to the target rootfs
       for copy_target in os.listdir(self.project.project_def["configuration"]["dft_base"]):
