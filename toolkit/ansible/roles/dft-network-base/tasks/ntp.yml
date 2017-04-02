@@ -36,8 +36,8 @@
     - ntp
 
 - name : DFT - Configure NTP client
-  template: src=templates/ntp.conf.j2 
+  template: src=ntp.conf.j2 
             dest=/etc/ntp.conf
             owner=root 
             group=root 
-            mode="u=rw,g=r,o=r"   
+            mode="0644"   

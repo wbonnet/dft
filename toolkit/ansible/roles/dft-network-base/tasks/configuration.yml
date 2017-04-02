@@ -28,8 +28,8 @@
 
 ---
 - name : DFT - Setup network/interfaces
-  template: src=templates/interfaces.j2 
+  template: src=interfaces.j2 
             dest=/etc/network/interfaces
             owner=root 
             group=root 
-            mode="u=rw,g=r,o=r"          
+            mode="0664" 
