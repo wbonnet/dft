@@ -38,6 +38,11 @@
        install_recommends=no
   with_items:
     - chromium
+  when: (ansible_distribution == "Debian" and ansible_distribution_major_version >= "9") or
+        (
+          (ansible_distribution == "Debian" and ansible_distribution_major_version < "9") and
+          (ansible_architecture == 'x86_64' or ansible_architecture == 'i386')
+        )
 
 #
 # Create the directory needed to store the chromium desktop entry
@@ -49,15 +54,15 @@
         recurse=yes
         owner={{ dft_username }}
         group={{ dft_usergroup }}
-  when: dft_browser_autologin is defined and dft_browser_autologin == True
+  when: dft_browser_autologin is defined and dft_browser_autologin == True and
 
 #
 # Create the chromium desktop entry used to start chromium when session opens
 #
 - name : DFT - Install chromium autostart
-  template: src=templates/chromium.desktop.j2
+  template: src=chromium.desktop.j2
           dest=/home/{{ dft_username }}/.config/autostart/chromium.desktop
           owner={{ dft_username }}
           group={{ dft_usergroup }}
-          mode="u=rw,g=r,o=r"
+          mode="0644"
   when: dft_browser_autologin is defined and dft_browser_autologin == True
