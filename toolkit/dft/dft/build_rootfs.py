@@ -68,10 +68,10 @@ class BuildRootFS(CliCommand):
 
   # -------------------------------------------------------------------------
   #
-  # install_rootfs
+  # create_rootfs
   #
   # -------------------------------------------------------------------------
-  def install_rootfs(self):
+  def create_rootfs(self):
     """This method implement the business logic of generating the rootfs.
     It calls dedicated method for each step. The main steps are :
 

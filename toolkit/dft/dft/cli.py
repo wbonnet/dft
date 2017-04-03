@@ -480,20 +480,20 @@ x factory_setup                    Apply some extra factory setup before generat
         self.project.logging.debug("Overriding target_version with CLI value : %s => %s",
                                    self.project.target_version,
                                    self.args.limit_target_version)
-        self.project.target_version = self.args.limit_target_version
+        self.project.set_version(self.args.limit_target_version)
 
     if self.args.limit_target_arch != None:
       if self.args.limit_target_arch != self.project.target_arch:
         self.project.logging.debug("Overriding target_arch with CLI value : %s => %s",
                                    self.project.target_arch,
                                    self.args.limit_target_arch)
-        self.project.target_arch = self.args.limit_target_arch
+        self.project.set_arch(self.args.limit_target_arch)
 
     # Create the business object
     command = build_rootfs.BuildRootFS(self.dft, self.project)
 
     # Then
-    command.install_rootfs()
+    command.create_rootfs()
 
 
 

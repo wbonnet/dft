@@ -172,8 +172,8 @@ class ProjectDefinition(object):
     self.content_base_workdir = None
 
     # Defines member variables
-    self.target_arch = None
-    self.target_version = None
+    self.target_arch = "unknown"
+    self.target_version = "unknown"
     self.archive_filename = None
     self.rootfs_mountpoint = None
     self.firmware_directory = None
@@ -373,33 +373,21 @@ class ProjectDefinition(object):
 
       # Retrieve the target architecture
 # TODO : handle multiple archs
-      self.target_arch = self.project_def["project_definition"]["architectures"][0]
+      self.set_arch(self.project_def["project_definition"]["architectures"][0])
 
       # Target version to use when building the debootstrap. It has to be
       # a Debian version (jessie, stretch, etc.)
-# TODO : handle multiple version
-      self.target_version = self.rootfs_def["target_versions"][0]
+        # Only set this variable if it is not defined. If it is defined, it means it has been
+        # overriden from command line.
+        # TODO seems not so clean... should be refactored
+      self.set_version(self.rootfs_def["target_versions"][0])
 
-      # Generate the archive filename
-# TODO : handle multiple archs / version
-      self.archive_filename = self.rootfs_generator_cachedirname + "/" + self.target_arch
-      self.archive_filename += "-" +  self.target_version + "-"
-      self.archive_filename += self.project_def["configuration"]["project_name"]
-      self.archive_filename += ".tar"
-
-      # Generates the path to the rootfs mountpoint
-      # Stores the path to the rootfs mountpoint used by debootstrap
-      self.rootfs_mountpoint = self.rootfs_base_workdir + "/" + self.target_arch
-      self.rootfs_mountpoint += "-" + self.target_version
-
-      # Generate the path where to store generated squashfs files
-      self.firmware_directory = self.firmware_base_workdir + "/"
-      self.firmware_directory += self.target_arch + "-" + self.target_version
-
+      # Defines the full path and filename to the firmware
       self.firmware_filename = self.firmware_directory + "/"
       self.firmware_filename += self.project_def["configuration"]["project_name"]
       self.firmware_filename += ".squashfs"
 
+      # Defines the full path and filename to the init used by firmware
       self.init_filename = self.firmware_directory + "/init"
       self.stacking_script_filename = self.firmware_directory + "/dft_create_stack.sh"
 
@@ -408,3 +396,63 @@ class ProjectDefinition(object):
       # Just log and exit, nothing is mounted yet
       self.logging.critical("Error: %s - %s.", exception.filename, exception.strerror)
       exit(1)
+
+  # ---------------------------------------------------------------------------
+  #
+  # set_version
+  #
+  # ---------------------------------------------------------------------------
+  def set_version(self, version):
+    """ This method set the version attribute, and all the attributes computed
+    using version value. This method should be rewritten to handle building
+    several version at a time.
+    """
+
+    # Defines the version attribute
+    self.target_version = version
+
+    # Generate the archive filename
+# TODO : handle multiple archs / version
+    self.archive_filename = self.rootfs_generator_cachedirname + "/" + self.target_arch
+    self.archive_filename += "-" +  self.target_version + "-"
+    self.archive_filename += self.project_def["configuration"]["project_name"]
+    self.archive_filename += ".tar"
+
+    # Generates the path to the rootfs mountpoint
+    # Stores the path to the rootfs mountpoint used by debootstrap
+    self.rootfs_mountpoint = self.rootfs_base_workdir + "/" + self.target_arch
+    self.rootfs_mountpoint += "-" + self.target_version
+
+    # Generate the path where to store generated squashfs files
+    self.firmware_directory = self.firmware_base_workdir + "/"
+    self.firmware_directory += self.target_arch + "-" + self.target_version
+
+  # ---------------------------------------------------------------------------
+  #
+  # set_arch
+  #
+  # ---------------------------------------------------------------------------
+  def set_arch(self, arch):
+    """ This method set the arch attribute, and all the attributes computed
+    using arch value. This method should be rewritten to handle building
+    several version at a time.
+    """
+
+    # Defines the arch attribute
+    self.target_arch = arch
+
+    # Generate the archive filename
+# TODO : handle multiple archs / version
+    self.archive_filename = self.rootfs_generator_cachedirname + "/" + self.target_arch
+    self.archive_filename += "-" +  self.target_version + "-"
+    self.archive_filename += self.project_def["configuration"]["project_name"]
+    self.archive_filename += ".tar"
+
+    # Generates the path to the rootfs mountpoint
+    # Stores the path to the rootfs mountpoint used by debootstrap
+    self.rootfs_mountpoint = self.rootfs_base_workdir + "/" + self.target_arch
+    self.rootfs_mountpoint += "-" + self.target_version
+
+    # Generate the path where to store generated squashfs files
+    self.firmware_directory = self.firmware_base_workdir + "/"
+    self.firmware_directory += self.target_arch + "-" + self.target_version
