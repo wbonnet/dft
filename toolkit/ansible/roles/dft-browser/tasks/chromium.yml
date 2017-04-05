@@ -54,7 +54,7 @@
         recurse=yes
         owner={{ dft_username }}
         group={{ dft_usergroup }}
-  when: dft_browser_autologin is defined and dft_browser_autologin == True and
+  when: dft_browser_autologin is defined and dft_browser_autologin == True
 
 #
 # Create the chromium desktop entry used to start chromium when session opens
