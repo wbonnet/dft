@@ -142,17 +142,24 @@ packages:
 
 
 #
-# The vulnerabilities dictionnary control what is included in the output.
+# The vulnerabilities dictionnary controls what is included in the output.
 # Default tool used for package information generation is debsecan.
 #
 vulnerabilities:
   generate: True
 
 #
-# The security dictionnary control what is included in the output.
-# Default tool used for package information generation is opnscap.
+# The security dictionnary controls what is included in the output.
+# Default tool used for package information generation is openscap.
 #
 security:
+  generate: True
+
+#
+# The rootkit dictionnary controls what is included in the output.
+# Default tool used for package information generation is rkhunter.
+#
+rootkit:
   generate: True
 
 #

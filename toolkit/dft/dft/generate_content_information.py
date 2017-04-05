@@ -159,7 +159,8 @@ class GenerateContentInformation(CliCommand):
     It calls dedicated method for each step. The main steps are :
     . Generate information about installed packages
     . Generate vulnerabilities information using debsecan
-    . Generate security information using openscap
+    . Generate security information using openscap and lynis
+    . Generate rootkit information using rkhunter
     . Generate file information (list, size, fingerprint, etc.)
     . Generate antivirus execution report
     """
@@ -203,6 +204,16 @@ class GenerateContentInformation(CliCommand):
         self.gen_security_info()
       else:
         logging.info("Security information generation is deactivated")
+
+    #
+    # Generate the rootkit information
+    #
+    if self.project.dft.generate_all_information or self.project.dft.gen_rootkit_info:
+      if "rootkit" in self.project.content_information_def:
+        logging.debug("Rootkit information generation is activated")
+        self.gen_rootkit_info()
+      else:
+        logging.info("Rootkit information generation is deactivated")
 
     #
     # Generate the files information
@@ -418,57 +429,11 @@ class GenerateContentInformation(CliCommand):
     logging.debug("Antivirus scan command    : " + antivirus_cmd_scan)
 
     # Check if clamscan is installed in the chrooted environment
-    need_to_remove_clamav = False
+    need_to_remove_package = False
     if not use_host_av:
       if not os.path.isfile(self.project.rootfs_mountpoint + "/usr/bin/clamscan"):
-        # If not, test if it has to be installed, or should it fail ?
-        # Default behavior is to install clamav if missing and to remove
-        # it if it has been installed in this method context (and not in the
-        # rootfs)
+        need_to_remove_package = self.check_install_missing_package("clamav")
 
-        # If install_missing_software key is not defined, then set its default value
-        if "install_missing_software" not in self.project.content_information_def["configuration"]:
-          self.project.content_information_def["configuration"]["install_missing_software"] = False
-
-        # If skip_missing_software key is not defined, then set its default value
-        if "skip_missing_software" not in self.project.content_information_def["configuration"]:
-          logging.debug("Setting default value of skip_missing_software to False")
-          self.project.content_information_def["configuration"]["skip_missing_software"] = True
-
-        # Check if installation is authorized sinc the software is missing
-        if self.project.content_information_def["configuration"]["install_missing_software"]:
-          logging.info("Installing clamav in rootfs")
-
-          # Update the catalog before installing
-          sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
-          sudo_command += " /usr/bin/apt-get update --allow-unauthenticated"
-          self.execute_command(sudo_command)
-
-          # Install missing packages into the chroot
-          sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
-          sudo_command += " /usr/bin/apt-get install --no-install-recommends"
-          sudo_command += " --yes --allow-unauthenticated clamav"
-          self.execute_command(sudo_command)
-#TODO remove and purge it after execution
-
-          # Set the flag used tomark that we install clamav and we have to
-          # remove it before exiting the application
-          need_to_remove_clamav = True
-
-        # Not installed and not allowed to install missing software
-        else:
-          # Check if skipping is allowed or not
-          if self.project.content_information_def["configuration"]["skip_missing_software"]:
-            logging.warning("Skipping vulnerabilities content generation. Clamav is missing\
-                            and instalation not allowed by configuration file.")
-            return
-          else:
-            # Skipping is deactivated, so is installation, thus it fails
-            logging.error("Clamav is missing and installation not allowed by configuration file.")
-            logging.error("Please consider to add skip_missing_software or \
-                          install_mising_software in configuration file")
-            logging.critical("Generation cannot continue, execution is aborted.")
-            exit(1)
     # This is the case which we use the host antivirus
     else:
       # Check if antivirus is present on the host. If not, nothin
@@ -530,7 +495,7 @@ class GenerateContentInformation(CliCommand):
     self.output_writer.flush_and_close()
 
     # Remove ClamAV if it has been installled in the chroooted environnement
-    if need_to_remove_clamav:
+    if need_to_remove_package:
       logging.debug("Starting to remove Clamav")
       self.remove_package("clamav")
 
@@ -548,8 +513,45 @@ class GenerateContentInformation(CliCommand):
 
     # TODO need purge ?
 
-    # Initialize the output writer for packages content generation
+    # Initialize the output writer for security content generation
     self.output_writer.initialize("security")
+
+    # Flush all pending output and close stream or file
+    self.output_writer.flush_and_close()
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # gen_rootkit_info
+  #
+  # -------------------------------------------------------------------------
+  def gen_rootkit_info(self):
+    """This method implement the execution of a rootkit scanner on the
+    generated rootfs. It is based on the use of rkhunter in the chrooted
+    environment.
+    """
+
+    # Initialize the output writer for rootkit content generation
+    self.output_writer.initialize("rootkit")
+
+    # Check if package is installed in the chrooted environment
+    if not os.path.isfile(self.project.rootfs_mountpoint + "/usr/bin/rkhunter"):
+        # Install missing packages into the chroot
+        # Set the flag used tomark that we install debsecan and we have to
+        # remove it before exiting the application
+        need_to_remove_package = self.check_install_missing_package("rkhunter")
+
+    # Generate the debsecan execution command
+    sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
+    sudo_command += " /usr/bin/rkhunter --check --skip-keypress"
+    self.execute_command(sudo_command)
+
+    # Test if debsecan has to be removed
+    if need_to_remove_package:
+      # Remove extra packages into the chroot
+      logging.info("Removing rkhunter in rootfs")
+      self.remove_package("debsecan")
 
     # Flush all pending output and close stream or file
     self.output_writer.flush_and_close()
@@ -567,58 +569,15 @@ class GenerateContentInformation(CliCommand):
     chrooted environment.
     """
 
-     # Initialize the output writer for packages content generation
+     # Initialize the output writer for vulnerabilities content generation
     self.output_writer.initialize("vulnerabilities")
 
     # Check if debsecan is installed in the chrooted environment
     if not os.path.isfile(self.project.rootfs_mountpoint + "/usr/bin/debsecan"):
-      # If not, test if it has to be installed, or should it fail ?
-      # Default behavior is to install debsecan if missing and to remove
-      # it if it has been installed in this method context (and not in the
-      # rootfs)
-      # If key is not defined, then set its default value
-      if self.project.content_information_def["configuration"] != None:
-        if "install_missing_software" not in self.project.content_information_def["configuration"]:
-          logging.debug("Setting default value of install_missing_software to False")
-          self.project.content_information_def["configuration"]["install_missing_software"] = False
-      else:
-        logging.debug("Setting default value of install-missing-software to False")
-        self.project.content_information_def["configuration"] = {'install_missing_software': False}
-
-      if self.project.content_information_def["configuration"]["install_missing_software"]:
-        logging.info("Installing debsecan in rootfs")
-
         # Install missing packages into the chroot
-        self.install_package("debsecan")
-
         # Set the flag used tomark that we install debsecan and we have to
         # remove it before exiting the application
-        need_to_remove_debsecan = True
-
-      # The tool is missing and installation is not allowed,thus either we
-      # allowed to skip this stage, or we fail and exit
-      else:
-        # If key is not defined, then set its default value
-        if self.project.content_information_def["configuration"] != None:
-          if "skip_missing_software" not in self.project.content_information_def["configuration"]:
-            logging.debug("Setting default value of skip_missing_software to False")
-            self.project.content_information_def["configuration"]["skip_missing_software"] = True
-        else:
-          logging.debug("Setting default value of skip_missing_software to False")
-          self.project.content_information_def["configuration"] = {'skip_missing_software': True}
-
-        # Check if skipping is allowed or not
-        if self.project.content_information_def["configuration"]["skip_missing_software"]:
-          logging.warning("Skipping vulnerabilities content generation. Debsecan is missing and \
-                          instalation not allowed by configuration file.")
-          return
-        else:
-          # Skipping is deactivated, so is installation, thus it fails
-          logging.error("Debsecan is missing and installation not allowed by configuration file.")
-          logging.error("Please consider to add skip_missing_software or \
-                        install_mising_software in configuration file")
-          logging.critical("Generation cannot continue, execution is aborted.")
-          exit(1)
+        need_to_remove_package = self.check_install_missing_package("debsecan")
 
     # Generate the debsecan execution command
     sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
@@ -626,11 +585,66 @@ class GenerateContentInformation(CliCommand):
     self.execute_command(sudo_command)
 
     # Test if debsecan has to be removed
-    if need_to_remove_debsecan:
-      logging.info("Removing debsecan in rootfs")
-
+    if need_to_remove_package:
       # Remove extra packages into the chroot
+      logging.info("Removing debsecan in rootfs")
       self.remove_package("debsecan")
 
     # Flush all pending output and close stream or file
     self.output_writer.flush_and_close()
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # check_install_missing_package
+  #
+  # -------------------------------------------------------------------------
+  def gen_vulnerabilities_info(self, packages):
+    """This method implement the logic of missing packages instalaltion in
+    the rootfs. Some operation may neeed packages which are not in the rootfs,
+    thus     we may have to install these packages to execute the command.
+
+    The method checks project configuration for the possibility to install
+    missing packages. If installation is authorized, the it install it and
+    return True ( meaning need to remove packages avec execution), otherwise
+    it returns false or exit if skipping on error is not authorized.
+    """
+
+    # If install_missing_software key is not defined, then set its default value
+    if "install_missing_software" not in self.project.content_information_def["configuration"]:
+      self.project.content_information_def["configuration"]["install_missing_software"] = False
+
+    # If skip_missing_software key is not defined, then set its default value
+    if "skip_missing_software" not in self.project.content_information_def["configuration"]:
+      logging.debug("Setting default value of skip_missing_software to False")
+      self.project.content_information_def["configuration"]["skip_missing_software"] = True
+
+    # Check if installation is authorized sinc the software is missing
+    if self.project.content_information_def["configuration"]["install_missing_software"]:
+      logging.info("Installing " + packages + " in rootfs")
+
+      # Update the catalog before installing
+      self.update_package_catalog()
+
+      # Install missing packages into the chroot
+      self.install_package(package)
+
+      # Set the flag used tomark that we install clamav and we have to
+      # remove it before exiting the application
+      return True
+
+    # Not installed and not allowed to install missing software
+    else:
+      # Check if skipping is allowed or not
+      if self.project.content_information_def["configuration"]["skip_missing_software"]:
+        logging.warning("Skipping vulnerabilities content generation. Clamav is missing\
+                        and instalation not allowed by configuration file.")
+        return False
+      else:
+        # Skipping is deactivated, so is installation, thus it fails
+        logging.error("Clamav is missing and installation not allowed by configuration file.")
+        logging.error("Please consider to add skip_missing_software or \
+                      install_mising_software in configuration file")
+        logging.critical("Generation cannot continue, execution is aborted.")
+        exit(1)

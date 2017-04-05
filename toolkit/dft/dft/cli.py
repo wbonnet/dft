@@ -297,6 +297,12 @@ x factory_setup                    Apply some extra factory setup before generat
                              dest='gen_security_info',
                              help="generate the information about security.\n")
 
+    # Activate the generation of information about rootkit
+    self.parser.add_argument('--generate-rootkit-information',
+                             action='store_true',
+                             dest='gen_rootkit_info',
+                             help="generate the information about rootkits.\n")
+
     # Activate the generation of information about files.
     self.parser.add_argument('--generate-files-information',
                              action='store_true',
@@ -640,6 +646,14 @@ x factory_setup                    Apply some extra factory setup before generat
       self.project.dft.gen_security_info = self.args.gen_security_info
       # If flag is true, then generate all as to be false
       if self.project.dft.gen_security_info:
+        self.project.dft.generate_all_information = False
+
+    # Check if the rootkit are needed
+    if self.args.gen_rootkit_info != None:
+      # Flag is defined, then copy it
+      self.project.dft.gen_rootkit_info = self.args.gen_rootkit_info
+      # If flag is true, then generate all as to be false
+      if self.project.dft.gen_rootkit_info:
         self.project.dft.generate_all_information = False
 
     # Create the business object

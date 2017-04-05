@@ -261,3 +261,22 @@ class CliCommand(object):
     sudo_command += " /usr/bin/apt-get install --no-install-recommends --yes "
     sudo_command += " --allow-unauthenticated  " + target
     self.execute_command(sudo_command)
+
+  # -------------------------------------------------------------------------
+  #
+  # update_package_catalog
+  #
+  # -------------------------------------------------------------------------
+  def update_package_catalog(self):
+    """This method updates the local catalog using the remote server defined
+    in /etc/apt/sources.list.
+
+    This command is executed inside the chrooted environment and may need to
+    have qemu installed.
+    """
+
+    self.project.logging.debug("Install package(s) : " + target)
+    sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
+    sudo_command += " /usr/bin/apt-get install --no-install-recommends --yes "
+    sudo_command += " --allow-unauthenticated  " + target
+    self.execute_command(sudo_command)

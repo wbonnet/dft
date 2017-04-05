@@ -27,5 +27,10 @@
 #
 
 ---
-- include: sudo.yml
-- include: rkhunter.yml
+- name : DFT - Install rkhunter
+  apt: name={{ item }}
+       state=installed
+       update_cache=true
+       install_recommends=no
+  with_items:
+    - rkhunter
