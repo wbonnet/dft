@@ -511,13 +511,43 @@ class GenerateContentInformation(CliCommand):
   # -------------------------------------------------------------------------
   def gen_security_info(self):
     """This method implement the generation of information about security.
-    It relies on call to openscap in the chrooted environment.
+    It relies on call to openscap or lynis in the chrooted environment.
     """
 
     # TODO need purge ?
 
     # Initialize the output writer for security content generation
     self.output_writer.initialize("security")
+
+    # Initialize and empty dictionnaries. It is use to stores the key/value
+    # pair used processed during output
+    output_item = dict()
+
+    # Check if package is installed in the chrooted environment
+    need_to_remove_package = False
+    if not os.path.isfile(self.project.rootfs_mountpoint + "/usr/sbin/lynis"):
+        # Install missing packages into the chroot
+        # Set the flag used tomark that we install debsecan and we have to
+        # remove it before exiting the application
+        need_to_remove_package = self.check_install_missing_package("lynis")
+
+    # Generate the debsecan execution command
+    sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
+    sudo_command += " /usr/sbin/lynis audit system"
+    sudo_command_output = self.execute_command(sudo_command)
+    output_item["lynis"] = sudo_command_output.decode('UTF-8')
+
+    # print(output)
+    self.output_writer.output_buffer.append(output_item)
+
+    # Test if debsecan has to be removed
+    if need_to_remove_package:
+      # Remove extra packages into the chroot
+      logging.info("Removing lynis in rootfs")
+      self.remove_package("lynis")
+
+    # Flush all pending output and close stream or file
+    self.output_writer.flush_and_close()
 
     # Flush all pending output and close stream or file
     self.output_writer.flush_and_close()
@@ -543,6 +573,7 @@ class GenerateContentInformation(CliCommand):
     output_item = dict()
 
     # Check if package is installed in the chrooted environment
+    need_to_remove_package = False
     if not os.path.isfile(self.project.rootfs_mountpoint + "/usr/bin/rkhunter"):
         # Install missing packages into the chroot
         # Set the flag used tomark that we install debsecan and we have to
