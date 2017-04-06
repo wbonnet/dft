@@ -51,6 +51,13 @@ configuration:
   # of execution (unless already installed in the rootfs). Default is False
   install_missing_software: True
 
+  # This variable contol the call to apt-get update before installing packages
+  # into the rootfs (if activated). If the variable is set to True (default value),
+  # then "apt-get update" is called before "apt-get install".
+  #
+  # If set to False the current catalog is used, no update is triggered
+  update_catalog_before_install: False
+
   # In some case it is useful to skip a generation step if software is missing
   # and rootfs modification is not allowed. Setting this variable to True will
   # allow to skip this stage, False will cause the program to abort.

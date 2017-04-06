@@ -275,8 +275,7 @@ class CliCommand(object):
     have qemu installed.
     """
 
-    self.project.logging.debug("Install package(s) : " + target)
+    self.project.logging.debug("Updating APT catalog")
     sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
-    sudo_command += " /usr/bin/apt-get install --no-install-recommends --yes "
-    sudo_command += " --allow-unauthenticated  " + target
+    sudo_command += " /usr/bin/apt-get update --yes --allow-unauthenticated "
     self.execute_command(sudo_command)

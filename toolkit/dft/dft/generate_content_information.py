@@ -165,6 +165,9 @@ class GenerateContentInformation(CliCommand):
     . Generate antivirus execution report
     """
 
+    # output some activity log. Some operation may be quite long...
+    logging.info("Starting to generate content information")
+
     # Check that there is a content definition file first
     if self.project.content_information_def is None:
       self.project.logging.critical("The content generation file is not defined in project file")
@@ -180,7 +183,7 @@ class GenerateContentInformation(CliCommand):
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_packages_info:
       if "packages" in self.project.content_information_def:
-        logging.debug("Packages information generation is activated")
+        logging.info("Starting to generate packages information")
         self.gen_packages_info()
       else:
         logging.info("Packages information generation is deactivated")
@@ -190,7 +193,7 @@ class GenerateContentInformation(CliCommand):
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_vulnerabilities_info:
       if "vulnerabilities" in self.project.content_information_def:
-        logging.debug("Vulnerabilities information generation is activated")
+        logging.info("Starting to generate vulnerabilities information")
         self.gen_vulnerabilities_info()
       else:
         logging.info("Vulnerabilities information generation is deactivated")
@@ -200,7 +203,7 @@ class GenerateContentInformation(CliCommand):
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_security_info:
       if "security" in self.project.content_information_def:
-        logging.debug("Security information generation is activated")
+        logging.info("Starting to generate security information")
         self.gen_security_info()
       else:
         logging.info("Security information generation is deactivated")
@@ -210,7 +213,7 @@ class GenerateContentInformation(CliCommand):
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_rootkit_info:
       if "rootkit" in self.project.content_information_def:
-        logging.debug("Rootkit information generation is activated")
+        logging.info("Starting to generate rootkit information")
         self.gen_rootkit_info()
       else:
         logging.info("Rootkit information generation is deactivated")
@@ -220,7 +223,7 @@ class GenerateContentInformation(CliCommand):
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_files_info:
       if "files" in self.project.content_information_def:
-        logging.debug("File information generation is activated")
+        logging.info("Starting to generate files information")
         self.gen_files_info()
       else:
         logging.info("Files information generation is deactivated")
@@ -230,7 +233,7 @@ class GenerateContentInformation(CliCommand):
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_antivirus_info:
       if "antivirus" in self.project.content_information_def:
-        logging.debug("Anti-virus information generation is activated")
+        logging.info("Starting to generate antivirus information")
         self.gen_antivirus_info()
       else:
         logging.info("Anti-virus information generation is deactivated")
@@ -535,6 +538,10 @@ class GenerateContentInformation(CliCommand):
     # Initialize the output writer for rootkit content generation
     self.output_writer.initialize("rootkit")
 
+    # Initialize and empty dictionnaries. It is use to stores the key/value
+    # pair used processed during output
+    output_item = dict()
+
     # Check if package is installed in the chrooted environment
     if not os.path.isfile(self.project.rootfs_mountpoint + "/usr/bin/rkhunter"):
         # Install missing packages into the chroot
@@ -545,7 +552,11 @@ class GenerateContentInformation(CliCommand):
     # Generate the debsecan execution command
     sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
     sudo_command += " /usr/bin/rkhunter --check --skip-keypress"
-    self.execute_command(sudo_command)
+    sudo_command_output = self.execute_command(sudo_command)
+    output_item["rkhunter"] = sudo_command_output.decode('UTF-8')
+
+    # print(output)
+    self.output_writer.output_buffer.append(output_item)
 
     # Test if debsecan has to be removed
     if need_to_remove_package:
@@ -572,7 +583,12 @@ class GenerateContentInformation(CliCommand):
      # Initialize the output writer for vulnerabilities content generation
     self.output_writer.initialize("vulnerabilities")
 
+    # Initialize and empty dictionnaries. It is use to stores the key/value
+    # pair used processed during output
+    output_item = dict()
+
     # Check if debsecan is installed in the chrooted environment
+    need_to_remove_package = False
     if not os.path.isfile(self.project.rootfs_mountpoint + "/usr/bin/debsecan"):
         # Install missing packages into the chroot
         # Set the flag used tomark that we install debsecan and we have to
@@ -582,7 +598,8 @@ class GenerateContentInformation(CliCommand):
     # Generate the debsecan execution command
     sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
     sudo_command += " /usr/bin/debsecan"
-    self.execute_command(sudo_command)
+    sudo_command_output = self.execute_command(sudo_command)
+    output_item["debsecan"] = sudo_command_output.decode('UTF-8')
 
     # Test if debsecan has to be removed
     if need_to_remove_package:
@@ -593,14 +610,14 @@ class GenerateContentInformation(CliCommand):
     # Flush all pending output and close stream or file
     self.output_writer.flush_and_close()
 
-
+#TODO does seems to output anything
 
   # -------------------------------------------------------------------------
   #
   # check_install_missing_package
   #
   # -------------------------------------------------------------------------
-  def gen_vulnerabilities_info(self, packages):
+  def check_install_missing_package(self, packages):
     """This method implement the logic of missing packages instalaltion in
     the rootfs. Some operation may neeed packages which are not in the rootfs,
     thus     we may have to install these packages to execute the command.
@@ -625,10 +642,11 @@ class GenerateContentInformation(CliCommand):
       logging.info("Installing " + packages + " in rootfs")
 
       # Update the catalog before installing
-      self.update_package_catalog()
+      if self.project.content_information_def["configuration"]["update_catalog_before_install"]:
+        self.update_package_catalog()
 
       # Install missing packages into the chroot
-      self.install_package(package)
+      self.install_package(packages)
 
       # Set the flag used tomark that we install clamav and we have to
       # remove it before exiting the application
