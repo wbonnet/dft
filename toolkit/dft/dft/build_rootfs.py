@@ -426,8 +426,7 @@ class BuildRootFS(CliCommand):
     self.generate_apt_sources()
 
     # Then update the list of packages
-    apt_command = "sudo chroot " + self.project.rootfs_mountpoint + " /usr/bin/apt-get update"
-    self.execute_command(apt_command)
+    self.update_package_catalog()
 
     # Install extra packages into the chroot
     self.install_package("apt-utils ansible")
