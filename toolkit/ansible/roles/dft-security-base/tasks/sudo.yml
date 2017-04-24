@@ -36,11 +36,10 @@
     - sudo
 
 - name : DFT - Add specific sudoers configuration files
-  file: src=files/{{ item }}
-        dest=/etc/sudores.d/{{ item }}
-        state=present
+  copy: src=files/{{ item }}
+        dest=/etc/sudoers.d/{{ item }}
         mode=0600
         owner=root
         group=root
-  with_items: dft_sudoers.config_files
-  when: dft_sudoers.config_files is defined
+  with_items: "{{ dft_sudoers.config_files }}"
+  when: dft_sudoers is defined and dft_sudoers.config_files is defined
