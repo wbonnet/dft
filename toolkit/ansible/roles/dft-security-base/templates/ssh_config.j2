@@ -17,7 +17,7 @@
 # ssh_config(5) man page.
 
 {% for host in dft_openssh.ssh.hosts %}
-Host {{ host }}
+Host {{ host.name }}
 {% if host.forward_agent is defined %}
     ForwardAgent {{ host.forward_agent }}
 {% else %}
@@ -78,7 +78,7 @@ Host {{ host }}
 {% else %}
 #   BatchMode no
 {% endif %}
-{% if host.x check_host_ip defined %}
+{% if host.check_host_ip is defined %}
     CheckHostIP {{ host.check_host_ip }}
 {% else %}
 #   CheckHostIP yes
@@ -101,6 +101,7 @@ Host {{ host }}
 {% if host.identity_files is defined %}
 {% for identity_file in host.identity_files %}
     IdentityFile {{ identity_file }}
+{% endfor %}
 {% else %}
 #   IdentityFile ~/.ssh/identity
 #   IdentityFile ~/.ssh/id_rsa
@@ -183,3 +184,4 @@ Host {{ host }}
 {% else %}
     GSSAPIAuthentication yes
 {% endif %}
+{% endfor %}
