@@ -28,28 +28,25 @@
 
 ---
 - name : DFT - Install /etc/issue
-  file: src=files/issue
+  copy: src=files/issue
         dest=/etc/issue
-        state=file
         mode=0644
         owner=root
         group=root
-  when: ( dft_banner is defined and dft_banner.issue is defined and dft_banner.issue == True)
+  when: dft_banner.install_issue == True
 
 - name : DFT - Install /etc/issue.net
-  file: src=files/issue.net
+  copy: src=files/issue.net
         dest=/etc/issue.net
-        state=file
         mode=0644
         owner=root
         group=root
-  when: ( dft_banner is defined and dft_banner.issue.net is defined and dft_banner.issue.net == True)
+  when: dft_banner.install_issue_net == True
 
 - name : DFT - Install /etc/motd
-  file: src=files/motd
+  copy: src=files/motd
         dest=/etc/motd
-        state=file
         mode=0644
         owner=root
         group=root
-  when: ( dft_banner is defined and dft_banner.motd is defined and dft_banner.motd == True)
+  when: dft_banner.install_motd == True

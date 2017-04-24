@@ -68,11 +68,11 @@ dft_openssh:
 # and files.issue.net or copied to the target
 dft_banner:
   # If true will copy files/issue to /etc/isssue, otherwise do nothing
-  - install_issue: True
+  install_issue: True
   # If true will copy files/issue.net to /etc/isssue.net, otherwise do nothing
-  - install_issue_net: True
+  install_issue_net: True
   # If true will copy files/motd to /etc/motd, otherwise do nothing
-  - install_motd: True
+  install_motd: True
 
 # -------------------------------------------------------------------------------------------------
 
