@@ -27,8 +27,8 @@
 #
 
 ---
-- name: DFT - Setup hostname
-  hostname: name={{ dft_hostname }}
+# - name: DFT - Setup hostname
+#  hostname: name={{ dft_hostname }}
 
 - name: DFT - Add hostname to /etc/hosts
   lineinfile: dest=/etc/hosts 
