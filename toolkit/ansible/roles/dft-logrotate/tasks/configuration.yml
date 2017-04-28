@@ -27,21 +27,25 @@
 #
 
 # ---
-- name : DFT - Remove unused logrotate configuration files
-  file: path={{ item }}
+- name: DFT - deploy logrotate main configuration file
+  template: src=logrotate.conf.j2
+            dest=/etc/logrotate.conf
+            owner=root
+            group=root
+            mode="0644"
+
+- name : DFT - Remove useless configuration files
+  file: path=/etc/logrotate.d/{{ item }}
         state=absent
-        mode=0644
-        owner=root
-        group=root
-  with_items: dft_logrotate.remove_config_files
-  when: dft_logrotate.remove_config_files is defined
+  with_items: "{{ dft_logrotate.remove_config_files }}"
+  when: dft_logrotate is defined and dft_logrotate.remove_config_files is defined
 
 - name : DFT - Add specific logrotate configuration files
-  file: src=files/{{ item }}
+  copy: src=files/{{ item }}
         dest=/etc/logrotate.d/{{ item }}
-        state=present
         mode=0644
         owner=root
         group=root
-  with_items: dft_logrotate.add_config_files
-  when: dft_logrotate.add_config_files is defined
+  with_items: "{{ dft_logrotate.add_config_files }}"
+  when: dft_logrotate is defined and dft_logrotate.add_config_files is defined
+

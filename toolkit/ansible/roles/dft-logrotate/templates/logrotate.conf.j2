@@ -1,0 +1,48 @@
+# see "man logrotate" for details
+# rotate log files weekly
+{% if dft_logrotate.frequency is defined %}
+{{ dft_logrotate.frequency  }}
+{% else %}
+weekly
+{% endif %}
+
+# number of backlogs to keep track of
+{% if dft_logrotate.rotate_count is defined %}
+rotate {{ dft_logrotate.rotate_count }}
+{% else %}
+rotate 4
+{% endif %}
+
+# create new (empty) log files after rotating old ones
+{% if dft_logrotate.create_new_empty is defined and dft_logrotate.create_new_empty %}
+create
+{% else %}
+# create
+{% endif %}
+
+# uncomment this if you want your log files compressed
+{% if dft_logrotate.compress is defined and dft_logrotate.compress %}
+compress
+{% else %}
+#compress
+{% endif %}
+
+# packages drop log rotation information into this directory
+include /etc/logrotate.d
+
+# no packages own wtmp, or btmp -- we'll rotate them here
+/var/log/wtmp {
+    missingok
+    monthly
+    create 0664 root utmp
+    rotate 1
+}
+
+/var/log/btmp {
+    missingok
+    monthly
+    create 0660 root utmp
+    rotate 1
+}
+
+# system-specific logs may be configured here
