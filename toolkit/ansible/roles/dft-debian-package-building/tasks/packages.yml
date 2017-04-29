@@ -37,3 +37,4 @@
     - fakeroot
     - devscripts
     - git
+    - debootstrap
