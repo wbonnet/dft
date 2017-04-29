@@ -20,11 +20,63 @@ create
 # create
 {% endif %}
 
-# uncomment this if you want your log files compressed
+# Are the log files compressed ?
 {% if dft_logrotate.compress is defined and dft_logrotate.compress %}
 compress
 {% else %}
-#compress
+nocompress
+{% endif %}
+
+# Command used for log compression
+{% if dft_logrotate.compress_command is defined %}
+compresscmd {{ dft_logrotate.compress_command }}
+{% else %}
+gzip
+{% endif %}
+
+{% if dft_logrotate.compress_extension is defined %}
+# Extension of the compressed log files
+compressext {{ dft_logrotate.compress_extension }}
+{% endif %}
+
+{% if dft_logrotate.uncompress_command is defined %}
+# Command used for log uncompression
+uncompresscmd {{ dft_logrotate.uncompress_command }}
+{% endif %}
+
+{% if dft_logrotate.compress_options is defined %}
+# Options passed to the compress command. The default, for gzip(1),  is  "-6"
+# (biased  towards high compression at the expense of speed).  If you use a
+# different compression command, you may need to change the compressoptions to match.
+compressoptions {{ dft_logrotate.compress_options }}
+{% endif %}
+
+{% if dft_logrotate.copy is defined and dft_logrotate.copy %}
+# Make a copy of the log file, but don't change the original at all.
+# This option can be used, for instance, to make  a snapshot  of  the
+# current log file, or when some other utility needs to truncate or parse
+# the file.  When this option is used, the create option will have no
+# effect, as the old log file stays in place.C ommand used for log
+# uncompression
+copy
+{% endif %}
+
+{% if dft_logrotate.copy_truncate is defined and dft_logrotate.copy_truncate %}
+# Truncate the original log file to zero size in place after creating a copy,
+# instead of moving the old  log  file  and optionally  creating  a new one.
+# It can be used when some program cannot be told to close its logfile and thus might
+# continue writing (appending) to the previous log file forever.  Note that there is
+# a very small  time  slice  between copying  the file and truncating it, so some
+# logging data might be lost.  When this option is used, the create option
+# will have no effect, as the old log file stays in place.
+copytruncate
+{% endif %}
+
+{% if dft_logrotate.date_extension is defined and dft_logrotate.date_extension %}
+# Archive old versions of log files adding a date extension like YYYYMMDD instead of
+# simply adding a number. The extension may be configured using the dateformat and
+# dateyesterday options.
+dateext {{ dft_logrotate.date_extension }}
 {% endif %}
 
 # packages drop log rotation information into this directory
