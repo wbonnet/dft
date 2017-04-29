@@ -33,7 +33,7 @@
         mode=0644
         owner=root
         group=root
-  when: dft_banner.install_issue == True
+  when: dft_banner.install_issue is defined and dft_banner.install_issue == True
 
 - name : DFT - Install /etc/issue.net
   copy: src=files/issue.net
@@ -41,7 +41,7 @@
         mode=0644
         owner=root
         group=root
-  when: dft_banner.install_issue_net == True
+  when: dft_banner.install_issue_net is defined and dft_banner.install_issue_net == True
 
 - name : DFT - Install /etc/motd
   copy: src=files/motd
@@ -49,4 +49,4 @@
         mode=0644
         owner=root
         group=root
-  when: dft_banner.install_motd == True
+  when: dft_banner.install_motd is defined and dft_banner.install_motd == True
