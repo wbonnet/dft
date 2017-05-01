@@ -34,6 +34,21 @@ SignWith: {{ item.sign_with }}
 {% if item.deb_override is defined %}
 DebOverride: {{ item.deb_override }}
 {% endif %}
+{% if item.udeb_override is defined %}
+UDebOverride: {{ item.udeb_override }}
+{% endif %}
 {% if item.dsc_override is defined %}
 DscOverride: {{ item.dsc_override }}
+{% endif %}
+{% if item.deb_indices is defined %}
+DebIndices: {{ item.deb_indices }}
+{% endif %}
+{% if item.udeb_indices is defined %}
+UDebIndices: {{ item.udeb_indices }}
+{% endif %}
+{% if item.dsc_indices is defined %}
+DscIndices: {{ item.dsc_indices }}
+{% endif %}
+{% if item.contents is defined %}
+Contents: {{ item.contents }}
 {% endif %}

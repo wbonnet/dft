@@ -44,8 +44,11 @@
 #
 #
 
+# This variables is the base directory for the repositories, everything will be created under
+# this path
 dft_debian_repository_directory: /srv/debian-repositories
 
+# This variable is a list of repository configurations. Each item in the list is a repo
 dft_debian_repository_configuration:
   - origin: DFT
     base_dir: debian
@@ -53,7 +56,7 @@ dft_debian_repository_configuration:
     suite: testing
     codename: stretch
     # version: 9.0
-    architectures: i386 amd64 source
+    architectures: i386 amd64 ppc64 source
     components: main
     udeb_components: main
     log: dft.log
@@ -61,6 +64,15 @@ dft_debian_repository_configuration:
     # deb_override: override.stretch
     # dsc_override: override.stretch
     # sign_with: default
+    # udeb_override:
+    # dsc_override:
+    # deb_indices: Packages Release . .gz .bz2
+    # udeb_indices: Packages . .gz .bz2
+    # dsc_indices: Sources Release .gz .bz2
+    # contents: Sources Release .gz .bz2
+    # The allow variable is a list of rules to output to the Allow section
+    allow:
+      - testing>stretch stretch
 
   - origin: DFT-security
     base_dir: debian-security
@@ -68,7 +80,7 @@ dft_debian_repository_configuration:
     suite: testing
     codename: stretch
     # version: 9.0
-    architectures: i386 amd64 source
+    architectures: i386 amd64 ppc64 source
     components: main
     udeb_components: main
     log: dft-security.log
