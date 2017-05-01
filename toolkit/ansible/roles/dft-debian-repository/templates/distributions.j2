@@ -1,0 +1,39 @@
+{% if item.origin is defined %}
+Origin: {{ item.origin }}
+{% endif %}
+{% if item.label is defined %}
+Label: {{ item.label }}
+{% endif %}
+{% if item.suite is defined %}
+Suite: {{ item.suite }}
+{% endif %}
+{% if item.codename is defined %}
+Codename: {{ item.codename }}
+{% endif %}
+{% if item.version is defined %}
+Version: {{ item.version }}
+{% endif %}
+{% if item.architectures is defined %}
+Architectures: {{ item.architectures }}
+{% endif %}
+{% if item.components is defined %}
+Components: {{ item.components }}
+{% endif %}
+{% if item.udeb_components is defined %}
+UDebComponents: {{ item.udeb_components }}
+{% endif %}
+{% if item.description is defined %}
+Description: {{ item.description }}
+{% endif %}
+{% if item.log is defined %}
+Log: {{ dft_debian_repository_directory }}/{{ item.base_dir }}/logs/{{ item.log }}
+{% endif %}
+{% if item.sign_with is defined %}
+SignWith: {{ item.sign_with }}
+{% endif %}
+{% if item.deb_override is defined %}
+DebOverride: {{ item.deb_override }}
+{% endif %}
+{% if item.dsc_override is defined %}
+DscOverride: {{ item.dsc_override }}
+{% endif %}
