@@ -29,34 +29,34 @@
 # -------------------------------------------------------------------------------------------------
 # Create the reprepro group
 - name: Create the reprepro group
-  group: name={{ dft_debian_repository_user_definition.reprepro_user_group }}
+  group: name={{ dft_debian_repository_user_definition.group }}
          state=present
 
 # Add the user 'reprepro' with a bash shell, appending the group reprepro and
 # {{ dft_debian_repository_web_server_definition.group }} to the user's groups
 - name: Create the reprepro user
-  user: name={{ dft_debian_repository_user_definition.reprepro_user_username }}
-        shell={{ dft_debian_repository_user_definition.reprepro_user_shell }}
-        home={{ dft_debian_repository_user_definition.reprepro_user_home_dir }}
-        group={{ dft_debian_repository_user_definition.reprepro_user_group }}
+  user: name={{ dft_debian_repository_user_definition.username }}
+        shell={{ dft_debian_repository_user_definition.shell }}
+        home={{ dft_debian_repository_user_definition.home_dir }}
+        group={{ dft_debian_repository_user_definition.group }}
         groups={{ dft_debian_repository_web_server_definition.group }}
         append=yes
 
 # Create the reprepro script directory
 - name: DFT - Create reprepro script directory
-  file: path={{ dft_debian_repository_user_definition.reprepro_user_home_dir }}/bin
+  file: path={{ dft_debian_repository_user_definition.home_dir }}/bin
         state=directory
         recurse=yes
-        owner={{ dft_debian_repository_user_definition.reprepro_user_username }}
-        group={{ dft_debian_repository_user_definition.reprepro_user_group }}
+        owner={{ dft_debian_repository_user_definition.username }}
+        group={{ dft_debian_repository_user_definition.group }}
         mode="0755"
 
 # Instanciate the options template file
 - name: DFT - Copy reprepro_import_packages script template
   template: src=reprepro_import_packages.j2
-            dest={{ dft_debian_repository_user_definition.reprepro_user_home_dir }}/bin/reprepro_import_packages
-            owner={{ dft_debian_repository_user_definition.reprepro_user_username }}
-            group={{ dft_debian_repository_user_definition.reprepro_user_group }}
+            dest={{ dft_debian_repository_user_definition.home_dir }}/bin/reprepro_import_packages
+            owner={{ dft_debian_repository_user_definition.username }}
+            group={{ dft_debian_repository_user_definition.group }}
             mode="0755"
 
 # -------------------------------------------------------------------------------------------------
@@ -134,3 +134,10 @@
             mode="0644"
   with_items:
     - "{{ dft_debian_repository_configuration }}"
+
+
+
+
+# TODO setup cron
+# TODO generate apache vhost
+# TODO generate gpg keys

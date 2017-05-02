@@ -92,18 +92,18 @@ dft_debian_repository_configuration:
 # reprepro role variables definition
 #
 dft_debian_repository_user_definition:
-  reprepro_user_username: reprepro
-  reprepro_user_group: reprepro
-  reprepro_user_home_dir: /home/reprepro/
-  reprepro_user_shell: /bin/bash
+  username: reprepro
+  group: reprepro
+  home_dir: /home/reprepro/
+  shell: /bin/bash
 
 # Parameters of the cron job. Cron is running the reprepro_import_packages script
 dft_debian_repository_cron_definition:
-  reprepro_cron_month: "*"
-  reprepro_cron_weekday: "*"
-  reprepro_cron_day: "*"
-  reprepro_cron_hour: "*"
-  reprepro_cron_minute: "0"
+  month: "*"
+  weekday: "*"
+  day: "*"
+  hour: "*"
+  minute: "0"
 
 dft_debian_repository_web_server_definition:
   group: "www-data"
