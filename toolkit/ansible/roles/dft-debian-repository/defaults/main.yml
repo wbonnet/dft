@@ -48,6 +48,9 @@
 # this path
 dft_debian_repository_directory: /srv/debian-repositories
 
+# This variable controls the  pache vrtualhost server name
+dft_debian_repository_server_name: repositories.dft.org
+
 # This variable is a list of repository configurations. Each item in the list is a repo
 dft_debian_repository_configuration:
   - origin: DFT

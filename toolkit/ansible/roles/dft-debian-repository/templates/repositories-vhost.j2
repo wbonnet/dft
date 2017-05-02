@@ -1,24 +1,41 @@
-# Allow to browse everything in the repositories tree
-<Directory {{ dft_debian_repository_directory }}>
-  Options Indexes FollowSymLinks Multiviews
-  Order allow,deny
-  Allow from all
-</Directory>
+<VirtualHost *>
+    DocumentRoot {{ dft_debian_repository_directory }}
+    ServerName {{ dft_debian_repository_server_name }}
+    ErrorLog /var/log/apache2/{{ dft_debian_repository_server_name }}.error.log
 
-# The following directives prevents from browsing some internal repo structures
-# The syntax allow multiple repositories (there is no need to generate a rule per repo).
-# The * joker match any repo under the dft_debian_repository_directory base directory
-<Directory "{{ dft_debian_repository_directory }}/*/db/">
-        Order deny,allow
-        Deny from all
-</Directory>
+    LogLevel warn
 
-<Directory "{{ dft_debian_repository_directory }}/*/conf/">
-        Order deny,allow
-        Deny from all
-</Directory>
+    CustomLog /var/log/apache2/{{ dft_debian_repository_server_name }}.access.log combined
+    ServerSignature On
 
-<Directory "{{ dft_debian_repository_directory }}/*/incoming/">
+    # Allow directory listings so that people can browse the repository from their browser too
+    <Directory "/var/packages">
+        Options Indexes FollowSymLinks MultiViews
+        DirectoryIndex index.html
+        AllowOverride Options
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+    # The following directives prevents from browsing some internal repo structures
+    # The syntax allow multiple repositories (there is no need to generate a rule per repo).
+    # The * joker match any repo under the dft_debian_repository_directory base directory
+    <Directory "{{ dft_debian_repository_directory }}/*/conf">
         Order allow,deny
         Deny from all
-</Directory>
+        Satisfy all
+    </Directory>
+
+    <Directory "{{ dft_debian_repository_directory }}/*/db">
+        Order allow,deny
+        Deny from all
+        Satisfy all
+    </Directory>
+
+    <Directory "{{ dft_debian_repository_directory }}/*/incoming">
+        Order allow,deny
+        Deny from all
+        Satisfy all
+    </Directory>
+</VirtualHost>
+

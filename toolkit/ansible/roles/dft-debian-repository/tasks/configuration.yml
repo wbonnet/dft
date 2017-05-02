@@ -146,5 +146,18 @@
         user="{{ dft_debian_repository_user_definition.username }}"
         job="cd {{ dft_debian_repository_user_definition.home_dir }} && {{ dft_debian_repository_user_definition.home_dir }}/bin/reprepro_import_packages"
 
-# TODO generate apache vhost
+# -------------------------------------------------------------------------------------------------
+# Instanciate the APACHE VIRTUALHOST File
+- name: DFT - Copy virtualhost file
+  template: src=repositories-vhost.j2
+            dest=/etc/apache2/sites-available/042-debian-repositories.conf
+            owner=root
+            group=root
+            mode="0644"
+
+# Enable repositories virtualhost
+- name: DFT - Enable repositories virtualhost
+  command: a2ensite 042-debian-repositories.conf
+
+
 # TODO generate gpg keys
