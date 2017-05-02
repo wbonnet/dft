@@ -135,9 +135,16 @@
   with_items:
     - "{{ dft_debian_repository_configuration }}"
 
+# -------------------------------------------------------------------------------------------------
+# Add processincoming script cron table for user reprepro. Scheduled every hour by default
+- cron: name="Repository update"
+        month={{ dft_debian_repository_cron_definition.month }}
+        weekday={{ dft_debian_repository_cron_definition.weekday }}
+        day={{ dft_debian_repository_cron_definition.day }}
+        hour={{ dft_debian_repository_cron_definition.hour }}
+        minute={{ dft_debian_repository_cron_definition.minute }}
+        user="{{ dft_debian_repository_user_definition.username }}"
+        job="cd {{ dft_debian_repository_user_definition.home_dir }} && {{ dft_debian_repository_user_definition.home_dir }}/bin/reprepro_import_packages"
 
-
-
-# TODO setup cron
 # TODO generate apache vhost
 # TODO generate gpg keys

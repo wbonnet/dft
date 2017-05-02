@@ -1,0 +1,24 @@
+# Allow to browse everything in the repositories tree
+<Directory {{ dft_debian_repository_directory }}>
+  Options Indexes FollowSymLinks Multiviews
+  Order allow,deny
+  Allow from all
+</Directory>
+
+# The following directives prevents from browsing some internal repo structures
+# The syntax allow multiple repositories (there is no need to generate a rule per repo).
+# The * joker match any repo under the dft_debian_repository_directory base directory
+<Directory "{{ dft_debian_repository_directory }}/*/db/">
+        Order deny,allow
+        Deny from all
+</Directory>
+
+<Directory "{{ dft_debian_repository_directory }}/*/conf/">
+        Order deny,allow
+        Deny from all
+</Directory>
+
+<Directory "{{ dft_debian_repository_directory }}/*/incoming/">
+        Order allow,deny
+        Deny from all
+</Directory>

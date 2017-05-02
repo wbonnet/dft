@@ -63,7 +63,7 @@ dft_debian_repository_configuration:
     description: DFT test repository (you should change this to your real configuration)
     # deb_override: override.stretch
     # dsc_override: override.stretch
-    # sign_with: default
+    sign_with: default
     # udeb_override:
     # dsc_override:
     # deb_indices: Packages Release . .gz .bz2
@@ -73,21 +73,6 @@ dft_debian_repository_configuration:
     # The allow variable is a list of rules to output to the Allow section
     allow:
       - testing>stretch stretch
-
-  - origin: DFT-security
-    base_dir: debian-security
-    label: DFT Test repo security
-    suite: testing
-    codename: stretch
-    # version: 9.0
-    architectures: i386 amd64 ppc64 source
-    components: main
-    udeb_components: main
-    log: dft-security.log
-    description: DFT test repository (you should change this to your real configuration)
-    # deb_override: override.stretch
-    # dsc_override: override.stretch
-    # sign_with: default
 
 # reprepro role variables definition
 #
