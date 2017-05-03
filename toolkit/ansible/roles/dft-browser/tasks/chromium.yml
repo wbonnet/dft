@@ -33,7 +33,7 @@
 #
 - name : DFT - Install chromium
   apt: name={{ item }}
-       state=installed
+       state=latest
        update_cache=true
        install_recommends=no
   with_items:

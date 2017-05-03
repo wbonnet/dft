@@ -29,7 +29,7 @@
 ---
 - name : DFT - Install openjdk8
   apt: name={{ item }} 
-       state=installed 
+       state=latest 
        update_cache=true
        install_recommends=no
   with_items:
@@ -38,7 +38,7 @@
 
 - name : DFT - Install openjdk7
   apt: name={{ item }} 
-       state=installed 
+       state=latest 
        update_cache=true
        install_recommends=no
   with_items:
