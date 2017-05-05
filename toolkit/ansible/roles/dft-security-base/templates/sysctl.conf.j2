@@ -6,12 +6,20 @@
 
 {% if dft_kernel_hardening.sysctl_default %}
 {% for param in dft_kernel_hardening.sysctl_default %}
+{% if param.comment is defined %}
+
+# {{ param.comment }}
+{% endif %}
 {{ param.key }} = {{ param.value }}
 {% endfor %}
 {% endif %}
 
 {% if dft_kernel_hardening.sysctl_extra %}
 {% for param in dft_kernel_hardening.sysctl_extra %}
+{% if param.comment is defined %}
+
+# {{ param.comment }}
+{% endif %}
 {{ param.key }} = {{ param.value }}
 {% endfor %}
 {% endif %}

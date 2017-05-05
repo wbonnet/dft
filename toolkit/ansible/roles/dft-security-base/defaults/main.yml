@@ -81,6 +81,10 @@ dft_kernel_hardening:
   # The following list defines the default values of kernel parameters.
   # Defaut config i empty in a Debian installation. It is generated from a template
   # filled with values defied in the list below.
+  #
+  # Comments can be added to the generated sysctl.conf file by adding the optional "comment" key
+  # to one or several list item
+  #
   sysctl_default:
     - { key: "kernel.core_uses_pid",                             value: 1 }
     - { key: "kernel.ctrl-alt-del",                              value: 0 }
@@ -114,4 +118,4 @@ dft_kernel_hardening:
   # The values of both list can be overriden by user in its variable file. Nonetheless this list
   # targets user need and is empty in the defaults file. The previous list will not be modified in
   # most of the cae, thus it can be left unmodifie.
-  sysctl_extra:x
+  sysctl_extra:
