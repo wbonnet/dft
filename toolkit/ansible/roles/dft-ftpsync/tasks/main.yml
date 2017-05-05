@@ -78,6 +78,14 @@
 - name: Get ftp sync and extract archive
   unarchive: src=https://ftp-master.debian.org/ftpsync.tar.gz dest=/tmp copy=no
 
+# Ensure log dir exists (it happens it may be removed from Debian archive)
+- name: Ensure the log dir exist
+  file: path=/tmp/distrib/log
+        state=directory
+        mode=0755
+        group=root
+        owner=root
+
 # Copy the extract files to the ftpsync user home directory
 - name: Copy the extracted files to usr/local
   command: cp -fr /tmp/distrib/{{item}} {{ dft_ftpsync_user_home_dir }}
