@@ -86,6 +86,9 @@ dft_kernel_hardening:
   # to one or several list item
   #
   sysctl_default:
+    - { key: "fs.protected_hardlinks" ,                          value: 1 }
+    - { key: "fs.protected_symlinks" ,                           value: 1 }
+    - { key: "fs.suid_dumpable" ,                                value: 0 }
     - { key: "kernel.core_uses_pid",                             value: 1 }
     - { key: "kernel.ctrl-alt-del",                              value: 0 }
     - { key: "kernel.kptr_restrict",                             value: 2 }
