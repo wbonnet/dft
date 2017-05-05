@@ -7,6 +7,7 @@ source /etc/network/interfaces.d/*
 auto lo
 iface lo inet loopback
 
+{% if dft_network_interfaces %}
 {% for interface in dft_network_interfaces %}
 # Definition of interface {{ interface.name }}
 auto {{ interface.name }}
@@ -35,3 +36,4 @@ iface {{ interface.name }} inet static
 {% endif %}
 
 {% endfor %}
+{% endif %}
