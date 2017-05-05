@@ -43,7 +43,7 @@ dft_os_apt_generate_source_list: True
 #
 # This variable defines the main Debian mirror used by the system
 #
-dft_os_apt_debian_mirror: ftp.de.debian.org
+dft_os_apt_debian_mirror: http://ftp.de.debian.org
 
 #
 # This variable defines if the deb-src sources should be generated of not
