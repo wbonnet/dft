@@ -1,0 +1,16 @@
+# ----- Sources for {{ dft_os_apt_debian_version }} ------------------------------------------------------
+deb http://{{ dft_os_apt_debian_mirror }}/debian/ {{ dft_os_apt_debian_version }} {{ dft_os_apt_debian_sections }}
+{% if dft_os_apt_generate_deb_src is defined and dft_os_apt_generate_deb_src %}
+deb-src http://{{ dft_os_apt_debian_mirror }}/debian/ {{ dft_os_apt_debian_version }} {{ dft_os_apt_debian_sections }}
+
+{% endif %}
+deb http://{{ dft_os_apt_debian_mirror }}/debian-security {{ dft_os_apt_debian_version }}/updates {{ dft_os_apt_debian_sections }}
+{% if dft_os_apt_generate_deb_src is defined and dft_os_apt_generate_deb_src %}
+deb-src http://{{ dft_os_apt_debian_mirror }}/debian-security {{ dft_os_apt_debian_version }}/updates {{ dft_os_apt_debian_sections }}
+
+{% endif %}
+deb http://{{ dft_os_apt_debian_mirror }}/debian/ {{ dft_os_apt_debian_version }}-updates {{ dft_os_apt_debian_sections }}
+{% if dft_os_apt_generate_deb_src is defined and dft_os_apt_generate_deb_src %}
+deb-src http://{{ dft_os_apt_debian_mirror }}/debian/ {{ dft_os_apt_debian_version }}-updates {{ dft_os_apt_debian_sections }}
+
+{% endif %}
