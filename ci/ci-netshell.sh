@@ -21,12 +21,6 @@ export VIRTUALENVWRAPPER_HOOK_DIR=${WORKON_HOME}
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
 
-# Create the python virtualenv
-pip3 install virtualenvwrapper
-mkvirtualenv dft
-workon dft
-pip3 install pyyaml
-
 # Move to dft tool source dir
 cd toolkit/dft
 
