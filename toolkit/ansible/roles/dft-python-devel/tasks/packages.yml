@@ -32,3 +32,6 @@
     - virtualenv
     - virtualenvwrapper
     - python3-pip
+    - python-cheetah
+    - python3-mako
+    - python3-setuptools
