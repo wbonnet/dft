@@ -53,7 +53,7 @@ configuration:
   # Defines the path to project configuration files. By default (undefined  
   # value) configuration files are searched in the same directory as the 
   # current project.yml file
-  project-path: "~/Devel/dft/toolkit/examples/firmware-projects/netshell-dual-bank-overlayfs"
+  project-path: "~/Devel/dft/examples/firmware-projects/netshell-dual-bank-overlayfs"
 
   # Path to the dft installation directory
   dft-base: "~/Devel/dft/toolkit/ansible"
