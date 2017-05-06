@@ -28,7 +28,7 @@ pip3 install pyyaml
 cd toolkit/dft
 
 # Run the dft tool to build the root_fs
-python3.5 dft build_rootfs  --project-file ${WORKING_DIR}/${DFT_PROJECT} --log-level debug --keep-boootstrap-files
+python3.5 dft build_rootfs  --project-file ${WORKING_DIR}/${DFT_PROJECT} --log-level debug --keep-bootstrap-files
 
 # Run the dft tool to build the firmware
 python3.5 dft build_firmware --project-file ${WORKING_DIR}/${DFT_PROJECT} --log-level debug
