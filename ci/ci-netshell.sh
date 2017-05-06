@@ -5,6 +5,9 @@
 # netshell example
 #
 
+# Stop a first error
+set -e
+
 # Retrive the project filename from the command line
 DFT_PROJECT=$1
 
