@@ -45,7 +45,7 @@ configuration:
   # Defines the root of the working directories. A dirctory named after
   # project name will be created under this path, and subdirectories used to
   # store rootfs, bootloader, image, etc will be created
-  working_dir: "~/Devel/dft/working_dir"
+  working_dir: "../../working_dir"
 
   # Defines the project name. Mostly used for output and directories creation
   project_name: "netshell"
@@ -53,17 +53,17 @@ configuration:
   # Defines the path to project configuration files. By default (undefined
   # value) configuration files are searched in the same directory as the
   # current project.yml file
-  project_path: "~/Devel/dft/examples/starter-projects/netshell"
+  # project_path: "~/Devel/dft/examples/starter-projects/netshell"
 
   # Path to the dft installation directory
-  dft_base: "~/Devel/dft/toolkit/ansible"
+  dft_base: "../ansible"
 
   # Define a list of directories with additional content (roles, playbooks, etc)
   # which are copied to /dft_bootstrap during rootfs bootstrapping. These paths
   # contains project specific definition (which are not included in the dft
   # open-source tool)
-  additional_roles:
-  - "~/Devel/dft/examples/redefined-roles"
+  # additional_roles:
+  # - "~/Devel/dft/examples/redefined-roles"
 
 # ----------------------------------------------------------------------------
 #
