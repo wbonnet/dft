@@ -62,8 +62,8 @@ configuration:
   # which are copied to /dft_bootstrap during rootfs bootstrapping. These paths
   # contains project specific definition (which are not included in the dft
   # open-source tool)
-  # additional_roles:
-  # - "~/Devel/dft/examples/redefined-roles"
+  additional_roles:
+   - "../../examples/redefined-roles"
 
 # ----------------------------------------------------------------------------
 #
