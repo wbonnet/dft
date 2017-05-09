@@ -57,6 +57,8 @@ class AssembleFirmware(CliCommand):
     # Initialize ancestor
     CliCommand.__init__(self, dft, project)
 
+
+
   # -------------------------------------------------------------------------
   #
   # assemble_firmware
@@ -105,8 +107,6 @@ class AssembleFirmware(CliCommand):
     if os.path.isfile(self.project.init_filename):
       os.remove(self.project.init_filename)
 
-    # Copy the init script to the target directory
-
     # Generate the stacking script
     self.generate_stacking_scripts()
 
@@ -123,6 +123,8 @@ class AssembleFirmware(CliCommand):
     # Copy the new / updated bootchain from the rootfs to the output directory
     self.copy_bootchain_to_output()
 
+
+
   # -------------------------------------------------------------------------
   #
   # install_tools_and_kernel
@@ -135,7 +137,17 @@ class AssembleFirmware(CliCommand):
     Operations executed by this method run in a chrooted environment in the
     generated rootfs.
     """
-    pass
+
+    # Output current method to debug
+    logging.debug("Entering install_tools_and_kernel...")
+
+    # Install initramfs-tools to the roootfs
+    self.install_package("initramfs-tools")
+    self.install_package("linux-image-" + self.project.target_arch)
+
+# FIXME: seems to work onlly for amd64
+
+
 
   # -------------------------------------------------------------------------
   #
@@ -147,7 +159,15 @@ class AssembleFirmware(CliCommand):
     operation is ran from the chrooted environment. Stacking script and
     modifications to the init script are included during this stage.
     """
-    pass
+
+    # Output current method to debug
+    logging.debug("Entering update_initramfs...")
+
+    # Copy the stacking script to /tmp in the rootfs
+    sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint + " update-initramfs -u"
+    self.execute_command(sudo_command)
+
+
 
   # -------------------------------------------------------------------------
   #
@@ -158,7 +178,16 @@ class AssembleFirmware(CliCommand):
     """This method copy the bootchain that has been installed / updated from the
     generated rootfs to the output directory on the host.
     """
-    pass
+
+    # Output current method to debug
+    logging.debug("Entering copy_boootchain_to_output...")
+
+    # Copy the stacking script to /tmp in the rootfs
+    sudo_command = 'sudo cp ' + self.project.rootfs_mountpoint + '/boot/* ' + \
+                  self.project.firmware_directory
+    self.execute_command(sudo_command)
+
+
 
   # -------------------------------------------------------------------------
   #
@@ -171,7 +200,24 @@ class AssembleFirmware(CliCommand):
     are used when the initramfs is created or updated. Stacking script is
     included into the new initramfs, so are init modifications.
     """
-    pass
+
+    # Output current method to debug
+    logging.debug("Entering deploy_stacking_scripts...")
+
+    # Copy the stacking script to /tmp in the rootfs
+    sudo_command = 'sudo cp ' + self.project.stacking_script_filename + " " + \
+                   self.project.rootfs_mountpoint + '/tmp/'
+    self.execute_command(sudo_command)
+
+    # Copy the initramfs build hook to the hook dir in the generated rootfs
+    sudo_command = 'sudo cp ' + self.project.project_def["configuration"]["dft_base"] + \
+                   "/../scripts/add_dft_to_initramfs " + self.project.rootfs_mountpoint + \
+                   '/usr/share/initramfs-tools/hooks/'
+    self.execute_command(sudo_command)
+
+# FIXME : Fix path to root installation
+
+
 
   # -------------------------------------------------------------------------
   #
@@ -187,8 +233,12 @@ class AssembleFirmware(CliCommand):
     (using aufs or overlayfs).
     """
 
+    # Output current method to debug
+    logging.debug("Entering generate_stacking_scripts...")
+
+
     # Generate the stacking script
-        # configuration, then move  roles to the target rootfs
+    # configuration, then move  roles to the target rootfs
     with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
       # Retrieve generation date
       today = datetime.datetime.now()
@@ -204,6 +254,8 @@ class AssembleFirmware(CliCommand):
       working_file.write("# Generation date : " + today.strftime("%d/%m/%Y - %H:%M.%S") + "\n")
       working_file.write("#\n")
       working_file.write("\n")
+
+    # Now it's done, let's close the file
     working_file.close()
 
     # Generate the common stuff. It includes mounting the target (used later for stacking them)

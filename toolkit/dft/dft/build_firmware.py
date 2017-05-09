@@ -64,7 +64,6 @@ class BuildFirmware(CliCommand):
       . Remove existing file
       . Generate the mksquashfs command and add options
       . That's all
-
     """
 
     # Check that there is a firmware configuration file first

@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Stop on first error
+set -x
+
+# Source the hoook-functions script
+. /usr/share/initramfs-tools/hook-functions
+
+# Copy the stacking script to the initramfs bin directory
+cp -pnL /tmp/dft_create_stack.sh ${DESTDIR}/bin
+
+# Ensure the script is executable
+chmod 755 ${DESTDIR}/bin/dft_create_stack.sh

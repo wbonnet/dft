@@ -688,7 +688,7 @@ class GenerateContentInformation(CliCommand):
       # Check if skipping is allowed or not
       if self.project.content_information_def["configuration"]["skip_missing_software"]:
         logging.warning("Skipping vulnerabilities content generation. Clamav is missing\
-                        and instalation not allowed by configuration file.")
+                        and installation not allowed by configuration file.")
         return False
       else:
         # Skipping is deactivated, so is installation, thus it fails
