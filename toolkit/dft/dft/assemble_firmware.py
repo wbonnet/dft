@@ -108,16 +108,77 @@ class AssembleFirmware(CliCommand):
     # Copy the init script to the target directory
 
     # Generate the stacking script
-    self.generate_stack_script()
+    self.generate_stacking_scripts()
 
+    # Deploy scripts to the generated rootfs (in order to create the new initramfs)
+    self.deploy_stacking_scripts()
 
+    # Install the packages and tools needed to create the updated bootchain
+    self.install_tools_and_kernel()
+
+    # Regenerate the initramfs to include our custum stacking script and some modification
+    # to the init script ( needed to call the stacking script )
+    self.update_initramfs()
+
+    # Copy the new / updated bootchain from the rootfs to the output directory
+    self.copy_bootchain_to_output()
 
   # -------------------------------------------------------------------------
   #
-  # generate_stack_script
+  # install_tools_and_kernel
   #
   # -------------------------------------------------------------------------
-  def generate_stack_script(self):
+  def install_tools_and_kernel(self):
+    """This method installs in the generated rootfs the tools needed to update
+    (or generate) theinitramfs, and also install kernel if needed.
+
+    Operations executed by this method run in a chrooted environment in the
+    generated rootfs.
+    """
+    pass
+
+  # -------------------------------------------------------------------------
+  #
+  # update_initramfs
+  #
+  # -------------------------------------------------------------------------
+  def update_initramfs(self):
+    """This method regerenate (or create if missing) the initramfs. This
+    operation is ran from the chrooted environment. Stacking script and
+    modifications to the init script are included during this stage.
+    """
+    pass
+
+  # -------------------------------------------------------------------------
+  #
+  # copy_bootchain_to_output
+  #
+  # -------------------------------------------------------------------------
+  def copy_bootchain_to_output(self):
+    """This method copy the bootchain that has been installed / updated from the
+    generated rootfs to the output directory on the host.
+    """
+    pass
+
+  # -------------------------------------------------------------------------
+  #
+  # deploy_stacking_scripts
+  #
+  # -------------------------------------------------------------------------
+  def deploy_stacking_scripts(self):
+    """This method deploys the stacking script and modification made to init
+    script to the rootfs generated during previous stages. This information
+    are used when the initramfs is created or updated. Stacking script is
+    included into the new initramfs, so are init modifications.
+    """
+    pass
+
+  # -------------------------------------------------------------------------
+  #
+  # generate_stacking_scripts
+  #
+  # -------------------------------------------------------------------------
+  def generate_stacking_scripts(self):
     """This method implement the generation of the stacking script
 
     The stacking script is called in the initramfs by the init script. Stacking
@@ -129,7 +190,7 @@ class AssembleFirmware(CliCommand):
     # Generate the stacking script
         # configuration, then move  roles to the target rootfs
     with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
-      # Retrieve geenration date
+      # Retrieve generation date
       today = datetime.datetime.now()
 
       # Generate file header
@@ -342,7 +403,7 @@ class AssembleFirmware(CliCommand):
     method only do output, the file is closed after the method returns.
     """
 
-    # Reopenthe working file
+    # Reopen the working file
     working_file = open(working_file_name, "a")
 
     working_file.write("generate_aufs_stacking\n")
