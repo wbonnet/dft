@@ -454,19 +454,29 @@ class BuildRootFS(CliCommand):
     Second part of the methods iterate the repositories from configuration
     file and generates sources.list
     """
-#TODO : remove validity check after generation ? => flag ?
     logging.info("starting to generate APT sources configuration")
 
-    # Generate the file path
-    filepath = self.project.rootfs_mountpoint + "/etc/apt/apt.conf.d/10no-check-valid-until"
+    # Test if the generate_validity_check is defined, if not set the default value
+    if "generate_validity_check" not in self.project.project_def["configuration"]:
+      self.project.project_def["configuration"]["generate_validity_check"] = True
 
-    # Open the file and writes configuration in it
-    with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
-      working_file.write("Acquire::Check-Valid-Until \"0\";\n")
-    working_file.close()
+    # Test if we have to generate the no-check-valid_until file
+    if self.project.project_def["configuration"]["generate_validity_check"] == True:
+      logging.debug("generating /etc/apt/apt.conf.d/10no-check-valid-until")
 
-    sudo_command = "sudo mv -f " + working_file.name + " " + filepath
-    self.execute_command(sudo_command)
+      # Generate the file path
+      filepath = self.project.rootfs_mountpoint + "/etc/apt/apt.conf.d/10no-check-valid-until"
+
+      # Open the file and writes configuration in it
+      with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
+        working_file.write("Acquire::Check-Valid-Until \"0\";\n")
+      working_file.close()
+
+      sudo_command = "sudo mv -f " + working_file.name + " " + filepath
+      self.execute_command(sudo_command)
+    # If generation is deactivated, only output a debug message
+    else:
+      logging.debug("/etc/apt/apt.conf.d/10no-check-valid-until generation is deactivated")
 
     # Generate the file path
     filepath = self.project.rootfs_mountpoint + "/etc/apt/sources.list"

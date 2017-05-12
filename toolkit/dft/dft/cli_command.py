@@ -223,6 +223,24 @@ class CliCommand(object):
       self.project.logging.debug("keep_bootstrap_files is activated, keeping DFT bootstrap " +
                                  "files in " + self.project.rootfs_mountpoint + "/dft_bootstrap")
 
+    # Test if the generate_validity_check is defined, if not set the default value
+    if "remove_validity_check" not in self.project.project_def["configuration"]:
+      self.project.project_def["configuration"]["remove_validity_check"] = False
+
+    if self.project.project_def["configuration"]["remove_validity_check"] == True:
+      self.project.logging.debug("remove generated /etc/apt/apt.conf.d/10no-check-valid-until")
+
+      # Generate the file path
+      filepath = self.project.rootfs_mountpoint + "/etc/apt/apt.conf.d/10no-check-valid-until"
+
+      # Test if the file exists
+      if os.path.isfile(filepath):
+        # Generate a rm command with root privileges and execute it
+        sudo_command = "sudo rm -f " + filepath
+        self.execute_command(sudo_command)
+    else:
+      self.project.logging.debug("remove_validity_check_ is set to False. Generated /etc/apt/apt.conf.d/10no-check-valid-until is not removed")
+
 
 
   # -------------------------------------------------------------------------
