@@ -29,7 +29,7 @@
 # This is useful when your main repository is not automatically updated from an online official
 # repository. Default value is to generate this file and deactivate the check
 #
-dft_os_apt_deactivate_check_valid_until: True
+dft_os_apt_deactivate_check_valid_until: False
 
 #
 # This variable control the generation of the /etc/apt/sources.list file
