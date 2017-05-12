@@ -43,6 +43,7 @@ class CheckRootFS(CliCommand):
   packages, files, directories and symlink. Attributes, versions and
   content can also be checked
   """
+  # pylint: disable=too-many-instance-attributes
 
   # -------------------------------------------------------------------------
   #
@@ -311,7 +312,6 @@ class CheckRootFS(CliCommand):
 # TODO traiter les paquet en rc ?
 
     # Output the execution summary
-# TODO handle plural
 # TODO handle none for expected in case the  is no unit tests
     print("")
     print("Package check execution summary")
@@ -621,7 +621,6 @@ class CheckRootFS(CliCommand):
       # Process the check results (update counters and output information)
       self.process_rule_checking_output(rule)
 
-# TODO handle plural
 # TODO handle none for expected in case the  is no unit tests
 
     print("")

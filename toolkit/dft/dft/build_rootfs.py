@@ -28,7 +28,6 @@ based upon the definition stored in a configuration file and a set of Ansible ro
 import logging
 import os
 import tarfile
-import shutil
 import tempfile
 from distutils import dir_util
 from distutils import file_util
@@ -63,6 +62,11 @@ class BuildRootFS(CliCommand):
     # Initialize ancestor
     CliCommand.__init__(self, dft, project)
 
+    # Flags used to know if proc and dev hae beeon mounted in the generated rootfs
+    self.proc_is_mounted = False
+    self.devpts_is_mounted = False
+    self.devshm_is_mounted = False
+
     # Set the log level from the configuration
     logging.basicConfig(level=project.dft.log_level)
 
@@ -96,7 +100,8 @@ class BuildRootFS(CliCommand):
     else:
       if ("keep_rootfs_history" in self.project.project_def["configuration"] and
           self.project.project_def["configuration"]["keep_rootfs_history"]):
-        logging.warn("target rootfs mount point already exists : " + self.project.rootfs_mountpoint)
+        logging.warning("target rootfs mount point already exists : " +
+                        self.project.rootfs_mountpoint)
         exit(1)
       else:
 
@@ -198,11 +203,6 @@ class BuildRootFS(CliCommand):
 
     except OSError as exception:
       # Call clean up to umount /proc and /dev
-      self.cleanup_installation_files()
-      logging.critical("Error: %s - %s.", exception.filename, exception.strerror)
-      exit(1)
-
-    except shutil.Error as exception:
       self.cleanup_installation_files()
       logging.critical("Error: %s - %s.", exception.filename, exception.strerror)
       exit(1)

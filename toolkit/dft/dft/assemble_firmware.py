@@ -138,8 +138,8 @@ class AssembleFirmware(CliCommand):
     generated rootfs.
     """
 
-    # Output current method to debug
-    logging.debug("Entering install_tools_and_kernel...")
+    # Output current task to logs
+    logging.info("Installing initramfs tools and kernel")
 
     # Install initramfs-tools to the roootfs
     self.install_package("initramfs-tools")
@@ -160,8 +160,8 @@ class AssembleFirmware(CliCommand):
     modifications to the init script are included during this stage.
     """
 
-    # Output current method to debug
-    logging.debug("Entering update_initramfs...")
+    # Output current task to logs
+    logging.info("Upadting initramfs")
 
     # Copy the stacking script to /tmp in the rootfs
     sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint + " update-initramfs -u"
@@ -179,8 +179,8 @@ class AssembleFirmware(CliCommand):
     generated rootfs to the output directory on the host.
     """
 
-    # Output current method to debug
-    logging.debug("Entering copy_boootchain_to_output...")
+    # Output current task to logs
+    logging.info("Copying boootchain to firmware directory")
 
     # Copy the stacking script to /tmp in the rootfs
     sudo_command = 'sudo cp ' + self.project.rootfs_mountpoint + '/boot/* ' + \
@@ -201,8 +201,8 @@ class AssembleFirmware(CliCommand):
     included into the new initramfs, so are init modifications.
     """
 
-    # Output current method to debug
-    logging.debug("Entering deploy_stacking_scripts...")
+    # Output current task to logs
+    logging.info("Deploying stacking scripts to target")
 
     # Copy the stacking script to /tmp in the rootfs
     sudo_command = 'sudo cp ' + self.project.stacking_script_filename + " " + \
@@ -233,8 +233,8 @@ class AssembleFirmware(CliCommand):
     (using aufs or overlayfs).
     """
 
-    # Output current method to debug
-    logging.debug("Entering generate_stacking_scripts...")
+    # Output current task to logs
+    logging.info("Generating stacking scripts")
 
 
     # Generate the stacking script

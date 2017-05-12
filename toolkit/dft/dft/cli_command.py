@@ -39,6 +39,8 @@ class CliCommand(object):
      sudo execution and error handling, qemu setup and tear down, etc
   """
 
+  # pylint: disable=too-many-instance-attributes
+
   # -------------------------------------------------------------------------
   #
   # __init__
@@ -77,7 +79,7 @@ class CliCommand(object):
 
     # Flag used to prevent multiple call to cleanup since cleanup is used
     # in exception processing
-    self.doing_cleanup_installation_files = False
+    self.cleanup_in_progress = False
 
   # -------------------------------------------------------------------------
   #
@@ -190,11 +192,11 @@ class CliCommand(object):
     # Are we already doing a cleanup ? this may happens if an exception
     # occurs when cleaning up. It prevents multiple call and loop in
     # exception processing
-    if self.doing_cleanup_installation_files:
+    if self.cleanup_in_progress:
       return
 
     # Set the flag used to prevent multiple call
-    self.doing_cleanup_installation_files = True
+    self.cleanup_in_progress = True
 
     # Check if /proc is mounted, then umount it
     if self.proc_is_mounted:
@@ -211,7 +213,7 @@ class CliCommand(object):
       sudo_command = "sudo umount " + self.project.rootfs_mountpoint + "/proc"
       self.execute_command(sudo_command)
 
-    self.doing_cleanup_installation_files = False
+    self.cleanup_in_progress = False
 
     # Delete the DFT files from the rootfs
     if not self.project.dft.keep_bootstrap_files:

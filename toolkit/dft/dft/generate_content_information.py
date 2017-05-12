@@ -526,10 +526,10 @@ class GenerateContentInformation(CliCommand):
     # Check if package is installed in the chrooted environment
     need_to_remove_package = False
     if not os.path.isfile(self.project.rootfs_mountpoint + "/usr/sbin/lynis"):
-        # Install missing packages into the chroot
-        # Set the flag used tomark that we install debsecan and we have to
-        # remove it before exiting the application
-        need_to_remove_package = self.check_install_missing_package("lynis")
+      # Install missing packages into the chroot
+      # Set the flag used tomark that we install debsecan and we have to
+      # remove it before exiting the application
+      need_to_remove_package = self.check_install_missing_package("lynis")
 
     # Generate the debsecan execution command
     sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
@@ -575,10 +575,10 @@ class GenerateContentInformation(CliCommand):
     # Check if package is installed in the chrooted environment
     need_to_remove_package = False
     if not os.path.isfile(self.project.rootfs_mountpoint + "/usr/bin/rkhunter"):
-        # Install missing packages into the chroot
-        # Set the flag used tomark that we install debsecan and we have to
-        # remove it before exiting the application
-        need_to_remove_package = self.check_install_missing_package("rkhunter")
+      # Install missing packages into the chroot
+      # Set the flag used tomark that we install debsecan and we have to
+      # remove it before exiting the application
+      need_to_remove_package = self.check_install_missing_package("rkhunter")
 
     # Generate the debsecan execution command
     sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
@@ -621,10 +621,10 @@ class GenerateContentInformation(CliCommand):
     # Check if debsecan is installed in the chrooted environment
     need_to_remove_package = False
     if not os.path.isfile(self.project.rootfs_mountpoint + "/usr/bin/debsecan"):
-        # Install missing packages into the chroot
-        # Set the flag used tomark that we install debsecan and we have to
-        # remove it before exiting the application
-        need_to_remove_package = self.check_install_missing_package("debsecan")
+      # Install missing packages into the chroot
+      # Set the flag used tomark that we install debsecan and we have to
+      # remove it before exiting the application
+      need_to_remove_package = self.check_install_missing_package("debsecan")
 
     # Generate the debsecan execution command
     sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
