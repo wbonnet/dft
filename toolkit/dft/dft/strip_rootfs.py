@@ -64,7 +64,6 @@ class StripRootFS(CliCommand):
   def strip_rootfs(self):
     """This method implement the business logic of rootfs stripping.
 
-    TODO
     It calls dedicated method for each step. The main steps are :
     . strip_packages      This step will remove each package marked as absent
     . strip_files         This step will remove each file marked as absent
@@ -106,12 +105,29 @@ class StripRootFS(CliCommand):
         for pkg in self.project.stripping_def["packages"]["absent"]:
           # If the package is installed
           if pkg in self.installed_packages:
-            # Then remove it !
+            # First chck if we h&ve to add APT
+            filepath = self.project.rootfs_mountpoint + "/usr/bin/apt-get"
+
+            # Test if the binary exists
+            if not os.path.isfile(filepath):
+              # No thus install, and set the flag to mark it has to be removed in the end
+              self.project.logging.debug("apt packag is needed for tripping, installing it")
+              self.install_package("apt")
+              self.need_to_strip_apt = True
+
+            # Then remove the package since it is in the kill list !
             self.remove_package(pkg)
       else:
         self.project.logging.debug("The stripping definition does not include packages to remove")
     else:
       self.project.logging.debug("The stripping definition does not include packages section")
+
+    # Package stripping is done, we no longer apt package (if we had to install it)
+    # It is now time to remove it. It has to do done before files and directories stripping
+    # In case the next stripping stages breaks APT
+    if self.need_to_strip_apt == True:
+      self.project.logging.debug("apt packag has been installed during stripping, now removing it")
+      self.remove_package("apt")
 
     #
     # Strip the files
@@ -164,19 +180,7 @@ class StripRootFS(CliCommand):
     if self.use_qemu_static:
       self.cleanup_qemu()
 
-
-
-
-    # First strip the packages
-#    need_to_strip_apt = False
-
-    # Check if at some time the APT stuff has be caimed for removal
- #   if need_to_strip_apt:
-      # We now have to remove
-  #    pass
-# Next strip the directories
-# Then strip the symlinks
-# And finally strip the files
+# Then strip the symlinks ??? check it is in unit test
 
 
 
