@@ -34,11 +34,11 @@ layout:
   method: overlayfs
 
   # Definition of the different things to stack to assemble the firmware
-  stack-definition:
+  stack_definition:
     # Stack items are individual element of the stack. They are processed
     # and added to the aufs o overlayfs according to their order of
     # definition
-  - stack-item:
+  - stack_item:
       # Name under which the item is known and used in the scripts
       # Name is used to mount the item in host filesystem under /mnt/dft/name
       name: system
@@ -50,7 +50,7 @@ layout:
       # Path to the squashfs file to mount
       # This information is ignored if type is ot squashfs
       # Default value is generated based upon the project information
-      squashfs-file: system.fw
+      squashfs_file: system.fw
 
       # Name of the partition device to mount when type is partition
       # This information is ignored if type is not partition
@@ -63,10 +63,10 @@ layout:
 
       # Options to pass to the mount command.
       # Default is TODO
-      # mount-options:
+      # mount_options:
 
     # Defines a tmpfs to stack over the root 
-  - stack-item:
+  - stack_item:
       # Name of the mount point
       name: volatile
 
@@ -77,10 +77,10 @@ layout:
       mountpoint: /
 
       # Specify the size of the tmpfs 
-      mount-options: "size=1G,nr_inodes=10k,mode=777"
+      mount_options: "size=1G,nr_inodes=10k,mode=777"
 
     # Defines a tmpfs to stack over the root 
-  - stack-item:
+  - stack_item:
       # Name of the mount point
       name: data
 
@@ -94,13 +94,13 @@ layout:
       mountpoint: /
 
       # Specify the size of the tmpfs 
-      mount-options: "noatime,nodiratime"
+      mount_options: "noatime,nodiratime"
 
 
 # TODO name + stack_over ?
 
 # TODO globa  l ?
-  auto-commit: False
+  auto_commit: False
 #   defines mapping over squashfs
 #   => direct write ?
 # stacking ? 
@@ -115,7 +115,7 @@ security:
   # Defines security paramters such as the use of hash, digital ignature, etc.
   # TODO  not at start, but need to check for hashes or signatures
   # TODO  how to handle ciphering, keygen, secure storage
-  hash-method: none
+  hash_method: none
 
 TODO ciphering
 
@@ -138,81 +138,46 @@ resilience:
 configuration:
 
   # Defines the block size. Default is 131072 bytes
-  block-size: "256K"
+  block_size: "256K"
 
   # Compressors available are gzip (default), lzo, xz
   compressor: "xz"
 
   # Don't make the filesystem exportable via NFS. 
-  # no-exports: True
+  # no_exports: True
 
   # Don't detect sparse files. Default is False
-  # no-sparse: True
+  # no_sparse: True
 
   # Store or not extended attributes. Default is True
   # xattrs: False
 
   # Do not compress inode table. Default is False
-  # no-inode-compression: True
+  # no_inode_compression: True
 
   # Do not compress data blocks. Default is False
-  # no-datablock-compression: True
+  # no_datablock_compression: True
 
   # Do not compress fragment blocks. Default is False
-  # no-fragment-compression: True
+  # no_fragment_compression: True
 
   # Do not compress extended attributes. Default is False
-  # no-xattrs-compression: True
+  # no_xattrs_compression: True
 
   # Use or not fragments.
-  # use-fragments: True
+  # use_fragments: True
 
   # Do not perform duplicate checking.
-  # no-duplicates-check: True
+  # no_duplicates_check: True
 
   # Make all files owned by root.
-  # all-root: False
+  # all_root: False
 
   # Set all file uids to uid.
-  # force-uid: "1234"
+  # force_uid: "1234"
 
   # Set all file gids to gid.
-  # force-gid: "1234"
+  # force_gid: "1234"
 
   # Do not pad filesystem to a multiple of 4K.
   # nopad: True
-
-
-#        -keep-as-directory
-#            if  one source directory is specified, create a root directory contain‐
-#            ing that directory, rather than the contents of the directory.
-
-#    Filesystem filter options
-#        -p PSEUDO_DEFINITION
-#            Add pseudo file definition.
-
-#        -pf PSEUDO_FILE
-#            Add list of pseudo file definitions.
-
-#        -sort SORT_FILE
-#            sort files according to priorities in SORT_FILE. One file or  dir  with
-#            priority per line. Priority -32768 to 32767, default priority 0.
-
-#        -ef EXCLUDE_FILE
-#            list of exclude dirs/files. One per line.
-
-#        -wildcards
-#            Allow  extended  shell  wildcards  (globbing)  to  be  used  in exclude
-#            dirs/files
-
-#        -regex
-#            Allow POSIX regular expressions to be used in exclude dirs/files.
-
-#    Filesystem append options
-#        -noappend
-#            do not append to existing filesystem.
-
-#        -root-becomes NAME
-#            when appending source files/directories, make the original root  become
-#            a  subdirectory in the new root called NAME, rather than adding the new
-#            source items to the original root.
