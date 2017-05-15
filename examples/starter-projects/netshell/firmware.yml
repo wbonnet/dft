@@ -115,7 +115,7 @@ security:
   # Defines security paramters such as the use of hash, digital ignature, etc.
   # TODO  not at start, but need to check for hashes or signatures
   # TODO  how to handle ciphering, keygen, secure storage
-  hash_method: tagada
+  hash_method: md5
 
 # ----------------------------------------------------------------------------
 #
