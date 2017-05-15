@@ -85,69 +85,140 @@ class BuildFirmware(CliCommand):
     if os.path.isfile(self.project.firmware_filename):
       os.remove(self.project.firmware_filename)
 
+    # Generate the squashfs files
+    self.create_squashfs_files()
+
+    # Generate checksums for squashfs_files
+    self.create_squashfs_checksums()
+
+
+  # -------------------------------------------------------------------------
+  #
+  # create_squashfs_checksums
+  #
+  # -------------------------------------------------------------------------
+  def create_squashfs_checksums(self):
+    """This method generates the checksum files (MD5 SHA1 or SHA256) according
+    to the security options defined in the firmware section of the project.
+
+    The algorith to use is defined by the security:hash-method key
+    """
+
+    # Test if the security section is defined
+    if "security" in self.project.firmware_def:
+      # Yes, thus test if the hash-method is defined. If not defined, default
+      # value is applied. Default value is "no hash"
+      if "hash_method" in self.project.firmware_def["security"]:
+        # Convert hash-method to lower case in order to use it as command prefix
+        self.project.firmware_def["security"]["hash_method"] = self.project.firmware_def["security"]["hash_method"].lower()
+
+        # Check that the algorith is valid (authorized values are md5 sha1 sha256)
+        if self.project.firmware_def["security"]["hash_method"] in "md5" "sha1" "sha256":
+          # Output some fancy logs :)
+          self.project.logging.info("Generating hash file " + self.project.firmware_filename + "." +
+                                    self.project.firmware_def["security"]["hash_method"])
+
+          # Generate the hash tool call
+          cmd = self.project.firmware_def["security"]["hash_method"] + "sum " + '"'
+          cmd += self.project.firmware_filename + '" > "' + self.project.firmware_filename
+          cmd += "." + self.project.firmware_def["security"]["hash_method"] + '"'
+
+          # Execute the hash generation command
+          self.execute_command(cmd)
+
+        # Algorithm is unknown, output an error and exit
+        else:
+          self.project.logging.error("The hash-method is unknown (" + 
+                                     self.project.firmware_def["security"]["hash_method"] + ")")
+          exit(1)
+
+      # Not defined, thus no hash generated,just log it
+      else:
+        self.project.logging.info("The key hash-method is not defined under security in this" +
+                                  " firmware definition. No hash produced")
+    else:
+      self.project.logging.info("The security section is not defined under security in this" +
+                                " firmware definition. No hash produced")
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # create_squashfs_files
+  #
+  # -------------------------------------------------------------------------
+  def create_squashfs_files(self):
+    """This method implement the creation of squashfs files. It calls mksquash
+    tool from comand line (by generating the call using all options from config)
+    usiness logic of firmware generation.
+    """
+
+    # Output some fancy logs :)
+    self.project.logging.info("Generating " + self.project.firmware_filename)
+
     # Create a new squashfs file from the rootfs path
-    sudo_command = 'mksquashfs "' +  self.project.rootfs_mountpoint + '" "'
-    sudo_command += self.project.firmware_filename + '"'
+    cmd = 'mksquashfs "' +  self.project.rootfs_mountpoint + '" "'
+    cmd += self.project.firmware_filename + '"'
 
     # Append arguments if defined in the configuration file
     if "block_size" in self.project.firmware_def["configuration"]:
-      sudo_command += ' -b ' + self.project.firmware_def["configuration"]["block_size"]
+      cmd += ' -b ' + self.project.firmware_def["configuration"]["block_size"]
 
     if "compressor" in self.project.firmware_def["configuration"]:
-      sudo_command += ' -comp ' + self.project.firmware_def["configuration"]["compressor"]
+      cmd += ' -comp ' + self.project.firmware_def["configuration"]["compressor"]
 
     if "no_exports" in self.project.firmware_def["configuration"]:
       if self.project.firmware_def["configuration"]["no_exports"]:
-        sudo_command += ' -no-exports '
+        cmd += ' -no-exports '
 
     if "no_spare" in self.project.firmware_def["configuration"]:
-      sudo_command += ' -no-spare '
+      cmd += ' -no-spare '
 
     if "xattrs" in self.project.firmware_def["configuration"]:
       if self.project.firmware_def["configuration"]["xattrs"]:
-        sudo_command += ' -xattrs '
+        cmd += ' -xattrs '
       if not self.project.firmware_def["configuration"]["xattrs"]:
-        sudo_command += ' -no-xattrs '
+        cmd += ' -no-xattrs '
 
     if "no_inode_compression" in self.project.firmware_def["configuration"]:
-      sudo_command += ' -noI '
+      cmd += ' -noI '
 
     if "no_datablock_compression" in self.project.firmware_def["configuration"]:
-      sudo_command += ' -noD '
+      cmd += ' -noD '
 
     if "no_fragmentblock_compression" in self.project.firmware_def["configuration"]:
-      sudo_command += ' -noF '
+      cmd += ' -noF '
 
     if "no_xattrs_compression" in self.project.firmware_def["configuration"]:
-      sudo_command += ' -noX '
+      cmd += ' -noX '
 
     if "use_fragments" in self.project.firmware_def["configuration"]:
       if self.project.firmware_def["configuration"]["use_fragments"]:
-        sudo_command += ' -always_use_fragments '
+        cmd += ' -always_use_fragments '
       if not self.project.firmware_def["configuration"]["use_fragments"]:
-        sudo_command += ' -no_fragments '
+        cmd += ' -no_fragments '
 
     if "no_duplicate_check" in self.project.firmware_def["configuration"]:
       if self.project.firmware_def["configuration"]["no_duplicate_check"]:
-        sudo_command += ' -no-duplicates '
+        cmd += ' -no-duplicates '
 
     if "all_root" in self.project.firmware_def["configuration"]:
       if self.project.firmware_def["configuration"]["all_root"]:
-        sudo_command += ' -all-root '
+        cmd += ' -all-root '
 
     if "force_uid" in self.project.firmware_def["configuration"]:
-      sudo_command += ' -force-uid '
-      sudo_command += self.project.firmware_def["configuration"]["force_uid"]
+      cmd += ' -force-uid '
+      cmd += self.project.firmware_def["configuration"]["force_uid"]
 
     if "force_gid" in self.project.firmware_def["configuration"]:
-      sudo_command += ' -force-gid '
-      sudo_command += self.project.firmware_def["configuration"]["force_gid"]
+      cmd += ' -force-gid '
+      cmd += self.project.firmware_def["configuration"]["force_gid"]
 
     if "nopad" in self.project.firmware_def["configuration"]:
       if self.project.firmware_def["configuration"]["nopad"]:
-        sudo_command += ' -nopad '
+        cmd += ' -nopad '
 
-    self.execute_command(sudo_command)
+    self.execute_command(cmd)
 
     # Final log
     logging.info("Firmware has been successfully generated into : "\
