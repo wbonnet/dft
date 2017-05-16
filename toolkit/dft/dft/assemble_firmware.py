@@ -99,8 +99,7 @@ class AssembleFirmware(CliCommand):
     # Ensure firmware exists
     # TODO : iterate the list of squashfs files
     if not os.path.isfile(self.project.firmware_filename):
-      logging.critical("The firmware does not exist (" +
-                       self.project.firmware_filename + ")")
+      logging.critical("The firmware does not exist (" + self.project.firmware_filename + ")")
       exit(1)
 
     # Remove existing initscript if needed
@@ -144,8 +143,6 @@ class AssembleFirmware(CliCommand):
     # Install initramfs-tools to the roootfs
     self.install_package("initramfs-tools")
     self.install_package("linux-image-" + self.project.target_arch)
-
-# FIXME: seems to work onlly for amd64
 
 
 
@@ -214,8 +211,6 @@ class AssembleFirmware(CliCommand):
                    "/../scripts/add_dft_to_initramfs " + self.project.rootfs_mountpoint + \
                    '/usr/share/initramfs-tools/hooks/'
     self.execute_command(sudo_command)
-
-# FIXME : Fix path to root installation
 
 
 

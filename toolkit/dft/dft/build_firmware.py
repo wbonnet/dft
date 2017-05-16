@@ -110,7 +110,8 @@ class BuildFirmware(CliCommand):
       # value is applied. Default value is "no hash"
       if "hash_method" in self.project.firmware_def["security"]:
         # Convert hash-method to lower case in order to use it as command prefix
-        self.project.firmware_def["security"]["hash_method"] = self.project.firmware_def["security"]["hash_method"].lower()
+        self.project.firmware_def["security"]["hash_method"] = self.project.\
+                                                     firmware_def["security"]["hash_method"].lower()
 
         # Check that the algorith is valid (authorized values are md5 sha1 sha256)
         if self.project.firmware_def["security"]["hash_method"] in "md5" "sha1" "sha256":
@@ -128,7 +129,7 @@ class BuildFirmware(CliCommand):
 
         # Algorithm is unknown, output an error and exit
         else:
-          self.project.logging.error("The hash-method is unknown (" + 
+          self.project.logging.error("The hash-method is unknown (" +
                                      self.project.firmware_def["security"]["hash_method"] + ")")
           exit(1)
 
@@ -152,6 +153,9 @@ class BuildFirmware(CliCommand):
     tool from comand line (by generating the call using all options from config)
     usiness logic of firmware generation.
     """
+
+    # Deactivate too_many-branches since we wnt it to be written this way
+    # pylint: disable=too-many-branches
 
     # Output some fancy logs :)
     self.project.logging.info("Generating " + self.project.firmware_filename)
@@ -223,5 +227,3 @@ class BuildFirmware(CliCommand):
     # Final log
     logging.info("Firmware has been successfully generated into : "\
                  + self.project.firmware_filename)
-
-# TODO : add control hash and signature according to configuration file options

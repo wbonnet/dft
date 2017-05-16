@@ -54,6 +54,9 @@ class StripRootFS(CliCommand):
     # Initialize a dictionnary to hold the list of installed packages
     self.installed_packages = {}
 
+    # Flag to used to keep track of the need to uninstall APT in case wehad to install it
+    self.need_to_strip_apt = False
+
 
 
   # -------------------------------------------------------------------------
