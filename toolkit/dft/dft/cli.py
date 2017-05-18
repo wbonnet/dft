@@ -432,7 +432,7 @@ x factory_setup                    Apply some extra factory setup before generat
     # Create the business object
     command = assemble_firmware.AssembleFirmware(self.dft, self.project)
 
-    # Then
+    # Then call the dedicated method
     command.assemble_firmware()
 
 
@@ -498,7 +498,7 @@ x factory_setup                    Apply some extra factory setup before generat
     # Create the business object
     command = build_rootfs.BuildRootFS(self.dft, self.project)
 
-    # Then
+    # Then call the dedicated method
     command.create_rootfs()
 
 
@@ -516,7 +516,7 @@ x factory_setup                    Apply some extra factory setup before generat
     # Create the business object
     command = build_bootloader.BuildBootloader(self.dft, self.project)
 
-    # Then
+    # Then call the dedicated method
     command.build_bootloader()
 
 
@@ -534,7 +534,7 @@ x factory_setup                    Apply some extra factory setup before generat
     # Create the business object
     command = build_image.BuildImage(self.dft, self.project)
 
-    # Then
+    # Then call the dedicated method
     command.build_image()
 
 
@@ -552,7 +552,7 @@ x factory_setup                    Apply some extra factory setup before generat
     # Create the business object
     command = build_firmware.BuildFirmware(self.dft, self.project)
 
-    # Then
+    # Then call the dedicated method
     command.build_firmware()
 
 
@@ -570,7 +570,7 @@ x factory_setup                    Apply some extra factory setup before generat
     # Create the business object
     command = check_rootfs.CheckRootFS(self.dft, self.project)
 
-    # Then
+    # Then call the dedicated method
     command.check_rootfs()
 
 
@@ -659,7 +659,7 @@ x factory_setup                    Apply some extra factory setup before generat
     # Create the business object
     command = generate_content_information.GenerateContentInformation(self.dft, self.project)
 
-    # Then
+    # Then call the dedicated method
     command.gen_content_info()
 
 
@@ -676,5 +676,10 @@ x factory_setup                    Apply some extra factory setup before generat
     # Create the business object
     command = strip_rootfs.StripRootFS(self.dft, self.project)
 
-    # Then
+    # Then call the dedicated method
     command.strip_rootfs()
+
+
+# TODO add clean-dir option to build and assemble firmware. What is the strategy for cleaning and
+# recycling previous content
+# maybe more working dir, and a final output ?
