@@ -461,7 +461,7 @@ class BuildRootFS(CliCommand):
       self.project.project_def["configuration"]["generate_validity_check"] = True
 
     # Test if we have to generate the no-check-valid_until file
-    if self.project.project_def["configuration"]["generate_validity_check"] == True:
+    if self.project.project_def["configuration"]["generate_validity_check"]:
       logging.debug("generating /etc/apt/apt.conf.d/10no-check-valid-until")
 
       # Generate the file path

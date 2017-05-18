@@ -26,6 +26,7 @@ according to the rules defined in a Yaml configuration file. Stripping a rootfs 
 of removing files and packages.
 """
 
+import os
 from cli_command import CliCommand
 
 #

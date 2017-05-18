@@ -227,7 +227,7 @@ class CliCommand(object):
     if "remove_validity_check" not in self.project.project_def["configuration"]:
       self.project.project_def["configuration"]["remove_validity_check"] = False
 
-    if self.project.project_def["configuration"]["remove_validity_check"] == True:
+    if self.project.project_def["configuration"]["remove_validity_check"]:
       self.project.logging.debug("remove generated /etc/apt/apt.conf.d/10no-check-valid-until")
 
       # Generate the file path
@@ -239,7 +239,9 @@ class CliCommand(object):
         sudo_command = "sudo rm -f " + filepath
         self.execute_command(sudo_command)
     else:
-      self.project.logging.debug("remove_validity_check_ is set to False. Generated /etc/apt/apt.conf.d/10no-check-valid-until is not removed")
+      msg = "remove_validity_check_ is set to False. Generated "
+      msg += "/etc/apt/apt.conf.d/10no-check-valid-until is not removed"
+      self.project.logging.debug(msg)
 
 
 
