@@ -304,7 +304,7 @@ class CheckRootFS(CliCommand):
     #
     for rule in self.project.check_def["packages"]["allowed"]:
       # Call the check package method
-      self.check_package_rules(rule, allowed=True)
+      self.check_package_rules(rule)
 
       # Process the check results (update counters and output information)
       self.process_rule_checking_output(rule)
@@ -396,7 +396,7 @@ class CheckRootFS(CliCommand):
   # check_package_rules
   #
   # -------------------------------------------------------------------------
-  def check_package_rules(self, rule, mandatory=None, forbidden=None, allowed=None):
+  def check_package_rules(self, rule, mandatory=None, forbidden=None):
     """This method is in charge of contolling if the rules defined for a
     given package are verified or not. It uses the same constraint definitions
     and structure as in check_packages method.
@@ -870,7 +870,7 @@ class CheckRootFS(CliCommand):
         return
 
       # Create the hasher used to parse file and compute hash
-      hasher = hashlib.md5()
+      md5_hasher = hashlib.md5()
 
       # Open file in read binary mode
       with open(rule["path"], 'rb') as file_to_hash:
@@ -881,15 +881,18 @@ class CheckRootFS(CliCommand):
         # Iterate the file reading. Each time it loops, it updates the hasher
         # buffer, appending data just read
         while len(buffer) > 0:
-          hasher.update(buffer)
+          md5_hasher.update(buffer)
           buffer = file_to_hash.read(self.block_size)
 
         # Compare the hash to the rule, and set the check flag if needed
-        if rule["md5"] != hasher.hexdigest():
+        if rule["md5"] != md5_hasher.hexdigest():
           self.project.logging.info("File " + rule["path"] + " has an invalid MD5 hash. hash is " +
-                                    hasher.hexdigest() + " instead of " + rule["md5"])
+                                    md5_hasher.hexdigest() + " instead of " + rule["md5"])
           self.is_rule_check_successfull = False
           return
+        else:
+          self.project.logging.debug("File " + rule["path"] + " has a valid MD5 hash. hash is " +
+                                     md5_hasher.hexdigest())
 
     # Check the sha1 hash of the target
     if "sha1" in rule:
@@ -901,7 +904,7 @@ class CheckRootFS(CliCommand):
         return
 
       # Create the hasher used to parse file and compute hash
-      hasher = hashlib.sha1()
+      sha1_hasher = hashlib.sha1()
 
       # Open file in read binary mode
       with open(rule["path"], 'rb') as file_to_hash:
@@ -912,15 +915,18 @@ class CheckRootFS(CliCommand):
         # Iterate the file reading. Each time it loops, it updates the hasher
         # buffer, appending data just read
         while len(buffer) > 0:
-          hasher.update(buffer)
+          sha1_hasher.update(buffer)
           buffer = file_to_hash.read(self.block_size)
 
         # Compare the hash to the rule, and set the check flag if needed
-        if rule["sha1"] != hasher.hexdigest():
+        if rule["sha1"] != sha1_hasher.hexdigest():
           self.project.logging.info("File " + rule["path"] + " has an invalid SHA1 hash. hash is " +
-                                    hasher.hexdigest() + " instead of " + rule["sha1"])
+                                    sha1_hasher.hexdigest() + " instead of " + rule["sha1"])
           self.is_rule_check_successfull = False
           return
+        else:
+          self.project.logging.debug("File " + rule["path"] + " has a valid SHA1 hash. hash is " +
+                                     sha1_hasher.hexdigest())
 
     # Check the sha256 hash of the target
     if "sha256" in rule:
@@ -932,7 +938,7 @@ class CheckRootFS(CliCommand):
         return
 
       # Create the hasher used to parse file and compute hash
-      hasher = hashlib.sha256()
+      sha256_hasher = hashlib.sha256()
 
       # Open file in read binary mode
       with open(rule["path"], 'rb') as file_to_hash:
@@ -943,17 +949,16 @@ class CheckRootFS(CliCommand):
         # Iterate the file reading. Each time it loops, it updates the hasher
         # buffer, appending data just read
         while len(buffer) > 0:
-          hasher.update(buffer)
+          sha256_hasher.update(buffer)
           buffer = file_to_hash.read(self.block_size)
 
         # Compare the hash to the rule, and set the check flag if needed
-        if rule["sha256"] != hasher.hexdigest():
+        if rule["sha256"] != sha256_hasher.hexdigest():
           self.project.logging.info("File " + rule["path"] +
                                     " has an invalid SHA256 hash. SHA256 is " +
-                                    hasher.hexdigest() + " instead of " +
-                                    rule["sha256"])
+                                    sha256_hasher.hexdigest() + " instead of " + rule["sha256"])
           self.is_rule_check_successfull = False
           return
         else:
           self.project.logging.debug("File " + rule["path"] + " has a valid SHA256 hash. hash is " +
-                                     hasher.hexdigest() + " instead of " + rule["sha256"])
+                                     sha256_hasher.hexdigest())
