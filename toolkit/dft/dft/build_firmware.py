@@ -28,6 +28,7 @@ anything you decide. They can be stacked in memory to create the read only opera
 
 import logging
 import os
+from shutil import rmtree
 from cli_command import CliCommand
 
 #
@@ -77,13 +78,15 @@ class BuildFirmware(CliCommand):
                        self.project.rootfs_mountpoint + ")")
       exit(1)
 
-    # Ensure firmware generation path exists and is a dir
-    if not os.path.isdir(self.project.firmware_directory):
-      os.makedirs(self.project.firmware_directory)
+    # Remove existing firmware if needed, and all the files that may be in this directory
+    # FIXME: Check that bad configuration cannot destroy local machine
+    if os.path.isdir(self.project.firmware_directory):
+     self.project.logging.info("Recreating the firmware output directory " +
+                               self.project.firmware_directory)
+     rmtree(self.project.firmware_directory)
 
-    # Remove existing firmware if needed
-    if os.path.isfile(self.project.firmware_filename):
-      os.remove(self.project.firmware_filename)
+    # Ensure firmware generation path exists and is a dir
+    os.makedirs(self.project.firmware_directory)
 
     # Generate the squashfs files
     self.create_squashfs_files()
