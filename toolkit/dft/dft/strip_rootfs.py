@@ -128,7 +128,7 @@ class StripRootFS(CliCommand):
     # Package stripping is done, we no longer apt package (if we had to install it)
     # It is now time to remove it. It has to do done before files and directories stripping
     # In case the next stripping stages breaks APT
-    if self.need_to_strip_apt == True:
+    if self.need_to_strip_apt:
       self.project.logging.debug("apt packag has been installed during stripping, now removing it")
       self.remove_package("apt")
 
