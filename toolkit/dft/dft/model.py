@@ -47,201 +47,180 @@ class DftKey(Enum):
   """
 
   # Define each and every key and associated string used in the DFT tool
+
+  ABSENT = "absent"
   ADDITIONAL_ROLES = "additional_roles"
+  ALL_ROOT = "all_root"
+  ALLOW_OPTIONAL = "allow_optional"
+  ALLOWED = "allowed"
+  ALLOWED_ARCH = "allowed_arch"
+  ALLOWED_VERSION = "allowed_version"
+  ANTIVIRUS = "antivirus"
+  ARCH = "arch"
+  ARCHITECTURE = "architecture"
   ARCHITECTURES = "architectures"
   ARCHIVE_FILENAME_EXTENSION = ".tar"
+  ARM = "arm"
+  ARMEL = "armel"
+  ARMHF = "armhf"
+  ASSEMBLE_FIRMWARE = "assemble_firmware"
+  AUFS = "aufs"
+  BLACKLISTED_ARCH = "blacklisted_arch"
+  BLACKLISTED_VERSION = "blacklisted_version"
+  BLOCK_SIZE = "block_size"
   BOOTLOADER = "bootloader"
   BOOTLOADER_WORKDIR = "bootloader"
+  BUILD_BOOTLOADER = "build_bootloader"
+  BUILD_FIRMWARE = "build_firmware"
+  BUILD_IMAGE = "build_image"
+  BUILD_ROOTFS = "build_rootfs"
   CHECK = "check"
+  CHECK_ROOTFS = "check_rootfs"
+  COMPRESSOR = "compressor"
+  CONFIG_FILE = "config_file"
   CONFIGURATION = "configuration"
   CONTENT_INFORMATION = "content_information"
   CONTENT_WORKDIR = "content"
+  CSV = "csv"
+  DEBOOTSTRAP_REPOSITORY = "debootstrap_repository"
   DEBOOTSTRAP_TARGET = "minbase"
   DEFAULT_CONFIGURATION_FILE = "~/.dftrc"
   DEFAULT_PROJECT_FILE = "project.yml"
+  DESCRIPTION = "description"
   DFT_BASE = "dft_base"
+  DIRECTORIES = "directories"
+  DIRECTORY = "directory"
+  EMPTY = "empty"
+  EXPECTED_RESULT = "expected_result"
+  FACTORY_SETUP = "factory_setup"
+  FILE = "file"
+  FILES = "files"
   FIRMWARE = "firmware"
   FIRMWARE_FILENAME_EXTESION = ".fw"
   FIRMWARE_WORKDIR = "firmware"
+  FORBIDDEN = "forbidden"
+  FORCE_UID = "force_uid"
+  FORMAT = "format"
+  GEN_ANTIVIRUS_INFO = "gen_antivirus_info"
+  GEN_FILES_INFO = "gen_files_info"
+  GEN_PACKAGES_INFO = "gen_packages_info"
+  GEN_SECURITY_INFO = "gen_security_info"
+  GEN_VULNERABILITIES_INFO = "gen_vulnerabilities_info"
+  GENERATE_CONTENT_INFORMATION = "generate_content_information"
+  GENERATE_DEB = "generate_deb"
+  GENERATE_SRC = "generate_src"
+  GENERATE_VALIDITY_CHECK = "generate_validity_check"
   GENERATOR_CACHE_DIR = "generator_cache_dir"
+  GROUP = "group"
+  HASH_METHOD = "hash_method"
   IMAGE = "image"
   IMAGE_WORKDIR = "image"
   INIT_FILENAME = "init_filename"
+  INSTALL_MSSING_SOFTWARE = "install_mssing_software"
+  INSTALLATION_CONSSTRAINT = "installation_consstraint"
+  INSTALLED_SIZE = "installed_size"
+  JSON = "json"
+  KEEP_BOOTSTRAP_FILES = "keep_bootstrap_files"
+  KEEP_ROOTFS_HISTORY = "keep_rootfs_history"
+  LABEL = "label"
+  LAYOUT = "layout"
+  LIMIT_TARGET_ARCH = "limit_target_arch"
+  LIMIT_TARGET_VERSION = "limit_target_version"
+  LOG_LEVEL = "log_level"
+  MANDATORY = "mandatory"
+  MANDATORY_ONLY = "mandatory_only"
+  MAX_VERSION = "max_version"
+  MD5 = "md5"
+  METHOD = "method"
+  MIN_VERSION = "min_version"
+  MODE = "mode"
+  MOUNT_OPTIONS = "mount_options"
+  NAME = "name"
+  NO_CONSTRAINT = "no_constraint"
+  NO_DATABLOCK_COMPRESSION = "no_datablock_compression"
+  NO_DUPICATE_CHECK = "no_dupicate_check"
+  NO_EXPORTS = "no_exports"
+  NO_FRAGMENTBLOCK_COMPRESSION = "no_fragmentblock_compression"
+  NO_INODE_COMPRESSION = "no_inode_compression"
+  NO_SPARE = "no_spare"
+  NO_XATTRS_COMPRESSION = "no_xattrs_compression"
+  NOPAD = "nopad"
+  OPTION_CONFIG_FILE = "--config-file"
+  GENERATE_ANTIVIRUS_INFORMATION = "--generate-antivirus-information"
+  GENERATE_FILES_INFORMATION = "--generate-files-information"
+  GENERATE_PACKAGES_INFORMATION = "--generate-packages-information"
+  GENERATE_ROOTKIT_INFORMATION = "--generate-rootkit-information"
+  GENERATE_SECURITY_INFORMATION = "--generate-security-information"
+  GENERATE_VULNERABILITIES_INFORMATION = "--generate-vulnerabilities-information"
+  KEEP_BOOTSTRAP_FILES = "--keep-bootstrap-files"
+  OPTION_LIMIT_ARCH = "--limit-arch"
+  OPTION_LIMIT_VERSION = "--limit-version"
+  OPTION_LOG_LEVEL = "--log-level"
+  OPTION_OVERRIDE_DEBIAN_MIRROR = "--override-debian-mirror"
+  OPTION_PROJECT_FILE = "--project-file"
+  OPTION_UPDATE_CACHE_ARCHIVE = "--update-cache-archive"
+  OPTION_USE_CACHE_ARCHIVE = "--use-cache-archive"
+  OUTPUT = "output"
+  OUTPUT_PKG_ARCHITECTURE = "output_pkg_architecture"
+  OUTPUT_PKG_DESCRIPTION = "output_pkg_description"
+  OUTPUT_PKG_INSTALLED_SIZE = "output_pkg_installed_size"
+  OUTPUT_PKG_MD5 = "output_pkg_md5"
+  OUTPUT_PKG_NAME = "output_pkg_name"
+  OUTPUT_PKG_SHA256 = "output_pkg_sha256"
+  OUTPUT_PKG_SIZE = "output_pkg_size"
+  OUTPUT_PKG_STATUS = "output_pkg_status"
+  OVERLAYFS = "overlayfs"
+  OVERRIDE_DEBIAN_MIRROR = "override_debian_mirror"
+  OWNER = "owner"
+  PACKAGES = "packages"
+  PARTITION = "partition"
+  PATH = "path"
   PROJECT_DEFINITION = "project_definition"
+  PROJECT_FILE = "project_file"
   PROJECT_NAME = "project.yml"
   PROJECT_PATH = "project_path"
   PROJECT_WORKDIR = "project_base_workdir"
+  REMOVE_VALIDITY_CHECK = "remove_validity_check"
   REPOSITORIES = "repositories"
+  ROLES = "roles"
   ROOTFS = "rootfs"
   ROOTFS_DIR = "rootfs"
+  ROOTKIT = "rootkit"
+  SECTIONS = "sections"
+  SECURITY = "security"
+  SHA1 = "sha1"
+  SHA256 = "sha256"
+  SIZE = "size"
+  SKIP_MISSING_SOFTWARE = "skip_missing_software"
+  SQUASHFS = "squashfs"
+  STACK_DEFINITION = "stack_definition"
+  STACK_ITEM = "stack_item"
   STACK_SCRIPT = "dft_stack_script.sh"
+  STATUS = "status"
+  STDOUT = "stdout"
+  STRIP_ROOTFS = "strip_rootfs"
   STRIPPING = "stripping"
+  SUITE = "suite"
+  SYMLINK = "symlink"
+  TARGET = "target"
+  TARGET_PATH = "target_path"
   TARGET_VERSIONS = "target_versions"
+  TMPFS = "tmpfs"
+  TYPE = "type"
+  TYPE = "type"
+  UPDATE_CACHE_ARCHIVE = "update_cache_archive"
+  UPDATE_DATABASE = "update_database"
+  URL = "url"
+  USE_CACHE_ARCHIVE = "use_cache_archive"
+  USE_FRAGMENTS = "use_fragments"
+  USE_HOST_AV = "use_host_av"
   VARIABLES = "variables"
+  VULNERABILITIES = "vulnerabilities"
   WORKING_DIR = "working_dir"
-
-#   absent
-#   all_root
-#   allow_optional
-#   allowed
-#   allowed_arch
-#   allowed_version
-#   antivirus
-#   arch
-#   architecture
-#   arm
-#   armel
-#   armhf
-#   assemble_firmware
-#   aufs
-#   blacklisted_arch
-#   blacklisted_version
-#   block_size
-#   build_bootloader
-#   build_firmware
-#   build_image
-#   build_rootfs
-#   check_rootfs
-#   compressor
-#   config_file
-#   configuration
-#   configuration
-#   csv
-#   debootstrap_repository
-#   description
-#   directories
-#   directory
-#   empty
-#   empty
-#   expected-result
-#   expected_result
-#   expected_result
-#   factory_setup
-#   file
-#   file
-#   files
-#   forbidden
-#   force_gid
-#   force_uid
-#   format
-#   gen_antivirus_info
-#   gen_files_info
-#   gen_packages_info
-#   gen_security_info
-#   gen_security_info
-#   gen_vulnerabilities_info
-#   generate_content_information
-#   generate_deb
-#   generate_src
-#   generate_validity_check
-#   group
-#   hash_method
-#   install_mssing_software
-#   installation_consstraint
-#   installed_size
-#   json
-#   keep_bootstrap_files
-#   keep_rootfs_history
-#   label
-#   label
-#   label
-#   layout
-#   limit_target_arch
-#   limit_target_version
-#   log_level
-#   mandatory
-#   mandatory_only
-#   max_version
-#   md5
-#   md5
-#   md5
-#   method
-#   min_version
-#   mode
-#   mount_options
-#   name
-#   name
-#   name
-#   no_constraint
-#   no_datablock_compression
-#   no_dupicate_check
-#   no_exports
-#   no_fragmentblock_compression
-#   no_inode_compression
-#   no_spare
-#   no_xattrs_compression
-#   nopad
-#   output
-#   output_pkg_architecture
-#   output_pkg_description
-#   output_pkg_installed_size
-#   output_pkg_md5
-#   output_pkg_name
-#   output_pkg_sha256
-#   output_pkg_size
-#   output_pkg_status
-#   overlayfs
-#   override_debian_mirror
-#   owner
-#   packages
-#   partition
-#   path
-#   project_defiition
-#   project_definition
-#   project_file
-#   remove_validity_check
-#   roles
-#   rootkit
-#   sections
-#   security
-#   security
-#   sha1
-#   sha1
-#   sha256
-#   sha256
-#   sha256
-#   size
-#   skip_missing_software
-#   squashfs
-#   stack_definition
-#   stack_item
-#   status
-#   stdout
-#   strip_rootfs
-#   suite
-#   symlink
-#   target
-#   target
-#   target_path
-#   tmpfs
-#   type
-#   type
-#   update_cache_archive
-#   update_database
-#   url
-#   use_cache_archive
-#   use_fragments
-#   use_host_av
-#   vulnerabilities
-#   xattrs
-#   xml
-#   yaml
-#   yml
-# --config-file
-# --generate-antivirus-information
-# --generate-files-information
-# --generate-packages-information
-# --generate-rootkit-information
-# --generate-security-information
-# --generate-vulnerabilities-information
-# --keep-bootstrap-files
-# --limit-arch
-# --limit-version
-# --log-level
-# --override-debian-mirror
-# --project-file
-# --update-cache-archive
-# --use-cache-archive
+  XATTRS = "xattrs"
+  XML = "xml"
+  YAML = "yaml"
+  YML = "yml"
 
 # TODO: add a method to initialize all defaut value and not do it into the code
 
@@ -321,10 +300,11 @@ class DftConfiguration(object):
         self.logging.debug(self.dft_configuration)
 
         # Check if path starts with ~ and need expension
-        if self.dft_configuration[DftKey.CONFIGURATION.value][DftKey.WORKING_DIR.value][0] == "~" and \
-           self.dft_configuration[DftKey.CONFIGURATION.value][DftKey.WORKING_DIR.value][1] == "/":
+        if self.dft_configuration[DftKey.CONFIGURATION.value][DftKey.WORKING_DIR.value][0] == "~" \
+        and self.dft_configuration[DftKey.CONFIGURATION.value][DftKey.WORKING_DIR.value][1] == "/":
           self.dft_configuration[DftKey.CONFIGURATION.value][DftKey.WORKING_DIR.value] = \
-                              os.path.expanduser(self.dft_configuration[DftKey.CONFIGURATION.value][DftKey.WORKING_DIR.value])
+                    os.path.expanduser(self.dft_configuration[DftKey.CONFIGURATION.value]\
+                    [DftKey.WORKING_DIR.value])
 
         self.logging.debug(self.dft_configuration)
 
@@ -479,7 +459,7 @@ class ProjectDefinition(object):
                               os.path.expanduser(self.project_def[DftKey.CONFIGURATION.value][key])
 
         # Expand ~ in path since it is not done automagically by Python
-        for key in { DftKey.ADDITIONAL_ROLES.value }:
+        for key in {DftKey.ADDITIONAL_ROLES.value}:
           # For iterate the key and check they are defined in the config file
           if key in self.project_def[DftKey.CONFIGURATION.value]:
             # Then iterate the list of values it contains
@@ -489,7 +469,7 @@ class ProjectDefinition(object):
                  self.project_def[DftKey.CONFIGURATION.value][key][counter][1] == "/":
                 # If yes modifiy its value using expenduser ( replace ~ by /home/foo)
                 self.project_def[DftKey.CONFIGURATION.value][key][counter] = \
-                                 os.path.expanduser(self.project_def[DftKey.CONFIGURATION.value][key][counter])
+                      os.path.expanduser(self.project_def[DftKey.CONFIGURATION.value][key][counter])
 
       # Load the repositories sub configuration files
       if DftKey.REPOSITORIES.value in self.project_def[DftKey.PROJECT_DEFINITION.value]:
@@ -500,7 +480,8 @@ class ProjectDefinition(object):
 
       # Load the rootfs sub configuration files
       if "rootfs" in self.project_def[DftKey.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project_def[DftKey.PROJECT_DEFINITION.value]["rootfs"][0])
+        filename = self.generate_def_file_path(self.project_def[DftKey.PROJECT_DEFINITION.value]\
+                                                               ["rootfs"][0])
         with open(filename, 'r') as working_file:
           self.rootfs_def = yaml.load(working_file)
 
@@ -520,13 +501,15 @@ class ProjectDefinition(object):
 
       # Load the image sub configuration files
       if "image" in self.project_def[DftKey.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project_def[DftKey.PROJECT_DEFINITION.value]["image"][0])
+        filename = self.generate_def_file_path(self.project_def[DftKey.PROJECT_DEFINITION.value]\
+                                                               ["image"][0])
         with open(filename, 'r') as working_file:
           self.image_def = yaml.load(working_file)
 
       # Load the check sub configuration files
       if "check" in self.project_def[DftKey.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project_def[DftKey.PROJECT_DEFINITION.value]["check"][0])
+        filename = self.generate_def_file_path(self.project_def[DftKey.PROJECT_DEFINITION.value]\
+                                                               ["check"][0])
         with open(filename, 'r') as working_file:
           self.check_def = yaml.load(working_file)
 
@@ -566,8 +549,10 @@ class ProjectDefinition(object):
         self.rootfs_generator_cachedirname = "/tmp/"
 
       if DftKey.WORKING_DIR.value in self.project_def[DftKey.CONFIGURATION.value]:
-        self.project_base_workdir = self.project_def[DftKey.CONFIGURATION.value][DftKey.WORKING_DIR.value]
-        self.project_base_workdir += "/" + self.project_def[DftKey.CONFIGURATION.value]["project_name"]
+        self.project_base_workdir = self.project_def[DftKey.CONFIGURATION.value]\
+                                                    [DftKey.WORKING_DIR.value]
+        self.project_base_workdir += "/" + self.project_def[DftKey.CONFIGURATION.value]\
+                                                           ["project_name"]
       else:
         self.logging.debug("configuration/working_dir is not defined, using /tmp/dft as default \
                             value")
@@ -583,7 +568,8 @@ class ProjectDefinition(object):
 
       # Retrieve the target architecture
 # TODO : handle multiple archs
-      self.set_arch(self.project_def[DftKey.PROJECT_DEFINITION.value][DftKey.ARCHITECTURES.value][0])
+      self.set_arch(self.project_def[DftKey.PROJECT_DEFINITION.value]\
+                                    [DftKey.ARCHITECTURES.value][0])
 
       # Target version to use when building the debootstrap. It has to be
       # a Debian version (jessie, stretch, etc.)
