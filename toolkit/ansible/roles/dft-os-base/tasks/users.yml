@@ -58,4 +58,4 @@
                    exclusive={{ item.ssh_key_are_exclusive | default ('yes') }}
                    key_options={{ item.ssh_key_options | default('') }}
   with_items: "{{ dft_users }}"
-  when: dft_users is defined
+  when: dft_users is defined and item.ssh_key_file is defined
