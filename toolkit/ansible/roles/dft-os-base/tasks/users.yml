@@ -54,9 +54,9 @@
   authorized_key:  key="{{ lookup('file', 'files/{{ item.ssh_key_file }}') }}"
                    manage_dir=yes
                    state=present
-                   user={{ item.name }}
+                   user={{ item.username }}
                    exclusive={{ item.ssh_key_are_exclusive | default ('yes') }}
-                   path={{ item.ssh_key_path | default("/home/{{ item.name }}/.ssh/") }}
+                   path={{ item.ssh_key_path | default("/home/{{ item.username }}/.ssh/") }}
                    key_options={{ item.ssh_key_options | default('') }}
-  with_items: "{{ dft_users }}"
-  when: dft_users is defined
+  with_items: "{{ dft_user_authorized_keys }}"
+  when: dft_user_authorized_keys is defined
