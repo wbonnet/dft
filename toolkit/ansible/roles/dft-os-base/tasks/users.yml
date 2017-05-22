@@ -44,7 +44,19 @@
         group="{{ item.group }}"
         groups="{{ item.groups }}"
         shell="{{ item.shell }}"
+        generate_ssh_key="{{ item.generate_ssh_key | default ('no') }}"
         update_password=always
         state=present
+  with_items: "{{ dft_users }}"
+  when: dft_users is defined
+
+- name: DFT - Copy SSH keys to user directories
+  authorized_key:  key="{{ lookup('file', 'files/{{ item.ssh_key_file }}') }}"
+                   manage_dir=yes
+                   state=present
+                   user={{ item.name }}
+                   exclusive={{ item.ssh_key_are_exclusive | default ('yes') }}
+                   path={{ item.ssh_key_path | default("/home/{{ item.name }}/.ssh/") }}
+                   key_options={{ item.ssh_key_options | default('') }}
   with_items: "{{ dft_users }}"
   when: dft_users is defined
