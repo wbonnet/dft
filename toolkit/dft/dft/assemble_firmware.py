@@ -239,6 +239,7 @@ class AssembleFirmware(CliCommand):
       today = datetime.datetime.now()
 
       # Generate file header
+      working_file.write("#/bin/sh -e\n")
       working_file.write("#\n")
       working_file.write("# DFT Create Stack\n")
       working_file.write("#\n")
