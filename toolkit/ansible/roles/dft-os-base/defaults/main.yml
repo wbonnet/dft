@@ -39,15 +39,14 @@ dft_users:
       createhome: True ,
       groups: 'sudo' ,
       group: 'sudo' ,
+      shell: '/bin/bash'
 #     generate_ssh_key: 'no',
-      shell: '/bin/bash'}
+#     ssh_key_file: "dft.pub" ,
+#     ssh_key_options: "options_to_set",
+#     ssh_keys_are_exclusive: True
+    }
 
 # Defines the list of authorized ssh keys for users. The key files contains one or several public
 # keys that ar added to the authorized key file.
 # dft_user_authorized_keys:
 #  - { username: "dft" ,
-#      ssh_key_file: "dft.pub" ,
-#      ssh_key_options: "options_to_set",
-#      ssh_key_path: "/some_path_to_change_or_it_goes_by_default_to_authorized_keys_under_home_ssh",
-#      ssh_keys_are_exclusive: True
-#    }
