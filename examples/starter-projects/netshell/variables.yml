@@ -1,4 +1,4 @@
-# Set the hostname to the projec name
+# Set the hostname according to the project name
 dft_hostname: "netshell"
 
 # Create a group named dft
