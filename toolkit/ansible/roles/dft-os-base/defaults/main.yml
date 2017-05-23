@@ -35,6 +35,10 @@ dft_locales:
   - { name: "nl_NL.UTF-8" , state: "absent" }
 
 
+# Default timezone to configure if not ovrriden in project variables
+dft_timezone: "Etc/UTC"
+
+
 # Defines optionaly a password for root account (if this variable is defined).
 # If not defined a random pssword is set
 # dft_root_password: "{{ 'root' | password_hash('sha512') }}"
