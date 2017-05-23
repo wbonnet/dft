@@ -21,11 +21,19 @@
 #
 #
 
-# Default hostname
+# Default hostname to set if not ovrriden in project variables
 dft_hostname: "dft-default"
 
-# Default locales
-#dft-locales-to-configure:
+
+# Default locales to configure if not ovrriden in project variables
+dft_locales:
+  # Default behavior is to considr that ocl should be installed, thus no need to add state parameter
+  - { name: "en_GB.UTF-8" }
+  # Nonetheless it can be defined to present
+  - { name: "fr_FR.UTF-8" , state: "present" }
+  # Set it to absent to ensure a locale is not installed
+  - { name: "nl_NL.UTF-8" , state: "absent" }
+
 
 # Defines optionaly a password for root account (if this variable is defined).
 # If not defined a random pssword is set
@@ -45,8 +53,3 @@ dft_users:
 #     ssh_key_options: "options_to_set",
 #     ssh_keys_are_exclusive: True
     }
-
-# Defines the list of authorized ssh keys for users. The key files contains one or several public
-# keys that ar added to the authorized key file.
-# dft_user_authorized_keys:
-#  - { username: "dft" ,
