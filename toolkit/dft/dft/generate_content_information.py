@@ -29,6 +29,7 @@ import logging
 import os
 import tempfile
 from cli_command import CliCommand
+from model import Key
 
 #
 #    Class ContentOutputWriter
@@ -71,35 +72,41 @@ class ContentOutputWriter(object):
     """
 
     # Control output configuration parameters
-    if self.configuration["configuration"]["output"]["format"] == "csv":
+    if self.configuration[Key.CONFIGURATION.value][Key.OUTPUT.value][Key.FORMAT.value] \
+                                                                           == Key.CSV.value:
       logging.debug("Content information is output to CSV format")
-    elif self.configuration["configuration"]["output"]["format"] == "yaml":
+    elif self.configuration[Key.CONFIGURATION.value][Key.OUTPUT.value][Key.FORMAT.value] \
+                                                                           == Key.YAML.value:
       logging.debug("Content information is output to YAML format")
-    elif self.configuration["configuration"]["output"]["format"] == "json":
+    elif self.configuration[Key.CONFIGURATION.value][Key.OUTPUT.value][Key.FORMAT.value] \
+                                                                           == Key.JSON.value:
       logging.debug("Content information is output to JSON format")
       logging.error("Format is not yet available")
       exit(1)
-    elif self.configuration["configuration"]["output"]["format"] == "xml":
+    elif self.configuration[Key.CONFIGURATION.value][Key.OUTPUT.value][Key.FORMAT.value] \
+                                                                           == Key.XML.value:
       logging.debug("Content information is output to XML format")
       logging.error("Format is not yet available")
       exit(1)
     else:
       logging.error("Unknow output format " +
-                    self.configuration["configuration"]["output"]["format"])
+                    self.configuration[Key.CONFIGURATION.value][Key.OUTPUT.value][Key.FORMAT.value])
       exit(1)
 
     # Slect and create the output
-    if self.configuration["configuration"]["output"]["target"] == "file":
+    if self.configuration[Key.CONFIGURATION.value][Key.OUTPUT.value][Key.TARGET.value] \
+                                                                           == Key.FILE.value:
       # Create a temporary file for output
       self.output_file = tempfile.NamedTemporaryFile(mode='w+', delete=False)
       logging.debug("Content information is output to a file")
-    elif self.configuration["configuration"]["output"]["target"] == "stdout":
+    elif self.configuration[Key.CONFIGURATION.value][Key.OUTPUT.value][Key.TARGET.value] \
+                                                                           == Key.STDOUT.value:
       logging.debug("Content information is output to stdout")
       logging.error("Output to stdout is not yet available")
       exit(1)
     else:
-      logging.error("Unknow output TARGET " +
-                    self.configuration["configuration"]["output"]["target"])
+      logging.error("Unknow output TARGET " + self.configuration[Key.CONFIGURATION.value]\
+                                                       [Key.OUTPUT.value][Key.TARGET.value])
       exit(1)
 
   # -------------------------------------------------------------------------
@@ -182,7 +189,7 @@ class GenerateContentInformation(CliCommand):
     # Generate the packages information
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_packages_info:
-      if "packages" in self.project.content_information_def:
+      if Key.PACKAGES.value in self.project.content_information_def:
         logging.info("Starting to generate packages information")
         self.gen_packages_info()
       else:
@@ -192,7 +199,7 @@ class GenerateContentInformation(CliCommand):
     # Generate the vulnerabilities information
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_vulnerabilities_info:
-      if "vulnerabilities" in self.project.content_information_def:
+      if Key.VULNERABILITIES.value in self.project.content_information_def:
         logging.info("Starting to generate vulnerabilities information")
         self.gen_vulnerabilities_info()
       else:
@@ -202,7 +209,7 @@ class GenerateContentInformation(CliCommand):
     # Generate the security information
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_security_info:
-      if "security" in self.project.content_information_def:
+      if Key.SECURITY.value in self.project.content_information_def:
         logging.info("Starting to generate security information")
         self.gen_security_info()
       else:
@@ -212,7 +219,7 @@ class GenerateContentInformation(CliCommand):
     # Generate the rootkit information
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_rootkit_info:
-      if "rootkit" in self.project.content_information_def:
+      if Key.ROOTKIT.value in self.project.content_information_def:
         logging.info("Starting to generate rootkit information")
         self.gen_rootkit_info()
       else:
@@ -222,7 +229,7 @@ class GenerateContentInformation(CliCommand):
     # Generate the files information
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_files_info:
-      if "files" in self.project.content_information_def:
+      if Key.FILES.value in self.project.content_information_def:
         logging.info("Starting to generate files information")
         self.gen_files_info()
       else:
@@ -232,7 +239,7 @@ class GenerateContentInformation(CliCommand):
     # Generate the anti-virus information
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_antivirus_info:
-      if "antivirus" in self.project.content_information_def:
+      if Key.ANTIVIRUS.value in self.project.content_information_def:
         logging.info("Starting to generate antivirus information")
         self.gen_antivirus_info()
       else:
@@ -254,7 +261,7 @@ class GenerateContentInformation(CliCommand):
     """
 
     # Initialize the output writer for packages content generation
-    self.output_writer.initialize("packages")
+    self.output_writer.initialize(Key.PACKAGES.value)
 
     # Generate the dpkg command to retrieve the list of installed packages
     sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint + " dpkg -l | tail -n +6"
@@ -264,7 +271,7 @@ class GenerateContentInformation(CliCommand):
     for binaryline in sudo_command_output.splitlines():
       # Each fields is stored into a variable to easy manipulation and
       # simplify code. First get the array of words converted to UTF-8
-      line = binaryline.decode('utf-8').split()
+      line = binaryline.decode(Key.UTF8.value).split()
 
       # Extract each fields
       pkg_status = line[0]
@@ -280,70 +287,76 @@ class GenerateContentInformation(CliCommand):
       output_item = dict()
 
       # Test if we have to generate the package status in the output
-      if "output_pkg_status" in self.project.content_information_def["packages"]:
-        if self.project.content_information_def["packages"]["output_pkg_status"]:
-          output_item["status"] = pkg_status
+      if Key.OUTPUT_PKG_STATUS.value in self.project.content_information_def[Key.PACKAGES.value]:
+        if self.project.content_information_def[Key.PACKAGES.value][Key.OUTPUT_PKG_STATUS.value]:
+          output_item[Key.STATUS.value] = pkg_status
 
       # Test if we have to generate the package name in the output
-      if "output_pkg_name" in self.project.content_information_def["packages"]:
-        if self.project.content_information_def["packages"]["output_pkg_name"]:
-          output_item["name"] = pkg_name
+      if Key.OUTPUT_PKG_NAME.value in self.project.content_information_def[Key.PACKAGES.value]:
+        if self.project.content_information_def[Key.PACKAGES.value][Key.OUTPUT_PKG_NAME.value]:
+          output_item[Key.NAME.value] = pkg_name
 
       # Test if we have to generate the package version in the output
-      if "output_pkg_version" in self.project.content_information_def["packages"]:
-        if self.project.content_information_def["packages"]["output_pkg_version"]:
-          output_item["version"] = pkg_version
+      if Key.OUTPUT_PKG_VERSION.value in self.project.content_information_def[Key.PACKAGES.value]:
+        if self.project.content_information_def[Key.PACKAGES.value][Key.OUTPUT_PKG_VERSION.value]:
+          output_item[Key.VERSION.value] = pkg_version
 
       # Test if we have to generate the package architecture in the output
-      if "output_pkg_architecture" in self.project.content_information_def["packages"]:
-        if self.project.content_information_def["packages"]["output_pkg_architecture"]:
-          output_item["architecture"] = pkg_arch
+      if Key.OUTPUT_PKG_ARCHITECTURE.value in \
+                                          self.project.content_information_def[Key.PACKAGES.value]:
+        if self.project.content_information_def[Key.PACKAGES.value]\
+                                               [Key.OUTPUT_PKG_ARCHITECTURE.value]:
+          output_item[Key.ARCHITECTURE.value] = pkg_arch
 
       # Test if we have to generate the package md5 in the output
-      if "output_pkg_md5" in self.project.content_information_def["packages"]:
-        if self.project.content_information_def["packages"]["output_pkg_md5"]:
+      if Key.OUTPUT_PKG_MD5.value in self.project.content_information_def[Key.PACKAGES.value]:
+        if self.project.content_information_def[Key.PACKAGES.value][Key.OUTPUT_PKG_MD5.value]:
           # Generate the apt-cache show command to retrieve the MD5sum
           # Grp the keyword and print second word
           sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
           sudo_command += " apt-cache show " + pkg_name + " | grep ^MD5sum | awk '{ print $2 }'"
           sudo_command_output = self.execute_command(sudo_command)
-          output_item["md5"] = sudo_command_output.decode('utf-8')
+          output_item[Key.MD5.value] = sudo_command_output.decode(Key.UTF8.value)
 
       # Test if we have to generate the package sha256 in the output
-      if "output_pkg_sha256" in self.project.content_information_def["packages"]:
-        if self.project.content_information_def["packages"]["output_pkg_sha256"]:
+      if Key.OUTPUT_PKG_SHA256.value in self.project.content_information_def[Key.PACKAGES.value]:
+        if self.project.content_information_def[Key.PACKAGES.value][Key.OUTPUT_PKG_SHA256.value]:
           # Generate the apt-cache show command to retrieve the SHA256
           # Grp the keyword and print second word
           sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
           sudo_command += " apt-cache show " + pkg_name + " | grep ^SHA256 | awk '{ print $2 }'"
           sudo_command_output = self.execute_command(sudo_command)
-          output_item["sha256"] = sudo_command_output.decode('utf-8')
+          output_item[Key.SHA256.value] = sudo_command_output.decode(Key.UTF8.value)
 
       # Test if we have to generate the package size in the output
-      if "output_pkg_size" in self.project.content_information_def["packages"]:
-        if self.project.content_information_def["packages"]["output_pkg_size"]:
+      if Key.OUTPUT_PKG_SIZE.value in self.project.content_information_def[Key.PACKAGES.value]:
+        if self.project.content_information_def[Key.PACKAGES.value][Key.OUTPUT_PKG_SIZE.value]:
           # Generate the apt-cache show command to retrieve the Size
           # Grp the keyword and print second word
           sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
           sudo_command += " apt-cache show " + pkg_name + " | grep ^Size | awk '{ print $2 }'"
           sudo_command_output = self.execute_command(sudo_command)
-          output_item["size"] = sudo_command_output.decode('utf-8')
+          output_item[Key.SIZE.value] = sudo_command_output.decode(Key.UTF8.value)
 
       # Test if we have to generate the package installed-size in the output
-      if "output_pkg_installed_size" in self.project.content_information_def["packages"]:
-        if self.project.content_information_def["packages"]["output_pkg_installed_size"]:
+      if Key.OUTPUT_PKG_INSTALLED_SIZE.value in \
+                                          self.project.content_information_def[Key.PACKAGES.value]:
+        if self.project.content_information_def[Key.PACKAGES.value]\
+                                               [Key.OUTPUT_PKG_INSTALLED_SIZE.value]:
           # Generate the apt-cache show command to retrieve the Installed-SizeMD5sum
           # Grp the keyword and print second word
           sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
           sudo_command += " apt-cache show " + pkg_name
           sudo_command += " | grep ^Installed-Size | awk '{ print $2 }'"
           sudo_command_output = self.execute_command(sudo_command)
-          output_item["installed-size"] = sudo_command_output.decode('utf-8')
+          output_item[Key.INSTALLED_SIZE.value] = sudo_command_output.decode(Key.UTF8.value)
 
       # Test if we have to generate the package description in the output
-      if "output_pkg_description" in self.project.content_information_def["packages"]:
-        if self.project.content_information_def["packages"]["output_pkg_description"]:
-          output_item["description"] = pkg_description
+      if Key.OUTPUT_PKG_DESCRIPTION.value in \
+                                          self.project.content_information_def[Key.PACKAGES.value]:
+        if self.project.content_information_def[Key.PACKAGES.value]\
+                                               [Key.OUTPUT_PKG_DESCRIPTION.value]:
+          output_item[Key.DESCRIPTION.value] = pkg_description
 
       # print(output)
       self.output_writer.output_buffer.append(output_item)
@@ -364,8 +377,8 @@ class GenerateContentInformation(CliCommand):
     """
 
     # Initialize the output writer for packages content generation
-    self.output_writer.initialize("files")
-
+    self.output_writer.initialize(Key.FILES.value)
+h
     # Flush all pending output and close stream or file
     self.output_writer.flush_and_close()
 
@@ -395,8 +408,8 @@ class GenerateContentInformation(CliCommand):
     # then generate the command for both version output and clamav execution.
     # So far only clamav is supported.
     use_host_av = True
-    if "use_host_av" in self.project.content_information_def["antivirus"]:
-      if not self.project.content_information_def["antivirus"]["use_host_av"]:
+    if Key.USE_HOST_AV.value in self.project.content_information_def[Key.ANTIVIRUS.value]:
+      if not self.project.content_information_def[Key.ANTIVIRUS.value][Key.USE_HOST_AV.value]:
         use_host_av = False
 
     # Log which AV we are going to use
@@ -455,15 +468,15 @@ class GenerateContentInformation(CliCommand):
     output_item = dict()
 
     # Initialize the output writer for packages content generation
-    self.output_writer.initialize("antivirus")
+    self.output_writer.initialize(Key.ANTIVIRUS.value)
 
     # Check if the database update is authorized by configuration (can be off for offline systems)
-    if "update_database" not in self.project.content_information_def["antivirus"]:
-      self.project.content_information_def["antivirus"]["update_database"] = True
+    if Key.UPDATE_DATABASE.value not in self.project.content_information_def[Key.ANTIVIRUS.value]:
+      self.project.content_information_def[Key.ANTIVIRUS.value][Key.UPDATE_DATABASE.value] = True
 
     # Check if we have to update the database. Default is True. But it can be switched to False
     # for offline systems
-    if self.project.content_information_def["antivirus"]["update_database"]:
+    if self.project.content_information_def[Key.ANTIVIRUS.value][Key.UPDATE_DATABASE.value]:
       logging.debug("Starting to update Clamav database")
       sudo_command_output = self.execute_command(antivirus_cmd_update)
 
@@ -471,11 +484,11 @@ class GenerateContentInformation(CliCommand):
       for binaryline in sudo_command_output.splitlines():
         # Each fields is stored into a variable to easy manipulation and
         # simplify code. First get the array of words converted to UTF-8
-        line = binaryline.decode('utf-8')
+        line = binaryline.decode(Key.UTF8.value)
         print(line)
 
         # Test if we have to generate the package status in the output
-        output_item["update database"] += line
+        output_item[Key.UPDATE_DATABASE.value] += line
 
     # Just output de debug log when deactivated
     else:
@@ -484,12 +497,12 @@ class GenerateContentInformation(CliCommand):
     # Generate the dpkg command to retrieve the list of installed packages
     logging.debug("Starting Clamav version command")
     sudo_command_output = self.execute_command(antivirus_cmd_version)
-    output_item["version"] = sudo_command_output.decode('UTF-8')
+    output_item[Key.VERSION.value] = sudo_command_output.decode(Key.UTF8.value)
 
     # Generate the dpkg command to retrieve the list of installed packages
     logging.debug("Starting Clamav scan")
     sudo_command_output = self.execute_command(antivirus_cmd_scan)
-    output_item["scan"] = sudo_command_output.decode('UTF-8')
+    output_item[Key.SCAN.value] = sudo_command_output.decode(Key.UTF8.value)
 
     # print(output)
     self.output_writer.output_buffer.append(output_item)
@@ -517,7 +530,7 @@ class GenerateContentInformation(CliCommand):
     # TODO need purge ?
 
     # Initialize the output writer for security content generation
-    self.output_writer.initialize("security")
+    self.output_writer.initialize(Key.SECURITY.value)
 
     # Initialize and empty dictionnaries. It is use to stores the key/value
     # pair used processed during output
@@ -529,13 +542,13 @@ class GenerateContentInformation(CliCommand):
       # Install missing packages into the chroot
       # Set the flag used tomark that we install debsecan and we have to
       # remove it before exiting the application
-      need_to_remove_package = self.check_install_missing_package("lynis")
+      need_to_remove_package = self.check_install_missing_package(Key.LYNIS.value)
 
     # Generate the debsecan execution command
     sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
     sudo_command += " /usr/sbin/lynis audit system"
     sudo_command_output = self.execute_command(sudo_command)
-    output_item["lynis"] = sudo_command_output.decode('UTF-8')
+    output_item[Key.LYNIS.value] = sudo_command_output.decode(Key.UTF8.value)
 
     # print(output)
     self.output_writer.output_buffer.append(output_item)
@@ -544,7 +557,7 @@ class GenerateContentInformation(CliCommand):
     if need_to_remove_package:
       # Remove extra packages into the chroot
       logging.info("Removing lynis in rootfs")
-      self.remove_package("lynis")
+      self.remove_package(Key.LYNIS.value)
 
     # Flush all pending output and close stream or file
     self.output_writer.flush_and_close()
@@ -566,7 +579,7 @@ class GenerateContentInformation(CliCommand):
     """
 
     # Initialize the output writer for rootkit content generation
-    self.output_writer.initialize("rootkit")
+    self.output_writer.initialize(Key.ROOTKIT.value)
 
     # Initialize and empty dictionnaries. It is use to stores the key/value
     # pair used processed during output
@@ -578,13 +591,13 @@ class GenerateContentInformation(CliCommand):
       # Install missing packages into the chroot
       # Set the flag used tomark that we install debsecan and we have to
       # remove it before exiting the application
-      need_to_remove_package = self.check_install_missing_package("rkhunter")
+      need_to_remove_package = self.check_install_missing_package(Key.RKHUNTER.value)
 
     # Generate the debsecan execution command
     sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
     sudo_command += " /usr/bin/rkhunter --check --skip-keypress"
     sudo_command_output = self.execute_command(sudo_command)
-    output_item["rkhunter"] = sudo_command_output.decode('UTF-8')
+    output_item[Key.RKHUNTER.value] = sudo_command_output.decode(Key.UTF8.value)
 
     # print(output)
     self.output_writer.output_buffer.append(output_item)
@@ -593,7 +606,7 @@ class GenerateContentInformation(CliCommand):
     if need_to_remove_package:
       # Remove extra packages into the chroot
       logging.info("Removing rkhunter in rootfs")
-      self.remove_package("debsecan")
+      self.remove_package(Key.RKHUNTER.value)
 
     # Flush all pending output and close stream or file
     self.output_writer.flush_and_close()
@@ -612,7 +625,7 @@ class GenerateContentInformation(CliCommand):
     """
 
      # Initialize the output writer for vulnerabilities content generation
-    self.output_writer.initialize("vulnerabilities")
+    self.output_writer.initialize(Key.VULNERABILITIES.value)
 
     # Initialize and empty dictionnaries. It is use to stores the key/value
     # pair used processed during output
@@ -630,7 +643,7 @@ class GenerateContentInformation(CliCommand):
     sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
     sudo_command += " /usr/bin/debsecan"
     sudo_command_output = self.execute_command(sudo_command)
-    output_item["debsecan"] = sudo_command_output.decode('UTF-8')
+    output_item["debsecan"] = sudo_command_output.decode(Key.UTF8.value)
 
     # Test if debsecan has to be removed
     if need_to_remove_package:
@@ -660,20 +673,26 @@ class GenerateContentInformation(CliCommand):
     """
 
     # If install_missing_software key is not defined, then set its default value
-    if "install_missing_software" not in self.project.content_information_def["configuration"]:
-      self.project.content_information_def["configuration"]["install_missing_software"] = False
+    if Key.INSTALL_MISSING_SOFTWARE.value not in \
+                                    self.project.content_information_def[Key.CONFIGURATION.value]:
+      self.project.content_information_def[Key.CONFIGURATION.value]\
+                                          [Key.INSTALL_MISSING_SOFTWARE.value] = False
 
     # If skip_missing_software key is not defined, then set its default value
-    if "skip_missing_software" not in self.project.content_information_def["configuration"]:
+    if Key.SKIP_MISSING_SOFTWARE.value not in \
+                                    self.project.content_information_def[Key.CONFIGURATION.value]:
       logging.debug("Setting default value of skip_missing_software to False")
-      self.project.content_information_def["configuration"]["skip_missing_software"] = True
+      self.project.content_information_def[Key.CONFIGURATION.value]\
+                                          [Key.SKIP_MISSING_SOFTWARE.value] = True
 
     # Check if installation is authorized sinc the software is missing
-    if self.project.content_information_def["configuration"]["install_missing_software"]:
+    if self.project.content_information_def[Key.CONFIGURATION.value]\
+                                           [Key.INSTALL_MISSING_SOFTWARE.value]:
       logging.info("Installing " + packages + " in rootfs")
 
       # Update the catalog before installing
-      if self.project.content_information_def["configuration"]["update_catalog_before_install"]:
+      if self.project.content_information_def[Key.CONFIGURATION.value]\
+                                             ["update_catalog_before_install"]:
         self.update_package_catalog()
 
       # Install missing packages into the chroot
@@ -686,7 +705,8 @@ class GenerateContentInformation(CliCommand):
     # Not installed and not allowed to install missing software
     else:
       # Check if skipping is allowed or not
-      if self.project.content_information_def["configuration"]["skip_missing_software"]:
+      if self.project.content_information_def[Key.CONFIGURATION.value]\
+                                             [Key.SKIP_MISSING_SOFTWARE.value]:
         logging.warning("Skipping vulnerabilities content generation. Clamav is missing\
                         and installation not allowed by configuration file.")
         return False

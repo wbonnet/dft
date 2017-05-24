@@ -27,6 +27,7 @@ of removing files and packages.
 """
 
 import os
+from model import DftKey
 from cli_command import CliCommand
 
 #
@@ -91,9 +92,9 @@ class StripRootFS(CliCommand):
     #
 
     # Check that the stripping definition includes packages
-    if "packages" in self.project.stripping_def:
+    if DftKey.PACKAGES.value in self.project.stripping_def:
       # Check that the stripping definition includes a status absent
-      if "absent" in self.project.stripping_def["packages"]:
+      if DftKey.ABSENT.value in self.project.stripping_def[DftKey.PACKAGES.value]:
         # Retrieve the list of installed packages
         sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
         sudo_command += " dpkg -l | tail -n +6 | awk '{ print $2 }'"
@@ -106,7 +107,7 @@ class StripRootFS(CliCommand):
           self.installed_packages[binaryline.decode('utf-8').split()[0]] = True
 
         # Iterate the list packages to remove
-        for pkg in self.project.stripping_def["packages"]["absent"]:
+        for pkg in self.project.stripping_def[DftKey.PACKAGES.value][DftKey.ABSENT.value]:
           # If the package is installed
           if pkg in self.installed_packages:
             # First chck if we h&ve to add APT
@@ -138,17 +139,17 @@ class StripRootFS(CliCommand):
     #
 
     # Check that the stripping definition includes files
-    if "files" in self.project.stripping_def:
+    if DftKey.FILES.value in self.project.stripping_def:
       # Check that the stripping definition includes a status absent
-      if "absent" in self.project.stripping_def["files"]:
-        for working_file in self.project.stripping_def["files"]["absent"]:
+      if DftKey.ABSENT.value in self.project.stripping_def[DftKey.FILES.value]:
+        for working_file in self.project.stripping_def[DftKey.FILES.value][DftKey.ABSENT.value]:
           self.remove_file(working_file)
       else:
         self.project.logging.debug("The stripping definition does not include files to remove")
 
       # Check that the stripping definition includes a status empty
-      if "empty" in self.project.stripping_def["files"]:
-        for working_file in self.project.stripping_def["files"]["empty"]:
+      if DftKey.EMPTY.value in self.project.stripping_def[DftKey.FILES.value]:
+        for working_file in self.project.stripping_def[DftKey.FILES.value][DftKey.EMPTY.value]:
           self.empty_file(working_file)
       else:
         self.project.logging.debug("Stripping definition does not include files to truncate")
@@ -161,17 +162,17 @@ class StripRootFS(CliCommand):
     #
 
     # Check that the stripping definition includes directories
-    if "directories" in self.project.stripping_def:
+    if DftKey.DIRECTORIES.value in self.project.stripping_def:
       # Check that the stripping definition includes a status absent
-      if "absent" in self.project.stripping_def["directories"]:
-        for directory in self.project.stripping_def["directories"]["absent"]:
+      if DftKey.ABSENT.value in self.project.stripping_def[DftKey.DIRECTORIES.value]:
+        for directory in self.project.stripping_def[DftKey.DIRECTORIES.value][DftKey.ABSENT.value]:
           self.remove_directory(directory)
       else:
         self.project.logging.debug("Stripping definition does not include directories to remove")
 
       # Check that the stripping definition includes a status empty
-      if "empty" in self.project.stripping_def["directories"]:
-        for directory in self.project.stripping_def["directories"]["empty"]:
+      if DftKey.EMPTY.value in self.project.stripping_def[DftKey.DIRECTORIES.value]:
+        for directory in self.project.stripping_def[DftKey.DIRECTORIES.value][DftKey.EMPTY.value]:
           self.empty_directory(directory)
       else:
         self.project.logging.debug("The stripping definition does not include files to empty")
