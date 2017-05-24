@@ -28,7 +28,7 @@
 distributions:
     # Debian 8.0 Jessie
     - name: 'jessie'
-      architectures: [ 'amd64', 'i386', 'armel', 'armhf' ]
+      architectures: [ 'amd64', 'i386', 'armel', 'armhf', 'mips' ]
       repositories:
         - url: 'http://ftp.fr.debian.org/debian/'
           suite: 'jessie'
@@ -42,7 +42,7 @@ distributions:
 
     # Debian 9.0 Stretch
     - name: 'stretch'
-      architectures: [ 'amd64', 'i386', 'armel', 'armhf' ]
+      architectures: [ 'amd64', 'i386', 'armel', 'armhf', 'mips' ]
       repositories:
         - url: 'http://ftp.fr.debian.org/debian/'
           suite: 'stretch'
