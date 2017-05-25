@@ -88,8 +88,33 @@ class StripRootFS(CliCommand):
       return
 
     #
-    # Strip the packages
+    # Strip the differents object categories one by one
     #
+    #
+    self.strip_packages()
+    self.strip_files()
+    self.strip_directories()
+
+    # Remove QEMU if it has been isntalled. It has to be done in the end
+    # since some cleanup tasks could need QEMU
+    if self.use_qemu_static:
+      self.cleanup_qemu()
+
+# Then strip the symlinks ??? check it is in unit test
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # strip_packages
+  #
+  # -------------------------------------------------------------------------
+  def strip_packages(self):
+    """This method implement the package stripping
+
+    The method parses the output of the dpkg -l command and checks if packages are
+    in the rules dictionnaries, then apply the action defined in the matching rule.
+    """
 
     # Check that the stripping definition includes packages
     if DftKey.PACKAGES.value in self.project.stripping_def:
@@ -134,9 +159,16 @@ class StripRootFS(CliCommand):
       self.project.logging.debug("apt packag has been installed during stripping, now removing it")
       self.remove_package("apt")
 
-    #
-    # Strip the files
-    #
+  # -------------------------------------------------------------------------
+  #
+  # strip_files
+  #
+  # -------------------------------------------------------------------------
+  def strip_files(self):
+    """This method implement the file stripping
+
+    The method parses the list of rules, then apply the action defined in the matching rule.
+    """
 
     # Check that the stripping definition includes files
     if DftKey.FILES.value in self.project.stripping_def:
@@ -157,9 +189,16 @@ class StripRootFS(CliCommand):
     else:
       self.project.logging.debug("Stripping definition does not include files section")
 
-    #
-    # Strip the directories
-    #
+  # -------------------------------------------------------------------------
+  #
+  # strip_directories
+  #
+  # -------------------------------------------------------------------------
+  def strip_directories(self):
+    """This method implement the directory stripping
+
+    The method parses the list of rules, then apply the action defined in the matching rule.
+    """
 
     # Check that the stripping definition includes directories
     if DftKey.DIRECTORIES.value in self.project.stripping_def:
@@ -179,13 +218,6 @@ class StripRootFS(CliCommand):
 
     else:
       self.project.logging.debug("The stripping definition does not include directories section")
-
-    # Remove QEMU if it has been isntalled. It has to be done in the end
-    # since some cleanup tasks could need QEMU
-    if self.use_qemu_static:
-      self.cleanup_qemu()
-
-# Then strip the symlinks ??? check it is in unit test
 
 
 
