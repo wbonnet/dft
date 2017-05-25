@@ -27,6 +27,7 @@ This chain contains uboot, kernel; initramfs and DTB.
 
 import logging
 from cli_command import CliCommand
+from model import Key
 
 #
 #    Class BuildBootloader
