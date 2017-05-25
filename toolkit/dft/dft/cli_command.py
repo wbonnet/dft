@@ -28,6 +28,7 @@ cli targets.
 import os
 import subprocess
 import shutil
+from model import DftKey
 
 #
 #    Class CliCommand
@@ -62,7 +63,7 @@ class CliCommand(object):
 
     # Retrieve the architecture of the host
     self.host_arch = subprocess.check_output("dpkg --print-architecture",
-                                             shell=True).decode('UTF-8').rstrip()
+                                             shell=True).decode(Key.UTF8.value).rstrip()
 
     # Boolean used to flag the use of QEMU static
     self.use_qemu_static = (self.host_arch != project.target_arch)
