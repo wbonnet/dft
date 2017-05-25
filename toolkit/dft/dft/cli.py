@@ -32,6 +32,7 @@ import textwrap
 import logging
 import build_rootfs
 import model
+from model import Key
 import assemble_firmware
 import build_bootloader
 import build_image
@@ -101,28 +102,28 @@ x factory_setup                    Apply some extra factory setup before generat
     # Stores the argument in the instance
     self.command = args
 
-    self.add_parser_common()
+    self.__add_parser_common()
 # TODO command build project
 
     # According to the command, call the method dedicated to parse the arguments
-    if   self.command == "assemble_firmware":
-      self.add_parser_assemble_firmware()
-    elif self.command == "build_rootfs":
-      self.add_parser_build_rootfs()
-    elif self.command == "build_bootloader":
-      self.add_parser_build_bootloader()
-    elif self.command == "build_image":
-      self.add_parser_build_image()
-    elif self.command == "build_firmware":
-      self.add_parser_build_firmware()
-    elif self.command == "check_rootfs":
-      self.add_parser_check_rootfs()
-    elif self.command == "factory_setup":
-      self.add_parser_factory_setup()
-    elif self.command == "generate_content_information":
-      self.add_parser_generate_content()
-    elif self.command == "strip_rootfs":
-      self.add_parser_strip_rootfs()
+    if self.command == Key.ASSEMBLE_FIRMWARE.value:
+      self.__add_parser_assemble_firmware()
+    elif self.command == Key.BUILD_ROOTFS.value:
+      self.__add_parser_build_rootfs()
+    elif self.command == Key.BUILD_BOOTLOADER.value:
+      self.__add_parser_build_bootloader()
+    elif self.command == Key.BUILD_IMAGE.value:
+      self.__add_parser_build_image()
+    elif self.command == Key.BUILD_FIRMWARE.value:
+      self.__add_parser_build_firmware()
+    elif self.command == Key.CHECK_ROOTFS.value:
+      self.__add_parser_check_rootfs()
+    elif self.command == Key.FACTORY_SETUP.value:
+      self.__add_parser_factory_setup()
+    elif self.command == Key.GEN_CONTENT_INFO.value:
+      self.__add_parser_generate_content()
+    elif self.command == Key.STRIP_ROOTFS.value:
+      self.__add_parser_strip_rootfs()
     else:
       # If the command word is unknown, the force the parsing of the help flag
       return self.parser.parse_args(['-h'])
@@ -130,30 +131,30 @@ x factory_setup                    Apply some extra factory setup before generat
     # Finally call the parser that has been completed by the previous lines
     self.args = self.parser.parse_args()
 
-  def add_parser_assemble_firmware(self):
+  def __add_parser_assemble_firmware(self):
     """ This method add parser options specific to assemble_firmware command
     """
 
     # Add the arguments
-    self.parser.add_argument('assemble_firmware',
-                             help='Command to execute')
+    self.parser.add_argument(Key.ASSEMBLE_FIRMWARE.value,
+                             help=Key.OPT_HELP_LABEL.value)
 
 
-  def add_parser_build_rootfs(self):
+  def __add_parser_build_rootfs(self):
     """ This method add parser options specific to build_rootfs command
     """
 
     # Add the arguments
-    self.parser.add_argument('build_rootfs',
-                             help='Command to execute')
+    self.parser.add_argument(Key.BUILD_ROOTFS.value,
+                             help=Key.OPT_HELP_LABEL.value)
 
     # Overrides the target architecture from the configuration file by
     # limiting it to a given list of arch. Architectures not defined in
     # the configuration file can be added with this parameter
 # TODO: parse the list of argument. So far only one value is handled
-    self.parser.add_argument('--limit-arch',
+    self.parser.add_argument(Key.OPT_LIMIT_ARCH.value,
                              action='store',
-                             dest='limit_target_arch',
+                             dest=Key.LIMIT_TARGET_ARCH.value,
                              help="limit the list of target arch to process (comma separated list"
                                   " of arch eg: arch1,arch2)")
 
@@ -161,9 +162,9 @@ x factory_setup                    Apply some extra factory setup before generat
     # use is limited it to a given list of arch. Versions not defined
     # in the configuration file can be added with this parameter
 # TODO: parse the list of argument. So far only one value is handled
-    self.parser.add_argument('--limit-version',
+    self.parser.add_argument(Key.OPT_LIMIT_VERSION.value,
                              action='store',
-                             dest='limit_target_version',
+                             dest=Key.LIMIT_TARGET_VERSION.value,
                              help="limit the list of target version to process (comma separated "
                                   "list of versions eg: jessie,stretch)")
 
@@ -171,9 +172,9 @@ x factory_setup                    Apply some extra factory setup before generat
     # with debootstrap, having this option enable will make DFT look for
     # an existing cache archive, an extract it instead of doing a fresh
     # debootstrap installation
-    self.parser.add_argument('--use-cache-archive',
+    self.parser.add_argument(Key.OPT_USE_CACHE_ARCHIVE.value,
                              action='store_true',
-                             dest='use_cache_archive',
+                             dest=Key.USE_CACHE_ARCHIVE.value,
                              help="activate the use of an existing cache archive (extract archive "
                                   "instead of running debootstrap). \nThis option does nothing if "
                                   "the cache archive do no exist. In this case, debootstrap will "
@@ -183,9 +184,9 @@ x factory_setup                    Apply some extra factory setup before generat
     # with debootstrap, having this option enable will make DFT look for
     # an existing cache archive, an extract it instead of doing a fresh
     # debootstrap installation
-    self.parser.add_argument('--update-cache-archive',
+    self.parser.add_argument(Key.OPT_UPDATE_CACHE_ARCHIVE.value,
                              action='store_true',
-                             dest='update_cache_archive',
+                             dest=Key.UPDATE_CACHE_ARCHIVE.value,
                              help="update the cache archive after building a rootfs with "
                                   "debootstrap. Existing archive will\nbe deleted if it already "
                                   "exist, or it will be created if missing")
@@ -193,9 +194,9 @@ x factory_setup                    Apply some extra factory setup before generat
     # Override the list of mirrors defined in the configuration file.
     # This option defines a single mirror, not a full list of mirrors.
     # Thus the list of mirrors will be replaced by a single one
-    self.parser.add_argument('--override-debian-mirror',
+    self.parser.add_argument(Key.OPT_OVERRIDE_DEBIAN_MIRROR.value,
                              action='store',
-                             dest='override_debian_mirror',
+                             dest=Key.OVERRIDE_DEBIAN_MIRROR.value,
                              help="override the list of mirrors defined in the configuration file."
                                   " This option\ndefines a single mirror, not a full list of "
                                   "mirrors. Thus the list of mirrors\nwill be replaced by a single"
@@ -205,155 +206,155 @@ x factory_setup                    Apply some extra factory setup before generat
     # /dft_bootstrap in the target rootfs. This option prevents DFT from
     # removing these files. This is useful to debug ansible stuff and
     # replay an playbooks at will
-    self.parser.add_argument('--keep-bootstrap-files',
+    self.parser.add_argument(Key.OPT_KEEP_BOOTSTRAP_FILES.value,
                              action='store_true',
-                             dest='keep_bootstrap_files',
+                             dest=Key.KEEP_BOOTSTRAP_FILES.value,
                              help="do not delete DFT bootstrap files after installation (debug "
                                   "purpose)")
 
 
 
-  def add_parser_build_bootloader(self):
+  def __add_parser_build_bootloader(self):
     """ This method add parser options specific to build_bootloader command
     """
 
     # Add the arguments
-    self.parser.add_argument('build_bootloader',
-                             help='Command to execute')
+    self.parser.add_argument(Key.BUILD_BOOTLOADER.value,
+                             help=Key.OPT_HELP_LABEL.value)
 
 
 
-  def add_parser_build_image(self):
+  def __add_parser_build_image(self):
     """ This method add parser options specific to build_image command
     """
 
 
     # Add the arguments
-    self.parser.add_argument('build_image',
-                             help='Command to execute')
+    self.parser.add_argument(Key.BUILD_IMAGE.value,
+                             help=Key.OPT_HELP_LABEL.value)
 
 
 
-  def add_parser_build_firmware(self):
+  def __add_parser_build_firmware(self):
     """ This method add parser options specific to build_firmware command
     """
 
     # Add the arguments
-    self.parser.add_argument('build_firmware',
-                             help='Command to execute')
+    self.parser.add_argument(Key.BUILD_FIRMWARE.value,
+                             help=Key.OPT_HELP_LABEL.value)
 
 
 
-  def add_parser_check_rootfs(self):
+  def __add_parser_check_rootfs(self):
     """ This method add parser options specific to check_rootfs command
     """
 
     # Add the arguments
-    self.parser.add_argument('build_check_rootfs',
-                             help='Command to execute')
+    self.parser.add_argument(Key.CHECK_ROOTFS.value,
+                             help=Key.OPT_HELP_LABEL.value)
 
 
 
-  def add_parser_factory_setup(self):
+  def __add_parser_factory_setup(self):
     """ This method add parser options specific to factory_setup command
     """
 
     # Add the arguments
-    self.parser.add_argument('factory_setup',
-                             help='Command to execute')
+    self.parser.add_argument(Key.FACTORY_SETUP.value,
+                             help=Key.OPT_HELP_LABEL.value)
 
 
 
-  def add_parser_generate_content(self):
+  def __add_parser_generate_content(self):
     """ This method add parser options specific to generate_content_information
     command
     """
 
     # Add the arguments
-    self.parser.add_argument('generate_content_information',
-                             help='Command to execute')
+    self.parser.add_argument(Key.GEN_CONTENT_INFO.value,
+                             help=Key.OPT_HELP_LABEL.value)
 
     # Activate the generation of the packages information.
     # Default behavior is to generate everything if no generate_xxx_information
     # flag is set. If at least one fag is set, then the user has to set every
     # needed flag
-    self.parser.add_argument('--generate-packages-information',
+    self.parser.add_argument(Key.OPT_GEN_PACKAGES_INFO.value,
                              action='store_true',
-                             dest='gen_packages_info',
+                             dest=Key.GEN_PACKAGES_INFO.value,
                              help="generate the information about packages. If at least one of "
                                   "the\ngenerate_something_information is set,then it deactivate "
                                   "the 'generate all'\ndefault behavior, and each information "
                                   "source has to be set.\n")
 
     # Activate the generation of information about vulnerabilities
-    self.parser.add_argument('--generate-vulnerabilities-information',
+    self.parser.add_argument(Key.OPT_GEN_VULNERABILITIES_INFO.value,
                              action='store_true',
-                             dest='gen_vulnerabilities_info',
+                             dest=Key.GEN_VULNERABILITIES_INFO.value,
                              help="generate the information about vulnerabilities.\n")
 
     # Activate the generation of information about security
-    self.parser.add_argument('--generate-security-information',
+    self.parser.add_argument(Key.OPT_GEN_SECURITY_INFO.value,
                              action='store_true',
-                             dest='gen_security_info',
+                             dest=Key.GEN_SECURITY_INFO.value,
                              help="generate the information about security.\n")
 
     # Activate the generation of information about rootkit
-    self.parser.add_argument('--generate-rootkit-information',
+    self.parser.add_argument(Key.OPT_GEN_ROOTKIT_INFO.value,
                              action='store_true',
-                             dest='gen_rootkit_info',
+                             dest=Key.GEN_ROOTKIT_INFO.value,
                              help="generate the information about rootkits.\n")
 
     # Activate the generation of information about files.
-    self.parser.add_argument('--generate-files-information',
+    self.parser.add_argument(Key.OPT_GEN_FILES_INFO.value,
                              action='store_true',
-                             dest='gen_files_info',
+                             dest=Key.GEN_FILES_INFO.value,
                              help="generate the information about files.\n")
 
     # Activate the generation of information about the anti-virus execution.
-    self.parser.add_argument('--generate-antivirus-information',
+    self.parser.add_argument(Key.OPT_GEN_ANTIVIRUS_INFO.value,
                              action='store_true',
-                             dest='gen_antivirus_info',
+                             dest=Key.GEN_ANTIVIRUS_INFO.value,
                              help="generate the information about anti-virus execution.\n")
 
 
 
-  def add_parser_strip_rootfs(self):
+  def __add_parser_strip_rootfs(self):
     """ This method add parser options specific to strip_rootfs command
     """
 
     # Add the arguments
-    self.parser.add_argument('strip_rootfs',
-                             help='Command to execute')
+    self.parser.add_argument(Key.STRIP_ROOTFS.value,
+                             help=Key.OPT_HELP_LABEL.value)
 
 
 
-  def add_parser_common(self):
+  def __add_parser_common(self):
     """ This method add parser options common to all command
     Configuration file store the definition of rootfs. Option can be
     overriden by arguments on the command line (like --target-arch)
     """
 
     # Configuration file defines rootfs and its modulation
-    self.parser.add_argument('--config-file',
+    self.parser.add_argument(Key.OPT_CONFIG_FILE.value,
                              action='store',
-                             dest='config_file',
-                             default='dft.yml',
+                             dest=Key.CONFIG_FILE.value,
+                             default=Key.DEFAULT_CONFIGURATION_FILE.value,
                              help='DFT configuration file')
 
     # Project definition file defines environnement shared between
     # the different DFT commands (such as path to diirectory storing)
     # cache archives, temporary working dir, temp dir name patterns, etc.)
-    self.parser.add_argument('--project-file',
+    self.parser.add_argument(Key.OPT_PROJECT_FILE.value,
                              action='store',
-                             dest='project_file',
-                             default='project.yml',
+                             dest=Key.PROJECT_FILE.value,
+                             default=Key.DEFAULT_PROJECT_FILE.value,
                              required=True,
                              help='project definition file')
 
     # Defines the level of the log to output
-    self.parser.add_argument('--log-level',
+    self.parser.add_argument(Key.OPT_LOG_LEVEL.value,
                              action='store',
-                             dest='log_level',
+                             dest=Key.LOG_LEVEL.value,
                              choices=['debug', 'info', 'warning', 'error', 'critical'],
                              help="defines the minimal log level. Default value is  warning")
 
@@ -384,7 +385,7 @@ x factory_setup                    Apply some extra factory setup before generat
       self.project.dft.log_level = self.args.log_level.upper()
     # If not command line value, defaults to log
     else:
-      self.project.dft.log_level = "INFO"
+      self.project.dft.log_level = "info"
 
     # Create the logger object
     logging.basicConfig(level=self.project.dft.log_level)
@@ -400,31 +401,33 @@ x factory_setup                    Apply some extra factory setup before generat
     # ---------------------------------------------------------------------
 
     # Select the method to run according to the command
-    if self.command == "assemble_firmware":
-      self.run_assemble_firmware()
-    elif self.command == "build_rootfs":
-      self.run_build_rootfs()
-    elif self.command == "build_bootloader":
-      self.run_build_bootloader()
-    elif self.command == "build_image":
-      self.run_build_image()
-    elif self.command == "build_firmware":
-      self.run_build_firmware()
-    elif self.command == "check_rootfs":
-      self.run_check_rootfs()
-    elif self.command == "factory_setup":
-      self.run_factory_setup()
-    elif self.command == "generate_content_information":
-      self.run_generate_content()
-    elif self.command == "strip_rootfs":
-      self.run_strip_rootfs()
+    if self.command == Key.ASSEMBLE_FIRMWARE.value:
+      self.__run_assemble_firmware()
+    elif self.command == Key.BUILD_ROOTFS.value:
+      self.__run_build_rootfs()
+    elif self.command == Key.BUILD_BOOTLOADER.value:
+      self.__run_build_bootloader()
+    elif self.command == Key.BUILD_IMAGE.value:
+      self.__run_build_image()
+    elif self.command == Key.BUILD_FIRMWARE.value:
+      self.__run_build_firmware()
+    elif self.command == Key.CHECK_ROOTFS.value:
+      self.__run_check_rootfs()
+    elif self.command == Key.FACTORY_SETUP.value:
+      self.__run_factory_setup()
+    elif self.command == Key.GEN_CONTENT_INFO.value:
+      self.__run_generate_content()
+    elif self.command == Key.STRIP_ROOTFS.value:
+      self.__run_strip_rootfs()
+
+
 
   # -------------------------------------------------------------------------
   #
-  # run_assemble_firmware
+  # __run_assemble_firmware
   #
   # -------------------------------------------------------------------------
-  def run_assemble_firmware(self):
+  def __run_assemble_firmware(self):
     """ Method used to handle the assemble_firmware command.
     Create the business objet, then execute the entry point
     """
@@ -439,10 +442,10 @@ x factory_setup                    Apply some extra factory setup before generat
 
   # -------------------------------------------------------------------------
   #
-  # run_build_rootfs
+  # __run_build_rootfs
   #
   # -------------------------------------------------------------------------
-  def run_build_rootfs(self):
+  def __run_build_rootfs(self):
     """ Method used to handle the build_rootfs command.
       Create the business objet, then execute the entry point
     """
@@ -458,13 +461,13 @@ x factory_setup                    Apply some extra factory setup before generat
         self.project.dft.keep_bootstrap_files = self.args.keep_bootstrap_files
 
     if self.args.override_debian_mirror != None:
-      if self.args.override_debian_mirror != self.project.project_def["project-definition"]\
-                                                                     ["debootstrap-repository"]:
+      if self.args.override_debian_mirror != self.project.project_def[Key.PROJECT_DEFINITION.value]\
+                                                                 [Key.DEBOOTSTRAP_REPOSITORY.value]:
         self.project.logging.debug("Overriding pkg_archive_url with CLI value : %s => %s",
-                                   self.project.project_def["project-definition"]\
-                                                           ["debootstrap-repository"],
+                                   self.project.project_def[Key.PROJECT_DEFINITION.value]\
+                                                           [Key.DEBOOTSTRAP_REPOSITORY.value],
                                    self.args.override_debian_mirror)
-        self.project.project_def["project-definition"]["debootstrap-repository"] = \
+        self.project.project_def[Key.PROJECT_DEFINITION.value][Key.DEBOOTSTRAP_REPOSITORY.value] = \
                                    self.args.override_debian_mirror
 
     if self.args.update_cache_archive != None:
@@ -505,10 +508,10 @@ x factory_setup                    Apply some extra factory setup before generat
 
   # -------------------------------------------------------------------------
   #
-  # run_build_bootloader
+  # __run_build_bootloader
   #
   # -------------------------------------------------------------------------
-  def run_build_bootloader(self):
+  def __run_build_bootloader(self):
     """ Method used to handle the build_bootloader command.
     Create the business objet, then execute the entry point.
     """
@@ -523,10 +526,10 @@ x factory_setup                    Apply some extra factory setup before generat
 
   # -------------------------------------------------------------------------
   #
-  # run_build_image
+  # __run_build_image
   #
   # -------------------------------------------------------------------------
-  def run_build_image(self):
+  def __run_build_image(self):
     """ Method used to handle the build_image command.
     Create the business objet, then execute the entry point.
     """
@@ -541,10 +544,10 @@ x factory_setup                    Apply some extra factory setup before generat
 
   # -------------------------------------------------------------------------
   #
-  # run_build_firmware
+  # __run_build_firmware
   #
   # -------------------------------------------------------------------------
-  def run_build_firmware(self):
+  def __run_build_firmware(self):
     """ Method used to handle the build_firmware command.
     Create the business objet, then execute the entry point.
     """
@@ -559,10 +562,10 @@ x factory_setup                    Apply some extra factory setup before generat
 
   # -------------------------------------------------------------------------
   #
-  # run_check_rootfs
+  # __run_check_rootfs
   #
   # -------------------------------------------------------------------------
-  def run_check_rootfs(self):
+  def __run_check_rootfs(self):
     """ Method used to handle the check_rootfs command.
     Create the business objet, then execute the entry point
     """
@@ -577,10 +580,10 @@ x factory_setup                    Apply some extra factory setup before generat
 
   # -------------------------------------------------------------------------
   #
-  # run_factory_setup
+  # __run_factory_setup
   #
   # -------------------------------------------------------------------------
-  def run_factory_setup(self):
+  def __run_factory_setup(self):
     """ Method used to handle the factory_setup command.
     Its behavior is still to define.
     """
@@ -590,10 +593,10 @@ x factory_setup                    Apply some extra factory setup before generat
 
   # -------------------------------------------------------------------------
   #
-  # run_generate_content
+  # __run_generate_content
   #
   # -------------------------------------------------------------------------
-  def run_generate_content(self):
+  def __run_generate_content(self):
     """ Method used to handle the generate_content_information command.
     Create the business objet, then execute the entry point
     """
@@ -665,10 +668,10 @@ x factory_setup                    Apply some extra factory setup before generat
 
   # -------------------------------------------------------------------------
   #
-  # run_strip_rootfs
+  # __run_strip_rootfs
   #
   # -------------------------------------------------------------------------
-  def run_strip_rootfs(self):
+  def __run_strip_rootfs(self):
     """ Method used to handle the strip_rootfs command.
       Create the business objet, then execute the entry point
     """
