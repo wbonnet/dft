@@ -27,7 +27,6 @@
 #
 
 #---
-
 # Deactivate repository validity check
 - name : DFT - Deactivate repository expiration check
   copy: src=files/10no-check-valid-until
@@ -55,5 +54,3 @@
   with_items:
     - aptitude
     - apt-transport-https
-
-
