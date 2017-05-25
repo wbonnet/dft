@@ -27,6 +27,7 @@ the rootfs and bootchain.
 
 import logging
 from cli_command import CliCommand
+from model import Key
 
 #
 #    Class BuildImage
