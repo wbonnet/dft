@@ -32,6 +32,7 @@ import tempfile
 from distutils import dir_util
 from distutils import file_util
 from cli_command import CliCommand
+from model import Key
 
 #
 #    Class BuildRootFS
@@ -39,7 +40,7 @@ from cli_command import CliCommand
 class BuildRootFS(CliCommand):
   """This class implements method needed to create the Root FileSystem
 
-  The "RootFS" is the initial installation of Debian (debootstrap) which
+  The Key.ROOTFS.value is the initial installation of Debian (debootstrap) which
   is used to apply ansible playbooks.
 
   The methods implemented in this class provides what is needed to :
@@ -89,17 +90,17 @@ class BuildRootFS(CliCommand):
     """
 
     # Check that DFT path is valid
-    if not os.path.isdir(self.project.project_def["configuration"]["dft_base"]):
+    if not os.path.isdir(self.project.project_def[Key.CONFIGURATION.value][Key.DFT_BASE.value]):
       logging.critical("Path to DFT installation is not valid : %s",
-                       self.project.project_def["configuration"]["dft_base"])
+                       self.project.project_def[Key.CONFIGURATION.value][Key.DFT_BASE.value])
       exit(1)
 
     # Ensure target rootfs mountpoint exists and is a dir
     if not os.path.isdir(self.project.rootfs_mountpoint):
       os.makedirs(self.project.rootfs_mountpoint)
     else:
-      if ("keep_rootfs_history" in self.project.project_def["configuration"] and
-          self.project.project_def["configuration"]["keep_rootfs_history"]):
+      if (Key.KEEP_ROOTFS_HISTORY.value in self.project.project_def[Key.CONFIGURATION.value] and
+          self.project.project_def[Key.CONFIGURATION.value][Key.KEEP_ROOTFS_HISTORY.value]):
         logging.warning("target rootfs mount point already exists : " +
                         self.project.rootfs_mountpoint)
         exit(1)
@@ -175,10 +176,11 @@ class BuildRootFS(CliCommand):
         logging.debug("dft_bootstrap already exist under " + dft_target_path)
 
       # Copy the DFT toolkit content to the target rootfs
-      for copy_target in os.listdir(self.project.project_def["configuration"]["dft_base"]):
+      for copy_target in os.listdir(self.project.project_def[Key.CONFIGURATION.value]\
+                                                            [Key.DFT_BASE.value]):
         logging.debug("Copy the DFT toolkit : preparing to copy " + copy_target)
-        copy_target_path = os.path.join(self.project.project_def["configuration"]["dft_base"],
-                                        copy_target)
+        copy_target_path = os.path.join(self.project.project_def[Key.CONFIGURATION.value]\
+                                                                [Key.DFT_BASE.value], copy_target)
         if os.path.isfile(copy_target_path):
           logging.debug("copying file " + copy_target_path + " => " + dft_target_path)
           file_util.copy_file(copy_target_path, dft_target_path)
@@ -187,8 +189,9 @@ class BuildRootFS(CliCommand):
           dir_util.copy_tree(copy_target_path, os.path.join(dft_target_path, copy_target))
 
       # Copy the additional toolkit content to the target rootfs
-      if "additional_roles" in self.project.project_def["configuration"]:
-        for additional_path in self.project.project_def["configuration"]["additional_roles"]:
+      if Key.ADDITIONAL_ROLES.value in self.project.project_def[Key.CONFIGURATION.value]:
+        for additional_path in self.project.project_def[Key.CONFIGURATION.value]\
+                                                       [Key.ADDITIONAL_ROLES.value]:
           logging.debug("Copy the additional toolkit : preparing to copy from additional path "
                         + additional_path)
           for copy_target in os.listdir(additional_path):
@@ -220,12 +223,13 @@ class BuildRootFS(CliCommand):
       working_file.write("\n")
 
       # Test if some variable files have to be included
-      if "variables" in self.project.project_def["project_definition"]:
+      if Key.VARIABLES.value in self.project.project_def[Key.PROJECT_DEFINITION.value]:
         # Yes, then output the vars_files marker
         working_file.write("  vars_files:\n")
 
         # And iterate the list of files containing variables
-        for vars_file in self.project.project_def["project_definition"]["variables"]:
+        for vars_file in self.project.project_def[Key.PROJECT_DEFINITION.value]\
+                                                 [Key.VARIABLES.value]:
           # Append the file to the site.yml file
           working_file.write("  - " + vars_file + "\n")
           logging.debug("Adding variables file " + vars_file)
@@ -249,7 +253,7 @@ class BuildRootFS(CliCommand):
       working_file.write("  roles:\n")
 
       # Iterate the list of distributions loaded from the file
-      for role in self.project.rootfs_def["roles"]:
+      for role in self.project.rootfs_def[Key.ROLES.value]:
         # At least one role has beenfound, flag it
         role_has_been_found = True
         logging.debug("Adding role " + role)
@@ -271,7 +275,7 @@ class BuildRootFS(CliCommand):
       logging.warning("No role has been found in rootfs definition. Rootfs is same as debootstrap \
                        output")
       logging.error("You may wish to have a look to : " + self.project.generate_def_file_path(\
-                                       self.project.project_def["project_definition"]["rootfs"][0]))
+                      self.project.project_def[Key.PROJECT_DEFINITION.value][Key.ROOTFS.value][0]))
 
     # Execute Ansible
     # TODO : multiple target ? not sure...
@@ -387,7 +391,8 @@ class BuildRootFS(CliCommand):
     # Add the target, mount point and repository url to the debootstrap command
     debootstrap_command += " " +  self.project.target_version + " "
     debootstrap_command += self.project.rootfs_mountpoint + " "
-    debootstrap_command += self.project.project_def["project_definition"]["debootstrap_repository"]
+    debootstrap_command += self.project.project_def[Key.PROJECT_DEFINITION.value]\
+                                                   [Key.DEBOOTSTRAP_REPOSITORY.value]
 
     # Finally run the subprocess
     self.execute_command(debootstrap_command)
@@ -457,11 +462,11 @@ class BuildRootFS(CliCommand):
     logging.info("starting to generate APT sources configuration")
 
     # Test if the generate_validity_check is defined, if not set the default value
-    if "generate_validity_check" not in self.project.project_def["configuration"]:
-      self.project.project_def["configuration"]["generate_validity_check"] = True
+    if Key.GENERATE_VALIDITY_CHECK.value not in self.project.project_def[Key.CONFIGURATION.value]:
+      self.project.project_def[Key.CONFIGURATION.value][Key.GENERATE_VALIDITY_CHECK.value] = True
 
     # Test if we have to generate the no-check-valid_until file
-    if self.project.project_def["configuration"]["generate_validity_check"]:
+    if self.project.project_def[Key.CONFIGURATION.value][Key.GENERATE_VALIDITY_CHECK.value]:
       logging.debug("generating /etc/apt/apt.conf.d/10no-check-valid-until")
 
       # Generate the file path
@@ -482,8 +487,8 @@ class BuildRootFS(CliCommand):
     filepath = self.project.rootfs_mountpoint + "/etc/apt/sources.list"
 
     # Open the file and writes configuration in it
-    self.project.debian_mirror_url = self.project.project_def["project_definition"]\
-                                                             ["debootstrap_repository"]
+    self.project.debian_mirror_url = self.project.project_def[Key.PROJECT_DEFINITION.value]\
+                                                             [Key.DEBOOTSTRAP_REPOSITORY.value]
 
     # Flag if we have found a matching distro or not
     distro_has_been_found = False
@@ -491,34 +496,36 @@ class BuildRootFS(CliCommand):
     # The open the temp file for output, and iterate the distro dictionnary
     with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
       # Iterate the list of distributions loaded from the file
-      for distro in self.project.repositories_def["distributions"]:
+      for distro in self.project.repositories_def[Key.DISTRIBUTIONS.value]:
         logging.debug(distro)
         # Process only if it is the version we target
-        if distro["name"] == self.project.target_version and self.project.target_arch in \
-                                                                          distro["architectures"]:
+        if distro[Key.NAME.value] == self.project.target_version and \
+                                     self.project.target_arch in distro[Key.ARCHITECTURES.value]:
           # W have found a matching distro or not
           distro_has_been_found = True
           # Then iterate all the sources for this distro version
-          for repo in distro["repositories"]:
+          for repo in distro[Key.REPOSITORIES.value]:
             logging.debug(repo)
 
             # Test if deb line has to be generated
-            if ("generate_deb" not in repo) or ("generate_deb" in repo and repo["generate_deb"]):
+            if (Key.GENERATE_DEB.value not in repo) or (Key.GENERATE_DEB.value in repo and \
+                                                        repo[Key.GENERATE_DEB.value]):
               # Will generate the deb line only if the key
               # generate-deb is present and set to True or the key
               # is not present
-              working_file.write("deb " + repo["url"] +" " + repo["suite"] + " ")
-              for section in repo["sections"]:
+              working_file.write("deb " + repo[Key.URL.value] +" " + repo[Key.SUITE.value] + " ")
+              for section in repo[Key.SECTIONS.value]:
                 working_file.write(section + " ")
               working_file.write("\n")
 
             # Test if deb-src line has also to be generated
-            if "generate_src" in repo:
+            if Key.GENERATE_SRC.value in repo:
               # Will generate the deb-src line only if the key
               # generate-src is present and set to True
-              if repo["generate_src"]:
-                working_file.write("deb-src " + repo["url"] +" " + repo["suite"] + " ")
-                for section in repo["sections"]:
+              if repo[Key.GENERATE_SRC.value]:
+                working_file.write("deb-src " + repo[Key.URL.value] + " " +
+                                   repo[Key.SUITE.value] + " ")
+                for section in repo[Key.SECTIONS.value]:
                   working_file.write(section + " ")
                 working_file.write("\n")
 
@@ -529,7 +536,8 @@ class BuildRootFS(CliCommand):
       logging.error("No distribution matching " + self.project.target_version + " has been found.")
       logging.error("Please check repositories definition for this project.")
       logging.error("File in use is : " + self.project.generate_def_file_path(\
-                                self.project.project_def["project_definition"]["repositories"][0]))
+                                self.project.project_def[Key.PROJECT_DEFINITION.value]\
+                                                        [Key.REPOSITORIES.value][0]))
       logging.critical("Cannot generate /etc/apt/sources.list under rootfs path. Operation is \
                         aborted !")
       exit(1)
