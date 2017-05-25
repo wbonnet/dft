@@ -119,7 +119,7 @@ class BuildFirmware(CliCommand):
 
         # Check that the algorith is valid (authorized values are md5 sha1 sha256)
         if self.project.firmware_def[Key.SECURITY.value][Key.HASH_METHOD.value] in \
-              [ Key.MD5.value, Key.SHA1.value, Key.SHA256.value]:
+                                    [Key.MD5.value, Key.SHA1.value, Key.SHA256.value]:
           # Output some fancy logs :)
           self.project.logging.info("Generating hash file " + self.project.firmware_filename + "." +
                                     self.project.firmware_def[Key.SECURITY.value]\
