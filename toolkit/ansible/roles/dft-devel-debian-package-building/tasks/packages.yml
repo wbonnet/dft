@@ -38,4 +38,4 @@
     - devscripts
     - git
     - debootstrap
-    - dh_make
+    - dh-make
