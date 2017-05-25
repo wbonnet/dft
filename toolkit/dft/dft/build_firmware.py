@@ -30,6 +30,7 @@ import logging
 import os
 from shutil import rmtree
 from cli_command import CliCommand
+from model import Key
 
 #
 #    Class BuildFirmware
@@ -108,24 +109,26 @@ class BuildFirmware(CliCommand):
     """
 
     # Test if the security section is defined
-    if "security" in self.project.firmware_def:
+    if Key.SECURITY.value in self.project.firmware_def:
       # Yes, thus test if the hash-method is defined. If not defined, default
       # value is applied. Default value is "no hash"
-      if "hash_method" in self.project.firmware_def["security"]:
+      if Key.HASH_METHOD.value in self.project.firmware_def[Key.SECURITY.value]:
         # Convert hash-method to lower case in order to use it as command prefix
-        self.project.firmware_def["security"]["hash_method"] = self.project.\
-                                                     firmware_def["security"]["hash_method"].lower()
+        self.project.firmware_def[Key.SECURITY.value][Key.HASH_METHOD.value] = self.project.\
+                                    firmware_def[Key.SECURITY.value][Key.HASH_METHOD.value].lower()
 
         # Check that the algorith is valid (authorized values are md5 sha1 sha256)
-        if self.project.firmware_def["security"]["hash_method"] in "md5" "sha1" "sha256":
+        if self.project.firmware_def[Key.SECURITY.value][Key.HASH_METHOD.value] in \
+              [ Key.MD5.value, Key.SHA1.value, Key.SHA256.value]:
           # Output some fancy logs :)
           self.project.logging.info("Generating hash file " + self.project.firmware_filename + "." +
-                                    self.project.firmware_def["security"]["hash_method"])
+                                    self.project.firmware_def[Key.SECURITY.value]\
+                                                             [Key.HASH_METHOD.value])
 
           # Generate the hash tool call
-          cmd = self.project.firmware_def["security"]["hash_method"] + "sum " + '"'
+          cmd = self.project.firmware_def[Key.SECURITY.value][Key.HASH_METHOD.value] + "sum " + '"'
           cmd += self.project.firmware_filename + '" > "' + self.project.firmware_filename
-          cmd += "." + self.project.firmware_def["security"]["hash_method"] + '"'
+          cmd += "." + self.project.firmware_def[Key.SECURITY.value][Key.HASH_METHOD.value] + '"'
 
           # Execute the hash generation command
           self.execute_command(cmd)
@@ -133,7 +136,8 @@ class BuildFirmware(CliCommand):
         # Algorithm is unknown, output an error and exit
         else:
           self.project.logging.error("The hash-method is unknown (" +
-                                     self.project.firmware_def["security"]["hash_method"] + ")")
+                                     self.project.firmware_def[Key.SECURITY.value]\
+                                                              [Key.HASH_METHOD.value] + ")")
           exit(1)
 
       # Not defined, thus no hash generated,just log it
