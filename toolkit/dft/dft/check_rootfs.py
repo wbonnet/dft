@@ -32,6 +32,7 @@ import subprocess
 import stat
 import hashlib
 from cli_command import CliCommand
+from model import Key
 
 #
 #    Class CheckRootFS
