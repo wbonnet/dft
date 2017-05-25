@@ -35,10 +35,10 @@ import yaml
 
 # -----------------------------------------------------------------------------
 #
-# class DftKey
+# class Key
 #
 # -----------------------------------------------------------------------------
-class DftKey(Enum):
+class Key(Enum):
   """This class defines the valid keys to used to access infrmation from
   confiugration files. The keys are enumerated vlues defined by string. The string
   used are (understand 'must be') the same as the keys in yaml files.
@@ -90,6 +90,7 @@ class DftKey(Enum):
   DFT_BASE = "dft_base"
   DIRECTORIES = "directories"
   DIRECTORY = "directory"
+  DISTRIBUTIONS = "distributions"
   EMPTY = "empty"
   EXPECTED_RESULT = "expected_result"
   FACTORY_SETUP = "factory_setup"
@@ -102,11 +103,12 @@ class DftKey(Enum):
   FORCE_UID = "force_uid"
   FORMAT = "format"
   GEN_ANTIVIRUS_INFO = "gen_antivirus_info"
+  GEN_CONTENT_INFO = "generate_content_information"
   GEN_FILES_INFO = "gen_files_info"
   GEN_PACKAGES_INFO = "gen_packages_info"
+  GEN_ROOTKIT_INFO = "generate_rootkit_information"
   GEN_SECURITY_INFO = "gen_security_info"
   GEN_VULNERABILITIES_INFO = "gen_vulnerabilities_info"
-  GENERATE_CONTENT_INFORMATION = "generate_content_information"
   GENERATE_DEB = "generate_deb"
   GENERATE_SRC = "generate_src"
   GENERATE_VALIDITY_CHECK = "generate_validity_check"
@@ -117,12 +119,14 @@ class DftKey(Enum):
   IMAGE_WORKDIR = "image"
   INIT_FILENAME = "init_filename"
   INSTALL_MSSING_SOFTWARE = "install_mssing_software"
-  INSTALLATION_CONSSTRAINT = "installation_consstraint"
+  INSTALLATION_CONSTRAINT = "installation_constraint"
   INSTALLED_SIZE = "installed_size"
   JSON = "json"
   KEEP_BOOTSTRAP_FILES = "keep_bootstrap_files"
   KEEP_ROOTFS_HISTORY = "keep_rootfs_history"
   LABEL = "label"
+  LABEL_RESULT_FAIL = "[FAIL]"
+  LABEL_RESULT_OK = "[ OK ]"
   LAYOUT = "layout"
   LIMIT_TARGET_ARCH = "limit_target_arch"
   LIMIT_TARGET_VERSION = "limit_target_version"
@@ -135,6 +139,7 @@ class DftKey(Enum):
   MIN_VERSION = "min_version"
   MODE = "mode"
   MOUNT_OPTIONS = "mount_options"
+  MOUNTPOINT = "mountpoint"
   NAME = "name"
   NO_CONSTRAINT = "no_constraint"
   NO_DATABLOCK_COMPRESSION = "no_datablock_compression"
@@ -152,6 +157,7 @@ class DftKey(Enum):
   OPT_GEN_ROOTKIT_INFO = "--generate-rootkit-information"
   OPT_GEN_SECURITY_INFO = "--generate-security-information"
   OPT_GEN_VULNERABILITIES_INFO = "--generate-vulnerabilities-information"
+  OPT_HELP_LABEL = "Command to execute"
   OPT_KEEP_BOOTSTRAP_FILES = "--keep-bootstrap-files"
   OPT_LIMIT_ARCH = "--limit-arch"
   OPT_LIMIT_VERSION = "--limit-version"
@@ -194,6 +200,7 @@ class DftKey(Enum):
   SIZE = "size"
   SKIP_MISSING_SOFTWARE = "skip_missing_software"
   SQUASHFS = "squashfs"
+  SQUASHFS_FILE = "squashfs-file"
   STACK_DEFINITION = "stack_definition"
   STACK_ITEM = "stack_item"
   STACK_SCRIPT = "dft_stack_script.sh"
@@ -215,6 +222,7 @@ class DftKey(Enum):
   USE_FRAGMENTS = "use_fragments"
   USE_HOST_AV = "use_host_av"
   UTF8 = "utf-8"
+  VERSION = "version"
   VARIABLES = "variables"
   VULNERABILITIES = "vulnerabilities"
   WORKING_DIR = "working_dir"
@@ -301,11 +309,11 @@ class DftConfiguration(object):
         self.logging.debug(self.dft_configuration)
 
         # Check if path starts with ~ and need expension
-        if self.dft_configuration[DftKey.CONFIGURATION.value][DftKey.WORKING_DIR.value][0] == "~" \
-        and self.dft_configuration[DftKey.CONFIGURATION.value][DftKey.WORKING_DIR.value][1] == "/":
-          self.dft_configuration[DftKey.CONFIGURATION.value][DftKey.WORKING_DIR.value] = \
-                    os.path.expanduser(self.dft_configuration[DftKey.CONFIGURATION.value]\
-                    [DftKey.WORKING_DIR.value])
+        if self.dft_configuration[Key.CONFIGURATION.value][Key.WORKING_DIR.value][0] == "~" \
+        and self.dft_configuration[Key.CONFIGURATION.value][Key.WORKING_DIR.value][1] == "/":
+          self.dft_configuration[Key.CONFIGURATION.value][Key.WORKING_DIR.value] = \
+                    os.path.expanduser(self.dft_configuration[Key.CONFIGURATION.value]\
+                    [Key.WORKING_DIR.value])
 
         self.logging.debug(self.dft_configuration)
 
@@ -344,7 +352,7 @@ class ProjectDefinition(object):
     # Filename is mandatory, and is defaulted to project.yml if
     # not defined
     if filename is None:
-      self.project_name = DftKey.PROJECT_NAME.value
+      self.project_name = Key.PROJECT_NAME.value
     else:
       self.project_name = filename
 
@@ -408,8 +416,8 @@ class ProjectDefinition(object):
     """
 
     # Check if the project path is defined into the project file
-    if "project_path" in self.project_def[DftKey.CONFIGURATION.value]:
-      filename = self.project_def[DftKey.CONFIGURATION.value]["project_path"] + "/" + filename
+    if "project_path" in self.project_def[Key.CONFIGURATION.value]:
+      filename = self.project_def[Key.CONFIGURATION.value]["project_path"] + "/" + filename
     else:
       filename = os.path.dirname(self.project_name) + "/" + filename
 
@@ -449,88 +457,88 @@ class ProjectDefinition(object):
         self.project_def = yaml.load(working_file)
 
         # Expand ~ in path since it is not done automagically by Python
-        for key in {"dft_base", "project_path", DftKey.WORKING_DIR.value}:
+        for key in {"dft_base", "project_path", Key.WORKING_DIR.value}:
           # For iterate the key and check they are defined in the config file
-          if key in self.project_def[DftKey.CONFIGURATION.value]:
+          if key in self.project_def[Key.CONFIGURATION.value]:
             # Then chek if the single value field starts by "~/"
-            if self.project_def[DftKey.CONFIGURATION.value][key][0] == "~" and \
-               self.project_def[DftKey.CONFIGURATION.value][key][1] == "/":
+            if self.project_def[Key.CONFIGURATION.value][key][0] == "~" and \
+               self.project_def[Key.CONFIGURATION.value][key][1] == "/":
               # If yes modifiy its value using expenduser ( replace ~ by /home/foo)
-              self.project_def[DftKey.CONFIGURATION.value][key] = \
-                              os.path.expanduser(self.project_def[DftKey.CONFIGURATION.value][key])
+              self.project_def[Key.CONFIGURATION.value][key] = \
+                              os.path.expanduser(self.project_def[Key.CONFIGURATION.value][key])
 
         # Expand ~ in path since it is not done automagically by Python
-        for key in {DftKey.ADDITIONAL_ROLES.value}:
+        for key in {Key.ADDITIONAL_ROLES.value}:
           # For iterate the key and check they are defined in the config file
-          if key in self.project_def[DftKey.CONFIGURATION.value]:
+          if key in self.project_def[Key.CONFIGURATION.value]:
             # Then iterate the list of values it contains
-            for counter in range(len(self.project_def[DftKey.CONFIGURATION.value][key])):
+            for counter in range(len(self.project_def[Key.CONFIGURATION.value][key])):
               # Then chek if the valuestarts by "~/"
-              if self.project_def[DftKey.CONFIGURATION.value][key][counter][0] == "~" and \
-                 self.project_def[DftKey.CONFIGURATION.value][key][counter][1] == "/":
+              if self.project_def[Key.CONFIGURATION.value][key][counter][0] == "~" and \
+                 self.project_def[Key.CONFIGURATION.value][key][counter][1] == "/":
                 # If yes modifiy its value using expenduser ( replace ~ by /home/foo)
-                self.project_def[DftKey.CONFIGURATION.value][key][counter] = \
-                      os.path.expanduser(self.project_def[DftKey.CONFIGURATION.value][key][counter])
+                self.project_def[Key.CONFIGURATION.value][key][counter] = \
+                      os.path.expanduser(self.project_def[Key.CONFIGURATION.value][key][counter])
 
       # Load the repositories sub configuration files
-      if DftKey.REPOSITORIES.value in self.project_def[DftKey.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project_def[DftKey.PROJECT_DEFINITION.value]\
-                                               [DftKey.REPOSITORIES.value][0])
+      if Key.REPOSITORIES.value in self.project_def[Key.PROJECT_DEFINITION.value]:
+        filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
+                                               [Key.REPOSITORIES.value][0])
         with open(filename, 'r') as working_file:
           self.repositories_def = yaml.load(working_file)
 
       # Load the rootfs sub configuration files
-      if "rootfs" in self.project_def[DftKey.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project_def[DftKey.PROJECT_DEFINITION.value]\
+      if "rootfs" in self.project_def[Key.PROJECT_DEFINITION.value]:
+        filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
                                                                ["rootfs"][0])
         with open(filename, 'r') as working_file:
           self.rootfs_def = yaml.load(working_file)
 
       # Load the firmware sub configuration files
-      if "firmware" in self.project_def[DftKey.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project_def[DftKey.PROJECT_DEFINITION.value]\
+      if "firmware" in self.project_def[Key.PROJECT_DEFINITION.value]:
+        filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
                                                                ["firmware"][0])
         with open(filename, 'r') as working_file:
           self.firmware_def = yaml.load(working_file)
 
       # Load the bootloader sub configuration files
-      if "bootloader" in self.project_def[DftKey.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project_def[DftKey.PROJECT_DEFINITION.value]\
+      if "bootloader" in self.project_def[Key.PROJECT_DEFINITION.value]:
+        filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
                                                                ["bootloader"][0])
         with open(filename, 'r') as working_file:
           self.bootloader_def = yaml.load(working_file)
 
       # Load the image sub configuration files
-      if "image" in self.project_def[DftKey.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project_def[DftKey.PROJECT_DEFINITION.value]\
+      if "image" in self.project_def[Key.PROJECT_DEFINITION.value]:
+        filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
                                                                ["image"][0])
         with open(filename, 'r') as working_file:
           self.image_def = yaml.load(working_file)
 
       # Load the check sub configuration files
-      if "check" in self.project_def[DftKey.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project_def[DftKey.PROJECT_DEFINITION.value]\
+      if "check" in self.project_def[Key.PROJECT_DEFINITION.value]:
+        filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
                                                                ["check"][0])
         with open(filename, 'r') as working_file:
           self.check_def = yaml.load(working_file)
 
       # Load the stripping sub configuration files
-      if "stripping" in self.project_def[DftKey.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project_def[DftKey.PROJECT_DEFINITION.value]\
+      if "stripping" in self.project_def[Key.PROJECT_DEFINITION.value]:
+        filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
                                                                ["stripping"][0])
         with open(filename, 'r') as working_file:
           self.stripping_def = yaml.load(working_file)
 
       # Load the check sub configuration files
-      if "content_information" in self.project_def[DftKey.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project_def[DftKey.PROJECT_DEFINITION.value]\
+      if "content_information" in self.project_def[Key.PROJECT_DEFINITION.value]:
+        filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
                                                                ["content_information"][0])
         with open(filename, 'r') as working_file:
           self.content_information_def = yaml.load(working_file)
 
       # Load the list of variables files
-      if "variables" in self.project_def[DftKey.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project_def[DftKey.PROJECT_DEFINITION.value]\
+      if "variables" in self.project_def[Key.PROJECT_DEFINITION.value]:
+        filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
                                                                ["variables"][0])
         with open(filename, 'r') as working_file:
           self.variables_def = yaml.load(working_file)
@@ -541,24 +549,24 @@ class ProjectDefinition(object):
       #
 
       # Generate the cache archive filename
-      if "rootfs_generator_cachedirname" in self.project_def[DftKey.CONFIGURATION.value]:
-        self.rootfs_generator_cachedirname = self.project_def[DftKey.CONFIGURATION.value]\
+      if "rootfs_generator_cachedirname" in self.project_def[Key.CONFIGURATION.value]:
+        self.rootfs_generator_cachedirname = self.project_def[Key.CONFIGURATION.value]\
                                                              ["rootfs_generator_cachedirname"]
       else:
         self.logging.debug("configuration/rootfs_generator_cachedirname is not defined, using /tmp\
                             as default value")
         self.rootfs_generator_cachedirname = "/tmp/"
 
-      if DftKey.WORKING_DIR.value in self.project_def[DftKey.CONFIGURATION.value]:
-        self.project_base_workdir = self.project_def[DftKey.CONFIGURATION.value]\
-                                                    [DftKey.WORKING_DIR.value]
-        self.project_base_workdir += "/" + self.project_def[DftKey.CONFIGURATION.value]\
+      if Key.WORKING_DIR.value in self.project_def[Key.CONFIGURATION.value]:
+        self.project_base_workdir = self.project_def[Key.CONFIGURATION.value]\
+                                                    [Key.WORKING_DIR.value]
+        self.project_base_workdir += "/" + self.project_def[Key.CONFIGURATION.value]\
                                                            ["project_name"]
       else:
         self.logging.debug("configuration/working_dir is not defined, using /tmp/dft as default \
                             value")
         self.project_base_workdir = "/tmp/dft/"
-        self.project_base_workdir += self.project_def[DftKey.CONFIGURATION.value]["project_name"]
+        self.project_base_workdir += self.project_def[Key.CONFIGURATION.value]["project_name"]
 
       # Defines path for subcommand
       self.rootfs_base_workdir = self.project_base_workdir + "/rootfs"
@@ -569,8 +577,8 @@ class ProjectDefinition(object):
 
       # Retrieve the target architecture
 # TODO : handle multiple archs
-      self.set_arch(self.project_def[DftKey.PROJECT_DEFINITION.value]\
-                                    [DftKey.ARCHITECTURES.value][0])
+      self.set_arch(self.project_def[Key.PROJECT_DEFINITION.value]\
+                                    [Key.ARCHITECTURES.value][0])
 
       # Target version to use when building the debootstrap. It has to be
       # a Debian version (jessie, stretch, etc.)
@@ -581,7 +589,7 @@ class ProjectDefinition(object):
 
       # Defines the full path and filename to the firmware
       self.firmware_filename = self.firmware_directory + "/"
-      self.firmware_filename += self.project_def[DftKey.CONFIGURATION.value]["project_name"]
+      self.firmware_filename += self.project_def[Key.CONFIGURATION.value]["project_name"]
       self.firmware_filename += ".squashfs"
 
       # Defines the full path and filename to the init used by firmware
@@ -612,7 +620,7 @@ class ProjectDefinition(object):
 # TODO : handle multiple archs / version
     self.archive_filename = self.rootfs_generator_cachedirname + "/" + self.target_arch
     self.archive_filename += "-" +  self.target_version + "-"
-    self.archive_filename += self.project_def[DftKey.CONFIGURATION.value]["project_name"]
+    self.archive_filename += self.project_def[Key.CONFIGURATION.value]["project_name"]
     self.archive_filename += ".tar"
 
     # Generates the path to the rootfs mountpoint
@@ -642,7 +650,7 @@ class ProjectDefinition(object):
 # TODO : handle multiple archs / version
     self.archive_filename = self.rootfs_generator_cachedirname + "/" + self.target_arch
     self.archive_filename += "-" +  self.target_version + "-"
-    self.archive_filename += self.project_def[DftKey.CONFIGURATION.value]["project_name"]
+    self.archive_filename += self.project_def[Key.CONFIGURATION.value]["project_name"]
     self.archive_filename += ".tar"
 
     # Generates the path to the rootfs mountpoint
