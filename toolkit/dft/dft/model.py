@@ -204,7 +204,7 @@ class Key(Enum):
   SIZE = "size"
   SKIP_MISSING_SOFTWARE = "skip_missing_software"
   SQUASHFS = "squashfs"
-  SQUASHFS_FILE = "squashfs-file"
+  SQUASHFS_FILE = "squashfs_file"
   STACK_DEFINITION = "stack_definition"
   STACK_ITEM = "stack_item"
   STACK_SCRIPT = "dft_stack_script.sh"
