@@ -28,7 +28,7 @@ cli targets.
 import os
 import subprocess
 import shutil
-from model import DftKey
+from model import Key
 
 #
 #    Class CliCommand
