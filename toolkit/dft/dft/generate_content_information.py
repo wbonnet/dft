@@ -378,7 +378,7 @@ class GenerateContentInformation(CliCommand):
 
     # Initialize the output writer for packages content generation
     self.output_writer.initialize(Key.FILES.value)
-h
+
     # Flush all pending output and close stream or file
     self.output_writer.flush_and_close()
 
