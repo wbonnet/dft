@@ -133,7 +133,7 @@ project_definition:
   variables:
     - variables.yml
 
-  # Definition of the list of target architectures. Firmware will be generated for
-  # each of the architecture in this list
-  architectures:
-    - amd64
+  # Definition of the list of targets, with architectures, versions and optionaly board.
+  # Firmware will be generated for each of the architecture in this list
+  target:
+    - { architecture: amd64 , version: stretch , board: generic-x86_64 }
