@@ -68,6 +68,7 @@ class Key(Enum):
   BLACKLISTED_ARCH = "blacklisted_arch"
   BLACKLISTED_VERSION = "blacklisted_version"
   BLOCK_SIZE = "block_size"
+  BOARD = "board"
   BOOTLOADER = "bootloader"
   BOOTLOADER_WORKDIR = "bootloader"
   BUILD_BOOTLOADER = "build_bootloader"
@@ -112,7 +113,6 @@ class Key(Enum):
   GENERATE_DEB = "generate_deb"
   GENERATE_SRC = "generate_src"
   GENERATE_VALIDITY_CHECK = "generate_validity_check"
-  GENERATOR_CACHE_DIR = "generator_cache_dir"
   GROUP = "group"
   HASH_METHOD = "hash_method"
   IMAGE = "image"
@@ -130,6 +130,7 @@ class Key(Enum):
   LABEL_RESULT_OK = "[ OK ]"
   LAYOUT = "layout"
   LIMIT_TARGET_ARCH = "limit_target_arch"
+  LIMIT_TARGET_BOARD = "limit_target_board"
   LIMIT_TARGET_VERSION = "limit_target_version"
   LOG_LEVEL = "log_level"
   LYNIS = "lynis"
@@ -162,12 +163,11 @@ class Key(Enum):
   OPT_HELP_LABEL = "Command to execute"
   OPT_KEEP_BOOTSTRAP_FILES = "--keep-bootstrap-files"
   OPT_LIMIT_ARCH = "--limit-arch"
+  OPT_LIMIT_BOARD = "--limit-board"
   OPT_LIMIT_VERSION = "--limit-version"
   OPT_LOG_LEVEL = "--log-level"
   OPT_OVERRIDE_DEBIAN_MIRROR = "--override-debian-mirror"
   OPT_PROJECT_FILE = "--project-file"
-  OPT_UPDATE_CACHE_ARCHIVE = "--update-cache-archive"
-  OPT_USE_CACHE_ARCHIVE = "--use-cache-archive"
   OUTPUT = "output"
   OUTPUT_PKG_ARCHITECTURE = "output_pkg_architecture"
   OUTPUT_PKG_DESCRIPTION = "output_pkg_description"
@@ -186,7 +186,7 @@ class Key(Enum):
   PATH = "path"
   PROJECT_DEFINITION = "project_definition"
   PROJECT_FILE = "project_file"
-  PROJECT_NAME = "project.yml"
+  PROJECT_NAME = "project_name"
   PROJECT_PATH = "project_path"
   PROJECT_WORKDIR = "project_base_workdir"
   REMOVE_VALIDITY_CHECK = "remove_validity_check"
@@ -216,13 +216,10 @@ class Key(Enum):
   SYMLINK = "symlink"
   TARGET = "target"
   TARGET_PATH = "target_path"
-  TARGET_VERSIONS = "target_versions"
   TMPFS = "tmpfs"
   TYPE = "type"
-  UPDATE_CACHE_ARCHIVE = "update_cache_archive"
   UPDATE_DATABASE = "update_database"
   URL = "url"
-  USE_CACHE_ARCHIVE = "use_cache_archive"
   USE_FRAGMENTS = "use_fragments"
   USE_HOST_AV = "use_host_av"
   UTF8 = "utf-8"
@@ -246,7 +243,7 @@ class DftConfiguration(object):
   """This class defines default configuration for the DFT toolchain
 
   The tool configuration contains environment variables used to define
-  information such as default root working path, cache directories, etc.
+  information such as default root working path, etc.
 
   The values stored in this object are read from the following sources,
   in order of priority (from the highest priority to the lowest).
@@ -267,18 +264,10 @@ class DftConfiguration(object):
     else:
       self.configuration_file = filename
 
-    # Boolean used to flag if the cache archive should used instead
-    # of doing a real debootstrap installation
-    self.use_cache_archive = False
-
-    # Boolean used to flag if the cache archive should used updated
-    # after doing a real debootstrap installation
-    self.update_cache_archive = False
-
     # Debootstrap target to use (minbase or buildd)
     self.debootstrap_target = "minbase"
 
-    # Path to the default directory ued to store rootfs and cache archives
+    # Path to the default directory ued to store rootfs
     # It defaults to /tmp
 # TODO : This may lead to full file system, should be changed, may be
 # a mandatory value in the config file ? => change to None
@@ -376,6 +365,7 @@ class ProjectDefinition(object):
 
     # Defines member variables
     self.target_arch = "unknown"
+    self.target_board = "unknown"
     self.target_version = "unknown"
     self.archive_filename = None
     self.rootfs_mountpoint = None
@@ -393,7 +383,6 @@ class ProjectDefinition(object):
     self.project_base_workdir = None
     self.project_def = None
     self.repositories_def = None
-    self.rootfs_generator_cachedirname = None
     self.stripping_def = None
     self.variables_def = None
 
@@ -420,8 +409,8 @@ class ProjectDefinition(object):
     """
 
     # Check if the project path is defined into the project file
-    if "project_path" in self.project_def[Key.CONFIGURATION.value]:
-      filename = self.project_def[Key.CONFIGURATION.value]["project_path"] + "/" + filename
+    if Key.PROJECT_PATH.value in self.project_def[Key.CONFIGURATION.value]:
+      filename = self.project_def[Key.CONFIGURATION.value][Key.PROJECT_PATH.value] + "/" + filename
     else:
       filename = os.path.dirname(self.project_name) + "/" + filename
 
@@ -461,7 +450,7 @@ class ProjectDefinition(object):
         self.project_def = yaml.load(working_file)
 
         # Expand ~ in path since it is not done automagically by Python
-        for key in {"dft_base", "project_path", Key.WORKING_DIR.value}:
+        for key in {"dft_base", Key.PROJECT_PATH.value, Key.WORKING_DIR.value}:
           # For iterate the key and check they are defined in the config file
           if key in self.project_def[Key.CONFIGURATION.value]:
             # Then chek if the single value field starts by "~/"
@@ -492,58 +481,58 @@ class ProjectDefinition(object):
           self.repositories_def = yaml.load(working_file)
 
       # Load the rootfs sub configuration files
-      if "rootfs" in self.project_def[Key.PROJECT_DEFINITION.value]:
+      if Key.ROOTFS.value in self.project_def[Key.PROJECT_DEFINITION.value]:
         filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
-                                                               ["rootfs"][0])
+                                                               [Key.ROOTFS.value][0])
         with open(filename, 'r') as working_file:
           self.rootfs_def = yaml.load(working_file)
 
       # Load the firmware sub configuration files
-      if "firmware" in self.project_def[Key.PROJECT_DEFINITION.value]:
+      if Key.FIRMWARE.value in self.project_def[Key.PROJECT_DEFINITION.value]:
         filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
-                                                               ["firmware"][0])
+                                                               [Key.FIRMWARE.value][0])
         with open(filename, 'r') as working_file:
           self.firmware_def = yaml.load(working_file)
 
       # Load the bootloader sub configuration files
-      if "bootloader" in self.project_def[Key.PROJECT_DEFINITION.value]:
+      if Key.BOOTLOADER.value in self.project_def[Key.PROJECT_DEFINITION.value]:
         filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
-                                                               ["bootloader"][0])
+                                                               [Key.BOOTLOADER.value][0])
         with open(filename, 'r') as working_file:
           self.bootloader_def = yaml.load(working_file)
 
       # Load the image sub configuration files
-      if "image" in self.project_def[Key.PROJECT_DEFINITION.value]:
+      if Key.IMAGE.value in self.project_def[Key.PROJECT_DEFINITION.value]:
         filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
-                                                               ["image"][0])
+                                                               [Key.IMAGE.value][0])
         with open(filename, 'r') as working_file:
           self.image_def = yaml.load(working_file)
 
       # Load the check sub configuration files
-      if "check" in self.project_def[Key.PROJECT_DEFINITION.value]:
+      if Key.CHECK.value in self.project_def[Key.PROJECT_DEFINITION.value]:
         filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
-                                                               ["check"][0])
+                                                               [Key.CHECK.value][0])
         with open(filename, 'r') as working_file:
           self.check_def = yaml.load(working_file)
 
       # Load the stripping sub configuration files
-      if "stripping" in self.project_def[Key.PROJECT_DEFINITION.value]:
+      if Key.STRIPPING.value in self.project_def[Key.PROJECT_DEFINITION.value]:
         filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
-                                                               ["stripping"][0])
+                                                               [Key.STRIPPING.value][0])
         with open(filename, 'r') as working_file:
           self.stripping_def = yaml.load(working_file)
 
       # Load the check sub configuration files
-      if "content_information" in self.project_def[Key.PROJECT_DEFINITION.value]:
+      if Key.CONTENT_INFORMATION.value in self.project_def[Key.PROJECT_DEFINITION.value]:
         filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
-                                                               ["content_information"][0])
+                                                               [Key.CONTENT_INFORMATION.value][0])
         with open(filename, 'r') as working_file:
           self.content_information_def = yaml.load(working_file)
 
       # Load the list of variables files
-      if "variables" in self.project_def[Key.PROJECT_DEFINITION.value]:
+      if Key.VARIABLES.value in self.project_def[Key.PROJECT_DEFINITION.value]:
         filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
-                                                               ["variables"][0])
+                                                               [Key.VARIABLES.value][0])
         with open(filename, 'r') as working_file:
           self.variables_def = yaml.load(working_file)
 
@@ -552,25 +541,16 @@ class ProjectDefinition(object):
       # configuration variables
       #
 
-      # Generate the cache archive filename
-      if "rootfs_generator_cachedirname" in self.project_def[Key.CONFIGURATION.value]:
-        self.rootfs_generator_cachedirname = self.project_def[Key.CONFIGURATION.value]\
-                                                             ["rootfs_generator_cachedirname"]
-      else:
-        self.logging.debug("configuration/rootfs_generator_cachedirname is not defined, using /tmp\
-                            as default value")
-        self.rootfs_generator_cachedirname = "/tmp/"
-
       if Key.WORKING_DIR.value in self.project_def[Key.CONFIGURATION.value]:
         self.project_base_workdir = self.project_def[Key.CONFIGURATION.value]\
                                                     [Key.WORKING_DIR.value]
         self.project_base_workdir += "/" + self.project_def[Key.CONFIGURATION.value]\
-                                                           ["project_name"]
+                                                           [Key.PROJECT_NAME.value]
       else:
         self.logging.debug("configuration/working_dir is not defined, using /tmp/dft as default \
                             value")
         self.project_base_workdir = "/tmp/dft/"
-        self.project_base_workdir += self.project_def[Key.CONFIGURATION.value]["project_name"]
+        self.project_base_workdir += self.project_def[Key.CONFIGURATION.value][Key.PROJECT_NAME.value]
 
       # Defines path for subcommand
       self.rootfs_base_workdir = self.project_base_workdir + "/rootfs"
@@ -579,21 +559,23 @@ class ProjectDefinition(object):
       self.firmware_base_workdir = self.project_base_workdir + "/firmware"
       self.content_base_workdir = self.project_base_workdir + "/content"
 
-      # Retrieve the target architecture
-# TODO : handle multiple archs
-      self.set_arch(self.project_def[Key.PROJECT_DEFINITION.value]\
-                                    [Key.ARCHITECTURES.value][0])
-
-      # Target version to use when building the debootstrap. It has to be
-      # a Debian version (jessie, stretch, etc.)
-        # Only set this variable if it is not defined. If it is defined, it means it has been
-        # overriden from command line.
-        # TODO seems not so clean... should be refactored
-      self.set_version(self.rootfs_def["target_versions"][0])
+      # Retrieve the target components (version and board)
+      if Key.TARGET.value in self.project_def[Key.PROJECT_DEFINITION.value]:
+        # TODO: to remove since the board defines it
+        self.set_arch(self.project_def[Key.PROJECT_DEFINITION.value]\
+                                      [Key.TARGET.value][0][Key.ARCHITECTURE.value])
+        # Target board to use when building the bootloader and installing kernel. It has to be
+        # a board defined under the bsp directory
+        self.set_board(self.project_def[Key.PROJECT_DEFINITION.value]\
+                                      [Key.TARGET.value][0][Key.BOARD.value])
+        # Target version to use when building the debootstrap. It has to be
+        # a Debian version (jessie, stretch, etc.)
+        self.set_version(self.project_def[Key.PROJECT_DEFINITION.value]\
+                                      [Key.TARGET.value][0][Key.VERSION.value])
 
       # Defines the full path and filename to the firmware
       self.firmware_filename = self.firmware_directory + "/"
-      self.firmware_filename += self.project_def[Key.CONFIGURATION.value]["project_name"]
+      self.firmware_filename += self.project_def[Key.CONFIGURATION.value][Key.PROJECT_NAME.value]
       self.firmware_filename += ".squashfs"
 
       # Defines the full path and filename to the init used by firmware
@@ -608,6 +590,17 @@ class ProjectDefinition(object):
 
   # ---------------------------------------------------------------------------
   #
+  # set_board
+  #
+  # ---------------------------------------------------------------------------
+  def set_board(self, version):
+    """ XXX
+    """
+
+    print("TODO: code the set_board")
+
+  # ---------------------------------------------------------------------------
+  #
   # set_version
   #
   # ---------------------------------------------------------------------------
@@ -619,13 +612,6 @@ class ProjectDefinition(object):
 
     # Defines the version attribute
     self.target_version = version
-
-    # Generate the archive filename
-# TODO : handle multiple archs / version
-    self.archive_filename = self.rootfs_generator_cachedirname + "/" + self.target_arch
-    self.archive_filename += "-" +  self.target_version + "-"
-    self.archive_filename += self.project_def[Key.CONFIGURATION.value]["project_name"]
-    self.archive_filename += ".tar"
 
     # Generates the path to the rootfs mountpoint
     # Stores the path to the rootfs mountpoint used by debootstrap
@@ -649,13 +635,6 @@ class ProjectDefinition(object):
 
     # Defines the arch attribute
     self.target_arch = arch
-
-    # Generate the archive filename
-# TODO : handle multiple archs / version
-    self.archive_filename = self.rootfs_generator_cachedirname + "/" + self.target_arch
-    self.archive_filename += "-" +  self.target_version + "-"
-    self.archive_filename += self.project_def[Key.CONFIGURATION.value]["project_name"]
-    self.archive_filename += ".tar"
 
     # Generates the path to the rootfs mountpoint
     # Stores the path to the rootfs mountpoint used by debootstrap

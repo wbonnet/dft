@@ -158,6 +158,16 @@ x factory_setup                    Apply some extra factory setup before generat
                              help="limit the list of target arch to process (comma separated list"
                                   " of arch eg: arch1,arch2)")
 
+    # Overrides the target board used to build the rootfs. Board to
+    # use is limited it to a given list of arch. Boards not defined
+    # in the configuration file can be added with this parameter
+# TODO: parse the list of argument. So far only one value is handled
+    self.parser.add_argument(Key.OPT_LIMIT_BOARD.value,
+                             action='store',
+                             dest=Key.LIMIT_TARGET_BOARD.value,
+                             help="limit the list of target board to process (comma separated "
+                                  "list of versions eg: generic_x86-64, raspberry-pi-3, odroid-xu4)")
+
     # Overrides the target version used to build the rootfs. Version to
     # use is limited it to a given list of arch. Versions not defined
     # in the configuration file can be added with this parameter
@@ -167,29 +177,6 @@ x factory_setup                    Apply some extra factory setup before generat
                              dest=Key.LIMIT_TARGET_VERSION.value,
                              help="limit the list of target version to process (comma separated "
                                   "list of versions eg: jessie,stretch)")
-
-    # Activate the use of the rootfs cache archive. When building a rootfs
-    # with debootstrap, having this option enable will make DFT look for
-    # an existing cache archive, an extract it instead of doing a fresh
-    # debootstrap installation
-    self.parser.add_argument(Key.OPT_USE_CACHE_ARCHIVE.value,
-                             action='store_true',
-                             dest=Key.USE_CACHE_ARCHIVE.value,
-                             help="activate the use of an existing cache archive (extract archive "
-                                  "instead of running debootstrap). \nThis option does nothing if "
-                                  "the cache archive do no exist. In this case, debootstrap will "
-                                  "be \nlaunched and the missing archive will not be created")
-
-    # Activate the use of the rootfs cache archive. When building a rootfs
-    # with debootstrap, having this option enable will make DFT look for
-    # an existing cache archive, an extract it instead of doing a fresh
-    # debootstrap installation
-    self.parser.add_argument(Key.OPT_UPDATE_CACHE_ARCHIVE.value,
-                             action='store_true',
-                             dest=Key.UPDATE_CACHE_ARCHIVE.value,
-                             help="update the cache archive after building a rootfs with "
-                                  "debootstrap. Existing archive will\nbe deleted if it already "
-                                  "exist, or it will be created if missing")
 
     # Override the list of mirrors defined in the configuration file.
     # This option defines a single mirror, not a full list of mirrors.
@@ -343,7 +330,7 @@ x factory_setup                    Apply some extra factory setup before generat
 
     # Project definition file defines environnement shared between
     # the different DFT commands (such as path to diirectory storing)
-    # cache archives, temporary working dir, temp dir name patterns, etc.)
+    # temporary working dir, temp dir name patterns, etc.)
     self.parser.add_argument(Key.OPT_PROJECT_FILE.value,
                              action='store',
                              dest=Key.PROJECT_FILE.value,
@@ -470,26 +457,19 @@ x factory_setup                    Apply some extra factory setup before generat
         self.project.project_def[Key.PROJECT_DEFINITION.value][Key.DEBOOTSTRAP_REPOSITORY.value] = \
                                    self.args.override_debian_mirror
 
-    if self.args.update_cache_archive != None:
-      if self.args.update_cache_archive != self.project.dft.update_cache_archive:
-        self.project.logging.debug("Overriding update_cache_archive with CLI value : %s => %s",
-                                   self.project.dft.update_cache_archive,
-                                   self.args.update_cache_archive)
-        self.project.dft.update_cache_archive = self.args.update_cache_archive
-
-    if self.args.use_cache_archive != None:
-      if self.args.use_cache_archive != self.project.dft.use_cache_archive:
-        self.project.logging.debug("Overriding use_cache_archive with CLI value : %s => %s",
-                                   self.project.dft.use_cache_archive,
-                                   self.args.use_cache_archive)
-        self.project.dft.use_cache_archive = self.args.use_cache_archive
-
     if self.args.limit_target_version != None:
       if self.args.limit_target_version != self.project.target_version:
         self.project.logging.debug("Overriding target_version with CLI value : %s => %s",
                                    self.project.target_version,
                                    self.args.limit_target_version)
         self.project.set_version(self.args.limit_target_version)
+
+    if self.args.limit_target_board != None:
+      if self.args.limit_target_board != self.project.target_board:
+        self.project.logging.debug("Overriding target_board with CLI value : %s => %s",
+                                   self.project.target_doard,
+                                   self.args.limit_target_board)
+        self.project.set_board(self.args.limit_target_board)
 
     if self.args.limit_target_arch != None:
       if self.args.limit_target_arch != self.project.target_arch:

@@ -81,9 +81,7 @@ class BuildRootFS(CliCommand):
     It calls dedicated method for each step. The main steps are :
 
     . setting up working directory
-    . extracting cache archive content or running debootstrap
     . setup QEMU and run stage 2 if needed
-    . update cache if needed
     . deploy DFT Ansible templates, and run Ansible to do confiugration
     . cleanup installation files
     . cleanup QEMU if needed
@@ -117,20 +115,8 @@ class BuildRootFS(CliCommand):
     if not os.path.exists(dft_target_path):
       os.makedirs(dft_target_path)
 
-    # Check if the archive has to be used instead of doing a debootstraping
-    # for real. Only if the archive exist...
-    if self.project.dft.use_cache_archive and self.cache_archive_is_available:
-      self.fake_debootstrap_rootfs()
-    else:
-      # In any other cases, do a real debootstrap call
-      self.generate_debootstrap_rootfs()
-
-    # Test if the archive has to be updated
-    if self.project.dft.update_cache_archive:
-      # But only do it if we haven't bee using the cache, or it
-      # would be extracted, then archived again.
-      if self.project.dft.use_cache_archive:
-        self.update_rootfs_archive()
+    # Do the debootstrap call
+    self.generate_debootstrap_rootfs()
 
     # Launch Ansible to install roles identified in configuration file
     self.install_packages()
@@ -307,62 +293,6 @@ class BuildRootFS(CliCommand):
 
     sudo_command = "sudo mv -f " + working_file.name + " " + filepath
     self.execute_command(sudo_command)
-
-
-  # -------------------------------------------------------------------------
-  #
-  # update_rootfs_archive
-  #
-  # -------------------------------------------------------------------------
-  def update_rootfs_archive(self):
-    """This methods update (delete then recreate) the rootfs archive after
-    doing a real debootstrap installation.
-
-    Archive is not updated if cache has been used instead of debootstraping
-    otherwise it would generate the same archive"""
-    logging.info("starting to update rootfs archive")
-
-    # Remove existing archive before generating the new one
-    try:
-      if os.path.isfile(self.project.archive_filename):
-        logging.info("removing previous archive file : " + self.project.archive_filename)
-        os.remove(self.project.archive_filename)
-
-    # Catch file removal exceptions
-    except OSError as exception:
-      logging.critical("Error: %s - %s.", exception.filename, exception.strerror)
-      self.cleanup_installation_files()
-      exit(1)
-
-    # Create the new archive
-    cache_archive = tarfile.open(self.project.archive_filename)
-    cache_archive.add(name=self.project.rootfs_mountpoint)
-    cache_archive.close()
-
-
-
-  # -------------------------------------------------------------------------
-  #
-  # fake_debootstrap_rootfs
-  #
-  # -------------------------------------------------------------------------
-  def fake_debootstrap_rootfs(self):
-    """ This method simulates the deboootstrap call by extracting the content
-    of a cache archive.
-    """
-    logging.info("starting to fake generate debootstrap rootfs")
-
-    # Check that the archive exists
-    if not os.path.isfile(self.project.archive_filename):
-      logging.warning("cache has been activate and archive file does not exist : "
-                      + self.project.archive_filename)
-      return False
-
-    # Extract tar file to rootfs mountpoint
-    logging.info("extracting archive : " + self.project.archive_filename)
-    cache_archive = tarfile.open(self.project.archive_filename)
-    cache_archive.extractall(path=self.project.rootfs_mountpoint)
-    cache_archive.close()
 
 
 
