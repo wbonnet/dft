@@ -719,5 +719,5 @@ class ProjectDefinition(object):
     the value of current target (arch, board name and version).
     """
 
-    # Compute the value of the rootfs_mountpoint
+    # Compute the value of the rootfs_mountpoint and return it to the caller
     return self.rootfs_base_workdir + "/" +  self.__get_target_directory(0)
