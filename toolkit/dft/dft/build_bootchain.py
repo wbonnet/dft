@@ -21,7 +21,7 @@
 #
 #
 
-""" This module implements the functionnalities needed to build the bootloader chain.
+""" This module implements the functionnalities needed to build the bootchain chain.
 This chain contains uboot, kernel; initramfs and DTB.
 """
 
@@ -30,10 +30,10 @@ from cli_command import CliCommand
 from model import Key
 
 #
-#    Class BuildBootloader
+#    Class Buildbootchain
 #
-class BuildBootloader(CliCommand):
-  """This class implements method needed to generate the Bootloaer chain.
+class BuildBootChain(CliCommand):
+  """This class implements method needed to generate the boot chain.
 
   This chain includes :
     . uboot or grub (depending on architecture)
@@ -56,11 +56,11 @@ class BuildBootloader(CliCommand):
 
   # -------------------------------------------------------------------------
   #
-  # build_image
+  # build_bootchain
   #
   # -------------------------------------------------------------------------
-  def build_bootloader(self):
-    """This method implement the business logic of bootloader generation.
+  def build_bootchain(self):
+    """This method implement the business logic of bootchain generation.
     botloader cntains the kernel itself, uboot, dtb files etc.
 
     It calls dedicated method for each step. The main steps are :

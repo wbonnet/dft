@@ -44,7 +44,7 @@
 configuration:
   # Defines the root of the working directories. A dirctory named after
   # project name will be created under this path, and subdirectories used to
-  # store rootfs, bootloader, image, etc will be created
+  # store rootfs, bootchain, image, etc will be created
   working_dir: "~/Devel/dft/working_dir"
 
   # Defines the project name. Mostly used for output and directories creation

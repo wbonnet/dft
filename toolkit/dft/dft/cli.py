@@ -34,7 +34,8 @@ import build_rootfs
 import model
 from model import Key
 import assemble_firmware
-import build_bootloader
+import build_bootchain
+import install_bootchain
 import build_image
 import build_firmware
 import check_rootfs
@@ -61,7 +62,7 @@ class Cli(object):
     """
 
     # Current version
-    self.version = "0.3.0"
+    self.version = "0.3.1"
 
     # Create the internal parser from argparse
     self.parser = argparse.ArgumentParser(description=textwrap.dedent('''\
@@ -72,8 +73,9 @@ DFT is a collection of tools used to create Debian based firmwares
 Available commands are :
 ? assemble_firmware                Create a firmware from a rootfs and generate the configuration files used to loading after booting
 . build_rootfs                     Generate a debootstrap from a Debian repository, install and configure required packages
-? build_bootloader                 Build the bootloader toolchain (kernel, initramfs, grub or uboot)
-? build_image                      Build the disk image from the firmware (or rootfs) and bootloader toolchain
+? build_bootchain                  Build the bootchain (kernel, initramfs, grub or uboot)
+? install_bootchain                Install the bootchain (kernel, initramfs, grub or uboot) in the rootfs
+? build_image                      Build the disk image from the firmware (or rootfs) and bootchain
 . build_firmware                   Build the firmware configuration files and scripts used to load in memory the firmware
 . check_rootfs                     Control the content of the rootfs rootfs after its generation (debsecan and openscap)
 x factory_setup                    Apply some extra factory setup before generating the firmware
@@ -110,8 +112,10 @@ x factory_setup                    Apply some extra factory setup before generat
       self.__add_parser_assemble_firmware()
     elif self.command == Key.BUILD_ROOTFS.value:
       self.__add_parser_build_rootfs()
-    elif self.command == Key.BUILD_BOOTLOADER.value:
-      self.__add_parser_build_bootloader()
+    elif self.command == Key.BUILD_BOOTCHAIN.value:
+      self.__add_parser_build_bootchain()
+    elif self.command == Key.INSTALL_BOOTCHAIN.value:
+      self.__add_parser_install_bootchain()
     elif self.command == Key.BUILD_IMAGE.value:
       self.__add_parser_build_image()
     elif self.command == Key.BUILD_FIRMWARE.value:
@@ -201,12 +205,22 @@ x factory_setup                    Apply some extra factory setup before generat
 
 
 
-  def __add_parser_build_bootloader(self):
-    """ This method add parser options specific to build_bootloader command
+  def __add_parser_build_bootchain(self):
+    """ This method add parser options specific to build_bootchain command
     """
 
     # Add the arguments
-    self.parser.add_argument(Key.BUILD_BOOTLOADER.value,
+    self.parser.add_argument(Key.BUILD_BOOTCHAIN.value,
+                             help=Key.OPT_HELP_LABEL.value)
+
+
+
+  def __add_parser_install_bootchain(self):
+    """ This method add parser options specific to install_bootchain command
+    """
+
+    # Add the arguments
+    self.parser.add_argument(Key.INSTALL_BOOTCHAIN.value,
                              help=Key.OPT_HELP_LABEL.value)
 
 
@@ -372,7 +386,7 @@ x factory_setup                    Apply some extra factory setup before generat
       self.project.dft.log_level = self.args.log_level.upper()
     # If not command line value, defaults to log
     else:
-      self.project.dft.log_level = "info"
+      self.project.dft.log_level = Key.LOG_LEVEL_INFO.value
 
     # Create the logger object
     logging.basicConfig(level=self.project.dft.log_level)
@@ -392,8 +406,10 @@ x factory_setup                    Apply some extra factory setup before generat
       self.__run_assemble_firmware()
     elif self.command == Key.BUILD_ROOTFS.value:
       self.__run_build_rootfs()
-    elif self.command == Key.BUILD_BOOTLOADER.value:
-      self.__run_build_bootloader()
+    elif self.command == Key.BUILD_BOOTCHAIN.value:
+      self.__run_build_bootchain()
+    elif self.command == Key.INSTALL_BOOTCHAIN.value:
+      self.__run_install_bootchain()
     elif self.command == Key.BUILD_IMAGE.value:
       self.__run_build_image()
     elif self.command == Key.BUILD_FIRMWARE.value:
@@ -488,19 +504,37 @@ x factory_setup                    Apply some extra factory setup before generat
 
   # -------------------------------------------------------------------------
   #
-  # __run_build_bootloader
+  # __run_build_bootchain
   #
   # -------------------------------------------------------------------------
-  def __run_build_bootloader(self):
-    """ Method used to handle the build_bootloader command.
+  def __run_build_bootchain(self):
+    """ Method used to handle the build_bootchain command.
     Create the business objet, then execute the entry point.
     """
 
     # Create the business object
-    command = build_bootloader.BuildBootloader(self.dft, self.project)
+    command = build_bootchain.BuildBootChain(self.dft, self.project)
 
     # Then call the dedicated method
-    command.build_bootloader()
+    command.build_bootchain()
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # __run_install_bootchain
+  #
+  # -------------------------------------------------------------------------
+  def __run_install_bootchain(self):
+    """ Method used to handle the install_bootchain command.
+    Create the business objet, then execute the entry point.
+    """
+
+    # Create the business object
+    command = install_bootchain.InstallBootChain(self.dft, self.project)
+
+    # Then call the dedicated method
+    command.install_bootchain()
 
 
 

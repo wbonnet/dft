@@ -69,9 +69,9 @@ class Key(Enum):
   BLACKLISTED_VERSION = "blacklisted_version"
   BLOCK_SIZE = "block_size"
   BOARD = "board"
-  BOOTLOADER = "bootloader"
-  BOOTLOADER_WORKDIR = "bootloader"
-  BUILD_BOOTLOADER = "build_bootloader"
+  BOOTCHAIN = "bootchain"
+  BOOTCHAIN_WORKDIR = "bootchain"
+  BUILD_BOOTCHAIN = "build_bootchain"
   BUILD_FIRMWARE = "build_firmware"
   BUILD_IMAGE = "build_image"
   BUILD_ROOTFS = "build_rootfs"
@@ -118,6 +118,7 @@ class Key(Enum):
   IMAGE = "image"
   IMAGE_WORKDIR = "image"
   INIT_FILENAME = "init_filename"
+  INSTALL_BOOTCHAIN = "install_bootchain"
   INSTALL_MISSING_SOFTWARE = "install_missing_software"
   INSTALL_MSSING_SOFTWARE = "install_mssing_software"
   INSTALLATION_CONSTRAINT = "installation_constraint"
@@ -133,6 +134,7 @@ class Key(Enum):
   LIMIT_TARGET_BOARD = "limit_target_board"
   LIMIT_TARGET_VERSION = "limit_target_version"
   LOG_LEVEL = "log_level"
+  LOG_LEVEL_INFO = "INFO"
   LYNIS = "lynis"
   MANDATORY = "mandatory"
   MANDATORY_ONLY = "mandatory_only"
@@ -359,14 +361,11 @@ class ProjectDefinition(object):
     # Defines path for subcommand
     self.rootfs_base_workdir = None
     self.image_base_workdir = None
-    self.bootloader_base_workdir = None
+    self.bootchain_base_workdir = None
     self.firmware_base_workdir = None
     self.content_base_workdir = None
 
     # Defines member variables
-    self.target_arch = "unknown"
-    self.target_board = "unknown"
-    self.target_version = "unknown"
     self.archive_filename = None
     self.rootfs_mountpoint = None
     self.firmware_directory = None
@@ -374,8 +373,8 @@ class ProjectDefinition(object):
     self.init_filename = None
     self.stacking_script_filename = None
 
+    self.targets = None
     self.rootfs_def = None
-    self.bootloader_def = None
     self.check_def = None
     self.content_information_def = None
     self.firmware_def = None
@@ -494,13 +493,6 @@ class ProjectDefinition(object):
         with open(filename, 'r') as working_file:
           self.firmware_def = yaml.load(working_file)
 
-      # Load the bootloader sub configuration files
-      if Key.BOOTLOADER.value in self.project_def[Key.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
-                                                               [Key.BOOTLOADER.value][0])
-        with open(filename, 'r') as working_file:
-          self.bootloader_def = yaml.load(working_file)
-
       # Load the image sub configuration files
       if Key.IMAGE.value in self.project_def[Key.PROJECT_DEFINITION.value]:
         filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
@@ -555,7 +547,7 @@ class ProjectDefinition(object):
       # Defines path for subcommand
       self.rootfs_base_workdir = self.project_base_workdir + "/rootfs"
       self.image_base_workdir = self.project_base_workdir + "/image"
-      self.bootloader_base_workdir = self.project_base_workdir + "/bootloader"
+      self.bootchain_base_workdir = self.project_base_workdir + "/bootchain"
       self.firmware_base_workdir = self.project_base_workdir + "/firmware"
       self.content_base_workdir = self.project_base_workdir + "/content"
 
@@ -564,7 +556,7 @@ class ProjectDefinition(object):
         # TODO: to remove since the board defines it
         self.set_arch(self.project_def[Key.PROJECT_DEFINITION.value]\
                                       [Key.TARGET.value][0][Key.ARCHITECTURE.value])
-        # Target board to use when building the bootloader and installing kernel. It has to be
+        # Target board to use when building the bootchain and installing kernel. It has to be
         # a board defined under the bsp directory
         self.set_board(self.project_def[Key.PROJECT_DEFINITION.value]\
                                       [Key.TARGET.value][0][Key.BOARD.value])

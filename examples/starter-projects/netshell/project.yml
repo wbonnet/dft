@@ -44,7 +44,7 @@
 configuration:
   # Defines the root of the working directories. A dirctory named after
   # project name will be created under this path, and subdirectories used to
-  # store rootfs, bootloader, image, etc will be created
+  # store rootfs, bootchain, image, etc will be created
   working_dir: "../../working_dir"
 
   # Defines the project name. Mostly used for output and directories creation
@@ -108,10 +108,6 @@ project_definition:
   # Definition of the firmware content and structure
   firmware:
     - firmware.yml
-
-  # Definition of the bootloader toolchain
-  bootloader:
-    - bootloader.yml
 
   # Definition of the image structure
   image:
