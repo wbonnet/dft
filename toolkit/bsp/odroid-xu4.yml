@@ -20,3 +20,11 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 #
+
+architecture: armhf
+kernel:
+  provider: "devuan"
+  packages:
+    - kernel
+    - firmware
+    - uboot

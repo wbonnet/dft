@@ -388,6 +388,80 @@ class ProjectDefinition(object):
     self.variables = None
 
 
+  # ---------------------------------------------------------------------------
+  #
+  # get_target_arch
+  #
+  # ---------------------------------------------------------------------------
+  def get_target_arch(self, index = 0):
+    """ Simple getter to access the arch of n-th item in the targets to produce
+    list. It is designed to reduce caller code complexity, and hide internal
+    data structure.
+
+    If no index is provided it returns the first element, or None if the
+    array is empty.
+    """
+
+    # Check if the array is empty
+    if len(self.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value]) == 0:
+      # Yes thus, returns None
+      return None
+    # Otherwise returns the n-th item
+    else:
+      return self.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][index]\
+                         [Key.BSP.value][Key.ARCHITECTURE.value]
+
+
+
+  # ---------------------------------------------------------------------------
+  #
+  # get_target_board
+  #
+  # ---------------------------------------------------------------------------
+  def get_target_board(self, index = 0):
+    """ Simple getter to access the board of n-th item in the targets to produce
+    list. It is designed to reduce caller code complexity, and hide internal
+    data structure.
+
+    If no index is provided it returns the first element, or None if the
+    array is empty.
+    """
+
+    # Check if the array is empty
+    if len(self.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value]) == 0:
+      # Yes thus, returns None
+      return None
+    # Otherwise returns the n-th item
+    else:
+      return self.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][index]\
+                         [Key.BOARD.value]
+
+
+
+  # ---------------------------------------------------------------------------
+  #
+  # get_target_version
+  #
+  # ---------------------------------------------------------------------------
+  def get_target_version(self, index = 0):
+    """ Simple getter to access the version of n-th item in the targets to produce
+    list. It is designed to reduce caller code complexity, and hide internal
+    data structure.
+
+    If no index is provided it returns the first element, or None if the
+    array is empty.
+    """
+
+    # Check if the array is empty
+    # if len(self.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value]) == 0:
+    #   # Yes thus, returns None
+    #   return None
+    # # Otherwise returns the n-th item
+    # else:
+    return self.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][index]\
+                         [Key.VERSION.value]
+
+
 
   # ---------------------------------------------------------------------------
   #
@@ -569,25 +643,24 @@ class ProjectDefinition(object):
             exit(1)
           else:
             logging.debug("loading BSP file " + bsp_file)
-            target[Key.BSP.value] = yaml.load(bsp_file)
-            print(target[Key.BSP.value])
-        exit(0)
+            with open(bsp_file, 'r') as working_file:
+              target[Key.BSP.value] = yaml.load(working_file)
 
         # TODO: to remove since the board defines it
-        self.set_arch(self.project[Key.PROJECT_DEFINITION.value]\
-                                      [Key.TARGETS.value][0][Key.ARCHITECTURE.value])
+        self.set_arch(self.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
+                                  [Key.BSP.value][Key.ARCHITECTURE.value])
         # Target board to use when building the bootchain and installing kernel. It has to be
         # a board defined under the bsp directory
-        self.set_board(self.project[Key.PROJECT_DEFINITION.value]\
-                                      [Key.TARGETS.value][0][Key.BOARD.value])
+        self.set_board(self.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
+                                   [Key.BOARD.value])
         # Target version to use when building the debootstrap. It has to be
         # a Debian version (jessie, stretch, etc.)
-        self.set_version(self.project[Key.PROJECT_DEFINITION.value]\
-                                      [Key.TARGETS.value][0][Key.VERSION.value])
+        self.set_version(self.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
+                                     [Key.VERSION.value])
 
       # Defines the full path and filename to the firmware
       self.firmware_filename = self.firmware_directory + "/"
-      self.firmware_filename += self.project[Key.CONFIGURATION.value][Key.PROJECT_NAME.value]
+      self.firmware_filename += self.project[Key.PROJECT_DEFINITION.value][Key.PROJECT_NAME.value]
       self.firmware_filename += ".squashfs"
 
       # Defines the full path and filename to the init used by firmware
@@ -622,17 +695,14 @@ class ProjectDefinition(object):
     several version at a time.
     """
 
-    # Defines the version attribute
-    self.target_version = version
-
     # Generates the path to the rootfs mountpoint
     # Stores the path to the rootfs mountpoint used by debootstrap
-    self.rootfs_mountpoint = self.rootfs_base_workdir + "/" + self.target_arch
-    self.rootfs_mountpoint += "-" + self.target_version
+    self.rootfs_mountpoint = self.rootfs_base_workdir + "/" + self.get_target_arch()
+    self.rootfs_mountpoint += "-" + version
 
     # Generate the path where to store generated squashfs files
     self.firmware_directory = self.firmware_base_workdir + "/"
-    self.firmware_directory += self.target_arch + "-" + self.target_version
+    self.firmware_directory += self.get_target_arch() + "-" + version
 
   # ---------------------------------------------------------------------------
   #
@@ -650,9 +720,9 @@ class ProjectDefinition(object):
 
     # Generates the path to the rootfs mountpoint
     # Stores the path to the rootfs mountpoint used by debootstrap
-    self.rootfs_mountpoint = self.rootfs_base_workdir + "/" + self.target_arch
-    self.rootfs_mountpoint += "-" + self.target_version
+    self.rootfs_mountpoint = self.rootfs_base_workdir + "/" + self.target_arch + "-"
+    self.rootfs_mountpoint += self.get_target_version()
 
     # Generate the path where to store generated squashfs files
-    self.firmware_directory = self.firmware_base_workdir + "/"
-    self.firmware_directory += self.target_arch + "-" + self.target_version
+    self.firmware_directory = self.firmware_base_workdir + "/" + self.target_arch + "-"
+    self.firmware_directory += self.get_target_version()

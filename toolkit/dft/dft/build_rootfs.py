@@ -69,7 +69,7 @@ class BuildRootFS(CliCommand):
     self.devshm_is_mounted = False
 
     # Path to the ansible roles under dft_base
-    self.ansible_dir = project.project_def[Key.CONFIGURATION.value][Key.DFT_BASE.value] + "/ansible"
+    self.ansible_dir = project.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] + "/ansible"
 
     # Set the log level from the configuration
     logging.basicConfig(level=project.dft.log_level)
@@ -93,15 +93,15 @@ class BuildRootFS(CliCommand):
     # Check that DFT path is valid
     if not os.path.isdir(self.ansible_dir):
       logging.critical("Path to DFT installation is not valid : %s. Ansible directory is missing",
-                       self.project.project_def[Key.CONFIGURATION.value][Key.DFT_BASE.value])
+                       self.project.project[Key.CONFIGURATION.value][Key.DFT_BASE.value])
       exit(1)
 
     # Ensure target rootfs mountpoint exists and is a dir
     if not os.path.isdir(self.project.rootfs_mountpoint):
       os.makedirs(self.project.rootfs_mountpoint)
     else:
-      if (Key.KEEP_ROOTFS_HISTORY.value in self.project.project_def[Key.CONFIGURATION.value] and
-          self.project.project_def[Key.CONFIGURATION.value][Key.KEEP_ROOTFS_HISTORY.value]):
+      if (Key.KEEP_ROOTFS_HISTORY.value in self.project.project[Key.CONFIGURATION.value] and
+          self.project.project[Key.CONFIGURATION.value][Key.KEEP_ROOTFS_HISTORY.value]):
         logging.warning("target rootfs mount point already exists : " +
                         self.project.rootfs_mountpoint)
         exit(1)
@@ -176,9 +176,9 @@ class BuildRootFS(CliCommand):
           dir_util.copy_tree(copy_target_path, os.path.join(dft_target_path, copy_target))
 
       # Copy the additional toolkit content to the target rootfs
-      if Key.ADDITIONAL_ROLES.value in self.project.project_def[Key.CONFIGURATION.value]:
-        for additional_path in self.project.project_def[Key.CONFIGURATION.value]\
-                                                       [Key.ADDITIONAL_ROLES.value]:
+      if Key.ADDITIONAL_ROLES.value in self.project.project[Key.CONFIGURATION.value]:
+        for additional_path in self.project.project[Key.CONFIGURATION.value]\
+                                                   [Key.ADDITIONAL_ROLES.value]:
           logging.debug("Copy the additional toolkit : preparing to copy from additional path "
                         + additional_path)
           for copy_target in os.listdir(additional_path):
@@ -210,12 +210,12 @@ class BuildRootFS(CliCommand):
       working_file.write("\n")
 
       # Test if some variable files have to be included
-      if Key.VARIABLES.value in self.project.project_def[Key.PROJECT_DEFINITION.value]:
+      if Key.VARIABLES.value in self.project.project[Key.PROJECT_DEFINITION.value]:
         # Yes, then output the vars_files marker
         working_file.write("  vars_files:\n")
 
         # And iterate the list of files containing variables
-        for vars_file in self.project.project_def[Key.PROJECT_DEFINITION.value]\
+        for vars_file in self.project.project[Key.PROJECT_DEFINITION.value]\
                                                  [Key.VARIABLES.value]:
           # Append the file to the site.yml file
           working_file.write("  - " + vars_file + "\n")
@@ -262,7 +262,7 @@ class BuildRootFS(CliCommand):
       logging.warning("No role has been found in rootfs definition. Rootfs is same as debootstrap \
                        output")
       logging.error("You may wish to have a look to : " + self.project.generate_def_file_path(\
-                      self.project.project_def[Key.PROJECT_DEFINITION.value][Key.ROOTFS.value][0]))
+                      self.project.project[Key.PROJECT_DEFINITION.value][Key.ROOTFS.value][0]))
 
     # Execute Ansible
     # TODO : multiple target ? not sure...
@@ -320,9 +320,9 @@ class BuildRootFS(CliCommand):
       logging.info("running debootstrap")
 
     # Add the target, mount point and repository url to the debootstrap command
-    debootstrap_command += " " +  self.project.target_version + " "
+    debootstrap_command += " " +  self.project.get_target_version() + " "
     debootstrap_command += self.project.rootfs_mountpoint + " "
-    debootstrap_command += self.project.project_def[Key.PROJECT_DEFINITION.value]\
+    debootstrap_command += self.project.project[Key.PROJECT_DEFINITION.value]\
                                                    [Key.DEBOOTSTRAP_REPOSITORY.value]
 
     # Finally run the subprocess
@@ -393,11 +393,11 @@ class BuildRootFS(CliCommand):
     logging.info("starting to generate APT sources configuration")
 
     # Test if the generate_validity_check is defined, if not set the default value
-    if Key.GENERATE_VALIDITY_CHECK.value not in self.project.project_def[Key.CONFIGURATION.value]:
-      self.project.project_def[Key.CONFIGURATION.value][Key.GENERATE_VALIDITY_CHECK.value] = True
+    if Key.GENERATE_VALIDITY_CHECK.value not in self.project.project[Key.CONFIGURATION.value]:
+      self.project.project[Key.CONFIGURATION.value][Key.GENERATE_VALIDITY_CHECK.value] = True
 
     # Test if we have to generate the no-check-valid_until file
-    if self.project.project_def[Key.CONFIGURATION.value][Key.GENERATE_VALIDITY_CHECK.value]:
+    if self.project.project[Key.CONFIGURATION.value][Key.GENERATE_VALIDITY_CHECK.value]:
       logging.debug("generating /etc/apt/apt.conf.d/10no-check-valid-until")
 
       # Generate the file path
@@ -418,7 +418,7 @@ class BuildRootFS(CliCommand):
     filepath = self.project.rootfs_mountpoint + "/etc/apt/sources.list"
 
     # Open the file and writes configuration in it
-    self.project.debian_mirror_url = self.project.project_def[Key.PROJECT_DEFINITION.value]\
+    self.project.debian_mirror_url = self.project.project[Key.PROJECT_DEFINITION.value]\
                                                              [Key.DEBOOTSTRAP_REPOSITORY.value]
 
     # Flag if we have found a matching distro or not
@@ -430,8 +430,8 @@ class BuildRootFS(CliCommand):
       for distro in self.project.repositories_def[Key.DISTRIBUTIONS.value]:
         logging.debug(distro)
         # Process only if it is the version we target
-        if distro[Key.NAME.value] == self.project.target_version and \
-                                     self.project.target_arch in distro[Key.ARCHITECTURES.value]:
+        if distro[Key.NAME.value] == self.project.get_target_version() and \
+                                     self.project.get_target_arch() in distro[Key.ARCHITECTURES.value]:
           # W have found a matching distro or not
           distro_has_been_found = True
           # Then iterate all the sources for this distro version
@@ -464,10 +464,10 @@ class BuildRootFS(CliCommand):
     # /etc/apt/sources.list and installation will faill
     if not distro_has_been_found:
       self.cleanup_installation_files()
-      logging.error("No distribution matching " + self.project.target_version + " has been found.")
+      logging.error("No distribution matching " + self.project.get_target_version() + " has been found.")
       logging.error("Please check repositories definition for this project.")
       logging.error("File in use is : " + self.project.generate_def_file_path(\
-                                self.project.project_def[Key.PROJECT_DEFINITION.value]\
+                                self.project.project[Key.PROJECT_DEFINITION.value]\
                                                         [Key.REPOSITORIES.value][0]))
       logging.critical("Cannot generate /etc/apt/sources.list under rootfs path. Operation is \
                         aborted !")
