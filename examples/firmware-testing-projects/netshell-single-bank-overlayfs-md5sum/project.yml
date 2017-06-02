@@ -42,21 +42,19 @@
 #
 # ----------------------------------------------------------------------------
 configuration:
+
   # Defines the root of the working directories. A dirctory named after
   # project name will be created under this path, and subdirectories used to
   # store rootfs, bootchain, image, etc will be created
-  working-dir: "~/Devel/dft/working_dir"
-
-  # Defines the project name. Mostly used for output and directories creation
-  project-name: "netshell-single-bank-overlayfs-md5sum"
+  working_dir: "~/Devel/dft/working_dir"
 
   # Defines the path to project configuration files. By default (undefined
   # value) configuration files are searched in the same directory as the
   # current project.yml file
-  # project-path: "~/Devel/dft/examples/firmware-projects/netshell-single-bank-overlayfs"
+  # project_path: "~/Devel/dft/examples/firmware-projects/netshell-single-bank-overlayfs"
 
-  # Path to the dft installation directory
-  dft-base: "~/Devel/dft/toolkit/ansible"
+  # Path to the dft installation directory. Default value is /usr/share/dft
+  # dft_base: "../ansible"
 
   # Define a list of directories with additional content (roles, playbooks, etc)
   # which are copied to /dft_bootstrap during rootfs bootstrapping. These paths
@@ -76,16 +74,19 @@ configuration:
 #   If a step is not defined (no yaml configuration file), it will be skipped
 #   As an example, if you only want to generate a rootfs and check its content
 #   you only have to define :
-#   - debootstrap-repository
-#   - repositories (if different from debootstrap-repository)
+#   - debootstrap_repository
+#   - repositories (if different from debootstrap_repository)
 #   - rootfs
 #   - check
 # ----------------------------------------------------------------------------
-project-definition:
+project_definition:
+
+  # Defines the project name. Mostly used for output and directories creation
+  project_name: "netshell-single-bank-overlayfs-md5sum"
 
   # Definition of the repositories used for bootstrapping
   # There can be only one repo, thus its url is defined here
-  debootstrap-repository: "http://ftp.de.debian.org/debian"
+  debootstrap_repository: "http://ftp.de.debian.org/debian"
 
   # Definition of the repositories to use
   repositories:
@@ -112,7 +113,7 @@ project-definition:
   #   - stripping.yml
 
   # Definition of the content to generate
-  # content-information:
+  # content_information:
   #   - content.yml
 
   # Definition of the variables to be passed to rootfs creation
@@ -121,5 +122,5 @@ project-definition:
 
   # Definition of the list of targets, with architectures, versions and optionaly board.
   # Firmware will be generated for each of the architecture in this list
-  target:
-    - { architecture: amd64 , version: stretch , board: generic-x86_64 }
+  targets:
+    - { version: stretch , board: generic-x86_64 }
