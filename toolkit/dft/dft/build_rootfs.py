@@ -68,6 +68,9 @@ class BuildRootFS(CliCommand):
     self.devpts_is_mounted = False
     self.devshm_is_mounted = False
 
+    # Path to the ansible roles under dft_base
+    self.ansible_dir = project.project_def[Key.CONFIGURATION.value][Key.DFT_BASE.value] + "/ansible"
+
     # Set the log level from the configuration
     logging.basicConfig(level=project.dft.log_level)
 
@@ -88,8 +91,8 @@ class BuildRootFS(CliCommand):
     """
 
     # Check that DFT path is valid
-    if not os.path.isdir(self.project.project_def[Key.CONFIGURATION.value][Key.DFT_BASE.value]):
-      logging.critical("Path to DFT installation is not valid : %s",
+    if not os.path.isdir(self.ansible_dir):
+      logging.critical("Path to DFT installation is not valid : %s. Ansible directory is missing",
                        self.project.project_def[Key.CONFIGURATION.value][Key.DFT_BASE.value])
       exit(1)
 
@@ -162,11 +165,9 @@ class BuildRootFS(CliCommand):
         logging.debug("dft_bootstrap already exist under " + dft_target_path)
 
       # Copy the DFT toolkit content to the target rootfs
-      for copy_target in os.listdir(self.project.project_def[Key.CONFIGURATION.value]\
-                                                            [Key.DFT_BASE.value]):
+      for copy_target in os.listdir(self.ansible_dir):
         logging.debug("Copy the DFT toolkit : preparing to copy " + copy_target)
-        copy_target_path = os.path.join(self.project.project_def[Key.CONFIGURATION.value]\
-                                                                [Key.DFT_BASE.value], copy_target)
+        copy_target_path = os.path.join(self.ansible_dir, copy_target)
         if os.path.isfile(copy_target_path):
           logging.debug("copying file " + copy_target_path + " => " + dft_target_path)
           file_util.copy_file(copy_target_path, dft_target_path)

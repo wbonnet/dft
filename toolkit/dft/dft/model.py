@@ -71,6 +71,7 @@ class Key(Enum):
   BOARD = "board"
   BOOTCHAIN = "bootchain"
   BOOTCHAIN_WORKDIR = "bootchain"
+  BSP = "bsp"
   BUILD_BOOTCHAIN = "build_bootchain"
   BUILD_FIRMWARE = "build_firmware"
   BUILD_IMAGE = "build_image"
@@ -217,6 +218,7 @@ class Key(Enum):
   SUITE = "suite"
   SYMLINK = "symlink"
   TARGET = "target"
+  TARGETS = "targets"
   TARGET_PATH = "target_path"
   TMPFS = "tmpfs"
   TYPE = "type"
@@ -374,16 +376,16 @@ class ProjectDefinition(object):
     self.stacking_script_filename = None
 
     self.targets = None
-    self.rootfs_def = None
-    self.check_def = None
-    self.content_information_def = None
-    self.firmware_def = None
-    self.image_def = None
+    self.rootfs = None
+    self.check = None
+    self.content_information = None
+    self.firmware = None
+    self.image = None
     self.project_base_workdir = None
-    self.project_def = None
-    self.repositories_def = None
-    self.stripping_def = None
-    self.variables_def = None
+    self.project = None
+    self.repositories = None
+    self.stripping = None
+    self.variables = None
 
 
 
@@ -408,12 +410,10 @@ class ProjectDefinition(object):
     """
 
     # Check if the project path is defined into the project file
-    if Key.PROJECT_PATH.value in self.project_def[Key.CONFIGURATION.value]:
-      filename = self.project_def[Key.CONFIGURATION.value][Key.PROJECT_PATH.value] + "/" + filename
+    if Key.PROJECT_PATH.value in self.project[Key.CONFIGURATION.value]:
+      filename = self.project[Key.CONFIGURATION.value][Key.PROJECT_PATH.value] + "/" + filename
     else:
       filename = os.path.dirname(self.project_name) + "/" + filename
-
-# TODO add include in project file
 
     # Return what has been generated
     return filename
@@ -441,108 +441,107 @@ class ProjectDefinition(object):
     # exception mecanism. If a FileNotFoundError is raised, then exit the
     # program
     try:
-# TODO : load and merge several confiuration files in the same dictionnary
       #
       # Load all the ub configuration files from disk
       #
       with open(self.project_name, 'r') as working_file:
-        self.project_def = yaml.load(working_file)
+        self.project = yaml.load(working_file)
 
         # Expand ~ in path since it is not done automagically by Python
         for key in {"dft_base", Key.PROJECT_PATH.value, Key.WORKING_DIR.value}:
           # For iterate the key and check they are defined in the config file
-          if key in self.project_def[Key.CONFIGURATION.value]:
+          if key in self.project[Key.CONFIGURATION.value]:
             # Then chek if the single value field starts by "~/"
-            if self.project_def[Key.CONFIGURATION.value][key][0] == "~" and \
-               self.project_def[Key.CONFIGURATION.value][key][1] == "/":
+            if self.project[Key.CONFIGURATION.value][key][0] == "~" and \
+               self.project[Key.CONFIGURATION.value][key][1] == "/":
               # If yes modifiy its value using expenduser ( replace ~ by /home/foo)
-              self.project_def[Key.CONFIGURATION.value][key] = \
-                              os.path.expanduser(self.project_def[Key.CONFIGURATION.value][key])
+              self.project[Key.CONFIGURATION.value][key] = \
+                              os.path.expanduser(self.project[Key.CONFIGURATION.value][key])
 
         # Expand ~ in path since it is not done automagically by Python
         for key in {Key.ADDITIONAL_ROLES.value}:
           # For iterate the key and check they are defined in the config file
-          if key in self.project_def[Key.CONFIGURATION.value]:
+          if key in self.project[Key.CONFIGURATION.value]:
             # Then iterate the list of values it contains
-            for counter in range(len(self.project_def[Key.CONFIGURATION.value][key])):
+            for counter in range(len(self.project[Key.CONFIGURATION.value][key])):
               # Then chek if the valuestarts by "~/"
-              if self.project_def[Key.CONFIGURATION.value][key][counter][0] == "~" and \
-                 self.project_def[Key.CONFIGURATION.value][key][counter][1] == "/":
+              if self.project[Key.CONFIGURATION.value][key][counter][0] == "~" and \
+                 self.project[Key.CONFIGURATION.value][key][counter][1] == "/":
                 # If yes modifiy its value using expenduser ( replace ~ by /home/foo)
-                self.project_def[Key.CONFIGURATION.value][key][counter] = \
-                      os.path.expanduser(self.project_def[Key.CONFIGURATION.value][key][counter])
+                self.project[Key.CONFIGURATION.value][key][counter] = \
+                      os.path.expanduser(self.project[Key.CONFIGURATION.value][key][counter])
 
       # Load the repositories sub configuration files
-      if Key.REPOSITORIES.value in self.project_def[Key.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
+      if Key.REPOSITORIES.value in self.project[Key.PROJECT_DEFINITION.value]:
+        filename = self.generate_def_file_path(self.project[Key.PROJECT_DEFINITION.value]\
                                                [Key.REPOSITORIES.value][0])
         with open(filename, 'r') as working_file:
-          self.repositories_def = yaml.load(working_file)
+          self.repositories = yaml.load(working_file)
 
       # Load the rootfs sub configuration files
-      if Key.ROOTFS.value in self.project_def[Key.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
+      if Key.ROOTFS.value in self.project[Key.PROJECT_DEFINITION.value]:
+        filename = self.generate_def_file_path(self.project[Key.PROJECT_DEFINITION.value]\
                                                                [Key.ROOTFS.value][0])
         with open(filename, 'r') as working_file:
-          self.rootfs_def = yaml.load(working_file)
+          self.rootfs = yaml.load(working_file)
 
       # Load the firmware sub configuration files
-      if Key.FIRMWARE.value in self.project_def[Key.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
+      if Key.FIRMWARE.value in self.project[Key.PROJECT_DEFINITION.value]:
+        filename = self.generate_def_file_path(self.project[Key.PROJECT_DEFINITION.value]\
                                                                [Key.FIRMWARE.value][0])
         with open(filename, 'r') as working_file:
-          self.firmware_def = yaml.load(working_file)
+          self.firmware = yaml.load(working_file)
 
       # Load the image sub configuration files
-      if Key.IMAGE.value in self.project_def[Key.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
+      if Key.IMAGE.value in self.project[Key.PROJECT_DEFINITION.value]:
+        filename = self.generate_def_file_path(self.project[Key.PROJECT_DEFINITION.value]\
                                                                [Key.IMAGE.value][0])
         with open(filename, 'r') as working_file:
-          self.image_def = yaml.load(working_file)
+          self.image = yaml.load(working_file)
 
       # Load the check sub configuration files
-      if Key.CHECK.value in self.project_def[Key.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
+      if Key.CHECK.value in self.project[Key.PROJECT_DEFINITION.value]:
+        filename = self.generate_def_file_path(self.project[Key.PROJECT_DEFINITION.value]\
                                                                [Key.CHECK.value][0])
         with open(filename, 'r') as working_file:
-          self.check_def = yaml.load(working_file)
+          self.check = yaml.load(working_file)
 
       # Load the stripping sub configuration files
-      if Key.STRIPPING.value in self.project_def[Key.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
+      if Key.STRIPPING.value in self.project[Key.PROJECT_DEFINITION.value]:
+        filename = self.generate_def_file_path(self.project[Key.PROJECT_DEFINITION.value]\
                                                                [Key.STRIPPING.value][0])
         with open(filename, 'r') as working_file:
-          self.stripping_def = yaml.load(working_file)
+          self.stripping = yaml.load(working_file)
 
       # Load the check sub configuration files
-      if Key.CONTENT_INFORMATION.value in self.project_def[Key.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
+      if Key.CONTENT_INFORMATION.value in self.project[Key.PROJECT_DEFINITION.value]:
+        filename = self.generate_def_file_path(self.project[Key.PROJECT_DEFINITION.value]\
                                                                [Key.CONTENT_INFORMATION.value][0])
         with open(filename, 'r') as working_file:
-          self.content_information_def = yaml.load(working_file)
+          self.content_information = yaml.load(working_file)
 
       # Load the list of variables files
-      if Key.VARIABLES.value in self.project_def[Key.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project_def[Key.PROJECT_DEFINITION.value]\
+      if Key.VARIABLES.value in self.project[Key.PROJECT_DEFINITION.value]:
+        filename = self.generate_def_file_path(self.project[Key.PROJECT_DEFINITION.value]\
                                                                [Key.VARIABLES.value][0])
         with open(filename, 'r') as working_file:
-          self.variables_def = yaml.load(working_file)
+          self.variables = yaml.load(working_file)
 
       #
       # Once configuration have been loaded, compute the values of some
       # configuration variables
       #
 
-      if Key.WORKING_DIR.value in self.project_def[Key.CONFIGURATION.value]:
-        self.project_base_workdir = self.project_def[Key.CONFIGURATION.value]\
-                                                    [Key.WORKING_DIR.value]
-        self.project_base_workdir += "/" + self.project_def[Key.CONFIGURATION.value]\
-                                                           [Key.PROJECT_NAME.value]
+      if Key.WORKING_DIR.value in self.project[Key.CONFIGURATION.value]:
+        self.project_base_workdir = self.project[Key.CONFIGURATION.value]\
+                                                [Key.WORKING_DIR.value]
+        self.project_base_workdir += "/" + self.project[Key.PROJECT_DEFINITION.value]\
+                                                       [Key.PROJECT_NAME.value]
       else:
         self.logging.debug("configuration/working_dir is not defined, using /tmp/dft as default \
                             value")
         self.project_base_workdir = "/tmp/dft/"
-        self.project_base_workdir += self.project_def[Key.CONFIGURATION.value][Key.PROJECT_NAME.value]
+        self.project_base_workdir += self.project[Key.CONFIGURATION.value][Key.PROJECT_NAME.value]
 
       # Defines path for subcommand
       self.rootfs_base_workdir = self.project_base_workdir + "/rootfs"
@@ -551,23 +550,44 @@ class ProjectDefinition(object):
       self.firmware_base_workdir = self.project_base_workdir + "/firmware"
       self.content_base_workdir = self.project_base_workdir + "/content"
 
+      # Check if DFT_BASE key is defined, otherwise set its default value to /usr/share/dft
+      if Key.DFT_BASE.value not in self.project[Key.PROJECT_DEFINITION.value]:
+        self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] = "/usr/share/dft"
+
       # Retrieve the target components (version and board)
-      if Key.TARGET.value in self.project_def[Key.PROJECT_DEFINITION.value]:
+      if Key.TARGETS.value in self.project[Key.PROJECT_DEFINITION.value]:
+        # Iterate the list of targets in order to load th BSP definition file
+        for target in self.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value]:
+          # Build the path to the filecontaining theBSP definition
+          bsp_file = self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] + "/bsp/"
+          bsp_file += target[Key.BOARD.value] + ".yml"
+
+          # Check that the BSP file exist
+          if not os.path.isfile(bsp_file):
+            logging.critical("The BSP file %s des not exist. Cannot continue execution, "
+                             "please fix target in project file", bsp_file)
+            exit(1)
+          else:
+            logging.debug("loading BSP file " + bsp_file)
+            target[Key.BSP.value] = yaml.load(bsp_file)
+            print(target[Key.BSP.value])
+        exit(0)
+
         # TODO: to remove since the board defines it
-        self.set_arch(self.project_def[Key.PROJECT_DEFINITION.value]\
-                                      [Key.TARGET.value][0][Key.ARCHITECTURE.value])
+        self.set_arch(self.project[Key.PROJECT_DEFINITION.value]\
+                                      [Key.TARGETS.value][0][Key.ARCHITECTURE.value])
         # Target board to use when building the bootchain and installing kernel. It has to be
         # a board defined under the bsp directory
-        self.set_board(self.project_def[Key.PROJECT_DEFINITION.value]\
-                                      [Key.TARGET.value][0][Key.BOARD.value])
+        self.set_board(self.project[Key.PROJECT_DEFINITION.value]\
+                                      [Key.TARGETS.value][0][Key.BOARD.value])
         # Target version to use when building the debootstrap. It has to be
         # a Debian version (jessie, stretch, etc.)
-        self.set_version(self.project_def[Key.PROJECT_DEFINITION.value]\
-                                      [Key.TARGET.value][0][Key.VERSION.value])
+        self.set_version(self.project[Key.PROJECT_DEFINITION.value]\
+                                      [Key.TARGETS.value][0][Key.VERSION.value])
 
       # Defines the full path and filename to the firmware
       self.firmware_filename = self.firmware_directory + "/"
-      self.firmware_filename += self.project_def[Key.CONFIGURATION.value][Key.PROJECT_NAME.value]
+      self.firmware_filename += self.project[Key.CONFIGURATION.value][Key.PROJECT_NAME.value]
       self.firmware_filename += ".squashfs"
 
       # Defines the full path and filename to the init used by firmware
