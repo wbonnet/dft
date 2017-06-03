@@ -198,7 +198,7 @@ class CheckRootFS(CliCommand):
     #
     # Check the packages
     #
-    if self.project.check_def != None and Key.PACKAGES.value in self.project.check_def:
+    if self.project.check != None and Key.PACKAGES.value in self.project.check:
       self.project.logging.debug("Packages check is activated")
       self.check_packages()
     else:
@@ -207,7 +207,7 @@ class CheckRootFS(CliCommand):
     #
     # Check the files
     #
-    if self.project.check_def != None and Key.FILES.value in self.project.check_def:
+    if self.project.check != None and Key.FILES.value in self.project.check:
       self.project.logging.debug("Files check is activated")
       self.check_files()
     else:
@@ -283,7 +283,7 @@ class CheckRootFS(CliCommand):
     # Now iterate the list of rules to check against installed packages
     # Process the Key.MANDATORY.value rules group
     #
-    for rule in self.project.check_def[Key.PACKAGES.value][Key.MANDATORY.value]:
+    for rule in self.project.check[Key.PACKAGES.value][Key.MANDATORY.value]:
       # Call the check package method
       self.check_package_rules(rule, mandatory=True)
 
@@ -293,7 +293,7 @@ class CheckRootFS(CliCommand):
     #
     # Process the Key.FORBIDDEN.value rules group
     #
-    for rule in self.project.check_def[Key.PACKAGES.value][Key.FORBIDDEN.value]:
+    for rule in self.project.check[Key.PACKAGES.value][Key.FORBIDDEN.value]:
       # Call the check package method
       self.check_package_rules(rule, forbidden=True)
 
@@ -303,7 +303,7 @@ class CheckRootFS(CliCommand):
     #
     # Process the Key.ALLOWED.value rules group
     #
-    for rule in self.project.check_def[Key.PACKAGES.value][Key.ALLOWED.value]:
+    for rule in self.project.check[Key.PACKAGES.value][Key.ALLOWED.value]:
       # Call the check package method
       self.check_package_rules(rule)
 
@@ -348,36 +348,36 @@ class CheckRootFS(CliCommand):
     list_allowed_packages = {}
 
     # Checks that the configuration section is defined
-    if Key.CONFIGURATION.value in self.project.check_def:
+    if Key.CONFIGURATION.value in self.project.check:
       # And that constraint is defined
-      if Key.INSTALLATION_CONSTRAINT.value in self.project.check_def[Key.CONFIGURATION.value]:
+      if Key.INSTALLATION_CONSTRAINT.value in self.project.check[Key.CONFIGURATION.value]:
         # Now check the defined contraint is valid (ie: no gizmo value)
-        if self.project.check_def[Key.CONFIGURATION.value][Key.INSTALLATION_CONSTRAINT.value] \
+        if self.project.check[Key.CONFIGURATION.value][Key.INSTALLATION_CONSTRAINT.value] \
           not in [Key.MANDATORY_ONLY.value, Key.ALLOW_OPTIONAL.value, Key.NO_CONSTRAINT.value]:
 #          not in "mandatory_only" "allow_optional" "allow_optional":
           self.project.logging.error("unknown installation constraint " + \
-                                     self.project.check_def[Key.CONFIGURATION.value]\
+                                     self.project.check[Key.CONFIGURATION.value]\
                                      [Key.INSTALLATION_CONSTRAINT.value])
           return False
         # If we reach this code, then there is a valid constaint defined
         else:
           # IF constraint is no-constraint there is nothing to do
-          if self.project.check_def[Key.CONFIGURATION.value][Key.INSTALLATION_CONSTRAINT.value] == \
+          if self.project.check[Key.CONFIGURATION.value][Key.INSTALLATION_CONSTRAINT.value] == \
                                                                             Key.NO_CONSTRAINT.value:
             self.project.logging.debug("installation constraint is " + \
-                                       self.project.check_def[Key.CONFIGURATION.value]\
+                                       self.project.check[Key.CONFIGURATION.value]\
                                                              [Key.INSTALLATION_CONSTRAINT.value])
             return True
 
           # Build the list of packages defined in the mandatory section. They
           # will be inthe list whatever is the constraint
-          for rule in self.project.check_def[Key.PACKAGES.value][Key.MANDATORY.value]:
+          for rule in self.project.check[Key.PACKAGES.value][Key.MANDATORY.value]:
             list_allowed_packages[rule[Key.NAME.value]] = True
 
           # Check if the optional packages are allowed, if yes add then to the list
-          if self.project.check_def[Key.CONFIGURATION.value][Key.INSTALLATION_CONSTRAINT.value] == \
+          if self.project.check[Key.CONFIGURATION.value][Key.INSTALLATION_CONSTRAINT.value] == \
                                                                            Key.ALLOW_OPTIONAL.value:
-            for rule in self.project.check_def[Key.PACKAGES.value][Key.ALLOWED.value]:
+            for rule in self.project.check[Key.PACKAGES.value][Key.ALLOWED.value]:
               list_allowed_packages[rule[Key.NAME.value]] = True
       else:
         self.project.logging.debug("no " + Key.INSTALLATION_CONSTRAINT.value)
@@ -608,7 +608,7 @@ class CheckRootFS(CliCommand):
     # Files will be checked on an individual basis, which is different of
     # packages. Package list can be retrieved with a single call to dpkg.
     # Retrieving the complete file list would cost too much
-    for rule in self.project.check_def[Key.FILES.value][Key.MANDATORY.value]:
+    for rule in self.project.check[Key.FILES.value][Key.MANDATORY.value]:
       # Call the check package method
       self.check_file_rules(rule, mandatory=True)
 
@@ -618,7 +618,7 @@ class CheckRootFS(CliCommand):
     #
     # Process the Key.FORBIDDEN.value rules group
     #
-    for rule in self.project.check_def[Key.FILES.value][Key.FORBIDDEN.value]:
+    for rule in self.project.check[Key.FILES.value][Key.FORBIDDEN.value]:
       # Call the check package method
       self.check_file_rules(rule, forbidden=True)
 
@@ -628,7 +628,7 @@ class CheckRootFS(CliCommand):
     #
     # Process the Key.ALLOWED.value rules group
     #
-    for rule in self.project.check_def[Key.FILES.value][Key.ALLOWED.value]:
+    for rule in self.project.check[Key.FILES.value][Key.ALLOWED.value]:
       # Call the check package method
       self.check_file_rules(rule, allowed=True)
 
