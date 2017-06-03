@@ -217,13 +217,14 @@ class CliCommand(object):
         shutil.rmtree(self.project.get_rootfs_mountpoint() + "/dft_bootstrap")
     else:
       self.project.logging.debug("keep_bootstrap_files is activated, keeping DFT bootstrap " +
-                                 "files in " + self.project.get_rootfs_mountpoint() + "/dft_bootstrap")
+                                 "files in " + self.project.get_rootfs_mountpoint() +
+                                 "/dft_bootstrap")
 
     # Test if the generate_validity_check is defined, if not set the default value
-    if "remove_validity_check" not in self.project.project_def["configuration"]:
-      self.project.project_def["configuration"]["remove_validity_check"] = False
+    if "remove_validity_check" not in self.project.project["configuration"]:
+      self.project.project["configuration"]["remove_validity_check"] = False
 
-    if self.project.project_def["configuration"]["remove_validity_check"]:
+    if self.project.project["configuration"]["remove_validity_check"]:
       self.project.logging.debug("remove generated /etc/apt/apt.conf.d/10no-check-valid-until")
 
       # Generate the file path
