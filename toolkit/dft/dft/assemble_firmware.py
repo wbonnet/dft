@@ -94,8 +94,8 @@ class AssembleFirmware(CliCommand):
       exit(1)
 
     # Ensure firmware generation path exists and is a dir
-    if not os.path.isdir(self.project.firmware_directory):
-      os.makedirs(self.project.firmware_directory)
+    if not os.path.isdir(self.project.get_firmware_directory()):
+      os.makedirs(self.project.get_firmware_directory())
 
     # Ensure firmware exists
     # TODO : iterate the list of squashfs files
@@ -143,7 +143,7 @@ class AssembleFirmware(CliCommand):
 
     # Install initramfs-tools to the roootfs
     self.install_package("initramfs-tools")
-    self.install_package("linux-image-" + self.project.target_arch)
+    self.install_package("linux-image-" + self.project.get_target_arch())
 
 
 
@@ -162,7 +162,7 @@ class AssembleFirmware(CliCommand):
     logging.info("Upadting initramfs")
 
     # Copy the stacking script to /tmp in the rootfs
-    sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint + " update-initramfs -u"
+    sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint() + " update-initramfs -u"
     self.execute_command(sudo_command)
 
 
@@ -181,8 +181,8 @@ class AssembleFirmware(CliCommand):
     logging.info("Copying boootchain to firmware directory")
 
     # Copy the stacking script to /tmp in the rootfs
-    sudo_command = 'sudo cp ' + self.project.rootfs_mountpoint + '/boot/* ' + \
-                  self.project.firmware_directory
+    sudo_command = 'sudo cp ' + self.project.get_rootfs_mountpoint() + '/boot/* ' + \
+                  self.project.get_firmware_directory()
     self.execute_command(sudo_command)
 
 
@@ -204,13 +204,13 @@ class AssembleFirmware(CliCommand):
 
     # Copy the stacking script to /tmp in the rootfs
     sudo_command = 'sudo cp ' + self.project.stacking_script_filename + " " + \
-                   self.project.rootfs_mountpoint + '/tmp/'
+                   self.project.get_rootfs_mountpoint() + '/tmp/'
     self.execute_command(sudo_command)
 
     # Copy the initramfs build hook to the hook dir in the generated rootfs
     sudo_command = 'sudo cp '
     sudo_command += self.project.project_def[Key.CONFIGURATION.value][Key.DFT_BASE.value]
-    sudo_command += "/../scripts/add_dft_to_initramfs " + self.project.rootfs_mountpoint
+    sudo_command += "/../scripts/add_dft_to_initramfs " + self.project.get_rootfs_mountpoint()
     sudo_command += '/usr/share/initramfs-tools/hooks/'
     self.execute_command(sudo_command)
 
