@@ -369,8 +369,6 @@ class ProjectDefinition(object):
 
     # Defines member variables
     self.archive_filename = None
-    self.rootfs_mountpoint = None
-    self.firmware_directory = None
     self.firmware_filename = None
     self.init_filename = None
     self.stacking_script_filename = None
@@ -646,26 +644,14 @@ class ProjectDefinition(object):
             with open(bsp_file, 'r') as working_file:
               target[Key.BSP.value] = yaml.load(working_file)
 
-        # TODO: to remove since the board defines it
-        self.set_arch(self.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
-                                  [Key.BSP.value][Key.ARCHITECTURE.value])
-        # Target board to use when building the bootchain and installing kernel. It has to be
-        # a board defined under the bsp directory
-        self.set_board(self.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
-                                   [Key.BOARD.value])
-        # Target version to use when building the debootstrap. It has to be
-        # a Debian version (jessie, stretch, etc.)
-        self.set_version(self.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
-                                     [Key.VERSION.value])
-
       # Defines the full path and filename to the firmware
-      self.firmware_filename = self.firmware_directory + "/"
+      self.firmware_filename = self.get_firmware_directory() + "/"
       self.firmware_filename += self.project[Key.PROJECT_DEFINITION.value][Key.PROJECT_NAME.value]
       self.firmware_filename += ".squashfs"
 
       # Defines the full path and filename to the init used by firmware
-      self.init_filename = self.firmware_directory + "/init"
-      self.stacking_script_filename = self.firmware_directory + "/dft_create_stack.sh"
+      self.init_filename = self.get_firmware_directory() + "/init"
+      self.stacking_script_filename = self.get_firmware_directory() + "/dft_create_stack.sh"
 
     # Handle exception that may occur when trying to open unknown files
     except OSError as exception:
@@ -673,56 +659,42 @@ class ProjectDefinition(object):
       self.logging.critical("Error: %s - %s.", exception.filename, exception.strerror)
       exit(1)
 
+
+
   # ---------------------------------------------------------------------------
   #
-  # set_board
+  # get_firmware_directory
   #
   # ---------------------------------------------------------------------------
-  def set_board(self, version):
-    """ XXX
+  def get_firmware_directory(self):
+    """ This method compute and return the firmware_directory value based using
+    the value of current target (arch, board name and version).
     """
 
-    print("TODO: code the set_board")
+    # Compute the value of the firmware_directory
+    firmware_directory = self.firmware_base_workdir + "/" + self.get_target_arch(0) + "-"
+    firmware_directory += self.get_target_version(0)
+
+    # That's all, log it and return
+    self.logging.debug("Computed rootfs_mountpoint : " + firmware_directory)
+    return firmware_directory
+
+
 
   # ---------------------------------------------------------------------------
   #
-  # set_version
+  # get_rootfs_mountpoint
   #
   # ---------------------------------------------------------------------------
-  def set_version(self, version):
-    """ This method set the version attribute, and all the attributes computed
-    using version value. This method should be rewritten to handle building
-    several version at a time.
+  def get_rootfs_mountpoint(self):
+    """ This method compute and return the rootfs_mountpoint value based using
+    the value of current target (arch, board name and version).
     """
 
-    # Generates the path to the rootfs mountpoint
-    # Stores the path to the rootfs mountpoint used by debootstrap
-    self.rootfs_mountpoint = self.rootfs_base_workdir + "/" + self.get_target_arch()
-    self.rootfs_mountpoint += "-" + version
+    # Compute the value of the rootfs_mountpoint
+    rootfs_mountpoint = self.rootfs_base_workdir + "/" + self.get_target_arch(0) + "-"
+    rootfs_mountpoint += self.get_target_version(0)
 
-    # Generate the path where to store generated squashfs files
-    self.firmware_directory = self.firmware_base_workdir + "/"
-    self.firmware_directory += self.get_target_arch() + "-" + version
-
-  # ---------------------------------------------------------------------------
-  #
-  # set_arch
-  #
-  # ---------------------------------------------------------------------------
-  def set_arch(self, arch):
-    """ This method set the arch attribute, and all the attributes computed
-    using arch value. This method should be rewritten to handle building
-    several version at a time.
-    """
-
-    # Defines the arch attribute
-    self.target_arch = arch
-
-    # Generates the path to the rootfs mountpoint
-    # Stores the path to the rootfs mountpoint used by debootstrap
-    self.rootfs_mountpoint = self.rootfs_base_workdir + "/" + self.target_arch + "-"
-    self.rootfs_mountpoint += self.get_target_version()
-
-    # Generate the path where to store generated squashfs files
-    self.firmware_directory = self.firmware_base_workdir + "/" + self.target_arch + "-"
-    self.firmware_directory += self.get_target_version()
+    # That's all, log it and return
+    self.logging.debug("Computed rootfs_mountpoint : " + rootfs_mountpoint)
+    return rootfs_mountpoint
