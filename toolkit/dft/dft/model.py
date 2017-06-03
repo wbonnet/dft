@@ -26,7 +26,6 @@ The Project and the Configuration. The classes implements the methods used to lo
 their content and definition fom yaml configuration file.
 """
 
-import logging
 import os
 from enum import Enum
 from datetime import datetime
@@ -343,7 +342,7 @@ class ProjectDefinition(object):
     """
 
     # Create the logger object
-    self.logging = logging.getLogger()
+    self.logging = self.logging.getLogger()
 
     # Store the filename containing the whole project definition
     # Filename is mandatory, and is defaulted to project.yml if
@@ -386,12 +385,13 @@ class ProjectDefinition(object):
     self.variables = None
 
 
+
   # ---------------------------------------------------------------------------
   #
   # get_target_arch
   #
   # ---------------------------------------------------------------------------
-  def get_target_arch(self, index = 0):
+  def get_target_arch(self, index=0):
     """ Simple getter to access the arch of n-th item in the targets to produce
     list. It is designed to reduce caller code complexity, and hide internal
     data structure.
@@ -416,7 +416,7 @@ class ProjectDefinition(object):
   # get_target_board
   #
   # ---------------------------------------------------------------------------
-  def get_target_board(self, index = 0):
+  def get_target_board(self, index=0):
     """ Simple getter to access the board of n-th item in the targets to produce
     list. It is designed to reduce caller code complexity, and hide internal
     data structure.
@@ -441,7 +441,7 @@ class ProjectDefinition(object):
   # get_target_version
   #
   # ---------------------------------------------------------------------------
-  def get_target_version(self, index = 0):
+  def get_target_version(self, index=0):
     """ Simple getter to access the version of n-th item in the targets to produce
     list. It is designed to reduce caller code complexity, and hide internal
     data structure.
@@ -489,6 +489,8 @@ class ProjectDefinition(object):
 
     # Return what has been generated
     return filename
+
+
 
   # ---------------------------------------------------------------------------
   #
@@ -636,11 +638,11 @@ class ProjectDefinition(object):
 
           # Check that the BSP file exist
           if not os.path.isfile(bsp_file):
-            logging.critical("The BSP file %s des not exist. Cannot continue execution, "
-                             "please fix target in project file", bsp_file)
+            self.logging.critical("The BSP file %s des not exist. Cannot continue execution, "
+                                  "please fix target in project file", bsp_file)
             exit(1)
           else:
-            logging.debug("loading BSP file " + bsp_file)
+            self.logging.debug("loading BSP file " + bsp_file)
             with open(bsp_file, 'r') as working_file:
               target[Key.BSP.value] = yaml.load(working_file)
 
@@ -663,6 +665,27 @@ class ProjectDefinition(object):
 
   # ---------------------------------------------------------------------------
   #
+  # __get_target_directory
+  #
+  # ---------------------------------------------------------------------------
+  def __get_target_directory(self, index=0):
+    """ This method compute and return the target component name used in the
+    working directory generation (firmware_directory or rootfs_mountpoint as
+    example). It is based upon values of current target (arch, board name and
+    version).
+    """
+
+    # Compute the value of the firmware_directory
+    target_directory = self.get_target_board(0) + "-" + self.get_target_arch(0) + "-"
+    target_directory += self.get_target_version(0)
+
+    # That's all folks :)
+    return target_directory
+
+
+
+  # ---------------------------------------------------------------------------
+  #
   # get_firmware_directory
   #
   # ---------------------------------------------------------------------------
@@ -672,12 +695,7 @@ class ProjectDefinition(object):
     """
 
     # Compute the value of the firmware_directory
-    firmware_directory = self.firmware_base_workdir + "/" + self.get_target_arch(0) + "-"
-    firmware_directory += self.get_target_version(0)
-
-    # That's all, log it and return
-    self.logging.debug("Computed rootfs_mountpoint : " + firmware_directory)
-    return firmware_directory
+    return self.firmware_base_workdir + "/" + self.__get_target_directory(0)
 
 
 
@@ -692,9 +710,4 @@ class ProjectDefinition(object):
     """
 
     # Compute the value of the rootfs_mountpoint
-    rootfs_mountpoint = self.rootfs_base_workdir + "/" + self.get_target_arch(0) + "-"
-    rootfs_mountpoint += self.get_target_version(0)
-
-    # That's all, log it and return
-    self.logging.debug("Computed rootfs_mountpoint : " + rootfs_mountpoint)
-    return rootfs_mountpoint
+    return self.rootfs_base_workdir + "/" +  self.__get_target_directory(0)
