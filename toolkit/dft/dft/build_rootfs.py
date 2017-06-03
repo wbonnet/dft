@@ -72,6 +72,7 @@ class BuildRootFS(CliCommand):
     self.ansible_dir = project.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] + "/ansible"
 
     # Set the log level from the configuration
+    print("setting logs " + project.dft.log_level)
     logging.basicConfig(level=project.dft.log_level)
 
   # -------------------------------------------------------------------------
@@ -97,24 +98,24 @@ class BuildRootFS(CliCommand):
       exit(1)
 
     # Ensure target rootfs mountpoint exists and is a dir
-    if not os.path.isdir(self.project.rootfs_mountpoint):
-      os.makedirs(self.project.rootfs_mountpoint)
+    if not os.path.isdir(self.project.get_rootfs_mountpoint()):
+      os.makedirs(self.project.get_rootfs_mountpoint())
     else:
       if (Key.KEEP_ROOTFS_HISTORY.value in self.project.project[Key.CONFIGURATION.value] and
           self.project.project[Key.CONFIGURATION.value][Key.KEEP_ROOTFS_HISTORY.value]):
         logging.warning("target rootfs mount point already exists : " +
-                        self.project.rootfs_mountpoint)
+                        self.project.get_rootfs_mountpoint())
         exit(1)
       else:
 
 # TODO security hole !!!!!
 # Protect path generation to avoid to remove / !!!
-        sudo_command = 'sudo rm -fr "' + self.project.rootfs_mountpoint +'"'
+        sudo_command = 'sudo rm -fr "' + self.project.get_rootfs_mountpoint() +'"'
         self.execute_command(sudo_command)
-        os.makedirs(self.project.rootfs_mountpoint)
+        os.makedirs(self.project.get_rootfs_mountpoint())
 
     # Create the bootstrap directory
-    dft_target_path = self.project.rootfs_mountpoint + "/dft_bootstrap/"
+    dft_target_path = self.project.get_rootfs_mountpoint() + "/dft_bootstrap/"
     if not os.path.exists(dft_target_path):
       os.makedirs(dft_target_path)
 
@@ -135,7 +136,7 @@ class BuildRootFS(CliCommand):
       self.cleanup_qemu()
 
     # Final log
-    logging.info("RootFS has been successfully generated into : " + self.project.rootfs_mountpoint)
+    logging.info("RootFS has been successfully generated into : " + self.project.get_rootfs_mountpoint())
 
   # -------------------------------------------------------------------------
   #
@@ -156,7 +157,7 @@ class BuildRootFS(CliCommand):
 
       # Check that target directory is in the rootfs. It has been previously created at the same
       # time as the mountpoint. This test check for both bootstrap and mountpoint.
-      dft_target_path = self.project.rootfs_mountpoint + "/dft_bootstrap/"
+      dft_target_path = self.project.get_rootfs_mountpoint() + "/dft_bootstrap/"
       if not os.path.exists(dft_target_path):
         logging.debug("creating dft_bootstrap under " + dft_target_path + "...")
         os.makedirs(dft_target_path)
@@ -250,7 +251,7 @@ class BuildRootFS(CliCommand):
     working_file.close()
 
     # Generate the file path
-    filepath = self.project.rootfs_mountpoint + "/dft_bootstrap/site.yml"
+    filepath = self.project.get_rootfs_mountpoint() + "/dft_bootstrap/site.yml"
 
     # Finally move the temporary file under the rootfs tree
     sudo_command = "sudo mv -f " + working_file.name + " " + filepath
@@ -267,7 +268,7 @@ class BuildRootFS(CliCommand):
     # Execute Ansible
     # TODO : multiple target ? not sure...
     logging.info("running ansible...")
-    sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
+    sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
     sudo_command += " /bin/bash -c \"cd /dft_bootstrap && /usr/bin/ansible-playbook -i"
     sudo_command += " inventory.yml -c local site.yml\""
     self.execute_command(sudo_command)
@@ -287,7 +288,7 @@ class BuildRootFS(CliCommand):
     logging.info("starting to generate build number")
 
     # Open the file and writes the timestamp in it
-    filepath = self.project.rootfs_mountpoint + "/etc/dft_version"
+    filepath = self.project.get_rootfs_mountpoint() + "/etc/dft_version"
     with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
       working_file.write("DFT-" + self.project.timestamp + "\n")
     working_file.close()
@@ -315,13 +316,13 @@ class BuildRootFS(CliCommand):
     # thus if use_qemu_static is True
     if self.use_qemu_static:
       logging.info("running debootstrap stage 1")
-      debootstrap_command += " --foreign --arch=" + self.project.target_arch
+      debootstrap_command += " --foreign --arch=" + self.project.get_target_arch()
     else:
       logging.info("running debootstrap")
 
     # Add the target, mount point and repository url to the debootstrap command
     debootstrap_command += " " +  self.project.get_target_version() + " "
-    debootstrap_command += self.project.rootfs_mountpoint + " "
+    debootstrap_command += self.project.get_rootfs_mountpoint() + " "
     debootstrap_command += self.project.project[Key.PROJECT_DEFINITION.value]\
                                                    [Key.DEBOOTSTRAP_REPOSITORY.value]
 
@@ -335,25 +336,25 @@ class BuildRootFS(CliCommand):
 
       # And second stage must be run
       logging.info("doing debootstrap stage 2")
-      debootstrap_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
+      debootstrap_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
       debootstrap_command += " /debootstrap/debootstrap --second-stage"
       self.execute_command(debootstrap_command)
 
 
     # Mount bind /proc into the rootfs mountpoint
-    sudo_command = "sudo mount --bind --make-rslave /proc " + self.project.rootfs_mountpoint
+    sudo_command = "sudo mount --bind --make-rslave /proc " + self.project.get_rootfs_mountpoint()
     sudo_command += "/proc"
     self.execute_command(sudo_command)
     self.proc_is_mounted = True
 
     # Mount bind /dev/pts into the rootfs mountpoint
-    sudo_command = "sudo mount --bind --make-rslave /dev/pts " + self.project.rootfs_mountpoint
+    sudo_command = "sudo mount --bind --make-rslave /dev/pts " + self.project.get_rootfs_mountpoint()
     sudo_command += "/dev/pts"
     self.execute_command(sudo_command)
     self.devpts_is_mounted = True
 
     # Mount bind /dev/shm into the rootfs mountpoint
-    sudo_command = "sudo mount --bind --make-rslave /dev/shm " + self.project.rootfs_mountpoint
+    sudo_command = "sudo mount --bind --make-rslave /dev/shm " + self.project.get_rootfs_mountpoint()
     sudo_command += "/dev/shm"
     self.execute_command(sudo_command)
     self.devshm_is_mounted = True
@@ -401,7 +402,7 @@ class BuildRootFS(CliCommand):
       logging.debug("generating /etc/apt/apt.conf.d/10no-check-valid-until")
 
       # Generate the file path
-      filepath = self.project.rootfs_mountpoint + "/etc/apt/apt.conf.d/10no-check-valid-until"
+      filepath = self.project.get_rootfs_mountpoint() + "/etc/apt/apt.conf.d/10no-check-valid-until"
 
       # Open the file and writes configuration in it
       with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
@@ -415,7 +416,7 @@ class BuildRootFS(CliCommand):
       logging.debug("/etc/apt/apt.conf.d/10no-check-valid-until generation is deactivated")
 
     # Generate the file path
-    filepath = self.project.rootfs_mountpoint + "/etc/apt/sources.list"
+    filepath = self.project.get_rootfs_mountpoint() + "/etc/apt/sources.list"
 
     # Open the file and writes configuration in it
     self.project.debian_mirror_url = self.project.project[Key.PROJECT_DEFINITION.value]\
