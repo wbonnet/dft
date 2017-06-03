@@ -69,7 +69,7 @@ class BuildFirmware(CliCommand):
     """
 
     # Check that there is a firmware configuration file first
-    if self.project.firmware_def is None:
+    if self.project.firmware is None:
       self.project.logging.critical("The firmware configuration file is not defined in project")
       exit(1)
 
@@ -109,26 +109,26 @@ class BuildFirmware(CliCommand):
     """
 
     # Test if the security section is defined
-    if Key.SECURITY.value in self.project.firmware_def:
+    if Key.SECURITY.value in self.project.firmware:
       # Yes, thus test if the hash-method is defined. If not defined, default
       # value is applied. Default value is "no hash"
-      if Key.HASH_METHOD.value in self.project.firmware_def[Key.SECURITY.value]:
+      if Key.HASH_METHOD.value in self.project.firmware[Key.SECURITY.value]:
         # Convert hash-method to lower case in order to use it as command prefix
-        self.project.firmware_def[Key.SECURITY.value][Key.HASH_METHOD.value] = self.project.\
-                                    firmware_def[Key.SECURITY.value][Key.HASH_METHOD.value].lower()
+        self.project.firmware[Key.SECURITY.value][Key.HASH_METHOD.value] = self.project.\
+                                    firmware[Key.SECURITY.value][Key.HASH_METHOD.value].lower()
 
         # Check that the algorith is valid (authorized values are md5 sha1 sha256)
-        if self.project.firmware_def[Key.SECURITY.value][Key.HASH_METHOD.value] in \
+        if self.project.firmware[Key.SECURITY.value][Key.HASH_METHOD.value] in \
                                     [Key.MD5.value, Key.SHA1.value, Key.SHA256.value]:
           # Output some fancy logs :)
           self.project.logging.info("Generating hash file " + self.project.firmware_filename + "." +
-                                    self.project.firmware_def[Key.SECURITY.value]\
+                                    self.project.firmware[Key.SECURITY.value]\
                                                              [Key.HASH_METHOD.value])
 
           # Generate the hash tool call
-          cmd = self.project.firmware_def[Key.SECURITY.value][Key.HASH_METHOD.value] + "sum " + '"'
+          cmd = self.project.firmware[Key.SECURITY.value][Key.HASH_METHOD.value] + "sum " + '"'
           cmd += self.project.firmware_filename + '" > "' + self.project.firmware_filename
-          cmd += "." + self.project.firmware_def[Key.SECURITY.value][Key.HASH_METHOD.value] + '"'
+          cmd += "." + self.project.firmware[Key.SECURITY.value][Key.HASH_METHOD.value] + '"'
 
           # Execute the hash generation command
           self.execute_command(cmd)
@@ -136,7 +136,7 @@ class BuildFirmware(CliCommand):
         # Algorithm is unknown, output an error and exit
         else:
           self.project.logging.error("The hash-method is unknown (" +
-                                     self.project.firmware_def[Key.SECURITY.value]\
+                                     self.project.firmware[Key.SECURITY.value]\
                                                               [Key.HASH_METHOD.value] + ")")
           exit(1)
 
@@ -172,61 +172,61 @@ class BuildFirmware(CliCommand):
     cmd += self.project.firmware_filename + '"'
 
     # Append arguments if defined in the configuration file
-    if "block_size" in self.project.firmware_def["configuration"]:
-      cmd += ' -b ' + self.project.firmware_def["configuration"]["block_size"]
+    if "block_size" in self.project.firmware["configuration"]:
+      cmd += ' -b ' + self.project.firmware["configuration"]["block_size"]
 
-    if "compressor" in self.project.firmware_def["configuration"]:
-      cmd += ' -comp ' + self.project.firmware_def["configuration"]["compressor"]
+    if "compressor" in self.project.firmware["configuration"]:
+      cmd += ' -comp ' + self.project.firmware["configuration"]["compressor"]
 
-    if "no_exports" in self.project.firmware_def["configuration"]:
-      if self.project.firmware_def["configuration"]["no_exports"]:
+    if "no_exports" in self.project.firmware["configuration"]:
+      if self.project.firmware["configuration"]["no_exports"]:
         cmd += ' -no-exports '
 
-    if "no_spare" in self.project.firmware_def["configuration"]:
+    if "no_spare" in self.project.firmware["configuration"]:
       cmd += ' -no-spare '
 
-    if "xattrs" in self.project.firmware_def["configuration"]:
-      if self.project.firmware_def["configuration"]["xattrs"]:
+    if "xattrs" in self.project.firmware["configuration"]:
+      if self.project.firmware["configuration"]["xattrs"]:
         cmd += ' -xattrs '
-      if not self.project.firmware_def["configuration"]["xattrs"]:
+      if not self.project.firmware["configuration"]["xattrs"]:
         cmd += ' -no-xattrs '
 
-    if "no_inode_compression" in self.project.firmware_def["configuration"]:
+    if "no_inode_compression" in self.project.firmware["configuration"]:
       cmd += ' -noI '
 
-    if "no_datablock_compression" in self.project.firmware_def["configuration"]:
+    if "no_datablock_compression" in self.project.firmware["configuration"]:
       cmd += ' -noD '
 
-    if "no_fragmentblock_compression" in self.project.firmware_def["configuration"]:
+    if "no_fragmentblock_compression" in self.project.firmware["configuration"]:
       cmd += ' -noF '
 
-    if "no_xattrs_compression" in self.project.firmware_def["configuration"]:
+    if "no_xattrs_compression" in self.project.firmware["configuration"]:
       cmd += ' -noX '
 
-    if "use_fragments" in self.project.firmware_def["configuration"]:
-      if self.project.firmware_def["configuration"]["use_fragments"]:
+    if "use_fragments" in self.project.firmware["configuration"]:
+      if self.project.firmware["configuration"]["use_fragments"]:
         cmd += ' -always_use_fragments '
-      if not self.project.firmware_def["configuration"]["use_fragments"]:
+      if not self.project.firmware["configuration"]["use_fragments"]:
         cmd += ' -no_fragments '
 
-    if "no_duplicate_check" in self.project.firmware_def["configuration"]:
-      if self.project.firmware_def["configuration"]["no_duplicate_check"]:
+    if "no_duplicate_check" in self.project.firmware["configuration"]:
+      if self.project.firmware["configuration"]["no_duplicate_check"]:
         cmd += ' -no-duplicates '
 
-    if "all_root" in self.project.firmware_def["configuration"]:
-      if self.project.firmware_def["configuration"]["all_root"]:
+    if "all_root" in self.project.firmware["configuration"]:
+      if self.project.firmware["configuration"]["all_root"]:
         cmd += ' -all-root '
 
-    if "force_uid" in self.project.firmware_def["configuration"]:
+    if "force_uid" in self.project.firmware["configuration"]:
       cmd += ' -force-uid '
-      cmd += self.project.firmware_def["configuration"]["force_uid"]
+      cmd += self.project.firmware["configuration"]["force_uid"]
 
-    if "force_gid" in self.project.firmware_def["configuration"]:
+    if "force_gid" in self.project.firmware["configuration"]:
       cmd += ' -force-gid '
-      cmd += self.project.firmware_def["configuration"]["force_gid"]
+      cmd += self.project.firmware["configuration"]["force_gid"]
 
-    if "nopad" in self.project.firmware_def["configuration"]:
-      if self.project.firmware_def["configuration"]["nopad"]:
+    if "nopad" in self.project.firmware["configuration"]:
+      if self.project.firmware["configuration"]["nopad"]:
         cmd += ' -nopad '
 
     self.execute_command(cmd)
