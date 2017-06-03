@@ -27,7 +27,6 @@ based upon the definition stored in a configuration file and a set of Ansible ro
 
 import logging
 import os
-import tarfile
 import tempfile
 from distutils import dir_util
 from distutils import file_util
@@ -136,7 +135,8 @@ class BuildRootFS(CliCommand):
       self.cleanup_qemu()
 
     # Final log
-    logging.info("RootFS has been successfully generated into : " + self.project.get_rootfs_mountpoint())
+    logging.info("RootFS has been successfully generated into : " +
+                 self.project.get_rootfs_mountpoint())
 
   # -------------------------------------------------------------------------
   #
@@ -241,7 +241,7 @@ class BuildRootFS(CliCommand):
       working_file.write("  roles:\n")
 
       # Iterate the list of distributions loaded from the file
-      for role in self.project.rootfs_def[Key.ROLES.value]:
+      for role in self.project.rootfs[Key.ROLES.value]:
         # At least one role has beenfound, flag it
         role_has_been_found = True
         logging.debug("Adding role " + role)
@@ -348,14 +348,14 @@ class BuildRootFS(CliCommand):
     self.proc_is_mounted = True
 
     # Mount bind /dev/pts into the rootfs mountpoint
-    sudo_command = "sudo mount --bind --make-rslave /dev/pts " + self.project.get_rootfs_mountpoint()
-    sudo_command += "/dev/pts"
+    sudo_command = "sudo mount --bind --make-rslave /dev/pts "
+    sudo_command += self.project.get_rootfs_mountpoint() + "/dev/pts"
     self.execute_command(sudo_command)
     self.devpts_is_mounted = True
 
     # Mount bind /dev/shm into the rootfs mountpoint
-    sudo_command = "sudo mount --bind --make-rslave /dev/shm " + self.project.get_rootfs_mountpoint()
-    sudo_command += "/dev/shm"
+    sudo_command = "sudo mount --bind --make-rslave /dev/shm "
+    sudo_command += self.project.get_rootfs_mountpoint() + "/dev/shm"
     self.execute_command(sudo_command)
     self.devshm_is_mounted = True
 
@@ -428,11 +428,12 @@ class BuildRootFS(CliCommand):
     # The open the temp file for output, and iterate the distro dictionnary
     with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
       # Iterate the list of distributions loaded from the file
-      for distro in self.project.repositories_def[Key.DISTRIBUTIONS.value]:
+      for distro in self.project.repositories[Key.DISTRIBUTIONS.value]:
         logging.debug(distro)
         # Process only if it is the version we target
         if distro[Key.NAME.value] == self.project.get_target_version() and \
-                                     self.project.get_target_arch() in distro[Key.ARCHITECTURES.value]:
+                                     self.project.get_target_arch() in \
+                                     distro[Key.ARCHITECTURES.value]:
           # W have found a matching distro or not
           distro_has_been_found = True
           # Then iterate all the sources for this distro version
@@ -465,7 +466,7 @@ class BuildRootFS(CliCommand):
     # /etc/apt/sources.list and installation will faill
     if not distro_has_been_found:
       self.cleanup_installation_files()
-      logging.error("No distribution matching " + self.project.get_target_version() + " has been found.")
+      logging.error("No distribution matching " + self.project.get_target_version())
       logging.error("Please check repositories definition for this project.")
       logging.error("File in use is : " + self.project.generate_def_file_path(\
                                 self.project.project[Key.PROJECT_DEFINITION.value]\
