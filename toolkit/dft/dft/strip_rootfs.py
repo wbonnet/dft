@@ -83,7 +83,7 @@ class StripRootFS(CliCommand):
       self.setup_qemu()
 
     # Check that there is a stripping definition
-    if self.project.stripping_def is None:
+    if self.project.stripping is None:
       self.project.logging.info("The project has no stripping information defined")
       return
 
@@ -117,9 +117,9 @@ class StripRootFS(CliCommand):
     """
 
     # Check that the stripping definition includes packages
-    if Key.PACKAGES.value in self.project.stripping_def:
+    if Key.PACKAGES.value in self.project.stripping:
       # Check that the stripping definition includes a status absent
-      if Key.ABSENT.value in self.project.stripping_def[Key.PACKAGES.value]:
+      if Key.ABSENT.value in self.project.stripping[Key.PACKAGES.value]:
         # Retrieve the list of installed packages
         sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
         sudo_command += " dpkg -l | tail -n +6 | awk '{ print $2 }'"
@@ -132,7 +132,7 @@ class StripRootFS(CliCommand):
           self.installed_packages[binaryline.decode('utf-8').split()[0]] = True
 
         # Iterate the list packages to remove
-        for pkg in self.project.stripping_def[Key.PACKAGES.value][Key.ABSENT.value]:
+        for pkg in self.project.stripping[Key.PACKAGES.value][Key.ABSENT.value]:
           # If the package is installed
           if pkg in self.installed_packages:
             # First chck if we h&ve to add APT
@@ -171,17 +171,17 @@ class StripRootFS(CliCommand):
     """
 
     # Check that the stripping definition includes files
-    if Key.FILES.value in self.project.stripping_def:
+    if Key.FILES.value in self.project.stripping:
       # Check that the stripping definition includes a status absent
-      if Key.ABSENT.value in self.project.stripping_def[Key.FILES.value]:
-        for working_file in self.project.stripping_def[Key.FILES.value][Key.ABSENT.value]:
+      if Key.ABSENT.value in self.project.stripping[Key.FILES.value]:
+        for working_file in self.project.stripping[Key.FILES.value][Key.ABSENT.value]:
           self.remove_file(working_file)
       else:
         self.project.logging.debug("The stripping definition does not include files to remove")
 
       # Check that the stripping definition includes a status empty
-      if Key.EMPTY.value in self.project.stripping_def[Key.FILES.value]:
-        for working_file in self.project.stripping_def[Key.FILES.value][Key.EMPTY.value]:
+      if Key.EMPTY.value in self.project.stripping[Key.FILES.value]:
+        for working_file in self.project.stripping[Key.FILES.value][Key.EMPTY.value]:
           self.empty_file(working_file)
       else:
         self.project.logging.debug("Stripping definition does not include files to truncate")
@@ -201,17 +201,17 @@ class StripRootFS(CliCommand):
     """
 
     # Check that the stripping definition includes directories
-    if Key.DIRECTORIES.value in self.project.stripping_def:
+    if Key.DIRECTORIES.value in self.project.stripping:
       # Check that the stripping definition includes a status absent
-      if Key.ABSENT.value in self.project.stripping_def[Key.DIRECTORIES.value]:
-        for directory in self.project.stripping_def[Key.DIRECTORIES.value][Key.ABSENT.value]:
+      if Key.ABSENT.value in self.project.stripping[Key.DIRECTORIES.value]:
+        for directory in self.project.stripping[Key.DIRECTORIES.value][Key.ABSENT.value]:
           self.remove_directory(directory)
       else:
         self.project.logging.debug("Stripping definition does not include directories to remove")
 
       # Check that the stripping definition includes a status empty
-      if Key.EMPTY.value in self.project.stripping_def[Key.DIRECTORIES.value]:
-        for directory in self.project.stripping_def[Key.DIRECTORIES.value][Key.EMPTY.value]:
+      if Key.EMPTY.value in self.project.stripping[Key.DIRECTORIES.value]:
+        for directory in self.project.stripping[Key.DIRECTORIES.value][Key.EMPTY.value]:
           self.empty_directory(directory)
       else:
         self.project.logging.debug("The stripping definition does not include files to empty")
