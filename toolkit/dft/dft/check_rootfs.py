@@ -251,7 +251,7 @@ class CheckRootFS(CliCommand):
     self.project.logging.info("starting to check installed packages")
 
     # Generate the dpkg command to retrieve the list of installed packages
-    sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
+    sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
     sudo_command += " dpkg -l | tail -n +6"
     pkglist = self.execute_command(sudo_command)
 
@@ -693,7 +693,7 @@ class CheckRootFS(CliCommand):
     # Target path is not an attribute, but a computed variable. It contains
     # the path to file or directory ultimatly pointed by symlinks. Computing
     # This variable has to be recursive since a link can point to a link
-    rule[Key.PATH.value] = self.project.rootfs_mountpoint + rule[Key.PATH.value]
+    rule[Key.PATH.value] = self.project.get_rootfs_mountpoint() + rule[Key.PATH.value]
     rule[Key.TARGET_PATH.value] = rule[Key.PATH.value]
     while os.path.islink(rule[Key.TARGET_PATH.value]):
       self.project.logging.debug("Processing link " + rule[Key.TARGET_PATH.value])
