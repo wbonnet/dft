@@ -78,18 +78,18 @@ class AssembleFirmware(CliCommand):
     """
 
     # Check that there is a firmware configuration file first
-    if self.project.firmware_def is None:
+    if self.project.firmware is None:
       self.project.logging.critical("The firmware configuration file is not defined in \
                                      project file")
       exit(1)
 
     # Check that the layout is available from the firmware configuration file
-    if Key.LAYOUT.value not in self.project.firmware_def:
+    if Key.LAYOUT.value not in self.project.firmware:
       self.project.logging.critical("The firmware layout is not defined in configuration file")
       exit(1)
 
     # Check that the stacking method is available from the firmware configuration file
-    if Key.METHOD.value not in self.project.firmware_def[Key.LAYOUT.value]:
+    if Key.METHOD.value not in self.project.firmware[Key.LAYOUT.value]:
       self.project.logging.critical("The firmware stacking method is not defined")
       exit(1)
 
@@ -98,7 +98,6 @@ class AssembleFirmware(CliCommand):
       os.makedirs(self.project.get_firmware_directory())
 
     # Ensure firmware exists
-    # TODO : iterate the list of squashfs files
     if not os.path.isfile(self.project.firmware_filename):
       logging.critical("The firmware does not exist (" + self.project.firmware_filename + ")")
       exit(1)
@@ -162,7 +161,8 @@ class AssembleFirmware(CliCommand):
     logging.info("Upadting initramfs")
 
     # Copy the stacking script to /tmp in the rootfs
-    sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint() + " update-initramfs -u"
+    sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
+    sudo_command += " update-initramfs -u"
     self.execute_command(sudo_command)
 
 
@@ -209,7 +209,7 @@ class AssembleFirmware(CliCommand):
 
     # Copy the initramfs build hook to the hook dir in the generated rootfs
     sudo_command = 'sudo cp '
-    sudo_command += self.project.project_def[Key.CONFIGURATION.value][Key.DFT_BASE.value]
+    sudo_command += self.project.project[Key.CONFIGURATION.value][Key.DFT_BASE.value]
     sudo_command += "/../scripts/add_dft_to_initramfs " + self.project.get_rootfs_mountpoint()
     sudo_command += '/usr/share/initramfs-tools/hooks/'
     self.execute_command(sudo_command)
@@ -260,16 +260,16 @@ class AssembleFirmware(CliCommand):
     self.generate_common_mount(working_file.name)
 
     # Call the method dedicated to the selected stacking method
-    if self.project.firmware_def[Key.LAYOUT.value][Key.METHOD.value] == Key.AUFS.value:
+    if self.project.firmware[Key.LAYOUT.value][Key.METHOD.value] == Key.AUFS.value:
       # Generate aufs stuff
       self.generate_aufs_stacking(working_file.name)
-    elif self.project.firmware_def[Key.LAYOUT.value][Key.METHOD.value] == Key.OVERLAYFS.value:
+    elif self.project.firmware[Key.LAYOUT.value][Key.METHOD.value] == Key.OVERLAYFS.value:
       # Generate overlayfs stuff
       self.generate_overlayfs_stacking(working_file.name)
     else:
       # If we reach this code, then method was unknown
       self.project.logging.critical("Unknown stacking method " +
-                                    self.project.firmware_def[Key.LAYOUT.value][Key.METHOD.value])
+                                    self.project.firmware[Key.LAYOUT.value][Key.METHOD.value])
       exit(1)
 
     # We are done with file generation, close it now
@@ -304,7 +304,7 @@ class AssembleFirmware(CliCommand):
     working_file = open(working_file_name, "a")
 
     # Check that the stack definition is in the configuration file
-    if Key.STACK_DEFINITION.value not in self.project.firmware_def[Key.LAYOUT.value]:
+    if Key.STACK_DEFINITION.value not in self.project.firmware[Key.LAYOUT.value]:
       self.project.logging.critical("The stack definition is not in the configuration file")
       exit(1)
 
@@ -314,7 +314,7 @@ class AssembleFirmware(CliCommand):
     working_file.write("\n")
 
     # Iterates the stack items
-    for item in self.project.firmware_def[Key.LAYOUT.value][Key.STACK_DEFINITION.value]:
+    for item in self.project.firmware[Key.LAYOUT.value][Key.STACK_DEFINITION.value]:
       # Generate the mount point creation code
       working_file.write("# Create the mount point for " + item[Key.STACK_ITEM.value]\
                          [Key.TYPE.value] + " '" + item[Key.STACK_ITEM.value][Key.NAME.value] +
@@ -404,12 +404,12 @@ class AssembleFirmware(CliCommand):
     working_file = open(working_file_name, "a")
 
     # Check that the stack definition is in the configuration file
-    if Key.STACK_DEFINITION.value not in self.project.firmware_def[Key.LAYOUT.value]:
+    if Key.STACK_DEFINITION.value not in self.project.firmware[Key.LAYOUT.value]:
       self.project.logging.critical("The stack definition is not in the configuration file")
       exit(1)
 
     # Iterates the stack items
-    for item in self.project.firmware_def[Key.LAYOUT.value][Key.STACK_DEFINITION.value]:
+    for item in self.project.firmware[Key.LAYOUT.value][Key.STACK_DEFINITION.value]:
       # Generate the mount point creation code
       working_file.write("# Stack the   " + item[Key.STACK_ITEM.value][Key.TYPE.value] +
                          " '" + item[Key.STACK_ITEM.value][Key.NAME.value] + "'\n")
