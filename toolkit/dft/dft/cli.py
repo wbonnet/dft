@@ -170,7 +170,7 @@ x factory_setup                    Apply some extra factory setup before generat
                              action='store',
                              dest=Key.LIMIT_TARGET_BOARD.value,
                              help="limit the list of target board to process (comma separated "
-                                  "list of versions eg: generic_x86-64, raspberry-pi-3, odroid-xu4)")
+                                  "list of versions eg: raspberry-pi-3, odroid-xu4)")
 
     # Overrides the target version used to build the rootfs. Version to
     # use is limited it to a given list of arch. Versions not defined
@@ -389,8 +389,9 @@ x factory_setup                    Apply some extra factory setup before generat
       self.project.dft.log_level = Key.LOG_LEVEL_INFO.value
 
     # Create the logger object
-    logging.basicConfig(level=self.project.dft.log_level)
+    logging.basicConfig()
     self.project.logging = logging.getLogger()
+    self.project.logging.setLevel(self.project.dft.log_level)
 
     # Get the config file from command line
     if self.args.config_file != None:
@@ -464,26 +465,26 @@ x factory_setup                    Apply some extra factory setup before generat
         self.project.dft.keep_bootstrap_files = self.args.keep_bootstrap_files
 
     if self.args.override_debian_mirror != None:
-      if self.args.override_debian_mirror != self.project.project_def[Key.PROJECT_DEFINITION.value]\
+      if self.args.override_debian_mirror != self.project.project[Key.PROJECT_DEFINITION.value]\
                                                                  [Key.DEBOOTSTRAP_REPOSITORY.value]:
         self.project.logging.debug("Overriding pkg_archive_url with CLI value : %s => %s",
-                                   self.project.project_def[Key.PROJECT_DEFINITION.value]\
-                                                           [Key.DEBOOTSTRAP_REPOSITORY.value],
+                                   self.project.project[Key.PROJECT_DEFINITION.value]\
+                                                       [Key.DEBOOTSTRAP_REPOSITORY.value],
                                    self.args.override_debian_mirror)
-        self.project.project_def[Key.PROJECT_DEFINITION.value][Key.DEBOOTSTRAP_REPOSITORY.value] = \
+        self.project.project[Key.PROJECT_DEFINITION.value][Key.DEBOOTSTRAP_REPOSITORY.value] = \
                                    self.args.override_debian_mirror
 
     if self.args.limit_target_version != None:
-      if self.args.limit_target_version != self.project.target_version:
+      if self.args.limit_target_version != self.project.get_target_version():
         self.project.logging.debug("Overriding target_version with CLI value : %s => %s",
-                                   self.project.target_version,
+                                   self.project.get_target_version(),
                                    self.args.limit_target_version)
         self.project.set_version(self.args.limit_target_version)
 
     if self.args.limit_target_board != None:
-      if self.args.limit_target_board != self.project.target_board:
+      if self.args.limit_target_board != self.project.get_target_board():
         self.project.logging.debug("Overriding target_board with CLI value : %s => %s",
-                                   self.project.target_doard,
+                                   self.project.get_target_board(),
                                    self.args.limit_target_board)
         self.project.set_board(self.args.limit_target_board)
 
