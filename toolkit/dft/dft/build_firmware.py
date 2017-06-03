@@ -74,20 +74,20 @@ class BuildFirmware(CliCommand):
       exit(1)
 
     # Ensure firmware generation path exists and is a dir
-    if not os.path.isdir(self.project.rootfs_mountpoint):
+    if not os.path.isdir(self.project.get_rootfs_mountpoint()):
       logging.critical("The rootfs directory does not exist (" +
-                       self.project.rootfs_mountpoint + ")")
+                       self.project.get_rootfs_mountpoint() + ")")
       exit(1)
 
     # Remove existing firmware if needed, and all the files that may be in this directory
     # FIXME: Check that bad configuration cannot destroy local machine
-    if os.path.isdir(self.project.firmware_directory):
+    if os.path.isdir(self.project.get_firmware_directory()):
       self.project.logging.info("Recreating the firmware output directory " +
-                                self.project.firmware_directory)
-      rmtree(self.project.firmware_directory)
+                                self.project.get_firmware_directory())
+      rmtree(self.project.get_firmware_directory())
 
     # Ensure firmware generation path exists and is a dir
-    os.makedirs(self.project.firmware_directory)
+    os.makedirs(self.project.get_firmware_directory())
 
     # Generate the squashfs files
     self.create_squashfs_files()
@@ -168,7 +168,7 @@ class BuildFirmware(CliCommand):
     self.project.logging.info("Generating " + self.project.firmware_filename)
 
     # Create a new squashfs file from the rootfs path
-    cmd = 'mksquashfs "' +  self.project.rootfs_mountpoint + '" "'
+    cmd = 'mksquashfs "' +  self.project.get_rootfs_mountpoint() + '" "'
     cmd += self.project.firmware_filename + '"'
 
     # Append arguments if defined in the configuration file
