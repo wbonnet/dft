@@ -488,9 +488,9 @@ x factory_setup                    Apply some extra factory setup before generat
         self.project.set_board(self.args.limit_target_board)
 
     if self.args.limit_target_arch != None:
-      if self.args.limit_target_arch != self.project.target_arch:
+      if self.args.limit_target_arch != self.project.get_target_arch():
         self.project.logging.debug("Overriding target_arch with CLI value : %s => %s",
-                                   self.project.target_arch,
+                                   self.project.get_target_arch(),
                                    self.args.limit_target_arch)
         self.project.set_arch(self.args.limit_target_arch)
 
