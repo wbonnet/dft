@@ -121,7 +121,7 @@ class StripRootFS(CliCommand):
       # Check that the stripping definition includes a status absent
       if Key.ABSENT.value in self.project.stripping_def[Key.PACKAGES.value]:
         # Retrieve the list of installed packages
-        sudo_command = "LANG=C sudo chroot " + self.project.rootfs_mountpoint
+        sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
         sudo_command += " dpkg -l | tail -n +6 | awk '{ print $2 }'"
         pkglist = self.execute_command(sudo_command)
 
@@ -136,7 +136,7 @@ class StripRootFS(CliCommand):
           # If the package is installed
           if pkg in self.installed_packages:
             # First chck if we h&ve to add APT
-            filepath = self.project.rootfs_mountpoint + "/usr/bin/apt-get"
+            filepath = self.project.get_rootfs_mountpoint() + "/usr/bin/apt-get"
 
             # Test if the binary exists
             if not os.path.isfile(filepath):
@@ -234,7 +234,7 @@ class StripRootFS(CliCommand):
     """
 
     self.project.logging.debug("Remove file : " + target)
-    sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
+    sudo_command = "sudo chroot " + self.project.get_rootfs_mountpoint()
     sudo_command += " rm -f " + target
     self.execute_command(sudo_command)
 
@@ -256,7 +256,7 @@ class StripRootFS(CliCommand):
     self.project.logging.debug("Empty file : " + target)
 
     # Test if the fileexist before trying to trucate it
-    sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
+    sudo_command = "sudo chroot " + self.project.get_rootfs_mountpoint()
     sudo_command += " bash -c '[ -f " + target + " ] && truncate " + target
     sudo_command += " --size 0 || true'"
     self.execute_command(sudo_command)
@@ -279,7 +279,7 @@ class StripRootFS(CliCommand):
     """
 
     self.project.logging.debug("Remove directory : " + target)
-    sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
+    sudo_command = "sudo chroot " + self.project.get_rootfs_mountpoint()
     sudo_command += " rm -fr " + target
     self.execute_command(sudo_command)
 
@@ -299,7 +299,7 @@ class StripRootFS(CliCommand):
     """
 
     self.project.logging.debug("Empty directory : " + target)
-    sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
+    sudo_command = "sudo chroot " + self.project.get_rootfs_mountpoint()
     sudo_command += " bash -c '[ -d " + target + " ] && find " + target
     sudo_command += " -type f | xargs rm -f || true'"
     self.execute_command(sudo_command)
