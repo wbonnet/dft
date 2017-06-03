@@ -66,7 +66,7 @@ class CliCommand(object):
                                              shell=True).decode(Key.UTF8.value).rstrip()
 
     # Boolean used to flag the use of QEMU static
-    self.use_qemu_static = (self.host_arch != project.target_arch)
+    self.use_qemu_static = (self.host_arch != project.get_target_arch())
 
     # Flags used to remove 'mount bind' states
     self.proc_is_mounted = False
@@ -123,19 +123,19 @@ class CliCommand(object):
       return
 
     # Copy the QEMU binary to the target, using root privileges
-    if   self.project.target_arch == "armhf":
+    if   self.project.get_target_arch() == "armhf":
       qemu_target_arch = "arm"
-    elif self.project.target_arch == "armel":
+    elif self.project.get_target_arch() == "armel":
       qemu_target_arch = "arm"
     else:
-      qemu_target_arch = self.project.target_arch
+      qemu_target_arch = self.project.get_target_arch()
 
     self.project.logging.info("setting up QEMU for arch " +
-                              self.project.target_arch +
+                              self.project.get_target_arch() +
                               " (using /usr/bin/qemu-" +
                               qemu_target_arch + "-static)")
     sudo_command = "sudo cp /usr/bin/qemu-"  + qemu_target_arch + "-static "
-    sudo_command += self.project.rootfs_mountpoint + "/usr/bin/"
+    sudo_command += self.project.get_rootfs_mountpoint() + "/usr/bin/"
     self.execute_command(sudo_command)
 
 
@@ -155,21 +155,21 @@ class CliCommand(object):
 
     if self.project.dft.keep_bootstrap_files:
       self.project.logging.debug("keep_bootstrap_files is activated, keeping QEMU in " +
-                                 self.project.rootfs_mountpoint)
+                                 self.project.get_rootfs_mountpoint())
       return
 
     # Copy the QEMU binary to the target, using root privileges
-    if   self.project.target_arch == "armhf":
+    if   self.project.get_target_arch() == "armhf":
       qemu_target_arch = "arm"
-    elif self.project.target_arch == "armel":
+    elif self.project.get_target_arch() == "armel":
       qemu_target_arch = "arm"
     else:
-      qemu_target_arch = self.project.target_arch
+      qemu_target_arch = self.project.get_target_arch()
 
     # Execute the file removal with root privileges
-    self.project.logging.info("cleaning QEMU for arch " + self.project.target_arch +
+    self.project.logging.info("cleaning QEMU for arch " + self.project.get_target_arch() +
                               "(/usr/bin/qemu-" + qemu_target_arch + "-static)")
-    os.system("sudo rm " + self.project.rootfs_mountpoint + "/usr/bin/qemu-" +
+    os.system("sudo rm " + self.project.get_rootfs_mountpoint() + "/usr/bin/qemu-" +
               qemu_target_arch + "-static")
 
   # -------------------------------------------------------------------------
@@ -196,28 +196,28 @@ class CliCommand(object):
 
     # Check if /proc is mounted, then umount it
     if self.proc_is_mounted:
-      sudo_command = "sudo umount " + self.project.rootfs_mountpoint + "/dev/pts"
+      sudo_command = "sudo umount " + self.project.get_rootfs_mountpoint() + "/dev/pts"
       self.execute_command(sudo_command)
 
     # Check if /dev/shm is mounted, then umount it
     if self.devshm_is_mounted:
-      sudo_command = "sudo umount " + self.project.rootfs_mountpoint + "/dev/shm"
+      sudo_command = "sudo umount " + self.project.get_rootfs_mountpoint() + "/dev/shm"
       self.execute_command(sudo_command)
 
     # Check if /dev/pts is mounted, then umount it
     if self.devpts_is_mounted:
-      sudo_command = "sudo umount " + self.project.rootfs_mountpoint + "/proc"
+      sudo_command = "sudo umount " + self.project.get_rootfs_mountpoint() + "/proc"
       self.execute_command(sudo_command)
 
     self.cleanup_in_progress = False
 
     # Delete the DFT files from the rootfs
     if not self.project.dft.keep_bootstrap_files:
-      if os.path.isdir(self.project.rootfs_mountpoint + "/dft_bootstrap"):
-        shutil.rmtree(self.project.rootfs_mountpoint + "/dft_bootstrap")
+      if os.path.isdir(self.project.get_rootfs_mountpoint() + "/dft_bootstrap"):
+        shutil.rmtree(self.project.get_rootfs_mountpoint() + "/dft_bootstrap")
     else:
       self.project.logging.debug("keep_bootstrap_files is activated, keeping DFT bootstrap " +
-                                 "files in " + self.project.rootfs_mountpoint + "/dft_bootstrap")
+                                 "files in " + self.project.get_rootfs_mountpoint() + "/dft_bootstrap")
 
     # Test if the generate_validity_check is defined, if not set the default value
     if "remove_validity_check" not in self.project.project_def["configuration"]:
@@ -227,7 +227,7 @@ class CliCommand(object):
       self.project.logging.debug("remove generated /etc/apt/apt.conf.d/10no-check-valid-until")
 
       # Generate the file path
-      filepath = self.project.rootfs_mountpoint + "/etc/apt/apt.conf.d/10no-check-valid-until"
+      filepath = self.project.get_rootfs_mountpoint() + "/etc/apt/apt.conf.d/10no-check-valid-until"
 
       # Test if the file exists
       if os.path.isfile(filepath):
@@ -256,7 +256,7 @@ class CliCommand(object):
     """
 
     self.project.logging.debug("Remove package : " + target)
-    sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
+    sudo_command = "sudo chroot " + self.project.get_rootfs_mountpoint()
     sudo_command += " /usr/bin/apt-get autoremove --purge --yes " + target
     self.execute_command(sudo_command)
 
@@ -275,7 +275,7 @@ class CliCommand(object):
     """
 
     self.project.logging.debug("Install package(s) : " + target)
-    sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
+    sudo_command = "sudo chroot " + self.project.get_rootfs_mountpoint()
     sudo_command += " /usr/bin/apt-get install --no-install-recommends --yes "
     sudo_command += " --allow-unauthenticated  " + target
     self.execute_command(sudo_command)
@@ -294,6 +294,6 @@ class CliCommand(object):
     """
 
     self.project.logging.debug("Updating APT catalog")
-    sudo_command = "sudo chroot " + self.project.rootfs_mountpoint
+    sudo_command = "sudo chroot " + self.project.get_rootfs_mountpoint()
     sudo_command += " /usr/bin/apt-get update --yes --allow-unauthenticated "
     self.execute_command(sudo_command)
