@@ -62,11 +62,6 @@ class BuildRootFS(CliCommand):
     # Initialize ancestor
     CliCommand.__init__(self, dft, project)
 
-    # Flags used to know if proc and dev hae beeon mounted in the generated rootfs
-    self.proc_is_mounted = False
-    self.devpts_is_mounted = False
-    self.devshm_is_mounted = False
-
     # Path to the ansible roles under dft_base
     self.ansible_dir = project.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] + "/ansible"
 
