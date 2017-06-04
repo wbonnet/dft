@@ -27,6 +27,7 @@ their content and definition fom yaml configuration file.
 """
 
 import os
+import logging
 from enum import Enum
 from datetime import datetime
 import yaml
@@ -126,6 +127,7 @@ class Key(Enum):
   JSON = "json"
   KEEP_BOOTSTRAP_FILES = "keep_bootstrap_files"
   KEEP_ROOTFS_HISTORY = "keep_rootfs_history"
+  KERNEL = "kernel"
   LABEL = "label"
   LABEL_RESULT_FAIL = "[FAIL]"
   LABEL_RESULT_OK = "[ OK ]"
@@ -170,6 +172,7 @@ class Key(Enum):
   OPT_LOG_LEVEL = "--log-level"
   OPT_OVERRIDE_DEBIAN_MIRROR = "--override-debian-mirror"
   OPT_PROJECT_FILE = "--project-file"
+  ORIGIN = "origin"
   OUTPUT = "output"
   OUTPUT_PKG_ARCHITECTURE = "output_pkg_architecture"
   OUTPUT_PKG_DESCRIPTION = "output_pkg_description"
@@ -221,6 +224,7 @@ class Key(Enum):
   TARGET_PATH = "target_path"
   TMPFS = "tmpfs"
   TYPE = "type"
+  UBOOT = "uboot"
   UPDATE_DATABASE = "update_database"
   URL = "url"
   USE_FRAGMENTS = "use_fragments"
@@ -342,7 +346,7 @@ class ProjectDefinition(object):
     """
 
     # Create the logger object
-    self.logging = self.logging.getLogger()
+    self.logging = logging.getLogger()
 
     # Store the filename containing the whole project definition
     # Filename is mandatory, and is defaulted to project.yml if
