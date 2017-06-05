@@ -129,7 +129,7 @@ class InstallBootChain(CliCommand):
     # Check if the provider is Debian, if yes, there is nothing to do for source list generation
     # The system will use the sources defined for rootfs installation
     if target[Key.BSP.value][Key.KERNEL.value][Key.ORIGIN.value] == "debian":
-        logging.debug("Using Debian repo as source provider.")
+      logging.debug("Using Debian repo as source provider.")
     else:
       # Target is not Debian, then we need to create a temporary file for source file generation
       # and complete the path according to the known providers
