@@ -123,7 +123,7 @@ class InstallBootChain(CliCommand):
     # Control the package provider. So far only handles debian armbian and devuan
     if target[Key.BSP.value][Key.KERNEL.value][Key.ORIGIN.value] not in \
       "devuan" "debian" "armbian":
-      logging.error("Unknown kernel provider '" + target[Key.BSP.value][origin] + "'")
+      logging.error("Unknown kernel provider '" + target[Key.BSP.value][Key.ORIGIN.value] + "'")
       exit(1)
 
     # Check if the provider is Debian, if yes, there is nothing to do for source list generation
@@ -173,4 +173,3 @@ class InstallBootChain(CliCommand):
 # ca uniquement si on connait e provider
 # pour le moment on en gère que trois
 #    self.install_package("xxx")
-
