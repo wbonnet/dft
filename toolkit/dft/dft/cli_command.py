@@ -104,6 +104,10 @@ class CliCommand(object):
       self.cleanup_installation_files()
       self.project.logging.critical("Error %d occured when executing %s",
                                     exception.returncode, exception.cmd)
+      self.project.logging.debug("stdout was :")
+      self.project.logging.debug(exception.stdout)
+      self.project.logging.debug("stderr was :")
+      self.project.logging.debug(exception.stderr)
       exit(1)
 
 
@@ -185,32 +189,6 @@ class CliCommand(object):
     """
     self.project.logging.info("starting to cleanup installation files")
 
-    # Are we already doing a cleanup ? this may happens if an exception
-    # occurs when cleaning up. It prevents multiple call and loop in
-    # exception processing
-    if self.cleanup_in_progress:
-      return
-
-    # Set the flag used to prevent multiple call
-    self.cleanup_in_progress = True
-
-    # Check if /proc is mounted, then umount it
-    if self.proc_is_mounted:
-      sudo_command = "sudo umount " + self.project.get_rootfs_mountpoint() + "/dev/pts"
-      self.execute_command(sudo_command)
-
-    # Check if /dev/shm is mounted, then umount it
-    if self.devshm_is_mounted:
-      sudo_command = "sudo umount " + self.project.get_rootfs_mountpoint() + "/dev/shm"
-      self.execute_command(sudo_command)
-
-    # Check if /dev/pts is mounted, then umount it
-    if self.devpts_is_mounted:
-      sudo_command = "sudo umount " + self.project.get_rootfs_mountpoint() + "/proc"
-      self.execute_command(sudo_command)
-
-    self.cleanup_in_progress = False
-
     # Delete the DFT files from the rootfs
     if not self.project.dft.keep_bootstrap_files:
       if os.path.isdir(self.project.get_rootfs_mountpoint() + "/dft_bootstrap"):
@@ -236,7 +214,7 @@ class CliCommand(object):
         sudo_command = "sudo rm -f " + filepath
         self.execute_command(sudo_command)
     else:
-      msg = "remove_validity_check_ is set to False. Generated "
+      msg = "remove_validity_check is set to False. Generated "
       msg += "/etc/apt/apt.conf.d/10no-check-valid-until is not removed"
       self.project.logging.debug(msg)
 
@@ -281,6 +259,23 @@ class CliCommand(object):
     sudo_command += " --allow-unauthenticated  " + target
     self.execute_command(sudo_command)
 
+
+
+  # -------------------------------------------------------------------------
+  #
+  # add_catalog_signing_key
+  #
+  # -------------------------------------------------------------------------
+  def add_catalog_signing_key(self, key):
+    """This method add a new signing key to the list of known keys.
+    """
+
+    # Import the public key in the APT tools
+    sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
+    sudo_command += " apt-key adv --recv-keys --keyserver pgp.mit.edu " + key
+    self.execute_command(sudo_command)
+
+
   # -------------------------------------------------------------------------
   #
   # update_package_catalog
@@ -298,3 +293,71 @@ class CliCommand(object):
     sudo_command = "sudo chroot " + self.project.get_rootfs_mountpoint()
     sudo_command += " /usr/bin/apt-get update --yes --allow-unauthenticated "
     self.execute_command(sudo_command)
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # setup_chrooted_environment
+  #
+  # -------------------------------------------------------------------------
+  def setup_chrooted_environment(self):
+    """This method mount in the chrooted environment all of the special
+    filesystems needed to make application work properly once chrooted.
+    """
+
+    # Mount bind /proc into the rootfs mountpoint
+    sudo_command = "sudo mount --bind --make-rslave /proc " + self.project.get_rootfs_mountpoint()
+    sudo_command += "/proc"
+    self.execute_command(sudo_command)
+    self.proc_is_mounted = True
+
+    # Mount bind /dev/pts into the rootfs mountpoint
+    sudo_command = "sudo mount --bind --make-rslave /dev/pts "
+    sudo_command += self.project.get_rootfs_mountpoint() + "/dev/pts"
+    self.execute_command(sudo_command)
+    self.devpts_is_mounted = True
+
+    # Mount bind /dev/shm into the rootfs mountpoint
+    sudo_command = "sudo mount --bind --make-rslave /dev/shm "
+    sudo_command += self.project.get_rootfs_mountpoint() + "/dev/shm"
+    self.execute_command(sudo_command)
+    self.devshm_is_mounted = True
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # teardown_chrooted_environment
+  #
+  # -------------------------------------------------------------------------
+  def teardown_chrooted_environment(self):
+    """This method umount in the chrooted environment all of the special
+    filesystems needed to make application work properly once chrooted.
+    """
+
+    # Are we already doing a cleanup ? this may happens if an exception
+    # occurs when cleaning up. It prevents multiple call and loop in
+    # exception processing
+    if self.cleanup_in_progress:
+      return
+
+    # Set the flag used to prevent multiple call
+    self.cleanup_in_progress = True
+
+    # Check if /proc is mounted, then umount it
+    if self.proc_is_mounted:
+      sudo_command = "sudo umount " + self.project.get_rootfs_mountpoint() + "/dev/pts"
+      self.execute_command(sudo_command)
+
+    # Check if /dev/shm is mounted, then umount it
+    if self.devshm_is_mounted:
+      sudo_command = "sudo umount " + self.project.get_rootfs_mountpoint() + "/dev/shm"
+      self.execute_command(sudo_command)
+
+    # Check if /dev/pts is mounted, then umount it
+    if self.devpts_is_mounted:
+      sudo_command = "sudo umount " + self.project.get_rootfs_mountpoint() + "/proc"
+      self.execute_command(sudo_command)
+
+    self.cleanup_in_progress = False

@@ -38,14 +38,21 @@ architecture: armhf
 # and muse be defined.
 #
 kernel:
+  # Use armbian for odroid xu4
   origin: armbian
-  packages:
-    - kernel
-    - dtb
-    - firmware
-#TODO: add flag to define if a specific source list ha to be generated under sources.list.define
 
+  # Defines the public of the repository ( default value is 93D6889F9F0E78D5 )
+  # pubkey: 93D6889F9F0E78D5
+
+  # List of packages to install from the repository
+  packages:
+    - linux-image-next-odroidxu4
+    - linux-dtb-next-odroidxu4
+    - linux-firmware-image-next-odroidxu4
+
+#TODO: add flag to define if a specific source list ha to be generated under sources.list.define
 
 # The uboot section defines the different parameters needed to select and install the uboot
 # used to boot the board an run kernel. It is defined by XXX
 # uboot:
+# linux-u-boot-odroidxu4-next

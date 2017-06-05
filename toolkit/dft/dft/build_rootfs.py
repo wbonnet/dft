@@ -119,6 +119,9 @@ class BuildRootFS(CliCommand):
     # Launch Ansible to install roles identified in configuration file
     self.install_packages()
 
+    # Setup the chrooted environment (mount bind dev and proc
+    self.teardown_chrooted_environment()
+
     # Once installation has been played, we need to do some cleanup
     # like ensute that no mount bind is still mounted, or delete the
     # DFT ansible files
@@ -260,11 +263,10 @@ class BuildRootFS(CliCommand):
       logging.error("You may wish to have a look to : " + self.project.generate_def_file_path(\
                       self.project.project[Key.PROJECT_DEFINITION.value][Key.ROOTFS.value][0]))
 
-    # Execute Ansible
-    # TODO : multiple target ? not sure...
+    # Generate the command line to execute Ansible in the chrooted environment
     logging.info("running ansible...")
     sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
-    sudo_command += " /bin/bash -c \"cd /dft_bootstrap && /usr/bin/ansible-playbook -i"
+    sudo_command += " /bin/bash -c \"cd /dft_bootstrap && /usr/bin/ansible-playbook -vvvv -i "
     sudo_command += " inventory.yml -c local site.yml\""
     self.execute_command(sudo_command)
     logging.info("ansible stage successfull")
@@ -335,24 +337,8 @@ class BuildRootFS(CliCommand):
       debootstrap_command += " /debootstrap/debootstrap --second-stage"
       self.execute_command(debootstrap_command)
 
-
-    # Mount bind /proc into the rootfs mountpoint
-    sudo_command = "sudo mount --bind --make-rslave /proc " + self.project.get_rootfs_mountpoint()
-    sudo_command += "/proc"
-    self.execute_command(sudo_command)
-    self.proc_is_mounted = True
-
-    # Mount bind /dev/pts into the rootfs mountpoint
-    sudo_command = "sudo mount --bind --make-rslave /dev/pts "
-    sudo_command += self.project.get_rootfs_mountpoint() + "/dev/pts"
-    self.execute_command(sudo_command)
-    self.devpts_is_mounted = True
-
-    # Mount bind /dev/shm into the rootfs mountpoint
-    sudo_command = "sudo mount --bind --make-rslave /dev/shm "
-    sudo_command += self.project.get_rootfs_mountpoint() + "/dev/shm"
-    self.execute_command(sudo_command)
-    self.devshm_is_mounted = True
+    # Setup the chrooted environment (mount bind dev and proc
+    self.setup_chrooted_environment()
 
     # Update the APT sources
     self.generate_apt_sources()

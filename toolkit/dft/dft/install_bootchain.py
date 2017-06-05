@@ -135,21 +135,45 @@ class InstallBootChain(CliCommand):
       # and complete the path according to the known providers
       with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
         if target[Key.BSP.value][Key.KERNEL.value][Key.ORIGIN.value] == "devuan":
+          # Defines the file name and content for devuan APT sources
           logging.debug("Using Devuan repo as source provider. Adding devuan.list")
           filepath += "devuan.list"
           working_file.write("deb http://packages.devuan.org/devuan ")
           working_file.write(target[Key.VERSION.value])
           working_file.write(" main\n")
+
+          # Check if the public key of the repository is defined in the BSP file, otherwise
+          # Set the default value to 93D6889F9F0E78D5
+          if Key.PUBKEY.value not in target[Key.BSP.value][Key.KERNEL.value]:
+            repo_pub_key = "XXX"
+          else:
+            repo_pub_key = target[Key.BSP.value][Key.KERNEL.value][Key.PUBKEY.value]
+
         elif target[Key.BSP.value][Key.KERNEL.value][Key.ORIGIN.value] == "armbian":
+          # Defines the file name and content for armbian APT sources
           logging.debug("Using Armbian repo as source provider. Adding armbian.list")
           filepath += "armbian.list"
           working_file.write("deb http://apt.armbian.com jessie main utils jessie-desktop\n")
 
-      # Finally move the temporary file under the rootfs tree
+          # Check if the public key of the repository is defined in the BSP file, otherwise
+          # Set the default value to 93D6889F9F0E78D5
+          if Key.PUBKEY.value not in target[Key.BSP.value][Key.KERNEL.value]:
+            repo_pub_key = "93D6889F9F0E78D5"
+            logging.debug("Using default Armbian signing key " + repo_pub_key)
+          else:
+            repo_pub_key = target[Key.BSP.value][Key.KERNEL.value][Key.PUBKEY.value]
+            logging.debug("Add Armbian signing key " + repo_pub_key)
+
+      # Move the temporary file under the rootfs tree
       sudo_command = "sudo mv -f " + working_file.name + " " + filepath
       print(sudo_command)
       self.execute_command(sudo_command)
 
+      # Add a key to the know catalog signing keys
+      self.add_catalog_signing_key(repo_pub_key)
+
+      # Update the catalog once the new sources is set
+      self.update_package_catalog()
 
 
   # -------------------------------------------------------------------------
@@ -166,10 +190,16 @@ class InstallBootChain(CliCommand):
     # Output current task to logs
     logging.info("Installing kernel sources")
 
-#    print(target)
-
-# puis install avec un update
-# et en itereant sur le saction packages
-# ca uniquement si on connait e provider
-# pour le moment on en gère que trois
-#    self.install_package("xxx")
+    # Check that the kernel entry is defined in the BSP
+    if Key.KERNEL.value in target[Key.BSP.value]:
+      # Check that the packages list is defined under kernel entry
+      if Key.PACKAGES.value in target[Key.BSP.value][Key.KERNEL.value]:
+        # Iterate the list of packages to install, and install them
+        for pkg in target[Key.BSP.value][Key.KERNEL.value][Key.PACKAGES.value]:
+          print(pkg)
+          logging.debug("Installing package " + pkg)
+          self.install_package(pkg)
+      else:
+        logging.debug("No package list under kernel. Nothing to do...")
+    else:
+      logging.debug("No kernel entry in the BSP. Nothing to do...")
