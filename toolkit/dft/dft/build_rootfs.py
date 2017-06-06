@@ -150,18 +150,18 @@ class BuildRootFS(CliCommand):
     copied to the target
     """
 
-    logging.info("installing packages...")
+    logging.info("installing packages")
 
     # Create the target directory. DFT files will be installed under this
     # directory.
     try:
-      logging.debug("copying DFT toolkit...")
+      logging.debug("copying DFT toolkit")
 
       # Check that target directory is in the rootfs. It has been previously created at the same
       # time as the mountpoint. This test check for both bootstrap and mountpoint.
       dft_target_path = self.project.get_rootfs_mountpoint() + "/dft_bootstrap/"
       if not os.path.exists(dft_target_path):
-        logging.debug("creating dft_bootstrap under " + dft_target_path + "...")
+        logging.debug("creating dft_bootstrap under " + dft_target_path)
         os.makedirs(dft_target_path)
         logging.debug("created !")
       else:
@@ -268,7 +268,7 @@ class BuildRootFS(CliCommand):
                       self.project.project[Key.PROJECT_DEFINITION.value][Key.ROOTFS.value][0]))
 
     # Generate the command line to execute Ansible in the chrooted environment
-    logging.info("running ansible...")
+    logging.info("running ansible")
     sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
     sudo_command += " /bin/bash -c \"cd /dft_bootstrap && /usr/bin/ansible-playbook -i "
     sudo_command += " inventory.yml -c local site.yml\""
@@ -286,7 +286,7 @@ class BuildRootFS(CliCommand):
     to keep track of generation date.
     """
 
-    logging.info("starting to generate build number")
+    logging.info("generating build number")
 
     # Open the file and writes the timestamp in it
     filepath = self.project.get_rootfs_mountpoint() + "/etc/dft_version"
@@ -308,7 +308,7 @@ class BuildRootFS(CliCommand):
     """ This method run deboostrap to create the initial rootfs.
     """
 
-    logging.info("starting to generate debootstrap rootfs")
+    logging.info("generating debootstrap rootfs")
 
     # Generate the base debootstrap command
     debootstrap_command = "sudo debootstrap --no-check-gpg"
@@ -330,7 +330,7 @@ class BuildRootFS(CliCommand):
     # Finally run the subprocess
     self.execute_command(debootstrap_command)
 
-    # Check if we are working with foreign arch, then ...
+    # Check if we are working with foreign arch
     if self.use_qemu_static:
       # QEMU is used, and we have to install it into the target
       self.setup_qemu()
@@ -376,7 +376,7 @@ class BuildRootFS(CliCommand):
     Second part of the methods iterate the repositories from configuration
     file and generates sources.list
     """
-    logging.info("starting to generate APT sources configuration")
+    logging.info("generating APT sources configuration")
 
     # Test if the generate_validity_check is defined, if not set the default value
     if Key.GENERATE_VALIDITY_CHECK.value not in self.project.project[Key.CONFIGURATION.value]:
@@ -486,7 +486,7 @@ class BuildRootFS(CliCommand):
     File systems definition if done in the image.yml file. Information are
     shared between build_rootfs and build_mage targets.
     """
-    logging.info("starting to /etc/fstab configuration file")
+    logging.info("generating fstab configuration file")
 
     # Check if the filesystems key is defined in image
     if Key.FILESYSTEMS.value not in self.project.image:
