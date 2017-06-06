@@ -488,14 +488,8 @@ class BuildRootFS(CliCommand):
     """
     logging.info("starting to /etc/fstab configuration file")
 
-    # Check if the Image is defined, otherwise there is nothing to do
-    if Key.IMAGE.value not in self.project.project[Key.PROJECT_DEFINITION.value]:
-      logging.debug("No image definition in project file. Nothing to do for fstab generation")
-      return
-
     # Check if the filesystems key is defined in image
-    if Key.FILESYSTEMS.value not in self.project.project[Key.PROJECT_DEFINITION.value]\
-                                                     [Key.IMAGE.value]:
+    if Key.FILESYSTEMS.value not in self.image:
       logging.debug("No filesystems definition in image file. Nothing to do for fstab generation")
       return
 
@@ -504,8 +498,7 @@ class BuildRootFS(CliCommand):
 
     # Generate a temporary file that will be filed then moved under /etc/fstab
     with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
-      for fileSystem in self.project.project[Key.PROJECT_DEFINITION.value][Key.IMAGE.value]\
-                                            [Key.FILESYSTEMS.value]:
+      for fileSystem in self.self.image[Key.FILESYSTEMS.value]:
         print(fileSystem)
         # Generate one by one the different fields of the filesystem lines
         working_file.write(fileSystem[Key.FILESYSTEM.value])
