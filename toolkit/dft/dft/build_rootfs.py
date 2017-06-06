@@ -270,7 +270,7 @@ class BuildRootFS(CliCommand):
     # Generate the command line to execute Ansible in the chrooted environment
     logging.info("running ansible...")
     sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
-    sudo_command += " /bin/bash -c \"cd /dft_bootstrap && /usr/bin/ansible-playbook -vvvv -i "
+    sudo_command += " /bin/bash -c \"cd /dft_bootstrap && /usr/bin/ansible-playbook -i "
     sudo_command += " inventory.yml -c local site.yml\""
     self.execute_command(sudo_command)
     logging.info("ansible stage successfull")
@@ -491,11 +491,13 @@ class BuildRootFS(CliCommand):
     # Check if the Image is defined, otherwise there is nothing to do
     if Key.IMAGE.value not in self.project.project[Key.PROJECT_DEFINITION.value]:
       logging.debug("No image definition in project file. Nothing to do for fstab generation")
+      return
 
     # Check if the filesystems key is defined in image
     if Key.FILESYSTEMS.value not in self.project.project[Key.PROJECT_DEFINITION.value]\
                                                      [Key.IMAGE.value]:
       logging.debug("No filesystems definition in image file. Nothing to do for fstab generation")
+      return
 
     # Generated the base path to the file to create
     filepath = self.project.get_rootfs_mountpoint() + "/etc/fstab"
