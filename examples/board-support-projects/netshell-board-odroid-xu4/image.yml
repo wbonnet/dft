@@ -48,7 +48,7 @@ filesystems:
     }
   # Definition of the tmp file system created in ram (tmpfs)
   - {
-      file*system: "tmpfs" ,
+      filesystem: "tmpfs" ,
       mountpouit: "/tmp" ,
       type: "tmpfs" ,
       options: "noatime,nodiratime,nosuid" ,
