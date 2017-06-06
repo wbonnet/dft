@@ -33,6 +33,7 @@ from distutils import file_util
 from cli_command import CliCommand
 from model import Key
 
+
 #
 #    Class BuildRootFS
 #
@@ -118,6 +119,9 @@ class BuildRootFS(CliCommand):
 
     # Launch Ansible to install roles identified in configuration file
     self.install_packages()
+
+    # Launch Ansible to install roles identified in configuration file
+    self.generate_fstab()
 
     # Setup the chrooted environment (mount bind dev and proc
     self.teardown_chrooted_environment()
@@ -462,3 +466,60 @@ class BuildRootFS(CliCommand):
     # Finally move the temporary file under the rootfs tree
     sudo_command = "sudo mv -f " + working_file.name + " " + filepath
     self.execute_command(sudo_command)
+
+  # -------------------------------------------------------------------------
+  #
+  # generate_fstab
+  #
+  # -------------------------------------------------------------------------
+  def generate_fstab(self):
+    """ This method is in charge of generating the file systems table
+    configuration file. Aka /etc/fstab.
+
+    This table describes the various file systems to mount into the rootfs
+    during the boot process. The file systems can override the definition
+    fromvthe initial boot, before changing root to firware.
+
+    If the rootfs is used in standard mode (not a squashfs based firmware),
+    then this file is the only fstab know and used by the system.
+
+    File systems definition if done in the image.yml file. Information are
+    shared between build_rootfs and build_mage targets.
+    """
+    logging.info("starting to /etc/fstab configuration file")
+
+    # Check if the Image is defined, otherwise there is nothing to do
+    if Key.IMAGE.value not in self.project.project[Key.PROJECT_DEFINITION.value]:
+      logging.debug("No image definition in project file. Nothing to do for fstab generation")
+
+    # Check if the filesystems key is defined in image
+    if Key.FILESYSTEMS.value not in self.project.project[Key.PROJECT_DEFINITION.value]\
+                                                     [Key.IMAGE.value]:
+      logging.debug("No filesystems definition in image file. Nothing to do for fstab generation")
+
+    # Generated the base path to the file to create
+    filepath = self.project.get_rootfs_mountpoint() + "/etc/fstab"
+
+    # Generate a temporary file that will be filed then moved under /etc/fstab
+    with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
+      for fileSystem in self.project.project[Key.PROJECT_DEFINITION.value][Key.IMAGE.value]\
+                                            [Key.FILESYSTEMS.value]:
+        print(fileSystem)
+        # Generate one by one the different fields of the filesystem lines
+        working_file.write(fileSystem[Key.FILESYSTEM.value])
+        working_file.write(" ")
+        working_file.write(fileSystem[Key.MOUNTPOINT.value])
+        working_file.write(" ")
+        working_file.write(fileSystem[Key.TYPE.value])
+        working_file.write(" ")
+        working_file.write(fileSystem[Key.OPTIONS.value])
+        working_file.write(" ")
+        working_file.write(fileSystem[Key.DUMP.value])
+        working_file.write(" ")
+        working_file.write(fileSystem[Key.PASS.value])
+        working_file.write("\n")
+
+      # Move the temporary file under the rootfs tree
+      sudo_command = "sudo mv -f " + working_file.name + " " + filepath
+      print(sudo_command)
+      self.execute_command(sudo_command)
