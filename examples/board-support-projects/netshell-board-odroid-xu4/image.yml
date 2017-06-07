@@ -39,7 +39,7 @@
 filesystems:
   # Definition of the root file system
   - {
-      filesystem: "/dev/mmcblk0p1" ,
+      filesystem: "/dev/mmcblk1p1" ,
       mountpoint: "/" ,
       type: "ext4" ,
       options: "discard,noatime,nodiratime,errors=remount-ro" ,

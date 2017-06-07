@@ -14,4 +14,3 @@ dft_sudoers:
   # Define the list of additional configuration files
   config_files:
     - dft
-
