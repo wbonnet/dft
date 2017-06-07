@@ -46,9 +46,9 @@ kernel:
 
   # List of packages to install from the repository
   packages:
-    - linux-image-next-orangepizero
-    - linux-dtb-next-orangepizero
-    - linux-firmware-image-next-orangepizero
+    - linux-image-next-sunxi
+    - linux-dtb-next-sunxi
+    - linux-firmware-image-next-sunxi
 
 #TODO: add flag to define if a specific source list ha to be generated under sources.list.define
 
