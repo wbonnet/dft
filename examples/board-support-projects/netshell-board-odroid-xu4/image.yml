@@ -49,7 +49,7 @@ filesystems:
   # Definition of the tmp file system created in ram (tmpfs)
   - {
       filesystem: "tmpfs" ,
-      mountpouit: "/tmp" ,
+      mountpoint: "/tmp" ,
       type: "tmpfs" ,
       options: "noatime,nodiratime,nosuid" ,
       dump: "0" ,

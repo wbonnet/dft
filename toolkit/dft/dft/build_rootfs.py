@@ -514,7 +514,7 @@ class BuildRootFS(CliCommand):
         working_file.write(fileSystem[Key.PASS.value])
         working_file.write("\n")
 
-      # Move the temporary file under the rootfs tree
-      sudo_command = "sudo mv -f " + working_file.name + " " + filepath
-      print(sudo_command)
-      self.execute_command(sudo_command)
+    # Move the temporary file under the rootfs tree
+    sudo_command = "sudo mv -f " + working_file.name + " " + filepath
+    print(sudo_command)
+    self.execute_command(sudo_command)
