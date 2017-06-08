@@ -27,3 +27,4 @@ roles:
   - dft-network-base
   - dft-security-base
   - dft-os-apt
+  - dft-os-power-management
