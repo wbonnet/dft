@@ -134,4 +134,3 @@ project_definition:
   # Firmware will be generated for each of the architecture in this list
   targets:
     - { version: stretch , board: generic-x86_64 }
-    - { version: stretch , board: odroid-xu4 }

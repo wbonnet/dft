@@ -27,6 +27,17 @@
 #
 
 ---
-- include: acpid.yml
-- include: upower.yml
-- include: cpufrequtils.yml
+- name : DFT - Install cpufrequtils
+  apt: name={{ item }}
+       state=latest
+       update_cache=true
+       install_recommends=no
+  with_items:
+    - cpufrequtils
+
+- name : DFT - Configure cpufrequtils
+  template: src=cpufrequtils.j2
+            dest=/etc/default/cpufrequtils.conf
+            owner=root
+            group=root
+            mode="0644"

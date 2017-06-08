@@ -118,6 +118,7 @@ class Key(Enum):
   GENERATE_SRC = "generate_src"
   GENERATE_VALIDITY_CHECK = "generate_validity_check"
   GROUP = "group"
+  GRUB = "grub"
   HASH_METHOD = "hash_method"
   IMAGE = "image"
   IMAGE_WORKDIR = "image"
