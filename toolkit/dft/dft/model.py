@@ -72,6 +72,7 @@ class Key(Enum):
   BOOTCHAIN = "bootchain"
   BOOTCHAIN_WORKDIR = "bootchain"
   BSP = "bsp"
+  BSP_FILE = "bsp_file"
   BUILD_BOOTCHAIN = "build_bootchain"
   BUILD_FIRMWARE = "build_firmware"
   BUILD_IMAGE = "build_image"
@@ -643,9 +644,14 @@ class ProjectDefinition(object):
       if Key.TARGETS.value in self.project[Key.PROJECT_DEFINITION.value]:
         # Iterate the list of targets in order to load th BSP definition file
         for target in self.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value]:
-          # Build the path to the filecontaining theBSP definition
-          bsp_file = self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] + "/bsp/"
-          bsp_file += target[Key.BOARD.value] + ".yml"
+          # Test if a specific BSP file is provided
+          if Key.BSP_FILE.value in target:
+            bsp_file = target[Key.BSP_FILE.value]
+          else:
+            # There is specific file, thus use the default path
+            # Build the path to the file containing the BSP definition
+            bsp_file = self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] + "/bsp/"
+            bsp_file += target[Key.BOARD.value] + ".yml"
 
           # Check that the BSP file exist
           if not os.path.isfile(bsp_file):

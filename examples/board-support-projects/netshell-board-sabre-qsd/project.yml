@@ -133,5 +133,12 @@ project_definition:
 
   # Definition of the list of targets, with architectures, versions and optionaly board.
   # Firmware will be generated for each of the architecture in this list
+  #
+  # version and board are mandatory attributes of the a item definition.
+  # bsp_file is an optional attribute used to define the path to a specific bsp file
+  # this attribute can be used when the target board is not supprted by DFT and a specific BSP
+  # definition has to be passed to the tool. Otherwise the BSP will be loaded from the default
+  # DFT installation
+  #
   targets:
     - { version: stretch , board: sabre-qsd }
