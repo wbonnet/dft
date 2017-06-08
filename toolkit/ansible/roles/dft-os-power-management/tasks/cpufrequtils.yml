@@ -34,10 +34,18 @@
        install_recommends=no
   with_items:
     - cpufrequtils
+    - sysfsutils
 
 - name : DFT - Configure cpufrequtils
   template: src=cpufrequtils.j2
             dest=/etc/default/cpufrequtils.conf
+            owner=root
+            group=root
+            mode="0644"
+
+- name : DFT - Configure sysfsutils
+  template: src=sysfs.conf.j2
+            dest=/etc/sysfs.conf
             owner=root
             group=root
             mode="0644"

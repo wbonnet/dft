@@ -22,7 +22,7 @@
 #
 
 # ---
-- name: DFT - deploy logrotate main configuration file
+- name: DFT - Deploy logrotate main configuration file
   template: src=logrotate.conf.j2
             dest=/etc/logrotate.conf
             owner=root
