@@ -110,4 +110,4 @@ project_definition:
   # DFT installation
   #
   targets:
-    - { version: stretch , board: generic-x86_64 }
+    - { version: stretch , board: generic-amd64 }
