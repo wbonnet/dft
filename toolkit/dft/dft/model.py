@@ -351,7 +351,7 @@ class DftConfiguration(object):
                 if self.configuration[Key.CONFIGURATION.value]\
                                      [Key.ADDITIONAL_ROLES.value][i][0] == "~" and \
                    self.configuration[Key.CONFIGURATION.value]\
-                                         [Key.ADDITIONAL_ROLES.value][i][1] ==  "/":
+                                     [Key.ADDITIONAL_ROLES.value][i][1] == "/":
                   self.configuration[Key.CONFIGURATION.value][Key.ADDITIONAL_ROLES.value][i] = \
                            os.path.expanduser(self.configuration[Key.CONFIGURATION.value]\
                                                                 [Key.ADDITIONAL_ROLES.value][i])

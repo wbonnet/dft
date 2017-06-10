@@ -209,7 +209,7 @@ class AssembleFirmware(CliCommand):
 
     # Copy the initramfs build hook to the hook dir in the generated rootfs
     sudo_command = 'sudo cp '
-    sudo_command += self.project.self.get_dft_base() + "/../scripts/add_dft_to_initramfs "
+    sudo_command += self.project.get_dft_base() + "/../scripts/add_dft_to_initramfs "
     sudo_command += self.project.get_rootfs_mountpoint() + '/usr/share/initramfs-tools/hooks/'
     self.execute_command(sudo_command)
 
