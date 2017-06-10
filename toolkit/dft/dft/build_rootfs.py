@@ -64,7 +64,7 @@ class BuildRootFS(CliCommand):
     CliCommand.__init__(self, dft, project)
 
     # Path to the ansible roles under dft_base
-    self.ansible_dir = project.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] + "/ansible"
+    self.ansible_dir = project.get_dft_base()  + "/ansible"
 
     # Set the log level from the configuration
     print("setting logs " + project.dft.log_level)
@@ -89,7 +89,7 @@ class BuildRootFS(CliCommand):
     # Check that DFT path is valid
     if not os.path.isdir(self.ansible_dir):
       logging.critical("Path to DFT installation is not valid : %s. Ansible directory is missing",
-                       self.project.project[Key.CONFIGURATION.value][Key.DFT_BASE.value])
+                       self.project.get_dft_base())
       exit(1)
 
     # Ensure target rootfs mountpoint exists and is a dir
