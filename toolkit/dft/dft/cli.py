@@ -397,7 +397,8 @@ x factory_setup                    Apply some extra factory setup before generat
     self.project.logging.setLevel(self.project.dft.log_level)
 
     # Get the config file from command line
-    if self.args.config_file != None:
+    if self.args.config_file != None and \
+       self.args.config_file != self.project.dft.configuration_file:
       self.project.logging.debug("Overriding config_file with CLI value : %s => %s",
                                  self.project.dft.configuration_file,
                                  self.args.config_file)

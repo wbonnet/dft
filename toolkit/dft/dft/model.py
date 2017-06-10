@@ -773,7 +773,6 @@ class ProjectDefinition(object):
 
     # Check if the value is defined
     if Key.DFT_BASE.value not in self.project[Key.PROJECT_DEFINITION.value]:
-      print(self.configuration.configuration)
       if Key.DFT_BASE.value in self.configuration.configuration[Key.CONFIGURATION.value]:
         self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] = \
                       self.configuration.configuration[Key.CONFIGURATION.value][Key.DFT_BASE.value]
