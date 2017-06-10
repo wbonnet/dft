@@ -455,7 +455,8 @@ class BuildRootFS(CliCommand):
     # /etc/apt/sources.list and installation will faill
     if not distro_has_been_found:
       self.cleanup_installation_files()
-      logging.error("No distribution matching " + self.project.get_target_version())
+      logging.error("No distribution matching " + self.project.get_target_version() + " / " +
+                    self.project.get_target_arch())
       logging.error("Please check repositories definition for this project.")
       logging.error("File in use is : " + self.project.generate_def_file_path(\
                                 self.project.project[Key.PROJECT_DEFINITION.value]\
