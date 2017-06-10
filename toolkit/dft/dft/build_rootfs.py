@@ -418,10 +418,6 @@ class BuildRootFS(CliCommand):
         logging.debug(distro)
 
         # Process only if it is the version we target
-        print("version " + self.project.get_target_version())
-        print("arch " + self.project.get_target_arch())
-        print(distro[Key.NAME.value])
-        print(distro[Key.ARCHITECTURES.value])
         if distro[Key.NAME.value] == self.project.get_target_version() and \
                                      self.project.get_target_arch() in \
                                      distro[Key.ARCHITECTURES.value]:
@@ -512,7 +508,6 @@ class BuildRootFS(CliCommand):
     # Generate a temporary file that will be filed then moved under /etc/fstab
     with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
       for fileSystem in self.project.image[Key.FILESYSTEMS.value]:
-        print(fileSystem)
         # Generate one by one the different fields of the filesystem lines
         working_file.write(fileSystem[Key.FILESYSTEM.value])
         working_file.write(" ")
@@ -529,5 +524,4 @@ class BuildRootFS(CliCommand):
 
     # Move the temporary file under the rootfs tree
     sudo_command = "sudo mv -f " + working_file.name + " " + filepath
-    print(sudo_command)
     self.execute_command(sudo_command)
