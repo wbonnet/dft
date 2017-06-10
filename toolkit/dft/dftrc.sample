@@ -41,7 +41,7 @@
 #   to install additional oftware nd configuration to the firmware.
 #
 # ----------------------------------------------------------------------------
-configuration:
+# configuration:
 
   # Defines the root of the working directories. A dirctory named after
   # project name will be created under this path, and subdirectories used to

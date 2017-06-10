@@ -370,8 +370,11 @@ x factory_setup                    Apply some extra factory setup before generat
     """
 
     # Create the dft configuration object, and load its configuration
-    self.dft = model.DftConfiguration(self.args.config_file)
-# TODO    self.dft.load_configuration()
+    if self.args.config_file is None:
+      self.dft = model.DftConfiguration()
+    else:
+      self.dft = model.DftConfiguration(self.args.config_file)
+    self.dft.load_configuration()
 
     # Create the project definition object, and load its configuration
     self.project = model.ProjectDefinition(self.args.project_file)

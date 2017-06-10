@@ -296,7 +296,7 @@ class DftConfiguration(object):
 
     # Initialize members used in configuration
     self.project_name = None
-    self.logging = None
+    self.logging = logging.getLogger()
     self.dft_configuration = None
 
 
@@ -309,21 +309,61 @@ class DftConfiguration(object):
     """ This method load the tool configuration from the given YAML file
     """
 
+    # If a new filename has been passed as argument, then store it
+    if filename is not None:
+      self.configuration_file = filename
+
+    if self.configuration_file[0] == "~" and self.configuration_file[1] == "/":
+      self.configuration_file = os.path.expanduser(self.configuration_file)
+
     try:
-      # Load it
-      with open(self.project_name, 'r') as working_file:
-        self.logging.debug("loading dft configuration : " + filename)
-        self.dft_configuration = yaml.load(working_file)
-        self.logging.debug(self.dft_configuration)
+      # Check it the configuration file exist
+      print(self.configuration_file)
 
-        # Check if path starts with ~ and need expension
-        if self.dft_configuration[Key.CONFIGURATION.value][Key.WORKING_DIR.value][0] == "~" \
-        and self.dft_configuration[Key.CONFIGURATION.value][Key.WORKING_DIR.value][1] == "/":
-          self.dft_configuration[Key.CONFIGURATION.value][Key.WORKING_DIR.value] = \
-                    os.path.expanduser(self.dft_configuration[Key.CONFIGURATION.value]\
-                    [Key.WORKING_DIR.value])
+      if os.path.isfile(self.configuration_file):
+        # Yes then, load it
+        with open(self.configuration_file, 'r') as working_file:
+          self.dft_configuration = yaml.load(working_file)
 
-        self.logging.debug(self.dft_configuration)
+          # Now we may have to expand a few paths...
+          # First check if the configurationis really defined
+          if Key.CONFIGURATION.value in self.dft_configuration:
+            # Yes then we now have to check one by one th different path to expand
+            # First let's process working_dir
+            if Key.WORKING_DIR.value in self.dft_configuration[Key.CONFIGURATION.value]:
+              # Check if path starts with ~ and need expension
+              if self.dft_configuration[Key.CONFIGURATION.value][Key.WORKING_DIR.value][0] == "~" \
+              and self.dft_configuration[Key.CONFIGURATION.value][Key.WORKING_DIR.value][1] == "/":
+                self.dft_configuration[Key.CONFIGURATION.value][Key.WORKING_DIR.value] = \
+                          os.path.expanduser(self.dft_configuration[Key.CONFIGURATION.value]\
+                                                                   [Key.WORKING_DIR.value])
+            # Then let's do dft_base
+            if Key.DFT_BASE.value in self.dft_configuration[Key.CONFIGURATION.value]:
+              # Check if path starts with ~ and need expension
+              if self.dft_configuration[Key.CONFIGURATION.value][Key.DFT_BASE.value][0] == "~" \
+              and self.dft_configuration[Key.CONFIGURATION.value][Key.DFT_BASE.value][1] == "/":
+                self.dft_configuration[Key.CONFIGURATION.value][Key.DFT_BASE.value] = \
+                          os.path.expanduser(self.dft_configuration[Key.CONFIGURATION.value]\
+                                                                   [Key.DFT_BASE.value])
+            # And finally the list of additionnal roles
+            if Key.ADDITIONAL_ROLES.value in self.dft_configuration[Key.CONFIGURATION.value]:
+              # Check if path starts with ~ and need expension
+              for i in range(0, len(self.dft_configuration[Key.CONFIGURATION.value]\
+                                                          [Key.ADDITIONAL_ROLES.value])):
+                if self.dft_configuration[Key.CONFIGURATION.value]\
+                                         [Key.ADDITIONAL_ROLES.value][i][0] == "~" and \
+                   self.dft_configuration[Key.CONFIGURATION.value]\
+                                         [Key.ADDITIONAL_ROLES.value][i][1] ==  "/":
+                  self.dft_configuration[Key.CONFIGURATION.value][Key.ADDITIONAL_ROLES.value][i] = \
+                           os.path.expanduser(self.dft_configuration[Key.CONFIGURATION.value]\
+                                                                    [Key.ADDITIONAL_ROLES.value][i])
+      else:
+        if self.configuration_file is not None:
+          print("The DFT configuration file was not found (" +  self.configuration_file + ")")
+        else:
+          print("The DFT configuration file was not found (<None>)")
+
+      exit(0)
 
     except OSError as exception:
       # Call clean up to umount /proc and /dev
@@ -693,8 +733,8 @@ class ProjectDefinition(object):
     """
 
     # Compute the value of the firmware_directory
-    target_directory = self.get_target_board(0) + "-" + self.get_target_arch(0) + "-"
-    target_directory += self.get_target_version(0)
+    target_directory = self.get_target_board(index) + "-" + self.get_target_arch(index) + "-"
+    target_directory += self.get_target_version(index)
 
     # That's all folks :)
     return target_directory
