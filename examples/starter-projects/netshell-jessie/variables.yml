@@ -1,0 +1,16 @@
+# Set the hostname according to the project name
+dft_hostname: "netshell-jessie"
+
+# Create a group named dft
+dft_groups:
+  - { name: "dft" }
+
+# Create the default user add put it into dft group
+dft_users:
+  - { name: "dft" , password: "dft" , createhome: True , groups: 'dft' , group: 'dft' , shell: '/bin/bash'}
+
+# Grants sudo privileges to defaut user
+dft_sudoers:
+  # Define the list of additional configuration files
+  config_files:
+    - dft
