@@ -28,7 +28,7 @@
 distributions:
     # Debian 9.0 Stretch
     - name: 'stretch'
-      architectures: [ 'armhf' ]
+      architectures: [ 'amd64' ]
       repositories:
         - url: 'http://ftp.fr.debian.org/debian/'
           suite: 'stretch'

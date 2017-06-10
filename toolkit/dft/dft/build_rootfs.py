@@ -414,8 +414,14 @@ class BuildRootFS(CliCommand):
     with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
       # Iterate the list of distributions loaded from the file
       for distro in self.project.repositories[Key.DISTRIBUTIONS.value]:
+        logging.debug("distro : ")
         logging.debug(distro)
+
         # Process only if it is the version we target
+        print("version " + self.project.get_target_version())
+        print("arch " + self.project.get_target_arch())
+        print(distro[Key.NAME.value])
+        print(distro[Key.ARCHITECTURES.value])
         if distro[Key.NAME.value] == self.project.get_target_version() and \
                                      self.project.get_target_arch() in \
                                      distro[Key.ARCHITECTURES.value]:
@@ -423,7 +429,9 @@ class BuildRootFS(CliCommand):
           distro_has_been_found = True
           # Then iterate all the sources for this distro version
           for repo in distro[Key.REPOSITORIES.value]:
+            logging.debug("repo : ")
             logging.debug(repo)
+
 
             # Test if deb line has to be generated
             if (Key.GENERATE_DEB.value not in repo) or (Key.GENERATE_DEB.value in repo and \
@@ -488,10 +496,15 @@ class BuildRootFS(CliCommand):
     """
     logging.info("generating fstab configuration file")
 
-    # Check if the filesystems key is defined in image
-    if Key.FILESYSTEMS.value not in self.project.image:
-      logging.debug("No filesystems definition in image file. Nothing to do for fstab generation")
-      return
+    # Check if the image configuration file exists
+    if self.project.image is not None:
+      # Yes, then, check if the filesystems key is defined in image
+      if Key.FILESYSTEMS.value not in self.project.image:
+        logging.debug("No filesystems definition in image file. Nothing to do for fstab generation")
+        return
+    else:
+        logging.debug("No image in project configuration. Nothing to do for fstab generation")
+        return
 
     # Generated the base path to the file to create
     filepath = self.project.get_rootfs_mountpoint() + "/etc/fstab"

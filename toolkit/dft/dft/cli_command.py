@@ -218,6 +218,9 @@ class CliCommand(object):
       msg += "/etc/apt/apt.conf.d/10no-check-valid-until is not removed"
       self.project.logging.debug(msg)
 
+    # Finally umount all the chrooted environment
+    self.teardown_chrooted_environment()
+
 
 
   # -------------------------------------------------------------------------
@@ -342,6 +345,8 @@ class CliCommand(object):
     if self.cleanup_in_progress:
       return
 
+    print(self.project.get_rootfs_mountpoint())
+
     # Set the flag used to prevent multiple call
     self.cleanup_in_progress = True
 
@@ -349,15 +354,18 @@ class CliCommand(object):
     if self.proc_is_mounted:
       sudo_command = "sudo umount " + self.project.get_rootfs_mountpoint() + "/dev/pts"
       self.execute_command(sudo_command)
+      self.proc_is_mounted = False
 
     # Check if /dev/shm is mounted, then umount it
     if self.devshm_is_mounted:
       sudo_command = "sudo umount " + self.project.get_rootfs_mountpoint() + "/dev/shm"
       self.execute_command(sudo_command)
+      self.devshm_is_mounted = False
 
     # Check if /dev/pts is mounted, then umount it
     if self.devpts_is_mounted:
       sudo_command = "sudo umount " + self.project.get_rootfs_mountpoint() + "/proc"
       self.execute_command(sudo_command)
+      self.devpts_is_mounted = False
 
     self.cleanup_in_progress = False
