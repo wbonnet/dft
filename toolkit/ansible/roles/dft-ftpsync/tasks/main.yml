@@ -80,7 +80,7 @@
 
 # Copy the extract files to the ftpsync user home directory
 - name: Copy the extracted files to usr/local
-  command: cp -fr /tmp/distrib/{{item}} {{ dft_ftpsync_user_home_dir }}
+  command: cp -fr /tmp/distrib/{{item}} {{ dft_ftpsync_user_home_dir }}/
   with_items:
     - bin
     - etc
@@ -146,7 +146,7 @@
         hour={{dft_ftpsync_cron_hour}}
         minute={{dft_ftpsync_cron_minute}}
         user="{{ dft_ftpsync_user_username }}"
-        job="cd {{ dft_ftpsync_user_home_dir }} && {{ dft_ftpsync_user_home_dir }}/bin/ftpsync-synchronize-all-archives"
+        job="cd {{ dft_ftpsync_user_home_dir }}/ && {{ dft_ftpsync_user_home_dir }}/bin/ftpsync-synchronize-all-archives"
 
 # Copy the Apache vhost configuration file to target host
 - name: Copy Apache vhost configuration file to target host
