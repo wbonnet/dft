@@ -107,12 +107,12 @@ project_definition:
     - rootfs.yml
 
   # Definition of the firmware content and structure
-#  firmware:
-#    - firmware.yml
+  firmware:
+    - firmware.yml
 
   # Definition of the image structure
-#  image:
-#    - image.yml
+  image:
+    - image.yml
 
   # Definition of the control to apply on the rootfs
 #  check:
