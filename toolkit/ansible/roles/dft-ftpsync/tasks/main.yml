@@ -58,14 +58,6 @@
         group={{ dft_ftpsync_user_group }}
         owner={{ dft_ftpsync_user_username }}
 
-# Create the backports archive target directory
-- name: Create the backports archive target directory
-  file: path={{ dft_ftpsync_backports_repository_dir }}
-        state=directory
-        mode=0775
-        group={{ dft_ftpsync_user_group }}
-        owner={{ dft_ftpsync_user_username }}
-
 # Create the security archive target directory
 - name: Create the security archive target directory
   file: path={{ dft_ftpsync_security_repository_dir }}
@@ -110,14 +102,6 @@
 - name: Copy ftpsync main archive configuration file to target host
   template: src=templates/ftpsync.conf.j2
             dest={{ dft_ftpsync_user_home_dir }}/etc/ftpsync.conf
-            owner=ftpsync
-            group=ftpsync
-            mode="u=rw,g=r,o=r"
-
-# Copy the ftpsync backports archive configuration file to target host
-- name: Copy ftpsync backports archive configuration file to target host
-  template: src=templates/ftpsync-backports.conf.j2
-            dest={{ dft_ftpsync_user_home_dir }}/etc/ftpsync-backports.conf
             owner=ftpsync
             group=ftpsync
             mode="u=rw,g=r,o=r"

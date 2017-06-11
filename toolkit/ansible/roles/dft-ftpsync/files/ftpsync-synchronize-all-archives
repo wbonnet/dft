@@ -22,14 +22,6 @@ then
   echo "$(date +"%Y-%m-%d %H:%M:%S") : Synchronization finished : debian"
 fi
 
-# Synchronize backports archive
-if [ ${SYNCHRONIZE_ALL_ARCHIVES_DO_SYNCHRONIZE_BACKPORTS} -eq 1 ] ;
-then
-  echo "$(date +"%Y-%m-%d %H:%M:%S") : Synchronization starting : debian-backports"
-  ${HOME}/bin/ftpsync sync:all sync:archive:backports
-  echo "$(date +"%Y-%m-%d %H:%M:%S") : Synchronization finished : debian-backports"
-fi
-
 # Synchronize ports archive
 if [ ${SYNCHRONIZE_ALL_ARCHIVES_DO_SYNCHRONIZE_PORTS} -eq 1 ] ;
 then

@@ -60,7 +60,7 @@ dft_ftpsync_apache_document_root: /var/www/mirrors/debian/
 dft_ftpsync_main_repository_dir: /var/www/mirrors/debian/debian
 dft_ftpsync_conf_main_debian_mirror: ftp.de.debian.org
 dft_ftpsync_conf_main_debian_mirror_path: debian
-dft_ftpsync_conf_main_arch_include: "amd64 i386 armel armhf arm64 source mips"
+dft_ftpsync_conf_main_arch_include: "amd64 source"
 dft_ftpsync_conf_main_exclude: ""
 
 #
@@ -69,17 +69,8 @@ dft_ftpsync_conf_main_exclude: ""
 dft_ftpsync_security_repository_dir: /var/www/mirrors/debian/debian-security
 dft_ftpsync_conf_security_debian_mirror: ftp.de.debian.org
 dft_ftpsync_conf_security_debian_mirror_path: debian-security
-dft_ftpsync_conf_security_arch_include: "amd64 i386 armel armhf arm64 source mips"
+dft_ftpsync_conf_security_arch_include: "amd64 source"
 dft_ftpsync_conf_security_exclude: ""
-
-#
-# ftpsync backports archive configuration
-#
-dft_ftpsync_backports_repository_dir: /var/www/mirrors/debian/debian-backports
-dft_ftpsync_conf_backports_debian_mirror: ftp.de.debian.org
-dft_ftpsync_conf_backports_debian_mirror_path: debian-backports
-dft_ftpsync_conf_backports_arch_include: "amd64 i386 armel armhf arm64 source mips"
-dft_ftpsync_conf_backports_exclude: ""
 
 #
 # ftpsync ports archive configuration
@@ -87,7 +78,7 @@ dft_ftpsync_conf_backports_exclude: ""
 dft_ftpsync_ports_repository_dir: /var/www/mirrors/debian/debian-ports
 dft_ftpsync_conf_ports_debian_mirror: ftp.de.debian.org
 dft_ftpsync_conf_ports_debian_mirror_path: debian-ports
-dft_ftpsync_conf_ports_arch_include: "ppc64 powerpcspe sparc64"
+dft_ftpsync_conf_ports_arch_include: "ppc64 sparc64"
 dft_ftpsync_conf_ports_exclude: ""
 
 #
@@ -101,4 +92,3 @@ dft_ftpsync_conf_ports_exclude: ""
 synchronize_all_archives_do_synchronize_main: 1
 synchronize_all_archives_do_synchronize_security: 1
 synchronize_all_archives_do_synchronize_ports: 1
-synchronize_all_archives_do_synchronize_backports: 1
