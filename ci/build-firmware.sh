@@ -28,6 +28,9 @@ cd toolkit/dft
 python3.5 dft build_rootfs  --project-file ${WORKING_DIR}/${DFT_PROJECT} --log-level debug --keep-bootstrap-files
 
 # Run the dft tool to build the firmware
+python3.5 dft install_bootchain --project-file ${WORKING_DIR}/${DFT_PROJECT} --log-level debug
+
+# Run the dft tool to build the firmware
 python3.5 dft build_firmware --project-file ${WORKING_DIR}/${DFT_PROJECT} --log-level debug
 
 # Run the dft tool to assemble the firmware scripts

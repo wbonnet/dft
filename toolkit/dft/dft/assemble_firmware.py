@@ -113,7 +113,7 @@ class AssembleFirmware(CliCommand):
     self.deploy_stacking_scripts()
 
     # Install the packages and tools needed to create the updated bootchain
-    self.install_tools_and_kernel()
+    self.install_initramfs_tools()
 
     # Regenerate the initramfs to include our custum stacking script and some modification
     # to the init script ( needed to call the stacking script )
@@ -126,12 +126,14 @@ class AssembleFirmware(CliCommand):
 
   # -------------------------------------------------------------------------
   #
-  # install_tools_and_kernel
+  # install_initramfs_tools
   #
   # -------------------------------------------------------------------------
-  def install_tools_and_kernel(self):
+  def install_initramfs_tools(self):
     """This method installs in the generated rootfs the tools needed to update
-    (or generate) theinitramfs, and also install kernel if needed.
+    (or generate) theinitramfs. The kernel is not installed, it is the job of
+    the install_bootchain target. The kernel to use is defined in the BSP
+    used by this target.
 
     Operations executed by this method run in a chrooted environment in the
     generated rootfs.
@@ -142,7 +144,6 @@ class AssembleFirmware(CliCommand):
 
     # Install initramfs-tools to the roootfs
     self.install_package("initramfs-tools")
-    self.install_package("linux-image-" + self.project.get_target_arch())
 
 
 
