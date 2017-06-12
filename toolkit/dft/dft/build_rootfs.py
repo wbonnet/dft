@@ -500,8 +500,8 @@ class BuildRootFS(CliCommand):
         logging.debug("No filesystems definition in image file. Nothing to do for fstab generation")
         return
     else:
-        logging.debug("No image in project configuration. Nothing to do for fstab generation")
-        return
+      logging.debug("No image in project configuration. Nothing to do for fstab generation")
+      return
 
     # Generated the base path to the file to create
     filepath = self.project.get_rootfs_mountpoint() + "/etc/fstab"
