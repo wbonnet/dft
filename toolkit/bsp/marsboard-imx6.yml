@@ -50,5 +50,5 @@ kernel:
     - linux-dtb-next-marsboard-imx6
     - linux-firmware-image-next-marsboard-imx6
 
-# On the i.MX6 marsboard the uboot is stored in SPi fhlash memory. Thus there is no need to
+# On the i.MX6 marsboard the uboot is stored in SPI flash memory. Thus there is no need to
 # include it into this BSP definition since its update is a manual process, out of DFT toolchain.
