@@ -73,6 +73,7 @@ class Key(Enum):
   BOOTCHAIN_WORKDIR = "bootchain"
   BSP = "bsp"
   BSP_FILE = "bsp_file"
+  BSP_BASE = "bsp_base"
   BUILD_BOOTCHAIN = "build_bootchain"
   BUILD_FIRMWARE = "build_firmware"
   BUILD_IMAGE = "build_image"
@@ -680,8 +681,7 @@ class ProjectDefinition(object):
           else:
             # There is specific file, thus use the default path
             # Build the path to the file containing the BSP definition
-            bsp_file = self.get_dft_base()  + "/bsp/"
-            bsp_file += target[Key.BOARD.value] + ".yml"
+            bsp_file = self.get_bsp_base() + "/" + target[Key.BOARD.value] + ".yml"
 
           # Check that the BSP file exist
           if not os.path.isfile(bsp_file):
@@ -772,12 +772,48 @@ class ProjectDefinition(object):
     """
 
     # Check if the value is defined
-    if Key.DFT_BASE.value not in self.project[Key.PROJECT_DEFINITION.value]:
+    if Key.DFT_BASE.value not in self.project[Key.CONFIGURATION.value]:
       if Key.DFT_BASE.value in self.configuration.configuration[Key.CONFIGURATION.value]:
         self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] = \
                       self.configuration.configuration[Key.CONFIGURATION.value][Key.DFT_BASE.value]
       else:
         self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] = "/usr/share/dft"
 
+    # Expand the path starting with ~/
+    if self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value][0] == "~" and \
+       self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value][1] == "/":
+      self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] = \
+                      os.path.expanduser(self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value])
+
     # Now a value is defined, just return it
     return self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value]
+
+
+
+  # ---------------------------------------------------------------------------
+  #
+  # get_bsp_base
+  #
+  # ---------------------------------------------------------------------------
+  def get_bsp_base(self):
+    """ This method compute and return the bsp_base directory using either the
+    value defined in the project file, the configuration file, or from the
+    default values.
+    """
+
+    # Check if the value is defined
+    if Key.BSP_BASE.value not in self.project[Key.CONFIGURATION.value]:
+      if Key.BSP_BASE.value in self.configuration.configuration[Key.CONFIGURATION.value]:
+        self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value] = \
+                      self.configuration.configuration[Key.CONFIGURATION.value][Key.BSP_BASE.value]
+      else:
+        self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value] = self.get_dft_base() + "/bsp"
+
+    # Expand the path starting with ~/
+    if self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value][0] == "~" and \
+       self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value][1] == "/":
+      self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value] = \
+                      os.path.expanduser(self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value])
+
+    # Now a value is defined, just return it
+    return self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value]
