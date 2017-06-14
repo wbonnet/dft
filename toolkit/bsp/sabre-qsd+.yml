@@ -46,9 +46,11 @@ kernel:
 
   # List of packages to install from the repository
   packages:
-    - linux-image-next-sabreqsd+
+    # Kernel and firmware are the same for both version of sabre qsd and qsd+
+    - linux-image-next-sabreqsd
+    - linux-firmware-image-next-sabreqsd
+    # Only DTB change between sabre qsd and qsd+
     - linux-dtb-next-sabreqsd+
-    - linux-firmware-image-next-sabreqsd+
 
 #TODO: add flag to define if a specific source list ha to be generated under sources.list.define
 
