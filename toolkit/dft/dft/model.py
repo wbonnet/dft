@@ -326,7 +326,7 @@ class DftConfiguration(object):
 
           # Now we may have to expand a few paths...
           # First check if the configurationis really defined
-          if Key.CONFIGURATION.value in self.configuration:
+          if self.configuration is not None and Key.CONFIGURATION.value in self.configuration:
             # Yes then we now have to check one by one th different path to expand
             # First let's process working_dir
             if Key.WORKING_DIR.value in self.configuration[Key.CONFIGURATION.value]:
@@ -773,7 +773,8 @@ class ProjectDefinition(object):
 
     # Check if the value is defined
     if Key.DFT_BASE.value not in self.project[Key.CONFIGURATION.value]:
-      if Key.DFT_BASE.value in self.configuration.configuration[Key.CONFIGURATION.value]:
+      if self.configuration.configuration is not None and \
+         Key.BSP_BASE.value in self.configuration.configuration[Key.CONFIGURATION.value]:
         self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] = \
                       self.configuration.configuration[Key.CONFIGURATION.value][Key.DFT_BASE.value]
       else:
@@ -803,7 +804,8 @@ class ProjectDefinition(object):
 
     # Check if the value is defined
     if Key.BSP_BASE.value not in self.project[Key.CONFIGURATION.value]:
-      if Key.BSP_BASE.value in self.configuration.configuration[Key.CONFIGURATION.value]:
+      if self.configuration.configuration is not None and \
+         Key.BSP_BASE.value in self.configuration.configuration[Key.CONFIGURATION.value]:
         self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value] = \
                       self.configuration.configuration[Key.CONFIGURATION.value][Key.BSP_BASE.value]
       else:
