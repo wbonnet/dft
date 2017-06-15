@@ -91,6 +91,7 @@ class Key(Enum):
   DEFAULT_CONFIGURATION_FILE = "~/.dftrc"
   DEFAULT_PROJECT_FILE = "project.yml"
   DESCRIPTION = "description"
+  DEVICES = "devices"
   DFT_BASE = "dft_base"
   DIRECTORIES = "directories"
   DIRECTORY = "directory"
@@ -100,9 +101,10 @@ class Key(Enum):
   EXPECTED_RESULT = "expected_result"
   FACTORY_SETUP = "factory_setup"
   FILE = "file"
+  FILENAME = "filename"
+  FILES = "files"
   FILESYSTEM = "filesystem"
   FILESYSTEMS = "filesystems"
-  FILES = "files"
   FIRMWARE = "firmware"
   FIRMWARE_FILENAME_EXTESION = ".fw"
   FIRMWARE_WORKDIR = "firmware"
@@ -759,6 +761,18 @@ class ProjectDefinition(object):
     # Compute the value of the rootfs_mountpoint and return it to the caller
     return self.rootfs_base_workdir + "/" +  self.__get_target_directory(0)
 
+
+  # ---------------------------------------------------------------------------
+  #
+  # get_image_directory
+  #
+  # ---------------------------------------------------------------------------
+  def get_image_directory(self):
+    """ This method compute and return the directory path for stoing images.
+    """
+
+    # Compute the value of the rootfs_mountpoint and return it to the caller
+    return self.image_base_workdir + "/" +  self.__get_target_directory(0)
 
   # ---------------------------------------------------------------------------
   #
