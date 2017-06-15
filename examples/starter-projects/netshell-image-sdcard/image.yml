@@ -34,10 +34,12 @@
 # ----------------------------------------------------------------------------
 devices:
   # Defines the size of the device to create. The size value is numerical
-  size: "8"
+  size: "2"
 
   # Defines the unit used for size. Valid values are :
   # "s" (sectors), "B" (bytes),  "kB",  "MB",  "MiB", "GB",  "GiB",  "TB",  "TiB"
+  #
+  # Default value is MB
   unit: "GB"
 
   # Defines the method used fill the empty image file after its creation.
@@ -51,7 +53,7 @@ devices:
 
   # Defines the filename used to store the device image. This file is created and allocated at
   # image creation.
-  filename: "toto.raw"
+  filename: "netshell.img"
 
   # Defines which kind of partition table label is used. Valid values are :
   # "aix", "amiga", "bsd", "dvh", "gpt", "loop", "mac", "msdos", "pc98", or "sun"
