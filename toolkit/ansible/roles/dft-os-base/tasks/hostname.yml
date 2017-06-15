@@ -29,9 +29,9 @@
 ---
 # Use the hostname module to change host name if it does not run on a local connection
 # Otherwise it would also change the name of the host
-- name: DFT - Setup hostname (non local connection)
-  hostname: name={{ dft_hostname }}
-  when: ansible_connection != "local"
+# - name: DFT - Setup hostname (non local connection)
+#  hostname: name={{ dft_hostname }}
+#  when: ansible_connection != "local"
 
 # If it is run through a local connection, we assume it is working in a chrooted environment
 # thus only modify /etc/hostname file since we are creating a rootfs. No need to change the
@@ -42,7 +42,7 @@
              owner=root
              group=root
              mode="0644"
-  when: ansible_connection == "local"
+#  when: ansible_connection == "local"
 
 - name: DFT - Add hostname to /etc/hosts
   lineinfile: dest=/etc/hosts
