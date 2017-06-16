@@ -26,6 +26,7 @@ the rootfs and bootchain.
 """
 
 import logging
+import parted
 import os
 from cli_command import CliCommand
 from model import Key
@@ -118,6 +119,9 @@ class BuildImage(CliCommand):
     . Fill method (used to create initial content
     """
 
+    # Output current task to logs
+    logging.info("Creating the target image file")
+
     # Check that there is an image configuration file first
     if self.project.image is None:
       self.project.logging.critical("The image configuration file is not defined in project file")
@@ -148,7 +152,7 @@ class BuildImage(CliCommand):
     # Continue to check everything needed is defined
     if Key.UNIT.value not in self.project.image[Key.DEVICES.value]:
       self.project.logging.warning("Image size unit is not defined, defaultig to MB.")
-      unit = "MB"
+      unit = "mb"
     else:
       unit = self.project.image[Key.DEVICES.value][Key.UNIT.value].lower()
 
@@ -164,10 +168,11 @@ class BuildImage(CliCommand):
       exit(1)
 
     # Some logging :)
-    self.project.logging.debug("Image size unit is '" + str(unit) + "', block size is " + str(block_size))
+    self.project.logging.debug("Image size unit is '" + str(unit) + "', block size is " +
+                               str(block_size))
 
     if Key.FILL_METHOD.value not in self.project.image[Key.DEVICES.value]:
-      self.project.logging.warning("Image fill method is not defined, defaultig to (filled with) zero.")
+      self.project.logging.warning("Image fill method is not defined, filling with zero.")
       fill_method = "zero"
     else:
       fill_method = self.project.image[Key.DEVICES.value][Key.FILL_METHOD.value]
@@ -203,21 +208,12 @@ class BuildImage(CliCommand):
       self.project.logging.debug("Image target aldredy exist, removing it")
       os.remove(self.image_path)
 
-# utilise dd
-# retrouver les parametres
-# size
-# unit
-# fill_method
+    # Create the fill command
+    sudo_command = "dd if=/dev/" + fill_method + " of=" + self.image_path
+    sudo_command += " bs=" + str(block_size) + " count=" + str(size)
+    sudo_command_output = self.execute_command(sudo_command)
 
-#     supprimer le fichier s'il existe ?
-    sudo_command = "touch " + self.image_path
-#    sudo_command_output = self.execute_command(sudo_command)
-    print(sudo_command)
 
-    # Output current task to logs
-    logging.info("Creating the target image file")
-
-    exit(0)
 
   # -------------------------------------------------------------------------
   #
@@ -280,9 +276,191 @@ class BuildImage(CliCommand):
     Operations executed by this method run in a chrooted environment in the
     generated rootfs.
     """
+#TODO cleanup method to remove loopback
 
     # Output current task to logs
     logging.info("Creating the partitions in the image mounted in loopback")
+
+    # Retrieve the partition type to create
+    if Key.LABEL.value not in self.project.image[Key.DEVICES.value]:
+      self.project.logging.warning("Partition table label is not defined, defaulting to dos.")
+      label = "msdos"
+    else:
+      label = self.project.image[Key.DEVICES.value][Key.LABEL.value]
+
+    # Check that the value is in the list of valid values
+    if label not in "aix" "amiga" "bsd" "dvh" "gpt" "loop" "mac" "msdos" "pc98" "sun":
+      self.project.logging.critical("Unknown partition label '" + label + "' . Aborting")
+      exit(1)
+    else:
+      self.project.logging.debug("Using partition label '" + label + "'")
+
+    # Retrieve the partition alignment
+    if Key.ALIGNMENT.value not in self.project.image[Key.DEVICES.value]:
+      self.project.logging.warning("Partition alignment is not defined, defaulting to none.")
+      alignment = "none"
+    else:
+      alignment = self.project.image[Key.DEVICES.value][Key.ALIGNMENT.value]
+
+    # TODO : handle partition alignment
+
+    # Check that the value is in the list of valid values
+    # if alignment == "none":
+    #   parted_alignment = None
+    # elif alignment == "optimal":
+    #   parted_alignment = parted.OPTIMAL
+    # elif alignment == "cylinder":
+    #   parted_alignment = cylinder
+    # elif alignment == "minimal":
+    #   parted_alignment = minimal
+    # else:
+    #   self.project.logging.critical("Unknown partition alignment '" + alignment + "' . Aborting")
+    #   exit(1)
+
+    self.project.logging.debug("Using partition alignment '" + alignment + "'")
+
+    # Create the partition tabl on the device
+    device = parted.getDevice(self.loopback_device)
+
+    # Create a new disk object
+    disk = parted.freshDisk(device, label)
+
+    # Check that there is a partition table inthe configuration file. If not it will fail later,
+    # thus better fail now.
+    if Key.PARTITIONS.value not in self.project.image[Key.DEVICES.value]:
+      self.project.logging.error("Partition table is not defined, nothing to do. Aborting")
+      exit(1)
+
+    # Nox iterate the partitiontables and create them
+    for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
+
+      # Retrieve the partition name
+      if Key.NAME.value in partition:
+        part_name = partition[Key.NAME.value]
+      else:
+        part_name = ""
+
+      self.project.logging.debug("Partition name =>  '" + part_name + "'")
+
+      # Retrieve the partition type
+      if Key.TYPE.value in partition:
+        part_type = partition[Key.TYPE.value]
+      else:
+        part_type = "primary"
+
+      # Check that the partition type is valid and convert in parted "define"
+      if part_type == "primary":
+        parted_type = parted.PARTITION_NORMAL
+      elif part_type == "extended":
+        parted_type = parted.PARTITION_EXTENDED
+      elif part_type == "logical":
+        parted_type = parted.PARTITION_LOGICAL
+      else:
+        self.project.logging.critical("Unknown partition type '" + part_type + "' . Aborting")
+        exit(1)
+
+      self.project.logging.debug("Partition type =>  '" + part_type + "'")
+
+      # Retrieve the partition size
+      if Key.SIZE.value not in partition:
+        self.project.logging.critical("Partition size is not defined. Aborting")
+        exit(1)
+      else:
+        # Retrieve the value and control it is an integer
+        try:
+          part_size = int(partition[Key.SIZE.value])
+        except ValueError:
+          self.project.logging.critical("Partition size is not a number : " +
+                                        partition[Key.SIZE.value])
+          exit(1)
+
+      self.project.logging.debug("Partition size => '" + str(part_size) + "'")
+
+      # Retrieve the partition unit
+      if Key.UNIT.value not in partition:
+        self.project.logging.warning("Partition size unit is not defined, defaultig to MB.")
+        part_unit = "MB"
+      else:
+        part_unit = partition[Key.UNIT.value]
+
+      # Compute the block size to use based on the unit
+      if part_unit not in "s" "B" "KB" "KiB" "MB" "MiB" "GB" "GiB" "TB" "TiB":
+        self.project.logging.critical("Unknwon unit '" + part_unit + "' . Aborting")
+        exit(1)
+      else:
+        self.project.logging.debug("Partition unit => '" + part_unit + "'")
+
+      # Retrieve the partition start sector
+      if Key.START_SECTOR.value not in partition:
+        self.project.logging.warning("Partition start_sector is not defined. " +
+                                     "Using next available in sequence")
+        part_start_sector = -1
+      else:
+        # Retrieve the value and control it is an integer
+        try:
+          part_start_sector = int(partition[Key.START_SECTOR.value])
+        except ValueError:
+          self.project.logging.critical("Partition start_sector is not a number : " +
+                                        partition[Key.START_SECTOR.value])
+          exit(1)
+
+      self.project.logging.debug("Partition start sector => '" + str(part_start_sector) + "'")
+
+      # Retrieve the partition flags
+      if Key.FLAGS.value not in partition:
+        self.project.logging.debug("Partition flags are not defined. Skipping...")
+        part_flags = None
+      else:
+        part_flags = partition[Key.FLAGS.value]
+        self.project.logging.debug("Partition flags => '" + part_flags + "'")
+
+      # Retrieve the partition file system type
+      if Key.FILESYSTEM.value not in partition:
+        self.project.logging.debug("File system to create on the partition is not defined.")
+        part_filesystem = None
+      else:
+        part_filesystem = partition[Key.FILESYSTEM.value].lower()
+        # Check that the value is in the list of valid values
+        if part_filesystem not in "ext2" "ext3" "ext4" "vfat":
+          self.project.logging.critical("Unknown filesystem type '" + part_filesystem +
+                                        "' . Aborting")
+          exit(1)
+        else:
+          self.project.logging.debug("Filesystem type =>  '" + part_filesystem + "'")
+
+      # Retrieve the partition format flag
+      if Key.FORMAT.value not in partition:
+        self.project.logging.debug("File system format flag is not defined. Defaulting to True")
+        part_format = True
+      else:
+        part_format = partition[Key.FORMAT.value]
+        self.project.logging.debug("File system format flag => '" + str(part_format) + "'")
+
+      #
+      # All information have been parsed,now let's create the partition in the loopback device
+      #
+
+      # Compute the sector count based on size and unit. Need for parted
+      sector_count = parted.sizeToSectors(part_size, part_unit, device.sectorSize)
+
+      # Compute the geometry for this device
+      geometry = parted.Geometry(start=part_start_sector, length=sector_count, device=device)
+
+      # Create the partition object in the loopback device
+      new_partition = parted.Partition(disk=disk, type=parted_type, geometry=geometry)
+
+      # Create the constraint object for alignment, etc.
+      # constraint = parted.Constraint(startAlign=parted_alignment, endAlign=parted_alignment, \
+      #              startRange=start, endRange=end, minSize=min_size, maxSize=max_size)
+      constraint = parted.Constraint(exactGeom=new_partition.geometry)
+
+      # Add the partition to the disk
+      disk.addPartition(partition=new_partition, constraint=constraint)
+
+    # Make modification persistent to disk
+    disk.commit()
+
+    exit(0)
 
 
 

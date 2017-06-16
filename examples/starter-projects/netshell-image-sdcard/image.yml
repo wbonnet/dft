@@ -34,13 +34,13 @@
 # ----------------------------------------------------------------------------
 devices:
   # Defines the size of the device to create. The size value is numerical
-  size: "2"
+  size: "256"
 
   # Defines the unit used for size. Valid values are :
   # "s" (sectors), "B" (bytes),  "kB",  "MB",  "MiB", "GB",  "GiB",  "TB",  "TiB"
   #
   # Default value is MB
-  unit: "GB"
+  unit: "MB"
 
   # Defines the method used fill the empty image file after its creation.
   # Valid values are :
@@ -57,34 +57,40 @@ devices:
 
   # Defines which kind of partition table label is used. Valid values are :
   # "aix", "amiga", "bsd", "dvh", "gpt", "loop", "mac", "msdos", "pc98", or "sun"
-  label: "dos"
+  #
+  # default value is msdos
+  label: "msdos"
 
   # Defines which alignement ype is used for newly created partitions. Valid vaues ares :
   #  . none       Use the minimum alignment allowed by the disk type.
   #  . cylinder   Align partitions to cylinders.
   #  . minimal    Use minimum alignment as given by the disk topology information.
   #  . optimal    Use  optimum  alignment  as  given by the disk topology information.
+  #
+  # default value is none
   alignment: "optimal"
 
   # Defines the list of partitions to create inside the device
   partitions:
     - {
         # Name or label of the partition. Supported only by dos, gpt and pc98 tables.
-        name: "name" ,
+        # Default value is empty name
+        name: "boot" ,
 
         # Defines the partition type. Valid values are "primary", "logical", or "extended"
+        # Default valueis primary
         type: "primary" ,
 
         # Defines the size of the partition to create. The size value is numerical
-        size: "8" ,
+        size: "16" ,
 
         # Defines the unit used for size. Valid values are :
         # "s" (sectors), "B" (bytes),  "kB",  "MB",  "MiB", "GB",  "GiB",  "TB",  "TiB",
         # "%" (percentage of device size)
-        unit: "GB" ,
+        unit: "MB" ,
 
         # Frst sector of the partition
-        sector_start: "2048" ,
+        start_sector: "2048" ,
 
         # Toggle the given set of flags on the partition
         # flag: "" ,
@@ -92,8 +98,45 @@ devices:
         # Should the partition be formatted. Default value is False
         format: True ,
 
-        # Type of the file system to create
-        filesystem_type: ""
+        # Type of the file system to create. This value is optional, if not defined no file
+        # system will be created, even if the format flag is true
+        filesystem: "ext4"
+
+        # Missing type from fdisk list
+      }
+    - {
+        # Name or label of the partition. Supported only by dos, gpt and pc98 tables.
+        # Default value is empty name
+        name: "system" ,
+
+        # Defines the partition type. Valid values are "primary", "logical", or "extended"
+        # Default valueis primary
+        type: "primary" ,
+
+        # Defines the size of the partition to create. The size value is numerical
+        size: "128" ,
+
+        # Defines the unit used for size. Valid values are :
+        # "s" (sectors), "B" (bytes),  "kB",  "MB",  "MiB", "GB",  "GiB",  "TB",  "TiB",
+        # "%" (percentage of device size)
+        unit: "MB" ,
+
+        # First sector of the partition
+        start_sector: "42048" ,
+
+        # Toggle the given set of flags on the partition
+        # Default value is no flags
+        # flag: "" ,
+
+        # Should the partition be formatted. Default value is False
+        format: True ,
+
+        # Type of the file system to create. This value is optional, if not defined no file
+        # system will be created, even if the format flag is true
+        # Valid values are : "ext2" "ext3" "ext4" "vfat"
+        filesystem: "ext4"
+
+        # Missing type from fdisk list
       }
 
 
