@@ -100,6 +100,10 @@ devices:
 
         # Type of the file system to create. This value is optional, if not defined no file
         # system will be created, even if the format flag is true
+        # "hfsx" "fat32" "linux-swap(v0)" "affs5" "affs2" "ext4" "ext3" "ext2" "amufs" "amufs0"
+        # "amufs1" "amufs2" "amufs3" "amufs4" "amufs5" "btrfs" "linux-swap(v1)" "swsusp" "hfs+"
+        # "reiserfs" "freebsd-ufs" "xfs" "affs7" "ntfs" "zfs" "affs4" "hfs" "affs6" "affs1" "affs0"
+        # "affs3" "hp-ufs" "fat16" "sun-ufs" "asfs" "jfs" "apfs2" "apfs1"
         filesystem: "ext4"
 
         # Missing type from fdisk list
@@ -133,8 +137,12 @@ devices:
 
         # Type of the file system to create. This value is optional, if not defined no file
         # system will be created, even if the format flag is true
-        # Valid values are : "ext2" "ext3" "ext4" "vfat"
-        filesystem: "ext4"
+        # Valid values are :
+        # "hfsx" "fat32" "linux-swap(v0)" "affs5" "affs2" "ext4" "ext3" "ext2" "amufs" "amufs0"
+        # "amufs1" "amufs2" "amufs3" "amufs4" "amufs5" "btrfs" "linux-swap(v1)" "swsusp" "hfs+"
+        # "reiserfs" "freebsd-ufs" "xfs" "affs7" "ntfs" "zfs" "affs4" "hfs" "affs6" "affs1" "affs0"
+        # "affs3" "hp-ufs" "fat16" "sun-ufs" "asfs" "jfs" "apfs2" "apfs1"
+        filesystem: "linux-swap(v1)"
 
         # Missing type from fdisk list
       }
