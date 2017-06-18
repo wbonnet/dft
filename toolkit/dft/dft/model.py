@@ -211,6 +211,7 @@ class Key(Enum):
   PUBKEY = "pubkey"
   REMOVE_VALIDITY_CHECK = "remove_validity_check"
   REPOSITORIES = "repositories"
+  RESERVED_SIZE = "reserved_size"
   RKHUNTER = "rkhunter"
   ROLES = "roles"
   ROOTFS = "rootfs"
