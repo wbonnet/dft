@@ -92,6 +92,9 @@ class BuildImage(CliCommand):
     # Setup the partitions in the image
     self.create_partitions()
 
+    # Create and format the filesystems on the newly created partitions
+    self.create_filesystems()
+
     # Copy rootfs to the image
     self.install_image_content()
 
@@ -268,13 +271,11 @@ class BuildImage(CliCommand):
   #
   # -------------------------------------------------------------------------
   def create_partitions(self):
-    """XXXX This method installs in the generated rootfs the tools needed to update
-    (or generate) theinitramfs. The kernel is not installed, it is the job of
-    the install_bootchain target. The kernel to use is defined in the BSP
-    used by this target.
+    """This method creates the partition table and the different partitions
+    in the loopback device. It first read the device definition, then iterate
+    the list of partitions.
 
-    Operations executed by this method run in a chrooted environment in the
-    generated rootfs.
+    Device operation are done using the pyparted library.
     """
 #TODO cleanup method to remove loopback
 
@@ -421,7 +422,7 @@ class BuildImage(CliCommand):
       else:
         part_filesystem = partition[Key.FILESYSTEM.value].lower()
         # Check that the value is in the list of valid values
-        if part_filesystem not in "ext2" "ext3" "ext4" "vfat":
+        if part_filesystem not in  parted.fileSystemType:
           self.project.logging.critical("Unknown filesystem type '" + part_filesystem +
                                         "' . Aborting")
           exit(1)
@@ -446,8 +447,11 @@ class BuildImage(CliCommand):
       # Compute the geometry for this device
       geometry = parted.Geometry(start=part_start_sector, length=sector_count, device=device)
 
+      # Create the arted filesystem object
+      fs = parted.FileSystem(type=part_filesystem, geometry=geometry)
+
       # Create the partition object in the loopback device
-      new_partition = parted.Partition(disk=disk, type=parted_type, geometry=geometry)
+      new_partition = parted.Partition(disk=disk, type=parted_type, geometry=geometry, fs=fs)
 
       # Create the constraint object for alignment, etc.
       # constraint = parted.Constraint(startAlign=parted_alignment, endAlign=parted_alignment, \
@@ -459,8 +463,6 @@ class BuildImage(CliCommand):
 
     # Make modification persistent to disk
     disk.commit()
-
-    exit(0)
 
 
 
@@ -534,3 +536,97 @@ class BuildImage(CliCommand):
 
     # Output current task to logs
     logging.info("Umounting the image and releasing the loopback devices")
+
+  # -------------------------------------------------------------------------
+  #
+  # create_filesystes
+  #
+  # -------------------------------------------------------------------------
+  def create_filesystems(self):
+    """This method creates the file systems on the partition created by the
+    create_partitions method. It uses the same configuration file.
+
+    File system creation is implemented in a different method since it has tp
+    be done after partition creation and commit. It can't be done on the fly.
+
+    This code has been separated to make it more easy to read and maintain.
+
+    Since it is executed in sequence after partition creation, configuration
+    file is not checked again for the same parameters. Only parameters
+    specific to filesystems are checked.
+    """
+
+    # Output current task to logs
+    logging.info("Creating the filesystems in the newly created partitions")
+
+    # Defines a partition counter. Starts at zerp and is incremented at each iteration
+    # beginning. It means first partition is 1.
+    part_index = 0
+
+    # Nox iterate the partitiontables and create them
+    for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
+
+      # Increase partition index
+      part_index += 1
+
+      # Retrieve the partition format flag
+      if Key.FORMAT.value not in partition:
+        self.project.logging.debug("File system format flag is not defined. Defaulting to True")
+        part_format = True
+      else:
+        part_format = partition[Key.FORMAT.value]
+        self.project.logging.debug("File system format flag => '" + str(part_format) + "'")
+
+      # Check if the flag is true, if not there is nothing to do
+      if not part_format:
+        self.project.logging.debug("The format flag is deactivated for martition " + part_index)
+      else:
+        # Retrieve the partition file system type
+        if Key.FILESYSTEM.value not in partition:
+          self.project.logging.debug("File system to create on the partition is not defined.")
+          part_filesystem = None
+        else:
+          part_filesystem = partition[Key.FILESYSTEM.value].lower()
+
+        # Default is having no format nor tunefs tool. It will be checked after fs type
+        # control and tool command guessing
+        format_tool = None
+        tune_tool = None
+
+        # Check that the value is in the list of valid values
+        if part_filesystem == "ext2":
+          format_tool = "mkfs.ext2"
+          tune_tool = "tune2fs"
+        elif part_filesystem == "ext3":
+          format_tool = "mkfs.ext3"
+          tune_tool = "tune2fs"
+        elif part_filesystem == "ext4":
+          format_tool = "mkfs.ext4"
+          tune_tool = "tune2fs"
+        elif part_filesystem == "fat32":
+          format_tool = "mkfs.vfat"
+        elif part_filesystem == "linux-swap(v0)" or part_filesystem == "linux-swap(v1)":
+          format_tool = "mkswap"
+
+        # Creation du file fystem sur a prtition
+        sudo_command = 'sudo ' + format_tool + ' ' + self.loopback_device + 'p' + str(part_index)
+        self.execute_command(sudo_command)
+
+      # Retrieve the reserved size
+      if Key.RESERVED_SIZE.value not in partition:
+        self.project.logging.debug("Partition reserved size is not defined, skipping tune2fs.")
+      # else:
+        # Copy the stacking script to /tmp in the rootfs
+        # sudo_command = 'sudo ' + tune_tool + ' ' +
+        # + self.device + 'p' + part_index
+        # # self.execute_command(sudo_command)
+        # print(sudo_command)
+
+#faire le tune2fs
+#mettre le parametre dans image
+#voir le man si yen a d'autre
+#penser a faire des fsck apres la copie
+#faire un tableau des fs ? genre dans partoche
+#restera a trouver comment ordonner les points de montage
+
+
