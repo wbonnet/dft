@@ -484,6 +484,40 @@ class BuildImage(CliCommand):
     # Output current task to logs
     logging.info("Installating image content")
 
+    # Defines a partition counter. Starts at zerp and is incremented at each iteration
+    # beginning. It means first partition is 1.
+    part_index = 0
+
+    # Get a temporary directory used as root for image mounting
+    image_root = "/tmp/zlika"
+
+    # Nox iterate the partitiontables and create them
+    for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
+
+      # Increase partition index
+      part_index += 1
+
+      # Retrieve the partition format flag
+      if Key.FORMAT.value not in partition:
+        self.project.logging.debug("File system format flag is not defined. Defaulting to True")
+        part_format = True
+      else:
+        part_format = partition[Key.FORMAT.value]
+        self.project.logging.debug("File system format flag => '" + str(part_format) + "'")
+
+      # Process only if the partition has been formatted and mapping is defined
+      if part_format and Key.INSTALL_CONTENT_PARTITION_MAPPING.value in partition:
+
+        # Copy the stacking script to /tmp in the rootfs
+        sudo_command = 'sudo mount ' + self.loopback_device + "p" + str(part_index) + " "
+        sudo_command += image_root + partition[Key.INSTALL_CONTENT_PARTITION_MAPPING.value]
+        # self.execute_command(sudo_command)
+        print(sudo_command)
+
+    # Iter
+#penser a faire des fsck apres la copie
+#faire un tableau des fs ? genre dans partoche
+#restera a trouver comment ordonner les points de montage
 
 
   # -------------------------------------------------------------------------
@@ -625,8 +659,5 @@ class BuildImage(CliCommand):
 #faire le tune2fs
 #mettre le parametre dans image
 #voir le man si yen a d'autre
-#penser a faire des fsck apres la copie
-#faire un tableau des fs ? genre dans partoche
-#restera a trouver comment ordonner les points de montage
 
 

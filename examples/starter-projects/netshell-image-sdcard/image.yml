@@ -104,9 +104,22 @@ devices:
         # "amufs1" "amufs2" "amufs3" "amufs4" "amufs5" "btrfs" "linux-swap(v1)" "swsusp" "hfs+"
         # "reiserfs" "freebsd-ufs" "xfs" "affs7" "ntfs" "zfs" "affs4" "hfs" "affs6" "affs1" "affs0"
         # "affs3" "hp-ufs" "fat16" "sun-ufs" "asfs" "jfs" "apfs2" "apfs1"
-        filesystem: "ext4"
+        filesystem: "ext4" ,
 
         # Missing type from fdisk list
+
+        # This variable defines if some content from the rootfs / firmare should be installed on this
+        # partition during installation. It is used to know if the partition should be mounted
+        # fronth loopback, and where, during image content installation.
+        #
+        # The value is the mountpint of this partition. It means it must have been formatted. This
+        # parameter will wil ignored is the format flag is not set to True.
+        #
+        # Only "file" filesystems can have initial content. For instance, partition like swap are
+        # left empty (only formatted).
+        #
+        # efault value is undefined, which means no content to be copied
+        install_content_partition_mapping: "/"
       }
     - {
         # Name or label of the partition. Supported only by dos, gpt and pc98 tables.
