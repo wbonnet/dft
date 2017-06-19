@@ -492,14 +492,16 @@ class BuildImage(CliCommand):
     # Get a temporary directory used as root for image mounting
     image_mount_root = tempfile.mkdtemp(dir=self.project.get_image_directory())
 
+    # Define the list of path to mount and umount which is are empty list at start
+    # We need these list to sort path before mounting to prevent false order of declaration
+    path_to_mount = []
+    path_to_umount = []
+
     # Nox iterate the partitiontables and create them
     for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
 
       # Increase partition index
       part_index += 1
-
-      # Define the list of path to umount which is an empty list at start
-      path_to_umount = []
 
       # Retrieve the partition format flag
       if Key.FORMAT.value not in partition:
@@ -513,19 +515,48 @@ class BuildImage(CliCommand):
       if part_format and Key.INSTALL_CONTENT_PARTITION_MAPPING.value in partition:
 
         # Generate the mount point for the given partition
-        path_to_mount = image_mount_root + partition[Key.INSTALL_CONTENT_PARTITION_MAPPING.value]
+        path = {}
+        path["device"] = self.loopback_device + "p" + str(part_index)
+        path["path"] = image_mount_root + partition[Key.INSTALL_CONTENT_PARTITION_MAPPING.value]
+        path_to_mount.append(path)
 
-        # Copy the stacking script to /tmp in the rootfs
-        sudo_command = 'sudo mount ' + self.loopback_device + "p" + str(part_index) + " "
-        sudo_command += path_to_mount
+    #
+    # All the partitions have been identified, now let's sot them in mount order and do mount
+    #
 
-        # self.execute_command(sudo_command)
-        print(sudo_command)
+    # Sort the list usingpath as the key, in reverse order sinc path will be popped
+    path_to_mount.sort(key=lambda p: p["path"], reverse=True)
+    while len(path_to_mount) > 0:
+      # Get the next item to mount
+      path = path_to_mount.pop()
 
-        # Push the path in the list of path to umount before xiting this method
-        path_to_umount.append(path_to_mount)
+      # Generate the ount command
+      sudo_command = 'sudo mount ' + path["device"] + " " + path["path"]
+      self.execute_command(sudo_command)
+
+      # Mount was successful, thus push the path in the umount list
+      path_to_umount.append(path["path"])
 
 
+# add missing mkdir -p
+
+    #
+    # All the partitions have been mounted now let's copy the data
+    #
+
+    # Test if we should copy the firmware or the rootfs
+
+    #
+    # Data have been copied, lets unmount all the partitions before teardown the loopback
+    #
+
+    # First let's sort the list to umount in the same order as the fs have been mounted
+    # (never umout /var before /var/log). Sort is in normal order since we pop the list
+    path_to_umount.sort()
+    while len(path_to_umount) > 0:
+      # Generate the uount command
+      sudo_command = 'sudo umount ' + path_to_umount.pop()
+      self.execute_command(sudo_command)
 
     # Iter
 #penser a faire des fsck apres la copie
