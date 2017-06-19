@@ -535,7 +535,7 @@ class BuildImage(CliCommand):
       self.execute_command(sudo_command)
 
       # Generate the ount command
-      sudo_command = 'sudo mount ' + path["device"] + " " + path["path"]
+      sudo_command = "sudo mount '" + path["device"] + "' '" + path["path"] + "'"
       self.execute_command(sudo_command)
 
       # Mount was successful, thus push the path in the umount list
@@ -559,7 +559,7 @@ class BuildImage(CliCommand):
     path_to_umount.sort()
     while len(path_to_umount) > 0:
       # Generate the uount command
-      sudo_command = 'sudo umount ' + path_to_umount.pop()
+      sudo_command = "sudo umount '" + path_to_umount.pop() + "'"
       self.execute_command(sudo_command)
 
     # Iter
