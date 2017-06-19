@@ -530,6 +530,10 @@ class BuildImage(CliCommand):
       # Get the next item to mount
       path = path_to_mount.pop()
 
+      # Create the local mount point if needed
+      sudo_command = "sudo mkdir -p '" + path["path"] + "'"
+      self.execute_command(sudo_command)
+
       # Generate the ount command
       sudo_command = 'sudo mount ' + path["device"] + " " + path["path"]
       self.execute_command(sudo_command)
