@@ -26,6 +26,7 @@ the rootfs and bootchain.
 """
 
 import logging
+import tempfile
 import parted
 import os
 from cli_command import CliCommand
@@ -489,13 +490,16 @@ class BuildImage(CliCommand):
     part_index = 0
 
     # Get a temporary directory used as root for image mounting
-    image_root = "/tmp/zlika"
+    image_mount_root = tempfile.mkdtemp(dir=self.project.get_image_directory())
 
     # Nox iterate the partitiontables and create them
     for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
 
       # Increase partition index
       part_index += 1
+
+      # Define the list of path to umount which is an empty list at start
+      path_to_umount = []
 
       # Retrieve the partition format flag
       if Key.FORMAT.value not in partition:
@@ -508,11 +512,20 @@ class BuildImage(CliCommand):
       # Process only if the partition has been formatted and mapping is defined
       if part_format and Key.INSTALL_CONTENT_PARTITION_MAPPING.value in partition:
 
+        # Generate the mount point for the given partition
+        path_to_mount = image_mount_root + partition[Key.INSTALL_CONTENT_PARTITION_MAPPING.value]
+
         # Copy the stacking script to /tmp in the rootfs
         sudo_command = 'sudo mount ' + self.loopback_device + "p" + str(part_index) + " "
-        sudo_command += image_root + partition[Key.INSTALL_CONTENT_PARTITION_MAPPING.value]
+        sudo_command += path_to_mount
+
         # self.execute_command(sudo_command)
         print(sudo_command)
+
+        # Push the path in the list of path to umount before xiting this method
+        path_to_umount.append(path_to_mount)
+
+
 
     # Iter
 #penser a faire des fsck apres la copie
