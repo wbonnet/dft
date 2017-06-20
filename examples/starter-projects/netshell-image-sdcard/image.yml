@@ -129,7 +129,7 @@ devices:
         start_sector: "270336" ,
         format: True ,
         filesystem: "ext4" ,
-        install_content_partition_mapping: "/var/logs"
+        install_content_partition_mapping: "/var/log"
       }
     - {
         name: "var" ,
