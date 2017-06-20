@@ -606,10 +606,10 @@ class BuildImage(CliCommand):
     # It is done by calling fsck on evey path from the device_to_fsck list
     while len(device_to_fsck) > 0:
       # Generate the umount command
-      sudo_command = 'sudo fsck -y "' + device_to_fsck.pop() + '"'
+      sudo_command = 'sudo fsck -y ' + device_to_fsck.pop()
       self.execute_command(sudo_command)
 
-#tune2fs
+
 
   # -------------------------------------------------------------------------
   #
@@ -738,15 +738,7 @@ class BuildImage(CliCommand):
         self.execute_command(sudo_command)
 
         # Check if some ext filesystems options should be applied (accord to man tune2fs)
-        if Key.EXT_FS_OPTIONS in tune_tool is not None:
-          sudo_command = 'sudo ' + tune_tool + ' ' + partition[Key.EXT_FS_OPTIONS.value]
+        if Key.EXT_FS_TUNE.value in partition and tune_tool is not None:
+          sudo_command = 'sudo ' + tune_tool + ' ' + partition[Key.EXT_FS_TUNE.value]
           sudo_command += ' ' + self.loopback_device + 'p' + str(part_index)
-          echo(sudo_command)
-          #  self.execute_command(sudo_command)
-
-
-#faire le tune2fs
-#mettre le parametre dans image
-#voir le man si yen a d'autre
-
-
+          self.execute_command(sudo_command)
