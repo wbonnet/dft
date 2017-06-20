@@ -587,8 +587,6 @@ class BuildImage(CliCommand):
     else:
       logging.error("Firmware copy is not yet available. Doing nothing")
 
-    exit(0)
-
     #
     # Data have been copied, lets unmount all the partitions before teardown the loopback
     #
@@ -601,7 +599,7 @@ class BuildImage(CliCommand):
       sudo_command = 'sudo umount "' + path_to_umount.pop() + '"'
       self.execute_command(sudo_command)
 
-    # Iter
+
 #penser a faire des fsck apres la copie
 #faire un tableau des fs ? genre dans partoche
 #restera a trouver comment ordonner les points de montage
