@@ -693,7 +693,7 @@ class ProjectDefinition(object):
           else:
             # There is specific file, thus use the default path
             # Build the path to the file containing the BSP definition
-            bsp_file = self.get_bsp_base() + "/" + target[Key.BOARD.value] + ".yml"
+            bsp_file = self.get_bsp_base() + "/boards/" + target[Key.BOARD.value] + ".yml"
 
           # Check that the BSP file exist
           if not os.path.isfile(bsp_file):

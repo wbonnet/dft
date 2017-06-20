@@ -629,6 +629,25 @@ class BuildImage(CliCommand):
     # Output current task to logs
     logging.info("Installating the boot (uboot or grub)")
 
+    # Check if a uboot section is defined in the BSP
+    print(self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value])
+    # if Key.BSP.value in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value]:
+
+
+    # ][Key.KERNEL.value][Key.ORIGIN.value] not in \
+    #   "devuan" "debian" "armbian":
+    #   logging.error("Unknown kernel provider '" + target[Key.BSP.value][Key.ORIGIN.value] + "'")
+    #   exit(1)
+
+
+    # if Key.DEVICES.value not in self.project.image:
+    #   self.project.logging.critical("The image devices is not defined in configuration file")
+    #   exit(1)
+
+    # # Check that the filename is available from the devices section in the configuration file
+    # if Key.UBOOT.value in self.project.image[Key.DEVICES.value]:
+    #   self.project.logging.debug("Installing uboot")
+    #   exit(1)
 
 
   # -------------------------------------------------------------------------
