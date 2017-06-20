@@ -119,27 +119,27 @@ devices:
         # left empty (only formatted).
         #
         # Default value is undefined, which means no content to be copied
-        install_content_partition_mapping: "/"
+        install_content_partition_mapping: "/boot"
       }
     - {
-        name: "var" ,
+        name: "logs" ,
         type: "primary" ,
         size: "256" ,
         unit: "MB" ,
         start_sector: "270336" ,
         format: True ,
         filesystem: "ext4" ,
-        install_content_partition_mapping: "/var"
+        install_content_partition_mapping: "/var/logs"
       }
     - {
-        name: "logs" ,
+        name: "var" ,
         type: "primary" ,
         size: "512" ,
         unit: "MB" ,
         start_sector: "794624" ,
         format: True ,
         filesystem: "ext4" ,
-        install_content_partition_mapping: "/var/logs"
+        install_content_partition_mapping: "/var/"
       }
     - {
         name: "system" ,
@@ -149,7 +149,7 @@ devices:
         start_sector: "1843200" ,
         format: True ,
         filesystem: "ext4",
-        install_content_partition_mapping: "/var"
+        install_content_partition_mapping: "/"
       }
 
 

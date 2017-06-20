@@ -27,6 +27,7 @@ the rootfs and bootchain.
 
 import logging
 import tempfile
+from distutils import dir_util
 import shutil
 import parted
 import os
@@ -582,14 +583,15 @@ class BuildImage(CliCommand):
         logging.debug("copying the rootfsc ontent from " + self.project.get_rootfs_mountpoint() +
                       " to " + image_mount_root)
 
-        copy_source_path = self.project.get_rootfs_mountpoint() + "/" + copy_target
-        copy_target_path = image_mount_root + "/" + copy_target
+        copy_source_path = os.path.join(self.project.get_rootfs_mountpoint(), copy_target)
+        copy_target_path = os.path.join(image_mount_root, copy_target)
         if os.path.isfile(copy_target):
           logging.debug("copying file " + copy_source_path + " => " + copy_target_path)
           shutil.copyfile(src=copy_source_path, dst=copy_target_path, symlinks=True)
         else:
           logging.debug("copying file " + copy_source_path + " => " + copy_target_path)
-          shutil.copytree(src=copy_source_path, dst=copy_target_path, symlinks=True)
+          # shutil.copytree(src=copy_source_path, dst=copy_target_path, symlinks=True)
+          dir_util.copy_tree(src=copy_source_path, dst=copy_target_path, preserve_symlinks=1)
     else:
       logging.error("Firmware copy is not yet available. Doing nothing")
 
