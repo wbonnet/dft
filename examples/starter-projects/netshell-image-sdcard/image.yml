@@ -187,3 +187,20 @@ filesystems:
       dump: "0" ,
       pass: "0"
     }
+
+
+# ----------------------------------------------------------------------------
+#
+# Definition of the content ource to use. Source can be either firmware or
+# rootfs. The source is controled by a flag defining "rootfs" or firmware.
+#
+# Additionnal parameter such as (TODO) defines source specific options
+#
+# ----------------------------------------------------------------------------
+content:
+  # Defines the type to use. Valid values are :
+  # . firmware
+  # . rootfs
+  #
+  # Default value is rootfs (even if content section is not defined)
+  type: rootfs

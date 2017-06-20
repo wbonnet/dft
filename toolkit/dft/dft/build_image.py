@@ -554,12 +554,44 @@ class BuildImage(CliCommand):
     # All the partitions have been mounted now let's copy the data
     #
 
-    # Test if we should copy the firmware or the rootfs
-    shutil.copytree(self.project.get_rootfs_mountpoint(), image_mount_root + "/")
+    # Defines the default behavior, to copy the rootfs. True means rootfs, thus false means firmware
+    copy_rootfs = True
 
-    # sudo_command = 'sudo cp -frp "' + self.project.get_rootfs_mountpoint() + '/*" "'
-    # sudo_command += self.project.get_image_directory() + '"'
-    # self.execute_command(sudo_command)
+    # Test if we should copy the firmware or the rootfs
+    if not Key.CONTENT.value in self.project.image:
+      logging.info("No content section in image configuration file. Defaulting to copy rootfs")
+    else:
+      if not Key.TYPE.value in self.project.image[Key.CONTENT.value]:
+        logging.info("No type defined in content section of image configuration file. Defaulting " +
+                     " to copy rootfs")
+      else:
+        logging.debug("Image content : " + self.project.image[Key.CONTENT.value][Key.TYPE.value])
+        if self.project.image[Key.CONTENT.value][Key.TYPE.value].lower() == "rootfs":
+          copy_rootfs = True
+        elif self.project.image[Key.CONTENT.value][Key.TYPE.value].lower() == "firmware":
+          copy_rootfs = False
+        else:
+          logging.critical("Unknown image content : " + self.project.image[Key.CONTENT.value]\
+                           [Key.TYPE.value] + ". Aborting.")
+          exit(1)
+
+    # Switch between firmware and rootfs copy
+    if copy_rootfs:
+      # Iterate the list of fies in the rootfs and copy them to image
+      for copy_target in os.listdir(self.project.get_rootfs_mountpoint()):
+        logging.debug("copying the rootfsc ontent from " + self.project.get_rootfs_mountpoint() +
+                      " to " + image_mount_root)
+
+        copy_source_path = self.project.get_rootfs_mountpoint() + "/" + copy_target
+        copy_target_path = image_mount_root + "/" + copy_target
+        if os.path.isfile(copy_target):
+          logging.debug("copying file " + copy_source_path + " => " + copy_target_path)
+          shutil.copyfile(src=copy_source_path, dst=copy_target_path, symlinks=True)
+        else:
+          logging.debug("copying file " + copy_source_path + " => " + copy_target_path)
+          shutil.copytree(src=copy_source_path, dst=copy_target_path, symlinks=True)
+    else:
+      logging.error("Firmware copy is not yet available. Doing nothing")
 
     #
     # Data have been copied, lets unmount all the partitions before teardown the loopback

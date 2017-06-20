@@ -84,6 +84,7 @@ class Key(Enum):
   COMPRESSOR = "compressor"
   CONFIG_FILE = "config_file"
   CONFIGURATION = "configuration"
+  CONTENT = "content"
   CONTENT_INFORMATION = "content_information"
   CONTENT_WORKDIR = "content"
   CSV = "csv"
