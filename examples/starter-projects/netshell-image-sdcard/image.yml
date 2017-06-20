@@ -106,6 +106,13 @@ devices:
         # "affs3" "hp-ufs" "fat16" "sun-ufs" "asfs" "jfs" "apfs2" "apfs1"
         filesystem: "ext4" ,
 
+        # This variable defines if tune2fs should be called on ext 2/3/4 filesystems, and the
+        # options to set. Typical use is setting reserved space to 0. Any options from "man tune2fs"
+        # can be set. Please check the man for more informatons
+        #
+        # Default value (commented out or not defined) means no options and no call to tune2fs
+        ext_fs_tune: "-m 0" ,
+
         # Missing type from fdisk list
 
         # This variable defines if some content from the rootfs / firmare should be installed on this
@@ -129,6 +136,7 @@ devices:
         start_sector: "270336" ,
         format: True ,
         filesystem: "ext4" ,
+        ext_fs_tune: "-m 0" ,
         install_content_partition_mapping: "/var/log"
       }
     - {
@@ -139,6 +147,7 @@ devices:
         start_sector: "794624" ,
         format: True ,
         filesystem: "ext4" ,
+        ext_fs_tune: "-m 0" ,
         install_content_partition_mapping: "/var/"
       }
     - {

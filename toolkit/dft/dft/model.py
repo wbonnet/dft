@@ -100,6 +100,7 @@ class Key(Enum):
   DISTRIBUTIONS = "distributions"
   DUMP = "dump"
   EMPTY = "empty"
+  EXT_FS_TuNE = "ext_fs_tune"
   EXPECTED_RESULT = "expected_result"
   FACTORY_SETUP = "factory_setup"
   FILE = "file"

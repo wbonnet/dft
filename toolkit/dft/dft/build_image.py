@@ -737,15 +737,13 @@ class BuildImage(CliCommand):
         sudo_command = 'sudo ' + format_tool + ' ' + self.loopback_device + 'p' + str(part_index)
         self.execute_command(sudo_command)
 
-      # Retrieve the reserved size
-      if Key.RESERVED_SIZE.value not in partition:
-        self.project.logging.debug("Partition reserved size is not defined, skipping tune2fs.")
-      # else:
-        # Copy the stacking script to /tmp in the rootfs
-        # sudo_command = 'sudo ' + tune_tool + ' ' +
-        # + self.device + 'p' + part_index
-        # # self.execute_command(sudo_command)
-        # print(sudo_command)
+        # Check if some ext filesystems options should be applied (accord to man tune2fs)
+        if Key.EXT_FS_OPTIONS in tune_tool is not None:
+          sudo_command = 'sudo ' + tune_tool + ' ' + partition[Key.EXT_FS_OPTIONS.value]
+          sudo_command += ' ' + self.loopback_device + 'p' + str(part_index)
+          echo(sudo_command)
+          #  self.execute_command(sudo_command)
+
 
 #faire le tune2fs
 #mettre le parametre dans image
