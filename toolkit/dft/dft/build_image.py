@@ -627,11 +627,51 @@ class BuildImage(CliCommand):
     """
 
     # Output current task to logs
-    logging.info("Installating the boot (uboot or grub)")
+    logging.info("Installing the boot (uboot or grub)")
 
-    # Check if a uboot section is defined in the BSP
+    # Check if a BSP section is defined. It should be, or we certainly have failed before anyways
+    print(Key.BSP.value)
     print(self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value])
-    # if Key.BSP.value in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value]:
+    if Key.BSP.value in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]:
+
+      # And that it contains a uboot section. Otherwise it may be a grub section
+      if Key.UBOOT.value in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value]\
+                                              [0][Key.BSP.value]:
+
+        # Iterate the list of actions. An action is a dd call to copy binary data to the image
+        for action in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value]\
+                                          [0][Key.BSP.value][Key.UBOOT.value]:
+
+          # Check that the source is defined. Otherwise it will not be able to call dd
+          print(action)
+          if Key.SOURCE.value not in action:
+            logging.critical("No source defined in the uboot installation action. Aborting.")
+            exit(1)
+          else:
+            # Copy the source
+            source = action[Key.SOURCE.value]
+
+            # If the source is an absolute path, then use it "as is", otherwise prefix with
+            # the bsp root
+            if not os.path.isabs(source):
+              source = self.project.get_bsp_base() + "/uboot/" + source
+
+          # Check if options is defined, if not default to an empty string, many "jut call dd
+          # without options"
+          if Key.OPTIONS.value not in action:
+            logging.debug("No options defined.")
+            options = ""
+          else:
+            options = action[Key.OPTIONS.value]
+
+          # Let's run dd to copy to the image
+          sudo_command = 'sudo dd if="' + source + '" of="' + self.loopback_device + '" ' + options
+          self.execute_command(sudo_command)
+      else:
+        logging.debug("No UBOOT defined, skipping.")
+    else:
+      logging.warning("No BSP defined, skipping. The generated image will may not be able to boot")
+
 
 
     # ][Key.KERNEL.value][Key.ORIGIN.value] not in \

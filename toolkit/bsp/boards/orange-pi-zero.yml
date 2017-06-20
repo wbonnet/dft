@@ -56,7 +56,10 @@ kernel:
 # used to boot the board an run kernel. It is defined by XXX
 uboot:
   - {
-      file: "" ,
-      options: ""
+      source: "/dev/zero" ,
+      options: "bs=1k count=1023 seek=1 status=noxfer"
     }
-
+  - {
+      source: "u-boot-sunxi-with-spl.bin" ,
+      options: "bs=1024 seek=8 status=noxfer"
+    }

@@ -227,6 +227,7 @@ class Key(Enum):
   SHA256 = "sha256"
   SIZE = "size"
   SKIP_MISSING_SOFTWARE = "skip_missing_software"
+  SOURCE = "source"
   SQUASHFS = "squashfs"
   SQUASHFS_FILE = "squashfs_file"
   STACK_DEFINITION = "stack_definition"
