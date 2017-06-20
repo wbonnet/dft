@@ -506,6 +506,7 @@ class BuildImage(CliCommand):
     # We need these list to sort path before mounting to prevent false order of declaration
     path_to_mount = []
     path_to_umount = []
+    device_to_fsck = []
 
     # Nox iterate the partitiontables and create them
     for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
@@ -529,6 +530,8 @@ class BuildImage(CliCommand):
         path["device"] = self.loopback_device + "p" + str(part_index)
         path["path"] = image_mount_root + partition[Key.INSTALL_CONTENT_PARTITION_MAPPING.value]
         path_to_mount.append(path)
+        # TODO: fsck on swap ?
+        device_to_fsck.append(path["device"])
 
     #
     # All the partitions have been identified, now let's sot them in mount order and do mount
@@ -599,11 +602,14 @@ class BuildImage(CliCommand):
       sudo_command = 'sudo umount "' + path_to_umount.pop() + '"'
       self.execute_command(sudo_command)
 
+    # Content have been copied and partition umount, now let's control the filesystems
+    # It is done by calling fsck on evey path from the device_to_fsck list
+    while len(device_to_fsck) > 0:
+      # Generate the umount command
+      sudo_command = 'sudo fsck -y "' + device_to_fsck.pop() + '"'
+      self.execute_command(sudo_command)
 
-#penser a faire des fsck apres la copie
-#faire un tableau des fs ? genre dans partoche
-#restera a trouver comment ordonner les points de montage
-
+#tune2fs
 
   # -------------------------------------------------------------------------
   #
