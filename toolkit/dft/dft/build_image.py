@@ -27,6 +27,7 @@ the rootfs and bootchain.
 
 import logging
 import tempfile
+import shutil
 import parted
 import os
 from cli_command import CliCommand
@@ -213,8 +214,8 @@ class BuildImage(CliCommand):
       os.remove(self.image_path)
 
     # Create the fill command
-    sudo_command = "dd if=/dev/" + fill_method + " of=" + self.image_path
-    sudo_command += " bs=" + str(block_size) + " count=" + str(size)
+    sudo_command = 'dd if=/dev/' + fill_method + ' of="' + self.image_path
+    sudo_command += '" bs=' + str(block_size) + ' count=' + str(size)
     sudo_command_output = self.execute_command(sudo_command)
 
 
@@ -246,13 +247,14 @@ class BuildImage(CliCommand):
       if self.image_path is not None:
         if os.path.isfile(self.image_path):
           # Mount the image in the loopback device
-          sudo_command = "sudo /sbin/losetup " + self.loopback_device + " " + self.image_path
+          sudo_command = 'sudo /sbin/losetup "' + self.loopback_device + '" "'
+          sudo_command += self.image_path + '"'
           sudo_command_output = self.execute_command(sudo_command)
           # Set the flag to True, if an error occured an exception has been raised, and this line
           # is not executed
           self.image_is_mounted = True
         else:
-          logging.critical("Image file " + self.image_path + " does not exist. Aborting !")
+          logging.critical("Image file '" + self.image_path + "' does not exist. Aborting !")
           exit(1)
       else:
         logging.critical("Image file path is not defined. Aborting !")
@@ -473,13 +475,20 @@ class BuildImage(CliCommand):
   #
   # -------------------------------------------------------------------------
   def install_image_content(self):
-    """XXXX This method installs in the generated rootfs the tools needed to update
-    (or generate) theinitramfs. The kernel is not installed, it is the job of
-    the install_bootchain target. The kernel to use is defined in the BSP
-    used by this target.
+    """This method installs the content from the generated rootfs or firmware
+    into the partition previously created and formwated.
 
-    Operations executed by this method run in a chrooted environment in the
-    generated rootfs.
+    The method execute several iterations of the partitions lists from the
+    device entry.
+
+    . First iteration compute the list of partition to mount, sort them and
+      push mounts to a list
+    . Second iteration is on the list of mounts, remove mount points one by
+      one, creates, under a temporary directory, the path need to execute the
+      mount command, then do the mount and push the path to the list of
+      directories to umount
+    . Copy either the rootfs or the firmware to the mounted partitions
+    . Iterate the umount list and cleanup things
     """
 
     # Output current task to logs
@@ -531,24 +540,26 @@ class BuildImage(CliCommand):
       path = path_to_mount.pop()
 
       # Create the local mount point if needed
-      sudo_command = "sudo mkdir -p '" + path["path"] + "'"
+      sudo_command = 'sudo mkdir -p "' + path["path"] + '"'
       self.execute_command(sudo_command)
 
       # Generate the ount command
-      sudo_command = "sudo mount '" + path["device"] + "' '" + path["path"] + "'"
+      sudo_command = 'sudo mount "' + path["device"] + '" "' + path["path"] + '"'
       self.execute_command(sudo_command)
 
       # Mount was successful, thus push the path in the umount list
       path_to_umount.append(path["path"])
-
-
-# add missing mkdir -p
 
     #
     # All the partitions have been mounted now let's copy the data
     #
 
     # Test if we should copy the firmware or the rootfs
+    shutil.copytree(self.project.get_rootfs_mountpoint(), image_mount_root + "/")
+
+    # sudo_command = 'sudo cp -frp "' + self.project.get_rootfs_mountpoint() + '/*" "'
+    # sudo_command += self.project.get_image_directory() + '"'
+    # self.execute_command(sudo_command)
 
     #
     # Data have been copied, lets unmount all the partitions before teardown the loopback
@@ -559,7 +570,7 @@ class BuildImage(CliCommand):
     path_to_umount.sort()
     while len(path_to_umount) > 0:
       # Generate the uount command
-      sudo_command = "sudo umount '" + path_to_umount.pop() + "'"
+      sudo_command = 'sudo umount "' + path_to_umount.pop() + '"'
       self.execute_command(sudo_command)
 
     # Iter
@@ -567,6 +578,7 @@ class BuildImage(CliCommand):
 #faire un tableau des fs ? genre dans partoche
 #restera a trouver comment ordonner les points de montage
 
+    exit(0)
 
   # -------------------------------------------------------------------------
   #
