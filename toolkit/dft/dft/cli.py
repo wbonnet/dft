@@ -62,7 +62,7 @@ class Cli(object):
     """
 
     # Current version
-    self.version = "0.3.1"
+    self.version = "0.4.0"
 
     # Create the internal parser from argparse
     self.parser = argparse.ArgumentParser(description=textwrap.dedent('''\
@@ -71,11 +71,11 @@ Debian Firmware Toolkit v''' + self.version + '''
 DFT is a collection of tools used to create Debian based firmwares
 
 Available commands are :
-? assemble_firmware                Create a firmware from a rootfs and generate the configuration files used to loading after booting
+. assemble_firmware                Create a firmware from a rootfs and generate the configuration files used to loading after booting
 . build_rootfs                     Generate a debootstrap from a Debian repository, install and configure required packages
 ? build_bootchain                  Build the bootchain (kernel, initramfs, grub or uboot)
-? install_bootchain                Install the bootchain (kernel, initramfs, grub or uboot) in the rootfs
-? build_image                      Build the disk image from the firmware (or rootfs) and bootchain
+. install_bootchain                Install the bootchain (kernel, initramfs, grub or uboot) in the rootfs
+. build_image                      Build the disk image from the firmware (or rootfs) and bootchain
 . build_firmware                   Build the firmware configuration files and scripts used to load in memory the firmware
 . check_rootfs                     Control the content of the rootfs rootfs after its generation (debsecan and openscap)
 x factory_setup                    Apply some extra factory setup before generating the firmware
