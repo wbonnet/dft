@@ -49,6 +49,7 @@ kernel:
     - linux-image-next-sunxi
     - linux-dtb-next-sunxi
     - linux-firmware-image-next-sunxi
+    - linux-jessie-root-orangepizero
 
 #TODO: add flag to define if a specific source list ha to be generated under sources.list.define
 
