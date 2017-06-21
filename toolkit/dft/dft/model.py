@@ -156,6 +156,8 @@ class Key(Enum):
   MANDATORY_ONLY = "mandatory_only"
   MAX_VERSION = "max_version"
   MD5 = "md5"
+  MESSAGE_START = "message_start"
+  MESSAGE_END = "message_end"
   METHOD = "method"
   MIN_VERSION = "min_version"
   MODE = "mode"
@@ -642,10 +644,21 @@ class ProjectDefinition(object):
 
       # Load the stripping sub configuration files
       if Key.STRIPPING.value in self.project[Key.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project[Key.PROJECT_DEFINITION.value]\
-                                                               [Key.STRIPPING.value][0])
-        with open(filename, 'r') as working_file:
-          self.stripping = yaml.load(working_file)
+
+        # Initialize the rule dictionnary
+        self.stripping = []
+
+        # Iterate the list of stripping rule files
+        if self.project[Key.PROJECT_DEFINITION.value][Key.STRIPPING.value] is not None:
+          for stripping_file in self.project[Key.PROJECT_DEFINITION.value][Key.STRIPPING.value]:
+            # Get th full path of the file to load
+            filename = self.generate_def_file_path(stripping_file)
+
+            # Open and read the file
+            with open(filename, 'r') as working_file:
+              # YAML structure is stored at index 'counter'
+              self.stripping.append(yaml.load(working_file))
+
 
       # Load the check sub configuration files
       if Key.CONTENT_INFORMATION.value in self.project[Key.PROJECT_DEFINITION.value]:

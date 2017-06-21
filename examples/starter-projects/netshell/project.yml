@@ -117,10 +117,12 @@ project_definition:
   # Definition of the control to apply on the rootfs
   check:
     - check_rootfs.yml
+    - check2_rootfs.yml
+    - check3_rootfs.yml
 
   # Definition of the stripping rules (to remove extra packages, files etc.)
   stripping:
-    - stripping.yml
+     - stripping.yml
 
   # Definition of the content to generate
   content_information:

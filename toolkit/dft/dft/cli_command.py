@@ -345,8 +345,6 @@ class CliCommand(object):
     if self.cleanup_in_progress:
       return
 
-    print(self.project.get_rootfs_mountpoint())
-
     # Set the flag used to prevent multiple call
     self.cleanup_in_progress = True
 

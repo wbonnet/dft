@@ -87,13 +87,23 @@ class StripRootFS(CliCommand):
       self.project.logging.info("The project has no stripping information defined")
       return
 
-    #
-    # Strip the differents object categories one by one
-    #
-    #
-    self.strip_packages()
-    self.strip_files()
-    self.strip_directories()
+    # Iterate the list of rule set, and call the dedicated method
+    for rules in self.project.stripping:
+
+      # Display startup mesage if defined
+      if Key.MESSAGE_START.value in rules:
+        self.project.logging.info(rules[Key.MESSAGE_START.value])
+
+      #
+      # Strip the differents object categories one by one
+      #
+      self.strip_packages(rules)
+      self.strip_files(rules)
+      self.strip_directories(rules)
+
+      # Display end mesage if defined
+      if Key.MESSAGE_END.value in rules:
+        self.project.logging.info(rules[Key.MESSAGE_END.value])
 
     # Remove QEMU if it has been isntalled. It has to be done in the end
     # since some cleanup tasks could need QEMU
@@ -109,7 +119,7 @@ class StripRootFS(CliCommand):
   # strip_packages
   #
   # -------------------------------------------------------------------------
-  def strip_packages(self):
+  def strip_packages(self, rules):
     """This method implement the package stripping
 
     The method parses the output of the dpkg -l command and checks if packages are
@@ -117,9 +127,9 @@ class StripRootFS(CliCommand):
     """
 
     # Check that the stripping definition includes packages
-    if Key.PACKAGES.value in self.project.stripping:
+    if Key.PACKAGES.value in rules:
       # Check that the stripping definition includes a status absent
-      if Key.ABSENT.value in self.project.stripping[Key.PACKAGES.value]:
+      if Key.ABSENT.value in rules[Key.PACKAGES.value]:
         # Retrieve the list of installed packages
         sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
         sudo_command += " dpkg -l | tail -n +6 | awk '{ print $2 }'"
@@ -132,7 +142,7 @@ class StripRootFS(CliCommand):
           self.installed_packages[binaryline.decode('utf-8').split()[0]] = True
 
         # Iterate the list packages to remove
-        for pkg in self.project.stripping[Key.PACKAGES.value][Key.ABSENT.value]:
+        for pkg in rules[Key.PACKAGES.value][Key.ABSENT.value]:
           # If the package is installed
           if pkg in self.installed_packages:
             # First chck if we h&ve to add APT
@@ -164,24 +174,24 @@ class StripRootFS(CliCommand):
   # strip_files
   #
   # -------------------------------------------------------------------------
-  def strip_files(self):
+  def strip_files(self, rules):
     """This method implement the file stripping
 
     The method parses the list of rules, then apply the action defined in the matching rule.
     """
 
     # Check that the stripping definition includes files
-    if Key.FILES.value in self.project.stripping:
+    if Key.FILES.value in rules:
       # Check that the stripping definition includes a status absent
-      if Key.ABSENT.value in self.project.stripping[Key.FILES.value]:
-        for working_file in self.project.stripping[Key.FILES.value][Key.ABSENT.value]:
+      if Key.ABSENT.value in rules[Key.FILES.value]:
+        for working_file in rules[Key.FILES.value][Key.ABSENT.value]:
           self.remove_file(working_file)
       else:
         self.project.logging.debug("The stripping definition does not include files to remove")
 
       # Check that the stripping definition includes a status empty
-      if Key.EMPTY.value in self.project.stripping[Key.FILES.value]:
-        for working_file in self.project.stripping[Key.FILES.value][Key.EMPTY.value]:
+      if Key.EMPTY.value in rules[Key.FILES.value]:
+        for working_file in rules[Key.FILES.value][Key.EMPTY.value]:
           self.empty_file(working_file)
       else:
         self.project.logging.debug("Stripping definition does not include files to truncate")
@@ -194,24 +204,24 @@ class StripRootFS(CliCommand):
   # strip_directories
   #
   # -------------------------------------------------------------------------
-  def strip_directories(self):
+  def strip_directories(self, rules):
     """This method implement the directory stripping
 
     The method parses the list of rules, then apply the action defined in the matching rule.
     """
 
     # Check that the stripping definition includes directories
-    if Key.DIRECTORIES.value in self.project.stripping:
+    if Key.DIRECTORIES.value in rules:
       # Check that the stripping definition includes a status absent
-      if Key.ABSENT.value in self.project.stripping[Key.DIRECTORIES.value]:
-        for directory in self.project.stripping[Key.DIRECTORIES.value][Key.ABSENT.value]:
+      if Key.ABSENT.value in rules[Key.DIRECTORIES.value]:
+        for directory in rules[Key.DIRECTORIES.value][Key.ABSENT.value]:
           self.remove_directory(directory)
       else:
         self.project.logging.debug("Stripping definition does not include directories to remove")
 
       # Check that the stripping definition includes a status empty
-      if Key.EMPTY.value in self.project.stripping[Key.DIRECTORIES.value]:
-        for directory in self.project.stripping[Key.DIRECTORIES.value][Key.EMPTY.value]:
+      if Key.EMPTY.value in rules[Key.DIRECTORIES.value]:
+        for directory in rules[Key.DIRECTORIES.value][Key.EMPTY.value]:
           self.empty_directory(directory)
       else:
         self.project.logging.debug("The stripping definition does not include files to empty")
@@ -228,14 +238,14 @@ class StripRootFS(CliCommand):
   # -------------------------------------------------------------------------
   def remove_file(self, target):
     """This method removes a file from the target rootfs.
-
-    For safety reasons, this command is executed inside the chrooted
-    environment and may need to have qemu installed.
     """
 
     self.project.logging.debug("Remove file : " + target)
-    sudo_command = "sudo chroot " + self.project.get_rootfs_mountpoint()
-    sudo_command += " rm -f " + target
+
+    # Deleting file is done from host rootf. There is no need to trigger a chroot to rm rm
+    # Moreover, some files may be missing from the chroot to be target to run chroot
+    target = self.project.get_rootfs_mountpoint() + "/" + target
+    sudo_command = "sudo rm -f " + target
     self.execute_command(sudo_command)
 
 
@@ -248,16 +258,16 @@ class StripRootFS(CliCommand):
   def empty_file(self, target):
     """This method makes 'empty' a file from the target rootfs. The operation
     is a file truncate.
-
-    For safety reasons, this command is executed inside the chrooted
-    environment and may need to have qemu installed.
     """
 
     self.project.logging.debug("Empty file : " + target)
 
+    # Deleting file is done from host rootf. There is no need to trigger a chroot to rm rm
+    # Moreover, some files may be missing from the chroot to be target to run chroot
+    target = self.project.get_rootfs_mountpoint() + "/" + target
+
     # Test if the fileexist before trying to trucate it
-    sudo_command = "sudo chroot " + self.project.get_rootfs_mountpoint()
-    sudo_command += " bash -c '[ -f " + target + " ] && truncate " + target
+    sudo_command = "bash -c '[ -f " + target + " ] && truncate " + target
     sudo_command += " --size 0 || true'"
     self.execute_command(sudo_command)
 
@@ -273,14 +283,15 @@ class StripRootFS(CliCommand):
 
     This operation also rmoves recursivly the directory content (thus you'd
     better not remove / ...).
-
-    For safety reasons, this command is executed inside the chrooted
-    environment and may need to have qemu installed.
     """
 
     self.project.logging.debug("Remove directory : " + target)
-    sudo_command = "sudo chroot " + self.project.get_rootfs_mountpoint()
-    sudo_command += " rm -fr " + target
+
+    # Deleting dirctories is done from host rootf. There is no need to trigger a chroot to rm rm
+    # Moreover, some files may be missing from the chroot to be target to run chroot
+    target = self.project.get_rootfs_mountpoint() + "/" + target
+
+    sudo_command = "rm -fr " + target
     self.execute_command(sudo_command)
 
 
@@ -293,13 +304,13 @@ class StripRootFS(CliCommand):
   def empty_directory(self, target):
     """This method removes a dirctory content recursivly. Only files and
     symlinks are remove. The sub dirctories structure is not mdified.
-
-    For safety reasons, this command is executed inside the chrooted
-    environment and may need to have qemu installed.
     """
 
+    # Emptying dirctories is done from host rootf. There is no need to trigger a chroot to rm rm
+    # Moreover, some files may be missing from the chroot to be target to run chroot
+    target = self.project.get_rootfs_mountpoint() + "/" + target
+
     self.project.logging.debug("Empty directory : " + target)
-    sudo_command = "sudo chroot " + self.project.get_rootfs_mountpoint()
-    sudo_command += " bash -c '[ -d " + target + " ] && find " + target
+    sudo_command = "bash -c '[ -d " + target + " ] && find " + target
     sudo_command += " -type f | xargs rm -f || true'"
     self.execute_command(sudo_command)

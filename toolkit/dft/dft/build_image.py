@@ -163,7 +163,7 @@ class BuildImage(CliCommand):
     # Compute the block size to use based on the unit
     if unit == "s": block_size = 512
     elif unit == "b": block_size = 1
-    elif unit == "kb" or unit == "kib": block_size = 1024
+    elif unit == "kb" or unit == "kib": é = 1024
     elif unit == "mb" or unit == "mib": block_size = 1024 * 1024
     elif unit == "gb" or unit == "gib": block_size = 1024 * 1024 * 1024
     elif unit == "tb" or unit == "tib": block_size = 1024 * 1024 * 1024 * 1024
