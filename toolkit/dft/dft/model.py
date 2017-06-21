@@ -812,7 +812,7 @@ class ProjectDefinition(object):
     # Check if the value is defined
     if Key.DFT_BASE.value not in self.project[Key.CONFIGURATION.value]:
       if self.configuration.configuration is not None and \
-         Key.BSP_BASE.value in self.configuration.configuration[Key.CONFIGURATION.value]:
+         Key.DFT_BASE.value in self.configuration.configuration[Key.CONFIGURATION.value]:
         self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] = \
                       self.configuration.configuration[Key.CONFIGURATION.value][Key.DFT_BASE.value]
       else:
