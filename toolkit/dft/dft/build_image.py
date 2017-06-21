@@ -26,11 +26,9 @@ the rootfs and bootchain.
 """
 
 import logging
-import tempfile
-from distutils import dir_util
-import shutil
-import parted
 import os
+import tempfile
+import parted
 from cli_command import CliCommand
 from model import Key
 
@@ -217,7 +215,7 @@ class BuildImage(CliCommand):
     # Create the fill command
     sudo_command = 'dd if=/dev/' + fill_method + ' of="' + self.image_path
     sudo_command += '" bs=' + str(block_size) + ' count=' + str(size)
-    sudo_command_output = self.execute_command(sudo_command)
+    self.execute_command(sudo_command)
 
 
 
@@ -452,10 +450,10 @@ class BuildImage(CliCommand):
       geometry = parted.Geometry(start=part_start_sector, length=sector_count, device=device)
 
       # Create the arted filesystem object
-      fs = parted.FileSystem(type=part_filesystem, geometry=geometry)
+      filesys = parted.FileSystem(type=part_filesystem, geometry=geometry)
 
       # Create the partition object in the loopback device
-      new_partition = parted.Partition(disk=disk, type=parted_type, geometry=geometry, fs=fs)
+      new_partition = parted.Partition(disk=disk, type=parted_type, geometry=geometry, fs=filesys)
 
       # Create the constraint object for alignment, etc.
       # constraint = parted.Constraint(startAlign=parted_alignment, endAlign=parted_alignment, \
