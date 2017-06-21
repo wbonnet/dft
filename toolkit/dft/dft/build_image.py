@@ -628,8 +628,6 @@ class BuildImage(CliCommand):
     logging.info("Installing the boot (uboot or grub)")
 
     # Check if a BSP section is defined. It should be, or we certainly have failed before anyways
-    print(Key.BSP.value)
-    print(self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value])
     if Key.BSP.value in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]:
 
       # And that it contains a uboot section. Otherwise it may be a grub section
@@ -641,7 +639,6 @@ class BuildImage(CliCommand):
                                           [0][Key.BSP.value][Key.UBOOT.value]:
 
           # Check that the source is defined. Otherwise it will not be able to call dd
-          print(action)
           if Key.SOURCE.value not in action:
             logging.critical("No source defined in the uboot installation action. Aborting.")
             exit(1)
