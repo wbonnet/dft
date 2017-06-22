@@ -117,8 +117,8 @@ project_definition:
   # Definition of the control to apply on the rootfs
   check:
     - check_rootfs.yml
-    - check2_rootfs.yml
-    - check3_rootfs.yml
+    - check_rootfs2.yml
+    - check_rootfs3.yml
 
   # Definition of the stripping rules (to remove extra packages, files etc.)
   stripping:

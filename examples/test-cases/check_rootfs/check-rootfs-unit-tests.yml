@@ -8,11 +8,11 @@
 # License.
 #
 #
-# Copyright 2016 DFT project (http:/www.debianfirmwaretoolkit.org).  
+# Copyright 2016 DFT project (http:/www.debianfirmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
 # Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http:/www.linuxfirmwarefromscratch.org).  
+# Copyright 2014 LFFS project (http:/www.linuxfirmwarefromscratch.org).
 #
 #
 # Contributors list :
@@ -21,8 +21,17 @@
 #
 #
 
+#
+# Defines messages to be output as info when this set of rules start to be executed
+# and when execution is finished.
+#
+# Default value is no message (same as undefined)
+#
+message_start: "Check rules : main - Started"
+message_end: "Check rules : main - Finished"
+
 # The following variables defines the lobal behavior of the check_rootfs util
-# These are top level rules which defines what to do when a package is not 
+# These are top level rules which defines what to do when a package is not
 # listed in any section. It also defines restriction such as "mandatory only"
 configuration:
   # This variable defines the constraint upon installation strategy
@@ -37,8 +46,8 @@ configuration:
   installation_constraint: allow_optional
 
 #
-# The following packages definition are provided as an example of how to use 
-# use packages restriction check, and are also used as one of the dft tool 
+# The following packages definition are provided as an example of how to use
+# use packages restriction check, and are also used as one of the dft tool
 # test case
 #
 packages:
@@ -46,17 +55,17 @@ packages:
   # Mandatory packages
   #
   mandatory:
-    # This package exist and is installed 
+    # This package exist and is installed
     - name: "base-files"
       label: "Testing that mandatory package base-file is installed (when it is installed)"
       # Test is supposed to succeed
       expected_result: True
-    # This package does not exist and should generate an error 
+    # This package does not exist and should generate an error
     - name: "missing-non-existent-package"
       label: "Testing that mandatory package missing-nonexistent-package (when it is not installed)"
       # Test is supposed to fail
       expected_result: False
-    # This package has to be installed with a constraint on minimum version 
+    # This package has to be installed with a constraint on minimum version
     - name: "vim-tiny"
       label: "Testing minimum version of a mandatory package (when installed version is higher than minimum)"
       min_version: "2:7.0"
@@ -80,16 +89,16 @@ packages:
       min_version: "2:9.0"
       # Test is supposed to succeed
       expected_result: False
-    # This package has to be installed with a given version 
+    # This package has to be installed with a given version
     - name: "vim-common"
       label: "Testing allowed version of a mandatory package (when installed version is the allowed version)"
       allowed_version: "2:8.0.0134-1"
       # Test is supposed to succeed
       expected_result: True
-    # This package has to be installed with a given version 
+    # This package has to be installed with a given version
     - name: "vim-common"
       label: "Testing a list of allowed versions of a mandatory package(when installed version is in the list)"
-      allowed_version: 
+      allowed_version:
         - "2:8.0.0022-1"
         - "2:8.0.0134-1"
       # Test is supposed to succeed
@@ -103,7 +112,7 @@ packages:
     # This package has to be installed with a given version
     - name: "vim-common"
       label: "Testing a list of allowed versions of a mandatory package (when installed version is not in the list)"
-      allowed_version: 
+      allowed_version:
         - "2:9.0"
         - "2:9.1"
       # Test is supposed to fail
@@ -142,7 +151,7 @@ packages:
       label: "Testing maximum version of an optionnal package (when installed version is lower than maximum)"
       max_version: "2:8.1"
       # Test is supposed to succeed
-      expected_result: True      
+      expected_result: True
     # This package is allowed and has a constraint on version
     - name: "vim-common"
       label: "Testing maximum version of an optionnal package (when installed version is higher than maximum)"
@@ -174,7 +183,7 @@ packages:
     # you use ;) just change versions
     - name: "vim-common"
       label: "Testing a list of allowed versions of an optionnal package (when installed version is in the list)"
-      allowed_version: 
+      allowed_version:
         - "2:8.0.0134-1"
         - "2:8.0.0022-1"
       # Test is supposed to succeed
@@ -183,7 +192,7 @@ packages:
     # should not succeed since none of the version are valid.
     - name: "vim-common"
       label: "Testing a list of allowed versions of an optionnal package (when installed version is not in the list)"
-      allowed_version: 
+      allowed_version:
         - "2:7.0"
         - "2:7.1"
       # Test is supposed to succeed
@@ -192,7 +201,7 @@ packages:
     # versions, it should succeed.
     - name: "vim-common"
       label: "Testing a list of blacklisted versions of an optionnal package (when installed version is not in the list)"
-      blacklisted_version: 
+      blacklisted_version:
         - "2:9.0.0134-1"
         - "2:9.0.0022-1"
       # Test is supposed to succeed
@@ -201,7 +210,7 @@ packages:
     # versions, it should fail.
     - name: "vim-common"
       label: "Testing a list of blacklisted versions of an optionnal package (when installed version is in the list)"
-      blacklisted_version: 
+      blacklisted_version:
         - "2:8.0.0134-1"
         - "2:9.0.0022-1"
       # Test is supposed to fail
@@ -214,7 +223,7 @@ packages:
         - "arm64"
       # Test is supposed to succeed
       expected_result: True
-    # This package is allowed and has several constraints on blacklisted 
+    # This package is allowed and has several constraints on blacklisted
     # arch, it should succeed
     - name: "vim-common"
       label: "Testing a list of several blacklisted architectures of an optionnal package (when installed version is not in the list)"
@@ -242,7 +251,7 @@ packages:
         - "arm64"
       # Test is supposed to fail
       expected_result: False
-    # This package is allowed on several arch but not amd64 it should fail 
+    # This package is allowed on several arch but not amd64 it should fail
     - name: "base-files"
       label: "Testing a list of allowed architectures of an optionnal package (when installed version is not in the list)"
       blacklisted_version:
@@ -293,7 +302,7 @@ files:
     label: "Testing that a mandatory file exist (when it is not a file but a directory)"
     type: "file"
     # Test is supposed to fail
-    expected_result: False  
+    expected_result: False
     # Mandatory single but it is a symlink
   - path: "/dft/existing/link"
     label: "Testing that a mandatory file exist (when it is not a file but a symlink)"
@@ -422,13 +431,13 @@ files:
     target: "/dft/missing/does-not-exist"
     # Test is supposed to fail
     expected_result: False
-    # Missing symlink with missing target 
+    # Missing symlink with missing target
   - path: "/dft/missing/link"
     label: "Testing that a mandatory symlink and its target both exist (when the target does not exist and type is not defined)"
     target: "/dft/missing/target-not-exist"
     # Test is supposed to fail
     expected_result: False
-  # 
+  #
   # Forbidden objects
   #
   forbidden:
@@ -547,7 +556,7 @@ files:
     target: "link-target"
     # Test is supposed to fail
     expected_result: False
-  # This link point is forbidden. Even if the target does not exist, the 
+  # This link point is forbidden. Even if the target does not exist, the
   # target becomes forbidden (link target not file itself)
   - path: "/dft/existing/link"
     label: "Testing that a forbidden symlink target does not exist (when the target does not exist)"
@@ -656,14 +665,14 @@ files:
     type: "directory"
     # Test is supposed to succeed since missing but optional
     expected_result: False
-  # Test that a directory is not empty 
+  # Test that a directory is not empty
   - path: "/dft/existing/empty-directory"
     label: "Testing that a directory is not empty (when the directory is empty)"
     type: "directory"
     empty: False
     # Test is supposed to fail
     expected_result: False
-  # Test that a directory is not empty 
+  # Test that a directory is not empty
   - path: "/dft/existing/non-empty-directory"
     label: "Testing that a directory is not empty (when the directory is not empty)"
     type: "directory"
@@ -754,14 +763,14 @@ files:
     type: "symlink"
     # Test is supposed to fail
     expected_result: True
-  # Test that a link to a directory is not empty 
+  # Test that a link to a directory is not empty
   - path: "/dft/existing/link-to-empty-directory"
     label: "Testing symlink to an empty directory (when expecting the directory to be not empty)"
     type: "symlink"
     empty: False
     # Test is supposed to fail
     expected_result: False
-  # Test that a link to a directory is not empty 
+  # Test that a link to a directory is not empty
   - path: "/dft/existing/link-to-non-empty-directory"
     label: "Testing symlink to a non empty directory (when expecting the directory to be not empty)"
     type: "symlink"
@@ -782,14 +791,14 @@ files:
     empty: True
     # Test is supposed to fail
     expected_result: False
-  # Test that a link to a file is not empty 
+  # Test that a link to a file is not empty
   - path: "/dft/existing/link-to-empty-file"
     label: "Testing symlink to an empty file (when expecting the file to be not empty)"
     type: "symlink"
     empty: False
     # Test is supposed to fail
     expected_result: False
-  # Test that a link to a file is not empty 
+  # Test that a link to a file is not empty
   - path: "/dft/existing/link-to-non-empty-file"
     label: "Testing symlink to a non empty file (when expecting the file to be not empty)"
     type: "symlink"

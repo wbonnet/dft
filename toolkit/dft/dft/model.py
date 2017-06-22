@@ -637,10 +637,20 @@ class ProjectDefinition(object):
 
       # Load the check sub configuration files
       if Key.CHECK.value in self.project[Key.PROJECT_DEFINITION.value]:
-        filename = self.generate_def_file_path(self.project[Key.PROJECT_DEFINITION.value]\
-                                                               [Key.CHECK.value][0])
-        with open(filename, 'r') as working_file:
-          self.check = yaml.load(working_file)
+
+        # Initialize the rule dictionnary
+        self.check = []
+
+        # Iterate the list of stripping rule files
+        if self.project[Key.PROJECT_DEFINITION.value][Key.CHECK.value] is not None:
+          for check_file in self.project[Key.PROJECT_DEFINITION.value][Key.CHECK.value]:
+            # Get th full path of the file to load
+            filename = self.generate_def_file_path(check_file)
+
+            # Open and read the file
+            with open(filename, 'r') as working_file:
+              # YAML structure is stored at index 'counter'
+              self.check.append(yaml.load(working_file))
 
       # Load the stripping sub configuration files
       if Key.STRIPPING.value in self.project[Key.PROJECT_DEFINITION.value]:

@@ -195,23 +195,39 @@ class CheckRootFS(CliCommand):
       # QEMU is used, and we have to install it into the target
       self.setup_qemu()
 
-    #
-    # Check the packages
-    #
-    if self.project.check != None and Key.PACKAGES.value in self.project.check:
-      self.project.logging.debug("Packages check is activated")
-      self.check_packages()
-    else:
-      self.project.logging.info("Packages check generation is deactivated")
+    # Check that there is a check definition
+    if self.project.check is None:
+      self.project.logging.info("The project has no check information defined")
+      return
 
-    #
-    # Check the files
-    #
-    if self.project.check != None and Key.FILES.value in self.project.check:
-      self.project.logging.debug("Files check is activated")
-      self.check_files()
-    else:
-      self.project.logging.info("Files check generation is deactivated")
+    # Iterate the list of rule set, and call the dedicated method
+    for rules in self.project.check:
+
+      # Display startup mesage if defined
+      if Key.MESSAGE_START.value in rules:
+        self.project.logging.info(rules[Key.MESSAGE_START.value])
+
+      #
+      # Check the packages
+      #
+      if Key.PACKAGES.value in rules:
+        self.project.logging.debug("Packages check is activated")
+        self.check_packages(rules)
+      else:
+        self.project.logging.info("Packages check generation is deactivated")
+
+      #
+      # Check the files
+      #
+      if Key.FILES.value in rules:
+        self.project.logging.debug("Files check is activated")
+        self.check_files(rules)
+      else:
+        self.project.logging.info("Files check generation is deactivated")
+
+      # Display end mesage if defined
+      if Key.MESSAGE_END.value in rules:
+        self.project.logging.info(rules[Key.MESSAGE_END.value])
 
     # Remove QEMU if it has been isntalled. It has to be done in the end
     # since some cleanup tasks could need QEMU
@@ -228,7 +244,7 @@ class CheckRootFS(CliCommand):
   # check_packages
   #
   # -------------------------------------------------------------------------
-  def check_packages(self):
+  def check_packages(self, rules):
     """This method is in charge of contolling the packages installed in the
     rootfs according to the rules loaded from the configurtion file.
 
@@ -274,7 +290,7 @@ class CheckRootFS(CliCommand):
                                            Key.ARCH.value:pkg_arch}
 
     # Check the installation constraint (mandatory-only, allow-optional or no-constraint)
-    self.check_installation_constraint()
+    self.check_installation_constraint(rules)
 
     # Reset the rules statistics before starting to itare the list of rules
     self.reset_rule_check_statistics()
@@ -283,7 +299,7 @@ class CheckRootFS(CliCommand):
     # Now iterate the list of rules to check against installed packages
     # Process the Key.MANDATORY.value rules group
     #
-    for rule in self.project.check[Key.PACKAGES.value][Key.MANDATORY.value]:
+    for rule in rules[Key.PACKAGES.value][Key.MANDATORY.value]:
       # Call the check package method
       self.check_package_rules(rule, mandatory=True)
 
@@ -293,7 +309,7 @@ class CheckRootFS(CliCommand):
     #
     # Process the Key.FORBIDDEN.value rules group
     #
-    for rule in self.project.check[Key.PACKAGES.value][Key.FORBIDDEN.value]:
+    for rule in rules[Key.PACKAGES.value][Key.FORBIDDEN.value]:
       # Call the check package method
       self.check_package_rules(rule, forbidden=True)
 
@@ -303,7 +319,7 @@ class CheckRootFS(CliCommand):
     #
     # Process the Key.ALLOWED.value rules group
     #
-    for rule in self.project.check[Key.PACKAGES.value][Key.ALLOWED.value]:
+    for rule in rules[Key.PACKAGES.value][Key.ALLOWED.value]:
       # Call the check package method
       self.check_package_rules(rule)
 
@@ -327,7 +343,7 @@ class CheckRootFS(CliCommand):
   # check_installation_constraint
   #
   # -------------------------------------------------------------------------
-  def check_installation_constraint(self):
+  def check_installation_constraint(self, rules):
     """This method is in charge of chcking that the installed packages are
     compliant with the constaint defined in the configuration section.
     Constraint can be :
@@ -348,36 +364,36 @@ class CheckRootFS(CliCommand):
     list_allowed_packages = {}
 
     # Checks that the configuration section is defined
-    if Key.CONFIGURATION.value in self.project.check:
+    if Key.CONFIGURATION.value in rules:
       # And that constraint is defined
-      if Key.INSTALLATION_CONSTRAINT.value in self.project.check[Key.CONFIGURATION.value]:
+      if Key.INSTALLATION_CONSTRAINT.value in rules[Key.CONFIGURATION.value]:
         # Now check the defined contraint is valid (ie: no gizmo value)
-        if self.project.check[Key.CONFIGURATION.value][Key.INSTALLATION_CONSTRAINT.value] \
+        if rules[Key.CONFIGURATION.value][Key.INSTALLATION_CONSTRAINT.value] \
           not in [Key.MANDATORY_ONLY.value, Key.ALLOW_OPTIONAL.value, Key.NO_CONSTRAINT.value]:
 #          not in "mandatory_only" "allow_optional" "allow_optional":
           self.project.logging.error("unknown installation constraint " + \
-                                     self.project.check[Key.CONFIGURATION.value]\
+                                     rules[Key.CONFIGURATION.value]\
                                      [Key.INSTALLATION_CONSTRAINT.value])
           return False
         # If we reach this code, then there is a valid constaint defined
         else:
           # IF constraint is no-constraint there is nothing to do
-          if self.project.check[Key.CONFIGURATION.value][Key.INSTALLATION_CONSTRAINT.value] == \
+          if rules[Key.CONFIGURATION.value][Key.INSTALLATION_CONSTRAINT.value] == \
                                                                             Key.NO_CONSTRAINT.value:
             self.project.logging.debug("installation constraint is " + \
-                                       self.project.check[Key.CONFIGURATION.value]\
-                                                             [Key.INSTALLATION_CONSTRAINT.value])
+                                       rules[Key.CONFIGURATION.value]\
+                                            [Key.INSTALLATION_CONSTRAINT.value])
             return True
 
           # Build the list of packages defined in the mandatory section. They
           # will be inthe list whatever is the constraint
-          for rule in self.project.check[Key.PACKAGES.value][Key.MANDATORY.value]:
+          for rule in rules[Key.PACKAGES.value][Key.MANDATORY.value]:
             list_allowed_packages[rule[Key.NAME.value]] = True
 
           # Check if the optional packages are allowed, if yes add then to the list
-          if self.project.check[Key.CONFIGURATION.value][Key.INSTALLATION_CONSTRAINT.value] == \
+          if rules[Key.CONFIGURATION.value][Key.INSTALLATION_CONSTRAINT.value] == \
                                                                            Key.ALLOW_OPTIONAL.value:
-            for rule in self.project.check[Key.PACKAGES.value][Key.ALLOWED.value]:
+            for rule in rules[Key.PACKAGES.value][Key.ALLOWED.value]:
               list_allowed_packages[rule[Key.NAME.value]] = True
       else:
         self.project.logging.debug("no " + Key.INSTALLATION_CONSTRAINT.value)
@@ -568,7 +584,7 @@ class CheckRootFS(CliCommand):
   # check_files
   #
   # -------------------------------------------------------------------------
-  def check_files(self):
+  def check_files(self, rules):
     """This method is in charge of contolling the files (and also
     directories and symlinks) installed in the rootfs according to the
     rules loaded from the configurtion file.
@@ -608,7 +624,7 @@ class CheckRootFS(CliCommand):
     # Files will be checked on an individual basis, which is different of
     # packages. Package list can be retrieved with a single call to dpkg.
     # Retrieving the complete file list would cost too much
-    for rule in self.project.check[Key.FILES.value][Key.MANDATORY.value]:
+    for rule in rules[Key.FILES.value][Key.MANDATORY.value]:
       # Call the check package method
       self.check_file_rules(rule, mandatory=True)
 
@@ -618,7 +634,7 @@ class CheckRootFS(CliCommand):
     #
     # Process the Key.FORBIDDEN.value rules group
     #
-    for rule in self.project.check[Key.FILES.value][Key.FORBIDDEN.value]:
+    for rule in rules[Key.FILES.value][Key.FORBIDDEN.value]:
       # Call the check package method
       self.check_file_rules(rule, forbidden=True)
 
@@ -628,7 +644,7 @@ class CheckRootFS(CliCommand):
     #
     # Process the Key.ALLOWED.value rules group
     #
-    for rule in self.project.check[Key.FILES.value][Key.ALLOWED.value]:
+    for rule in rules[Key.FILES.value][Key.ALLOWED.value]:
       # Call the check package method
       self.check_file_rules(rule, allowed=True)
 
