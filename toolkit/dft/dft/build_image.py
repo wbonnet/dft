@@ -569,7 +569,8 @@ class BuildImage(CliCommand):
     if not Key.CONTENT.value in self.project.image:
       logging.info("No content section in image configuration file. Defaulting to copy rootfs")
     else:
-      if not Key.TYPE.value in self.project.image[Key.CONTENT.value]:
+      if self.project.image[Key.CONTENT.value] is None or \
+         not Key.TYPE.value in self.project.image[Key.CONTENT.value]:
         logging.info("No type defined in content section of image configuration file. Defaulting " +
                      " to copy rootfs")
       else:
