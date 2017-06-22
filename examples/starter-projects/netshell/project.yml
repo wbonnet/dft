@@ -99,36 +99,42 @@ project_definition:
   debootstrap_repository: "http://ftp.de.debian.org/debian"
 
   # Definition of the repositories to use
+# TODO mltiple files
   repositories:
     - repositories.yml
 
   # Definition of the rootfs content
+# TODO rootfs ?
   rootfs:
     - rootfs.yml
 
   # Definition of the firmware content and structure
+# TODO list ?
   firmware:
     - firmware.yml
 
   # Definition of the image structure
+# TODO ? list ?
   image:
     - image.yml
 
-  # Definition of the control to apply on the rootfs
+  # Definition of the control to apply on the rootfs. This variable is a list. Several files
+  # can be defined, they will be processed in the list order.
   check:
     - check_rootfs.yml
-    - check_rootfs2.yml
-    - check_rootfs3.yml
 
-  # Definition of the stripping rules (to remove extra packages, files etc.)
+  # Definition of the stripping rules (to remove extra packages, files etc.). This variable is
+  # a list. Several files can be defined, they will be processed in the list order.
   stripping:
      - stripping.yml
 
   # Definition of the content to generate
+# TODO ? multiple file ?
   content_information:
     - content.yml
 
-  # Definition of the variables to be passed to rootfs creation
+  # Definition of the variables to be passed to rootfs creation. This variable is a list.
+  # Several files can be defined, they will be processed in the list order.
   variables:
     - variables.yml
 

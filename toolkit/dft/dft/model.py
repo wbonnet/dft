@@ -133,7 +133,7 @@ class Key(Enum):
   IMAGE_WORKDIR = "image"
   INIT_FILENAME = "init_filename"
   INSTALL_BOOTCHAIN = "install_bootchain"
-  INSTALL_CONTENT_PARTITION_MAPPING = "install_content_partition_mapping"
+  CONTENT_PARTITION_MAPPING = "install_content_partition_mapping"
   INSTALL_MISSING_SOFTWARE = "install_missing_software"
   INSTALL_MSSING_SOFTWARE = "install_mssing_software"
   INSTALLATION_CONSTRAINT = "installation_constraint"
@@ -374,7 +374,7 @@ class DftConfiguration(object):
 
     except OSError as exception:
       # Call clean up to umount /proc and /dev
-      self.logging.critical("Error: %s - %s." % (exception.filename, exception.strerror))
+      self.logging.critical("Error: " + exception.filename + "- " + exception.strerror)
       exit(1)
 
 # -----------------------------------------------------------------------------

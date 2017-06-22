@@ -161,12 +161,18 @@ class BuildImage(CliCommand):
       unit = self.project.image[Key.DEVICES.value][Key.UNIT.value].lower()
 
     # Compute the block size to use based on the unit
-    if unit == "s": block_size = 512
-    elif unit == "b": block_size = 1
-    elif unit == "kb" or unit == "kib": é = 1024
-    elif unit == "mb" or unit == "mib": block_size = 1024 * 1024
-    elif unit == "gb" or unit == "gib": block_size = 1024 * 1024 * 1024
-    elif unit == "tb" or unit == "tib": block_size = 1024 * 1024 * 1024 * 1024
+    if unit == "s":
+      block_size = 512
+    elif unit == "b":
+      block_size = 1
+    elif unit == "kb" or unit == "kib":
+      block_size = 1024
+    elif unit == "mb" or unit == "mib":
+      block_size = 1024 * 1024
+    elif unit == "gb" or unit == "gib":
+      block_size = 1024 * 1024 * 1024
+    elif unit == "tb" or unit == "tib":
+      block_size = 1024 * 1024 * 1024 * 1024
     else:
       self.project.logging.critical("Unknwon unit '" + unit + "' . Aborting")
       exit(1)
@@ -521,12 +527,12 @@ class BuildImage(CliCommand):
         self.project.logging.debug("File system format flag => '" + str(part_format) + "'")
 
       # Process only if the partition has been formatted and mapping is defined
-      if part_format and Key.INSTALL_CONTENT_PARTITION_MAPPING.value in partition:
+      if part_format and Key.CONTENT_PARTITION_MAPPING.value in partition:
 
         # Generate the mount point for the given partition
         path = {}
         path["device"] = self.loopback_device + "p" + str(part_index)
-        path["path"] = image_mount_root + partition[Key.INSTALL_CONTENT_PARTITION_MAPPING.value]
+        path["path"] = image_mount_root + partition[Key.CONTENT_PARTITION_MAPPING.value]
         path_to_mount.append(path)
         # TODO: fsck on swap ?
         device_to_fsck.append(path["device"])

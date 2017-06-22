@@ -508,19 +508,19 @@ class BuildRootFS(CliCommand):
 
     # Generate a temporary file that will be filed then moved under /etc/fstab
     with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
-      for fileSystem in self.project.image[Key.FILESYSTEMS.value]:
+      for file_system in self.project.image[Key.FILESYSTEMS.value]:
         # Generate one by one the different fields of the filesystem lines
-        working_file.write(fileSystem[Key.FILESYSTEM.value])
+        working_file.write(file_system[Key.FILESYSTEM.value])
         working_file.write(" ")
-        working_file.write(fileSystem[Key.MOUNTPOINT.value])
+        working_file.write(file_system[Key.MOUNTPOINT.value])
         working_file.write(" ")
-        working_file.write(fileSystem[Key.TYPE.value])
+        working_file.write(file_system[Key.TYPE.value])
         working_file.write(" ")
-        working_file.write(fileSystem[Key.OPTIONS.value])
+        working_file.write(file_system[Key.OPTIONS.value])
         working_file.write(" ")
-        working_file.write(fileSystem[Key.DUMP.value])
+        working_file.write(file_system[Key.DUMP.value])
         working_file.write(" ")
-        working_file.write(fileSystem[Key.PASS.value])
+        working_file.write(file_system[Key.PASS.value])
         working_file.write("\n")
 
     # Move the temporary file under the rootfs tree
