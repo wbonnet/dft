@@ -105,6 +105,10 @@ class BuildImage(CliCommand):
     # Umount the image and release the loopback deice
     self.umount_image()
 
+    # Final information if the information is available
+    if self.image_path is not None:
+      self.project.logging.info("The image has been successfully generated in : " + self.image_path)
+
 
 
   # -------------------------------------------------------------------------
@@ -611,7 +615,7 @@ class BuildImage(CliCommand):
     # It is done by calling fsck on evey path from the device_to_fsck list
     while len(device_to_fsck) > 0:
       # Generate the umount command
-      sudo_command = 'sudo fsck -y ' + device_to_fsck.pop()
+      sudo_command = 'sudo fsck -f -y ' + device_to_fsck.pop()
       self.execute_command(sudo_command)
 
 
