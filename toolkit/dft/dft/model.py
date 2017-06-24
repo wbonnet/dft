@@ -21,6 +21,12 @@
 #
 #
 
+
+# TODO add activate and override library
+# TODO add default path to library and override
+# TODO add explicit library call ?
+# TODO add "personnal" library
+
 """ This module contains the definition of the two main classes used in DFT model.
 The Project and the Configuration. The classes implements the methods used to load
 their content and definition fom yaml configuration file.
