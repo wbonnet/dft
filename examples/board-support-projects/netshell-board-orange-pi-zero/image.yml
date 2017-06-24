@@ -75,7 +75,7 @@ devices:
     - {
         # Name or label of the partition. Supported only by dos, gpt and pc98 tables.
         # Default value is empty name
-        name: "boot" ,
+        name: "system" ,
 
         # Defines the partition type. Valid values are "primary", "logical", or "extended"
         # Default valueis primary
@@ -145,10 +145,10 @@ devices:
 filesystems:
   # Definition of the root file system
   - {
-      filesystem: "/dev/mmcblk1p1" ,
+      filesystem: "/dev/mmcblk0p1" ,
       mountpoint: "/" ,
       type: "ext4" ,
-      options: "noatime,nodiratime,errors=remount-ro" ,
+      options: "rw,noatime,nodiratime,errors=remount-ro" ,
       dump: "0" ,
       pass: "1"
     }

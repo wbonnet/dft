@@ -40,7 +40,7 @@ configuration:
   #                    be installed)
   # - allow_optional  (only listed packages can be installed aither mandatory
   #                    or optional)
-  # - no_constraint   (any packages can b installed even if not listed)
+  # - no_constraint   (any packages can be installed even if not listed)
   #
   # default value is no-constraint
   installation_constraint: allow_optional
