@@ -458,8 +458,8 @@ class BuildRootFS(CliCommand):
       logging.error("No distribution matching " + self.project.get_target_version() + " / " +
                     self.project.get_target_arch())
       logging.error("Please check repositories definition for this project.")
-      logging.error("File in use is : " + self.project.generate_def_file_path(\
-                                self.project.project[Key.PROJECT_DEFINITION.value]\
+      logging.error("Repositories file is : " + self.project.generate_def_file_path(\
+                                    self.project.project[Key.PROJECT_DEFINITION.value]\
                                                         [Key.REPOSITORIES.value][0]))
       logging.critical("Cannot generate /etc/apt/sources.list under rootfs path. Operation is \
                         aborted !")

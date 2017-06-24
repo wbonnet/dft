@@ -131,6 +131,8 @@ class CliCommand(object):
       qemu_target_arch = "arm"
     elif self.project.get_target_arch() == "armel":
       qemu_target_arch = "arm"
+    elif self.project.get_target_arch() == "arm64":
+      qemu_target_arch = "aarch64"
     else:
       qemu_target_arch = self.project.get_target_arch()
 
