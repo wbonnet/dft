@@ -136,11 +136,12 @@ class CliCommand(object):
     else:
       qemu_target_arch = self.project.get_target_arch()
 
-    self.project.logging.info("setting up QEMU for arch " +
-                              self.project.get_target_arch() +
-                              " (using /usr/bin/qemu-" +
-                              qemu_target_arch + "-static)")
-    sudo_command = "sudo cp /usr/bin/qemu-"  + qemu_target_arch + "-static "
+    # Generate the qemu binary name
+    self.qemu_binary = "/usr/bin/qemu-" + qemu_target_arch + "-static"
+
+    self.project.logging.info("setting up QEMU for arch " + self.project.get_target_arch() +
+                              " (using " + self.qemu_binary + ")")
+    sudo_command = "sudo cp " + self.qemu_binary + " "
     sudo_command += self.project.get_rootfs_mountpoint() + "/usr/bin/"
     self.execute_command(sudo_command)
 
@@ -164,19 +165,15 @@ class CliCommand(object):
                                  self.project.get_rootfs_mountpoint())
       return
 
-    # Copy the QEMU binary to the target, using root privileges
-    if   self.project.get_target_arch() == "armhf":
-      qemu_target_arch = "arm"
-    elif self.project.get_target_arch() == "armel":
-      qemu_target_arch = "arm"
-    else:
-      qemu_target_arch = self.project.get_target_arch()
-
     # Execute the file removal with root privileges
     self.project.logging.info("cleaning QEMU for arch " + self.project.get_target_arch() +
-                              "(/usr/bin/qemu-" + qemu_target_arch + "-static)")
-    os.system("sudo rm " + self.project.get_rootfs_mountpoint() + "/usr/bin/qemu-" +
-              qemu_target_arch + "-static")
+                              "(using " + self.qemu_binary +")")
+    os.system("sudo rm " + self.project.get_rootfs_mountpoint() + self.qemu_binary)
+
+    # Empty the binary name
+    self.qemu_binary = None
+
+
 
   # -------------------------------------------------------------------------
   #
