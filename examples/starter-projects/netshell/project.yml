@@ -104,12 +104,10 @@ project_definition:
     - repositories.yml
 
   # Definition of the rootfs content
-# TODO rootfs ?
   rootfs:
     - rootfs.yml
 
   # Definition of the firmware content and structure
-# TODO list ?
   firmware:
     - firmware.yml
 
@@ -129,7 +127,6 @@ project_definition:
      - stripping.yml
 
   # Definition of the content to generate
-# TODO ? multiple file ?
   content_information:
     - content.yml
 
