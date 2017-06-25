@@ -246,7 +246,7 @@ class BuildImage(CliCommand):
     """
 
     # Retrieve the next available loopback device
-    sudo_command = "sudo /sbin/losetup -f"
+    sudo_command = "/sbin/losetup -f"
     sudo_command_output = self.execute_command(sudo_command)
 
     # Parse the output to retrive the device and store it
@@ -258,7 +258,7 @@ class BuildImage(CliCommand):
       if self.image_path is not None:
         if os.path.isfile(self.image_path):
           # Mount the image in the loopback device
-          sudo_command = 'sudo /sbin/losetup "' + self.loopback_device + '" "'
+          sudo_command = '/sbin/losetup "' + self.loopback_device + '" "'
           sudo_command += self.image_path + '"'
           sudo_command_output = self.execute_command(sudo_command)
           # Set the flag to True, if an error occured an exception has been raised, and this line
@@ -554,11 +554,11 @@ class BuildImage(CliCommand):
       path = path_to_mount.pop()
 
       # Create the local mount point if needed
-      sudo_command = 'sudo mkdir -p "' + path["path"] + '"'
+      sudo_command = 'mkdir -p "' + path["path"] + '"'
       self.execute_command(sudo_command)
 
       # Generate the ount command
-      sudo_command = 'sudo mount "' + path["device"] + '" "' + path["path"] + '"'
+      sudo_command = 'mount "' + path["device"] + '" "' + path["path"] + '"'
       self.execute_command(sudo_command)
 
       # Mount was successful, thus push the path in the umount list
@@ -610,14 +610,14 @@ class BuildImage(CliCommand):
     path_to_umount.sort()
     while len(path_to_umount) > 0:
       # Generate the uount command
-      sudo_command = 'sudo umount "' + path_to_umount.pop() + '"'
+      sudo_command = 'umount "' + path_to_umount.pop() + '"'
       self.execute_command(sudo_command)
 
     # Content have been copied and partition umount, now let's control the filesystems
     # It is done by calling fsck on evey path from the device_to_fsck list
     while len(device_to_fsck) > 0:
       # Generate the umount command
-      sudo_command = 'sudo fsck -f -y ' + device_to_fsck.pop()
+      sudo_command = 'fsck -f -y ' + device_to_fsck.pop()
       self.execute_command(sudo_command)
 
 
@@ -673,7 +673,7 @@ class BuildImage(CliCommand):
             options = action[Key.OPTIONS.value]
 
           # Let's run dd to copy to the image
-          sudo_command = 'sudo dd if="' + source + '" of="' + self.loopback_device + '" ' + options
+          sudo_command = 'dd if="' + source + '" of="' + self.loopback_device + '" ' + options
           self.execute_command(sudo_command)
       else:
         logging.debug("No UBOOT defined, skipping.")
@@ -715,7 +715,7 @@ class BuildImage(CliCommand):
     # Check that the loopback device is defined
     if self.loopback_device is not None:
       # Copy the stacking script to /tmp in the rootfs
-      sudo_command = 'sudo losetup -d ' + self.loopback_device
+      sudo_command = 'losetup -d ' + self.loopback_device
       self.execute_command(sudo_command)
 
       # Loopback has been released, set the member to None
@@ -801,11 +801,11 @@ class BuildImage(CliCommand):
           format_tool = "mkswap"
 
         # Creation du file fystem sur a prtition
-        sudo_command = 'sudo ' + format_tool + ' ' + self.loopback_device + 'p' + str(part_index)
+        sudo_command = format_tool + ' ' + self.loopback_device + 'p' + str(part_index)
         self.execute_command(sudo_command)
 
         # Check if some ext filesystems options should be applied (accord to man tune2fs)
         if Key.EXT_FS_TUNE.value in partition and tune_tool is not None:
-          sudo_command = 'sudo ' + tune_tool + ' ' + partition[Key.EXT_FS_TUNE.value]
+          sudo_command = tune_tool + ' ' + partition[Key.EXT_FS_TUNE.value]
           sudo_command += ' ' + self.loopback_device + 'p' + str(part_index)
           self.execute_command(sudo_command)
