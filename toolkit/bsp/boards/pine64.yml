@@ -61,7 +61,7 @@ uboot:
       # The source can be either a file or a special device like /dev/zero or /dev/random
       # If the path is absolute, it will be left unchanged, otherwise it is prefix by the
       # BSP path
-      source: "u-boot-with-dtb.bin" ,
+      source: "u-boot-sunxi-with-spl.bin" ,
 
       # Defines the options to be passed to dd
       options: "bs=1k seek=8 conv=fsync"
