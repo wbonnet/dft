@@ -21,4 +21,5 @@ dft_lightdm_autologin_user: dft
 
 # Browser to install is chromium
 dft_browser: chromium
-
+dft_usergroup: dft
+dft_username: dft
