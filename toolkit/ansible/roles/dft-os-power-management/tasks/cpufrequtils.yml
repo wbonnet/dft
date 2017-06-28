@@ -38,7 +38,7 @@
 
 - name : DFT - Configure cpufrequtils
   template: src=cpufrequtils.j2
-            dest=/etc/default/cpufrequtils.conf
+            dest=/etc/default/cpufrequtils
             owner=root
             group=root
             mode="0644"
