@@ -88,6 +88,8 @@ class Key(Enum):
   CHECK = "check"
   CHECK_ROOTFS = "check_rootfs"
   COMPRESSOR = "compressor"
+  COMPRESSION = "compression"
+  COMPRESSION_OPTIONS = "compression_options"
   CONFIG_FILE = "config_file"
   CONFIGURATION = "configuration"
   CONTENT = "content"

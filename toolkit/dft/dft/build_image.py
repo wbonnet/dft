@@ -107,6 +107,9 @@ class BuildImage(CliCommand):
     # Umount the image and release the loopback deice
     self.umount_image()
 
+    # Compress the generated image
+    self.compress_image()
+
     # Final information if the information is available
     if self.image_path is not None:
       self.project.logging.info("The image has been successfully generated in : " + self.image_path)
@@ -628,7 +631,7 @@ class BuildImage(CliCommand):
   #
   # -------------------------------------------------------------------------
   def install_boot(self):
-    """XXXX This method installs in the generated rootfs the tools needed to update
+    """This method installs in the generated rootfs the tools needed to update
     (or generate) theinitramfs. The kernel is not installed, it is the job of
     the install_bootchain target. The kernel to use is defined in the BSP
     used by this target.
@@ -809,3 +812,77 @@ class BuildImage(CliCommand):
           sudo_command = tune_tool + ' ' + partition[Key.EXT_FS_TUNE.value]
           sudo_command += ' ' + self.loopback_device + 'p' + str(part_index)
           self.execute_command(sudo_command)
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # compress_image
+  #
+  # -------------------------------------------------------------------------
+  def compress_image(self):
+    """This method is in charge of checking compression configuration and
+    options, and if needed to run the compression tools on the iage.
+
+    The compression is done by running the selected compression tool as a
+    subpress. The python compression library is not (yet?) called since the
+    compressor usage is really basic.
+    """
+
+    # Output current task to logs
+    logging.info("Compressing the image")
+
+    # Check that the compression tool is defined
+    if Key.COMPRESSION.value not in self.project.image[Key.DEVICES.value]:
+      self.project.logging.info("No compression mode is defined. Skipping image copmpression")
+      return
+
+    # Retrieve the compression tool and check its vaidity
+    compression_tool = self.project.image[Key.DEVICES.value][Key.COMPRESSION.value].lower()
+    if compression_tool == "" or compression_tool == "none":
+      self.project.logging.info("Compression is deactivated. Skipping image copmpression")
+      return
+    # Check for lzma format
+    elif compression_tool == "lzma":
+      compression_tool = "/usr/bin/env xz -z --format=lzma"
+      compression_suffix = ".lzma"
+    # Check for xz format
+    elif compression_tool == "xz":
+      compression_tool = "/usr/bin/env xz -z"
+      compression_suffix = ".xz"
+    # Check for bzip2 format
+    elif compression_tool == "bzip2":
+      compression_tool = "/usr/bin/env bzip2"
+      compression_suffix = ".bz2"
+    # Check for gzip format
+    elif compression_tool == "gzip":
+      compression_tool = "/usr/bin/env gzip"
+      compression_suffix = ".gz"
+    # Check for 7z format
+    elif compression_tool == "7z":
+      compression_tool = "/usr/bin/env 7z"
+      compression_suffix = ".7z"
+    else:
+      self.project.logging.error("Unknow compression method '" + compression_tool +
+                                 "'. Skipping image copmpression")
+      return
+
+    # Check that the filename is available from the devices section in the configuration file
+    if Key.COMPRESSION_OPTIONS.value not in self.project.image[Key.DEVICES.value]:
+      self.project.logging.debug("Cmpression options are not defined. Defaulting to empty string")
+      compression_options = ""
+    else:
+      compression_options = self.project.image[Key.DEVICES.value][Key.COMPRESSION_OPTIONS.value]
+
+    # Test for compressed image existence and remove it if needed
+    if os.path.isfile(self.image_path + compression_suffix):
+      self.project.logging.debug("Compressed image aldredy exist, removing it")
+      os.remove(self.image_path + compression_suffix)
+
+
+    # Let's run dd to copy to the image
+    sudo_command = compression_tool + ' ' + compression_options + '"' + self.image_path + '"'
+    self.execute_command(sudo_command)
+
+    # Update the image file name
+    self.image_path = self.image_path + compression_suffix
