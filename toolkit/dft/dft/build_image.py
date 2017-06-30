@@ -858,10 +858,6 @@ class BuildImage(CliCommand):
     elif compression_tool == "gzip":
       compression_tool = "/usr/bin/env gzip"
       compression_suffix = ".gz"
-    # Check for 7z format
-    elif compression_tool == "7z":
-      compression_tool = "/usr/bin/env 7z"
-      compression_suffix = ".7z"
     else:
       self.project.logging.error("Unknow compression method '" + compression_tool +
                                  "'. Skipping image copmpression")

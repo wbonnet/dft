@@ -58,13 +58,12 @@ devices:
   # Defines the kind of compression to apply on the image once its created. Valid values are :
   # . bzip2
   # . gzip
-  # . 7z
   # . xz
   # . lzma  (euivalent to xz --format=lzma)
   # . none
   #
   # Default value is none, which means no copression at all. The generated image is left unchanged
-  compression: "gzip"
+  compression: "bzip2"
 
   # Defines the options to pass to the compressor. The options can be any options supported by the
   # tool used for compression (please check the dedicated man pages for a complete list of options)
