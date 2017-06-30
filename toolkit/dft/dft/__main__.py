@@ -27,6 +27,7 @@ process the command line and run the action.
 
 import sys
 import cli
+import time
 
 def main():
   """
@@ -55,4 +56,16 @@ def main():
 # Check this is code is called from the __main__
 #
 if __name__ == '__main__':
-  sys.exit(main())
+
+  # Start counting the execution time
+  start_time = time.time()
+
+  # execute the program and catch return code
+  ret = main()
+
+  # Compute execution time
+  elapsed_time = time.time() - start_time
+  print ("Execution time %.2f seconds" % elapsed_time)
+
+  # End execution et return code from main method
+  sys.exit(ret)
