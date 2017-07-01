@@ -511,7 +511,7 @@ class GenerateContentInformation(CliCommand):
     # Flush all pending output and close stream or file
     self.output_writer.flush_and_close()
 
-    # Remove ClamAV if it has been installled in the chroooted environnement
+    # Remove ClamAV if it has been installled in the chrooted environnement
     if need_to_remove_package:
       logging.debug("Starting to remove Clamav")
       self.remove_package("clamav")

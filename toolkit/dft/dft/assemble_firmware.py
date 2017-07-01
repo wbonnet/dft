@@ -142,7 +142,7 @@ class AssembleFirmware(CliCommand):
     # Output current task to logs
     logging.info("Installing initramfs tools and kernel")
 
-    # Install initramfs-tools to the roootfs
+    # Install initramfs-tools to the rootfs
     self.install_package("initramfs-tools")
 
 
@@ -179,7 +179,7 @@ class AssembleFirmware(CliCommand):
     """
 
     # Output current task to logs
-    logging.info("Copying boootchain to firmware directory")
+    logging.info("Copying bootchain to firmware directory")
 
     # Copy the stacking script to /tmp in the rootfs
     sudo_command = 'sudo cp ' + self.project.get_rootfs_mountpoint() + '/boot/* ' + \

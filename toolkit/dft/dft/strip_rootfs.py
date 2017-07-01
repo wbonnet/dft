@@ -21,7 +21,7 @@
 #
 #
 
-""" This modules implements the functionnalities used to strip a roootfs (or rootfs)
+""" This modules implements the functionnalities used to strip a rootfs (or rootfs)
 according to the rules defined in a Yaml configuration file. Stripping a rootfs is made
 of removing files and packages.
 """
