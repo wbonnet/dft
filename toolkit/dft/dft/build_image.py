@@ -865,7 +865,7 @@ class BuildImage(CliCommand):
 
     # Check that the filename is available from the devices section in the configuration file
     if Key.COMPRESSION_OPTIONS.value not in self.project.image[Key.DEVICES.value]:
-      self.project.logging.debug("Cmpression options are not defined. Defaulting to empty string")
+      self.project.logging.debug("Compression options are not defined. Defaulting to empty string")
       compression_options = ""
     else:
       compression_options = self.project.image[Key.DEVICES.value][Key.COMPRESSION_OPTIONS.value]
