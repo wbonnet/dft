@@ -30,6 +30,7 @@ the rootfs and bootchain.
 import logging
 import os
 import tempfile
+import shutil
 import parted
 from cli_command import CliCommand
 from model import Key
@@ -591,6 +592,11 @@ class BuildImage(CliCommand):
         else:
           logging.critical("Unknown image content : " + self.project.image[Key.CONTENT.value]\
                            [Key.TYPE.value] + ". Aborting.")
+
+          # Remove the temporary mount point before exiting
+          shutil.rmtree(image_mount_root)
+
+          # And now exit program
           exit(1)
 
     # Switch between firmware and rootfs copy
@@ -615,6 +621,9 @@ class BuildImage(CliCommand):
       # Generate the uount command
       sudo_command = 'umount "' + path_to_umount.pop() + '"'
       self.execute_command(sudo_command)
+
+    # Remove the temporary mount point before exiting
+    shutil.rmtree(image_mount_root)
 
     # Content have been copied and partition umount, now let's control the filesystems
     # It is done by calling fsck on evey path from the device_to_fsck list
