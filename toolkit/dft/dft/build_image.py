@@ -25,8 +25,6 @@
 the rootfs and bootchain.
 """
 
-# TODO add imaeg compression
-
 import logging
 import os
 import tempfile
