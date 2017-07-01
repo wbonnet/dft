@@ -49,7 +49,10 @@
   # working_dir: "../../working_dir"
 
   # Path to the dft installation directory. Default value is /usr/share/dft
-  # dft_base: "../ansible"
+  # dft_base: ".."
+
+  # Path to the dft bsp definition directory. Default value is /usr/share/dft/bsp
+  # bsp_base: "../bsp"
 
   # Define a list of directories with additional content (roles, playbooks, etc)
   # which are copied to /dft_bootstrap during rootfs bootstrapping. These paths
