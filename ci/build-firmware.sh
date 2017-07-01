@@ -36,6 +36,12 @@ python3.5 dft build_firmware --project-file ${WORKING_DIR}/${DFT_PROJECT} --log-
 # Run the dft tool to assemble the firmware scripts
 python3.5 dft assemble_firmware --project-file ${WORKING_DIR}/${DFT_PROJECT} --log-level debug
 
+# Install the kernel and bootchain in the generated rootfs
+python3.5 dft install_bootchain --project-file ${WORKING_DIR}/${DFT_PROJECT} --log-level debug
+
+# Create the image from the generated rootfs
+python3.5 dft build_image --project-file ${WORKING_DIR}/${DFT_PROJECT} --log-level debug
+
 # Go back to startup directory and clean working directory
 cd ${WORKING_DIR}
 sudo rm -fr ${WORKING_DIR}/working_dir/*/rootfs
