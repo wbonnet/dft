@@ -542,7 +542,6 @@ class BuildImage(CliCommand):
         path["device"] = self.loopback_device + "p" + str(part_index)
         path["path"] = image_mount_root + partition[Key.CONTENT_PARTITION_MAPPING.value]
         path_to_mount.append(path)
-        # TODO: fsck on swap ?
         device_to_fsck.append(path["device"])
 
     #

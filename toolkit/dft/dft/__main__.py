@@ -26,8 +26,8 @@ process the command line and run the action.
 """
 
 import sys
-import cli
 import time
+import cli
 
 def main():
   """
@@ -47,9 +47,17 @@ def main():
     args = ["__help__", "-h"]
     parser.parse(args)
 
-  # Once parsed call the runner method
-  return parser.run()
+  # Start counting the execution time
+  time_starting = time.time()
 
+  # Execute the program and catch return code
+  ret_code = parser.run()
+
+  # Compute execution time
+  time_elapsed = time.time() - time_starting
+  print("Execution time %.2f seconds" % time_elapsed)
+
+  return ret_code
 
 # That's all folks. All the processing has bee done in the run
 #
@@ -57,15 +65,5 @@ def main():
 #
 if __name__ == '__main__':
 
-  # Start counting the execution time
-  start_time = time.time()
-
-  # execute the program and catch return code
-  ret = main()
-
-  # Compute execution time
-  elapsed_time = time.time() - start_time
-  print ("Execution time %.2f seconds" % elapsed_time)
-
   # End execution et return code from main method
-  sys.exit(ret)
+  sys.exit(main())

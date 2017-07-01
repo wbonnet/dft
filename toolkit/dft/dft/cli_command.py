@@ -67,6 +67,7 @@ class CliCommand(object):
 
     # Boolean used to flag the use of QEMU static
     self.use_qemu_static = (self.host_arch != project.get_target_arch())
+    self.qemu_binary = None
 
     # Flags used to remove 'mount bind' states
     self.proc_is_mounted = False
