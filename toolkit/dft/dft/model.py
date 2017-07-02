@@ -729,7 +729,7 @@ class ProjectDefinition(object):
 
           # Check that the BSP file exist
           if not os.path.isfile(bsp_file):
-            self.logging.critical("The BSP file %s des not exist. Cannot continue execution, "
+            self.logging.critical("The BSP file %s does not exist. Cannot continue execution, "
                                   "please fix target in project file", bsp_file)
             exit(1)
           else:

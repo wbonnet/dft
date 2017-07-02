@@ -94,7 +94,7 @@ class CliCommand(object):
     self.project.logging.debug("running : " + command)
 
     try:
-      # Execute the subprocess, output en errors are piped
+      # Execute the subprocess, output ans errors are piped
       completed = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                  shell=True, check=True, universal_newlines=False)
 
