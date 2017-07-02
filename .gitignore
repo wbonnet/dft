@@ -1,0 +1,6 @@
+# File editors
+*~
+*.sw?
+
+# Python generated files
+__pycache__/
