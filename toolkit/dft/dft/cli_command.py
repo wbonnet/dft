@@ -137,8 +137,34 @@ class CliCommand(object):
     else:
       qemu_target_arch = self.project.get_target_arch()
 
+    # qemu (static) has not a consistent naming among distributions. Gentoo
+    # will name it 'qemu-ARCH' whereas debian will name it 'qemu-ARCH-static".
+    qemu_candidates = [
+      "/usr/bin/qemu-" + qemu_target_arch,
+      "/usr/bin/qemu-" + qemu_target_arch + "-static"
+    ]
+    for qemu in qemu_candidates:
+      # We first check that the candidate file exists
+      if os.path.exists(qemu):
+        # Then, we run the file command to check whether the qemu program is
+        # statically linked or not. If this is true, we use this program as
+        # the qemu-static for the target architecture.
+        output = subprocess.check_output(["file", "--brief", "-L", qemu])
+        # The output of file will be something like:
+        # <type>, <arch>, <version>, <link type>, <interpreter>,  [...]
+        # and we are interested in the 4th parameter (link type).
+        link_info = output.decode(Key.UTF8.value).split(", ")[3]
+        if link_info == "statically linked":
+          self.qemu_binary = qemu
+          break # Found, stop iterating.
+
+    # Check that a valid qemu binary was found in the previous step
+    if not self.qemu_binary:
+      self.project.logging.critical("Failed to find qemu (static) for %s",
+                                    qemu_target_arch)
+      exit(1)
+
     # Generate the qemu binary name
-    self.qemu_binary = "/usr/bin/qemu-" + qemu_target_arch + "-static"
 
     self.project.logging.info("setting up QEMU for arch " + self.project.get_target_arch() +
                               " (using " + self.qemu_binary + ")")
