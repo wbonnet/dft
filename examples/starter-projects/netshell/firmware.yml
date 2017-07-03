@@ -182,7 +182,7 @@ configuration:
 
 
 #        -keep-as-directory
-#            if  one source directory is specified, create a root directory contain‐
+#            if  one source directory is specified, create a root directory contain
 #            ing that directory, rather than the contents of the directory.
 
 #    Filesystem filter options
