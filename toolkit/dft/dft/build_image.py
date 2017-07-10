@@ -18,6 +18,7 @@
 # Contributors list :
 #
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#    Jean-Marc Lacroix  jeanmarc.lacroix@free.fr
 #
 #
 
