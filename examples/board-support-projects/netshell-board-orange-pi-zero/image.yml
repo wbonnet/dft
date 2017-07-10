@@ -18,6 +18,7 @@
 # Contributors list :
 #
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#    Jean-Marc Lacroix  jeanmarc.lacroix@free.fr
 #
 #
 
@@ -148,7 +149,7 @@ filesystems:
       filesystem: "/dev/mmcblk0p1" ,
       mountpoint: "/" ,
       type: "ext4" ,
-      options: "rw,noatime,nodiratime,errors=remount-ro" ,
+      options: "rw,suid,dev,exec,auto,nouser,async,noatime,nodiratime,errors=remount-ro" ,
       dump: "0" ,
       pass: "1"
     }
