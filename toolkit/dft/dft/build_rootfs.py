@@ -21,6 +21,8 @@
 #
 #
 
+# TODO : handle 'any architecture' for repository definition
+
 """ This modules iplements the functionnalities needed to create a rootfs installation
 based upon the definition stored in a configuration file and a set of Ansible roles.
 """
