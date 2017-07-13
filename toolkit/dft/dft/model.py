@@ -109,7 +109,6 @@ class Key(Enum):
   EMPTY = "empty"
   EXT_FS_TUNE = "ext_fs_tune"
   EXPECTED_RESULT = "expected_result"
-  FACTORY_SETUP = "factory_setup"
   FILE = "file"
   FILENAME = "filename"
   FILES = "files"

@@ -71,13 +71,12 @@ DFT is a collection of tools used to create Debian based firmwares
 
 Available commands are :
 . assemble_firmware                Create a firmware from a rootfs and generate the configuration files used to loading after booting
-. build_rootfs                     Generate a debootstrap from a Debian repository, install and configure required packages
-. install_bootchain                Install the bootchain (kernel, initramfs, grub or uboot) in the rootfs
 . build_image                      Build the disk image from the firmware (or rootfs) and bootchain
 . build_firmware                   Build the firmware configuration files and scripts used to load in memory the firmware
+. build_rootfs                     Generate a debootstrap from a Debian repository, install and configure required packages
 . check_rootfs                     Control the content of the rootfs rootfs after its generation (debsecan and openscap)
-x factory_setup                    Apply some extra factory setup before generating the firmware
 ? generate_content_information     Generate a manifest identiyfing content and versions
+. install_bootchain                Install the bootchain (kernel, initramfs, grub or uboot) in the rootfs
 . strip_rootfs                     Strip down the rootfs before assembling the firmware'''),
                                           formatter_class=argparse.RawTextHelpFormatter)
 
@@ -118,8 +117,6 @@ x factory_setup                    Apply some extra factory setup before generat
       self.__add_parser_build_firmware()
     elif self.command == Key.CHECK_ROOTFS.value:
       self.__add_parser_check_rootfs()
-    elif self.command == Key.FACTORY_SETUP.value:
-      self.__add_parser_factory_setup()
     elif self.command == Key.GEN_CONTENT_INFO.value:
       self.__add_parser_generate_content()
     elif self.command == Key.STRIP_ROOTFS.value:
@@ -238,16 +235,6 @@ x factory_setup                    Apply some extra factory setup before generat
 
     # Add the arguments
     self.parser.add_argument(Key.CHECK_ROOTFS.value,
-                             help=Key.OPT_HELP_LABEL.value)
-
-
-
-  def __add_parser_factory_setup(self):
-    """ This method add parser options specific to factory_setup command
-    """
-
-    # Add the arguments
-    self.parser.add_argument(Key.FACTORY_SETUP.value,
                              help=Key.OPT_HELP_LABEL.value)
 
 
@@ -404,8 +391,6 @@ x factory_setup                    Apply some extra factory setup before generat
       self.__run_build_firmware()
     elif self.command == Key.CHECK_ROOTFS.value:
       self.__run_check_rootfs()
-    elif self.command == Key.FACTORY_SETUP.value:
-      self.__run_factory_setup()
     elif self.command == Key.GEN_CONTENT_INFO.value:
       self.__run_generate_content()
     elif self.command == Key.STRIP_ROOTFS.value:
@@ -560,19 +545,6 @@ x factory_setup                    Apply some extra factory setup before generat
     # Then call the dedicated method
     command.check_rootfs()
 
-
-
-  # -------------------------------------------------------------------------
-  #
-  # __run_factory_setup
-  #
-  # -------------------------------------------------------------------------
-  def __run_factory_setup(self):
-    """ Method used to handle the factory_setup command.
-    Its behavior is still to define.
-    """
-
-    pass
 
 
   # -------------------------------------------------------------------------
