@@ -140,8 +140,8 @@ class CliCommand(object):
     # qemu (static) has not a consistent naming among distributions. Gentoo
     # will name it 'qemu-ARCH' whereas debian will name it 'qemu-ARCH-static".
     qemu_candidates = [
-      "/usr/bin/qemu-" + qemu_target_arch,
-      "/usr/bin/qemu-" + qemu_target_arch + "-static"
+        "/usr/bin/qemu-" + qemu_target_arch,
+        "/usr/bin/qemu-" + qemu_target_arch + "-static"
     ]
     for qemu in qemu_candidates:
       # We first check that the candidate file exists
