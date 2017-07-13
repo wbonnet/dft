@@ -228,9 +228,9 @@ class BuildImage(CliCommand):
       os.remove(self.image_path)
 
     # Create the fill command
-    sudo_command = 'dd if=/dev/' + fill_method + ' of="' + self.image_path
-    sudo_command += '" bs=' + str(block_size) + ' count=' + str(size)
-    self.execute_command(sudo_command)
+    command = 'dd if=/dev/' + fill_method + ' of="' + self.image_path
+    command += '" bs=' + str(block_size) + ' count=' + str(size)
+    self.execute_command(command)
 
 
 
@@ -249,11 +249,11 @@ class BuildImage(CliCommand):
     """
 
     # Retrieve the next available loopback device
-    sudo_command = "/sbin/losetup -f"
-    sudo_command_output = self.execute_command(sudo_command)
+    command = "/sbin/losetup -f"
+    command_output = self.execute_command(command)
 
     # Parse the output to retrive the device and store it
-    binaryline = sudo_command_output.splitlines()
+    binaryline = command_output.splitlines()
     self.loopback_device = binaryline[0].decode(Key.UTF8.value)
 
     # Check that the image is not mounted and path is defined and exist
@@ -261,9 +261,9 @@ class BuildImage(CliCommand):
       if self.image_path is not None:
         if os.path.isfile(self.image_path):
           # Mount the image in the loopback device
-          sudo_command = '/sbin/losetup "' + self.loopback_device + '" "'
-          sudo_command += self.image_path + '"'
-          sudo_command_output = self.execute_command(sudo_command)
+          command = '/sbin/losetup "' + self.loopback_device + '" "'
+          command += self.image_path + '"'
+          command_output = self.execute_command(command)
           # Set the flag to True, if an error occured an exception has been raised, and this line
           # is not executed
           self.image_is_mounted = True
@@ -556,12 +556,12 @@ class BuildImage(CliCommand):
       path = path_to_mount.pop()
 
       # Create the local mount point if needed
-      sudo_command = 'mkdir -p "' + path["path"] + '"'
-      self.execute_command(sudo_command)
+      command = 'mkdir -p "' + path["path"] + '"'
+      self.execute_command(command)
 
       # Generate the ount command
-      sudo_command = 'mount "' + path["device"] + '" "' + path["path"] + '"'
-      self.execute_command(sudo_command)
+      command = 'mount "' + path["device"] + '" "' + path["path"] + '"'
+      self.execute_command(command)
 
       # Mount was successful, thus push the path in the umount list
       path_to_umount.append(path["path"])
@@ -603,8 +603,8 @@ class BuildImage(CliCommand):
       for copy_target in os.listdir(self.project.get_rootfs_mountpoint()):
         copy_source_path = os.path.join(self.project.get_rootfs_mountpoint(), copy_target)
         copy_target_path = os.path.join(image_mount_root, copy_target)
-        sudo_command = "cp -fra " + copy_source_path + " " + copy_target_path
-        self.execute_command(sudo_command)
+        command = "cp -fra " + copy_source_path + " " + copy_target_path
+        self.execute_command(command)
     else:
       logging.error("Firmware copy is not yet available. Doing nothing")
 
@@ -617,8 +617,8 @@ class BuildImage(CliCommand):
     path_to_umount.sort()
     while len(path_to_umount) > 0:
       # Generate the uount command
-      sudo_command = 'umount "' + path_to_umount.pop() + '"'
-      self.execute_command(sudo_command)
+      command = 'umount "' + path_to_umount.pop() + '"'
+      self.execute_command(command)
 
     # Remove the temporary mount point before exiting
     shutil.rmtree(image_mount_root)
@@ -627,8 +627,8 @@ class BuildImage(CliCommand):
     # It is done by calling fsck on evey path from the device_to_fsck list
     while len(device_to_fsck) > 0:
       # Generate the umount command
-      sudo_command = 'fsck -f -y ' + device_to_fsck.pop()
-      self.execute_command(sudo_command)
+      command = 'fsck -f -y ' + device_to_fsck.pop()
+      self.execute_command(command)
 
 
 
@@ -683,8 +683,8 @@ class BuildImage(CliCommand):
             options = action[Key.OPTIONS.value]
 
           # Let's run dd to copy to the image
-          sudo_command = 'dd if="' + source + '" of="' + self.loopback_device + '" ' + options
-          self.execute_command(sudo_command)
+          command = 'dd if="' + source + '" of="' + self.loopback_device + '" ' + options
+          self.execute_command(command)
       else:
         logging.debug("No UBOOT defined, skipping.")
     else:
@@ -725,8 +725,8 @@ class BuildImage(CliCommand):
     # Check that the loopback device is defined
     if self.loopback_device is not None:
       # Copy the stacking script to /tmp in the rootfs
-      sudo_command = 'losetup -d ' + self.loopback_device
-      self.execute_command(sudo_command)
+      command = 'losetup -d ' + self.loopback_device
+      self.execute_command(command)
 
       # Loopback has been released, set the member to None
       self.loopback_device = None
@@ -811,14 +811,14 @@ class BuildImage(CliCommand):
           format_tool = "mkswap"
 
         # Creation du file fystem sur a prtition
-        sudo_command = format_tool + ' ' + self.loopback_device + 'p' + str(part_index)
-        self.execute_command(sudo_command)
+        command = format_tool + ' ' + self.loopback_device + 'p' + str(part_index)
+        self.execute_command(command)
 
         # Check if some ext filesystems options should be applied (accord to man tune2fs)
         if Key.EXT_FS_TUNE.value in partition and tune_tool is not None:
-          sudo_command = tune_tool + ' ' + partition[Key.EXT_FS_TUNE.value]
-          sudo_command += ' ' + self.loopback_device + 'p' + str(part_index)
-          self.execute_command(sudo_command)
+          command = tune_tool + ' ' + partition[Key.EXT_FS_TUNE.value]
+          command += ' ' + self.loopback_device + 'p' + str(part_index)
+          self.execute_command(command)
 
 
 
@@ -884,8 +884,8 @@ class BuildImage(CliCommand):
 
 
     # Let's run dd to copy to the image
-    sudo_command = compression_tool + ' ' + compression_options + '"' + self.image_path + '"'
-    self.execute_command(sudo_command)
+    command = compression_tool + ' ' + compression_options + '"' + self.image_path + '"'
+    self.execute_command(command)
 
     # Update the image file name
     self.image_path = self.image_path + compression_suffix

@@ -131,9 +131,9 @@ class StripRootFS(CliCommand):
       # Check that the stripping definition includes a status absent
       if Key.ABSENT.value in rules[Key.PACKAGES.value]:
         # Retrieve the list of installed packages
-        sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
-        sudo_command += " dpkg -l | tail -n +6 | awk '{ print $2 }'"
-        pkglist = self.execute_command(sudo_command)
+        command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
+        command += " dpkg -l | tail -n +6 | awk '{ print $2 }'"
+        pkglist = self.execute_command(command)
 
         # Transform the binary outputinto text
         for binaryline in pkglist.splitlines():
@@ -245,8 +245,8 @@ class StripRootFS(CliCommand):
     # Deleting file is done from host rootf. There is no need to trigger a chroot to rm rm
     # Moreover, some files may be missing from the chroot to be target to run chroot
     target = self.project.get_rootfs_mountpoint() + "/" + target
-    sudo_command = "sudo rm -f " + target
-    self.execute_command(sudo_command)
+    command = "rm -f " + target
+    self.execute_command(command)
 
 
 
@@ -267,9 +267,9 @@ class StripRootFS(CliCommand):
     target = self.project.get_rootfs_mountpoint() + "/" + target
 
     # Test if the fileexist before trying to trucate it
-    sudo_command = "bash -c '[ -f " + target + " ] && truncate " + target
-    sudo_command += " --size 0 || true'"
-    self.execute_command(sudo_command)
+    command = "bash -c '[ -f " + target + " ] && truncate " + target
+    command += " --size 0 || true'"
+    self.execute_command(command)
 
 
 
@@ -291,8 +291,8 @@ class StripRootFS(CliCommand):
     # Moreover, some files may be missing from the chroot to be target to run chroot
     target = self.project.get_rootfs_mountpoint() + "/" + target
 
-    sudo_command = "rm -fr " + target
-    self.execute_command(sudo_command)
+    command = "rm -fr " + target
+    self.execute_command(command)
 
 
 
@@ -311,6 +311,6 @@ class StripRootFS(CliCommand):
     target = self.project.get_rootfs_mountpoint() + "/" + target
 
     self.project.logging.debug("Empty directory : " + target)
-    sudo_command = "bash -c '[ -d " + target + " ] && find " + target
-    sudo_command += " -type f | xargs rm -f || true'"
-    self.execute_command(sudo_command)
+    command = "bash -c '[ -d " + target + " ] && find " + target
+    command += " -type f | xargs rm -f || true'"
+    self.execute_command(command)

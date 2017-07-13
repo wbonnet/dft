@@ -162,9 +162,9 @@ class AssembleFirmware(CliCommand):
     logging.info("Upadting initramfs")
 
     # Copy the stacking script to /tmp in the rootfs
-    sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
-    sudo_command += " update-initramfs -u"
-    self.execute_command(sudo_command)
+    command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
+    command += " update-initramfs -u"
+    self.execute_command(command)
 
 
 
@@ -182,9 +182,9 @@ class AssembleFirmware(CliCommand):
     logging.info("Copying bootchain to firmware directory")
 
     # Copy the stacking script to /tmp in the rootfs
-    sudo_command = 'sudo cp ' + self.project.get_rootfs_mountpoint() + '/boot/* ' + \
+    command = 'cp ' + self.project.get_rootfs_mountpoint() + '/boot/* ' + \
                   self.project.get_firmware_directory()
-    self.execute_command(sudo_command)
+    self.execute_command(command)
 
 
 
@@ -204,15 +204,14 @@ class AssembleFirmware(CliCommand):
     logging.info("Deploying stacking scripts to target")
 
     # Copy the stacking script to /tmp in the rootfs
-    sudo_command = 'sudo cp ' + self.project.stacking_script_filename + " " + \
+    command = 'cp ' + self.project.stacking_script_filename + " " + \
                    self.project.get_rootfs_mountpoint() + '/tmp/'
-    self.execute_command(sudo_command)
+    self.execute_command(command)
 
     # Copy the initramfs build hook to the hook dir in the generated rootfs
-    sudo_command = 'sudo cp '
-    sudo_command += self.project.get_dft_base() + "/scripts/add_dft_to_initramfs "
-    sudo_command += self.project.get_rootfs_mountpoint() + '/usr/share/initramfs-tools/hooks/'
-    self.execute_command(sudo_command)
+    command = 'cp ' + self.project.get_dft_base() + "/scripts/add_dft_to_initramfs "
+    command += self.project.get_rootfs_mountpoint() + '/usr/share/initramfs-tools/hooks/'
+    self.execute_command(command)
 
 
 
@@ -278,8 +277,8 @@ class AssembleFirmware(CliCommand):
     filepath = self.project.stacking_script_filename
 
     # And now we can move the temporary file under the rootfs tree
-    sudo_command = "mv -f " + working_file.name + " " + filepath
-    self.execute_command(sudo_command)
+    command = "mv -f " + working_file.name + " " + filepath
+    self.execute_command(command)
 
     # Final log
     logging.info("Firmware stacking has been successfully generated into : " + filepath)
@@ -462,7 +461,7 @@ class AssembleFirmware(CliCommand):
     working_file = open(working_file_name, "a")
 
     working_file.write("generate_aufs_stacking\n")
-# sudo mount -t aufs -o noatime,nodiratime,br:${systemdir}=rr -o udba=reval none ${mountdir}
+#  mount -t aufs -o noatime,nodiratime,br:${systemdir}=rr -o udba=reval none ${mountdir}
 
     # We are done here, now close the file
     working_file.close()

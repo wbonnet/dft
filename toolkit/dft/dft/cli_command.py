@@ -37,7 +37,7 @@ class CliCommand(object):
   """This class implements the base class used for all command fro cli
 
      It provides method used in all the derivated command, such has
-     sudo execution and error handling, qemu setup and tear down, etc
+     command execution and error handling, qemu setup and tear down, etc
   """
 
   # pylint: disable=too-many-instance-attributes
@@ -85,7 +85,7 @@ class CliCommand(object):
   # -------------------------------------------------------------------------
   def execute_command(self, command):
     """ This method run a command as a subprocess. Typical use case is
-    running sudo commands.
+    running commands.
 
     This method is a wrapper to subprocess.run , and will be moved soon
     in a helper object. It provides mutalisation of error handling
@@ -168,9 +168,9 @@ class CliCommand(object):
 
     self.project.logging.info("setting up QEMU for arch " + self.project.get_target_arch() +
                               " (using " + self.qemu_binary + ")")
-    sudo_command = "sudo cp " + self.qemu_binary + " "
-    sudo_command += self.project.get_rootfs_mountpoint() + "/usr/bin/"
-    self.execute_command(sudo_command)
+    command = "cp " + self.qemu_binary + " "
+    command += self.project.get_rootfs_mountpoint() + "/usr/bin/"
+    self.execute_command(command)
 
 
   # -------------------------------------------------------------------------
@@ -195,7 +195,7 @@ class CliCommand(object):
     # Execute the file removal with root privileges
     self.project.logging.info("cleaning QEMU for arch " + self.project.get_target_arch() +
                               "(using " + self.qemu_binary +")")
-    os.system("sudo rm " + self.project.get_rootfs_mountpoint() + self.qemu_binary)
+    os.system("rm " + self.project.get_rootfs_mountpoint() + self.qemu_binary)
 
     # Empty the binary name
     self.qemu_binary = None
@@ -237,8 +237,8 @@ class CliCommand(object):
       # Test if the file exists
       if os.path.isfile(filepath):
         # Generate a rm command with root privileges and execute it
-        sudo_command = "sudo rm -f " + filepath
-        self.execute_command(sudo_command)
+        command = "rm -f " + filepath
+        self.execute_command(command)
     else:
       msg = "remove_validity_check is set to False. Generated "
       msg += "/etc/apt/apt.conf.d/10no-check-valid-until is not removed"
@@ -264,9 +264,9 @@ class CliCommand(object):
     """
 
     self.project.logging.debug("Remove package : " + target)
-    sudo_command = "sudo chroot " + self.project.get_rootfs_mountpoint()
-    sudo_command += " /usr/bin/apt-get autoremove --purge --yes " + target
-    self.execute_command(sudo_command)
+    command = "chroot " + self.project.get_rootfs_mountpoint()
+    command += " /usr/bin/apt-get autoremove --purge --yes " + target
+    self.execute_command(command)
 
 
   # -------------------------------------------------------------------------
@@ -283,10 +283,10 @@ class CliCommand(object):
     """
 
     self.project.logging.debug("Install package(s) : " + target)
-    sudo_command = "sudo chroot " + self.project.get_rootfs_mountpoint()
-    sudo_command += " /usr/bin/apt-get install --no-install-recommends --yes "
-    sudo_command += " --allow-unauthenticated  " + target
-    self.execute_command(sudo_command)
+    command = "chroot " + self.project.get_rootfs_mountpoint()
+    command += " /usr/bin/apt-get install --no-install-recommends --yes "
+    command += " --allow-unauthenticated  " + target
+    self.execute_command(command)
 
 
 
@@ -300,9 +300,9 @@ class CliCommand(object):
     """
 
     # Import the public key in the APT tools
-    sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
-    sudo_command += " apt-key adv --recv-keys --keyserver pgp.mit.edu " + key
-    self.execute_command(sudo_command)
+    command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
+    command += " apt-key adv --recv-keys --keyserver pgp.mit.edu " + key
+    self.execute_command(command)
 
 
   # -------------------------------------------------------------------------
@@ -319,9 +319,9 @@ class CliCommand(object):
     """
 
     self.project.logging.debug("Updating APT catalog")
-    sudo_command = "sudo chroot " + self.project.get_rootfs_mountpoint()
-    sudo_command += " /usr/bin/apt-get update --yes --allow-unauthenticated "
-    self.execute_command(sudo_command)
+    command = "chroot " + self.project.get_rootfs_mountpoint()
+    command += " /usr/bin/apt-get update --yes --allow-unauthenticated "
+    self.execute_command(command)
 
 
 
@@ -336,21 +336,21 @@ class CliCommand(object):
     """
 
     # Mount bind /proc into the rootfs mountpoint
-    sudo_command = "sudo mount --bind --make-rslave /proc " + self.project.get_rootfs_mountpoint()
-    sudo_command += "/proc"
-    self.execute_command(sudo_command)
+    command = "mount --bind --make-rslave /proc " + self.project.get_rootfs_mountpoint()
+    command += "/proc"
+    self.execute_command(command)
     self.proc_is_mounted = True
 
     # Mount bind /dev/pts into the rootfs mountpoint
-    sudo_command = "sudo mount --bind --make-rslave /dev/pts "
-    sudo_command += self.project.get_rootfs_mountpoint() + "/dev/pts"
-    self.execute_command(sudo_command)
+    command = "mount --bind --make-rslave /dev/pts "
+    command += self.project.get_rootfs_mountpoint() + "/dev/pts"
+    self.execute_command(command)
     self.devpts_is_mounted = True
 
     # Mount bind /dev/shm into the rootfs mountpoint
-    sudo_command = "sudo mount --bind --make-rslave /dev/shm "
-    sudo_command += self.project.get_rootfs_mountpoint() + "/dev/shm"
-    self.execute_command(sudo_command)
+    command = "mount --bind --make-rslave /dev/shm "
+    command += self.project.get_rootfs_mountpoint() + "/dev/shm"
+    self.execute_command(command)
     self.devshm_is_mounted = True
 
 
@@ -376,20 +376,20 @@ class CliCommand(object):
 
     # Check if /proc is mounted, then umount it
     if self.proc_is_mounted:
-      sudo_command = "sudo umount " + self.project.get_rootfs_mountpoint() + "/dev/pts"
-      self.execute_command(sudo_command)
+      command = "umount " + self.project.get_rootfs_mountpoint() + "/dev/pts"
+      self.execute_command(command)
       self.proc_is_mounted = False
 
     # Check if /dev/shm is mounted, then umount it
     if self.devshm_is_mounted:
-      sudo_command = "sudo umount " + self.project.get_rootfs_mountpoint() + "/dev/shm"
-      self.execute_command(sudo_command)
+      command = "umount " + self.project.get_rootfs_mountpoint() + "/dev/shm"
+      self.execute_command(command)
       self.devshm_is_mounted = False
 
     # Check if /dev/pts is mounted, then umount it
     if self.devpts_is_mounted:
-      sudo_command = "sudo umount " + self.project.get_rootfs_mountpoint() + "/proc"
-      self.execute_command(sudo_command)
+      command = "umount " + self.project.get_rootfs_mountpoint() + "/proc"
+      self.execute_command(command)
       self.devpts_is_mounted = False
 
     self.cleanup_in_progress = False

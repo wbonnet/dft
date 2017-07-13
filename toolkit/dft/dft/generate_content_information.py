@@ -264,12 +264,12 @@ class GenerateContentInformation(CliCommand):
     self.output_writer.initialize(Key.PACKAGES.value)
 
     # Generate the dpkg command to retrieve the list of installed packages
-    sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
-    sudo_command += " dpkg -l | tail -n +6"
-    sudo_command_output = self.execute_command(sudo_command)
+    command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
+    command += " dpkg -l | tail -n +6"
+    command_output = self.execute_command(command)
 
     # Iterate the output of the dpkg process:
-    for binaryline in sudo_command_output.splitlines():
+    for binaryline in command_output.splitlines():
       # Each fields is stored into a variable to easy manipulation and
       # simplify code. First get the array of words converted to UTF-8
       line = binaryline.decode(Key.UTF8.value).split()
@@ -314,30 +314,30 @@ class GenerateContentInformation(CliCommand):
         if self.project.content_information[Key.PACKAGES.value][Key.OUTPUT_PKG_MD5.value]:
           # Generate the apt-cache show command to retrieve the MD5sum
           # Grp the keyword and print second word
-          sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
-          sudo_command += " apt-cache show " + pkg_name + " | grep ^MD5sum | awk '{ print $2 }'"
-          sudo_command_output = self.execute_command(sudo_command)
-          output_item[Key.MD5.value] = sudo_command_output.decode(Key.UTF8.value)
+          command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
+          command += " apt-cache show " + pkg_name + " | grep ^MD5sum | awk '{ print $2 }'"
+          command_output = self.execute_command(command)
+          output_item[Key.MD5.value] = command_output.decode(Key.UTF8.value)
 
       # Test if we have to generate the package sha256 in the output
       if Key.OUTPUT_PKG_SHA256.value in self.project.content_information[Key.PACKAGES.value]:
         if self.project.content_information[Key.PACKAGES.value][Key.OUTPUT_PKG_SHA256.value]:
           # Generate the apt-cache show command to retrieve the SHA256
           # Grp the keyword and print second word
-          sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
-          sudo_command += " apt-cache show " + pkg_name + " | grep ^SHA256 | awk '{ print $2 }'"
-          sudo_command_output = self.execute_command(sudo_command)
-          output_item[Key.SHA256.value] = sudo_command_output.decode(Key.UTF8.value)
+          command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
+          command += " apt-cache show " + pkg_name + " | grep ^SHA256 | awk '{ print $2 }'"
+          command_output = self.execute_command(command)
+          output_item[Key.SHA256.value] = command_output.decode(Key.UTF8.value)
 
       # Test if we have to generate the package size in the output
       if Key.OUTPUT_PKG_SIZE.value in self.project.content_information[Key.PACKAGES.value]:
         if self.project.content_information[Key.PACKAGES.value][Key.OUTPUT_PKG_SIZE.value]:
           # Generate the apt-cache show command to retrieve the Size
           # Grp the keyword and print second word
-          sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
-          sudo_command += " apt-cache show " + pkg_name + " | grep ^Size | awk '{ print $2 }'"
-          sudo_command_output = self.execute_command(sudo_command)
-          output_item[Key.SIZE.value] = sudo_command_output.decode(Key.UTF8.value)
+          command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
+          command += " apt-cache show " + pkg_name + " | grep ^Size | awk '{ print $2 }'"
+          command_output = self.execute_command(command)
+          output_item[Key.SIZE.value] = command_output.decode(Key.UTF8.value)
 
       # Test if we have to generate the package installed-size in the output
       if Key.OUTPUT_PKG_INSTALLED_SIZE.value in \
@@ -346,11 +346,11 @@ class GenerateContentInformation(CliCommand):
                                                [Key.OUTPUT_PKG_INSTALLED_SIZE.value]:
           # Generate the apt-cache show command to retrieve the Installed-SizeMD5sum
           # Grp the keyword and print second word
-          sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
-          sudo_command += " apt-cache show " + pkg_name
-          sudo_command += " | grep ^Installed-Size | awk '{ print $2 }'"
-          sudo_command_output = self.execute_command(sudo_command)
-          output_item[Key.INSTALLED_SIZE.value] = sudo_command_output.decode(Key.UTF8.value)
+          command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
+          command += " apt-cache show " + pkg_name
+          command += " | grep ^Installed-Size | awk '{ print $2 }'"
+          command_output = self.execute_command(command)
+          output_item[Key.INSTALLED_SIZE.value] = command_output.decode(Key.UTF8.value)
 
       # Test if we have to generate the package description in the output
       if Key.OUTPUT_PKG_DESCRIPTION.value in \
@@ -400,7 +400,7 @@ class GenerateContentInformation(CliCommand):
 
     # We have to generate part of the command used to run the antivirus, depending
     # on the environment. It is called the antivus_cmd_prefix. It will be used
-    # in the coming sudo command.
+    # in the coming command.
     antivirus_cmd_version = ""
     antivirus_cmd_update = ""
     antivirus_cmd_scan = ""
@@ -419,25 +419,25 @@ class GenerateContentInformation(CliCommand):
     # Now generation platform is identfied, we can generation the coommands
     if use_host_av:
       # Generate the version command
-      antivirus_cmd_version = "LANG=C sudo clamscan --version"
+      antivirus_cmd_version = "LANG=C clamscan --version"
 
       # Generate the update command
-      antivirus_cmd_update = "LANG=C sudo freshclam"
+      antivirus_cmd_update = "LANG=C freshclam"
 
       # Generate the scan command
-      antivirus_cmd_scan = "LANG=C sudo clamscan --infected --recursive "
+      antivirus_cmd_scan = "LANG=C clamscan --infected --recursive "
       antivirus_cmd_scan += self.project.get_rootfs_mountpoint()
     else:
       # Generate the version command
-      antivirus_cmd_version = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
+      antivirus_cmd_version = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
       antivirus_cmd_version += " clamscan --version"
 
       # Generate the update command
-      antivirus_cmd_update = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
+      antivirus_cmd_update = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
       antivirus_cmd_update += " freshclam"
 
       # Generate the scan command
-      antivirus_cmd_scan = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
+      antivirus_cmd_scan = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
       antivirus_cmd_scan += " clamscan --infected --recursive /"
 
     # Log the generated commands
@@ -479,10 +479,10 @@ class GenerateContentInformation(CliCommand):
     # for offline systems
     if self.project.content_information[Key.ANTIVIRUS.value][Key.UPDATE_DATABASE.value]:
       logging.debug("Starting to update Clamav database")
-      sudo_command_output = self.execute_command(antivirus_cmd_update)
+      command_output = self.execute_command(antivirus_cmd_update)
 
       # Parse the results and add lines to the output buffer
-      for binaryline in sudo_command_output.splitlines():
+      for binaryline in command_output.splitlines():
         # Each fields is stored into a variable to easy manipulation and
         # simplify code. First get the array of words converted to UTF-8
         line = binaryline.decode(Key.UTF8.value)
@@ -497,13 +497,13 @@ class GenerateContentInformation(CliCommand):
 
     # Generate the dpkg command to retrieve the list of installed packages
     logging.debug("Starting Clamav version command")
-    sudo_command_output = self.execute_command(antivirus_cmd_version)
-    output_item[Key.VERSION.value] = sudo_command_output.decode(Key.UTF8.value)
+    command_output = self.execute_command(antivirus_cmd_version)
+    output_item[Key.VERSION.value] = command_output.decode(Key.UTF8.value)
 
     # Generate the dpkg command to retrieve the list of installed packages
     logging.debug("Starting Clamav scan")
-    sudo_command_output = self.execute_command(antivirus_cmd_scan)
-    output_item[Key.SCAN.value] = sudo_command_output.decode(Key.UTF8.value)
+    command_output = self.execute_command(antivirus_cmd_scan)
+    output_item[Key.SCAN.value] = command_output.decode(Key.UTF8.value)
 
     # print(output)
     self.output_writer.output_buffer.append(output_item)
@@ -546,10 +546,10 @@ class GenerateContentInformation(CliCommand):
       need_to_remove_package = self.check_install_missing_package(Key.LYNIS.value)
 
     # Generate the debsecan execution command
-    sudo_command = "sudo chroot " + self.project.get_rootfs_mountpoint()
-    sudo_command += " /usr/sbin/lynis audit system"
-    sudo_command_output = self.execute_command(sudo_command)
-    output_item[Key.LYNIS.value] = sudo_command_output.decode(Key.UTF8.value)
+    command = "chroot " + self.project.get_rootfs_mountpoint()
+    command += " /usr/sbin/lynis audit system"
+    command_output = self.execute_command(command)
+    output_item[Key.LYNIS.value] = command_output.decode(Key.UTF8.value)
 
     # print(output)
     self.output_writer.output_buffer.append(output_item)
@@ -595,10 +595,10 @@ class GenerateContentInformation(CliCommand):
       need_to_remove_package = self.check_install_missing_package(Key.RKHUNTER.value)
 
     # Generate the debsecan execution command
-    sudo_command = "sudo chroot " + self.project.get_rootfs_mountpoint()
-    sudo_command += " /usr/bin/rkhunter --check --skip-keypress"
-    sudo_command_output = self.execute_command(sudo_command)
-    output_item[Key.RKHUNTER.value] = sudo_command_output.decode(Key.UTF8.value)
+    command = "chroot " + self.project.get_rootfs_mountpoint()
+    command += " /usr/bin/rkhunter --check --skip-keypress"
+    command_output = self.execute_command(command)
+    output_item[Key.RKHUNTER.value] = command_output.decode(Key.UTF8.value)
 
     # print(output)
     self.output_writer.output_buffer.append(output_item)
@@ -641,10 +641,10 @@ class GenerateContentInformation(CliCommand):
       need_to_remove_package = self.check_install_missing_package("debsecan")
 
     # Generate the debsecan execution command
-    sudo_command = "sudo chroot " + self.project.get_rootfs_mountpoint()
-    sudo_command += " /usr/bin/debsecan"
-    sudo_command_output = self.execute_command(sudo_command)
-    output_item["debsecan"] = sudo_command_output.decode(Key.UTF8.value)
+    command = "chroot " + self.project.get_rootfs_mountpoint()
+    command += " /usr/bin/debsecan"
+    command_output = self.execute_command(command)
+    output_item["debsecan"] = command_output.decode(Key.UTF8.value)
 
     # Test if debsecan has to be removed
     if need_to_remove_package:

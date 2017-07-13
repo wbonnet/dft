@@ -107,8 +107,8 @@ class BuildRootFS(CliCommand):
 
 # TODO security hole !!!!!
 # Protect path generation to avoid to remove / !!!
-        sudo_command = 'sudo rm -fr "' + self.project.get_rootfs_mountpoint() +'"'
-        self.execute_command(sudo_command)
+        command = 'rm -fr "' + self.project.get_rootfs_mountpoint() +'"'
+        self.execute_command(command)
         os.makedirs(self.project.get_rootfs_mountpoint())
 
     # Create the bootstrap directory
@@ -258,8 +258,8 @@ class BuildRootFS(CliCommand):
     filepath = self.project.get_rootfs_mountpoint() + "/dft_bootstrap/site.yml"
 
     # Finally move the temporary file under the rootfs tree
-    sudo_command = "sudo mv -f " + working_file.name + " " + filepath
-    self.execute_command(sudo_command)
+    command = "mv -f " + working_file.name + " " + filepath
+    self.execute_command(command)
 
     # Warn the user if no role is found. In such case rootfs will be same
     # debotstrap, which is certainly not what is expected
@@ -271,10 +271,10 @@ class BuildRootFS(CliCommand):
 
     # Generate the command line to execute Ansible in the chrooted environment
     logging.info("running ansible")
-    sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
-    sudo_command += " /bin/bash -c \"cd /dft_bootstrap && /usr/bin/ansible-playbook -i "
-    sudo_command += " inventory.yml -c local site.yml\""
-    self.execute_command(sudo_command)
+    command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
+    command += " /bin/bash -c \"cd /dft_bootstrap && /usr/bin/ansible-playbook -i "
+    command += " inventory.yml -c local site.yml\""
+    self.execute_command(command)
     logging.info("ansible stage successfull")
 
 
@@ -296,8 +296,8 @@ class BuildRootFS(CliCommand):
       working_file.write("DFT-" + self.project.timestamp + "\n")
     working_file.close()
 
-    sudo_command = "sudo mv -f " + working_file.name + " " + filepath
-    self.execute_command(sudo_command)
+    command = "mv -f " + working_file.name + " " + filepath
+    self.execute_command(command)
 
 
 
@@ -313,7 +313,7 @@ class BuildRootFS(CliCommand):
     logging.info("generating debootstrap rootfs")
 
     # Generate the base debootstrap command
-    debootstrap_command = "sudo debootstrap --no-check-gpg"
+    debootstrap_command = "debootstrap --no-check-gpg"
 
     # Add the foreign and arch only if they are different from host, and
     # thus if use_qemu_static is True
@@ -339,7 +339,7 @@ class BuildRootFS(CliCommand):
 
       # And second stage must be run
       logging.info("doing debootstrap stage 2")
-      debootstrap_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
+      debootstrap_command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
       debootstrap_command += " /debootstrap/debootstrap --second-stage"
       self.execute_command(debootstrap_command)
 
@@ -396,8 +396,8 @@ class BuildRootFS(CliCommand):
         working_file.write("Acquire::Check-Valid-Until \"0\";\n")
       working_file.close()
 
-      sudo_command = "sudo mv -f " + working_file.name + " " + filepath
-      self.execute_command(sudo_command)
+      command = "mv -f " + working_file.name + " " + filepath
+      self.execute_command(command)
     # If generation is deactivated, only output a debug message
     else:
       logging.debug("/etc/apt/apt.conf.d/10no-check-valid-until generation is deactivated")
@@ -471,8 +471,8 @@ class BuildRootFS(CliCommand):
     working_file.close()
 
     # Finally move the temporary file under the rootfs tree
-    sudo_command = "sudo mv -f " + working_file.name + " " + filepath
-    self.execute_command(sudo_command)
+    command = "mv -f " + working_file.name + " " + filepath
+    self.execute_command(command)
 
   # -------------------------------------------------------------------------
   #
@@ -526,5 +526,5 @@ class BuildRootFS(CliCommand):
         working_file.write("\n")
 
     # Move the temporary file under the rootfs tree
-    sudo_command = "sudo mv -f " + working_file.name + " " + filepath
-    self.execute_command(sudo_command)
+    command = "mv -f " + working_file.name + " " + filepath
+    self.execute_command(command)

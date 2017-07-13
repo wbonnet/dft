@@ -165,9 +165,8 @@ class InstallBootChain(CliCommand):
             logging.debug("Add Armbian signing key " + repo_pub_key)
 
       # Move the temporary file under the rootfs tree
-      sudo_command = "sudo mv -f " + working_file.name + " " + filepath
-      print(sudo_command)
-      self.execute_command(sudo_command)
+      command = "mv -f " + working_file.name + " " + filepath
+      self.execute_command(command)
 
       # Add a key to the know catalog signing keys
       self.add_catalog_signing_key(repo_pub_key)
@@ -196,7 +195,6 @@ class InstallBootChain(CliCommand):
       if Key.PACKAGES.value in target[Key.BSP.value][Key.KERNEL.value]:
         # Iterate the list of packages to install, and install them
         for pkg in target[Key.BSP.value][Key.KERNEL.value][Key.PACKAGES.value]:
-          print(pkg)
           logging.debug("Installing package " + pkg)
           self.install_package(pkg)
       else:

@@ -267,9 +267,9 @@ class CheckRootFS(CliCommand):
     self.project.logging.info("starting to check installed packages")
 
     # Generate the dpkg command to retrieve the list of installed packages
-    sudo_command = "LANG=C sudo chroot " + self.project.get_rootfs_mountpoint()
-    sudo_command += " dpkg -l | tail -n +6"
-    pkglist = self.execute_command(sudo_command)
+    command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
+    command += " dpkg -l | tail -n +6"
+    pkglist = self.execute_command(command)
 
     # Iterate the output of the dpkg process and build the dictionnary of
     # all installed packages
