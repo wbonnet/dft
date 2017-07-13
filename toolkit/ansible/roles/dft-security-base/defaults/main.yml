@@ -22,11 +22,6 @@
 #
 
 
-#
-# Include the list of specific defaults files. Defaults are separated into different
-# files, one file per functionnality. In order to improve readability.
-#
-
 # Defines the default values of the openssh server and client configuration
 dft_openssh:
   # Defines the default values of the openssh server in order to provide some basic
