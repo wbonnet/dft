@@ -34,7 +34,6 @@ import build_rootfs
 import model
 from model import Key
 import assemble_firmware
-import build_bootchain
 import install_bootchain
 import build_image
 import build_firmware
@@ -62,7 +61,7 @@ class Cli(object):
     """
 
     # Current version
-    self.version = "0.4.0"
+    self.version = "0.4.9"
 
     # Create the internal parser from argparse
     self.parser = argparse.ArgumentParser(description=textwrap.dedent('''\
@@ -73,7 +72,6 @@ DFT is a collection of tools used to create Debian based firmwares
 Available commands are :
 . assemble_firmware                Create a firmware from a rootfs and generate the configuration files used to loading after booting
 . build_rootfs                     Generate a debootstrap from a Debian repository, install and configure required packages
-? build_bootchain                  Build the bootchain (kernel, initramfs, grub or uboot)
 . install_bootchain                Install the bootchain (kernel, initramfs, grub or uboot) in the rootfs
 . build_image                      Build the disk image from the firmware (or rootfs) and bootchain
 . build_firmware                   Build the firmware configuration files and scripts used to load in memory the firmware
@@ -112,8 +110,6 @@ x factory_setup                    Apply some extra factory setup before generat
       self.__add_parser_assemble_firmware()
     elif self.command == Key.BUILD_ROOTFS.value:
       self.__add_parser_build_rootfs()
-    elif self.command == Key.BUILD_BOOTCHAIN.value:
-      self.__add_parser_build_bootchain()
     elif self.command == Key.INSTALL_BOOTCHAIN.value:
       self.__add_parser_install_bootchain()
     elif self.command == Key.BUILD_IMAGE.value:
@@ -202,16 +198,6 @@ x factory_setup                    Apply some extra factory setup before generat
                              dest=Key.KEEP_BOOTSTRAP_FILES.value,
                              help="do not delete DFT bootstrap files after installation (debug "
                                   "purpose)")
-
-
-
-  def __add_parser_build_bootchain(self):
-    """ This method add parser options specific to build_bootchain command
-    """
-
-    # Add the arguments
-    self.parser.add_argument(Key.BUILD_BOOTCHAIN.value,
-                             help=Key.OPT_HELP_LABEL.value)
 
 
 
@@ -410,8 +396,6 @@ x factory_setup                    Apply some extra factory setup before generat
       self.__run_assemble_firmware()
     elif self.command == Key.BUILD_ROOTFS.value:
       self.__run_build_rootfs()
-    elif self.command == Key.BUILD_BOOTCHAIN.value:
-      self.__run_build_bootchain()
     elif self.command == Key.INSTALL_BOOTCHAIN.value:
       self.__run_install_bootchain()
     elif self.command == Key.BUILD_IMAGE.value:
@@ -503,24 +487,6 @@ x factory_setup                    Apply some extra factory setup before generat
 
     # Then call the dedicated method
     command.create_rootfs()
-
-
-
-  # -------------------------------------------------------------------------
-  #
-  # __run_build_bootchain
-  #
-  # -------------------------------------------------------------------------
-  def __run_build_bootchain(self):
-    """ Method used to handle the build_bootchain command.
-    Create the business objet, then execute the entry point.
-    """
-
-    # Create the business object
-    command = build_bootchain.BuildBootChain(self.dft, self.project)
-
-    # Then call the dedicated method
-    command.build_bootchain()
 
 
 

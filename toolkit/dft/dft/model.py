@@ -81,7 +81,6 @@ class Key(Enum):
   BSP = "bsp"
   BSP_FILE = "bsp_file"
   BSP_BASE = "bsp_base"
-  BUILD_BOOTCHAIN = "build_bootchain"
   BUILD_FIRMWARE = "build_firmware"
   BUILD_IMAGE = "build_image"
   BUILD_ROOTFS = "build_rootfs"
