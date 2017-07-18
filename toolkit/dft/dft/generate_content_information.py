@@ -145,6 +145,9 @@ class ContentOutputWriter(object):
 
     # Move the target file to the right place ?
     # Depends on how we handle temp files
+
+
+
 #
 #    Class GenerateContentInformation
 #
@@ -265,6 +268,8 @@ class GenerateContentInformation(CliCommand):
     # since some cleanup tasks could need QEMU
     if self.use_qemu_static:
       self.cleanup_qemu()
+
+
 
   # -------------------------------------------------------------------------
   #
@@ -672,6 +677,8 @@ class GenerateContentInformation(CliCommand):
     self.output_writer.flush_and_close()
 
 #TODO does seems to output anything
+
+
 
   # -------------------------------------------------------------------------
   #
