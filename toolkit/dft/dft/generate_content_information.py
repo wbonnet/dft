@@ -57,7 +57,7 @@ class ContentOutputWriter(object):
     # a list of dictionnaries. Each item in the list is a line to output. The
     # item content is a dictionnaries. The keys are used when producing output
     # to format such as XML, JSON or YAML
-    self.output_buffer = list()
+    self.__output_buffer = list()
 
   # -------------------------------------------------------------------------
   #
@@ -93,7 +93,7 @@ class ContentOutputWriter(object):
                     self.configuration[Key.CONFIGURATION.value][Key.OUTPUT.value][Key.FORMAT.value])
       exit(1)
 
-    # Slect and create the output
+    # Select and create the output
     if self.configuration[Key.CONFIGURATION.value][Key.OUTPUT.value][Key.TARGET.value] \
                                                                            == Key.FILE.value:
       # Create a temporary file for output
@@ -109,6 +109,22 @@ class ContentOutputWriter(object):
                                                        [Key.OUTPUT.value][Key.TARGET.value])
       exit(1)
 
+
+
+  # -------------------------------------------------------------------------
+  #
+  # append_item
+  #
+  # -------------------------------------------------------------------------
+  def append_item(self, item):
+    """Append an item to the output buffer. This method is provided to hide internals
+    """
+
+    # print(output)
+    self.__output_buffer.append(item)
+
+
+
   # -------------------------------------------------------------------------
   #
   # flush_and_close
@@ -119,7 +135,7 @@ class ContentOutputWriter(object):
     files
     """
 
-    print(self.output_buffer)
+    print(self.__output_buffer)
 
     # Test if the output file has been opened
     if self.output_file != None:
@@ -360,7 +376,7 @@ class GenerateContentInformation(CliCommand):
           output_item[Key.DESCRIPTION.value] = pkg_description
 
       # print(output)
-      self.output_writer.output_buffer.append(output_item)
+      self.output_writer.append_item(output_item)
 
     # Flush all pending output and close stream or file
     self.output_writer.flush_and_close()
@@ -506,7 +522,7 @@ class GenerateContentInformation(CliCommand):
     output_item[Key.SCAN.value] = command_output.decode(Key.UTF8.value)
 
     # print(output)
-    self.output_writer.output_buffer.append(output_item)
+    self.output_writer.append_item(output_item)
 
     # Flush all pending output and close stream or file
     self.output_writer.flush_and_close()
@@ -552,7 +568,7 @@ class GenerateContentInformation(CliCommand):
     output_item[Key.LYNIS.value] = command_output.decode(Key.UTF8.value)
 
     # print(output)
-    self.output_writer.output_buffer.append(output_item)
+    self.output_writer.append_item(output_item)
 
     # Test if debsecan has to be removed
     if need_to_remove_package:
@@ -601,7 +617,7 @@ class GenerateContentInformation(CliCommand):
     output_item[Key.RKHUNTER.value] = command_output.decode(Key.UTF8.value)
 
     # print(output)
-    self.output_writer.output_buffer.append(output_item)
+    self.output_writer.append_item(output_item)
 
     # Test if debsecan has to be removed
     if need_to_remove_package:

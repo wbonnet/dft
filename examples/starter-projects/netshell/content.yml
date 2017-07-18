@@ -121,7 +121,7 @@ packages:
 
   # If this is set to True (default is False), package version will be included
   # in the information generated
-  output_pkg_description: True
+  output_pkg_description: False
 
   # If this is set to True (default is False), package status will be included
   # in the information generated
@@ -129,23 +129,23 @@ packages:
 
   # If this is set to True (default is False), package architecture will be
   # included inthe information generated
-  output_pkg_architecture: True
+  output_pkg_architecture: False
 
   # If this is set to True (default is False), package md5sum (from catalog)
   # will be included inthe information generated
-  output_pkg_md5: True
+  output_pkg_md5: False
 
   # If this is set to True (default is False), package SHA256 (from catalog)
   # will be included inthe information generated
-  output_pkg_sha256: True
+  output_pkg_sha256: False
 
   # If this is set to True (default is False), package size (from catalog)
   # will be included inthe information generated
-  output_pkg_size: True
+  output_pkg_size: False
 
   # If this is set to True (default is False), package installed-size (from
   # catalog) will be included inthe information generated
-  output_pkg_installed_size: True
+  output_pkg_installed_size: False
 
 
 #
