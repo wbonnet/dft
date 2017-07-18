@@ -2,7 +2,7 @@
 
 {% for repo in dft_debian_repository_configuration %}
 # Importing packages from {{ repo.origin }}
-reprepro -b {{ dft_debian_repository_directory}}/{{ repo.base_dir}} updates
+reprepro -b {{ dft_debian_repository_directory}}/{{ repo.base_dir}} update
 reprepro -b {{ dft_debian_repository_directory}}/{{ repo.base_dir}} processincoming incoming-{{ repo.codename }} >> {{ dft_debian_repository_directory}}/{{ repo.base_dir}}/logs/{{ repo.log}}
 
 
