@@ -9,6 +9,13 @@
 
     CustomLog /var/log/apache2/{{ dft_debian_repository_server_name }}.access.log combined
 
+    # Set access control to /srv mountpoint
+    <Directory /srv/>
+        Options Indexes FollowSymLinks
+        AllowOverride None
+        Require all granted
+    </Directory>
+
     # Allow directory listings so that people can browse the repository from their browser too
     <Directory "{{ dft_debian_repository_directory }}">
         Options Indexes FollowSymLinks MultiViews
