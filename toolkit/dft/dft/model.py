@@ -126,7 +126,7 @@ class Key(Enum):
   GEN_CONTENT_INFO = "generate_content_information"
   GEN_FILES_INFO = "gen_files_info"
   GEN_PACKAGES_INFO = "gen_packages_info"
-  GEN_ROOTKIT_INFO = "generate_rootkit_information"
+  GEN_ROOTKIT_INFO = "gen_rootkit_info"
   GEN_SECURITY_INFO = "gen_security_info"
   GEN_VULNERABILITIES_INFO = "gen_vulnerabilities_info"
   GENERATE_DEB = "generate_deb"
@@ -320,6 +320,19 @@ class DftConfiguration(object):
     self.project_name = None
     self.logging = logging.getLogger()
     self.configuration = None
+
+    #
+    # Information generation flags. Each of the following flag controls the generation
+    # of a given section.
+    #
+    self.generate_all_information = None
+    self.gen_packages_info = None
+    self.gen_vulnerabilities_info = None
+    self.gen_rootkit_info = None
+    self.gen_security_info = None
+    self.gen_files_info = None
+    self.gen_antivirus_info = None
+
 
 
   # ---------------------------------------------------------------------------

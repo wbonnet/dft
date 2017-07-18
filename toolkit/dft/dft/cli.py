@@ -61,7 +61,7 @@ class Cli(object):
     """
 
     # Current version
-    self.version = "0.4.9"
+    self.version = "0.4.10"
 
     # Create the internal parser from argparse
     self.parser = argparse.ArgumentParser(description=textwrap.dedent('''\
