@@ -8,6 +8,9 @@ dft_groups:
 # Create the default user add put it into dft group
 dft_users:
   - { name: "dft" , password: "dft" , createhome: True , groups: 'dft' , group: 'dft' , shell: '/bin/bash'}
+  - { name: "dft2" , password_hash: "dfthash3" , createhome: True , groups: 'dft' , group: 'dft' , shell: '/bin/bash'}
+  - { name: "dft3" , password: "dft3" , createhome: True , groups: 'dft' , group: 'dft' , shell: '/bin/bash'}
+  - { name: "dft4" , password: "zlika", password_hash: "dfthash4" , createhome: True , groups: 'dft' , group: 'dft' , shell: '/bin/bash'}
 
 # Grants sudo privileges to defaut user
 dft_sudoers:

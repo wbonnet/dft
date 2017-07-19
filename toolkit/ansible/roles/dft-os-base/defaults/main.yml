@@ -44,10 +44,15 @@ dft_timezone: "Etc/UTC"
 # dft_root_password: "{{ 'root' | password_hash('sha512') }}"
 
 # Defines the list of users to create. By default, create a user named dft
-# and put it into sudo group
+# and put it into sudo group.
+#
+# The password field contains the plain text password (which is evil ! but sometime useful)
+# The password_hash contains the hahed value of the password. This variable has priority over
+# plain text value (if both are defined).
 dft_users:
   - { name: "dft" ,
       password: "dft" ,
+#      password_hash: "$6$2P36HIipn2AWBkoQ$o95Ooh0EodX8Rt9LFUW4zQNBYuIyu.i50THN9JWrKwPbnMjJMV1c97zX3HiBZ/CZYLQtxTlfDRj/TLDpQsIWp." ,
       createhome: True ,
       groups: 'sudo' ,
       group: 'sudo' ,

@@ -37,7 +37,20 @@
   shell: /usr/sbin/usermod root -p $(/usr/bin/openssl rand -base64 32)
   when: dft_root_password is not defined
 
-- name: DFT - Create local users
+- name: DFT - Create local users (using password hash)
+  user: name="{{ item.name }}"
+        password="{{ item.password_hash }}"
+        createhome="{{ item.createhome }}"
+        group="{{ item.group }}"
+        groups="{{ item.groups }}"
+        shell="{{ item.shell }}"
+        generate_ssh_key="{{ item.generate_ssh_key | default ('no') }}"
+        update_password=always
+        state=present
+  with_items: "{{ dft_users }}"
+  when: dft_users is defined and item.password_hash is defined
+
+- name: DFT - Create local users (plaintext password)
   user: name="{{ item.name }}"
         password="{{ item.password | password_hash('sha512') }}"
         createhome="{{ item.createhome }}"
@@ -48,7 +61,7 @@
         update_password=always
         state=present
   with_items: "{{ dft_users }}"
-  when: dft_users is defined
+  when: dft_users is defined and item.password_hash is not defined
 
 - name: DFT - Copy SSH keys to user directories
   authorized_key:  key="{{ lookup('file', 'files/{{ item.ssh_key_file }}') }}"
