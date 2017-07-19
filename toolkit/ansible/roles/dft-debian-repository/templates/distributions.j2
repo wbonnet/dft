@@ -52,3 +52,6 @@ DscIndices: {{ item.dsc_indices }}
 {% if item.contents is defined %}
 Contents: {{ item.contents }}
 {% endif %}
+{% if item.uploaders is defined %}
+Uploaders: uploaders
+{% endif %}
