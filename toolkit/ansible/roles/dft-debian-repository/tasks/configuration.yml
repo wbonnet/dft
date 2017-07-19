@@ -135,6 +135,17 @@
   with_items:
     - "{{ dft_debian_repository_configuration }}"
 
+# Instanciate the uploaders template file
+- name: DFT - Copy uploaders template
+  template: src=uploaders.j2
+            dest={{ dft_debian_repository_directory }}/{{ item.base_dir }}/conf/uploaders
+            owner={{ dft_debian_repository_web_server_definition.group }}
+            group={{ dft_debian_repository_web_server_definition.group }}
+            mode="0644"
+  with_items:
+    - "{{ dft_debian_repository_configuration }}"
+  when: item.uploaders is defined
+
 # -------------------------------------------------------------------------------------------------
 # Add processincoming script cron table for user reprepro. Scheduled every hour by default
 - cron: name="Repository update"

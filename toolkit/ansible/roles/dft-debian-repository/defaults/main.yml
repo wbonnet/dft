@@ -76,6 +76,10 @@ dft_debian_repository_configuration:
     # The allow variable is a list of rules to output to the Allow section
     allow:
       - testing>stretch stretch
+#    uploaders:
+#      - rule: "*"
+#        key: "123456789ABCDEF"
+
 
 # reprepro role variables definition
 #
