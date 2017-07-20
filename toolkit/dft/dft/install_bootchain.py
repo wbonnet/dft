@@ -145,9 +145,11 @@ class InstallBootChain(CliCommand):
           # Check if the public key of the repository is defined in the BSP file, otherwise
           # Set the default value to 93D6889F9F0E78D5
           if Key.PUBKEY.value not in target[Key.BSP.value][Key.KERNEL.value]:
-            repo_pub_key = "XXX"
+            repo_pub_key = "03337671FDE75BB6A85EC91FB876CB44FA1B0274"
+            logging.debug("Using default Devuan signing key " + repo_pub_key)
           else:
             repo_pub_key = target[Key.BSP.value][Key.KERNEL.value][Key.PUBKEY.value]
+            logging.debug("Add Devuan signing key " + repo_pub_key)
 
         elif target[Key.BSP.value][Key.KERNEL.value][Key.ORIGIN.value] == "armbian":
           # Defines the file name and content for armbian APT sources
@@ -158,7 +160,7 @@ class InstallBootChain(CliCommand):
           # Check if the public key of the repository is defined in the BSP file, otherwise
           # Set the default value to 93D6889F9F0E78D5
           if Key.PUBKEY.value not in target[Key.BSP.value][Key.KERNEL.value]:
-            repo_pub_key = "93D6889F9F0E78D5"
+            repo_pub_key = "DF00FAF1C577104B50BF1D0093D6889F9F0E78D5"
             logging.debug("Using default Armbian signing key " + repo_pub_key)
           else:
             repo_pub_key = target[Key.BSP.value][Key.KERNEL.value][Key.PUBKEY.value]

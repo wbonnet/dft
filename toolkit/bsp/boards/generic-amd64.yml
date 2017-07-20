@@ -34,15 +34,18 @@ architecture: amd64
 # to install (ie: packages containing kernel, dtb, firmware)
 #
 # Several packages repository are defined in DFT tool and can be used as is. The valid values are
-# debian, armbian, devuan, ubuntu and custom. Custom repository can be used, but URL is mandatory
-# and muse be defined.
+# debian, armbian, devuan and custom. Custom repository can be used, but URL is mandatory
+# and must be defined.
 #
 kernel:
   # Use debian for this board
   origin: debian
 
-  # Defines the public of the repository ( default value is 93D6889F9F0E78D5 )
-  # pubkey: 93D6889F9F0E78D5
+  # Defines the public key of the repository if not using default value.
+  # Default keys are :
+  #   armbian   DF00FAF1C577104B50BF1D0093D6889F9F0E78D5
+  #   devuan    03337671FDE75BB6A85EC91FB876CB44FA1B0274
+  # pubkey: DF00FAF1C577104B50BF1D0093D6889F9F0E78D5
 
   # List of packages to install from the repository
   packages:
