@@ -144,13 +144,14 @@ class BuildImage(CliCommand):
     . Compress partition files if reuired
     """
 
-    # Create the image file
+    # Create the partitions files
     # self.create_partitions_storage()
 
-    # # Create the loopbck device and mount the image file
+    # # Create the loopbck device and mount the partitions
     # self.setup_loopback()
 
     # # Setup the partitions in the image
+    # should be removed ?
     # self.create_partitions_inside_storage()
 
     # # Create and format the filesystems on the newly created partitions
@@ -165,8 +166,8 @@ class BuildImage(CliCommand):
     # # Umount the image and release the loopback deice
     # self.umount_image()
 
-    # # Compress the generated image
-    # self.compress_image()
+    # # Compress the generated partitions
+    # self.compress_partitions()
 
     # # Final information if the information is available
     # if self.image_path is not None:
