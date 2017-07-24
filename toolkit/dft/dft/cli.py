@@ -61,7 +61,7 @@ class Cli(object):
     """
 
     # Current version
-    self.version = "0.4.10"
+    self.version = "0.4.11"
 
     # Create the internal parser from argparse
     self.parser = argparse.ArgumentParser(description=textwrap.dedent('''\
@@ -73,6 +73,7 @@ Available commands are :
 . assemble_firmware                Create a firmware from a rootfs and generate the configuration files used to loading after booting
 . build_image                      Build the disk image from the firmware (or rootfs) and bootchain
 . build_firmware                   Build the firmware configuration files and scripts used to load in memory the firmware
+. build_partitions                 Build the disk partitions and store them into separate files
 . build_rootfs                     Generate a debootstrap from a Debian repository, install and configure required packages
 . check_rootfs                     Control the content of the rootfs rootfs after its generation (debsecan and openscap)
 ? generate_content_information     Generate a manifest identiyfing content and versions
@@ -113,6 +114,8 @@ Available commands are :
       self.__add_parser_install_bootchain()
     elif self.command == Key.BUILD_IMAGE.value:
       self.__add_parser_build_image()
+    elif self.command == Key.BUILD_PARTITIONS.value:
+      self.__add_parser_build_partitions()
     elif self.command == Key.BUILD_FIRMWARE.value:
       self.__add_parser_build_firmware()
     elif self.command == Key.CHECK_ROOTFS.value:
@@ -215,6 +218,17 @@ Available commands are :
 
     # Add the arguments
     self.parser.add_argument(Key.BUILD_IMAGE.value,
+                             help=Key.OPT_HELP_LABEL.value)
+
+
+
+  def __add_parser_build_partitions(self):
+    """ This method add parser options specific to build_partitions command
+    """
+
+
+    # Add the arguments
+    self.parser.add_argument(Key.BUILD_PARTITIONS.value,
                              help=Key.OPT_HELP_LABEL.value)
 
 
@@ -389,6 +403,8 @@ Available commands are :
       self.__run_build_image()
     elif self.command == Key.BUILD_FIRMWARE.value:
       self.__run_build_firmware()
+    elif self.command == Key.BUILD_PARTITIONS.value:
+      self.__run_build_partitions()
     elif self.command == Key.CHECK_ROOTFS.value:
       self.__run_check_rootfs()
     elif self.command == Key.GEN_CONTENT_INFO.value:
@@ -508,6 +524,27 @@ Available commands are :
 
     # Then call the dedicated method
     command.build_image()
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # __run_build_partitions
+  #
+  # -------------------------------------------------------------------------
+  def __run_build_partitions(self):
+    """ Method used to handle the build_partition command.
+    Create the business objet, then execute the entry point.
+
+    Partition building is handled by the same business object as image building.
+    Most of the code is common to both command.
+    """
+
+    # Create the business object
+    command = build_image.BuildImage(self.dft, self.project)
+
+    # Then call the dedicated method
+    command.build_partitions()
 
 
 
