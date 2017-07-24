@@ -84,16 +84,17 @@ class BuildImage(CliCommand):
     . Copy rootfs content to image
     . Install the boot sectors
     . Umount the image and release loopback
+    . Compress image file if reuired
     """
 
     # Create the image file
-    self.create_image()
+    self.create_image_storage()
 
     # Create the loopbck device and mount the image file
     self.setup_loopback()
 
     # Setup the partitions in the image
-    self.create_partitions()
+    self.create_partitions_inside_image()
 
     # Create and format the filesystems on the newly created partitions
     self.create_filesystems()
@@ -118,10 +119,67 @@ class BuildImage(CliCommand):
 
   # -------------------------------------------------------------------------
   #
-  # create_image
+  # build_partitions
   #
   # -------------------------------------------------------------------------
-  def create_image(self):
+  def build_partitions(self):
+    """This method implement the business logic of partitions generation in
+    the case of seperat partition generation. This is different of generating
+    partitions within an image since there is one file per partition instead
+    of only only one image file containing the partition table and all the
+    partitions structure and data.
+
+    The generated fies are name according to the image file. A suffix is added
+    based upon partition number (in sequential order) and .part suffix.
+
+    The main steps are :
+
+    . Creating one empty file per partition
+    . Setup each loopback device
+    . Create filesystem inside the loopback
+    . Mount the partitions according to the filesystem layout
+    . Copy rootfs content to tree of partitions
+    . Install the boot chain (no grub or bootloader)
+    . Umount the partitions and release loopback
+    . Compress partition files if reuired
+    """
+
+    # Create the image file
+    # self.create_partitions_storage()
+
+    # # Create the loopbck device and mount the image file
+    # self.setup_loopback()
+
+    # # Setup the partitions in the image
+    # self.create_partitions_inside_storage()
+
+    # # Create and format the filesystems on the newly created partitions
+    # self.create_filesystems()
+
+    # # Copy rootfs to the image
+    # self.install_image_content()
+
+    # # Install the boot (either grub or uboot)
+    # self.install_boot()
+
+    # # Umount the image and release the loopback deice
+    # self.umount_image()
+
+    # # Compress the generated image
+    # self.compress_image()
+
+    # # Final information if the information is available
+    # if self.image_path is not None:
+    #   self.project.logging.info("The image has been successfully generated in : " + self.image_path)
+    pass
+
+
+  # -------------------------------------------------------------------------
+  #
+  # create_image_storage
+  #
+  # -------------------------------------------------------------------------
+  def create_image_storage(self):
     """This method is in charge of crating the empty image file. The image
     file will later be mounted as a loop device, receive partitions, boot and
     rootfs content.
@@ -284,10 +342,10 @@ class BuildImage(CliCommand):
 
   # -------------------------------------------------------------------------
   #
-  # create_partitions
+  # create_partitions_inside_image
   #
   # -------------------------------------------------------------------------
-  def create_partitions(self):
+  def create_partitions_inside_image(self):
     """This method creates the partition table and the different partitions
     in the loopback device. It first read the device definition, then iterate
     the list of partitions.
@@ -746,7 +804,7 @@ class BuildImage(CliCommand):
   # -------------------------------------------------------------------------
   def create_filesystems(self):
     """This method creates the file systems on the partition created by the
-    create_partitions method. It uses the same configuration file.
+    create_partitions_inside_image method. It uses the same configuration file.
 
     File system creation is implemented in a different method since it has tp
     be done after partition creation and commit. It can't be done on the fly.
