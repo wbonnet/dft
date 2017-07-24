@@ -1,5 +1,5 @@
 # Set the hostname according to the project name
-dft_hostname: "netshell"
+dft_hostname: "netshell-multi-arch"
 
 # Create a group named dft
 dft_groups:
