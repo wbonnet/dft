@@ -35,6 +35,14 @@
   with_items:
     - sudo
 
+- name : DFT - Replace the /etc/sudoers configuration file
+  copy: src=files/{{ dft_sudoers.main_sudoers_file }}
+        dest=/etc/sudoers
+        mode=0440
+        owner=root
+        group=root
+  when: dft_sudoers is defined and dft_sudoers.main_sudoers_file is defined
+
 - name : DFT - Add specific sudoers configuration files
   copy: src=files/{{ item }}
         dest=/etc/sudoers.d/{{ item }}
