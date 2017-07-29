@@ -1,2 +1,2 @@
 # Set the hostname according to the project name
-dft_hostname: "sabre-qsd+"
+dft_hostname: "nanopi-neo"
