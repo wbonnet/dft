@@ -129,6 +129,7 @@ project_definition:
   # Definition of the variables to be passed to rootfs creation
   variables:
     - variables.yml
+    - variables-creator-ci20.yml
 
   # Definition of the list of targets, with architectures, versions and optionaly board.
   # Firmware will be generated for each of the architecture in this list
