@@ -53,8 +53,3 @@ architecture: powerpc
   #   - linux-image-amd64
 
 #TODO: add flag to define if a specific source list ha to be generated under sources.list.define
-
-# The uboot section defines the different parameters needed to select and install the uboot
-# used to boot the board an run kernel. It is defined by XXX
-# grub:
-#

@@ -43,9 +43,10 @@ kernel:
 
   # Defines the public key of the repository if not using default value.
   # Default keys are :
-  #   armbian   DF00FAF1C577104B50BF1D0093D6889F9F0E78D5
-  #   devuan    03337671FDE75BB6A85EC91FB876CB44FA1B0274
-  # pubkey: DF00FAF1C577104B50BF1D0093D6889F9F0E78D5
+  #   armbian     DF00FAF1C577104B50BF1D0093D6889F9F0E78D5
+  #   devuan      03337671FDE75BB6A85EC91FB876CB44FA1B0274
+  #   armwizard   358F3893AF23DDDA17381B8D962EBD6B1B362699
+  # pubkey:
 
   # List of packages to install from the repository
   packages:

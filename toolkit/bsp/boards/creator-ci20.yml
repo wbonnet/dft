@@ -27,7 +27,7 @@
 # Only one architecture can be set at a time, if a board can support several architecture
 # armel and armhf, or armhf and arm64, then you need to create several bsp definition file,
 # one for each architecture
-architecture: armhf
+architecture: mips
 
 # The kernel section defines the different parameters needed to select and install the kernel
 # used to boot the board. It is defined by a source (Debian repository) and a list of packages

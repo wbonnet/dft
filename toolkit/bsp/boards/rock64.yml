@@ -27,7 +27,7 @@
 # Only one architecture can be set at a time, if a board can support several architecture
 # armel and armhf, or armhf and arm64, then you need to create several bsp definition file,
 # one for each architecture
-architecture: amd64
+architecture: arm64
 
 # The kernel section defines the different parameters needed to select and install the kernel
 # used to boot the board. It is defined by a source (Debian repository) and a list of packages
@@ -39,7 +39,7 @@ architecture: amd64
 #
 kernel:
   # Defines the upstream site used to provide kernel for this device
-  origin: debian
+  origin: armwizard
 
   # Defines the public key of the repository if not using default value.
   # Default keys are :
@@ -50,6 +50,22 @@ kernel:
 
   # List of packages to install from the repository
   packages:
-    - linux-image-amd64
+    - linux-image-kernel-rock64
+    - linux-image-firmware-rock64
+    - linux-image-dtb-rock64
 
 #TODO: add flag to define if a specific source list ha to be generated under sources.list.define
+
+# The uboot section defines the different parameters needed to select and install the uboot
+# used to boot the board an run kernel. It is defined by XXX
+# uboot:
+#   - {
+#       # Defines the source of the data to be copied to the image
+#       # The source can be either a file or a special device like /dev/zero or /dev/random
+#       # If the path is absolute, it will be left unchanged, otherwise it is prefix by the
+#       # BSP path
+#       source: "u-boot-sunxi-with-spl.bin" ,
+
+#       # Defines the options to be passed to dd
+#       options: "bs=1k seek=8 conv=fsync"
+#     }

@@ -27,7 +27,7 @@
 # Only one architecture can be set at a time, if a board can support several architecture
 # armel and armhf, or armhf and arm64, then you need to create several bsp definition file,
 # one for each architecture
-architecture: amd64
+architecture: armhf
 
 # The kernel section defines the different parameters needed to select and install the kernel
 # used to boot the board. It is defined by a source (Debian repository) and a list of packages
@@ -39,7 +39,7 @@ architecture: amd64
 #
 kernel:
   # Defines the upstream site used to provide kernel for this device
-  origin: debian
+  origin: armwizard
 
   # Defines the public key of the repository if not using default value.
   # Default keys are :
@@ -50,6 +50,32 @@ kernel:
 
   # List of packages to install from the repository
   packages:
-    - linux-image-amd64
+    - linux-image-kernel-raspberry-pi3
+    - linux-image-firmware-raspberry-pi3
+    - linux-image-dtb-raspberry-pi3
 
 #TODO: add flag to define if a specific source list ha to be generated under sources.list.define
+
+# The uboot section defines the different parameters needed to select and install the uboot
+# used for this board. In some (rare) case, the uboot can include severa binaries, thus this
+# sections defines a list of binary files to copy to the target image, the copy method to use, and
+# its parameters.
+# uboot:
+#   - {
+#       # Identification the target image file. This has to be one of the filename defined in the
+#       # image.yml configuration file
+#       target_image: "xxx.image" ,
+
+#       # method used to copy the binary to the target image. Valid values are :
+#       #  . dd
+#       method: "dd" ,
+
+#       # Binary to copy to the target image. Binaries are stored under...
+#       binary: "xxx" ,
+
+#       # Copy method parameters. The valid value depends on the method used. You should refer to the
+#       # man page of the tool used by the selected method. parameters will be passed to this tool.
+#       #
+#       # This variable is optional, default value is no arameters passed
+#       # parameters: ""
+#     }
