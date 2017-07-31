@@ -25,16 +25,16 @@ source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
 cd toolkit/dft
 
 # Run the dft tool to build the root_fs
-python3.5 dft build_rootfs  --project-file ${WORKING_DIR}/${DFT_PROJECT} --log-level debug --keep-bootstrap-files
+sudo python3.5 dft build_rootfs  --project-file ${WORKING_DIR}/${DFT_PROJECT} --log-level debug --keep-bootstrap-files
 
 # Run the dft tool to build the firmware
-python3.5 dft install_bootchain --project-file ${WORKING_DIR}/${DFT_PROJECT} --log-level debug
+sudo python3.5 dft install_bootchain --project-file ${WORKING_DIR}/${DFT_PROJECT} --log-level debug
 
 # Run the dft tool to build the firmware
-python3.5 dft build_firmware --project-file ${WORKING_DIR}/${DFT_PROJECT} --log-level debug
+sudo python3.5 dft build_firmware --project-file ${WORKING_DIR}/${DFT_PROJECT} --log-level debug
 
 # Run the dft tool to assemble the firmware scripts
-python3.5 dft assemble_firmware --project-file ${WORKING_DIR}/${DFT_PROJECT} --log-level debug
+sudo python3.5 dft assemble_firmware --project-file ${WORKING_DIR}/${DFT_PROJECT} --log-level debug
 
 # Create the image from the generated rootfs
 sudo python3.5 dft build_image --project-file ${WORKING_DIR}/${DFT_PROJECT} --log-level debug

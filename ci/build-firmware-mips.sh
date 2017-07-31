@@ -25,7 +25,7 @@ source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
 cd toolkit/dft
 
 # Run the dft tool to build the root_fs
-python3.5 dft build_rootfs  --project-file ${WORKING_DIR}/${DFT_PROJECT} --log-level debug --keep-bootstrap-files --limit-arch mips
+sudo python3.5 dft build_rootfs  --project-file ${WORKING_DIR}/${DFT_PROJECT} --log-level debug --keep-bootstrap-files --limit-arch mips
 
 # Go back to startup directory and clean working directory
 cd ${WORKING_DIR}
