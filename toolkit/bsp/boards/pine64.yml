@@ -37,9 +37,9 @@ architecture: arm64
 # debian, armbian, devuan and custom. Custom repository can be used, but URL is mandatory
 # and must be defined.
 #
-kernel:
+#kernel:
   # Defines the upstream site used to provide kernel for this device
-  origin: armbian
+#  origin: armbian
 
   # Defines the public key of the repository if not using default value.
   # Default keys are :
@@ -49,24 +49,24 @@ kernel:
   # pubkey:
 
   # List of packages to install from the repository
-  packages:
-    - linux-dtb-pine64
-    - linux-image-pine64
-    - armbian-firmware
-    - linux-jessie-root-pine64
+#  packages:
+#    - linux-dtb-pine64
+#    - linux-image-pine64
+#    - armbian-firmware
+#    - linux-jessie-root-pine64
 
 #TODO: add flag to define if a specific source list ha to be generated under sources.list.define
 
 # The uboot section defines the different parameters needed to select and install the uboot
 # used to boot the board an run kernel. It is defined by XXX
-uboot:
-  - {
+#uboot:
+#  - {
       # Defines the source of the data to be copied to the image
       # The source can be either a file or a special device like /dev/zero or /dev/random
       # If the path is absolute, it will be left unchanged, otherwise it is prefix by the
       # BSP path
-      source: "u-boot-sunxi-with-spl.bin" ,
+#      source: "u-boot-sunxi-with-spl.bin" ,
 
       # Defines the options to be passed to dd
-      options: "bs=1k seek=8 conv=fsync"
-    }
+#      options: "bs=1k seek=8 conv=fsync"
+#    }

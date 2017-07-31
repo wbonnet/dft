@@ -37,9 +37,9 @@ architecture: armel
 # debian, armbian, devuan and custom. Custom repository can be used, but URL is mandatory
 # and must be defined.
 #
-kernel:
+#kernel:
   # Defines the upstream site used to provide kernel for this device
-  origin: armwizard
+#  origin: armwizard
 
   # Defines the public key of the repository if not using default value.
   # Default keys are :
@@ -49,10 +49,10 @@ kernel:
   # pubkey:
 
   # List of packages to install from the repository
-  packages:
-    - linux-image-kernel-raspberry-pi0
-    - linux-image-firmware-raspberry-pi0
-    - linux-image-dtb-raspberry-pi0
+#  packages:
+#    - linux-image-kernel-raspberry-pi0
+#    - linux-image-firmware-raspberry-pi0
+#    - linux-image-dtb-raspberry-pi0
 
 #TODO: add flag to define if a specific source list ha to be generated under sources.list.define
 
