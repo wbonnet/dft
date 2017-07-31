@@ -38,20 +38,21 @@ architecture: armhf
 # and must be defined.
 #
 kernel:
-  # Use armbian for marsoard imx6
-  origin: armbian
+  # Defines the upstream site used to provide kernel for this device
+  origin: armwizard
 
   # Defines the public key of the repository if not using default value.
   # Default keys are :
-  #   armbian   DF00FAF1C577104B50BF1D0093D6889F9F0E78D5
-  #   devuan    03337671FDE75BB6A85EC91FB876CB44FA1B0274
-  # pubkey: DF00FAF1C577104B50BF1D0093D6889F9F0E78D5
+  #   armbian     DF00FAF1C577104B50BF1D0093D6889F9F0E78D5
+  #   devuan      03337671FDE75BB6A85EC91FB876CB44FA1B0274
+  #   armwizard   358F3893AF23DDDA17381B8D962EBD6B1B362699
+  # pubkey:
 
   # List of packages to install from the repository
   packages:
-    - linux-image-next-marsboard-imx6
-    - linux-dtb-next-marsboard-imx6
-    - linux-firmware-image-next-marsboard-imx6
+    - linux-image-kernel-marsboard-imx6
+    - linux-image-dtb-marsboard-imx6
+    - linux-image-image-marsboard-imx6
 
 # On the i.MX6 marsboard the uboot is stored in SPI flash memory. Thus there is no need to
 # include it into this BSP definition since its update is a manual process, out of DFT toolchain.

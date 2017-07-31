@@ -38,22 +38,23 @@ architecture: armhf
 # and must be defined.
 #
 kernel:
-  # Use armbian for sabre quad smartdevice plus
-  origin: armbian
+  # Defines the upstream site used to provide kernel for this device
+  origin: armwizard
 
   # Defines the public key of the repository if not using default value.
   # Default keys are :
-  #   armbian   DF00FAF1C577104B50BF1D0093D6889F9F0E78D5
-  #   devuan    03337671FDE75BB6A85EC91FB876CB44FA1B0274
-  # pubkey: DF00FAF1C577104B50BF1D0093D6889F9F0E78D5
+  #   armbian     DF00FAF1C577104B50BF1D0093D6889F9F0E78D5
+  #   devuan      03337671FDE75BB6A85EC91FB876CB44FA1B0274
+  #   armwizard   358F3893AF23DDDA17381B8D962EBD6B1B362699
+  # pubkey:
 
   # List of packages to install from the repository
   packages:
     # Kernel and firmware are the same for both version of sabre qsd and qsd+
-    - linux-image-next-sabreqsd
-    - linux-firmware-image-next-sabreqsd
+    - linux-image-kernel-sabre-qsd
+    - linux-image-firmware-sabre-qsd
     # Only DTB change between sabre qsd and qsd+
-    - linux-dtb-next-sabreqsd+
+    - linux-image-dtb-sabre-qsd+
 
 #TODO: add flag to define if a specific source list ha to be generated under sources.list.define
 

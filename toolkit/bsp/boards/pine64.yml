@@ -38,7 +38,7 @@ architecture: arm64
 # and must be defined.
 #
 kernel:
-  # Use armbian for orange pi zero
+  # Defines the upstream site used to provide kernel for this device
   origin: armbian
 
   # Defines the public key of the repository if not using default value.
