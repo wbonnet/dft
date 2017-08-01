@@ -420,6 +420,10 @@ class BuildRootFS(CliCommand):
         logging.debug(distro)
 
         # Process only if it is the version we target
+        print(distro[Key.NAME.value])
+        print(self.project.get_target_version())
+        print(self.project.get_target_arch())
+        print(distro[Key.ARCHITECTURES.value])
         if distro[Key.NAME.value] == self.project.get_target_version() and \
                                      self.project.get_target_arch() in \
                                      distro[Key.ARCHITECTURES.value]:
