@@ -53,7 +53,7 @@ devices:
 
   # Defines the filename used to store the device image. This file is created and allocated at
   # image creation.
-  filename: "orange-pi-zero-dft.img"
+  filename: "dft.img"
 
   # Defines which kind of partition table label is used. Valid values are :
   # "aix", "amiga", "bsd", "dvh", "gpt", "loop", "mac", "msdos", "pc98", or "sun"
