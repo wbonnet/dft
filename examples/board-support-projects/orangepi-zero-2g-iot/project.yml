@@ -92,7 +92,7 @@ configuration:
 project_definition:
 
   # Defines the project name. Mostly used for output and directories creation
-  project_name: "netshell-board-orangepi-2g-iot"
+  project_name: "orangepi-2g-iot"
 
   # Definition of the repositories used for bootstrapping
   # There can be only one repo, thus its url is defined here

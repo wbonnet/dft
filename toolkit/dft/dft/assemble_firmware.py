@@ -390,14 +390,11 @@ class AssembleFirmware(CliCommand):
     # Reopenthe working file
     working_file = open(working_file_name, "a")
 
-
     working_file.write("\n")
     working_file.write("---------------------------------------------------------\n")
     working_file.write("generate_overlayfs_stacking\n")
     working_file.write("---------------------------------------------------------\n")
     working_file.write("\n")
-
-
 
     # Reopen the working file
     working_file = open(working_file_name, "a")
