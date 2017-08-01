@@ -141,4 +141,4 @@ project_definition:
   # DFT installation
   #
   targets:
-    - { version: stretch , board: orangepi-2g-iot }
+    - { version: stretch , board: orangepi-zero-2g-iot }
