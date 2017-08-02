@@ -413,7 +413,7 @@ class AssembleFirmware(CliCommand):
     # Iterates the stack items
     for item in self.project.firmware[Key.LAYOUT.value][Key.STACK_DEFINITION.value]:
       # Generate the mount point creation code
-      working_file.write("# Stack the   " + item[Key.STACK_ITEM.value][Key.TYPE.value] +
+      working_file.write("# Stack the " + item[Key.STACK_ITEM.value][Key.TYPE.value] +
                          " '" + item[Key.STACK_ITEM.value][Key.NAME.value] + "'\n")
 
       # Generate the tmpfs specific mount command
@@ -422,7 +422,7 @@ class AssembleFirmware(CliCommand):
         working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + ",upperdir=/mnt/dft/")
         working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "/mountpoint")
         working_file.write(",workdir=/mnt/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] +
-                           "/workdir\n")
+                           "/workdir")
         working_file.write(" " + item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + "\n")
 
       # Generate the tmpfs specific mount command
@@ -437,7 +437,7 @@ class AssembleFirmware(CliCommand):
         working_file.write("mount -t overlay overlay -olowerdir=")
         working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + ",upperdir=/mnt/dft/")
         working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value])
-        working_file.write(",workdir=/mnt/dft/workdir\n")
+        working_file.write(",workdir=/mnt/dft/workdir")
         working_file.write(" " + item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + "\n")
 
       working_file.write("\n")
