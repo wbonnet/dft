@@ -164,7 +164,7 @@ class AssembleFirmware(CliCommand):
 
     # Copy the stacking script to /tmp in the rootfs
     command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
-    command += " update-initramfs -u"
+    command += " update-initramfs -t -u"
     self.execute_command(command)
 
 
@@ -237,7 +237,9 @@ class AssembleFirmware(CliCommand):
       today = datetime.datetime.now()
 
       # Generate file header
-      working_file.write("#/bin/sh -ex\n")
+      working_file.write("#/bin/sh -x\n")
+      working_file.write("#\n")
+      working_file.write("set -e\n")
       working_file.write("#\n")
       working_file.write("# DFT Create Stack\n")
       working_file.write("#\n")
@@ -247,6 +249,21 @@ class AssembleFirmware(CliCommand):
       working_file.write("#\n")
       working_file.write("# Generation date : " + today.strftime("%d/%m/%Y - %H:%M.%S") + "\n")
       working_file.write("#\n")
+      working_file.write("\n")
+      working_file.write("\n")
+      working_file.write("\n")
+      working_file.write("PREREQ=""\n")
+      working_file.write("prereqs()\n")
+      working_file.write("{\n")
+      working_file.write("    echo \"$PREREQ\"\n")
+      working_file.write("}\n")
+      working_file.write("\n")
+      working_file.write("case $1 in\n")
+      working_file.write("prereqs)\n")
+      working_file.write("    prereqs\n")
+      working_file.write("    exit 0\n")
+      working_file.write("    ;;\n")
+      working_file.write("esac\n")
       working_file.write("\n")
 
     # Now it's done, let's close the file
