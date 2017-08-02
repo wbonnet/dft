@@ -756,7 +756,7 @@ class ProjectDefinition(object):
 
       # Defines the full path and filename to the init used by firmware
       self.init_filename = self.get_firmware_directory() + "/init"
-      self.stacking_script_filename = self.get_firmware_directory() + "/dft_create_stack.sh"
+      self.stacking_script_filename = self.get_firmware_directory() + "/dft_create_stack"
 
     # Handle exception that may occur when trying to open unknown files
     except OSError as exception:

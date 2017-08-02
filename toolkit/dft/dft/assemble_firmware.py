@@ -27,6 +27,7 @@ setting up the firmware in memory at system boot.
 
 import logging
 import os
+import stat
 import tempfile
 import datetime
 from cli_command import CliCommand
@@ -240,7 +241,7 @@ class AssembleFirmware(CliCommand):
       today = datetime.datetime.now()
 
       # Generate file header
-      working_file.write("#/bin/sh -e\n")
+      working_file.write("#/bin/sh -ex\n")
       working_file.write("#\n")
       working_file.write("# DFT Create Stack\n")
       working_file.write("#\n")
@@ -272,6 +273,10 @@ class AssembleFirmware(CliCommand):
       exit(1)
 
     # We are done with file generation, close it now
+
+    # Update stack script permissions. It has to be executable and world readable (not reuiered
+    # but easier to handle)
+    os.chmod(working_file.name, stat.S_IRWXU | stat.S_IRGRP | stat.S_IROTH)
 
     # Generate the file path
     filepath = self.project.stacking_script_filename
@@ -391,9 +396,9 @@ class AssembleFirmware(CliCommand):
     working_file = open(working_file_name, "a")
 
     working_file.write("\n")
-    working_file.write("---------------------------------------------------------\n")
-    working_file.write("generate_overlayfs_stacking\n")
-    working_file.write("---------------------------------------------------------\n")
+    working_file.write("# ---------------------------------------------------------\n")
+    working_file.write("# generate_overlayfs_stacking\n")
+    working_file.write("# ---------------------------------------------------------\n")
     working_file.write("\n")
 
     # Reopen the working file
