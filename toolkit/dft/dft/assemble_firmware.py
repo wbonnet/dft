@@ -204,14 +204,10 @@ class AssembleFirmware(CliCommand):
     # Output current task to logs
     logging.info("Deploying stacking scripts to target")
 
-    # Copy the stacking script to /tmp in the rootfs
-    command = 'cp ' + self.project.stacking_script_filename + " " + \
-                   self.project.get_rootfs_mountpoint() + '/tmp/'
-    self.execute_command(command)
-
-    # Copy the initramfs build hook to the hook dir in the generated rootfs
-    command = 'cp ' + self.project.get_dft_base() + "/scripts/add_dft_to_initramfs "
-    command += self.project.get_rootfs_mountpoint() + '/usr/share/initramfs-tools/hooks/'
+    # Copy the stacking script to /usr/share/initramfs-tools/script in the rootfs
+    command = 'cp ' + self.project.stacking_script_filename + " " +
+    command += self.project.get_rootfs_mountpoint()
+    command += '/usr/share/initramfs-tools/script/init-bottom'
     self.execute_command(command)
 
 
