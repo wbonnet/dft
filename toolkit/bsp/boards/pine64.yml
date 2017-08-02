@@ -37,9 +37,9 @@ architecture: arm64
 # debian, armbian, devuan and custom. Custom repository can be used, but URL is mandatory
 # and must be defined.
 #
-#kernel:
+kernel:
   # Defines the upstream site used to provide kernel for this device
-#  origin: armbian
+  origin: armbian
 
   # Defines the public key of the repository if not using default value.
   # Default keys are :
