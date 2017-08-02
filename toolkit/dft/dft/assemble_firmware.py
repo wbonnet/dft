@@ -207,7 +207,7 @@ class AssembleFirmware(CliCommand):
     # Copy the stacking script to /usr/share/initramfs-tools/script in the rootfs
     command = 'cp ' + self.project.stacking_script_filename + " "
     command += self.project.get_rootfs_mountpoint()
-    command += '/usr/share/initramfs-tools/script/init-bottom'
+    command += '/usr/share/initramfs-tools/scripts/init-bottom'
     self.execute_command(command)
 
 
