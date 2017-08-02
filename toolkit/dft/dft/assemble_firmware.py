@@ -205,7 +205,7 @@ class AssembleFirmware(CliCommand):
     logging.info("Deploying stacking scripts to target")
 
     # Copy the stacking script to /usr/share/initramfs-tools/script in the rootfs
-    command = 'cp ' + self.project.stacking_script_filename + " " +
+    command = 'cp ' + self.project.stacking_script_filename + " "
     command += self.project.get_rootfs_mountpoint()
     command += '/usr/share/initramfs-tools/script/init-bottom'
     self.execute_command(command)
