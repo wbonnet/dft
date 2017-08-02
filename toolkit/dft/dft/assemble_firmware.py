@@ -276,7 +276,8 @@ class AssembleFirmware(CliCommand):
 
     # Update stack script permissions. It has to be executable and world readable (not reuiered
     # but easier to handle)
-    os.chmod(working_file.name, stat.S_IRWXU | stat.S_IRGRP | stat.S_IROTH)
+    os.chmod(working_file.name, stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH |\
+             stat.S_IXOTH)
 
     # Generate the file path
     filepath = self.project.stacking_script_filename
