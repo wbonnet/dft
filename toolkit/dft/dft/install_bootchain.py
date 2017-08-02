@@ -26,6 +26,7 @@ generated rootfs. This chain contains uboot, kernel; initramfs and DTB.
 """
 
 import os
+import stat
 import logging
 import tempfile
 from cli_command import CliCommand
@@ -122,7 +123,7 @@ class InstallBootChain(CliCommand):
 
     # Control the package provider. So far only handles debian armbian and devuan
     if target[Key.BSP.value][Key.KERNEL.value][Key.ORIGIN.value] not in \
-      "devuan" "debian" "armbian":
+      "devuan" "debian" "armbian" "armwizard" :
       logging.error("Unknown kernel provider '" + target[Key.BSP.value][Key.ORIGIN.value] + "'")
       exit(1)
 
@@ -166,9 +167,29 @@ class InstallBootChain(CliCommand):
             repo_pub_key = target[Key.BSP.value][Key.KERNEL.value][Key.PUBKEY.value]
             logging.debug("Add Armbian signing key " + repo_pub_key)
 
+        elif target[Key.BSP.value][Key.KERNEL.value][Key.ORIGIN.value] == "armwizard":
+          # Defines the file name and content for armbian APT sources
+          logging.debug("Using ArmWizard repo as source provider. Adding armwizard.list")
+          filepath += "armwizard.list"
+          working_file.write("# deb http://apt.armwizard.org/debian " + target[Key.VERSION.value])
+          working_file.write(" bsp\n")
+
+          # Check if the public key of the repository is defined in the BSP file, otherwise
+          # Set the default value to 93D6889F9F0E78D5
+          if Key.PUBKEY.value not in target[Key.BSP.value][Key.KERNEL.value]:
+            repo_pub_key = "358F3893AF23DDDA17381B8D962EBD6B1B362699"
+            logging.debug("Using default Armwizard signing key " + repo_pub_key)
+          else:
+            repo_pub_key = target[Key.BSP.value][Key.KERNEL.value][Key.PUBKEY.value]
+            logging.debug("Add Armbian signing key " + repo_pub_key)
+
+      # Update new source file permissions. It has to be world readable
+      os.chmod(working_file.name, stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH)
+
       # Move the temporary file under the rootfs tree
       command = "mv -f " + working_file.name + " " + filepath
       self.execute_command(command)
+
 
       # Add a key to the know catalog signing keys
       self.add_catalog_signing_key(repo_pub_key)
