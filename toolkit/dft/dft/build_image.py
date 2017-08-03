@@ -658,7 +658,7 @@ class BuildImage(CliCommand):
 
     # Switch between firmware and rootfs copy
     if copy_rootfs:
-      # Iterate the list of fies in the rootfs and copy them to image
+      # Iterate the list of files in the rootfs and copy them to image
       for copy_target in os.listdir(self.project.get_rootfs_mountpoint()):
         copy_source_path = os.path.join(self.project.get_rootfs_mountpoint(), copy_target)
         copy_target_path = os.path.join(image_mount_root, copy_target)
