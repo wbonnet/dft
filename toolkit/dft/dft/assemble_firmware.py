@@ -107,11 +107,13 @@ class AssembleFirmware(CliCommand):
     if os.path.isfile(self.project.init_filename):
       os.remove(self.project.init_filename)
 
+    # Check if we are working with foreign arch
+    if self.use_qemu_static:
+      # QEMU is used, and we have to install it into the target
+      self.setup_qemu()
+
     # Generate the stacking script
     self.generate_stacking_scripts()
-
-    # Deploy scripts to the generated rootfs (in order to create the new initramfs)
-    self.deploy_stacking_scripts()
 
     # Install the packages and tools needed to create the updated bootchain
     self.install_initramfs_tools()
@@ -123,6 +125,10 @@ class AssembleFirmware(CliCommand):
     # Copy the new / updated bootchain from the rootfs to the output directory
     self.copy_bootchain_to_output()
 
+    # Remove QEMU if it has been isntalled. It has to be done in the end
+    # since some cleanup tasks could need QEMU
+    if self.use_qemu_static:
+      self.cleanup_qemu()
 
 
   # -------------------------------------------------------------------------
@@ -183,32 +189,13 @@ class AssembleFirmware(CliCommand):
     logging.info("Copying bootchain to firmware directory")
 
     # Copy the stacking script to /tmp in the rootfs
-    command = 'cp ' + self.project.get_rootfs_mountpoint() + '/boot/* ' + \
-                  self.project.get_firmware_directory()
-    self.execute_command(command)
+    source_dir = self.project.get_rootfs_mountpoint() + '/boot/'
 
-
-
-  # -------------------------------------------------------------------------
-  #
-  # deploy_stacking_scripts
-  #
-  # -------------------------------------------------------------------------
-  def deploy_stacking_scripts(self):
-    """This method deploys the stacking script and modification made to init
-    script to the rootfs generated during previous stages. This information
-    are used when the initramfs is created or updated. Stacking script is
-    included into the new initramfs, so are init modifications.
-    """
-
-    # Output current task to logs
-    logging.info("Deploying stacking scripts to target")
-
-    # Copy the stacking script to /usr/share/initramfs-tools/script in the rootfs
-    command = 'cp ' + self.project.stacking_script_filename + " "
-    command += self.project.get_rootfs_mountpoint()
-    command += '/usr/share/initramfs-tools/scripts/init-bottom'
-    self.execute_command(command)
+    for copy_target in os.listdir(source_dir):
+      copy_source_path = os.path.join(source_dir, copy_target)
+      copy_target_path = os.path.join(self.project.get_firmware_directory(), copy_target)
+      command = "cp -fra " + copy_source_path + " " + copy_target_path
+      self.execute_command(command)
 
 
 
@@ -293,10 +280,12 @@ class AssembleFirmware(CliCommand):
              stat.S_IXOTH)
 
     # Generate the file path
-    filepath = self.project.stacking_script_filename
+    filepath = self.project.get_rootfs_mountpoint()
+    filepath += '/usr/share/initramfs-tools/scripts/init-bottom/dft_create_stack'
 
     # And now we can move the temporary file under the rootfs tree
     command = "mv -f " + working_file.name + " " + filepath
+
     self.execute_command(command)
 
     # Final log

@@ -241,7 +241,6 @@ class Key(Enum):
   SQUASHFS_FILE = "squashfs_file"
   STACK_DEFINITION = "stack_definition"
   STACK_ITEM = "stack_item"
-  STACK_SCRIPT = "dft_stack_script.sh"
   START_SECTOR = "start_sector"
   STATUS = "status"
   STDOUT = "stdout"
@@ -452,7 +451,6 @@ class ProjectDefinition(object):
     self.archive_filename = None
     self.firmware_filename = None
     self.init_filename = None
-    self.stacking_script_filename = None
 
     self.targets = None
     self.rootfs = None
@@ -756,7 +754,6 @@ class ProjectDefinition(object):
 
       # Defines the full path and filename to the init used by firmware
       self.init_filename = self.get_firmware_directory() + "/init"
-      self.stacking_script_filename = self.get_firmware_directory() + "/dft_create_stack"
 
     # Handle exception that may occur when trying to open unknown files
     except OSError as exception:
