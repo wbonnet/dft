@@ -46,11 +46,11 @@ files:
   # This section defines the list of files to remove
   absent:
     # Remove a file
-    - /etc/deian_version
+    - /etc/debian_version
     # Remove a symlink
     - /etc/os-release
     # This test will fail since it removes a non existing file
-    - /etc/deian_version2
+    - /etc/debian_version2
     # This test will fail since it removes a non existing symlink
     - /etc/os-release2
 
