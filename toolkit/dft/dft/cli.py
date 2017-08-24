@@ -346,6 +346,8 @@ Available commands are :
                              choices=['debug', 'info', 'warning', 'error', 'critical'],
                              help="defines the minimal log level. Default value is  warning")
 
+
+
   # -------------------------------------------------------------------------
   #
   # run
