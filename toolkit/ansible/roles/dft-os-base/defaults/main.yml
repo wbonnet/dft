@@ -49,16 +49,16 @@ dft_timezone: "Etc/UTC"
 # The password field contains the plain text password (which is evil ! but sometime useful)
 # The password_hash contains the hahed value of the password. This variable has priority over
 # plain text value (if both are defined).
-dft_users:
-  - { name: "dft" ,
-      password: "dft" ,
+# dft_users:
+#  - { name: "dft" ,
+#      password: "dft" ,
 #      password_hash: "$6$2P36HIipn2AWBkoQ$o95Ooh0EodX8Rt9LFUW4zQNBYuIyu.i50THN9JWrKwPbnMjJMV1c97zX3HiBZ/CZYLQtxTlfDRj/TLDpQsIWp." ,
-      createhome: True ,
-      groups: 'sudo' ,
-      group: 'sudo' ,
-      shell: '/bin/bash'
+#      createhome: True ,
+#      groups: 'sudo' ,
+#      group: 'sudo' ,
+#      shell: '/bin/bash'
 #     generate_ssh_key: 'no',
 #     ssh_key_file: "dft.pub" ,
 #     ssh_key_options: "options_to_set",
 #     ssh_keys_are_exclusive: True
-    }
+#    }

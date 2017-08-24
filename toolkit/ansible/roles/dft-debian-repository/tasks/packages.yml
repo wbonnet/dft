@@ -30,7 +30,6 @@
 - name : DFT - Install reprepro
   apt: name={{ item }}
        state=latest
-       update_cache=true
        install_recommends=no
   with_items:
     - reprepro

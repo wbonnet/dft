@@ -8,11 +8,11 @@
 # License.
 #
 #
-# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).  
+# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
 # Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
 #
 #
 # Contributors list :
@@ -28,12 +28,11 @@
 
 ---
 #
-# Install firefox browser 
+# Install firefox browser
 #
 - name : DFT - Install firefox
-  apt: name={{ item }} 
-       state=latest 
-       update_cache=true
+  apt: name={{ item }}
+       state=latest
        install_recommends=no
   with_items:
     - firefox
@@ -43,8 +42,8 @@
 #
 - name : DFT - Create desktop autostart directory
   file: path=/home/{{ dft_username }}/.config/autostart
-        state=directory 
-        mode=0775 
+        state=directory
+        mode=0775
         recurse=yes
         owner={{ dft_username }}
         group={{ dft_usergroup }}
@@ -57,4 +56,4 @@
           dest=/home/{{ dft_username }}/.config/autostart/firefox.desktop
           owner={{ dft_username }}
           group={{ dft_usergroup }}
-          mode="u=rw,g=r,o=r"          
+          mode="u=rw,g=r,o=r"

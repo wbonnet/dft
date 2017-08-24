@@ -30,7 +30,6 @@
 - name : DFT - Install syslog-ng
   apt: name={{ item }}
        state=latest
-       update_cache=true
        install_recommends=no
   with_items:
     - syslog-ng

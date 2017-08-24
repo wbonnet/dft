@@ -40,7 +40,7 @@
 
 # Install the Apache Web server
 - name: Install Apache web server
-  apt: pkg=apache2 state=installed update_cache=true
+  apt: pkg=apache2 state=installed
 
 # Create the main archive target directory
 - name: Create the main archive target directory

@@ -8,11 +8,11 @@
 # License.
 #
 #
-# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).  
+# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
 # Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
 #
 #
 # Contributors list :
@@ -28,39 +28,38 @@
 
 ---
 - name : DFT - Install bind9
-  apt: name={{ item }} 
-       state=latest 
-       update_cache=true
+  apt: name={{ item }}
+       state=latest
        install_recommends=no
   with_items:
     - bind9
 
 - name : DFT - Setup bind9 zones
-  template: src=templates/zone.j2 
+  template: src=templates/zone.j2
             dest=/etc/bind/db.{{ dft_dns_server["zone"]["filename"] }}
-            owner=root 
-            group=root 
+            owner=root
+            group=root
             mode="u=rw,g=r,o=r"
 
 - name : DFT - Setup bind9 reverse zones
-  template: src=templates/reverse.j2 
+  template: src=templates/reverse.j2
             dest=/etc/bind/reverse.{{ dft_dns_server["zone"]["filename"] }}
-            owner=root 
-            group=root 
+            owner=root
+            group=root
             mode="u=rw,g=r,o=r"
 
 - name : DFT - Setup bind9 logging configuration
   copy: src=files/named.conf.log
         dest=/etc/bind/named.conf.log
-        owner=root 
-        group=root 
+        owner=root
+        group=root
         mode="u=rw,g=r,o=r"
 
 - name : DFT - Create bind9 logging directory
   file: dest=/var/log/bind
         state=directory
         owner=bind
-        group=bind 
+        group=bind
         mode="u=rwx,g=rx,o=rx"
 
 - name: DFT - Add log configuration to named.conf

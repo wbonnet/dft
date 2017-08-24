@@ -30,7 +30,6 @@
 - name : DFT - Install bootchart profiling tools
   apt: name={{ item }}
        state=latest
-       update_cache=true
        install_recommends=no
   with_items:
     - systemd-bootchart

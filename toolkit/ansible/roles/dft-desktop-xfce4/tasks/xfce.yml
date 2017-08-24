@@ -29,7 +29,6 @@
 - name : DFT - Install Xfce4 session and desktop
   apt: name={{ item }}
        state=latest
-       update_cache=true
        install_recommends=no
   with_items:
     - xfwm4
@@ -43,7 +42,6 @@
 - name : DFT - Install unclutter
   apt: name=unclutter
        state=latest
-       update_cache=true
        install_recommends=no
   when: ( dft_unclutter is defined and dft_unclutter == True )
 

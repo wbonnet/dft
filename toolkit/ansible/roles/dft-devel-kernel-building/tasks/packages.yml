@@ -30,7 +30,6 @@
 - name : DFT - Install software needed to build Linux kernel
   apt: name={{ item }}
        state=latest
-       update_cache=true
        install_recommends=no
   with_items:
     - bc
