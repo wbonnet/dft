@@ -38,9 +38,13 @@
         groups={{ dft_ftpsync_user_group }}
         append=yes
 
-# Install the Apache Web server
-- name: Install Apache web server
-  apt: pkg=apache2 state=installed
+- name : DFT - Install Apache2 Web server and rsync
+  apt: name={{ item }}
+       state=latest
+       install_recommends=no
+  with_items:
+    - apache2
+    - rsync
 
 # Create the main archive target directory
 - name: Create the main archive target directory
