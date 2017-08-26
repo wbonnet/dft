@@ -21,14 +21,11 @@
 #
 #
 
-#
-# Include the list of specific tasks. Tasks are separated into different
-# files, one file per functionnality.
-#
-
 ---
-- include: packages.yml
-- include: configuration.yml
-- include: ntp.yml
-- include: dhcp-client.yml
-- include: dns-resolver.yml
+- name : DFT - Configure DNS resolver
+  template: src=resolv.conf.j2
+            dest=/etc/resolv.conf
+            owner=root
+            group=root
+            mode="0644"
+  when: dft_dns_resolver
