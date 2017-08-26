@@ -32,13 +32,13 @@ dft_ntp_servers:
 
 # This variable defines the DNS resolver configuration. So far only standard /etc/resolv.conf
 # is supported.
-dft_dns_resolver:
+# dft_dns_resolver:
     # Defines the value of the search field
-   search: "search value"
+#   search: "search value"
     # Defines the value of the domain field
-   domain: "domain value"
+#   domain: "domain value"
     # Defines the list of actual known name servers
-   nameserver:
-     - server1
-     - server2
-     - server3
+#   nameserver:
+#     - server1
+#     - server2
+#     - server3
