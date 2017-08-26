@@ -28,4 +28,4 @@
             owner=root
             group=root
             mode="0644"
-  when: dft_dns_resolver
+  when: dft_dns_resolver is defined
