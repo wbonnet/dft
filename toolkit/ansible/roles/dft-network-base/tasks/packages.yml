@@ -39,3 +39,4 @@
     - ifupdown
     - traceroute
     - bind9-host
+    - net-tools
