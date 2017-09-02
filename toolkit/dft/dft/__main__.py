@@ -55,7 +55,7 @@ def main():
 
   # Compute execution time
   time_elapsed = time.time() - time_starting
-  print("Execution time %.2f seconds" % time_elapsed)
+  print("\n(Execution time %.2f seconds)" % time_elapsed)
 
   return ret_code
 
