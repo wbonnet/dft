@@ -191,11 +191,56 @@ class AssembleFirmware(CliCommand):
     # Copy the stacking script to /tmp in the rootfs
     source_dir = self.project.get_rootfs_mountpoint() + '/boot/'
 
+<<<<<<< HEAD
     for copy_target in os.listdir(source_dir):
       copy_source_path = os.path.join(source_dir, copy_target)
       copy_target_path = os.path.join(self.project.get_firmware_directory(), copy_target)
       command = "cp -fra " + copy_source_path + " " + copy_target_path
       self.execute_command(command)
+=======
+
+
+  # -------------------------------------------------------------------------
+  #
+  # deploy_stacking_scripts
+  #
+  # -------------------------------------------------------------------------
+  def deploy_stacking_scripts(self):
+    """This method deploys the stacking script and modification made to init
+    script to the rootfs generated during previous stages. This information
+    are used when the initramfs is created or updated. Stacking script is
+    included into the new initramfs, so are init modifications.
+    """
+
+    # Output current task to logs
+    logging.info("Deploying stacking scripts to target")
+
+    # Generate the target dir (sscript opy destination)
+    target = self.project.get_rootfs_mountpoint() + '/usr/share/initramfs-tools/scripts/local-bottom/'
+
+    # Check if the directory local-top exists, if not, create it
+    if not os.path.isdir(target):
+      os.makedirs(target)
+
+    # Copy the stacking script to /usr/share/initramfs-tools/script in the rootfs
+    command = 'cp ' + self.project.stacking_script_filename + " " + target
+    self.execute_command(command)
+
+    # Create a file in modules.d to ensure that squashfs and overlay modules are present
+    #T TODO handle as parameters incase of builtin ?
+    with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
+      # Generate file header
+      working_file.write("squashfs\n")
+      working_file.write("overlayfs\n")
+
+    # Done close the file
+    working_file.close()
+
+    # And now we can move the temporary file under the rootfs tree
+    filepath = self.project.get_rootfs_mountpoint() + '/usr/share/initramfs-tools/modules.d/'
+    command = "mv -f " + working_file.name + " " + filepath + "extra-fs"
+    self.execute_command(command)
+>>>>>>> Wip on assemble firmware
 
 
 
@@ -216,7 +261,6 @@ class AssembleFirmware(CliCommand):
     # Output current task to logs
     logging.info("Generating stacking scripts")
 
-
     # Generate the stacking script
     # configuration, then move  roles to the target rootfs
     with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
@@ -224,9 +268,9 @@ class AssembleFirmware(CliCommand):
       today = datetime.datetime.now()
 
       # Generate file header
-      working_file.write("#/bin/sh -x\n")
+      working_file.write("#/bin/sh -e\n")
       working_file.write("#\n")
-      working_file.write("set -e\n")
+      working_file.write("set -x\n")
       working_file.write("#\n")
       working_file.write("# DFT Create Stack\n")
       working_file.write("#\n")
@@ -236,8 +280,6 @@ class AssembleFirmware(CliCommand):
       working_file.write("#\n")
       working_file.write("# Generation date : " + today.strftime("%d/%m/%Y - %H:%M.%S") + "\n")
       working_file.write("#\n")
-      working_file.write("\n")
-      working_file.write("\n")
       working_file.write("\n")
       working_file.write("PREREQ=""\n")
       working_file.write("prereqs()\n")
@@ -315,9 +357,9 @@ class AssembleFirmware(CliCommand):
       self.project.logging.critical("The stack definition is not in the configuration file")
       exit(1)
 
-    # Create the workdir
+   # Create the workdir
     working_file.write("# Create the workdir directory\n")
-    working_file.write("mkdir -p /mnt/dft/workdir\n")
+    working_file.write("mkdir -p /root/mnt/dft/workdir\n")
     working_file.write("\n")
 
     # Iterates the stack items
@@ -326,7 +368,7 @@ class AssembleFirmware(CliCommand):
       working_file.write("# Create the mount point for " + item[Key.STACK_ITEM.value]\
                          [Key.TYPE.value] + " '" + item[Key.STACK_ITEM.value][Key.NAME.value] +
                          "'\n")
-      working_file.write("mkdir -p /mnt/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
+      working_file.write("mkdir -p /root/mnt/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
       working_file.write("\n")
 
       # Generate the mount commands
@@ -343,24 +385,24 @@ class AssembleFirmware(CliCommand):
           working_file.write("-o " + item[Key.STACK_ITEM.value][Key.MOUNT_OPTIONS.value] + " ")
 
         # Complete the mount command
-        working_file.write("tmpfs /mnt/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
-        working_file.write("mkdir /mnt/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] +
+        working_file.write("tmpfs /root/mnt/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
+        working_file.write("mkdir -p /root/mnt/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] +
                            "/workdir\n")
-        working_file.write("mkdir /mnt/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] +
+        working_file.write("mkdir -p /root/mnt/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] +
                            "/mountpoint\n")
 
-      # Generate the tmpfs specific mount command
+          # Generate the tmpfs specific mount command
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.SQUASHFS.value:
-        working_file.write("mount -t squashfs ")
+        working_file.write("mount -t squashfs  -o loop")
 
         # Is there some defined options ?
         if "mount-options" in item[Key.STACK_ITEM.value]:
           # Yes, then append the options to the command
-          working_file.write("-o " + item[Key.STACK_ITEM.value][Key.MOUNT_OPTIONS.value] + " ")
+          working_file.write("," + item[Key.STACK_ITEM.value][Key.MOUNT_OPTIONS.value])
 
         # Complete the mount command
-        working_file.write(item[Key.STACK_ITEM.value][Key.SQUASHFS_FILE.value] + " /mnt/dft/" +
-                           item[Key.STACK_ITEM.value][Key.NAME.value] + " -o loop\n")
+        working_file.write(" /root/boot/" + item[Key.STACK_ITEM.value][Key.SQUASHFS_FILE.value] + " /root/mnt/dft/" +
+                           item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
 
       # Generate the tmpfs specific mount command
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.PARTITION.value:
@@ -372,10 +414,12 @@ class AssembleFirmware(CliCommand):
           working_file.write("-o " + item[Key.STACK_ITEM.value]["mount-options"] + " ")
 
         # Complete the mount command
-        working_file.write(item[Key.STACK_ITEM.value][Key.PARTITION.value] + " /mnt/dft/" +
+        working_file.write(item[Key.STACK_ITEM.value][Key.PARTITION.value] + " /root/mnt/dft/" +
                            item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
 
       working_file.write("\n")
+      working_file.write("mount\n")
+      working_file.write("ls /root/mnt/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
 
     # We are done here, now close the file
     working_file.close()
@@ -401,7 +445,7 @@ class AssembleFirmware(CliCommand):
     working_file.write("\n")
     working_file.write("# ---------------------------------------------------------\n")
     working_file.write("# generate_overlayfs_stacking\n")
-    working_file.write("# ---------------------------------------------------------\n")
+    working_file.write("# ----------------------------------------------------------\n")
     working_file.write("\n")
 
     # Reopen the working file
@@ -421,15 +465,15 @@ class AssembleFirmware(CliCommand):
       # Generate the tmpfs specific mount command
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.TMPFS.value:
         working_file.write("mount -t overlay overlay -olowerdir=")
-        working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + ",upperdir=/mnt/dft/")
+        working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + ",upperdir=/root/mnt/dft/")
         working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "/mountpoint")
-        working_file.write(",workdir=/mnt/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] +
+        working_file.write(",workdir=/root/mnt/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] +
                            "/workdir")
         working_file.write(" " + item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + "\n")
 
       # Generate the tmpfs specific mount command
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.SQUASHFS.value:
-        working_file.write("mount -t overlay overlay -olowerdir=/mnt/dft/")
+        working_file.write("mount -t overlay overlay -olowerdir=/root/mnt/dft/")
         working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + ":" +
                            item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value])
         working_file.write(" " + item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + "\n")
@@ -437,9 +481,9 @@ class AssembleFirmware(CliCommand):
       # Generate the tmpfs specific mount command
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.PARTITION.value:
         working_file.write("mount -t overlay overlay -olowerdir=")
-        working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + ",upperdir=/mnt/dft/")
+        working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + ",upperdir=/root/mnt/dft/")
         working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value])
-        working_file.write(",workdir=/mnt/dft/workdir")
+        working_file.write(",workdir=/root/mnt/dft/workdir")
         working_file.write(" " + item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + "\n")
 
       working_file.write("\n")
@@ -470,3 +514,24 @@ class AssembleFirmware(CliCommand):
 
     # We are done here, now close the file
     working_file.close()
+
+
+
+# Il me manque la racine qui contient le firmware !
+# Je suis dans l'initramfs, je devrais donc trouver un moyen de monter une racine
+# et la je peux charger ce que je veux
+# probleme il me faut une vraie reflexion coté design et penser a ce que je veux faire des
+# firmwares usine
+
+# surement coder la logique dans l'initramfs ?
+# et ui connait les banks
+# chaque bank est une partoche qui contient que ses firmware ?
+# ou plutot c'est un tout cohérent avec ses noayxu etc.
+
+# faire schema
+
+# PS: K + D + I + F
+# B0: K + D + I + F
+# B1: K + D + I + F
+
+# Ciph ?

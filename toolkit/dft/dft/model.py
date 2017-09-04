@@ -884,3 +884,6 @@ class ProjectDefinition(object):
 
     # Now a value is defined, just return it
     return self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value]
+
+
+# TODO : rename dftconfig and  dft project withouT dft
