@@ -27,26 +27,29 @@ dft_openssh:
   # Defines the default values of the openssh server in order to provide some basic
   # hardening (according to lynis output)
   sshd:
-    - allow_tcp_forwarding: False
-    - client_alive_count_max: 2
+    allow_tcp_forwarding: "no"
+    client_alive_count_max: 2
 #   * Consider hardening SSH configuration [SSH-7408]
 #    - Details  : Compression (YES --> NO)
 #      https://cisofy.com/controls/SSH-7408/
 # TODO    - compression: False
-    - log_level: VERBOSE
-    - max_auth_tries: 2
-    - max_sessions: 2
-    - permit_root_login: No
-    - port: 2222
-    - tcp_keep_alive: No
-    - x11_formwarding: No
-    - allow_agent_forwarding: No
+    log_level: VERBOSE
+    max_auth_tries: 2
+    max_sessions: 2
+    permit_root_login: "no"
+    port: 2222
+    tcp_keep_alive: "no"
+    x11_forwarding: "no"
+    allow_agent_forwarding: "no"
+    verify_reverse_mapping: "no"
+    compression: "no"
+
   # Defines the default values of the openssh client in order to provide some basic
   # hardening (according to lynis output)
   ssh:
     hosts:
       - name: "*"
-        forward_x11_trusted: No
+        forward_x11_trusted: "no"
 
 # -------------------------------------------------------------------------------------------------
 

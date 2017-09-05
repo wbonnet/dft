@@ -3,11 +3,17 @@
 # possible, but leave them commented.  Uncommented options override the
 # default value.
 
+{% if dft_openssh.sshd.protocol is defined %}
+Protocol {{ dft_openssh.sshd.protocol }}
+{% else %}
+Protocol 2
+{% endif %}
 {% if dft_openssh.sshd.port is defined %}
 Port {{ dft_openssh.sshd.port }}
 {% else %}
 #Port 22
 {% endif %}
+
 {% if dft_openssh.sshd.address_family is defined %}
 AddressFamily {{ dft_openssh.sshd.address_family }}
 {% else %}
@@ -17,7 +23,7 @@ AddressFamily {{ dft_openssh.sshd.address_family }}
 {% for listen_address in dft_openssh.sshd.listen_addresses %}
 ListenAddress {{ dft_openssh.sshd.listen_addresses.listen_address }}
 {% endfor %}
-% else %}
+{% else %}
 #ListenAddress 0.0.0.0
 #ListenAddress ::
 {% endif %}
@@ -26,7 +32,7 @@ ListenAddress {{ dft_openssh.sshd.listen_addresses.listen_address }}
 {% for host_key in dft_openssh.sshd.host_keys %}
 HostKey {{ dft_openssh.sshd.host_keys.host_key }}
 {% endfor %}
-% else %}
+{% else %}
 #HostKey /etc/ssh/ssh_host_rsa_key
 #HostKey /etc/ssh/ssh_host_dsa_key
 #HostKey /etc/ssh/ssh_host_ecdsa_key
@@ -35,7 +41,7 @@ HostKey {{ dft_openssh.sshd.host_keys.host_key }}
 
 # Ciphers and keying
 {% if dft_openssh.sshd.rekey_limit is defined %}
-RekeyLimit Port {{ dft_openssh.sshd.rekey_limit }}
+RekeyLimit {{ dft_openssh.sshd.rekey_limit }}
 {% else %}
 #RekeyLimit default none
 {% endif %}
@@ -47,7 +53,7 @@ SyslogFacility {{ dft_openssh.sshd.syslog_facility }}
 #SyslogFacility AUTH
 {% endif %}
 {% if dft_openssh.sshd.log_level is defined %}
-LogLevel Port {{ dft_openssh.sshd.loglevel }}
+LogLevel {{ dft_openssh.sshd.log_level }}
 {% else %}
 #LogLevel INFO
 {% endif %}
@@ -60,11 +66,11 @@ LoginGraceTime {{ dft_openssh.sshd.login_grace_time }}
 #LoginGraceTime 2m
 {% endif %}
 {% if dft_openssh.sshd.permit_root_login is defined %}
-PermitRootLogin Port {{ dft_openssh.sshd.permit_root_login }}
+PermitRootLogin {{ dft_openssh.sshd.permit_root_login }}
 {% else %}
 #PermitRootLogin prohibit-password
 {% endif %}
-{% if dft_openssh.sshd.port is defined %}
+{% if dft_openssh.sshd.strict_modes is defined %}
 StrictModes {{ dft_openssh.sshd.strict_modes }}
 {% else %}
 #StrictModes yes
@@ -141,6 +147,34 @@ PasswordAuthentication {{ dft_openssh.sshd.password_authentication }}
 PermitEmptyPasswords {{ dft_openssh.sshd.permit_empty_passwords }}
 {% else %}
 #PermitEmptyPasswords no
+{% endif %}
+
+# Identify the list of user allowed to connect
+{% if dft_openssh.sshd.allow_users is defined %}
+AllowUsers {{ dft_openssh.sshd.allow_users }}
+{% else %}
+#AllowUsers
+{% endif %}
+
+# Identify the list of user denied to connect
+{% if dft_openssh.sshd.deny_users is defined %}
+DenyUsers {{ dft_openssh.sshd.deny_users }}
+{% else %}
+#DenyUsers
+{% endif %}
+
+# Identify the list of groups allowed to connect
+{% if dft_openssh.sshd.allow_groups is defined %}
+AllowGroups {{ dft_openssh.sshd.allow_groups }}
+{% else %}
+#AllowGroups
+{% endif %}
+
+# Identify the list of groups denied to connect
+{% if dft_openssh.sshd.deny_groups is defined %}
+DenyGroups {{ dft_openssh.sshd.deny_groups }}
+{% else %}
+#DenyGroups
 {% endif %}
 
 # Change to yes to enable challenge-response passwords (beware issues with
@@ -327,6 +361,14 @@ VersionAddendum {{ dft_openssh.sshd.version_addendum }}
 Banner {{ dft_openssh.sshd.banner }}
 {% else %}
 #Banner none
+{% endif %}
+
+# Defines if sshd tries to check that remote computer IP and IP from reverse DNS resolution are
+# the same
+{% if dft_openssh.sshd.verify_reverse_mapping is defined %}
+VerifyReverseMapping {{ dft_openssh.sshd.verify_reverse_mapping }}
+{% else %}
+#VerifyReverseMapping no
 {% endif %}
 
 # Allow client to pass locale environment variables
