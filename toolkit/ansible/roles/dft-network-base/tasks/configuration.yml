@@ -33,3 +33,5 @@
             owner=root
             group=root
             mode="0664"
+  # Excute this task only if an interfaces variable is defined
+  when: dft_network_interfaces is defined
