@@ -256,14 +256,14 @@ include /etc/logrotate.d
 # no packages own wtmp, or btmp -- we'll rotate them here
 /var/log/wtmp {
     missingok
-    monthly
+    weekly
     create 0664 root utmp
     rotate 1
 }
 
 /var/log/btmp {
     missingok
-    monthly
+    weekly
     create 0660 root utmp
     rotate 1
 }
