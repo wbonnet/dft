@@ -1,0 +1,74 @@
+# prevent startup with default configuration
+# set the following varible to 1 in order to allow Shorewall to start
+
+{%if dft_shorewall.default.wait_interface is defined %}
+startup={{ dft_shorewall.default.startup }}
+{% else %}
+startup=0
+{% endif %}
+
+
+# If your Shorewall configuration requires detection of the ip address of a ppp
+# interface, you must list such interfaces in "wait_interface" to get Shorewall
+# to wait until the interface is configured. Otherwise the script will fail
+# because it won't be able to detect the IP address.
+#
+# Example:
+#    wait_interface="ppp0"
+# or
+#    wait_interface="ppp0 ppp1"
+# or, if you have defined  in /etc/shorewall/params
+#    wait_interface=
+{%if dft_shorewall.default.wait_interface is defined %}
+wait_interface={{ dft_shorewall.default.wait_interface }}
+{% else %}
+wait_interface=
+{% endif %}
+
+#
+# Global start/restart options
+#
+{%if dft_shorewall.default.options is defined %}
+OPTIONS="{{ dft_shorewall.default.options }}"
+{% else %}
+OPTIONS=""
+{% endif %}
+
+#
+# Start options
+#
+{%if dft_shorewall.default.start_options is defined %}
+STARTOPTIONS="{{ dft_shorewall.default.start_options }}"
+{% else %}
+STARTOPTIONS=""
+{% endif %}
+
+#
+# Restart options
+#
+{%if dft_shorewall.default.restart_options is defined %}
+RESTARTOPTIONS="{{ dft_shorewall.default.restart_options }}"
+{% else %}
+RESTARTOPTIONS=""
+{% endif %}
+
+#
+# Init Log -- if /dev/null, use the STARTUP_LOG defined in shorewall.conf
+#
+{%if dft_shorewall.default.init_log is defined %}
+INITLOG={{ dft_shorewall.default.init_log }}
+{% else %}
+INITLOG=/dev/null
+{% endif %}
+
+#
+# Set this to 1 to cause '/etc/init.d/shorewall stop' to place the firewall in
+# a safe state rather than to open it
+#
+{%if dft_shorewall.default.safe_stop is defined %}
+SAFESTOP={{ dft_shorewall.default.safe_stop }}
+{% else %}
+SAFESTOP=0
+{% endif %}
+
+# EOF

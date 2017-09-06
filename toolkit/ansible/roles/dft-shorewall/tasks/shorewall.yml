@@ -33,3 +33,10 @@
        install_recommends=no
   with_items:
     - shorewall
+
+- name: DFT - Configure /etc/default/shorewall
+  template: src=default-shorexwall.j2
+            dest=/etc/default/shorewall
+            owner=root
+            group=root
+            mode="0644"
