@@ -35,7 +35,7 @@
     - shorewall
 
 - name: DFT - Configure /etc/default/shorewall
-  template: src=default-shorexwall.j2
+  template: src=default-shorewall.j2
             dest=/etc/default/shorewall
             owner=root
             group=root
