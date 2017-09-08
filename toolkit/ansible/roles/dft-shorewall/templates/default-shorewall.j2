@@ -1,7 +1,7 @@
 # prevent startup with default configuration
 # set the following varible to 1 in order to allow Shorewall to start
 
-{%if dft_shorewall.default.startup is defined %}
+{% if dft_shorewall.default.startup is defined %}
 startup={{ dft_shorewall.default.startup }}
 {% else %}
 startup=0
@@ -18,7 +18,7 @@ startup=0
 #    wait_interface="ppp0 ppp1"
 # or, if you have defined  in /etc/shorewall/params
 #    wait_interface=
-{%if dft_shorewall.default.wait_interface is defined %}
+{% if dft_shorewall.default.wait_interface is defined %}
 wait_interface={{ dft_shorewall.default.wait_interface }}
 {% else %}
 wait_interface=
@@ -27,7 +27,7 @@ wait_interface=
 #
 # Global start/restart options
 #
-{%if dft_shorewall.default.options is defined %}
+{% if dft_shorewall.default.options is defined %}
 OPTIONS="{{ dft_shorewall.default.options }}"
 {% else %}
 OPTIONS=""
@@ -36,7 +36,7 @@ OPTIONS=""
 #
 # Start options
 #
-{%if dft_shorewall.default.start_options is defined %}
+{% if dft_shorewall.default.start_options is defined %}
 STARTOPTIONS="{{ dft_shorewall.default.start_options }}"
 {% else %}
 STARTOPTIONS=""
@@ -45,7 +45,7 @@ STARTOPTIONS=""
 #
 # Restart options
 #
-{%if dft_shorewall.default.restart_options is defined %}
+{% if dft_shorewall.default.restart_options is defined %}
 RESTARTOPTIONS="{{ dft_shorewall.default.restart_options }}"
 {% else %}
 RESTARTOPTIONS=""
@@ -54,7 +54,7 @@ RESTARTOPTIONS=""
 #
 # Init Log -- if /dev/null, use the STARTUP_LOG defined in shorewall.conf
 #
-{%if dft_shorewall.default.init_log is defined %}
+{% if dft_shorewall.default.init_log is defined %}
 INITLOG={{ dft_shorewall.default.init_log }}
 {% else %}
 INITLOG=/dev/null
@@ -64,7 +64,7 @@ INITLOG=/dev/null
 # Set this to 1 to cause '/etc/init.d/shorewall stop' to place the firewall in
 # a safe state rather than to open it
 #
-{%if dft_shorewall.default.safe_stop is defined %}
+{% if dft_shorewall.default.safe_stop is defined %}
 SAFESTOP={{ dft_shorewall.default.safe_stop }}
 {% else %}
 SAFESTOP=0

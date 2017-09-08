@@ -21,7 +21,13 @@
 #
 #
 
+#
+# Defines the default values used to initialize shorewall iptable frontend
+#
 dft_shorewall:
+  #
+  # This section controls the content of the /etc/default/shorewall file
+  #
   default:
     # set the following varible to 1 in order to allow Shorewall to start
     startup: 1
@@ -50,3 +56,45 @@ dft_shorewall:
     # Set this to 1 to cause '/etc/init.d/shorewall stop' to place the firewall in
     # a safe state rather than to open it. Default value is 0
     # safe_stop:
+
+  #
+  # This section controls the content of the /etc/shorewall/params file
+  #
+  # params:
+    # Params contains a list of tuple composed of name and value keys. Each entry
+    # defines a variable
+    # - name: VARIABLE_1
+    #   value: "value of variable 1"
+    # - name: VARIABLE_2
+    #   value: "value of variable 2"
+
+
+  #
+  # This section controls the content of the /etc/shorewall/policy file
+  #
+  policy:
+    # Params contains a list of tuple composed of source dest and policy (all three are mandatories)
+    # and (optionaly) comment, log_level and limit_burst. Each entry defines a policy line
+    - comment: "Policy for connections initiated from zone lan"
+      source: lan
+      dest: net
+      policy: ACCEPT
+    - source: lan
+      dest: $FW
+      policy: ACCEPT
+    - comment: "Policy for connections initiated from zone $FW"
+      source: $FW
+      dest: net
+      policy: ACCEPT
+    - source: $FW
+      dest: lan
+      policy: ACCEPT
+    - comment: "Policy for connections initiated from zone net"
+      source: net
+      dest: $FW
+      policy: DROP
+      log_level: info
+      source: net
+      dest: lan
+      policy: DROP
+      log_level: info

@@ -39,4 +39,20 @@
             dest=/etc/default/shorewall
             owner=root
             group=root
-            mode="0644"
+            mode="0640"
+
+- name: DFT - Configure /etc/shorewall/params
+  template: src=params.j2
+            dest=/etc/shorewall/params
+            owner=root
+            group=root
+            mode="0640"
+  when: dft_shorewall.params is defined
+
+- name: DFT - Configure /etc/shorewall/policy
+  template: src=policy.j2
+            dest=/etc/shorewall/policy
+            owner=root
+            group=root
+            mode="0640"
+  when: dft_shorewall.policy is defined
