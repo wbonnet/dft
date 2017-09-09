@@ -1,140 +1,656 @@
+# -------------------------------------------------------------------------------------------------
 # General configuration
+# -------------------------------------------------------------------------------------------------
+{% if dft_shorewall is defined and dft_shorewall.startup_enabled is defined %}
+STARTUP_ENABLED={{ dft_shorewall.startup_enabled }}
+{% else %}
 STARTUP_ENABLED=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.verbosity is defined %}
+VERBOSITY={{ dft_shorewall.verbosity }}
+{% else %}
 VERBOSITY=1
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.pager is defined %}
+PAGER={{ dft_shorewall.pager }}
+{% else %}
 PAGER=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.firewall is defined %}
+FIREWALL={{ dft_shorewall.firewall }}
+{% else %}
 FIREWALL=
+{% endif %}
 
+# -------------------------------------------------------------------------------------------------
 # Logging
+# -------------------------------------------------------------------------------------------------
+{% if dft_shorewall is defined and dft_shorewall.blacklist_log_level is defined %}
+BLACKLIST_LOG_LEVEL={{ dft_shorewall.blacklist_log_level }}
+{% else %}
 BLACKLIST_LOG_LEVEL=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.invalid_log_level is defined %}
+INVALID_LOG_LEVEL={{ dft_shorewall.invalid_log_level }}
+{% else %}
 INVALID_LOG_LEVEL=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.log_backend is defined %}
+LOG_BACKEND={{ dft_shorewall.log_backend }}
+{% else %}
 LOG_BACKEND=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.log_martians is defined %}
+LOG_MARTIANS={{ dft_shorewall.log_martians }}
+{% else %}
 LOG_MARTIANS=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.log_verbosity is defined %}
+LOG_VERBOSITY={{ dft_shorewall.log_verbosity }}
+{% else %}
 LOG_VERBOSITY=2
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.logallnew is defined %}
+LOGALLNEW={{ dft_shorewall.logallnew }}
+{% else %}
 LOGALLNEW=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.logfile is defined %}
+LOGFILE={{ dft_shorewall.logfile }}
+{% else %}
 LOGFILE=/var/log/shorewall.log
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.logformat is defined %}
+LOGFORMAT={{ dft_shorewall.logformat }}
+{% else %}
 LOGFORMAT="Shorewall:%s:%s:"
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.logtagonly is defined %}
+LOGTAGONLY={{ dft_shorewall.logtagonly }}
+{% else %}
 LOGTAGONLY=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.loglimit is defined %}
+LOGLIMIT={{ dft_shorewall.loglimit }}
+{% else %}
 LOGLIMIT=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.maclist_log_level is defined %}
+MACLIST_LOG_LEVEL={{ dft_shorewall.maclist_log_level }}
+{% else %}
 MACLIST_LOG_LEVEL=info
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.related_log_level is defined %}
+RELATED_LOG_LEVEL={{ dft_shorewall.related_log_level }}
+{% else %}
 RELATED_LOG_LEVEL=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.pfilter_log_level is defined %}
+PFILTER_LOG_LEVEL={{ dft_shorewall.pfilter_log_level }}
+{% else %}
 PFILTER_LOG_LEVEL=info
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.sfilter_log_level is defined %}
+SFILTER_LOG_LEVEL={{ dft_shorewall.sfilter_log_level }}
+{% else %}
 SFILTER_LOG_LEVEL=info
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.smurf_log_level is defined %}
+SMURF_LOG_LEVEL={{ dft_shorewall.smurf_log_level }}
+{% else %}
 SMURF_LOG_LEVEL=info
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.startup_log is defined %}
+STARTUP_LOG={{ dft_shorewall.startup_log }}
+{% else %}
 STARTUP_LOG=/var/log/shorewall-init.log
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.tcp_flags_log_level is defined %}
+TCP_FLAGS_LOG_LEVEL={{ dft_shorewall.tcp_flags_log_level }}
+{% else %}
 TCP_FLAGS_LOG_LEVEL=info
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.untracked_log_level is defined %}
+UNTRACKED_LOG_LEVEL={{ dft_shorewall.untracked_log_level }}
+{% else %}
 UNTRACKED_LOG_LEVEL=
+{% endif %}
 
+# -------------------------------------------------------------------------------------------------
 # Location offiles and directories
+# -------------------------------------------------------------------------------------------------
+{% if dft_shorewall is defined and dft_shorewall.arptables is defined %}
+ARPTABLES={{ dft_shorewall.arptables }}
+{% else %}
 ARPTABLES=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.config_path is defined %}
+CONFIG_PATH={{ dft_shorewall.config_path }}
+{% else %}
 CONFIG_PATH="${CONFDIR}/shorewall:${SHAREDIR}/shorewall"
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.geoipdir is defined %}
+GEOIPDIR={{ dft_shorewall.geoipdir }}
+{% else %}
 GEOIPDIR=/usr/share/xt_geoip/LE
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.iptables is defined %}
+IPTABLES={{ dft_shorewall.iptables }}
+{% else %}
 IPTABLES=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.ip is defined %}
+IP={{ dft_shorewall.ip }}
+{% else %}
 IP=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.ipset is defined %}
+IPSET={{ dft_shorewall.ipset }}
+{% else %}
 IPSET=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.lockfile is defined %}
+LOCKFILE={{ dft_shorewall.lockfile }}
+{% else %}
 LOCKFILE=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.modulesdir is defined %}
+MODULESDIR={{ dft_shorewall.modulesdir }}
+{% else %}
 MODULESDIR=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.nfacct is defined %}
+NFACCT={{ dft_shorewall.nfacct }}
+{% else %}
 NFACCT=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.path is defined %}
+PATH={{ dft_shorewall.path }}
+{% else %}
 PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin"
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.perl is defined %}
+PERL={{ dft_shorewall.perl }}
+{% else %}
 PERL=/usr/bin/perl
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.restorefile is defined %}
+RESTOREFILE={{ dft_shorewall.restorefile }}
+{% else %}
 RESTOREFILE=restore
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.shorewall_shell is defined %}
+SHOREWALL_SHELL={{ dft_shorewall.shorewall_shell }}
+{% else %}
 SHOREWALL_SHELL=/bin/sh
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.subsyslock is defined %}
+SUBSYSLOCK={{ dft_shorewall.subsyslock }}
+{% else %}
 SUBSYSLOCK=""
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.tc is defined %}
+TC={{ dft_shorewall.tc }}
+{% else %}
 TC=
+{% endif %}
 
+# -------------------------------------------------------------------------------------------------
 # Default actions & macros
+# -------------------------------------------------------------------------------------------------
+{% if dft_shorewall is defined and dft_shorewall.accept_default is defined %}
+ACCEPT_DEFAULT={{ dft_shorewall.accept_default }}
+{% else %}
 ACCEPT_DEFAULT=none
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.drop_default is defined %}
+DROP_DEFAULT={{ dft_shorewall.drop_default }}
+{% else %}
 DROP_DEFAULT=Drop
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.nfqueue_default is defined %}
+NFQUEUE_DEFAULT={{ dft_shorewall.nfqueue_default }}
+{% else %}
 NFQUEUE_DEFAULT=none
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.queue_default is defined %}
+QUEUE_DEFAULT={{ dft_shorewall.queue_default }}
+{% else %}
 QUEUE_DEFAULT=none
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.reject_default is defined %}
+REJECT_DEFAULT={{ dft_shorewall.reject_default }}
+{% else %}
 REJECT_DEFAULT=Reject
+{% endif %}
 
+# -------------------------------------------------------------------------------------------------
 # RSH & RCP commands
+# -------------------------------------------------------------------------------------------------
+{% if dft_shorewall is defined and dft_shorewall.rcp_command is defined %}
+RCP_COMMAND={{ dft_shorewall.rcp_command }}
+{% else %}
 RCP_COMMAND='scp ${files} ${root}@${system}:${destination}'
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.rsh_command is defined %}
+RSH_COMMAND={{ dft_shorewall.rsh_command }}
+{% else %}
 RSH_COMMAND='ssh ${root}@${system} ${command}'
+{% endif %}
 
+# -------------------------------------------------------------------------------------------------
 # Firewall options
+# -------------------------------------------------------------------------------------------------
+{% if dft_shorewall is defined and dft_shorewall.accounting is defined %}
+ACCOUNTING={{ dft_shorewall.accounting }}
+{% else %}
 ACCOUNTING=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.accounting_table is defined %}
+ACCOUNTING_TABLE={{ dft_shorewall.accounting_table }}
+{% else %}
 ACCOUNTING_TABLE=filter
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.add_ip_aliases is defined %}
+ADD_IP_ALIASES={{ dft_shorewall.add_ip_aliases }}
+{% else %}
 ADD_IP_ALIASES=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.add_snat_aliases is defined %}
+ADD_SNAT_ALIASES={{ dft_shorewall.add_snat_aliases }}
+{% else %}
 ADD_SNAT_ALIASES=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.adminisabsentminded is defined %}
+ADMINISABSENTMINDED={{ dft_shorewall.adminisabsentminded }}
+{% else %}
 ADMINISABSENTMINDED=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.autocomment is defined %}
+AUTOCOMMENT={{ dft_shorewall.autocomment }}
+{% else %}
 AUTOCOMMENT=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.autohelpers is defined %}
+AUTOHELPERS={{ dft_shorewall.autohelpers }}
+{% else %}
 AUTOHELPERS=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.automake is defined %}
+AUTOMAKE={{ dft_shorewall.automake }}
+{% else %}
 AUTOMAKE=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.basic_filters is defined %}
+BASIC_FILTERS={{ dft_shorewall.basic_filters }}
+{% else %}
 BASIC_FILTERS=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.blacklist is defined %}
+BLACKLIST={{ dft_shorewall.blacklist }}
+{% else %}
 BLACKLIST="NEW,INVALID,UNTRACKED"
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.chain_scripts is defined %}
+CHAIN_SCRIPTS={{ dft_shorewall.chain_scripts }}
+{% else %}
 CHAIN_SCRIPTS=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.clampmss is defined %}
+CLAMPMSS={{ dft_shorewall.clampmss }}
+{% else %}
 CLAMPMSS=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.clear_tc is defined %}
+CLEAR_TC={{ dft_shorewall.clear_tc }}
+{% else %}
 CLEAR_TC=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.complete is defined %}
+COMPLETE={{ dft_shorewall.complete }}
+{% else %}
 COMPLETE=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.defer_dns_resolution is defined %}
+DEFER_DNS_RESOLUTION={{ dft_shorewall.defer_dns_resolution }}
+{% else %}
 DEFER_DNS_RESOLUTION=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.delete_then_add is defined %}
+DELETE_THEN_ADD={{ dft_shorewall.delete_then_add }}
+{% else %}
 DELETE_THEN_ADD=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.detect_dnat_ipaddrs is defined %}
+DETECT_DNAT_IPADDRS={{ dft_shorewall.detect_dnat_ipaddrs }}
+{% else %}
 DETECT_DNAT_IPADDRS=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.disable_ipv6 is defined %}
+DISABLE_IPV6={{ dft_shorewall.disable_ipv6 }}
+{% else %}
 DISABLE_IPV6=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.docker is defined %}
+DOCKER={{ dft_shorewall.docker }}
+{% else %}
 DOCKER=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.dont_load is defined %}
+DONT_LOAD={{ dft_shorewall.dont_load }}
+{% else %}
 DONT_LOAD=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.dynamic_blacklist is defined %}
+DYNAMIC_BLACKLIST={{ dft_shorewall.dynamic_blacklist }}
+{% else %}
 DYNAMIC_BLACKLIST=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.expand_policies is defined %}
+EXPAND_POLICIES={{ dft_shorewall.expand_policies }}
+{% else %}
 EXPAND_POLICIES=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.exportmodules is defined %}
+EXPORTMODULES={{ dft_shorewall.exportmodules }}
+{% else %}
 EXPORTMODULES=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.fastaccept is defined %}
+FASTACCEPT={{ dft_shorewall.fastaccept }}
+{% else %}
 FASTACCEPT=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.forward_clear_mark is defined %}
+FORWARD_CLEAR_MARK={{ dft_shorewall.forward_clear_mark }}
+{% else %}
 FORWARD_CLEAR_MARK=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.helpers is defined %}
+HELPERS={{ dft_shorewall.helpers }}
+{% else %}
 HELPERS=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.ignoreunknownvariables is defined %}
+IGNOREUNKNOWNVARIABLES={{ dft_shorewall.ignoreunknownvariables }}
+{% else %}
 IGNOREUNKNOWNVARIABLES=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.implicit_continue is defined %}
+IMPLICIT_CONTINUE={{ dft_shorewall.implicit_continue }}
+{% else %}
 IMPLICIT_CONTINUE=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.inline_matches is defined %}
+INLINE_MATCHES={{ dft_shorewall.inline_matches }}
+{% else %}
 INLINE_MATCHES=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.ipset_warnings is defined %}
+IPSET_WARNINGS={{ dft_shorewall.ipset_warnings }}
+{% else %}
 IPSET_WARNINGS=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.ip_forwarding is defined %}
+IP_FORWARDING={{ dft_shorewall.ip_forwarding }}
+{% else %}
 IP_FORWARDING=Keep
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.keep_rt_tables is defined %}
+KEEP_RT_TABLES={{ dft_shorewall.keep_rt_tables }}
+{% else %}
 KEEP_RT_TABLES=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.load_helpers_only is defined %}
+LOAD_HELPERS_ONLY={{ dft_shorewall.load_helpers_only }}
+{% else %}
 LOAD_HELPERS_ONLY=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.maclist_table is defined %}
+MACLIST_TABLE={{ dft_shorewall.maclist_table }}
+{% else %}
 MACLIST_TABLE=filter
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.maclist_ttl is defined %}
+MACLIST_TTL={{ dft_shorewall.maclist_ttl }}
+{% else %}
 MACLIST_TTL=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.mangle_enabled is defined %}
+MANGLE_ENABLED={{ dft_shorewall.mangle_enabled }}
+{% else %}
 MANGLE_ENABLED=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.mapoldactions is defined %}
+MAPOLDACTIONS={{ dft_shorewall.mapoldactions }}
+{% else %}
 MAPOLDACTIONS=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.mark_in_forward_chain is defined %}
+MARK_IN_FORWARD_CHAIN={{ dft_shorewall.mark_in_forward_chain }}
+{% else %}
 MARK_IN_FORWARD_CHAIN=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.miniupnpd is defined %}
+MINIUPNPD={{ dft_shorewall.miniupnpd }}
+{% else %}
 MINIUPNPD=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.module_suffix is defined %}
+MODULE_SUFFIX={{ dft_shorewall.module_suffix }}
+{% else %}
 MODULE_SUFFIX=ko
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.multicast is defined %}
+MULTICAST={{ dft_shorewall.multicast }}
+{% else %}
 MULTICAST=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.mutex_timeout is defined %}
+MUTEX_TIMEOUT={{ dft_shorewall.mutex_timeout }}
+{% else %}
 MUTEX_TIMEOUT=60
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.null_route_rfc1918 is defined %}
+NULL_ROUTE_RFC1918={{ dft_shorewall.null_route_rfc1918 }}
+{% else %}
 NULL_ROUTE_RFC1918=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.optimize is defined %}
+OPTIMIZE={{ dft_shorewall.optimize }}
+{% else %}
 OPTIMIZE=0
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.optimize_accounting is defined %}
+OPTIMIZE_ACCOUNTING={{ dft_shorewall.optimize_accounting }}
+{% else %}
 OPTIMIZE_ACCOUNTING=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.reject_action is defined %}
+REJECT_ACTION={{ dft_shorewall.reject_action }}
+{% else %}
 REJECT_ACTION=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.require_interface is defined %}
+REQUIRE_INTERFACE={{ dft_shorewall.require_interface }}
+{% else %}
 REQUIRE_INTERFACE=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.restart is defined %}
+RESTART={{ dft_shorewall.restart }}
+{% else %}
 RESTART=restart
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.restore_default_route is defined %}
+RESTORE_DEFAULT_ROUTE={{ dft_shorewall.restore_default_route }}
+{% else %}
 RESTORE_DEFAULT_ROUTE=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.restore_routemarks is defined %}
+RESTORE_ROUTEMARKS={{ dft_shorewall.restore_routemarks }}
+{% else %}
 RESTORE_ROUTEMARKS=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.retain_aliases is defined %}
+RETAIN_ALIASES={{ dft_shorewall.retain_aliases }}
+{% else %}
 RETAIN_ALIASES=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.route_filter is defined %}
+ROUTE_FILTER={{ dft_shorewall.route_filter }}
+{% else %}
 ROUTE_FILTER=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.save_arptables is defined %}
+SAVE_ARPTABLES={{ dft_shorewall.save_arptables }}
+{% else %}
 SAVE_ARPTABLES=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.save_ipsets is defined %}
+SAVE_IPSETS={{ dft_shorewall.save_ipsets }}
+{% else %}
 SAVE_IPSETS=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.tc_enabled is defined %}
+TC_ENABLED={{ dft_shorewall.tc_enabled }}
+{% else %}
 TC_ENABLED=Internal
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.tc_expert is defined %}
+TC_EXPERT={{ dft_shorewall.tc_expert }}
+{% else %}
 TC_EXPERT=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.tc_priomap is defined %}
+TC_PRIOMAP={{ dft_shorewall.tc_priomap }}
+{% else %}
 TC_PRIOMAP="2 3 3 3 2 3 1 1 2 2 2 2 2 2 2 2"
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.track_providers is defined %}
+TRACK_PROVIDERS={{ dft_shorewall.track_providers }}
+{% else %}
 TRACK_PROVIDERS=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.track_rules is defined %}
+TRACK_RULES={{ dft_shorewall.track_rules }}
+{% else %}
 TRACK_RULES=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.use_default_rt is defined %}
+USE_DEFAULT_RT={{ dft_shorewall.use_default_rt }}
+{% else %}
 USE_DEFAULT_RT=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.use_physical_names is defined %}
+USE_PHYSICAL_NAMES={{ dft_shorewall.use_physical_names }}
+{% else %}
 USE_PHYSICAL_NAMES=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.use_rt_names is defined %}
+USE_RT_NAMES={{ dft_shorewall.use_rt_names }}
+{% else %}
 USE_RT_NAMES=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.verbose_messages is defined %}
+VERBOSE_MESSAGES={{ dft_shorewall.verbose_messages }}
+{% else %}
 VERBOSE_MESSAGES=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.warnoldcapversion is defined %}
+WARNOLDCAPVERSION={{ dft_shorewall.warnoldcapversion }}
+{% else %}
 WARNOLDCAPVERSION=Yes
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.workarounds is defined %}
+WORKAROUNDS={{ dft_shorewall.workarounds }}
+{% else %}
 WORKAROUNDS=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.zero_marks is defined %}
+ZERO_MARKS={{ dft_shorewall.zero_marks }}
+{% else %}
 ZERO_MARKS=No
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.zone2zone is defined %}
+ZONE2ZONE={{ dft_shorewall.zone2zone }}
+{% else %}
 ZONE2ZONE=-
+{% endif %}
 
+# -------------------------------------------------------------------------------------------------
 # Packet disposition
+# -------------------------------------------------------------------------------------------------
+{% if dft_shorewall is defined and dft_shorewall.blacklist_disposition is defined %}
+BLACKLIST_DISPOSITION={{ dft_shorewall.blacklist_disposition }}
+{% else %}
 BLACKLIST_DISPOSITION=DROP
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.invalid_disposition is defined %}
+INVALID_DISPOSITION={{ dft_shorewall.invalid_disposition }}
+{% else %}
 INVALID_DISPOSITION=CONTINUE
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.maclist_disposition is defined %}
+MACLIST_DISPOSITION={{ dft_shorewall.maclist_disposition }}
+{% else %}
 MACLIST_DISPOSITION=REJECT
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.related_disposition is defined %}
+RELATED_DISPOSITION={{ dft_shorewall.related_disposition }}
+{% else %}
 RELATED_DISPOSITION=ACCEPT
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.rpfilter_disposition is defined %}
+RPFILTER_DISPOSITION={{ dft_shorewall.rpfilter_disposition }}
+{% else %}
 RPFILTER_DISPOSITION=DROP
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.smurf_disposition is defined %}
+SMURF_DISPOSITION={{ dft_shorewall.smurf_disposition }}
+{% else %}
 SMURF_DISPOSITION=DROP
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.sfilter_disposition is defined %}
+SFILTER_DISPOSITION={{ dft_shorewall.sfilter_disposition }}
+{% else %}
 SFILTER_DISPOSITION=DROP
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.tcp_flags_disposition is defined %}
+TCP_FLAGS_DISPOSITION={{ dft_shorewall.tcp_flags_disposition }}
+{% else %}
 TCP_FLAGS_DISPOSITION=DROP
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.untracked_disposition is defined %}
+UNTRACKED_DISPOSITION={{ dft_shorewall.untracked_disposition }}
+{% else %}
 UNTRACKED_DISPOSITION=CONTINUE
+{% endif %}
 
+# -------------------------------------------------------------------------------------------------
 # Packet mark layout
+# -------------------------------------------------------------------------------------------------
+{% if dft_shorewall is defined and dft_shorewall.tc_bits is defined %}
+TC_BITS={{ dft_shorewall.tc_bits }}
+{% else %}
 TC_BITS=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.provider_bits is defined %}
+PROVIDER_BITS={{ dft_shorewall.provider_bits }}
+{% else %}
 PROVIDER_BITS=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.provider_offset is defined %}
+PROVIDER_OFFSET={{ dft_shorewall.provider_offset }}
+{% else %}
 PROVIDER_OFFSET=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.mask_bits is defined %}
+MASK_BITS={{ dft_shorewall.mask_bits }}
+{% else %}
 MASK_BITS=
+{% endif %}
+{% if dft_shorewall is defined and dft_shorewall.zone_bits is defined %}
+ZONE_BITS={{ dft_shorewall.zone_bits }}
+{% else %}
 ZONE_BITS=0
+{% endif %}

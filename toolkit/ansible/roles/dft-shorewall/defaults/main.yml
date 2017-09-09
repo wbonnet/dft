@@ -172,5 +172,147 @@ dft_shorewall:
     #   rate_limit: rate_limit
     #   mark: mark
 
+  #
+  # This section controls the content of the /etc/shorewall/shorewall.conf file
+  #
+  shorewall_conf:
+    # General configuration
+    startup_enabled: zlika
+    verbosity: zlika
+    pager: zlika
+    firewall: zlika
 
+    # Logging
+    blacklist_log_level: zlika
+    invalid_log_level: zlika
+    log_backend: zlika
+    log_martians: zlika
+    log_verbosity: zlika
+    logallnew: zlika
+    logfile: zlika
+    logformat: zlika
+    logtagonly: zlika
+    loglimit: zlika
+    maclist_log_level: zlika
+    related_log_level: zlika
+    pfilter_log_level: zlika
+    sfilter_log_level: zlika
+    smurf_log_level: zlika
+    startup_log: zlika
+    tcp_flags_log_level: zlika
+    untracked_log_level: zlika
 
+    # Location offiles and directories
+    arptables: zlika
+    config_path: zlika
+    geoipdir: zlika
+    iptables: zlika
+    ip: zlika
+    ipset: zlika
+    lockfile: zlika
+    modulesdir: zlika
+    nfacct: zlika
+    path: zlika
+    perl: zlika
+    restorefile: zlika
+    shorewall_shell: zlika
+    subsyslock: zlika
+    tc: zlika
+
+    # Default actions & macros
+    accept_default: zlika
+    drop_default: zlika
+    nfqueue_default: zlika
+    queue_default: zlika
+    reject_default: zlika
+
+    # RSH & RCP commands
+    rcp_command: zlika
+    rsh_command: zlika
+
+    # Firewall options
+    accounting: zlika
+    accounting_table: zlika
+    add_ip_aliases: zlika
+    add_snat_aliases: zlika
+    adminisabsentminded: zlika
+    autocomment: zlika
+    autohelpers: zlika
+    automake: zlika
+    basic_filters: zlika
+    blacklist: zlika
+    chain_scripts: zlika
+    clampmss: zlika
+    clear_tc: zlika
+    complete: zlika
+    defer_dns_resolution: zlika
+    delete_then_add: zlika
+    detect_dnat_ipaddrs: zlika
+    disable_ipv6: zlika
+    docker: zlika
+    dont_load: zlika
+    dynamic_blacklist: zlika
+    expand_policies: zlika
+    exportmodules: zlika
+    fastaccept: zlika
+    forward_clear_mark: zlika
+    helpers: zlika
+    ignoreunknownvariables: zlika
+    implicit_continue: zlika
+    inline_matches: zlika
+    ipset_warnings: zlika
+    ip_forwarding: zlika
+    keep_rt_tables: zlika
+    load_helpers_only: zlika
+    maclist_table: zlika
+    maclist_ttl: zlika
+    mangle_enabled: zlika
+    mapoldactions: zlika
+    mark_in_forward_chain: zlika
+    miniupnpd: zlika
+    module_suffix: zlika
+    multicast: zlika
+    mutex_timeout: zlika
+    null_route_rfc1918: zlika
+    optimize: zlika
+    optimize_accounting: zlika
+    reject_action: zlika
+    require_interface: zlika
+    restart: zlika
+    restore_default_route: zlika
+    restore_routemarks: zlika
+    retain_aliases: zlika
+    route_filter: zlika
+    save_arptables: zlika
+    save_ipsets: zlika
+    tc_enabled: zlika
+    tc_expert: zlika
+    tc_priomap: zlika
+    track_providers: zlika
+    track_rules: zlika
+    use_default_rt: zlika
+    use_physical_names: zlika
+    use_rt_names: zlika
+    verbose_messages: zlika
+    warnoldcapversion: zlika
+    workarounds: zlika
+    zero_marks: zlika
+    zone2zone: zlika
+
+    # Packet disposition
+    blacklist_disposition: zlika
+    invalid_disposition: zlika
+    maclist_disposition: zlika
+    related_disposition: zlika
+    rpfilter_disposition: zlika
+    smurf_disposition: zlika
+    sfilter_disposition: zlika
+    tcp_flags_disposition: zlika
+    untracked_disposition: zlika
+
+    # Packet mark layout
+    tc_bits: zlika
+    provider_bits: zlika
+    provider_offset: zlika
+    mask_bits:  zlika
+    zone_bits: zlika
