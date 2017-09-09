@@ -5,7 +5,7 @@
 
 # {{ pol.comment }}
 {% endif %}
-{{ pol.source }}	{{ pol.dest }}	{{ pol.policy }}	{% if pol.log_level is defined %}{{ pol.log_level }}{% endif %}	{% if pol.limit_burst is defined %}{{ pol.limit_burst }}{% endif %}
+{{ pol.source }}	{{ pol.dest }}	{{ pol.policy }}	{% if pol.log_level is defined %}{{ pol.log_level }}{% else %}-{% endif %}	{% if pol.limit_burst is defined %}{{ pol.limit_burst }}{% else %}-{% endif %}
 
 {%endfor %}
 {% endif %}
@@ -14,4 +14,3 @@
 all all REJECT  info
 
 #LAST LINE -- ADD YOUR ENTRIES ABOVE THIS LINE -- DO NOT REMOVE
-

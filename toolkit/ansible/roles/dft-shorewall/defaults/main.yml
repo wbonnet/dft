@@ -61,40 +61,116 @@ dft_shorewall:
   # This section controls the content of the /etc/shorewall/params file
   #
   # params:
-    # Params contains a list of tuple composed of name and value keys. Each entry
+    # Params contains a list of tuples composed of name and value keys. Each entry
     # defines a variable
     # - name: VARIABLE_1
     #   value: "value of variable 1"
     # - name: VARIABLE_2
     #   value: "value of variable 2"
 
-
   #
   # This section controls the content of the /etc/shorewall/policy file
   #
-  policy:
-    # Params contains a list of tuple composed of source dest and policy (all three are mandatories)
-    # and (optionaly) comment, log_level and limit_burst. Each entry defines a policy line
-    - comment: "Policy for connections initiated from zone lan"
-      source: lan
-      dest: net
-      policy: ACCEPT
-    - source: lan
-      dest: $FW
-      policy: ACCEPT
-    - comment: "Policy for connections initiated from zone $FW"
-      source: $FW
-      dest: net
-      policy: ACCEPT
-    - source: $FW
-      dest: lan
-      policy: ACCEPT
-    - comment: "Policy for connections initiated from zone net"
-      source: net
-      dest: $FW
-      policy: DROP
-      log_level: info
-      source: net
-      dest: lan
-      policy: DROP
-      log_level: info
+  # policy:
+    # policy contains a list of tuples composed of source, dest and policy (all three are
+    # mandatories) and (optionaly) comment, log_level and limit_burst.
+    # Each entry defines a policy line
+    # - comment: "Policy for connections initiated from zone lan"
+    #   source: lan
+    #   dest: net
+    #   policy: ACCEPT
+    # - source: lan
+    #   dest: $FW
+    #   policy: ACCEPT
+
+  #
+  # This section controls the content of the /etc/shorewall/stoppedrules file
+  #
+  # stopped_rules:
+    # stopped_rules list of tuples composed of action, dest and source (all three are mandatories)
+    # and (optionaly) comment, proto dest_port and src_port. Each entry defines a rule to apply
+    # when firewall is in the stopped state
+    # - comment: "Rule 1"
+    #   action: ACCEPT
+    #   source: "eth1:0.0.0.0/0"
+    #   dest: $FW
+    #   proto: proto
+    #   dest_ports: dest_ports
+    #   src_ports: src_ports
+
+  #
+  # This section controls the content of the /etc/shorewall/zones file
+  #
+  # stopped_rules:
+    # zones list of tuple composed of action source and (all three are mandatories)
+    # and (optionaly) comment, proto dest_port and src_port. Each entry defines a rule to apply
+    # when firewall is in the stopped state
+    # - comment: "Rule 1"
+    #   action: ACCEPT
+    #   source: "eth1:0.0.0.0/0"
+    #   dest: $FW
+    #   proto: proto
+    #   dest_ports: dest_ports
+    #   src_ports: src_ports
+
+  #
+  # This section controls the content of the /etc/shorewall/zones file
+  #
+  # zones:
+    # zones list of tuple composed of zone and type (both are mandatories)
+    # and (optionaly) comment, options, in and out. Each entry defines a zone to control
+    # by the  firewall
+    # - comment: "Rule 1"
+    #   zone: fw
+    #   type: firewall
+    #   options: options
+    #   in: in
+    #   out: out
+
+  #
+  # This section controls the content of the /etc/shorewall/masq file
+  #
+  # masq:
+    # masq list of tuple composed of interface and source (both are mandatories)
+    # and (optionaly) address, proto, ports, ipsec and mark. Each entry defines an interface
+    # to be masqueraded by the  firewall
+    # - comment: "Rule 1"
+    #   interface: eth1
+    #   source: eth0
+    #   address: address
+    #   proto: proto
+    #   ipsec: ipsec
+    #   mark: mark
+
+  #
+  # This section controls the content of the /etc/shorewall/interfaces file
+  #
+  # interfaces:
+    # interfaces list of tuple composed of zone, interface, broadcast and options (all mandatories)
+    # Each entry defines an interface to be managed by the  firewall
+    # - comment: "Rule 1"
+    #   zone: net
+    #   interface: eth0
+    #   broadcast: detect
+    #   options: tcpflags,dhcp,nosmurfs,routefilter
+
+  #
+  # This section controls the content of the /etc/shorewall/rules file
+  #
+  # rules:
+    # rules list of tuple composed of action, source and dest (all mandatories) plus proto
+    # dest_port, source_port, original_dest, rate_limit and mark (optinal values)
+    # Each entry defines a rule applied by the firewall
+    # - comment: "Rule 1"
+    #   action: action
+    #   source: source
+    #   dest: dest
+    #   proto: proto
+    #   dest_port: dest_port
+    #   source_port: source_port
+    #   original_dest: original_dest
+    #   rate_limit: rate_limit
+    #   mark: mark
+
+
+
