@@ -171,7 +171,7 @@ class InstallBootChain(CliCommand):
           # Defines the file name and content for armbian APT sources
           logging.debug("Using ArmWizard repo as source provider. Adding armwizard.list")
           filepath += "armwizard.list"
-          working_file.write("# deb http://apt.armwizard.org/debian " + target[Key.VERSION.value])
+          working_file.write("deb http://apt.armwizard.org/armwizard " + target[Key.VERSION.value])
           working_file.write(" bsp\n")
 
           # Check if the public key of the repository is defined in the BSP file, otherwise
