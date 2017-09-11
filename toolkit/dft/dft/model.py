@@ -391,7 +391,11 @@ class DftConfiguration(object):
                                      [Key.ADDITIONAL_ROLES.value][i][1] == "/":
                   self.configuration[Key.CONFIGURATION.value][Key.ADDITIONAL_ROLES.value][i] = \
                            os.path.expanduser(self.configuration[Key.CONFIGURATION.value]\
-                                                                [Key.ADDITIONAL_ROLES.value][i])
+                                                          [Key.ADDITIONAL_ROLES.value][i])
+      else:
+        # No tehn output an error
+        self.logging.critical("The file " + self.filename + " does not exist. Aborting.")
+        exit(1)
 
     except OSError as exception:
       # Call clean up to umount /proc and /dev
