@@ -24,13 +24,13 @@
 #
 # Defines the default values used to initialize shorewall iptable frontend
 #
-dft_shorewall:
+# dft_shorewall:
   #
   # This section controls the content of the /etc/default/shorewall file
   #
-  default:
+  # default:
     # set the following varible to 1 in order to allow Shorewall to start
-    startup: 1
+    # startup: 0
 
     # If your Shorewall configuration requires detection of the ip address of a ppp
     # interface, you must list such interfaces in "wait_interface" to get Shorewall
@@ -42,13 +42,13 @@ dft_shorewall:
     # wait_interface:
 
     # Global start/restart options
-    options: ""
+    # options: ""
 
     # Start options
-    start_options: ""
+    # start_options: ""
 
     # Restart options
-    restart_options: ""
+    # restart_options: ""
 
     # Init Log -- Default is /dev/null, use the STARTUP_LOG defined in shorewall.conf
     # init_log:
@@ -175,144 +175,144 @@ dft_shorewall:
   #
   # This section controls the content of the /etc/shorewall/shorewall.conf file
   #
-  shorewall_conf:
-    # General configuration
-    startup_enabled: zlika
-    verbosity: zlika
-    pager: zlika
-    firewall: zlika
+  # shorewall_conf:
+  #   # General configuration
+  #   startup_enabled:
+  #   verbosity:
+  #   pager:
+  #   firewall:
 
-    # Logging
-    blacklist_log_level: zlika
-    invalid_log_level: zlika
-    log_backend: zlika
-    log_martians: zlika
-    log_verbosity: zlika
-    logallnew: zlika
-    logfile: zlika
-    logformat: zlika
-    logtagonly: zlika
-    loglimit: zlika
-    maclist_log_level: zlika
-    related_log_level: zlika
-    pfilter_log_level: zlika
-    sfilter_log_level: zlika
-    smurf_log_level: zlika
-    startup_log: zlika
-    tcp_flags_log_level: zlika
-    untracked_log_level: zlika
+  #   # Logging
+  #   blacklist_log_level:
+  #   invalid_log_level:
+  #   log_backend:
+  #   log_martians:
+  #   log_verbosity:
+  #   logallnew:
+  #   logfile:
+  #   logformat:
+  #   logtagonly:
+  #   loglimit:
+  #   maclist_log_level:
+  #   related_log_level:
+  #   pfilter_log_level:
+  #   sfilter_log_level:
+  #   smurf_log_level:
+  #   startup_log:
+  #   tcp_flags_log_level:
+  #   untracked_log_level:
 
-    # Location offiles and directories
-    arptables: zlika
-    config_path: zlika
-    geoipdir: zlika
-    iptables: zlika
-    ip: zlika
-    ipset: zlika
-    lockfile: zlika
-    modulesdir: zlika
-    nfacct: zlika
-    path: zlika
-    perl: zlika
-    restorefile: zlika
-    shorewall_shell: zlika
-    subsyslock: zlika
-    tc: zlika
+  #   # Location offiles and directories
+  #   arptables:
+  #   config_path:
+  #   geoipdir:
+  #   iptables:
+  #   ip:
+  #   ipset:
+  #   lockfile:
+  #   modulesdir:
+  #   nfacct:
+  #   path:
+  #   perl:
+  #   restorefile:
+  #   shorewall_shell:
+  #   subsyslock:
+  #   tc:
 
-    # Default actions & macros
-    accept_default: zlika
-    drop_default: zlika
-    nfqueue_default: zlika
-    queue_default: zlika
-    reject_default: zlika
+  #   # Default actions & macros
+  #   accept_default:
+  #   drop_default:
+  #   nfqueue_default:
+  #   queue_default:
+  #   reject_default:
 
-    # RSH & RCP commands
-    rcp_command: zlika
-    rsh_command: zlika
+  #   # RSH & RCP commands
+  #   rcp_command:
+  #   rsh_command:
 
-    # Firewall options
-    accounting: zlika
-    accounting_table: zlika
-    add_ip_aliases: zlika
-    add_snat_aliases: zlika
-    adminisabsentminded: zlika
-    autocomment: zlika
-    autohelpers: zlika
-    automake: zlika
-    basic_filters: zlika
-    blacklist: zlika
-    chain_scripts: zlika
-    clampmss: zlika
-    clear_tc: zlika
-    complete: zlika
-    defer_dns_resolution: zlika
-    delete_then_add: zlika
-    detect_dnat_ipaddrs: zlika
-    disable_ipv6: zlika
-    docker: zlika
-    dont_load: zlika
-    dynamic_blacklist: zlika
-    expand_policies: zlika
-    exportmodules: zlika
-    fastaccept: zlika
-    forward_clear_mark: zlika
-    helpers: zlika
-    ignoreunknownvariables: zlika
-    implicit_continue: zlika
-    inline_matches: zlika
-    ipset_warnings: zlika
-    ip_forwarding: zlika
-    keep_rt_tables: zlika
-    load_helpers_only: zlika
-    maclist_table: zlika
-    maclist_ttl: zlika
-    mangle_enabled: zlika
-    mapoldactions: zlika
-    mark_in_forward_chain: zlika
-    miniupnpd: zlika
-    module_suffix: zlika
-    multicast: zlika
-    mutex_timeout: zlika
-    null_route_rfc1918: zlika
-    optimize: zlika
-    optimize_accounting: zlika
-    reject_action: zlika
-    require_interface: zlika
-    restart: zlika
-    restore_default_route: zlika
-    restore_routemarks: zlika
-    retain_aliases: zlika
-    route_filter: zlika
-    save_arptables: zlika
-    save_ipsets: zlika
-    tc_enabled: zlika
-    tc_expert: zlika
-    tc_priomap: zlika
-    track_providers: zlika
-    track_rules: zlika
-    use_default_rt: zlika
-    use_physical_names: zlika
-    use_rt_names: zlika
-    verbose_messages: zlika
-    warnoldcapversion: zlika
-    workarounds: zlika
-    zero_marks: zlika
-    zone2zone: zlika
+  #   # Firewall options
+  #   accounting:
+  #   accounting_table:
+  #   add_ip_aliases:
+  #   add_snat_aliases:
+  #   adminisabsentminded:
+  #   autocomment:
+  #   autohelpers:
+  #   automake:
+  #   basic_filters:
+  #   blacklist:
+  #   chain_scripts:
+  #   clampmss:
+  #   clear_tc:
+  #   complete:
+  #   defer_dns_resolution:
+  #   delete_then_add:
+  #   detect_dnat_ipaddrs:
+  #   disable_ipv6:
+  #   docker:
+  #   dont_load:
+  #   dynamic_blacklist:
+  #   expand_policies:
+  #   exportmodules:
+  #   fastaccept:
+  #   forward_clear_mark:
+  #   helpers:
+  #   ignoreunknownvariables:
+  #   implicit_continue:
+  #   inline_matches:
+  #   ipset_warnings:
+  #   ip_forwarding:
+  #   keep_rt_tables:
+  #   load_helpers_only:
+  #   maclist_table:
+  #   maclist_ttl:
+  #   mangle_enabled:
+  #   mapoldactions:
+  #   mark_in_forward_chain:
+  #   miniupnpd:
+  #   module_suffix:
+  #   multicast:
+  #   mutex_timeout:
+  #   null_route_rfc1918:
+  #   optimize:
+  #   optimize_accounting:
+  #   reject_action:
+  #   require_interface:
+  #   restart:
+  #   restore_default_route:
+  #   restore_routemarks:
+  #   retain_aliases:
+  #   route_filter:
+  #   save_arptables:
+  #   save_ipsets:
+  #   tc_enabled:
+  #   tc_expert:
+  #   tc_priomap:
+  #   track_providers:
+  #   track_rules:
+  #   use_default_rt:
+  #   use_physical_names:
+  #   use_rt_names:
+  #   verbose_messages:
+  #   warnoldcapversion:
+  #   workarounds:
+  #   zero_marks:
+  #   zone2zone:
 
-    # Packet disposition
-    blacklist_disposition: zlika
-    invalid_disposition: zlika
-    maclist_disposition: zlika
-    related_disposition: zlika
-    rpfilter_disposition: zlika
-    smurf_disposition: zlika
-    sfilter_disposition: zlika
-    tcp_flags_disposition: zlika
-    untracked_disposition: zlika
+  #   # Packet disposition
+  #   blacklist_disposition:
+  #   invalid_disposition:
+  #   maclist_disposition:
+  #   related_disposition:
+  #   rpfilter_disposition:
+  #   smurf_disposition:
+  #   sfilter_disposition:
+  #   tcp_flags_disposition:
+  #   untracked_disposition:
 
-    # Packet mark layout
-    tc_bits: zlika
-    provider_bits: zlika
-    provider_offset: zlika
-    mask_bits:  zlika
-    zone_bits: zlika
+  #   # Packet mark layout
+  #   tc_bits:
+  #   provider_bits:
+  #   provider_offset:
+  #   mask_bits:
+  #   zone_bits:

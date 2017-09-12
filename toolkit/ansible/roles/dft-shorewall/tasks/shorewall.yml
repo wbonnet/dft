@@ -43,6 +43,7 @@
             owner=root
             group=root
             mode="0640"
+  when: dft_shorewall is defined and dft_shorewall.default is defined
 
 # Generate the content of the /etc/shorewall/params files from template
 # This files defines global variables for the shorewall frontend (to iptables)
@@ -52,7 +53,7 @@
             owner=root
             group=root
             mode="0640"
-  when: dft_shorewall.params is defined
+  when: dft_shorewall is defined and dft_shorewall.params is defined
 
 # Generate the content of the /etc/shorewall/policy files from template
 # This files defines the policy (ACCEPT, REJECT, DROP, etc.) between the diffrent zones
@@ -62,7 +63,7 @@
             owner=root
             group=root
             mode="0640"
-  when: dft_shorewall.policy is defined
+  when: dft_shorewall is defined and dft_shorewall.policy is defined
 
 # Generate the content of the /etc/shorewall/interfaces files from template
 # This files defines the interfaces managened by the firewall (eth0, eth1, etc.)
@@ -72,7 +73,7 @@
             owner=root
             group=root
             mode="0640"
-  when: dft_shorewall.interfaces is defined
+  when: dft_shorewall is defined and dft_shorewall.interfaces is defined
 
 # Generate the content of the /etc/shorewall/masq files from template
 # This files defines which interface are masqueraded
@@ -82,7 +83,7 @@
             owner=root
             group=root
             mode="0640"
-  when: dft_shorewall.masq is defined
+  when: dft_shorewall is defined and dft_shorewall.masq is defined
 
 # Generate the content of the /etc/shorewall/rules files from template
 # This files defines the firewalling rules
@@ -92,7 +93,7 @@
             owner=root
             group=root
             mode="0640"
-  when: dft_shorewall.rules is defined
+  when: dft_shorewall is defined and dft_shorewall.rules is defined
 
 # Generate the content of the /etc/shorewall/shorewall.conf files from template
 # This files defines the firewall scripts variables values
@@ -102,7 +103,7 @@
             owner=root
             group=root
             mode="0640"
-  when: dft_shorewall.shorewall_conf is defined
+  when: dft_shorewall is defined and dft_shorewall.shorewall_conf is defined
 
 # Generate the content of the /etc/shorewall/stoppedrules files from template
 # This files defines what traffic goes through the firewall when it is in the stopped state
@@ -112,7 +113,7 @@
             owner=root
             group=root
             mode="0640"
-  when: dft_shorewall.stopped_rules is defined
+  when: dft_shorewall is defined and dft_shorewall.stopped_rules is defined
 
 # Generate the content of the /etc/shorewall/zones files from template
 # This files defines the zones managed by the firewall
@@ -122,4 +123,4 @@
             owner=root
             group=root
             mode="0640"
-  when: dft_shorewall.zones is defined
+  when: dft_shorewall is defined and dft_shorewall.zones is defined
