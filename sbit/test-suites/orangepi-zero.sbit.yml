@@ -1,41 +1,81 @@
+#
+# Tests on board CPU support (available cores, etc.)
+#
 - category: CPU
   description: Testing H2+ CPU support
   test:
-    - script: "cpu_check_available_core_count"
+    - script: "cpu_check_available_processor_count"
       description: "Checking availability of the 4 cores"
       args: "4"
   test-suite:
-    - category: CPU feature availability
+    - category: Features
+      escription: CPU feature availability
       test:
         - script: "cpu_check_available_feature"
           description: "Feature : NEON"
           args: "neon"
-#  test-suite:
+
+#
+# Tests on system memory (physical, gpu dedicated, etc.)
+#
+- category: Network
+  description: Testing network, interfaces and functionalities support
+  test-suite:
+    - category: Interfaces
+      description: Network interfaces availability
+      test:
+        - script: "network_check_available_interface"
+          description: "Interface 'eth0' availability"
+          args: "eth0"
+        - script: "network_check_available_interface"
+          description: "Interface 'wlan0' availability"
+          args: "wlan0"
+    - category: Features
+      description: Network features availability
+      test:
+        - script: "deb_check_package_is_installed"
+          description: "VLAN support"
+          args: "vlan"
+
+#
+# Tests on network (available interfaces, hardware support, etc.)
+#
 - category: Memory
   description: Testing memory amout
   test:
     - script: "memory_check_available_physical_amount"
       description: "Available total memory"
       args: "507956"
+
+
+#
+# Tests on system itself. Functionality availability, loaded drivers, etc
+#
+- category: System
+  description: Testing system configuration
+  test-suite:
+    - category: Kernel
+      description: Kernel configuration
+      test:
+        - script: "system_file_exist"
+          description: "Kernel /proc/config.gz is activated"
+          args: "/proc/config.gz"
+#
+# Tests on instaled software packages
+#
 - category: Packages
-  description: Check that the needed packages are installed
+  description: Check installed software packages (debian based)
   test:
     - script: "deb_check_package_is_installed"
-      description: "Package htp is installed"
-      args: "htop"
+      description: "Package less is installed"
+      args: "less"
 
-#  test-suite:
 #- category: Peripherals
 #  short-description:
 #  test:
 #    - script: ""
 #  test-suite:
 #- category: Storage
-#  short-description:
-#  test:
-#    - script: ""
-#  test-suite:
-#- category: Network
 #  short-description:
 #  test:
 #    - script: ""
