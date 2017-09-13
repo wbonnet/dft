@@ -1,0 +1,66 @@
+- category: CPU
+  short-description: Testing H2+ CPU support
+  test:
+    - script: "cpu_check_available_core_count"
+      args: "4"
+#  test-suite:
+# - category: Memory
+#  short-description:
+#  test:
+#    - script: ""
+#  test-suite:
+#- category: Peripherals
+#  short-description:
+#  test:
+#    - script: ""
+#  test-suite:
+#- category: Storage
+#  short-description:
+#  test:
+#    - script: ""
+#  test-suite:
+#- category: Network
+#  short-description:
+#  test:
+#    - script: ""
+#  test-suite:
+#- category: Wifi
+#  short-description:
+#  test:
+#    - script: ""
+#  test-suite:
+#- category: Bluetooth
+#  short-description:
+#  test:
+#    - script: ""
+#  test-suite:
+#- category: USB
+#  short-description:
+#  test:
+#    - script: ""
+#  test-suite:
+#- category: GPIO
+#  short-description:
+#  test:
+#    - script: ""
+#  test-suite:
+#- category: Graphics
+#  short-description:
+#  test:
+#    - script: ""
+#  test-suite:
+#    - category: GPU
+#      short-description:
+#      test:
+#        - script: ""
+#      test-suite:
+#    - category: IPU
+#      short-description:
+#      test:
+#        - script: ""
+#      test-suite:
+#    - category: VPU
+#      short-description:
+#      test:
+#        - script: ""
+#      test-suite:
