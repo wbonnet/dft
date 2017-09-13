@@ -1,13 +1,29 @@
 - category: CPU
-  short-description: Testing H2+ CPU support
+  description: Testing H2+ CPU support
   test:
     - script: "cpu_check_available_core_count"
+      description: "Checking availability of the 4 cores"
       args: "4"
+  test-suite:
+    - category: CPU feature availability
+      test:
+        - script: "cpu_check_available_feature"
+          description: "Feature : NEON"
+          args: "neon"
 #  test-suite:
-# - category: Memory
-#  short-description:
-#  test:
-#    - script: ""
+- category: Memory
+  description: Testing memory amout
+  test:
+    - script: "memory_check_available_physical_amount"
+      description: "Available total memory"
+      args: "507956"
+- category: Packages
+  description: Check that the needed packages are installed
+  test:
+    - script: "deb_check_package_is_installed"
+      description: "Package htp is installed"
+      args: "htop"
+
 #  test-suite:
 #- category: Peripherals
 #  short-description:
