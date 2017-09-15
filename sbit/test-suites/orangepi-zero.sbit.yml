@@ -4,15 +4,15 @@
 - category: CPU
   description: Testing H2+ CPU support
   test:
-    - script: "cpu_check_available_processor_count"
-      description: "Checking availability of the 4 cores"
+    - description: "Checking availability of the 4 cores"
+      script: "cpu_available_processor_count"
       args: "4"
   test-suite:
     - category: Features
       escription: CPU feature availability
       test:
-        - script: "cpu_check_available_feature"
-          description: "Feature : NEON"
+        - description: "Feature : NEON"
+          script: "cpu_feature_is_available"
           args: "neon"
 
 #
@@ -24,17 +24,17 @@
     - category: Interfaces
       description: Network interfaces availability
       test:
-        - script: "network_check_available_interface"
-          description: "Interface 'eth0' availability"
+        - description: "Interface 'eth0' availability"
+          script: "net_interface_is_available"
           args: "eth0"
-        - script: "network_check_available_interface"
-          description: "Interface 'wlan0' availability"
+        - description: "Interface 'wlan0' availability"
+          script: "net_interface_is_available"
           args: "wlan0"
     - category: Features
       description: Network features availability
       test:
-        - script: "deb_check_package_is_installed"
-          description: "VLAN support"
+        - description: "VLAN support"
+          script: "deb_package_is_installed"
           args: "vlan"
 
 #
@@ -43,8 +43,8 @@
 - category: Memory
   description: Testing memory amout
   test:
-    - script: "memory_check_available_physical_amount"
-      description: "Available total memory"
+    - description: "Available total memory"
+      script: "mem_available_physical_amount"
       args: "507956"
 
 
@@ -57,8 +57,8 @@
     - category: Kernel
       description: Kernel configuration
       test:
-        - script: "system_file_exist"
-          description: "Kernel /proc/config.gz is activated"
+        - description: "Kernel /proc/config.gz is activated"
+          script: "fs_file_exist"
           args: "/proc/config.gz"
 #
 # Tests on instaled software packages
@@ -66,8 +66,8 @@
 - category: Packages
   description: Check installed software packages (debian based)
   test:
-    - script: "deb_check_package_is_installed"
-      description: "Package less is installed"
+    - description: "Package less is installed"
+      script: "deb_package_is_installed"
       args: "less"
 
 #- category: Peripherals
