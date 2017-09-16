@@ -453,6 +453,19 @@ class BuildRootFS(CliCommand):
                   working_file.write(section + " ")
                 working_file.write("\n")
 
+            # Check if there is a pubkey to retrieve using gpg key server
+
+            # Check if there is a pubkey to retrieve using its url
+            if Key.PUBKEY_URL.value in repo:
+              key_url = repo[Key.PUBKEY_URL.value]
+              logging.debug("retrieving public key : " + key_url)
+
+              # Generate the retrieve and add command
+              command = "chroot " + self.project.get_rootfs_mountpoint() + " bash -c "
+              command += "'/usr/bin/wget -qO - " + repo[Key.PUBKEY_URL.value]
+              command += " | /usr/bin/apt-key add -'"
+              self.execute_command(command)
+
     # Warn the user if no matching distro is found. There will be an empty
     # /etc/apt/sources.list and installation will faill
     if not distro_has_been_found:
