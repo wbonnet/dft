@@ -454,6 +454,15 @@ class BuildRootFS(CliCommand):
                 working_file.write("\n")
 
             # Check if there is a pubkey to retrieve using gpg key server
+            if Key.PUBKEY_GPG.value in repo:
+              key_gpg = repo[Key.PUBKEY_GPG.value]
+              logging.debug("retrieving public key : " + key_gpg)
+
+              # Generate the retrieve and add command
+              command = "chroot " + self.project.get_rootfs_mountpoint() + " bash -c "
+              command += "'/usr/bin/apt-key adv --recv-key --keyserver keyserver.ubuntu.com "
+              command += + key_gpg + "'"
+              self.execute_command(command)
 
             # Check if there is a pubkey to retrieve using its url
             if Key.PUBKEY_URL.value in repo:
