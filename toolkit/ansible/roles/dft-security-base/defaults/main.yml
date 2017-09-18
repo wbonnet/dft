@@ -93,7 +93,10 @@ dft_kernel_hardening:
   # filled with values defied in the list below.
   #
   # Comments can be added to the generated sysctl.conf file by adding the optional "comment" key
-  # to one or several list item
+  # to one or several list item.
+  #
+  # The settings from the list below are applied first, then the settings defined in the
+  # sysctl_extra list will be applied, and will override values defined in both lists.
   #
   sysctl_default:
     - { key: "fs.protected_hardlinks" ,                          value: 1 }
@@ -130,5 +133,5 @@ dft_kernel_hardening:
   # This list completes the previous list of values and should be used to define user values
   # The values of both list can be overriden by user in its variable file. Nonetheless this list
   # targets user need and is empty in the defaults file. The previous list will not be modified in
-  # most of the cae, thus it can be left unmodifie.
+  # most of the cae, thus it can be left unmodified.
   sysctl_extra:
