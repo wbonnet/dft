@@ -113,10 +113,16 @@ class AssembleFirmware(CliCommand):
       self.setup_qemu()
 
     # Generate the stacking script
-    self.generate_stacking_scripts()
+#    self.generate_init_script()
+
+    # Generate the stacking script
+    self.generate_stacking_script()
 
     # Install the packages and tools needed to create the updated bootchain
     self.install_initramfs_tools()
+
+    # Customize the content of the rootfs
+    self.customize_initramfs()
 
     # Regenerate the initramfs to include our custum stacking script and some modification
     # to the init script ( needed to call the stacking script )
@@ -170,7 +176,7 @@ class AssembleFirmware(CliCommand):
 
     # Copy the stacking script to /tmp in the rootfs
     command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
-    command += " update-initramfs -t -u"
+    command += " update-initramfs -t -u -k all"
     self.execute_command(command)
 
 
@@ -201,14 +207,13 @@ class AssembleFirmware(CliCommand):
 
   # -------------------------------------------------------------------------
   #
-  # deploy_stacking_scripts
+  # customize_initramfs
   #
   # -------------------------------------------------------------------------
-  def deploy_stacking_scripts(self):
-    """This method deploys the stacking script and modification made to init
-    script to the rootfs generated during previous stages. This information
-    are used when the initramfs is created or updated. Stacking script is
-    included into the new initramfs, so are init modifications.
+  def customize_initramfs(self):
+    """This method customize the list of modules loaded in the initramfs, and
+    copy the stacking scipt to the scipt directory, so it will be included in
+    the initramfs once generated.
     """
 
     # Output current task to logs
@@ -244,10 +249,10 @@ class AssembleFirmware(CliCommand):
 
   # -------------------------------------------------------------------------
   #
-  # generate_stacking_scripts
+  # generate_stacking_script
   #
   # -------------------------------------------------------------------------
-  def generate_stacking_scripts(self):
+  def generate_stacking_script(self):
     """This method implement the generation of the stacking script
 
     The stacking script is called in the initramfs by the init script. Stacking
@@ -279,40 +284,12 @@ class AssembleFirmware(CliCommand):
       working_file.write("# Generation date : " + today.strftime("%d/%m/%Y - %H:%M.%S") + "\n")
       working_file.write("#\n")
       working_file.write("\n")
-      working_file.write("PREREQ=""\n")
-      working_file.write("prereqs()\n")
-      working_file.write("{\n")
-      working_file.write("    echo \"$PREREQ\"\n")
-      working_file.write("}\n")
-      working_file.write("\n")
-      working_file.write("case $1 in\n")
-      working_file.write("prereqs)\n")
-      working_file.write("    prereqs\n")
-      working_file.write("    exit 0\n")
-      working_file.write("    ;;\n")
-      working_file.write("esac\n")
-      working_file.write("\n")
 
     # Now it's done, let's close the file
     working_file.close()
 
     # Generate the common stuff. It includes mounting the target (used later for stacking them)
     self.generate_common_mount(working_file.name)
-
-    # Call the method dedicated to the selected stacking method
-    if self.project.firmware[Key.LAYOUT.value][Key.METHOD.value] == Key.AUFS.value:
-      # Generate aufs stuff
-      self.generate_aufs_stacking(working_file.name)
-    elif self.project.firmware[Key.LAYOUT.value][Key.METHOD.value] == Key.OVERLAYFS.value:
-      # Generate overlayfs stuff
-      self.generate_overlayfs_stacking(working_file.name)
-    else:
-      # If we reach this code, then method was unknown
-      self.project.logging.critical("Unknown stacking method " +
-                                    self.project.firmware[Key.LAYOUT.value][Key.METHOD.value])
-      exit(1)
-
-    # We are done with file generation, close it now
 
     # Update stack script permissions. It has to be executable and world readable (not reuiered
     # but easier to handle)
@@ -330,6 +307,74 @@ class AssembleFirmware(CliCommand):
 
     # Final log
     logging.info("Firmware stacking has been successfully generated into : " + filepath)
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # generate_init_script
+  #
+  # -------------------------------------------------------------------------
+  def generate_init_script(self):
+    """This method implement the generation of the init script
+
+    The init script is called by the kernel when booting, after loading the
+    initramfs. Stacking script is included in the init script. Stacking is a
+    shell scipt fragment generated using the firmware.yml configuration
+    as input. It provides th specific cod used to mount and stack the filesystms
+    (using aufs or overlayfs).
+    """
+
+    # Output current task to logs
+    logging.info("Generating init scripts")
+
+    # Generate the stacking script
+    # configuration, then move  roles to the target rootfs
+    with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
+      # Retrieve generation date
+      today = datetime.datetime.now()
+
+      # Generate file header
+      working_file.write("#!/bin/sh -e\n")
+      working_file.write("#\n")
+      working_file.write("set -x\n")
+      working_file.write("#\n")
+      working_file.write("# DFT init script (including firmware stackig)\n")
+      working_file.write("#\n")
+      working_file.write("# This script has been generated automatically by the DFT toolkit.\n")
+      working_file.write("# It is in charge of mounting and stacking the different items\n")
+      working_file.write("# of the firmware.\n")
+      working_file.write("#\n")
+      working_file.write("# Generation date : " + today.strftime("%d/%m/%Y - %H:%M.%S") + "\n")
+
+
+    # It's done for beginning of script, let's close the file
+    working_file.close()
+
+     # Reopen the working file
+    working_file = open(working_file.name, "a")
+
+    # Now it's really done, let's close the file
+    working_file.close()
+
+    # We are done with file generation, close it now
+
+    # Update stack script permissions. It has to be executable and world readable (not reuiered
+    # but easier to handle)
+    os.chmod(working_file.name, stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH |\
+             stat.S_IXOTH)
+
+    # Generate the file path
+    filepath = self.project.get_rootfs_mountpoint()
+    filepath += '/usr/share/initramfs-tools/init'
+
+    # And now we can move the temporary file under the rootfs tree
+    command = "mv -f " + working_file.name + " " + filepath
+
+    self.execute_command(command)
+
+    # Final log
+    logging.info("Firmware init script has been successfully generated into : " + filepath)
 
 
 
@@ -512,24 +557,3 @@ class AssembleFirmware(CliCommand):
 
     # We are done here, now close the file
     working_file.close()
-
-
-
-# Il me manque la racine qui contient le firmware !
-# Je suis dans l'initramfs, je devrais donc trouver un moyen de monter une racine
-# et la je peux charger ce que je veux
-# probleme il me faut une vraie reflexion coté design et penser a ce que je veux faire des
-# firmwares usine
-
-# surement coder la logique dans l'initramfs ?
-# et ui connait les banks
-# chaque bank est une partoche qui contient que ses firmware ?
-# ou plutot c'est un tout cohérent avec ses noayxu etc.
-
-# faire schema
-
-# PS: K + D + I + F
-# B0: K + D + I + F
-# B1: K + D + I + F
-
-# Ciph ?
