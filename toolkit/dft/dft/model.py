@@ -393,9 +393,8 @@ class DftConfiguration(object):
                            os.path.expanduser(self.configuration[Key.CONFIGURATION.value]\
                                                           [Key.ADDITIONAL_ROLES.value][i])
       else:
-        # No tehn output an error
-        self.logging.critical("The file " + self.filename + " does not exist. Aborting.")
-        exit(1)
+        # No then it does not matter, let('s continue without ~/.dftrc file
+        self.logging.debug("The file " + self.configuration_file + " does not exist. Aborting.")
 
     except OSError as exception:
       # Call clean up to umount /proc and /dev
