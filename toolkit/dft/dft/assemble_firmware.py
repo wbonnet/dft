@@ -217,21 +217,10 @@ class AssembleFirmware(CliCommand):
     """
 
     # Output current task to logs
-    logging.info("Deploying stacking scripts to target")
-
-    # Generate the target dir (sscript opy destination)
-    target = self.project.get_rootfs_mountpoint() + '/usr/share/initramfs-tools/scripts/local-bottom/'
-
-    # Check if the directory local-top exists, if not, create it
-    if not os.path.isdir(target):
-      os.makedirs(target)
-
-    # Copy the stacking script to /usr/share/initramfs-tools/script in the rootfs
-    command = 'cp ' + self.project.stacking_script_filename + " " + target
-    self.execute_command(command)
+    logging.info("Customize modules list in target")
 
     # Create a file in modules.d to ensure that squashfs and overlay modules are present
-    #T TODO handle as parameters incase of builtin ?
+    #TODO handle as parameters in case of builtin ?
     with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
       # Generate file header
       working_file.write("squashfs\n")
@@ -285,16 +274,43 @@ class AssembleFirmware(CliCommand):
       working_file.write("#\n")
       working_file.write("\n")
 
+      working_file.write("PREREQ=""\n")
+      working_file.write("prereqs()\n")
+      working_file.write("{\n")
+      working_file.write("    echo \"$PREREQ\"\n")
+      working_file.write("}\n")
+      working_file.write("\n")
+      working_file.write("case $1 in\n")
+      working_file.write("prereqs)\n")
+      working_file.write("    prereqs\n")
+      working_file.write("    exit 0\n")
+      working_file.write("    ;;\n")
+      working_file.write("esac\n")
+      working_file.write("\n")
+
     # Now it's done, let's close the file
     working_file.close()
 
     # Generate the common stuff. It includes mounting the target (used later for stacking them)
     self.generate_common_mount(working_file.name)
 
+    # Call the method dedicated to the selected stacking method
+    if self.project.firmware[Key.LAYOUT.value][Key.METHOD.value] == Key.AUFS.value:
+      # Generate aufs stuff
+      self.generate_aufs_stacking(working_file.name)
+    elif self.project.firmware[Key.LAYOUT.value][Key.METHOD.value] == Key.OVERLAYFS.value:
+      # Generate overlayfs stuff
+      self.generate_overlayfs_stacking(working_file.name)
+    else:
+      # If we reach this code, then method was unknown
+      self.project.logging.critical("Unknown stacking method " +
+                                    self.project.firmware[Key.LAYOUT.value][Key.METHOD.value])
+      exit(1)
+
     # Update stack script permissions. It has to be executable and world readable (not reuiered
     # but easier to handle)
-    os.chmod(working_file.name, stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH |\
-             stat.S_IXOTH)
+    os.chmod(working_file.name, stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | \
+             stat.S_IROTH | stat.S_IXOTH)
 
     # Generate the file path
     filepath = self.project.get_rootfs_mountpoint()
@@ -400,17 +416,23 @@ class AssembleFirmware(CliCommand):
       self.project.logging.critical("The stack definition is not in the configuration file")
       exit(1)
 
-   # Create the workdir
+    # Ensure that loopback device is enabled
+    working_file.write("# Ensure that loopback device is enabled\n")
+    working_file.write("modprobe loop\n")
+    working_file.write("\n")
+
+    # Create the workdir
     working_file.write("# Create the workdir directory\n")
     working_file.write("mkdir -p /root/mnt/dft/workdir\n")
-    working_file.write("\n")
 
     # Iterates the stack items
     for item in self.project.firmware[Key.LAYOUT.value][Key.STACK_DEFINITION.value]:
       # Generate the mount point creation code
-      working_file.write("# Create the mount point for " + item[Key.STACK_ITEM.value]\
+      working_file.write("\n")
+      working_file.write("\n")
+      working_file.write("# ----- Create the mount point for " + item[Key.STACK_ITEM.value]\
                          [Key.TYPE.value] + " '" + item[Key.STACK_ITEM.value][Key.NAME.value] +
-                         "'\n")
+                         "' ----------\n")
       working_file.write("mkdir -p /root/mnt/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
       working_file.write("\n")
 
@@ -436,7 +458,9 @@ class AssembleFirmware(CliCommand):
 
           # Generate the tmpfs specific mount command
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.SQUASHFS.value:
-        working_file.write("mount -t squashfs  -o loop")
+        working_file.write("DEV=$(losetup -f)\n")
+        working_file.write("losetup ${DEV} /root/boot/" + item[Key.STACK_ITEM.value][Key.SQUASHFS_FILE.value] + "\n")
+        working_file.write("mount -t squashfs -o loop")
 
         # Is there some defined options ?
         if "mount-options" in item[Key.STACK_ITEM.value]:
@@ -444,8 +468,8 @@ class AssembleFirmware(CliCommand):
           working_file.write("," + item[Key.STACK_ITEM.value][Key.MOUNT_OPTIONS.value])
 
         # Complete the mount command
-        working_file.write(" /root/boot/" + item[Key.STACK_ITEM.value][Key.SQUASHFS_FILE.value] + " /root/mnt/dft/" +
-                           item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
+        working_file.write(" ${DEV} /root/mnt/dft/" +item[Key.STACK_ITEM.value][Key.NAME.value] \
+                           + "\n")
 
       # Generate the tmpfs specific mount command
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.PARTITION.value:
@@ -459,10 +483,6 @@ class AssembleFirmware(CliCommand):
         # Complete the mount command
         working_file.write(item[Key.STACK_ITEM.value][Key.PARTITION.value] + " /root/mnt/dft/" +
                            item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
-
-      working_file.write("\n")
-      working_file.write("mount\n")
-      working_file.write("ls /root/mnt/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
 
     # We are done here, now close the file
     working_file.close()
