@@ -144,7 +144,7 @@ class InstallBootChain(CliCommand):
           working_file.write(" main\n")
 
           # Check if the public key of the repository is defined in the BSP file, otherwise
-          # Set the default value to 93D6889F9F0E78D5
+          # Set the default value to FA1B0274
           if Key.PUBKEY.value not in target[Key.BSP.value][Key.KERNEL.value]:
             repo_pub_key = "03337671FDE75BB6A85EC91FB876CB44FA1B0274"
             logging.debug("Using default Devuan signing key " + repo_pub_key)
@@ -159,7 +159,7 @@ class InstallBootChain(CliCommand):
           working_file.write("deb http://apt.armbian.com jessie main utils jessie-desktop\n")
 
           # Check if the public key of the repository is defined in the BSP file, otherwise
-          # Set the default value to 93D6889F9F0E78D5
+          # Set the default value to 9F0E78D5
           if Key.PUBKEY.value not in target[Key.BSP.value][Key.KERNEL.value]:
             repo_pub_key = "DF00FAF1C577104B50BF1D0093D6889F9F0E78D5"
             logging.debug("Using default Armbian signing key " + repo_pub_key)
@@ -175,7 +175,7 @@ class InstallBootChain(CliCommand):
           working_file.write(" bsp\n")
 
           # Check if the public key of the repository is defined in the BSP file, otherwise
-          # Set the default value to 93D6889F9F0E78D5
+          # Set the default value to 1B362699
           if Key.PUBKEY.value not in target[Key.BSP.value][Key.KERNEL.value]:
             repo_pub_key = "358F3893AF23DDDA17381B8D962EBD6B1B362699"
             logging.debug("Using default Armwizard signing key " + repo_pub_key)
