@@ -458,11 +458,8 @@ class BuildRootFS(CliCommand):
               key_gpg = repo[Key.PUBKEY_GPG.value]
               logging.debug("retrieving public key : " + key_gpg)
 
-              # Generate the retrieve and add command
-              command = "chroot " + self.project.get_rootfs_mountpoint() + " bash -c "
-              command += "'/usr/bin/apt-key adv --recv-key --keyserver keyserver.ubuntu.com "
-              command += + key_gpg + "'"
-              self.execute_command(command)
+              # Add a key to the know catalog signing keys
+              self.add_catalog_signing_key(key_gpg)
 
             # Check if there is a pubkey to retrieve using its url
             if Key.PUBKEY_URL.value in repo:
