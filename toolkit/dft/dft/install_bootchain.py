@@ -123,65 +123,94 @@ class InstallBootChain(CliCommand):
 
     # Control the package provider. So far only handles debian armbian and devuan
     if target[Key.BSP.value][Key.KERNEL.value][Key.ORIGIN.value] not in \
-      "devuan" "debian" "armbian" "armwizard":
-      logging.error("Unknown kernel provider '" + target[Key.BSP.value][Key.ORIGIN.value] + "'")
+      "devuan" "debian" "armbian" "armwizard" "custom":
+      logging.error("Unknown kernel provider '" + target[Key.BSP.value][Key.KERNEL.value]\
+                    [Key.ORIGIN.value] + "'")
       exit(1)
 
     # Check if the provider is Debian, if yes, there is nothing to do for source list generation
     # The system will use the sources defined for rootfs installation
-    if target[Key.BSP.value][Key.KERNEL.value][Key.ORIGIN.value] == "debian":
+    if target[Key.BSP.value][Key.KERNEL.value][Key.ORIGIN.value] == Key.DEBIAN.value:
       logging.debug("Using Debian repo as source provider.")
     else:
+      # Set the repo name to None. It will be checked in the end to know if there is a key
+      # to install (key may have be installed using wget instead of apt-key in case of custom repo)
+      repo_pub_key = None
+
       # Target is not Debian, then we need to create a temporary file for source file generation
       # and complete the path according to the known providers
       with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
-        if target[Key.BSP.value][Key.KERNEL.value][Key.ORIGIN.value] == "devuan":
+        if target[Key.BSP.value][Key.KERNEL.value][Key.ORIGIN.value] == Key.DEVUAN.value:
           # Defines the file name and content for devuan APT sources
           logging.debug("Using Devuan repo as source provider. Adding devuan.list")
-          filepath += "devuan.list"
+          filepath += "devuan_repository.list"
           working_file.write("deb http://packages.devuan.org/devuan ")
           working_file.write(target[Key.VERSION.value])
           working_file.write(" main\n")
 
           # Check if the public key of the repository is defined in the BSP file, otherwise
-          # Set the default value to FA1B0274
+          # Set the default value of the key
           if Key.PUBKEY.value not in target[Key.BSP.value][Key.KERNEL.value]:
-            repo_pub_key = "03337671FDE75BB6A85EC91FB876CB44FA1B0274"
+            repo_pub_key = Key.DEVUAN_SIGNING_PUBKEY.value
             logging.debug("Using default Devuan signing key " + repo_pub_key)
           else:
             repo_pub_key = target[Key.BSP.value][Key.KERNEL.value][Key.PUBKEY.value]
             logging.debug("Add Devuan signing key " + repo_pub_key)
 
-        elif target[Key.BSP.value][Key.KERNEL.value][Key.ORIGIN.value] == "armbian":
+        elif target[Key.BSP.value][Key.KERNEL.value][Key.ORIGIN.value] == Key.ARMBIAN.value:
           # Defines the file name and content for armbian APT sources
           logging.debug("Using Armbian repo as source provider. Adding armbian.list")
-          filepath += "armbian.list"
+          filepath += "armbian_repository.list"
           working_file.write("deb http://apt.armbian.com jessie main utils jessie-desktop\n")
 
           # Check if the public key of the repository is defined in the BSP file, otherwise
-          # Set the default value to 9F0E78D5
+          # Set the default value of the key
           if Key.PUBKEY.value not in target[Key.BSP.value][Key.KERNEL.value]:
-            repo_pub_key = "DF00FAF1C577104B50BF1D0093D6889F9F0E78D5"
+            repo_pub_key = Key.ARMBIAN_SIGNING_PUBKEY.value
             logging.debug("Using default Armbian signing key " + repo_pub_key)
           else:
             repo_pub_key = target[Key.BSP.value][Key.KERNEL.value][Key.PUBKEY.value]
             logging.debug("Add Armbian signing key " + repo_pub_key)
 
-        elif target[Key.BSP.value][Key.KERNEL.value][Key.ORIGIN.value] == "armwizard":
+        elif target[Key.BSP.value][Key.KERNEL.value][Key.ORIGIN.value] == Key.ARMWIZARD.value:
           # Defines the file name and content for armbian APT sources
           logging.debug("Using ArmWizard repo as source provider. Adding armwizard.list")
-          filepath += "armwizard.list"
+          filepath += "armwizard_repository.list"
           working_file.write("deb http://apt.armwizard.org/armwizard " + target[Key.VERSION.value])
           working_file.write(" bsp\n")
 
           # Check if the public key of the repository is defined in the BSP file, otherwise
-          # Set the default value to 1B362699
+          # Set the default value of the key
           if Key.PUBKEY.value not in target[Key.BSP.value][Key.KERNEL.value]:
-            repo_pub_key = "358F3893AF23DDDA17381B8D962EBD6B1B362699"
+            repo_pub_key = Key.ARMWIZARD_SIGNING_PUBKEY.value
             logging.debug("Using default Armwizard signing key " + repo_pub_key)
           else:
             repo_pub_key = target[Key.BSP.value][Key.KERNEL.value][Key.PUBKEY.value]
             logging.debug("Add Armbian signing key " + repo_pub_key)
+
+        elif target[Key.BSP.value][Key.KERNEL.value][Key.ORIGIN.value] == Key.CUSTOM.value:
+          # Defines the file name and content for custom APT sources
+          logging.debug("Using custom repo as source provider. Adding custom_bsp_repository.list")
+          filepath += "custom_bsp_repository.list"
+          working_file.write("deb " + target[Key.BSP.value][Key.KERNEL.value][Key.URL.value] + "\n")
+
+          # Check if the public key of the repository is defined in the BSP file, otherwise
+          # Check if there is a pubkey to retrieve using its url
+          if Key.PUBKEY_URL.value in target[Key.BSP.value][Key.KERNEL.value]:
+            key_url = target[Key.BSP.value][Key.KERNEL.value][Key.PUBKEY_URL.value]
+            logging.debug("retrieving public key : " + key_url)
+
+            # Generate the retrieve and add command
+            command = "chroot " + self.project.get_rootfs_mountpoint() + " bash -c "
+            command += "'/usr/bin/wget -qO - "
+            command += target[Key.BSP.value][Key.KERNEL.value][Key.PUBKEY_URL.value]
+            command += " | /usr/bin/apt-key add -'"
+            self.execute_command(command)
+
+          # Public key is not available, installation is likely to fail
+          else:
+            logging.error("No public key is defined in board definition.")
+            logging.error("Continuing, but installation of kernel is likely to fail.")
 
       # Update new source file permissions. It has to be world readable
       os.chmod(working_file.name, stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH)
@@ -190,9 +219,9 @@ class InstallBootChain(CliCommand):
       command = "mv -f " + working_file.name + " " + filepath
       self.execute_command(command)
 
-
-      # Add a key to the know catalog signing keys
-      self.add_catalog_signing_key(repo_pub_key)
+      # Add a key to the know catalog signing keys, only if a key fingerprint has been defined
+      if not repo_pub_key is None:
+        self.add_catalog_signing_key(repo_pub_key)
 
       # Update the catalog once the new sources is set
       self.update_package_catalog()
