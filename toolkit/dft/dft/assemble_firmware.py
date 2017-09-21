@@ -1,4 +1,4 @@
-#
+  #
 # The contents of this file are subject to the Apache 2.0 license you may not
 # use this file except in compliance with the License.
 #
@@ -324,6 +324,9 @@ class AssembleFirmware(CliCommand):
     # Final log
     logging.info("Firmware stacking has been successfully generated into : " + filepath)
 
+# Cela merde quand j'ai tout sur la meme partition
+# Il faudrait surement en faire plusieurs, comme sur la cible. La partition de base ne contient que
+# ce qu'il faut, kernel et initramfs, une partition avec les squashfs et le reste c du data
 
 
   # -------------------------------------------------------------------------
@@ -421,11 +424,7 @@ class AssembleFirmware(CliCommand):
     working_file.write("modprobe loop\n")
     working_file.write("\n")
 
-    # Create the workdir
-    working_file.write("# Create the workdir directory\n")
-    working_file.write("mkdir -p /root/mnt/dft/workdir\n")
-
-    # Iterates the stack items
+      # Iterates the stack items
     for item in self.project.firmware[Key.LAYOUT.value][Key.STACK_DEFINITION.value]:
       # Generate the mount point creation code
       working_file.write("\n")
@@ -433,7 +432,7 @@ class AssembleFirmware(CliCommand):
       working_file.write("# ----- Create the mount point for " + item[Key.STACK_ITEM.value]\
                          [Key.TYPE.value] + " '" + item[Key.STACK_ITEM.value][Key.NAME.value] +
                          "' ----------\n")
-      working_file.write("mkdir -p /root/mnt/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
+      working_file.write("mkdir -p /root/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
       working_file.write("\n")
 
       # Generate the mount commands
@@ -450,10 +449,10 @@ class AssembleFirmware(CliCommand):
           working_file.write("-o " + item[Key.STACK_ITEM.value][Key.MOUNT_OPTIONS.value] + " ")
 
         # Complete the mount command
-        working_file.write("tmpfs /root/mnt/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
-        working_file.write("mkdir -p /root/mnt/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] +
+        working_file.write("tmpfs /root/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
+        working_file.write("mkdir -p /root/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] +
                            "/workdir\n")
-        working_file.write("mkdir -p /root/mnt/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] +
+        working_file.write("mkdir -p /root/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] +
                            "/mountpoint\n")
 
           # Generate the tmpfs specific mount command
@@ -468,12 +467,12 @@ class AssembleFirmware(CliCommand):
           working_file.write("," + item[Key.STACK_ITEM.value][Key.MOUNT_OPTIONS.value])
 
         # Complete the mount command
-        working_file.write(" ${DEV} /root/mnt/dft/" +item[Key.STACK_ITEM.value][Key.NAME.value] \
+        working_file.write(" ${DEV} /root/dft/" +item[Key.STACK_ITEM.value][Key.NAME.value] \
                            + "\n")
 
       # Generate the tmpfs specific mount command
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.PARTITION.value:
-        working_file.write("mount ")
+        working_file.write("mount -t ext4 ")
 
         # Is there some defined options ?
         if "mount-options" in item[Key.STACK_ITEM.value]:
@@ -481,7 +480,7 @@ class AssembleFirmware(CliCommand):
           working_file.write("-o " + item[Key.STACK_ITEM.value]["mount-options"] + " ")
 
         # Complete the mount command
-        working_file.write(item[Key.STACK_ITEM.value][Key.PARTITION.value] + " /root/mnt/dft/" +
+        working_file.write(item[Key.STACK_ITEM.value][Key.PARTITION.value] + " /root/dft/" +
                            item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
 
     # We are done here, now close the file
@@ -527,26 +526,26 @@ class AssembleFirmware(CliCommand):
 
       # Generate the tmpfs specific mount command
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.TMPFS.value:
-        working_file.write("mount -t overlay overlay -olowerdir=")
-        working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + ",upperdir=/root/mnt/dft/")
+        working_file.write("mount -t overlay overlay -o lowerdir=")
+        working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + ",upperdir=/root/dft/")
         working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "/mountpoint")
-        working_file.write(",workdir=/root/mnt/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] +
+        working_file.write(",workdir=/root/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] +
                            "/workdir")
         working_file.write(" " + item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + "\n")
 
       # Generate the tmpfs specific mount command
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.SQUASHFS.value:
-        working_file.write("mount -t overlay overlay -olowerdir=/root/mnt/dft/")
+        working_file.write("mount -t overlay overlay -o lowerdir=/root/dft/")
         working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + ":" +
                            item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value])
         working_file.write(" " + item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + "\n")
 
       # Generate the tmpfs specific mount command
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.PARTITION.value:
-        working_file.write("mount -t overlay overlay -olowerdir=")
-        working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + ",upperdir=/root/mnt/dft/")
+        working_file.write("mount -t overlay overlay -o lowerdir=")
+        working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + ",upperdir=/root/dft/")
         working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value])
-        working_file.write(",workdir=/root/mnt/dft/workdir")
+        working_file.write(",workdir=/root/dft/workdir")
         working_file.write(" " + item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + "\n")
 
       working_file.write("\n")
@@ -554,6 +553,11 @@ class AssembleFirmware(CliCommand):
     # We are done here, now close the file
     working_file.close()
 
+# Ajouter le type de FS dans le fichier YML et virer l'autre commentaire
+
+# Il faut redebugger le montage overlay
+
+# ptete d'abord tester l'aufs ? a voir
 
 
   # -------------------------------------------------------------------------

@@ -48,12 +48,27 @@ kernel:
   #   armwizard   358F3893AF23DDDA17381B8D962EBD6B1B362699
   # pubkey:
 
+  # Parameters for custom origin.
+  # Two parameters control the download of the custom repository sining key. There is no
+  # default values. Lack of definition will lead to an execution failure.
+
+  # First defines the URL of the repository signing pubkey to download and import
+  # pubkey_url: "http://custom.example.com/debian/key.pub"
+
+  # Second defines the fingerprint of the signing pubkey to retrieve and import (it needs to have
+  # internet connection and use MIT server as key server)
+  # pubkey_gpg: "http://custom.example.com/debian/key.pub"
+
   # List of packages to install from the repository
   packages:
     - linux-image-4.12.0
     # - linux-dtb-dev-sun8i
     # - armbian-firmware
     # - linux-jessie-root-dev-orangepizero
+
+  # Defines if the source generated to install kernel packaged should be kept or not after
+  # intallation. Default value is True
+  # keep_source: True
 
 #TODO: add flag to define if a specific source list ha to be generated under sources.list.define
 
