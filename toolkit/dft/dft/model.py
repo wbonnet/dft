@@ -156,6 +156,7 @@ class Key(Enum):
   JSON = "json"
   KEEP_BOOTSTRAP_FILES = "keep_bootstrap_files"
   KEEP_ROOTFS_HISTORY = "keep_rootfs_history"
+  KEEP_SOURCE = "keep_source"
   KERNEL = "kernel"
   LABEL = "label"
   LABEL_RESULT_FAIL = "[FAIL]"
