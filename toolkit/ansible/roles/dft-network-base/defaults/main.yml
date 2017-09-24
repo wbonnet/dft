@@ -42,3 +42,29 @@ dft_ntp_servers:
 #     - server1
 #     - server2
 #     - server3
+
+# This variable control the parameters requested by dhcp client from the server
+# This configuration is stored in the file /etc/dhcp/dhclient.conf
+# dft_dhcp_client:
+#   request: "subnet-mask, broadcast-address, time-offset, routers, \
+#   domain-name, domain-name-servers, domain-search, host-name, \
+#   dhcp6.name-servers, dhcp6.domain-search, dhcp6.fqdn, dhcp6.sntp-servers, \
+#   netbios-name-servers, netbios-scope, interface-mtu, \
+#   rfc3442-classless-static-routes, ntp-servers"
+#   send:
+#     - "dhcp-client-identifier 1:0:a0:24:ab:fb:9c"
+#     - "dhcp-lease-time 3600"
+#   supersede:
+#     - "domain-name \"fugue.com home.vix.com\""
+#   prepend:
+#     - "domain-name-servers 127.0.0.1"
+#   require:
+#     - "subnet-mask, domain-name-servers"
+#   timeout: 60
+#   retry: 60
+#   reboot: 10
+#   select-timeout: 5
+#   initial-interval: 2
+#   script: "/sbin/dhclient-script"
+#   media: "\"-link0 -link1 -link2\", \"link0 link1\""
+#   reject: 192.33.137.209
