@@ -8,11 +8,11 @@
 # License.
 #
 #
-# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).  
+# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
 # Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
 #
 #
 # Contributors list :
@@ -20,4 +20,25 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 #
+try:
+    from setuptools import setup
+
+except ImportError:
+    from distutils.core import setup
+
+config = {
+    'description': 'Debian Firmware Toolkit',
+    'long_description': 'DFT is a firmware used to produce firmware from a standard Debian repositories',
+    'author': 'William Bonnet',
+    'url': 'https://github.com/wbonnet/dft/',
+    'download_url': 'https://github.com/wbonnet/dft/',
+    'author_email': 'wbonnet@theitmakers.com',
+    'version': '0.5.0',
+    'install_requires': [ 'pyyaml', 'pyparted' ],
+    'packages': ['dft'],
+    'scripts': [ 'bin/dft' ],
+    'name': 'dft'
+}
+
+setup(**config)
 
