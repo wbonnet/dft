@@ -32,8 +32,8 @@ import os
 import tempfile
 from distutils import dir_util
 from distutils import file_util
-from cli_command import CliCommand
-from model import Key
+from dft.cli_command import CliCommand
+from dft.model import Key
 
 
 #

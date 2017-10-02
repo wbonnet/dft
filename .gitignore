@@ -1,6 +1,2 @@
-# File editors
-*~
-*.sw?
-
-# Python generated files
-__pycache__/
+.gitignore
+__pycache__

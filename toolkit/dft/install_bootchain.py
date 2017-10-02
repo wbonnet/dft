@@ -29,8 +29,8 @@ import os
 import stat
 import logging
 import tempfile
-from cli_command import CliCommand
-from model import Key
+from dft.cli_command import CliCommand
+from dft.model import Key
 
 #
 #    Class Installbootchain

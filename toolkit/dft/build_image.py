@@ -31,8 +31,8 @@ import os
 import tempfile
 import shutil
 import parted
-from cli_command import CliCommand
-from model import Key
+from dft.cli_command import CliCommand
+from dft.model import Key
 
 #
 #    Class BuildImage

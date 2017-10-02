@@ -29,8 +29,8 @@ anything you decide. They can be stacked in memory to create the read only opera
 import logging
 import os
 from shutil import rmtree
-from cli_command import CliCommand
-from model import Key
+from dft.cli_command import CliCommand
+from dft.model import Key
 
 #
 #    Class BuildFirmware

@@ -27,8 +27,8 @@ of removing files and packages.
 """
 
 import os
-from model import Key
-from cli_command import CliCommand
+from dft.model import Key
+from dft.cli_command import CliCommand
 
 #
 #    Class StripRootFS

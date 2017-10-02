@@ -28,8 +28,8 @@ content. Information ca be output to different format such as csv, yaml, xml, or
 import logging
 import os
 import tempfile
-from cli_command import CliCommand
-from model import Key
+from dft.cli_command import CliCommand
+from dft.model import Key
 
 #
 #    Class ContentOutputWriter

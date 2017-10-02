@@ -30,16 +30,16 @@ The module will do actual processing and run the associated worker method (run m
 import argparse
 import textwrap
 import logging
-import build_rootfs
-import model
-from model import Key
-import assemble_firmware
-import install_bootchain
-import build_image
-import build_firmware
-import check_rootfs
-import generate_content_information
-import strip_rootfs
+import dft.build_rootfs
+import dft.model
+from dft.model import Key
+import dft.assemble_firmware
+import dft.install_bootchain
+import dft.build_image
+import dft.build_firmware
+import dft.check_rootfs
+import dft.generate_content_information
+import dft.strip_rootfs
 
 # -----------------------------------------------------------------------------
 #

@@ -31,8 +31,8 @@ import os
 import subprocess
 import stat
 import hashlib
-from cli_command import CliCommand
-from model import Key
+from dft.cli_command import CliCommand
+from dft.model import Key
 
 #
 #    Class CheckRootFS

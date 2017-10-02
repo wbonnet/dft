@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 #
 # The contents of this file are subject to the Apache 2.0 license you may not
 # use this file except in compliance with the License.
@@ -27,7 +28,7 @@ process the command line and run the action.
 
 import sys
 import time
-import cli
+from dft import cli
 
 def main():
   """
