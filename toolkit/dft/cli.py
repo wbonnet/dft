@@ -127,7 +127,7 @@ Available commands are :
       self.__add_parser_build_firmware()
     elif self.command == Key.CHECK_ROOTFS.value:
       self.__add_parser_check_rootfs()
-    elif self.command == Key.GEN_CONTENT_INFO.value:
+    elif self.command == Key.CONTENT_INFO.value:
       self.__add_parser_list_content()
     elif self.command == Key.STRIP_ROOTFS.value:
       self.__add_parser_strip_rootfs()
@@ -154,36 +154,6 @@ Available commands are :
     # Add the arguments
     self.parser.add_argument(Key.BUILD_ROOTFS.value,
                              help=Key.OPT_HELP_LABEL.value)
-
-    # Overrides the target architecture from the configuration file by
-    # limiting it to a given list of arch. Architectures not defined in
-    # the configuration file can be added with this parameter
-# TODO: parse the list of argument. So far only one value is handled
-    self.parser.add_argument(Key.OPT_LIMIT_ARCH.value,
-                             action='store',
-                             dest=Key.LIMIT_TARGET_ARCH.value,
-                             help="limit the list of target arch to process (comma separated list"
-                                  " of arch eg: arch1,arch2)")
-
-    # Overrides the target board used to build the rootfs. Board to
-    # use is limited it to a given list of arch. Boards not defined
-    # in the configuration file can be added with this parameter
-# TODO: parse the list of argument. So far only one value is handled
-    self.parser.add_argument(Key.OPT_LIMIT_BOARD.value,
-                             action='store',
-                             dest=Key.LIMIT_TARGET_BOARD.value,
-                             help="limit the list of target board to process (comma separated "
-                                  "list of versions eg: raspberry-pi-3, odroid-xu4)")
-
-    # Overrides the target version used to build the rootfs. Version to
-    # use is limited it to a given list of arch. Versions not defined
-    # in the configuration file can be added with this parameter
-# TODO: parse the list of argument. So far only one value is handled
-    self.parser.add_argument(Key.OPT_LIMIT_VERSION.value,
-                             action='store',
-                             dest=Key.LIMIT_TARGET_VERSION.value,
-                             help="limit the list of target version to process (comma separated "
-                                  "list of versions eg: jessie,stretch)")
 
     # Override the list of mirrors defined in the configuration file.
     # This option defines a single mirror, not a full list of mirrors.
@@ -266,7 +236,7 @@ Available commands are :
     """
 
     # Add the arguments
-    self.parser.add_argument(Key.GEN_CONTENT_INFO.value,
+    self.parser.add_argument(Key.CONTENT_INFO.value,
                              help=Key.OPT_HELP_LABEL.value)
 
     # Activate the generation of the packages information.
@@ -416,7 +386,7 @@ Available commands are :
       self.__run_build_partitions()
     elif self.command == Key.CHECK_ROOTFS.value:
       self.__run_check_rootfs()
-    elif self.command == Key.GEN_CONTENT_INFO.value:
+    elif self.command == Key.CONTENT_INFO.value:
       self.__run_list_content()
     elif self.command == Key.STRIP_ROOTFS.value:
       self.__run_strip_rootfs()
@@ -470,27 +440,6 @@ Available commands are :
                                    self.args.override_debian_mirror)
         self.project.project[Key.PROJECT_DEFINITION.value][Key.DEBOOTSTRAP_REPOSITORY.value] = \
                                    self.args.override_debian_mirror
-
-    if self.args.limit_target_version != None:
-      if self.args.limit_target_version != self.project.get_target_version():
-        self.project.logging.debug("Overriding target_version with CLI value : %s => %s",
-                                   self.project.get_target_version(),
-                                   self.args.limit_target_version)
-        self.project.set_version(self.args.limit_target_version)
-
-    if self.args.limit_target_board != None:
-      if self.args.limit_target_board != self.project.get_target_board():
-        self.project.logging.debug("Overriding target_board with CLI value : %s => %s",
-                                   self.project.get_target_board(),
-                                   self.args.limit_target_board)
-        self.project.set_board(self.args.limit_target_board)
-
-    if self.args.limit_target_arch != None:
-      if self.args.limit_target_arch != self.project.get_target_arch():
-        self.project.logging.debug("Overriding target_arch with CLI value : %s => %s",
-                                   self.project.get_target_arch(),
-                                   self.args.limit_target_arch)
-        self.project.set_arch(self.args.limit_target_arch)
 
     # Create the business object
     command = build_rootfs.BuildRootFS(self.dft, self.project)

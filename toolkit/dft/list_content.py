@@ -175,10 +175,10 @@ class ListContent(CliCommand):
 
   # -------------------------------------------------------------------------
   #
-  # gen_content_info
+  # list_content
   #
   # -------------------------------------------------------------------------
-  def gen_content_info(self):
+  def list_content(self):
     """This method implement the business logic of content generation.
     Information provided is the list of packages, TBD
 
