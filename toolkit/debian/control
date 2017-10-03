@@ -16,7 +16,9 @@ Architecture: all
 Depends: ${misc:Depends},
          ${python3:Depends},
          python3-parted,
-         python3-yaml
+         python3-yaml,
+         debootstrap,
+         ansible
 Description: Debian Framework Toolkit
 
 Package: dft-doc

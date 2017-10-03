@@ -30,6 +30,8 @@ The module will do actual processing and run the associated worker method (run m
 import argparse
 import textwrap
 import logging
+
+from dft.release import __version__
 from dft import build_rootfs
 from dft import model
 from dft.model import Key
@@ -38,7 +40,7 @@ from dft import install_bootchain
 from dft import build_image
 from dft import build_firmware
 from dft import check_rootfs
-from dft import generate_content_information
+from dft import list_content
 from dft import strip_rootfs
 
 # -----------------------------------------------------------------------------
@@ -60,26 +62,31 @@ class Cli(object):
     """Default constructor
     """
 
-    # Current version
-    self.version = "0.4.11"
-
     # Create the internal parser from argparse
     self.parser = argparse.ArgumentParser(description=textwrap.dedent('''\
-Debian Firmware Toolkit v''' + self.version + '''
+Debian Firmware Toolkit v''' + __version__ + '''
 
 DFT is a collection of tools used to create Debian based firmwares
 
 Available commands are :
-. assemble_firmware                Create a firmware from a rootfs and generate the configuration files used to loading after booting
-. build_image                      Build the disk image from the firmware (or rootfs) and bootchain
-. build_firmware                   Build the firmware configuration files and scripts used to load in memory the firmware
-. build_partitions                 Build the disk partitions and store them into separate files
-. build_rootfs                     Generate a debootstrap from a Debian repository, install and configure required packages
-. check_rootfs                     Control the content of the rootfs rootfs after its generation (debsecan and openscap)
-? generate_content_information     Generate a manifest identiyfing content and versions
-. install_bootchain                Install the bootchain (kernel, initramfs, grub or uboot) in the rootfs
-. strip_rootfs                     Strip down the rootfs before assembling the firmware'''),
-                                          formatter_class=argparse.RawTextHelpFormatter)
+. assemble_firmware     Create a firmware from a rootfs and generate the
+                        configuration files used to loading after booting
+. build_image           Build the disk image from the firmware (or rootfs)
+                        and bootchain
+. build_firmware        Build the firmware configuration files and scripts 
+                        used to load in memory the firmware
+. build_partitions      Build the disk partitions and store them into
+                        separate files
+. build_rootfs          Generate a rootfs from a Debian repository, install
+                        and configure required packages inside the newly
+                        created rootfs (based on debootstrap and Ansible)
+. check_rootfs          Control the content of the rootfs rootfs after its
+                        generation (debsecan and openscap)
+? list_content          Generate a manifest identiyfing content and versions 
+. install_bootchain     Install the bootchain (kernel, initramfs, grub or
+                        uboot) in the rootfs
+. strip_rootfs          Strip down the rootfs before assembling the firmware'''), 
+    formatter_class=argparse.RawTextHelpFormatter)
 
     # Storesthe arguments from the parser
     self.args = None
@@ -121,7 +128,7 @@ Available commands are :
     elif self.command == Key.CHECK_ROOTFS.value:
       self.__add_parser_check_rootfs()
     elif self.command == Key.GEN_CONTENT_INFO.value:
-      self.__add_parser_generate_content()
+      self.__add_parser_list_content()
     elif self.command == Key.STRIP_ROOTFS.value:
       self.__add_parser_strip_rootfs()
     else:
@@ -253,8 +260,8 @@ Available commands are :
 
 
 
-  def __add_parser_generate_content(self):
-    """ This method add parser options specific to generate_content_information
+  def __add_parser_list_content(self):
+    """ This method add parser options specific to list_content
     command
     """
 

@@ -20,6 +20,9 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 #
+
+from dft.release import __version__, __author__, __author_email__
+
 try:
     from setuptools import setup
 
@@ -29,11 +32,11 @@ except ImportError:
 config = {
     'description': 'Debian Firmware Toolkit',
     'long_description': 'DFT is a firmware used to produce firmware from a standard Debian repositories',
-    'author': 'William Bonnet',
+    'author': __author__,
     'url': 'https://github.com/wbonnet/dft/',
     'download_url': 'https://github.com/wbonnet/dft/',
-    'author_email': 'wbonnet@theitmakers.com',
-    'version': '0.5.0',
+    'author_email': __author_email__,
+    'version': __version__,
     'install_requires': [ 'pyyaml', 'pyparted' ],
     'packages': ['dft'],
     'scripts': [ 'bin/dft' ],
