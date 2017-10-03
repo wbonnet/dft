@@ -73,7 +73,7 @@ Available commands are :
                         configuration files used to loading after booting
 . build_image           Build the disk image from the firmware (or rootfs)
                         and bootchain
-. build_firmware        Build the firmware configuration files and scripts 
+. build_firmware        Build the firmware configuration files and scripts
                         used to load in memory the firmware
 . build_partitions      Build the disk partitions and store them into
                         separate files
@@ -82,11 +82,11 @@ Available commands are :
                         created rootfs (based on debootstrap and Ansible)
 . check_rootfs          Control the content of the rootfs rootfs after its
                         generation (debsecan and openscap)
-? list_content          Generate a manifest identiyfing content and versions 
+? list_content          Generate a manifest identiyfing content and versions
 . install_bootchain     Install the bootchain (kernel, initramfs, grub or
                         uboot) in the rootfs
-. strip_rootfs          Strip down the rootfs before assembling the firmware'''), 
-    formatter_class=argparse.RawTextHelpFormatter)
+. strip_rootfs          Strip down the rootfs before assembling the firmware'''), formatter_class=\
+    argparse.RawTextHelpFormatter)
 
     # Storesthe arguments from the parser
     self.args = None
@@ -273,42 +273,42 @@ Available commands are :
     # Default behavior is to generate everything if no generate_xxx_information
     # flag is set. If at least one fag is set, then the user has to set every
     # needed flag
-    self.parser.add_argument(Key.OPT_GEN_PACKAGES_INFO.value,
+    self.parser.add_argument(Key.OPT_CONTENT_PACKAGES.value,
                              action='store_true',
-                             dest=Key.GEN_PACKAGES_INFO.value,
+                             dest=Key.CONTENT_PACKAGES.value,
                              help="generate the information about packages. If at least one of "
                                   "the\ngenerate_something_information is set,then it deactivate "
                                   "the 'generate all'\ndefault behavior, and each information "
                                   "source has to be set.\n")
 
     # Activate the generation of information about vulnerabilities
-    self.parser.add_argument(Key.OPT_GEN_VULNERABILITIES_INFO.value,
+    self.parser.add_argument(Key.OPT_CONTENT_VULNERABILITIES.value,
                              action='store_true',
-                             dest=Key.GEN_VULNERABILITIES_INFO.value,
+                             dest=Key.CONTENT_VULNERABILITIES.value,
                              help="generate the information about vulnerabilities.\n")
 
     # Activate the generation of information about security
-    self.parser.add_argument(Key.OPT_GEN_SECURITY_INFO.value,
+    self.parser.add_argument(Key.OPT_CONTENT_SECURITY.value,
                              action='store_true',
-                             dest=Key.GEN_SECURITY_INFO.value,
+                             dest=Key.CONTENT_SECURITY.value,
                              help="generate the information about security.\n")
 
     # Activate the generation of information about rootkit
-    self.parser.add_argument(Key.OPT_GEN_ROOTKIT_INFO.value,
+    self.parser.add_argument(Key.OPT_CONTENT_ROOTKIT.value,
                              action='store_true',
-                             dest=Key.GEN_ROOTKIT_INFO.value,
+                             dest=Key.CONTENT_ROOTKIT.value,
                              help="generate the information about rootkits.\n")
 
     # Activate the generation of information about files.
-    self.parser.add_argument(Key.OPT_GEN_FILES_INFO.value,
+    self.parser.add_argument(Key.OPT_CONTENT_FILES.value,
                              action='store_true',
-                             dest=Key.GEN_FILES_INFO.value,
+                             dest=Key.CONTENT_FILES.value,
                              help="generate the information about files.\n")
 
     # Activate the generation of information about the anti-virus execution.
-    self.parser.add_argument(Key.OPT_GEN_ANTIVIRUS_INFO.value,
+    self.parser.add_argument(Key.OPT_CONTENT_ANTIVIRUS.value,
                              action='store_true',
-                             dest=Key.GEN_ANTIVIRUS_INFO.value,
+                             dest=Key.CONTENT_ANTIVIRUS.value,
                              help="generate the information about anti-virus execution.\n")
 
 
@@ -417,7 +417,7 @@ Available commands are :
     elif self.command == Key.CHECK_ROOTFS.value:
       self.__run_check_rootfs()
     elif self.command == Key.GEN_CONTENT_INFO.value:
-      self.__run_generate_content()
+      self.__run_list_content()
     elif self.command == Key.STRIP_ROOTFS.value:
       self.__run_strip_rootfs()
 
@@ -595,77 +595,77 @@ Available commands are :
 
   # -------------------------------------------------------------------------
   #
-  # __run_generate_content
+  # __run_list_content
   #
   # -------------------------------------------------------------------------
-  def __run_generate_content(self):
-    """ Method used to handle the generate_content_information command.
+  def __run_list_content(self):
+    """ Method used to handle the list_content command.
     Create the business objet, then execute the entry point
     """
 
     # Check if we have to do a 'generate all' or if some more specific flags
     # have ben set to reduce output. Default is generate all to true and all
     # other flags to false
-    self.project.dft.generate_all_information = True
-    self.project.dft.gen_packages_info = False
-    self.project.dft.gen_files_info = False
-    self.project.dft.gen_antivirus_info = False
-    self.project.dft.gen_vulnerabilities_info = False
-    self.project.dft.gen_security_info = False
+    self.project.dft.list_all_content = True
+    self.project.dft.content_packages = False
+    self.project.dft.content_files = False
+    self.project.dft.content_antivirus = False
+    self.project.dft.content_vulnerabilities = False
+    self.project.dft.content_security = False
 
     # Check if the packages are needed
-    if self.args.gen_packages_info != None:
+    if self.args.content_packages != None:
       # Flag is defined, then copy it
-      self.project.dft.gen_packages_info = self.args.gen_packages_info
+      self.project.dft.content_packages = self.args.content_packages
       # If flag is true, then generate all as to be false
-      if self.project.dft.gen_packages_info:
-        self.project.dft.generate_all_information = False
+      if self.project.dft.content_packages:
+        self.project.dft.list_all_content = False
 
     # Check if the files are needed
-    if self.args.gen_files_info != None:
+    if self.args.content_files != None:
       # Flag is defined, then copy it
-      self.project.dft.gen_files_info = self.args.gen_files_info
+      self.project.dft.content_files = self.args.content_files
       # If flag is true, then generate all as to be false
-      if self.project.dft.gen_files_info:
-        self.project.dft.generate_all_information = False
+      if self.project.dft.content_files:
+        self.project.dft.list_all_content = False
 
     # Check if the vulnerabilties are needed
-    if self.args.gen_vulnerabilities_info != None:
+    if self.args.content_vulnerabilities != None:
       # Flag is defined, then copy it
-      self.project.dft.gen_vulnerabilities_info = self.args.gen_vulnerabilities_info
+      self.project.dft.content_vulnerabilities = self.args.content_vulnerabilities
       # If flag is true, then generate all as to be false
-      if self.project.dft.gen_vulnerabilities_info:
-        self.project.dft.generate_all_information = False
+      if self.project.dft.content_vulnerabilities:
+        self.project.dft.list_all_content = False
 
     # Check if the antivirus are needed
-    if self.args.gen_antivirus_info != None:
+    if self.args.content_antivirus != None:
       # Flag is defined, then copy it
-      self.project.dft.gen_antivirus_info = self.args.gen_antivirus_info
+      self.project.dft.content_antivirus = self.args.content_antivirus
       # If flag is true, then generate all as to be false
-      if self.project.dft.gen_antivirus_info:
-        self.project.dft.generate_all_information = False
+      if self.project.dft.content_antivirus:
+        self.project.dft.list_all_content = False
 
     # Check if the security are needed
-    if self.args.gen_security_info != None:
+    if self.args.content_security != None:
       # Flag is defined, then copy it
-      self.project.dft.gen_security_info = self.args.gen_security_info
+      self.project.dft.content_security = self.args.content_security
       # If flag is true, then generate all as to be false
-      if self.project.dft.gen_security_info:
-        self.project.dft.generate_all_information = False
+      if self.project.dft.content_security:
+        self.project.dft.list_all_content = False
 
     # Check if the rootkit are needed
-    if self.args.gen_rootkit_info != None:
+    if self.args.content_rootkit != None:
       # Flag is defined, then copy it
-      self.project.dft.gen_rootkit_info = self.args.gen_rootkit_info
+      self.project.dft.content_rootkit = self.args.content_rootkit
       # If flag is true, then generate all as to be false
-      if self.project.dft.gen_rootkit_info:
-        self.project.dft.generate_all_information = False
+      if self.project.dft.content_rootkit:
+        self.project.dft.list_all_content = False
 
     # Create the business object
-    command = generate_content_information.GenerateContentInformation(self.dft, self.project)
+    command = list_content.ListContent(self.dft, self.project)
 
     # Then call the dedicated method
-    command.gen_content_info()
+    command.list_content()
 
 
   # -------------------------------------------------------------------------

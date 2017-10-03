@@ -171,7 +171,7 @@ class BuildImage(CliCommand):
 
     # # Final information if the information is available
     # if self.image_path is not None:
-    #   self.project.logging.info("The image has been successfully generated in : " + self.image_path)
+    # self.project.logging.info("The image has been successfully generated in : " + self.image_path)
     pass
 
 

@@ -132,13 +132,13 @@ class Key(Enum):
   FORBIDDEN = "forbidden"
   FORCE_UID = "force_uid"
   FORMAT = "format"
-  GEN_ANTIVIRUS_INFO = "gen_antivirus_info"
-  GEN_CONTENT_INFO = "generate_content_information"
-  GEN_FILES_INFO = "gen_files_info"
-  GEN_PACKAGES_INFO = "gen_packages_info"
-  GEN_ROOTKIT_INFO = "gen_rootkit_info"
-  GEN_SECURITY_INFO = "gen_security_info"
-  GEN_VULNERABILITIES_INFO = "gen_vulnerabilities_info"
+  GEN_CONTENT_ANTIVIRUS = "content_antivirus"
+  GEN_CONTENT_INFO = "content_information"
+  GEN_CONTENT_FILES = "content_files"
+  GEN_CONTENT_PACKAGES = "content_packages"
+  GEN_CONTENT_ROOTKIT = "content_rootkit"
+  GEN_CONTENT_SECURITY = "content_security"
+  GEN_CONTENT_VULNERABILITIES = "content_vulnerabilities"
   GENERATE_DEB = "generate_deb"
   GENERATE_SRC = "generate_src"
   GENERATE_VALIDITY_CHECK = "generate_validity_check"
@@ -195,7 +195,7 @@ class Key(Enum):
   OPT_GEN_PACKAGES_INFO = "--generate-packages-information"
   OPT_GEN_ROOTKIT_INFO = "--generate-rootkit-information"
   OPT_GEN_SECURITY_INFO = "--generate-security-information"
-  OPT_GEN_VULNERABILITIES_INFO = "--generate-vulnerabilities-information"
+  OPT_GEN_CONTENT_VULNERABILITIES = "--generate-vulnerabilities-information"
   OPT_HELP_LABEL = "Command to execute"
   OPT_KEEP_BOOTSTRAP_FILES = "--keep-bootstrap-files"
   OPT_LIMIT_ARCH = "--limit-arch"
@@ -336,13 +336,13 @@ class DftConfiguration(object):
     # Information generation flags. Each of the following flag controls the generation
     # of a given section.
     #
-    self.generate_all_information = None
-    self.gen_packages_info = None
-    self.gen_vulnerabilities_info = None
-    self.gen_rootkit_info = None
-    self.gen_security_info = None
-    self.gen_files_info = None
-    self.gen_antivirus_info = None
+    self.list_all_content = None
+    self.content_packages = None
+    self.content_vulnerabilities = None
+    self.content_rootkit = None
+    self.content_security = None
+    self.content_files = None
+    self.content_antivirus = None
 
 
 

@@ -458,7 +458,8 @@ class AssembleFirmware(CliCommand):
           # Generate the tmpfs specific mount command
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.SQUASHFS.value:
         working_file.write("DEV=$(losetup -f)\n")
-        working_file.write("losetup ${DEV} /root/boot/" + item[Key.STACK_ITEM.value][Key.SQUASHFS_FILE.value] + "\n")
+        working_file.write("losetup ${DEV} /root/boot/" + item[Key.STACK_ITEM.value] \
+                           [Key.SQUASHFS_FILE.value] + "\n")
         working_file.write("mount -t squashfs -o loop")
 
         # Is there some defined options ?
@@ -527,7 +528,8 @@ class AssembleFirmware(CliCommand):
       # Generate the tmpfs specific mount command
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.TMPFS.value:
         working_file.write("mount -t overlay overlay -o lowerdir=")
-        working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + ",upperdir=/root/dft/")
+        working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value])
+        working_file.write(",upperdir=/root/dft/")
         working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "/mountpoint")
         working_file.write(",workdir=/root/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] +
                            "/workdir")
@@ -543,7 +545,8 @@ class AssembleFirmware(CliCommand):
       # Generate the tmpfs specific mount command
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.PARTITION.value:
         working_file.write("mount -t overlay overlay -o lowerdir=")
-        working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + ",upperdir=/root/dft/")
+        working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value])
+        working_file.write(",upperdir=/root/dft/")
         working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value])
         working_file.write(",workdir=/root/dft/workdir")
         working_file.write(" " + item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + "\n")

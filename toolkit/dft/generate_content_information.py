@@ -149,9 +149,9 @@ class ContentOutputWriter(object):
 
 
 #
-#    Class GenerateContentInformation
+#    Class ListContent
 #
-class GenerateContentInformation(CliCommand):
+class ListContent(CliCommand):
   """This class implements the methods needed to generate the output desribing
   rootfs content
   """
@@ -169,7 +169,7 @@ class GenerateContentInformation(CliCommand):
     CliCommand.__init__(self, dft, project)
 
     # Create the output writer object
-    self.output_writer = ContentOutputWriter(self.project.content_information)
+    self.output_writer = ContentOutputWriter(self.project.list_content)
 
 
 
@@ -195,7 +195,7 @@ class GenerateContentInformation(CliCommand):
     logging.info("Starting to generate content information")
 
     # Check that there is a content definition file first
-    if self.project.content_information is None:
+    if self.project.list_content is None:
       self.project.logging.critical("The content generation file is not defined in project file")
       exit(1)
 
@@ -208,7 +208,7 @@ class GenerateContentInformation(CliCommand):
     # Generate the packages information
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_packages_info:
-      if Key.PACKAGES.value in self.project.content_information:
+      if Key.PACKAGES.value in self.project.list_content:
         logging.info("Starting to generate packages information")
         self.gen_packages_info()
       else:
@@ -218,7 +218,7 @@ class GenerateContentInformation(CliCommand):
     # Generate the vulnerabilities information
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_vulnerabilities_info:
-      if Key.VULNERABILITIES.value in self.project.content_information:
+      if Key.VULNERABILITIES.value in self.project.list_content:
         logging.info("Starting to generate vulnerabilities information")
         self.gen_vulnerabilities_info()
       else:
@@ -228,7 +228,7 @@ class GenerateContentInformation(CliCommand):
     # Generate the security information
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_security_info:
-      if Key.SECURITY.value in self.project.content_information:
+      if Key.SECURITY.value in self.project.list_content:
         logging.info("Starting to generate security information")
         self.gen_security_info()
       else:
@@ -238,7 +238,7 @@ class GenerateContentInformation(CliCommand):
     # Generate the rootkit information
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_rootkit_info:
-      if Key.ROOTKIT.value in self.project.content_information:
+      if Key.ROOTKIT.value in self.project.list_content:
         logging.info("Starting to generate rootkit information")
         self.gen_rootkit_info()
       else:
@@ -248,7 +248,7 @@ class GenerateContentInformation(CliCommand):
     # Generate the files information
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_files_info:
-      if Key.FILES.value in self.project.content_information:
+      if Key.FILES.value in self.project.list_content:
         logging.info("Starting to generate files information")
         self.gen_files_info()
       else:
@@ -258,7 +258,7 @@ class GenerateContentInformation(CliCommand):
     # Generate the anti-virus information
     #
     if self.project.dft.generate_all_information or self.project.dft.gen_antivirus_info:
-      if Key.ANTIVIRUS.value in self.project.content_information:
+      if Key.ANTIVIRUS.value in self.project.list_content:
         logging.info("Starting to generate antivirus information")
         self.gen_antivirus_info()
       else:
@@ -309,30 +309,30 @@ class GenerateContentInformation(CliCommand):
       output_item = dict()
 
       # Test if we have to generate the package status in the output
-      if Key.OUTPUT_PKG_STATUS.value in self.project.content_information[Key.PACKAGES.value]:
-        if self.project.content_information[Key.PACKAGES.value][Key.OUTPUT_PKG_STATUS.value]:
+      if Key.OUTPUT_PKG_STATUS.value in self.project.list_content[Key.PACKAGES.value]:
+        if self.project.list_content[Key.PACKAGES.value][Key.OUTPUT_PKG_STATUS.value]:
           output_item[Key.STATUS.value] = pkg_status
 
       # Test if we have to generate the package name in the output
-      if Key.OUTPUT_PKG_NAME.value in self.project.content_information[Key.PACKAGES.value]:
-        if self.project.content_information[Key.PACKAGES.value][Key.OUTPUT_PKG_NAME.value]:
+      if Key.OUTPUT_PKG_NAME.value in self.project.list_content[Key.PACKAGES.value]:
+        if self.project.list_content[Key.PACKAGES.value][Key.OUTPUT_PKG_NAME.value]:
           output_item[Key.NAME.value] = pkg_name
 
       # Test if we have to generate the package version in the output
-      if Key.OUTPUT_PKG_VERSION.value in self.project.content_information[Key.PACKAGES.value]:
-        if self.project.content_information[Key.PACKAGES.value][Key.OUTPUT_PKG_VERSION.value]:
+      if Key.OUTPUT_PKG_VERSION.value in self.project.list_content[Key.PACKAGES.value]:
+        if self.project.list_content[Key.PACKAGES.value][Key.OUTPUT_PKG_VERSION.value]:
           output_item[Key.VERSION.value] = pkg_version
 
       # Test if we have to generate the package architecture in the output
       if Key.OUTPUT_PKG_ARCHITECTURE.value in \
-                                          self.project.content_information[Key.PACKAGES.value]:
-        if self.project.content_information[Key.PACKAGES.value]\
+                                          self.project.list_content[Key.PACKAGES.value]:
+        if self.project.list_content[Key.PACKAGES.value]\
                                                [Key.OUTPUT_PKG_ARCHITECTURE.value]:
           output_item[Key.ARCHITECTURE.value] = pkg_arch
 
       # Test if we have to generate the package md5 in the output
-      if Key.OUTPUT_PKG_MD5.value in self.project.content_information[Key.PACKAGES.value]:
-        if self.project.content_information[Key.PACKAGES.value][Key.OUTPUT_PKG_MD5.value]:
+      if Key.OUTPUT_PKG_MD5.value in self.project.list_content[Key.PACKAGES.value]:
+        if self.project.list_content[Key.PACKAGES.value][Key.OUTPUT_PKG_MD5.value]:
           # Generate the apt-cache show command to retrieve the MD5sum
           # Grp the keyword and print second word
           command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
@@ -341,8 +341,8 @@ class GenerateContentInformation(CliCommand):
           output_item[Key.MD5.value] = command_output.decode(Key.UTF8.value)
 
       # Test if we have to generate the package sha256 in the output
-      if Key.OUTPUT_PKG_SHA256.value in self.project.content_information[Key.PACKAGES.value]:
-        if self.project.content_information[Key.PACKAGES.value][Key.OUTPUT_PKG_SHA256.value]:
+      if Key.OUTPUT_PKG_SHA256.value in self.project.list_content[Key.PACKAGES.value]:
+        if self.project.list_content[Key.PACKAGES.value][Key.OUTPUT_PKG_SHA256.value]:
           # Generate the apt-cache show command to retrieve the SHA256
           # Grp the keyword and print second word
           command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
@@ -351,8 +351,8 @@ class GenerateContentInformation(CliCommand):
           output_item[Key.SHA256.value] = command_output.decode(Key.UTF8.value)
 
       # Test if we have to generate the package size in the output
-      if Key.OUTPUT_PKG_SIZE.value in self.project.content_information[Key.PACKAGES.value]:
-        if self.project.content_information[Key.PACKAGES.value][Key.OUTPUT_PKG_SIZE.value]:
+      if Key.OUTPUT_PKG_SIZE.value in self.project.list_content[Key.PACKAGES.value]:
+        if self.project.list_content[Key.PACKAGES.value][Key.OUTPUT_PKG_SIZE.value]:
           # Generate the apt-cache show command to retrieve the Size
           # Grp the keyword and print second word
           command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
@@ -362,8 +362,8 @@ class GenerateContentInformation(CliCommand):
 
       # Test if we have to generate the package installed-size in the output
       if Key.OUTPUT_PKG_INSTALLED_SIZE.value in \
-                                          self.project.content_information[Key.PACKAGES.value]:
-        if self.project.content_information[Key.PACKAGES.value]\
+                                          self.project.list_content[Key.PACKAGES.value]:
+        if self.project.list_content[Key.PACKAGES.value]\
                                                [Key.OUTPUT_PKG_INSTALLED_SIZE.value]:
           # Generate the apt-cache show command to retrieve the Installed-SizeMD5sum
           # Grp the keyword and print second word
@@ -375,8 +375,8 @@ class GenerateContentInformation(CliCommand):
 
       # Test if we have to generate the package description in the output
       if Key.OUTPUT_PKG_DESCRIPTION.value in \
-                                          self.project.content_information[Key.PACKAGES.value]:
-        if self.project.content_information[Key.PACKAGES.value]\
+                                          self.project.list_content[Key.PACKAGES.value]:
+        if self.project.list_content[Key.PACKAGES.value]\
                                                [Key.OUTPUT_PKG_DESCRIPTION.value]:
           output_item[Key.DESCRIPTION.value] = pkg_description
 
@@ -430,8 +430,8 @@ class GenerateContentInformation(CliCommand):
     # then generate the command for both version output and clamav execution.
     # So far only clamav is supported.
     use_host_av = True
-    if Key.USE_HOST_AV.value in self.project.content_information[Key.ANTIVIRUS.value]:
-      if not self.project.content_information[Key.ANTIVIRUS.value][Key.USE_HOST_AV.value]:
+    if Key.USE_HOST_AV.value in self.project.list_content[Key.ANTIVIRUS.value]:
+      if not self.project.list_content[Key.ANTIVIRUS.value][Key.USE_HOST_AV.value]:
         use_host_av = False
 
     # Log which AV we are going to use
@@ -493,12 +493,12 @@ class GenerateContentInformation(CliCommand):
     self.output_writer.initialize(Key.ANTIVIRUS.value)
 
     # Check if the database update is authorized by configuration (can be off for offline systems)
-    if Key.UPDATE_DATABASE.value not in self.project.content_information[Key.ANTIVIRUS.value]:
-      self.project.content_information[Key.ANTIVIRUS.value][Key.UPDATE_DATABASE.value] = True
+    if Key.UPDATE_DATABASE.value not in self.project.list_content[Key.ANTIVIRUS.value]:
+      self.project.list_content[Key.ANTIVIRUS.value][Key.UPDATE_DATABASE.value] = True
 
     # Check if we have to update the database. Default is True. But it can be switched to False
     # for offline systems
-    if self.project.content_information[Key.ANTIVIRUS.value][Key.UPDATE_DATABASE.value]:
+    if self.project.list_content[Key.ANTIVIRUS.value][Key.UPDATE_DATABASE.value]:
       logging.debug("Starting to update Clamav database")
       command_output = self.execute_command(antivirus_cmd_update)
 
@@ -698,24 +698,24 @@ class GenerateContentInformation(CliCommand):
 
     # If install_missing_software key is not defined, then set its default value
     if Key.INSTALL_MISSING_SOFTWARE.value not in \
-                                    self.project.content_information[Key.CONFIGURATION.value]:
-      self.project.content_information[Key.CONFIGURATION.value]\
+                                    self.project.list_content[Key.CONFIGURATION.value]:
+      self.project.list_content[Key.CONFIGURATION.value]\
                                           [Key.INSTALL_MISSING_SOFTWARE.value] = False
 
     # If skip_missing_software key is not defined, then set its default value
     if Key.SKIP_MISSING_SOFTWARE.value not in \
-                                    self.project.content_information[Key.CONFIGURATION.value]:
+                                    self.project.list_content[Key.CONFIGURATION.value]:
       logging.debug("Setting default value of skip_missing_software to False")
-      self.project.content_information[Key.CONFIGURATION.value]\
+      self.project.list_content[Key.CONFIGURATION.value]\
                                           [Key.SKIP_MISSING_SOFTWARE.value] = True
 
     # Check if installation is authorized sinc the software is missing
-    if self.project.content_information[Key.CONFIGURATION.value]\
+    if self.project.list_content[Key.CONFIGURATION.value]\
                                            [Key.INSTALL_MISSING_SOFTWARE.value]:
       logging.info("Installing " + packages + " in rootfs")
 
       # Update the catalog before installing
-      if self.project.content_information[Key.CONFIGURATION.value]\
+      if self.project.list_content[Key.CONFIGURATION.value]\
                                              ["update_catalog_before_install"]:
         self.update_package_catalog()
 
@@ -729,7 +729,7 @@ class GenerateContentInformation(CliCommand):
     # Not installed and not allowed to install missing software
     else:
       # Check if skipping is allowed or not
-      if self.project.content_information[Key.CONFIGURATION.value]\
+      if self.project.list_content[Key.CONFIGURATION.value]\
                                              [Key.SKIP_MISSING_SOFTWARE.value]:
         logging.warning("Skipping vulnerabilities content generation. Clamav is missing\
                         and installation not allowed by configuration file.")
