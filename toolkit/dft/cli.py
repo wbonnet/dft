@@ -30,16 +30,16 @@ The module will do actual processing and run the associated worker method (run m
 import argparse
 import textwrap
 import logging
-import dft.build_rootfs
-import dft.model
+from dft import build_rootfs
+from dft import model
 from dft.model import Key
-import dft.assemble_firmware
-import dft.install_bootchain
-import dft.build_image
-import dft.build_firmware
-import dft.check_rootfs
-import dft.generate_content_information
-import dft.strip_rootfs
+from dft import assemble_firmware
+from dft import install_bootchain
+from dft import build_image
+from dft import build_firmware
+from dft import check_rootfs
+from dft import generate_content_information
+from dft import strip_rootfs
 
 # -----------------------------------------------------------------------------
 #
@@ -386,11 +386,11 @@ Available commands are :
 
     # Get the config file from command line
     if self.args.config_file != None and \
-       self.args.config_file != self.project.dft.configuration_file:
+       self.args.config_file != self.project.dft.filename:
       self.project.logging.debug("Overriding config_file with CLI value : %s => %s",
-                                 self.project.dft.configuration_file,
+                                 self.project.dft.filename,
                                  self.args.config_file)
-      self.project.dft.configuration_file = self.args.config_file
+      self.project.dft.filename = self.args.config_file
 
     # ---------------------------------------------------------------------
 

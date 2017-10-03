@@ -308,9 +308,9 @@ class DftConfiguration(object):
 
     # Default configuration file to use if none is provided through the cli
     if filename is None:
-      self.configuration_file = "~/.dftrc"
+      self.filename = "~/.dftrc"
     else:
-      self.configuration_file = filename
+      self.filename = filename
 
     # Debootstrap target to use (minbase or buildd)
     self.debootstrap_target = "minbase"
@@ -357,16 +357,20 @@ class DftConfiguration(object):
 
     # If a new filename has been passed as argument, then store it
     if filename is not None:
-      self.configuration_file = filename
+      self.filename = filename
 
-    if self.configuration_file[0] == "~" and self.configuration_file[1] == "/":
-      self.configuration_file = os.path.expanduser(self.configuration_file)
+    # Expend ~ as uer home dir
+    self.filename = os.path.expanduser(self.filename)
+
+    # Check if configuration file exist in home ir, otherwise switch to package config file
+    if not os.path.isfile(self.filename):
+      self.filename = "/etc/dft/dftrc"
 
     try:
       # Check it the configuration file exist
-      if os.path.isfile(self.configuration_file):
+      if os.path.isfile(self.filename):
         # Yes then, load it
-        with open(self.configuration_file, 'r') as working_file:
+        with open(self.filename, 'r') as working_file:
           self.configuration = yaml.load(working_file)
 
           # Now we may have to expand a few paths...
@@ -403,7 +407,7 @@ class DftConfiguration(object):
                                                           [Key.ADDITIONAL_ROLES.value][i])
       else:
         # No then it does not matter, let('s continue without ~/.dftrc file
-        self.logging.debug("The file " + self.configuration_file + " does not exist. Aborting.")
+        self.logging.debug("The file " + self.filename + " does not exist. Aborting.")
 
     except OSError as exception:
       # Call clean up to umount /proc and /dev
