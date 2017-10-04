@@ -220,18 +220,43 @@ class AssembleFirmware(CliCommand):
     logging.info("Customize modules list in target")
 
     # Create a file in modules.d to ensure that squashfs and overlay modules are present
-    #TODO handle as parameters in case of builtin ?
+    # Also install any modules needed by the firmware to stack the file systems (overlay or aufs)
+    # or declared in the configuration file as additional
     with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
-      # Generate file header
+      # Squashfs is mandatory
+      # Detect if it is used or not
       working_file.write("squashfs\n")
-      working_file.write("overlayfs\n")
+
+      # Check if aufs or ovelayfs are needed
+      if self.project.firmware[Key.LAYOUT.value][Key.METHOD.value] == Key.AUFS.value:
+        working_file.write("aufs\n")
+      elif self.project.firmware[Key.LAYOUT.value][Key.METHOD.value] == Key.OVERLAYFS.value:
+        working_file.write("overlayfs\n")
+      else:
+        # If we reach this code, then method was unknown
+        self.project.logging.error("Unknown stacking method " +
+                                      self.project.firmware[Key.LAYOUT.value][Key.METHOD.value])
+
+      # Check if there is an initramfs customization section
+      if Key.INITRAMFS.value in self.project.firmware:
+        # Yes, so now look for an additional module section
+        if Key.ADDITIONAL_MODULES.value in self.project.firmware[Key.INITRAMFS.value]:
+          # Generate an entry for additional each module to load in initramfs as defined in
+          # the configuration file
+          for module in self.project.firmware[Key.INITRAMFS.value][Key.ADDITIONAL_MODULES.value]:
+            working_file.write(module + "\n")
+            logging.debug("adding additional module : " + module + " to initramfs")
+        else:
+          logging.debug("initramfs section found, but no additional module to include are defined")
+      else:
+        logging.debug("no initramfs section found")
 
     # Done close the file
     working_file.close()
 
     # And now we can move the temporary file under the rootfs tree
     filepath = self.project.get_rootfs_mountpoint() + '/usr/share/initramfs-tools/modules.d/'
-    command = "mv -f " + working_file.name + " " + filepath + "extra-fs"
+    command = "mv -f " + working_file.name + " " + filepath + "extra-modules"
     self.execute_command(command)
 
 
@@ -324,7 +349,7 @@ class AssembleFirmware(CliCommand):
     # Final log
     logging.info("Firmware stacking has been successfully generated into : " + filepath)
 
-# Cela merde quand j'ai tout sur la meme partition
+# TODO : Cela merde quand j'ai tout sur la meme partition
 # Il faudrait surement en faire plusieurs, comme sur la cible. La partition de base ne contient que
 # ce qu'il faut, kernel et initramfs, une partition avec les squashfs et le reste c du data
 

@@ -21,7 +21,18 @@
 #
 #
 
-
+# ----------------------------------------------------------------------------
+#
+# Initramfs customization
+#
+# ----------------------------------------------------------------------------
+# initramfs:
+  # Provides a list of modules added in /usr/share/initramfs-tools/modules.d/
+  # before running update-initramfs. The modules listed below will be included
+  # in the initrd archive.
+  # additional_modules:
+  #  - module1
+  #  - module2
 
 # ----------------------------------------------------------------------------
 #

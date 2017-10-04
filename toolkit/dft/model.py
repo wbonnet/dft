@@ -55,6 +55,7 @@ class Key(Enum):
   # Define each and every key and associated string used in the DFT tool
 
   ABSENT = "absent"
+  ADDITIONAL_MODULES = "additional_modules"
   ADDITIONAL_ROLES = "additional_roles"
   ALIGNMENT = "alignment"
   ALL_ROOT = "all_root"
@@ -148,6 +149,7 @@ class Key(Enum):
   IMAGE = "image"
   IMAGE_WORKDIR = "image"
   INIT_FILENAME = "init_filename"
+  INITRAMFS = "initramfs"
   INSTALL_BOOTCHAIN = "install_bootchain"
   INSTALL_MISSING_SOFTWARE = "install_missing_software"
   INSTALL_MSSING_SOFTWARE = "install_mssing_software"
