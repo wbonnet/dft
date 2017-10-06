@@ -353,6 +353,10 @@ Available commands are :
       command called from cli
     """
 
+    # Deactivate too_many-branches since we want it to be written this way
+    # (it means one branch in if else test for each command word)
+    # pylint: disable=too-many-branches
+
     # Create the dft configuration object, and load its configuration
     if self.args.config_file is None:
       self.dft = model.DftConfiguration()
@@ -677,8 +681,3 @@ Available commands are :
 
     # Then call the dedicated method
     command.run_sequence()
-
-
-# TODO add clean-dir option to build and assemble firmware. What is the strategy for cleaning and
-# recycling previous content
-# maybe more working dir, and a final output ?
