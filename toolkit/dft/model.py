@@ -117,7 +117,7 @@ class Key(Enum):
   DEBOOTSTRAP_TARGET = "minbase"
   DEFAULT_CONFIGURATION_FILE = "~/.dftrc"
   DEFAULT_PROJECT_FILE = "project.yml"
-  DEFAULT_SEQUENCE_NAME ="__dft_default_sequence__"
+  DEFAULT_SEQUENCE_NAME = "__dft_default_sequence__"
   DESCRIPTION = "description"
   DEVICES = "devices"
   DEVUAN = "devuan"
