@@ -38,7 +38,6 @@ from enum import Enum
 from datetime import datetime
 import yaml
 
-
 # -----------------------------------------------------------------------------
 #
 # class Key
@@ -55,6 +54,7 @@ class Key(Enum):
   # Define each and every key and associated string used in the DFT tool
 
   ABSENT = "absent"
+  ACTION = "action"
   ADDITIONAL_MODULES = "additional_modules"
   ADDITIONAL_ROLES = "additional_roles"
   ALIGNMENT = "alignment"
@@ -68,6 +68,7 @@ class Key(Enum):
   ARCHITECTURE = "architecture"
   ARCHITECTURES = "architectures"
   ARCHIVE_FILENAME_EXTENSION = ".tar"
+  ARGUMENTS = "arguments"
   ARM = "arm"
   ARMBIAN = "armbian"
   ARMBIAN_SIGNING_PUBKEY = "9F0E78D5"
@@ -90,6 +91,7 @@ class Key(Enum):
   BUILD_IMAGE = "build_image"
   BUILD_PARTITIONS = "build_partitions"
   BUILD_ROOTFS = "build_rootfs"
+  BUILDING_SEQUENCES = "building_sequences"
   CHECK = "check"
   CHECK_ROOTFS = "check_rootfs"
   COMPRESSION = "compression"
@@ -115,6 +117,7 @@ class Key(Enum):
   DEBOOTSTRAP_TARGET = "minbase"
   DEFAULT_CONFIGURATION_FILE = "~/.dftrc"
   DEFAULT_PROJECT_FILE = "project.yml"
+  DEFAULT_SEQUENCE_NAME ="__dft_default_sequence__"
   DESCRIPTION = "description"
   DEVICES = "devices"
   DEVUAN = "devuan"
@@ -202,7 +205,8 @@ class Key(Enum):
   OPT_LIMIT_VERSION = "--limit-version"
   OPT_LOG_LEVEL = "--log-level"
   OPT_OVERRIDE_DEBIAN_MIRROR = "--override-debian-mirror"
-  OPT_PROJECT_FILE = "--project-file"
+  OPT_PROJECT_FILE = "--project"
+  OPT_SEQUENCE_NAME = "--sequence"
   OPTIONS = "options"
   ORIGIN = "origin"
   OUTPUT = "output"
@@ -239,9 +243,11 @@ class Key(Enum):
   ROOTFS = "rootfs"
   ROOTFS_DIR = "rootfs"
   ROOTKIT = "rootkit"
+  RUN_SEQUENCE = "run_sequence"
   SCAN = "scan"
   SECTIONS = "sections"
   SECURITY = "security"
+  SEQUENCE_NAME = "sequence_name"
   SHA1 = "sha1"
   SHA256 = "sha256"
   SIZE = "size"
@@ -254,6 +260,7 @@ class Key(Enum):
   START_SECTOR = "start_sector"
   STATUS = "status"
   STDOUT = "stdout"
+  STEPS = "steps"
   STRIP_ROOTFS = "strip_rootfs"
   STRIPPING = "stripping"
   SUITE = "suite"
@@ -270,6 +277,7 @@ class Key(Enum):
   USE_FRAGMENTS = "use_fragments"
   USE_HOST_AV = "use_host_av"
   UTF8 = "utf-8"
+  VALUE = "value"
   VARIABLES = "variables"
   VERSION = "version"
   VULNERABILITIES = "vulnerabilities"
@@ -343,7 +351,8 @@ class DftConfiguration(object):
     self.content_files = None
     self.content_antivirus = None
 
-
+    # Name of the sequence to run
+    self.sequence_name = None
 
   # ---------------------------------------------------------------------------
   #
@@ -855,10 +864,10 @@ class ProjectDefinition(object):
 
     # Check if the value is defined
     if Key.DFT_BASE.value not in self.project[Key.CONFIGURATION.value]:
-      if self.configuration.configuration is not None and \
-         Key.DFT_BASE.value in self.configuration.configuration[Key.CONFIGURATION.value]:
+      if self.dft.configuration is not None and \
+         Key.DFT_BASE.value in self.dft.configuration[Key.CONFIGURATION.value]:
         self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] = \
-                      self.configuration.configuration[Key.CONFIGURATION.value][Key.DFT_BASE.value]
+                      self.dft.configuration[Key.CONFIGURATION.value][Key.DFT_BASE.value]
       else:
         self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] = "/usr/share/dft"
 
@@ -886,10 +895,10 @@ class ProjectDefinition(object):
 
     # Check if the value is defined
     if Key.BSP_BASE.value not in self.project[Key.CONFIGURATION.value]:
-      if self.configuration.configuration is not None and \
-         Key.BSP_BASE.value in self.configuration.configuration[Key.CONFIGURATION.value]:
+      if self.dft.configuration is not None and \
+         Key.BSP_BASE.value in self.dft.configuration[Key.CONFIGURATION.value]:
         self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value] = \
-                      self.configuration.configuration[Key.CONFIGURATION.value][Key.BSP_BASE.value]
+                      self.dft.configuration[Key.CONFIGURATION.value][Key.BSP_BASE.value]
       else:
         self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value] = self.get_dft_base() + "/bsp"
 

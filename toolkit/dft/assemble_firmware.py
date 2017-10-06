@@ -235,7 +235,7 @@ class AssembleFirmware(CliCommand):
       else:
         # If we reach this code, then method was unknown
         self.project.logging.error("Unknown stacking method " +
-                                      self.project.firmware[Key.LAYOUT.value][Key.METHOD.value])
+                                   oself.project.firmware[Key.LAYOUT.value][Key.METHOD.value])
 
       # Check if there is an initramfs customization section
       if Key.INITRAMFS.value in self.project.firmware:

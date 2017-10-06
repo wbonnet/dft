@@ -1,3 +1,68 @@
+dft (0.5.3-1) unstable; urgency=low
+
+  * New feature : Add suport of build sequence in project files
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
+
+dft-ci (0.5.3-1) unstable; urgency=low
+
+  * New feature : Add suport of build sequence in project files
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
+
+dft-doc (0.5.3-1) unstable; urgency=low
+
+  * New feature : Add suport of build sequence in project files
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
+
+dft-examples (0.5.3-1) unstable; urgency=low
+
+  * New feature : Add suport of build sequence in project files
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
+
+dft-bsp-test (0.5.3-1) unstable; urgency=low
+
+  * New feature : Add suport of build sequence in project files
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
+
+dft (0.5.2-1) unstable; urgency=low
+
+  * New feature : Add suport of an additional list of module to load when 
+                  updating the initramfs.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
+
+dft-ci (0.5.2-1) unstable; urgency=low
+
+  * New feature : Add suport of an additional list of module to load when 
+                  updating the initramfs.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
+
+dft-doc (0.5.2-1) unstable; urgency=low
+
+  * New feature : Add suport of an additional list of module to load when 
+                  updating the initramfs.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
+
+dft-examples (0.5.2-1) unstable; urgency=low
+
+  * New feature : Add suport of an additional list of module to load when 
+                  updating the initramfs.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
+
+dft-bsp-test (0.5.2-1) unstable; urgency=low
+
+  * New feature : Add suport of an additional list of module to load when 
+                  updating the initramfs.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
+
 dft (0.5.1-1) unstable; urgency=low
 
   * Initiial release.
@@ -27,3 +92,4 @@ dft-bsp-test (0.5.1-1) unstable; urgency=low
   * Initiial release.
 
  -- William Bonnet <wbonnet@theitmakers.com>  Tue, 3 Oct 2017 22:57:00 +0100
+

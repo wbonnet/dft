@@ -40,8 +40,9 @@ from dft import install_bootchain
 from dft import build_image
 from dft import build_firmware
 from dft import check_rootfs
-from dft import list_content
 from dft import strip_rootfs
+from dft import list_content
+from dft import sequence
 
 # -----------------------------------------------------------------------------
 #
@@ -85,6 +86,8 @@ Available commands are :
 ? list_content          Generate a manifest identiyfing content and versions
 . install_bootchain     Install the bootchain (kernel, initramfs, grub or
                         uboot) in the rootfs
+. run_sequence          Run a sequence of DFT command defined as defined in
+                        the project file
 . strip_rootfs          Strip down the rootfs before assembling the firmware'''), formatter_class=\
     argparse.RawTextHelpFormatter)
 
@@ -110,7 +113,6 @@ Available commands are :
     self.command = args
 
     self.__add_parser_common()
-# TODO command build project
 
     # According to the command, call the method dedicated to parse the arguments
     if self.command == Key.ASSEMBLE_FIRMWARE.value:
@@ -129,6 +131,8 @@ Available commands are :
       self.__add_parser_check_rootfs()
     elif self.command == Key.CONTENT_INFO.value:
       self.__add_parser_list_content()
+    elif self.command == Key.RUN_SEQUENCE.value:
+      self.__add_parser_run_sequence()
     elif self.command == Key.STRIP_ROOTFS.value:
       self.__add_parser_strip_rootfs()
     else:
@@ -292,6 +296,20 @@ Available commands are :
                              help=Key.OPT_HELP_LABEL.value)
 
 
+  def __add_parser_run_sequence(self):
+    """ This method add parser options specific to run_sequence command
+    """
+
+    # Add the arguments
+    self.parser.add_argument(Key.RUN_SEQUENCE.value,
+                             help=Key.OPT_HELP_LABEL.value)
+
+    # Configuration file defines rootfs and its modulation
+    self.parser.add_argument(Key.OPT_SEQUENCE_NAME.value,
+                             action='store',
+                             dest=Key.SEQUENCE_NAME.value,
+                             default=Key.DEFAULT_SEQUENCE_NAME.value,
+                             help='Name of the command sequence to execute')
 
   def __add_parser_common(self):
     """ This method add parser options common to all command
@@ -369,6 +387,12 @@ Available commands are :
                                  self.args.config_file)
       self.project.dft.filename = self.args.config_file
 
+    # Get the sequence name if defined
+    if self.args.sequence_name != None:
+      self.dft.sequence_name = self.args.sequence_name.lower()
+    else:
+      self.dft.sequence_name = Key.DEFAULT_SEQUENCE_NAME.value
+
     # ---------------------------------------------------------------------
 
     # Select the method to run according to the command
@@ -390,6 +414,8 @@ Available commands are :
       self.__run_list_content()
     elif self.command == Key.STRIP_ROOTFS.value:
       self.__run_strip_rootfs()
+    elif self.command == Key.RUN_SEQUENCE.value:
+      self.__run_run_sequence()
 
 
 
@@ -617,6 +643,7 @@ Available commands are :
     command.list_content()
 
 
+
   # -------------------------------------------------------------------------
   #
   # __run_strip_rootfs
@@ -632,6 +659,24 @@ Available commands are :
 
     # Then call the dedicated method
     command.strip_rootfs()
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # __run_run_sequence
+  #
+  # -------------------------------------------------------------------------
+  def __run_run_sequence(self):
+    """ Method used to handle the run_sequence command.
+      Create the business objet, then execute the entry point
+    """
+
+    # Create the business object
+    command = sequence.Sequence(self.dft, self.project)
+
+    # Then call the dedicated method
+    command.run_sequence()
 
 
 # TODO add clean-dir option to build and assemble firmware. What is the strategy for cleaning and
