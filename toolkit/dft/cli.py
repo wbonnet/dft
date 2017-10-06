@@ -32,13 +32,13 @@ import textwrap
 import logging
 
 from dft.release import __version__
-from dft import build_rootfs
 from dft import model
 from dft.model import Key
 from dft import assemble_firmware
 from dft import install_bootchain
 from dft import build_image
 from dft import build_firmware
+from dft import build_rootfs
 from dft import check_rootfs
 from dft import strip_rootfs
 from dft import list_content
@@ -387,13 +387,6 @@ Available commands are :
                                  self.args.config_file)
       self.project.dft.filename = self.args.config_file
 
-    # Get the sequence name if defined and onbly if we are processing RUN_SEQUENCE command
-    if self.command == Key.RUN_SEQUENCE.value:
-      if self.args.sequence_name != None:
-        self.dft.sequence_name = self.args.sequence_name.lower()
-      else:
-        self.dft.sequence_name = Key.DEFAULT_SEQUENCE_NAME.value
-
     # ---------------------------------------------------------------------
 
     # Select the method to run according to the command
@@ -672,6 +665,12 @@ Available commands are :
     """ Method used to handle the run_sequence command.
       Create the business objet, then execute the entry point
     """
+
+    # Get the sequence name if defined and onbly if we are processing RUN_SEQUENCE command
+    if self.args.sequence_name != None:
+      self.dft.sequence_name = self.args.sequence_name.lower()
+    else:
+      self.dft.sequence_name = Key.DEFAULT_SEQUENCE_NAME.value
 
     # Create the business object
     command = sequence.Sequence(self.dft, self.project)

@@ -31,6 +31,14 @@ import os
 from shutil import rmtree
 from dft.cli_command import CliCommand
 from dft.model import Key
+from dft import assemble_firmware
+from dft import install_bootchain
+from dft import build_image
+from dft import build_firmware
+from dft import build_rootfs
+from dft import check_rootfs
+from dft import strip_rootfs
+from dft import list_content
 
 #
 #    Class Sequence
@@ -54,7 +62,7 @@ class Sequence(CliCommand):
 
   # -------------------------------------------------------------------------
   #
-  #
+  # run_sequence
   #
   # -------------------------------------------------------------------------
   def run_sequence(self):
@@ -103,6 +111,87 @@ class Sequence(CliCommand):
     if len(sequence) == 0:
       logging.info("Sequence " + self.dft.sequence_name + " is empty. Nothing to do.")
     else:
+      # Some steps are defined in the list. Iterate it and call run_tep method on eah step
       for step in sequence[Key.STEPS.value]:
-        logging.debug("Doing step : " + step[Key.ACTION.value])
+        if not self.execute_step(step):
+          logging.error("Execution of step " + step[Key.ACTION.value] + " failed. Aborting")
+          exit(1)
 
+
+
+  # -------------------------------------------------------------------------
+  #
+  # execute_step
+  #
+  # -------------------------------------------------------------------------
+  def execute_step(self, step):
+    """This method implement the business logic of executing a single step
+    from a sequence of commands. Commands are the same as commands available
+    from the CLI (assemble_firmware, build_firmware, build_rootfs, etc.).
+    """
+
+    # According to the step action, call the method dedicated to execute it
+    logging.debug("Executing step : " + step[Key.ACTION.value])
+
+    # Handle the assemble_firmware action
+    if step[Key.ACTION.value] == Key.ASSEMBLE_FIRMWARE.value:
+      # Create the business object and call the execution method
+      command = assemble_firmware.AssembleFirmware(self.dft, self.project)
+      command.assemble_firmware()
+
+    # Handle the build_rootfs action
+    elif step[Key.ACTION.value] == Key.BUILD_ROOTFS.value:
+      # Create the business object and call the execution method
+      command = build_rootfs.BuildRootFS(self.dft, self.project)
+      command.create_rootfs()
+
+    # Handle the install_bootchain action
+    elif step[Key.ACTION.value] == Key.INSTALL_BOOTCHAIN.value:
+      # Create the business object and call the execution method
+      command = install_bootchain.InstallBootChain(self.dft, self.project)
+      command.install_bootchain()
+
+    # Handle the build_image action
+    elif step[Key.ACTION.value] == Key.BUILD_IMAGE.value:
+      # Create the business object and call the execution method
+      command = build_image.BuildImage(self.dft, self.project)
+      command.build_image()
+
+    # Handle the buid_partitions action
+    elif step[Key.ACTION.value] == Key.BUILD_PARTITIONS.value:
+      # Create the business object and call the execution method
+      command = build_image.BuildImage(self.dft, self.project)
+      command.build_partitions()
+
+    # Handle the build_firmware action
+    elif step[Key.ACTION.value] == Key.BUILD_FIRMWARE.value:
+      # Create the business object and call the execution method
+      command = build_firmware.BuildFirmware(self.dft, self.project)
+      command.build_firmware()
+
+    # Handle the check_rootfs action
+    elif step[Key.ACTION.value] == Key.CHECK_ROOTFS.value:
+      # Create the business object and call the execution method
+      command = check_rootfs.CheckRootFS(self.dft, self.project)
+      command.check_rootfs()
+
+    # Handle the content_information action
+    elif step[Key.ACTION.value] == Key.CONTENT_INFO.value:
+      # Create the business object and call the execution method
+      command = list_content.ListContent(self.dft, self.project)
+      command.list_content()
+
+    # Handle the strip_rootfs action
+    elif step[Key.ACTION.value] == Key.STRIP_ROOTFS.value:
+      # Create the business object and call the execution method
+      command = strip_rootfs.StripRootFS(self.dft, self.project)
+      command.strip_rootfs()
+
+    # Handle the unknown action
+    else:
+      # If the command word is unknown, output an eror, and return false
+      logging.fatal("Unknown step action : " + step[Key.ACTION.value] + ". Aborting")
+      return False
+
+    # Main exit, still here, this it succeeded
+    return True

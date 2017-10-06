@@ -207,9 +207,10 @@ building_sequences:
         # from the CLI. Args name can include or not the initiial dashes.
         # Arguments list itself is optional. When defining an argument, value may
         # be optional, depending on the argument.
-        # arguments:
-        #  - name: build_rootfs
-        #    value:
+        arguments:
+          - name: keep-bootstrap-files
+          - name: log-level
+            value: debug
       - action: check_rootfs
       - action: strip_rootfs
       - action: build_firmware
