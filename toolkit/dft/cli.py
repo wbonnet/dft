@@ -387,11 +387,12 @@ Available commands are :
                                  self.args.config_file)
       self.project.dft.filename = self.args.config_file
 
-    # Get the sequence name if defined
-    if self.args.sequence_name != None:
-      self.dft.sequence_name = self.args.sequence_name.lower()
-    else:
-      self.dft.sequence_name = Key.DEFAULT_SEQUENCE_NAME.value
+    # Get the sequence name if defined and onbly if we are processing RUN_SEQUENCE command
+    if self.command == Key.RUN_SEQUENCE.value:
+      if self.args.sequence_name != None:
+        self.dft.sequence_name = self.args.sequence_name.lower()
+      else:
+        self.dft.sequence_name = Key.DEFAULT_SEQUENCE_NAME.value
 
     # ---------------------------------------------------------------------
 
