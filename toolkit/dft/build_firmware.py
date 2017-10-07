@@ -161,7 +161,7 @@ class BuildFirmware(CliCommand):
     usiness logic of firmware generation.
     """
 
-    # Deactivate too_many-branches since we wnt it to be written this way
+    # Deactivate too_many-branches since we want it to be written this way
     # pylint: disable=too-many-branches
 
     # Output some fancy logs :)
