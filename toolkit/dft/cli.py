@@ -583,6 +583,7 @@ Available commands are :
     self.project.dft.content_packages = False
     self.project.dft.content_files = False
     self.project.dft.content_antivirus = False
+    self.project.dft.content_rootkit = False
     self.project.dft.content_vulnerabilities = False
     self.project.dft.content_security = False
 

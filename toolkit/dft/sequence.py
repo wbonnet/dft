@@ -135,32 +135,52 @@ class Sequence(CliCommand):
 
     # Handle the assemble_firmware action
     if step[Key.ACTION.value] == Key.ASSEMBLE_FIRMWARE.value:
+      # Makes a copy of the configuration before applying arguments redefined
+      # in the project file (within the sequence of steps)
+      cfg = self.copy_config_and_apply_args(step)
+
       # Create the business object and call the execution method
-      command = assemble_firmware.AssembleFirmware(self.dft, self.project)
+      command = assemble_firmware.AssembleFirmware(cfg, self.project)
       command.assemble_firmware()
 
     # Handle the build_rootfs action
     elif step[Key.ACTION.value] == Key.BUILD_ROOTFS.value:
+      # Makes a copy of the configuration before applying arguments redefined
+      # in the project file (within the sequence of steps)
+      cfg = self.copy_config_and_apply_args(step)
+
       # Create the business object and call the execution method
-      command = build_rootfs.BuildRootFS(self.dft, self.project)
+      command = build_rootfs.BuildRootFS(cfg, self.project)
       command.create_rootfs()
 
     # Handle the install_bootchain action
     elif step[Key.ACTION.value] == Key.INSTALL_BOOTCHAIN.value:
+      # Makes a copy of the configuration before applying arguments redefined
+      # in the project file (within the sequence of steps)
+      cfg = self.copy_config_and_apply_args(step)
+
       # Create the business object and call the execution method
-      command = install_bootchain.InstallBootChain(self.dft, self.project)
+      command = install_bootchain.InstallBootChain(cfg, self.project)
       command.install_bootchain()
 
     # Handle the build_image action
     elif step[Key.ACTION.value] == Key.BUILD_IMAGE.value:
+      # Makes a copy of the configuration before applying arguments redefined
+      # in the project file (within the sequence of steps)
+      cfg = self.copy_config_and_apply_args(step)
+
       # Create the business object and call the execution method
-      command = build_image.BuildImage(self.dft, self.project)
+      command = build_image.BuildImage(cfg, self.project)
       command.build_image()
 
     # Handle the buid_partitions action
     elif step[Key.ACTION.value] == Key.BUILD_PARTITIONS.value:
+      # Makes a copy of the configuration before applying arguments redefined
+      # in the project file (within the sequence of steps)
+      cfg = self.copy_config_and_apply_args(step)
+
       # Create the business object and call the execution method
-      command = build_image.BuildImage(self.dft, self.project)
+      command = build_image.BuildImage(cfg, self.project)
       command.build_partitions()
 
     # Handle the build_firmware action
@@ -171,20 +191,32 @@ class Sequence(CliCommand):
 
     # Handle the check_rootfs action
     elif step[Key.ACTION.value] == Key.CHECK_ROOTFS.value:
+      # Makes a copy of the configuration before applying arguments redefined
+      # in the project file (within the sequence of steps)
+      cfg = self.copy_config_and_apply_args(step)
+
       # Create the business object and call the execution method
-      command = check_rootfs.CheckRootFS(self.dft, self.project)
+      command = check_rootfs.CheckRootFS(cfg, self.project)
       command.check_rootfs()
 
     # Handle the content_information action
     elif step[Key.ACTION.value] == Key.CONTENT_INFO.value:
+      # Makes a copy of the configuration before applying arguments redefined
+      # in the project file (within the sequence of steps)
+      cfg = self.copy_config_and_apply_args(step)
+
       # Create the business object and call the execution method
-      command = list_content.ListContent(self.dft, self.project)
+      command = list_content.ListContent(cfg, self.project)
       command.list_content()
 
     # Handle the strip_rootfs action
     elif step[Key.ACTION.value] == Key.STRIP_ROOTFS.value:
+      # Makes a copy of the configuration before applying arguments redefined
+      # in the project file (within the sequence of steps)
+      cfg = self.copy_config_and_apply_args(step)
+
       # Create the business object and call the execution method
-      command = strip_rootfs.StripRootFS(self.dft, self.project)
+      command = strip_rootfs.StripRootFS(cfg, self.project)
       command.strip_rootfs()
 
     # Handle the unknown action
@@ -195,3 +227,61 @@ class Sequence(CliCommand):
 
     # Main exit, still here, this it succeeded
     return True
+
+
+  # -------------------------------------------------------------------------
+  #
+  # copy_config_and_apply_args
+  #
+  # -------------------------------------------------------------------------
+  def copy_config_and_apply_args(self, step):
+    """This method is used in step processing. It makes a copy of the
+    configuration, applies args value from step and returns this copy.
+
+    It is used to passed a modified copy of the configuration to business
+    method when xecuting steps, instead of modifying global configuration.
+    """
+
+    # According to the step action, call the method dedicated to execute it
+    logging.debug("Executing step : " + step[Key.ACTION.value])
+
+    # Make a copy of the configuration
+    cfg = self.dft
+
+    # Iterate the list of arguments if defined
+    if Key.ARGUMENTS.value in step and len(step[Key.ARGUMENTS.value]) > 0:
+      for arg in step[Key.ARGUMENTS.value]:
+        if Key.NAME.value not in arg:
+          logging.warning("Name is missing in definition of step " + step[Key.ACTION.value] + \
+                          ". Skipping it.")
+        else:
+          # Process list_content arguents
+          cfg.list_all_content = True
+          if arg[Key.NAME.value] == Key.OPT_CONTENT_ANTIVIRUS.value:
+            cfg.content_antivirus = True
+            cfg.list_all_content = False
+          elif arg[Key.NAME.value] == Key.OPT_CONTENT_FILES.value:
+            cfg.content_files = True
+            cfg.list_all_content = False
+          elif arg[Key.NAME.value] == Key.OPT_CONTENT_PACKAGES.value:
+            cfg.content_packages = True
+            cfg.list_all_content = False
+          elif arg[Key.NAME.value] == Key.OPT_CONTENT_ROOTKIT.value:
+            cfg.content_packages = True
+            cfg.list_all_content = False
+          elif arg[Key.NAME.value] == Key.OPT_CONTENT_SECURITY.value:
+            cfg.dft.content_security = True
+            cfg.list_all_content = False
+          elif arg[Key.NAME.value] == Key.OPT_CONTENT_VULNERABILITIES.value:
+            cfg.content_vulnerabilities = True
+            cfg.list_all_content = False
+          # Process common arguments
+          elif arg[Key.NAME.value] == Key.OPT_KEEP_BOOTSTRAP_FILES.value:
+            cfg.keep_bootstrap_files = True
+# TODO    elif arg[Key.NAME.value] == Key.OPT_OVERRIDE_DEBIAN_MIRROR:
+
+    # self.project.dft.list_all_content = True
+
+    # Returns the modified (or not) copy
+    return(cfg)
+
