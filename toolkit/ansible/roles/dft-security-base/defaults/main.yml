@@ -37,7 +37,7 @@ dft_openssh:
     max_auth_tries: 2
     max_sessions: 2
     permit_root_login: "no"
-    port: 19057
+    port: 30463
     tcp_keep_alive: "no"
     x11_forwarding: "no"
     allow_agent_forwarding: "no"
