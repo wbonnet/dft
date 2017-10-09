@@ -729,17 +729,15 @@ class ProjectDefinition(object):
       # Once configuration have been loaded, compute the values of some
       # configuration variables
       #
-
       if Key.WORKING_DIR.value in self.project[Key.CONFIGURATION.value]:
-        self.project_base_workdir = self.project[Key.CONFIGURATION.value]\
-                                                [Key.WORKING_DIR.value]
-        self.project_base_workdir += "/" + self.project[Key.PROJECT_DEFINITION.value]\
-                                                       [Key.PROJECT_NAME.value]
+        self.project_base_workdir = self.project[Key.CONFIGURATION.value][Key.WORKING_DIR.value]
       else:
         self.logging.debug("configuration/working_dir is not defined, using /tmp/dft as default \
                             value")
-        self.project_base_workdir = "/tmp/dft/"
-        self.project_base_workdir += self.project[Key.CONFIGURATION.value][Key.PROJECT_NAME.value]
+        self.project_base_workdir = "/tmp/dft"
+
+      self.project_base_workdir += "/" + self.project[Key.PROJECT_DEFINITION.value]\
+                                                     [Key.PROJECT_NAME.value]
 
       # Defines path for subcommand
       self.rootfs_base_workdir = self.project_base_workdir + "/rootfs"
