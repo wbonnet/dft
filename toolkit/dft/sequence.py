@@ -278,10 +278,7 @@ class Sequence(CliCommand):
           # Process common arguments
           elif arg[Key.NAME.value] == Key.OPT_KEEP_BOOTSTRAP_FILES.value:
             cfg.keep_bootstrap_files = True
-# TODO    elif arg[Key.NAME.value] == Key.OPT_OVERRIDE_DEBIAN_MIRROR:
-
-    # self.project.dft.list_all_content = True
-
+          elif arg[Key.NAME.value] == Key.OPT_OVERRIDE_DEBIAN_MIRROR:
+            logging.warning("Debian mirror is not yet overriden. Skipping it...")
     # Returns the modified (or not) copy
     return(cfg)
-
