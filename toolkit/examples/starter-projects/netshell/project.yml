@@ -61,7 +61,7 @@ configuration:
   # contains project specific definition (which are not included in the dft
   # open-source tool)
   additional_roles:
-   - "../../examples/redefined-roles"
+   - "/usr/share/dft/examples/redefined-roles"
 
   # Defines if the file /etc/apt/apt.conf.d/10no-check-valid-until should be generated or not
   # If generated this file contains Acquire::Check-Valid-Until: "0"; which disables validity
