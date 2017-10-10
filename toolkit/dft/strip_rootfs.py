@@ -290,16 +290,23 @@ class StripRootFS(CliCommand):
   def remove_directory(self, target):
     """This method removes  a directory from the target rootfs.
 
-    This operation also rmoves recursivly the directory content (thus you'd
+    This operation also removes recursivly the directory content (thus you'd
     better not remove / ...).
     """
 
-    self.project.logging.debug("Remove directory : " + target)
-
-    # Deleting dirctories is done from host rootf. There is no need to trigger a chroot to rm rm
-    # Moreover, some files may be missing from the chroot to be target to run chroot
+    # Deleting directories is done from host rootfs. There is no need to
+    # trigger a chroot to rm. Moreover, some files may be missing from the
+    # chroot to be able to run chroot command
     target = self.project.get_rootfs_mountpoint() + "/" + target
-    rmtree(target)
+
+    # Check if the directory exist
+    if os.path.isdir(target):
+      # Yes, then remove it and log it
+      rmtree(target)
+      self.project.logging.debug("Removed directory " + target)
+    else:
+      self.project.logging.debug("Directory " + target + " does not exist")
+
 
 
 
@@ -309,28 +316,33 @@ class StripRootFS(CliCommand):
   #
   # -------------------------------------------------------------------------
   def empty_directory(self, target):
-    """This method removes a dirctory content recursivly. Only files and
-    symlinks are remove. The sub dirctories structure is not mdified.
+    """This method removes a directory content recursivly. Only files and
+    symlinks are remove. The sub directories structure is not mdified.
     """
 
-    # Emptying dirctories is done from host rootf. There is no need to trigger a chroot to rm rm
+    # Emptying directories is done from host rootf. There is no need to trigger a chroot to rm rm
     # Moreover, some files may be missing from the chroot to be target to run chroot
     target = self.project.get_rootfs_mountpoint() + "/" + target
     self.project.logging.debug("Empty directory : " + target)
 
-    # Retrieve the list of entries in the foler to clean
-    for file in os.listdir(target):
-      # Get the full path name
-      filepath = os.path.join(target, file)
-      try:
-        # Check if it is a file or a symlink
-        if os.path.isfile(filepath) or os.path.islink(filepath):
-          # Yes then delete it
-          print("os.unlink(" + filepath + ")")
-        # Is it a sub directory ?
-        elif os.path.isdir(filepath):
-          # Yes then recurse it
-          self.empty_directory(filepath)
-      # Catch any exception that may occur and print the error
-      except Exception as e:
-        print(e)
+    # Check if the target directory exist
+    if os.path.isdir(target):
+      # Yes thus then we can process it. First retrieve the list en entries
+      # in the foler to clean
+      for file in os.listdir(target):
+        # Get the full path name
+        filepath = os.path.join(target, file)
+        try:
+          # Check if it is a file or a symlink
+          if os.path.isfile(filepath) or os.path.islink(filepath):
+            # Yes then delete it
+            print("os.unlink(" + filepath + ")")
+          # Is it a sub directory ?
+          elif os.path.isdir(filepath):
+            # Yes then recurse it
+            self.empty_directory(filepath)
+        # Catch any exception that may occur and print the error
+        except OSError as err:
+          print(err)
+    else:
+      self.project.logging.debug("Directory " + target + " does not exist")
