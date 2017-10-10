@@ -272,7 +272,7 @@ class BuildRootFS(CliCommand):
     # Generate the command line to execute Ansible in the chrooted environment
     logging.info("running ansible")
     command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
-    command += " /bin/bash -c \"cd /dft_bootstrap && /usr/bin/ansible-playbook -i "
+    command += " /bin/bash -c \"cd /dft_bootstrap && /usr/bin/ansible-playbook -i"
     command += " inventory.yml -c local site.yml\""
     self.execute_command(command)
     logging.info("ansible stage successfull")
@@ -320,6 +320,7 @@ class BuildRootFS(CliCommand):
     if self.use_qemu_static:
       logging.info("running debootstrap stage 1")
       debootstrap_command += " --foreign --arch=" + self.project.get_target_arch()
+      debootstrap_command += " --include=gnupg"
     else:
       logging.info("running debootstrap")
 
