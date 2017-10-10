@@ -27,6 +27,8 @@ of removing files and packages.
 """
 
 import os
+import errno
+from shutil import rmtree
 from dft.model import Key
 from dft.cli_command import CliCommand
 
@@ -245,8 +247,15 @@ class StripRootFS(CliCommand):
     # Deleting file is done from host rootf. There is no need to trigger a chroot to rm rm
     # Moreover, some files may be missing from the chroot to be target to run chroot
     target = self.project.get_rootfs_mountpoint() + "/" + target
-    command = "rm -f " + target
-    self.execute_command(command)
+    try:
+      os.remove(target)
+
+    # Catch OSError in case of file removal error
+    except OSError as err:
+      # If file does not exit errno value will be ENOENT
+      if err.errno != errno.ENOENT:
+        # Thus if excption was caused by something else, throw it upward
+        raise
 
 
 
@@ -290,9 +299,7 @@ class StripRootFS(CliCommand):
     # Deleting dirctories is done from host rootf. There is no need to trigger a chroot to rm rm
     # Moreover, some files may be missing from the chroot to be target to run chroot
     target = self.project.get_rootfs_mountpoint() + "/" + target
-
-    command = "rm -fr " + target
-    self.execute_command(command)
+    rmtree(target)
 
 
 
@@ -309,8 +316,21 @@ class StripRootFS(CliCommand):
     # Emptying dirctories is done from host rootf. There is no need to trigger a chroot to rm rm
     # Moreover, some files may be missing from the chroot to be target to run chroot
     target = self.project.get_rootfs_mountpoint() + "/" + target
-
     self.project.logging.debug("Empty directory : " + target)
-    command = "bash -c '[ -d " + target + " ] && find " + target
-    command += " -type f | xargs rm -f || true'"
-    self.execute_command(command)
+
+    # Retrieve the list of entries in the foler to clean
+    for file in os.listdir(target):
+      # Get the full path name
+      filepath = os.path.join(target, file)
+      try:
+        # Check if it is a file or a symlink
+        if os.path.isfile(filepath) or os.path.islink(filepath):
+          # Yes then delete it
+          print("os.unlink(" + filepath + ")")
+        # Is it a sub directory ?
+        elif os.path.isdir(filepath):
+          # Yes then recurse it
+          self.empty_directory(filepath)
+      # Catch any exception that may occur and print the error
+      except Exception as e:
+        print(e)

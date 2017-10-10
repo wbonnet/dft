@@ -268,8 +268,7 @@ class BuildImage(CliCommand):
       exit(1)
 
     # Create the directory if needed
-    if not os.path.isdir(self.project.get_image_directory()):
-      os.makedirs(self.project.get_image_directory())
+    os.makedirs(self.project.get_image_directory(), exist_ok=True)
 
     # Generate the path
     self.image_path = self.project.get_image_directory() + "/"

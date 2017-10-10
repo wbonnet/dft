@@ -30,6 +30,7 @@ based upon the definition stored in a configuration file and a set of Ansible ro
 import logging
 import os
 import tempfile
+from shutil import rmtree
 from distutils import dir_util
 from distutils import file_util
 from dft.cli_command import CliCommand
@@ -104,17 +105,12 @@ class BuildRootFS(CliCommand):
                         self.project.get_rootfs_mountpoint())
         exit(1)
       else:
-
-# TODO security hole !!!!!
-# Protect path generation to avoid to remove / !!!
-        command = 'rm -fr "' + self.project.get_rootfs_mountpoint() +'"'
-        self.execute_command(command)
+        rmtree(self.project.get_rootfs_mountpoint())
         os.makedirs(self.project.get_rootfs_mountpoint())
 
     # Create the bootstrap directory
     dft_target_path = self.project.get_rootfs_mountpoint() + "/dft_bootstrap/"
-    if not os.path.exists(dft_target_path):
-      os.makedirs(dft_target_path)
+    os.mkdir(dft_target_path)
 
     # Do the debootstrap call
     self.generate_debootstrap_rootfs()
@@ -164,7 +160,7 @@ class BuildRootFS(CliCommand):
       dft_target_path = self.project.get_rootfs_mountpoint() + "/dft_bootstrap/"
       if not os.path.exists(dft_target_path):
         logging.debug("creating dft_bootstrap under " + dft_target_path)
-        os.makedirs(dft_target_path)
+        os.mkdir(dft_target_path)
         logging.debug("created !")
       else:
         logging.debug("dft_bootstrap already exist under " + dft_target_path)

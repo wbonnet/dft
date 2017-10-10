@@ -27,8 +27,6 @@ different steps needed to build a firmware image from scratch.
 """
 
 import logging
-import os
-from shutil import rmtree
 from dft.cli_command import CliCommand
 from dft.model import Key
 from dft import assemble_firmware
@@ -94,15 +92,15 @@ class Sequence(CliCommand):
                     self.project.project[Key.BUILDING_SEQUENCES.value][0][Key.SEQUENCE_NAME.value])
 
     # Then search the sequence by its name. Use a boolean flag to mark it has been found
-    found_sequence = False
-    for sequence in self.project.project[Key.BUILDING_SEQUENCES.value]:
-      if self.dft.sequence_name == sequence[Key.SEQUENCE_NAME.value].lower():
+    sequence = None
+    for seq in self.project.project[Key.BUILDING_SEQUENCES.value]:
+      if self.dft.sequence_name == seq[Key.SEQUENCE_NAME.value].lower():
         logging.debug("Found sequence " + self.dft.sequence_name)
-        found_sequence = True
+        sequence = seq
         break
 
     # Was sequence found ?
-    if not found_sequence:
+    if sequence is None:
       logging.fatal("Sequence " + self.dft.sequence_name + \
                     " was not found in project file. Aborting.")
       exit(1)
@@ -132,6 +130,9 @@ class Sequence(CliCommand):
 
     # According to the step action, call the method dedicated to execute it
     logging.debug("Executing step : " + step[Key.ACTION.value])
+
+    # Command object used for step processing
+    command = None
 
     # Handle the assemble_firmware action
     if step[Key.ACTION.value] == Key.ASSEMBLE_FIRMWARE.value:
@@ -281,4 +282,4 @@ class Sequence(CliCommand):
           elif arg[Key.NAME.value] == Key.OPT_OVERRIDE_DEBIAN_MIRROR:
             logging.warning("Debian mirror is not yet overriden. Skipping it...")
     # Returns the modified (or not) copy
-    return(cfg)
+    return cfg

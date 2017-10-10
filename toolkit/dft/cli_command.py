@@ -28,6 +28,7 @@ cli targets.
 import os
 import subprocess
 import shutil
+import errno
 from dft.model import Key
 
 #
@@ -192,10 +193,18 @@ class CliCommand(object):
                                  self.project.get_rootfs_mountpoint())
       return
 
-    # Execute the file removal with root privileges
+    # Remove he QEmu binary if it exist
     self.project.logging.info("cleaning QEMU for arch " + self.project.get_target_arch() +
                               "(using " + self.qemu_binary +")")
-    os.system("rm " + self.project.get_rootfs_mountpoint() + self.qemu_binary)
+    try:
+      os.remove(self.project.get_rootfs_mountpoint() + self.qemu_binary)
+
+    # Catch OSError in case of file removal error
+    except OSError as err:
+      # If file does not exit errno value will be ENOENT
+      if err.errno != errno.ENOENT:
+        # Thus if exception was caused by something else, throw it upward
+        raise
 
     # Empty the binary name
     self.qemu_binary = None
@@ -236,9 +245,16 @@ class CliCommand(object):
 
       # Test if the file exists
       if os.path.isfile(filepath):
-        # Generate a rm command with root privileges and execute it
-        command = "rm -f " + filepath
-        self.execute_command(command)
+        try:
+          os.remove(filepath)
+
+        # Catch OSError in case of file removal error
+        except OSError as err:
+          # If file does not exit errno value will be ENOENT
+          if err.errno != errno.ENOENT:
+            # Thus if exception was caused by something else, throw it upward
+            raise
+
     else:
       msg = "remove_validity_check is set to False. Generated "
       msg += "/etc/apt/apt.conf.d/10no-check-valid-until is not removed"

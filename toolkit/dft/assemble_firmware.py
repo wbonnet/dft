@@ -95,8 +95,7 @@ class AssembleFirmware(CliCommand):
       exit(1)
 
     # Ensure firmware generation path exists and is a dir
-    if not os.path.isdir(self.project.get_firmware_directory()):
-      os.makedirs(self.project.get_firmware_directory())
+    os.makedirs(self.project.get_firmware_directory(), exist_ok=True)
 
     # Ensure firmware exists
     if not os.path.isfile(self.project.firmware_filename):
@@ -235,7 +234,7 @@ class AssembleFirmware(CliCommand):
       else:
         # If we reach this code, then method was unknown
         self.project.logging.error("Unknown stacking method " +
-                                   oself.project.firmware[Key.LAYOUT.value][Key.METHOD.value])
+                                   self.project.firmware[Key.LAYOUT.value][Key.METHOD.value])
 
       # Check if there is an initramfs customization section
       if Key.INITRAMFS.value in self.project.firmware:

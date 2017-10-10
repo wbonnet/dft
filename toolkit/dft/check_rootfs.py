@@ -589,7 +589,7 @@ class CheckRootFS(CliCommand):
     directories and symlinks) installed in the rootfs according to the
     rules loaded from the configurtion file.
 
-    Files ia a term that identify any object in the file system. A 'file'
+    Files in a term that identify any object in the file system. A 'file'
     can be a standard file, but also a directory or a symlink (special
     devices are not handled, yet...). As a standard file, a package is a
     file.
