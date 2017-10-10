@@ -384,32 +384,22 @@ class DftConfiguration(object):
             # Yes then we now have to check one by one th different path to expand
             # First let's process working_dir
             if Key.WORKING_DIR.value in self.configuration[Key.CONFIGURATION.value]:
-              # Check if path starts with ~ and need expension
-              if self.configuration[Key.CONFIGURATION.value][Key.WORKING_DIR.value][0] == "~" \
-              and self.configuration[Key.CONFIGURATION.value][Key.WORKING_DIR.value][1] == "/":
-                self.configuration[Key.CONFIGURATION.value][Key.WORKING_DIR.value] = \
-                          os.path.expanduser(self.configuration[Key.CONFIGURATION.value]\
-                                                               [Key.WORKING_DIR.value])
+              self.configuration[Key.CONFIGURATION.value][Key.WORKING_DIR.value] = \
+                        os.path.expanduser(self.configuration[Key.CONFIGURATION.value]\
+                                                             [Key.WORKING_DIR.value])
             # Then let's do dft_base
             if Key.DFT_BASE.value in self.configuration[Key.CONFIGURATION.value]:
-              # Check if path starts with ~ and need expension
-              if self.configuration[Key.CONFIGURATION.value][Key.DFT_BASE.value][0] == "~" \
-              and self.configuration[Key.CONFIGURATION.value][Key.DFT_BASE.value][1] == "/":
-                self.configuration[Key.CONFIGURATION.value][Key.DFT_BASE.value] = \
-                          os.path.expanduser(self.configuration[Key.CONFIGURATION.value]\
-                                                               [Key.DFT_BASE.value])
+              self.configuration[Key.CONFIGURATION.value][Key.DFT_BASE.value] = \
+                        os.path.expanduser(self.configuration[Key.CONFIGURATION.value]\
+                                                             [Key.DFT_BASE.value])
             # And finally the list of additionnal roles
             if Key.ADDITIONAL_ROLES.value in self.configuration[Key.CONFIGURATION.value]:
               # Check if path starts with ~ and need expension
               for i in range(0, len(self.configuration[Key.CONFIGURATION.value]\
                                                       [Key.ADDITIONAL_ROLES.value])):
-                if self.configuration[Key.CONFIGURATION.value]\
-                                     [Key.ADDITIONAL_ROLES.value][i][0] == "~" and \
-                   self.configuration[Key.CONFIGURATION.value]\
-                                     [Key.ADDITIONAL_ROLES.value][i][1] == "/":
-                  self.configuration[Key.CONFIGURATION.value][Key.ADDITIONAL_ROLES.value][i] = \
-                           os.path.expanduser(self.configuration[Key.CONFIGURATION.value]\
-                                                          [Key.ADDITIONAL_ROLES.value][i])
+                self.configuration[Key.CONFIGURATION.value][Key.ADDITIONAL_ROLES.value][i] = \
+                   os.path.expanduser(self.configuration[Key.CONFIGURATION.value]\
+                                                        [Key.ADDITIONAL_ROLES.value][i])
       else:
         # No then it does not matter, let('s continue without ~/.dftrc file
         self.logging.debug("The file " + self.filename + " does not exist. Aborting.")
@@ -628,12 +618,9 @@ class ProjectDefinition(object):
         for key in {Key.DFT_BASE.value, Key.PROJECT_PATH.value, Key.WORKING_DIR.value}:
           # For iterate the key and check they are defined in the config file
           if key in self.project[Key.CONFIGURATION.value]:
-            # Then chek if the single value field starts by "~/"
-            if self.project[Key.CONFIGURATION.value][key][0] == "~" and \
-               self.project[Key.CONFIGURATION.value][key][1] == "/":
-              # If yes modifiy its value using expenduser ( replace ~ by /home/foo)
-              self.project[Key.CONFIGURATION.value][key] = \
-                              os.path.expanduser(self.project[Key.CONFIGURATION.value][key])
+            # If yes modifiy its value using expenduser ( replace ~ by /home/foo)
+            self.project[Key.CONFIGURATION.value][key] = \
+                            os.path.expanduser(self.project[Key.CONFIGURATION.value][key])
 
         # Expand ~ in path since it is not done automagically by Python
         for key in {Key.ADDITIONAL_ROLES.value}:
@@ -641,38 +628,34 @@ class ProjectDefinition(object):
           if key in self.project[Key.CONFIGURATION.value]:
             # Then iterate the list of values it contains
             for counter in range(len(self.project[Key.CONFIGURATION.value][key])):
-              # Then chek if the valuestarts by "~/"
-              if self.project[Key.CONFIGURATION.value][key][counter][0] == "~" and \
-                 self.project[Key.CONFIGURATION.value][key][counter][1] == "/":
-                # If yes modifiy its value using expenduser ( replace ~ by /home/foo)
-                self.project[Key.CONFIGURATION.value][key][counter] = \
-                      os.path.expanduser(self.project[Key.CONFIGURATION.value][key][counter])
+              self.project[Key.CONFIGURATION.value][key][counter] = \
+                    os.path.expanduser(self.project[Key.CONFIGURATION.value][key][counter])
 
       # Load the repositories sub configuration files
       if Key.REPOSITORIES.value in self.project[Key.PROJECT_DEFINITION.value]:
         filename = self.generate_def_file_path(self.project[Key.PROJECT_DEFINITION.value]\
-                                               [Key.REPOSITORIES.value][0])
+                                                           [Key.REPOSITORIES.value][0])
         with open(filename, 'r') as working_file:
           self.repositories = yaml.load(working_file)
 
       # Load the rootfs sub configuration files
       if Key.ROOTFS.value in self.project[Key.PROJECT_DEFINITION.value]:
         filename = self.generate_def_file_path(self.project[Key.PROJECT_DEFINITION.value]\
-                                                               [Key.ROOTFS.value][0])
+                                                           [Key.ROOTFS.value][0])
         with open(filename, 'r') as working_file:
           self.rootfs = yaml.load(working_file)
 
       # Load the firmware sub configuration files
       if Key.FIRMWARE.value in self.project[Key.PROJECT_DEFINITION.value]:
         filename = self.generate_def_file_path(self.project[Key.PROJECT_DEFINITION.value]\
-                                                               [Key.FIRMWARE.value][0])
+                                                           [Key.FIRMWARE.value][0])
         with open(filename, 'r') as working_file:
           self.firmware = yaml.load(working_file)
 
       # Load the image sub configuration files
       if Key.IMAGE.value in self.project[Key.PROJECT_DEFINITION.value]:
         filename = self.generate_def_file_path(self.project[Key.PROJECT_DEFINITION.value]\
-                                                               [Key.IMAGE.value][0])
+                                                           [Key.IMAGE.value][0])
         with open(filename, 'r') as working_file:
           self.image = yaml.load(working_file)
 
@@ -731,10 +714,16 @@ class ProjectDefinition(object):
       #
       if Key.WORKING_DIR.value in self.project[Key.CONFIGURATION.value]:
         self.project_base_workdir = self.project[Key.CONFIGURATION.value][Key.WORKING_DIR.value]
+        print("Using working_dir from project : " + self.project_base_workdir)
       else:
-        self.logging.debug("configuration/working_dir is not defined, using /tmp/dft as default \
-                            value")
-        self.project_base_workdir = "/tmp/dft"
+        print(self.configuration.configuration)
+        if Key.WORKING_DIR.value in self.configuration.configuration[Key.CONFIGURATION.value]:
+          self.project_base_workdir = self.configuration.configuration[Key.CONFIGURATION.value]\
+                                                                      [Key.WORKING_DIR.value]
+          print("Using working_dir from configuration : " + self.project_base_workdir)
+        else:
+          print("configuration/working_dir is not defined, using /tmp/dft as default value")
+          self.project_base_workdir = "/tmp/dft"
 
       self.project_base_workdir += "/" + self.project[Key.PROJECT_DEFINITION.value]\
                                                      [Key.PROJECT_NAME.value]
@@ -867,9 +856,7 @@ class ProjectDefinition(object):
         self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] = "/usr/share/dft"
 
     # Expand the path starting with ~/
-    if self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value][0] == "~" and \
-       self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value][1] == "/":
-      self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] = \
+    self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] = \
                       os.path.expanduser(self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value])
 
     # Now a value is defined, just return it
@@ -898,9 +885,7 @@ class ProjectDefinition(object):
         self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value] = self.get_dft_base() + "/bsp"
 
     # Expand the path starting with ~/
-    if self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value][0] == "~" and \
-       self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value][1] == "/":
-      self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value] = \
+    self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value] = \
                       os.path.expanduser(self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value])
 
     # Now a value is defined, just return it
