@@ -359,13 +359,13 @@ Available commands are :
 
     # Create the dft configuration object, and load its configuration
     if self.args.config_file is None:
-      self.dft = model.DftConfiguration()
+      self.dft = model.Configuration()
     else:
-      self.dft = model.DftConfiguration(filename=self.args.config_file)
+      self.dft = model.Configuration(filename=self.args.config_file)
     self.dft.load_configuration()
 
     # Create the project definition object, and load its configuration
-    self.project = model.ProjectDefinition(filename=self.args.project_file, configuration=self.dft)
+    self.project = model.Project(filename=self.args.project_file, configuration=self.dft)
     self.project.load_definition()
 
     # ---------------------------------------------------------------------

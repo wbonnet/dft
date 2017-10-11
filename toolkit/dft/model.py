@@ -22,11 +22,6 @@
 #
 
 
-# TODO add activate and override library
-# TODO add default path to library and override
-# TODO add explicit library call ?
-# TODO add "personnal" library
-
 """ This module contains the definition of the two main classes used in DFT model.
 The Project and the Configuration. The classes implements the methods used to load
 their content and definition fom yaml configuration file.
@@ -284,14 +279,14 @@ class Key(Enum):
   YAML = "yaml"
   YML = "yml"
 
-# TODO: add a method to initialize all defaut value and not do it into the code
+
 
 # -----------------------------------------------------------------------------
 #
-# class DftConfiguration
+# class Configuration
 #
 # -----------------------------------------------------------------------------
-class DftConfiguration(object):
+class Configuration(object):
   """This class defines default configuration for the DFT toolchain
 
   The tool configuration contains environment variables used to define
@@ -321,8 +316,6 @@ class DftConfiguration(object):
 
     # Path to the default directory ued to store rootfs
     # It defaults to /tmp
-# TODO : This may lead to full file system, should be changed, may be
-# a mandatory value in the config file ? => change to None
     self.working_directory = None
 
     # During installation ansible files from DFT toolkit are copied to
@@ -411,10 +404,10 @@ class DftConfiguration(object):
 
 # -----------------------------------------------------------------------------
 #
-# Class ProjectDefinition
+# Class Project
 #
 # -----------------------------------------------------------------------------
-class ProjectDefinition(object):
+class Project(object):
   """This class defines a project. A project holds all the information used
   to produce the different object created by DFT (rootfs, modulations,
   firmware, bootlader, etc.).
@@ -451,7 +444,7 @@ class ProjectDefinition(object):
     self.timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
 
     # Create the object storing the DFT tool configuration
-    self.dft = DftConfiguration()
+    self.dft = Configuration()
 
     # Defines path for subcommand
     self.rootfs_base_workdir = None
@@ -890,6 +883,3 @@ class ProjectDefinition(object):
 
     # Now a value is defined, just return it
     return self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value]
-
-
-# TODO : rename dftconfig and  dft project withouT dft
