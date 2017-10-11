@@ -21,8 +21,6 @@
 #
 #
 
-# TODO : handle 'any architecture' for repository definition
-
 """ This modules iplements the functionnalities needed to create a rootfs installation
 based upon the definition stored in a configuration file and a set of Ansible roles.
 """
@@ -417,57 +415,60 @@ class BuildRootFS(CliCommand):
         logging.debug(distro)
 
         # Process only if it is the version we target
-        if distro[Key.NAME.value] == self.project.get_target_version() and \
-                                     self.project.get_target_arch() in \
+        if distro[Key.NAME.value] != self.project.get_target_version() or \
+                                     self.project.get_target_arch() not in \
                                      distro[Key.ARCHITECTURES.value]:
-          # W have found a matching distro or not
-          distro_has_been_found = True
-          # Then iterate all the sources for this distro version
-          for repo in distro[Key.REPOSITORIES.value]:
-            logging.debug("repo : ")
-            logging.debug(repo)
+          # No matching move to next item
+          continue
+
+        # It is a match, we have found a matching distro or not
+        distro_has_been_found = True
+        # Then iterate all the sources for this distro version
+        for repo in distro[Key.REPOSITORIES.value]:
+          logging.debug("repo : ")
+          logging.debug(repo)
 
 
-            # Test if deb line has to be generated
-            if (Key.GENERATE_DEB.value not in repo) or (Key.GENERATE_DEB.value in repo and \
-                                                        repo[Key.GENERATE_DEB.value]):
-              # Will generate the deb line only if the key
-              # generate-deb is present and set to True or the key
-              # is not present
-              working_file.write("deb " + repo[Key.URL.value] +" " + repo[Key.SUITE.value] + " ")
+          # Test if deb line has to be generated
+          if (Key.GENERATE_DEB.value not in repo) or (Key.GENERATE_DEB.value in repo and \
+                                                      repo[Key.GENERATE_DEB.value]):
+            # Will generate the deb line only if the key
+            # generate-deb is present and set to True or the key
+            # is not present
+            working_file.write("deb " + repo[Key.URL.value] +" " + repo[Key.SUITE.value] + " ")
+            for section in repo[Key.SECTIONS.value]:
+              working_file.write(section + " ")
+            working_file.write("\n")
+
+          # Test if deb-src line has also to be generated
+          if Key.GENERATE_SRC.value in repo:
+            # Will generate the deb-src line only if the key
+            # generate-src is present and set to True
+            if repo[Key.GENERATE_SRC.value]:
+              working_file.write("deb-src " + repo[Key.URL.value] + " " +
+                                 repo[Key.SUITE.value] + " ")
               for section in repo[Key.SECTIONS.value]:
                 working_file.write(section + " ")
               working_file.write("\n")
 
-            # Test if deb-src line has also to be generated
-            if Key.GENERATE_SRC.value in repo:
-              # Will generate the deb-src line only if the key
-              # generate-src is present and set to True
-              if repo[Key.GENERATE_SRC.value]:
-                working_file.write("deb-src " + repo[Key.URL.value] + " " +
-                                   repo[Key.SUITE.value] + " ")
-                for section in repo[Key.SECTIONS.value]:
-                  working_file.write(section + " ")
-                working_file.write("\n")
+          # Check if there is a pubkey to retrieve using gpg key server
+          if Key.PUBKEY_GPG.value in repo:
+            key_gpg = repo[Key.PUBKEY_GPG.value]
+            logging.debug("retrieving public key : " + key_gpg)
 
-            # Check if there is a pubkey to retrieve using gpg key server
-            if Key.PUBKEY_GPG.value in repo:
-              key_gpg = repo[Key.PUBKEY_GPG.value]
-              logging.debug("retrieving public key : " + key_gpg)
+            # Add a key to the know catalog signing keys
+            self.add_catalog_signing_key(key_gpg)
 
-              # Add a key to the know catalog signing keys
-              self.add_catalog_signing_key(key_gpg)
+          # Check if there is a pubkey to retrieve using its url
+          if Key.PUBKEY_URL.value in repo:
+            key_url = repo[Key.PUBKEY_URL.value]
+            logging.debug("retrieving public key : " + key_url)
 
-            # Check if there is a pubkey to retrieve using its url
-            if Key.PUBKEY_URL.value in repo:
-              key_url = repo[Key.PUBKEY_URL.value]
-              logging.debug("retrieving public key : " + key_url)
-
-              # Generate the retrieve and add command
-              command = "chroot " + self.project.get_rootfs_mountpoint() + " bash -c "
-              command += "'/usr/bin/wget -qO - " + repo[Key.PUBKEY_URL.value]
-              command += " | /usr/bin/apt-key add -'"
-              self.execute_command(command)
+            # Generate the retrieve and add command
+            command = "chroot " + self.project.get_rootfs_mountpoint() + " bash -c "
+            command += "'/usr/bin/wget -qO - " + repo[Key.PUBKEY_URL.value]
+            command += " | /usr/bin/apt-key add -'"
+            self.execute_command(command)
 
     # Warn the user if no matching distro is found. There will be an empty
     # /etc/apt/sources.list and installation will faill
