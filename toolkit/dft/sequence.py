@@ -243,9 +243,6 @@ class Sequence(CliCommand):
     method when xecuting steps, instead of modifying global configuration.
     """
 
-    # According to the step action, call the method dedicated to execute it
-    logging.debug("Executing step : " + step[Key.ACTION.value])
-
     # Make a copy of the configuration
     cfg = self.dft
 
