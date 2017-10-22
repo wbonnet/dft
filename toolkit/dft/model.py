@@ -707,15 +707,15 @@ class Project(object):
       #
       if Key.WORKING_DIR.value in self.project[Key.CONFIGURATION.value]:
         self.project_base_workdir = self.project[Key.CONFIGURATION.value][Key.WORKING_DIR.value]
-        print("Using working_dir from project : " + self.project_base_workdir)
+        self.logging.debug("Using working_dir from project : " + self.project_base_workdir)
       else:
-        print(self.configuration.configuration)
+        self.logging.debug(self.configuration.configuration)
         if Key.WORKING_DIR.value in self.configuration.configuration[Key.CONFIGURATION.value]:
           self.project_base_workdir = self.configuration.configuration[Key.CONFIGURATION.value]\
                                                                       [Key.WORKING_DIR.value]
-          print("Using working_dir from configuration : " + self.project_base_workdir)
+          self.logging.debug("Using working_dir from configuration : " + self.project_base_workdir)
         else:
-          print("configuration/working_dir is not defined, using /tmp/dft as default value")
+          self.logging.debug("configuration/working_dir is not defined, using /tmp/dft as default value")
           self.project_base_workdir = "/tmp/dft"
 
       self.project_base_workdir += "/" + self.project[Key.PROJECT_DEFINITION.value]\
