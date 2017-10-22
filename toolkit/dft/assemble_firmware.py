@@ -1,4 +1,4 @@
-  #
+#
 # The contents of this file are subject to the Apache 2.0 license you may not
 # use this file except in compliance with the License.
 #
@@ -59,7 +59,13 @@ class AssembleFirmware(CliCommand):
     # Initialize ancestor
     CliCommand.__init__(self, dft, project)
 
+    # Defines dft base directory in the initramfs file system.
+    # Should always be /dft
+    self.dft_root = "/dft"
 
+    # Defines stack mount point in the iniarmfs file system.
+    # Should alwaays be /root
+    self.stack_root = "/root"
 
   # -------------------------------------------------------------------------
   #
@@ -110,9 +116,6 @@ class AssembleFirmware(CliCommand):
     if self.use_qemu_static:
       # QEMU is used, and we have to install it into the target
       self.setup_qemu()
-
-    # Generate the stacking script
-#    self.generate_init_script()
 
     # Generate the stacking script
     self.generate_stacking_script()
@@ -230,7 +233,7 @@ class AssembleFirmware(CliCommand):
       if self.project.firmware[Key.LAYOUT.value][Key.METHOD.value] == Key.AUFS.value:
         working_file.write("aufs\n")
       elif self.project.firmware[Key.LAYOUT.value][Key.METHOD.value] == Key.OVERLAYFS.value:
-        working_file.write("overlayfs\n")
+        working_file.write("overlay\n")
       else:
         # If we reach this code, then method was unknown
         self.project.logging.error("Unknown stacking method " +
@@ -348,77 +351,6 @@ class AssembleFirmware(CliCommand):
     # Final log
     logging.info("Firmware stacking has been successfully generated into : " + filepath)
 
-# TODO : Cela merde quand j'ai tout sur la meme partition
-# Il faudrait surement en faire plusieurs, comme sur la cible. La partition de base ne contient que
-# ce qu'il faut, kernel et initramfs, une partition avec les squashfs et le reste c du data
-
-
-  # -------------------------------------------------------------------------
-  #
-  # generate_init_script
-  #
-  # -------------------------------------------------------------------------
-  def generate_init_script(self):
-    """This method implement the generation of the init script
-
-    The init script is called by the kernel when booting, after loading the
-    initramfs. Stacking script is included in the init script. Stacking is a
-    shell scipt fragment generated using the firmware.yml configuration
-    as input. It provides th specific cod used to mount and stack the filesystms
-    (using aufs or overlayfs).
-    """
-
-    # Output current task to logs
-    logging.info("Generating init scripts")
-
-    # Generate the stacking script
-    # configuration, then move  roles to the target rootfs
-    with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
-      # Retrieve generation date
-      today = datetime.datetime.now()
-
-      # Generate file header
-      working_file.write("#!/bin/sh -e\n")
-      working_file.write("#\n")
-      working_file.write("set -x\n")
-      working_file.write("#\n")
-      working_file.write("# DFT init script (including firmware stackig)\n")
-      working_file.write("#\n")
-      working_file.write("# This script has been generated automatically by the DFT toolkit.\n")
-      working_file.write("# It is in charge of mounting and stacking the different items\n")
-      working_file.write("# of the firmware.\n")
-      working_file.write("#\n")
-      working_file.write("# Generation date : " + today.strftime("%d/%m/%Y - %H:%M.%S") + "\n")
-
-
-    # It's done for beginning of script, let's close the file
-    working_file.close()
-
-     # Reopen the working file
-    working_file = open(working_file.name, "a")
-
-    # Now it's really done, let's close the file
-    working_file.close()
-
-    # We are done with file generation, close it now
-
-    # Update stack script permissions. It has to be executable and world readable (not reuiered
-    # but easier to handle)
-    os.chmod(working_file.name, stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH |\
-             stat.S_IXOTH)
-
-    # Generate the file path
-    filepath = self.project.get_rootfs_mountpoint()
-    filepath += '/usr/share/initramfs-tools/init'
-
-    # And now we can move the temporary file under the rootfs tree
-    command = "mv -f " + working_file.name + " " + filepath
-
-    self.execute_command(command)
-
-    # Final log
-    logging.info("Firmware init script has been successfully generated into : " + filepath)
-
 
 
   # -------------------------------------------------------------------------
@@ -448,7 +380,17 @@ class AssembleFirmware(CliCommand):
     working_file.write("modprobe loop\n")
     working_file.write("\n")
 
-      # Iterates the stack items
+    # Flag first item since mount point is different
+#Todo ajouter un test sur le chemiin de montage qui doit etre absolu et virer le slash dans
+#la generation
+
+    # Removing existing mounted root in order to use DFT root
+    working_file.write("umount /root\n")
+    working_file.write("umount " + self.stack_root + "\n")
+    working_file.write("mkdir -p " + self.stack_root + "\n")
+
+    # Iterates the stack items
+    item_count = 0
     for item in self.project.firmware[Key.LAYOUT.value][Key.STACK_DEFINITION.value]:
       # Generate the mount point creation code
       working_file.write("\n")
@@ -456,7 +398,8 @@ class AssembleFirmware(CliCommand):
       working_file.write("# ----- Create the mount point for " + item[Key.STACK_ITEM.value]\
                          [Key.TYPE.value] + " '" + item[Key.STACK_ITEM.value][Key.NAME.value] +
                          "' ----------\n")
-      working_file.write("mkdir -p /root/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
+      working_file.write("mkdir -p " + self.dft_root + "/")
+      working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
       working_file.write("\n")
 
       # Generate the mount commands
@@ -473,17 +416,19 @@ class AssembleFirmware(CliCommand):
           working_file.write("-o " + item[Key.STACK_ITEM.value][Key.MOUNT_OPTIONS.value] + " ")
 
         # Complete the mount command
-        working_file.write("tmpfs /root/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
-        working_file.write("mkdir -p /root/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] +
-                           "/workdir\n")
-        working_file.write("mkdir -p /root/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] +
-                           "/mountpoint\n")
+        working_file.write("tmpfs " + self.dft_root +"/")
+        working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
+        working_file.write("mkdir -p "+ self.dft_root + "/")
+        working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "/workdir\n")
+        working_file.write("mkdir -p " + self.dft_root + "/")
+        working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "/mountpoint\n")
 
-          # Generate the tmpfs specific mount command
+      # Generate the tmpfs specific mount command
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.SQUASHFS.value:
+        working_file.write("mount -t ext4 /dev/sdb3 " + self.dft_root + "\n")
         working_file.write("DEV=$(losetup -f)\n")
-        working_file.write("losetup ${DEV} /root/boot/" + item[Key.STACK_ITEM.value] \
-                           [Key.SQUASHFS_FILE.value] + "\n")
+        working_file.write("losetup ${DEV} " + self.dft_root + "/boot/")
+        working_file.write(item[Key.STACK_ITEM.value][Key.SQUASHFS_FILE.value] + "\n")
         working_file.write("mount -t squashfs -o loop")
 
         # Is there some defined options ?
@@ -491,26 +436,40 @@ class AssembleFirmware(CliCommand):
           # Yes, then append the options to the command
           working_file.write("," + item[Key.STACK_ITEM.value][Key.MOUNT_OPTIONS.value])
 
-        # Complete the mount command
-        working_file.write(" ${DEV} /root/dft/" +item[Key.STACK_ITEM.value][Key.NAME.value] \
-                           + "\n")
+        # Otherwise mount it to its dedicated moint
+        working_file.write(" ${DEV} " + self.stack_root)
+
+        # # If item count egals zero, then it is the bottom of the stack and it should be mounted
+        # # under /dft/mount
+        # if item_count == 0:
+        #   working_file.write("umount /root\n")
+        #   # Otherwise mount it to its dedicated moint
+        #   working_file.write(" ${DEV} /root")
+        # else:
+        #   # Complete the mount command
+        #   working_file.write(" ${DEV} /dft/")
+
+        #   # Otherwise mount it to its dedicated moint
+        #   working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
 
       # Generate the tmpfs specific mount command
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.PARTITION.value:
         working_file.write("mount -t ext4 ")
-
+#TODO: partition type
         # Is there some defined options ?
         if "mount-options" in item[Key.STACK_ITEM.value]:
           # Yes, then append the options to the command
           working_file.write("-o " + item[Key.STACK_ITEM.value]["mount-options"] + " ")
 
         # Complete the mount command
-        working_file.write(item[Key.STACK_ITEM.value][Key.PARTITION.value] + " /root/dft/" +
-                           item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
+        working_file.write(item[Key.STACK_ITEM.value][Key.PARTITION.value] + " " + self.dft_root +
+                           "/" + item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
+
+      # Increments item counter
+      item_count += 1
 
     # We are done here, now close the file
     working_file.close()
-
 
 
   # -------------------------------------------------------------------------
@@ -535,6 +494,8 @@ class AssembleFirmware(CliCommand):
     working_file.write("# ----------------------------------------------------------\n")
     working_file.write("\n")
 
+    self.project.logging.debug("Entering generate_overlayfs_stacking")
+
     # Reopen the working file
     working_file = open(working_file_name, "a")
 
@@ -544,38 +505,61 @@ class AssembleFirmware(CliCommand):
       exit(1)
 
     # Iterates the stack items
+    item_count = 0
     for item in self.project.firmware[Key.LAYOUT.value][Key.STACK_DEFINITION.value]:
-      # Generate the mount point creation code
+      # Stack only if item is not the first
+      if item_count == 0:
+        # Increase th counter
+        item_count += 1
+
+        # Move to next item, which is the real first one to stck
+        continue
+
+      # Not there is already a mounted item, let's stack ! Generate the mount point creation code
       working_file.write("# Stack the " + item[Key.STACK_ITEM.value][Key.TYPE.value] +
                          " '" + item[Key.STACK_ITEM.value][Key.NAME.value] + "'\n")
 
+      self.project.logging.debug("Generating overlay stacking for " + \
+                                 item[Key.STACK_ITEM.value][Key.TYPE.value] + " " + \
+                                 item[Key.STACK_ITEM.value][Key.NAME.value])
+
       # Generate the tmpfs specific mount command
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.TMPFS.value:
-        working_file.write("mount -t overlay overlay -o lowerdir=")
+        working_file.write("mount -t overlay -o lowerdir=" + self.stack_root)
         working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value])
-        working_file.write(",upperdir=/root/dft/")
+        working_file.write(",upperdir=" + self.dft_root + "/")
         working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "/mountpoint")
-        working_file.write(",workdir=/root/dft/" + item[Key.STACK_ITEM.value][Key.NAME.value] +
-                           "/workdir")
-        working_file.write(" " + item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + "\n")
+        working_file.write(",workdir="  + self.dft_root + "/")
+        working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "/workdir")
+        working_file.write(" overlay "  + self.stack_root)
+        working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + "\n")
 
       # Generate the tmpfs specific mount command
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.SQUASHFS.value:
-        working_file.write("mount -t overlay overlay -o lowerdir=/root/dft/")
-        working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + ":" +
-                           item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value])
-        working_file.write(" " + item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + "\n")
+        working_file.write("mount -t overlay -o lowerdir=" + self.stack_root)
+        working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + ":")
+        working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value])
+        working_file.write(" overlay "  + self.stack_root)
+        working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + "\n")
 
       # Generate the tmpfs specific mount command
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.PARTITION.value:
-        working_file.write("mount -t overlay overlay -o lowerdir=")
+        working_file.write("mount -t overlay -o lowerdir=" + self.stack_root)
         working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value])
-        working_file.write(",upperdir=/root/dft/")
+        working_file.write(",upperdir=" + self.dft_root + "/")
         working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value])
-        working_file.write(",workdir=/root/dft/workdir")
-        working_file.write(" " + item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + "\n")
+        working_file.write(",workdir=" + self.dft_root + "/workdir")
+        working_file.write(" overlay "  + self.stack_root)
+        working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + "\n")
 
       working_file.write("\n")
+
+      # Increase item counter
+      item_count += 1
+
+    # Debugging sleep, wil be removed soon. Just pause to read error message :)
+    # TODO
+    working_file.write("sleep 10\n")
 
     # We are done here, now close the file
     working_file.close()
@@ -585,6 +569,7 @@ class AssembleFirmware(CliCommand):
 # Il faut redebugger le montage overlay
 
 # ptete d'abord tester l'aufs ? a voir
+    self.project.logging.debug("Exiting generate_overlayfs_stacking")
 
 
   # -------------------------------------------------------------------------
