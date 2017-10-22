@@ -88,7 +88,7 @@ layout:
       mountpoint: /
 
       # Specify the size of the tmpfs
-      mount_options: "size=1G,nr_inodes=10k,mode=777"
+      mount_options: "size=256M,nr_inodes=10k,mode=777"
 
     # Defines a tmpfs to stack over the root
   - stack_item:
@@ -102,7 +102,24 @@ layout:
       partition: /dev/sdb1
 
       # Target mount point
-      mountpoint: /
+      mountpoint: /mnt/data
+
+      # Specify the size of the tmpfs
+      mount_options: "noatime,nodiratime"
+
+    # Defines a tmpfs to stack over the root
+  - stack_item:
+      # Name of the mount point
+      name: varlog
+
+      # Item type (tmpfs, partition or squashfs)
+      type: partition
+
+      # Partition to mount
+      partition: /dev/sdb2
+
+      # Target mount point
+      mountpoint: /var/log
 
       # Specify the size of the tmpfs
       mount_options: "noatime,nodiratime"
@@ -110,7 +127,7 @@ layout:
 
 # TODO name + stack_over ?
 
-# TODO globa  l ?
+# TODO global ?
   auto_commit: False
 #   defines mapping over squashfs
 #   => direct write ?
