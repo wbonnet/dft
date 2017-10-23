@@ -715,7 +715,7 @@ class Project(object):
                                                                       [Key.WORKING_DIR.value]
           self.logging.debug("Using working_dir from configuration : " + self.project_base_workdir)
         else:
-          self.logging.debug("configuration/working_dir is not defined, using /tmp/dft as default value")
+          self.logging.debug("configuration/working_dir is not defined, using /tmp/dft as default")
           self.project_base_workdir = "/tmp/dft"
 
       self.project_base_workdir += "/" + self.project[Key.PROJECT_DEFINITION.value]\
