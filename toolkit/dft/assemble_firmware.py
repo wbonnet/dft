@@ -314,6 +314,23 @@ class AssembleFirmware(CliCommand):
       working_file.write("    ;;\n")
       working_file.write("esac\n")
       working_file.write("\n")
+      working_file.write("\n")
+      working_file.write("\n")
+      working_file.write("# ---------------------------------------------------------\n")
+      working_file.write("# Setup DFT environment\n")
+      working_file.write("# ----------------------------------------------------------\n")
+      working_file.write("\n")
+
+      # Ensure that loopback device is enabled
+      working_file.write("# ----- Ensure that the meeded modules are loaded -----\n")
+      working_file.write("modprobe loop\n")
+
+      if self.project.firmware[Key.LAYOUT.value][Key.METHOD.value] == Key.AUFS.value:
+        working_file.write("modprobe aufs\n")
+      elif self.project.firmware[Key.LAYOUT.value][Key.METHOD.value] == Key.OVERLAYFS.value:
+        working_file.write("modprobe overlay\n")
+
+      working_file.write("\n")
 
     # Now it's done, let's close the file
     working_file.close()
@@ -370,21 +387,30 @@ class AssembleFirmware(CliCommand):
     # Reopen the working file
     working_file = open(working_file_name, "a")
 
+    working_file.write("\n")
+    working_file.write("\n")
+    working_file.write("# ---------------------------------------------------------\n")
+    working_file.write("# Generate Common mount commands\n")
+    working_file.write("# ----------------------------------------------------------\n")
+    working_file.write("\n")
+
     # Check that the stack definition is in the configuration file
     if Key.STACK_DEFINITION.value not in self.project.firmware[Key.LAYOUT.value]:
       self.project.logging.critical("The stack definition is not in the configuration file")
       exit(1)
 
-    # Ensure that loopback device is enabled
-    working_file.write("# Ensure that loopback device is enabled\n")
-    working_file.write("modprobe loop\n")
-    working_file.write("\n")
-
     # Flag first item since mount point is different
 #Todo ajouter un test sur le chemiin de montage qui doit etre absolu et virer le slash dans
 #la generation
 
+    # Create basic DFT directories structure
+    working_file.write("# ----- Create basic DFT directories structure -----\n")
+    working_file.write("mkdir -p " + self.dft_root + "/workdir\n")
+    working_file.write("mkdir -p " + self.dft_root + "/mountpoint\n")
+    working_file.write("\n")
+
     # Removing existing mounted root in order to use DFT root
+    working_file.write("# ----- Umount initial root and remount our own -----\n")
     working_file.write("umount /root\n")
     working_file.write("umount " + self.stack_root + "\n")
     working_file.write("mkdir -p " + self.stack_root + "\n")
@@ -394,19 +420,15 @@ class AssembleFirmware(CliCommand):
     for item in self.project.firmware[Key.LAYOUT.value][Key.STACK_DEFINITION.value]:
       # Generate the mount point creation code
       working_file.write("\n")
-      working_file.write("\n")
-      working_file.write("# ----- Create the mount point for " + item[Key.STACK_ITEM.value]\
+      working_file.write("# ----- Mounting " + item[Key.STACK_ITEM.value]\
                          [Key.TYPE.value] + " '" + item[Key.STACK_ITEM.value][Key.NAME.value] +
-                         "' ----------\n")
+                         "' -----\n")
+
+      # Create the base working directory
       working_file.write("mkdir -p " + self.dft_root + "/")
       working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
-      working_file.write("\n")
 
-      # Generate the mount commands
-      working_file.write("# Mount item " + item[Key.STACK_ITEM.value][Key.TYPE.value] + " '" +
-                         item[Key.STACK_ITEM.value][Key.NAME.value] + "'\n")
-
-      # Generate the tmpfs specific mount command
+      # ----- Generate the mount command to be used for a tmpfs ------------------------------------
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.TMPFS.value:
         working_file.write("mount -t tmpfs ")
 
@@ -418,16 +440,24 @@ class AssembleFirmware(CliCommand):
         # Complete the mount command
         working_file.write("tmpfs " + self.dft_root +"/")
         working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
-        working_file.write("mkdir -p "+ self.dft_root + "/")
-        working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "/workdir\n")
+
+
+
+        # WIPPPPPPP
         working_file.write("mkdir -p " + self.dft_root + "/")
         working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "/mountpoint\n")
 
-      # Generate the tmpfs specific mount command
+        # Create the workdir if we are using overlayfs (not needed for aufs)
+        if self.project.firmware[Key.LAYOUT.value][Key.METHOD.value] == Key.OVERLAYFS.value:
+          working_file.write("mkdir -p " + self.dft_root + "/")
+          working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "/workdir\n")
+
+
+      # ----- Generate the mount command to be used for a SQUASHFS file ----------------------------
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.SQUASHFS.value:
-        working_file.write("mount -t ext4 /dev/sdb3 " + self.dft_root + "\n")
+        working_file.write("mount -t ext4 /dev/sdb3 " + self.dft_root + "/mountpoint\n")
         working_file.write("DEV=$(losetup -f)\n")
-        working_file.write("losetup ${DEV} " + self.dft_root + "/boot/")
+        working_file.write("losetup ${DEV} " + self.dft_root + "/mountpoint/boot/")
         working_file.write(item[Key.STACK_ITEM.value][Key.SQUASHFS_FILE.value] + "\n")
         working_file.write("mount -t squashfs -o loop")
 
@@ -437,25 +467,12 @@ class AssembleFirmware(CliCommand):
           working_file.write("," + item[Key.STACK_ITEM.value][Key.MOUNT_OPTIONS.value])
 
         # Otherwise mount it to its dedicated moint
-        working_file.write(" ${DEV} " + self.stack_root)
+        working_file.write(" ${DEV} " + self.stack_root + "\n")
 
-        # # If item count egals zero, then it is the bottom of the stack and it should be mounted
-        # # under /dft/mount
-        # if item_count == 0:
-        #   working_file.write("umount /root\n")
-        #   # Otherwise mount it to its dedicated moint
-        #   working_file.write(" ${DEV} /root")
-        # else:
-        #   # Complete the mount command
-        #   working_file.write(" ${DEV} /dft/")
-
-        #   # Otherwise mount it to its dedicated moint
-        #   working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
-
-      # Generate the tmpfs specific mount command
+      # ----- Generate the mount command to be used for a partition --------------------------------
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.PARTITION.value:
         working_file.write("mount -t ext4 ")
-#TODO: partition type
+#TODO: handle partition type from configuration file
         # Is there some defined options ?
         if "mount-options" in item[Key.STACK_ITEM.value]:
           # Yes, then append the options to the command
@@ -464,6 +481,17 @@ class AssembleFirmware(CliCommand):
         # Complete the mount command
         working_file.write(item[Key.STACK_ITEM.value][Key.PARTITION.value] + " " + self.dft_root +
                            "/" + item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
+
+
+        # WIPPPPPPP
+        working_file.write("mkdir -p " + self.dft_root + "/")
+        working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "/mountpoint\n")
+
+        # Create the workdir if we are using overlayfs (not needed for aufs)
+        if self.project.firmware[Key.LAYOUT.value][Key.METHOD.value] == Key.OVERLAYFS.value:
+          working_file.write("mkdir -p " + self.dft_root + "/")
+          working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "/workdir\n")
+
 
       # Increments item counter
       item_count += 1
@@ -489,8 +517,10 @@ class AssembleFirmware(CliCommand):
     working_file = open(working_file_name, "a")
 
     working_file.write("\n")
+    working_file.write("\n")
+    working_file.write("\n")
     working_file.write("# ---------------------------------------------------------\n")
-    working_file.write("# generate_overlayfs_stacking\n")
+    working_file.write("# Generate OverlayFS Stacking\n")
     working_file.write("# ----------------------------------------------------------\n")
     working_file.write("\n")
 
@@ -523,7 +553,7 @@ class AssembleFirmware(CliCommand):
                                  item[Key.STACK_ITEM.value][Key.TYPE.value] + " " + \
                                  item[Key.STACK_ITEM.value][Key.NAME.value])
 
-      # Generate the tmpfs specific mount command
+      # ----- Generate the tmpfs specific mount command --------------------------------------------
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.TMPFS.value:
         working_file.write("mount -t overlay -o lowerdir=" + self.stack_root)
         working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value])
@@ -534,7 +564,7 @@ class AssembleFirmware(CliCommand):
         working_file.write(" overlay "  + self.stack_root)
         working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + "\n")
 
-      # Generate the tmpfs specific mount command
+      # ----- Generate the tmpfs specific mount command --------------------------------------------
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.SQUASHFS.value:
         working_file.write("mount -t overlay -o lowerdir=" + self.stack_root)
         working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + ":")
@@ -542,13 +572,14 @@ class AssembleFirmware(CliCommand):
         working_file.write(" overlay "  + self.stack_root)
         working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + "\n")
 
-      # Generate the tmpfs specific mount command
+      # ----- Generate the tmpfs specific mount command --------------------------------------------
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.PARTITION.value:
         working_file.write("mount -t overlay -o lowerdir=" + self.stack_root)
         working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value])
         working_file.write(",upperdir=" + self.dft_root + "/")
-        working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value])
-        working_file.write(",workdir=" + self.dft_root + "/workdir")
+        working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "/mountpoint")
+        working_file.write(",workdir=" + self.dft_root + "/")
+        working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "/workdir")
         working_file.write(" overlay "  + self.stack_root)
         working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value] + "\n")
 
@@ -559,7 +590,7 @@ class AssembleFirmware(CliCommand):
 
     # Debugging sleep, wil be removed soon. Just pause to read error message :)
     # TODO
-    working_file.write("sleep 10\n")
+    working_file.write("sleep 60\n")
 
     # We are done here, now close the file
     working_file.close()
@@ -588,7 +619,13 @@ class AssembleFirmware(CliCommand):
     # Reopen the working file
     working_file = open(working_file_name, "a")
 
-    working_file.write("generate_aufs_stacking\n")
+    working_file.write("\n")
+    working_file.write("\n")
+    working_file.write("# ---------------------------------------------------------\n")
+    working_file.write("# Generate AUFS Stacking\n")
+    working_file.write("# ----------------------------------------------------------\n")
+    working_file.write("\n")
+
 #  mount -t aufs -o noatime,nodiratime,br:${systemdir}=rr -o udba=reval none ${mountdir}
 
     # We are done here, now close the file
