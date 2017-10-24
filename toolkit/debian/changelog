@@ -1,3 +1,53 @@
+dft (0.5.4-1) unstable; urgency=low
+
+  * Fix : firmware integraion in initramfs (not yet completly done)
+  * Fix : several minor bugs
+  * Fix : symlinks in examples are now absolute
+  * New : native target in project. Arch is selecte according to host arch
+  * New : arch and foreign can be controled separatly in debootstrap
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 23 Oct 2017 23:42:00 +0100
+
+dft-ci (0.5.4-1) unstable; urgency=low
+
+  * Fix : firmware integraion in initramfs (not yet completly done)
+  * Fix : several minor bugs
+  * Fix : symlinks in examples are now absolute
+  * New : native target in project. Arch is selecte according to host arch
+  * New : arch and foreign can be controled separatly in debootstrap
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 23 Oct 2017 23:42:00 +0100
+
+dft-doc (0.5.4-1) unstable; urgency=low
+
+  * Fix : firmware integraion in initramfs (not yet completly done)
+  * Fix : several minor bugs
+  * Fix : symlinks in examples are now absolute
+  * New : native target in project. Arch is selecte according to host arch
+  * New : arch and foreign can be controled separatly in debootstrap
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 23 Oct 2017 23:42:00 +0100
+
+dft-examples (0.5.4-1) unstable; urgency=low
+
+  * Fix : firmware integraion in initramfs (not yet completly done)
+  * Fix : several minor bugs
+  * Fix : symlinks in examples are now absolute
+  * New : native target in project. Arch is selecte according to host arch
+  * New : arch and foreign can be controled separatly in debootstrap
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 23 Oct 2017 23:11:00 +0100
+
+dft-bsp-test (0.5.4-1) unstable; urgency=low
+
+  * Fix : firmware integraion in initramfs (not yet completly done)
+  * Fix : several minor bugs
+  * Fix : symlinks in examples are now absolute
+  * New : native target in project. Arch is selecte according to host arch
+  * New : arch and foreign can be controled separatly in debootstrap
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 23 Oct 2017 23:42:00 +0100
+
 dft (0.5.3-1) unstable; urgency=low
 
   * New feature : Add suport of build sequence in project files

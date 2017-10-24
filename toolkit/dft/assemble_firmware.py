@@ -65,7 +65,7 @@ class AssembleFirmware(CliCommand):
 
     # Defines stack mount point in the iniarmfs file system.
     # Should alwaays be /root
-    self.stack_root = "/root"
+    self.stack_root = "/rootgruu"
 
   # -------------------------------------------------------------------------
   #
@@ -555,7 +555,7 @@ class AssembleFirmware(CliCommand):
 
       # ----- Generate the tmpfs specific mount command --------------------------------------------
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.TMPFS.value:
-        working_file.write("mount -t overlay -o lowerdir=" + self.stack_root)
+        working_file.write("# mount -t overlay -o lowerdir=" + self.stack_root)
         working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value])
         working_file.write(",upperdir=" + self.dft_root + "/")
         working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "/mountpoint")
@@ -566,7 +566,7 @@ class AssembleFirmware(CliCommand):
 
       # ----- Generate the tmpfs specific mount command --------------------------------------------
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.SQUASHFS.value:
-        working_file.write("mount -t overlay -o lowerdir=" + self.stack_root)
+        working_file.write("# mount -t overlay -o lowerdir=" + self.stack_root)
         working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + ":")
         working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value])
         working_file.write(" overlay "  + self.stack_root)
@@ -574,7 +574,7 @@ class AssembleFirmware(CliCommand):
 
       # ----- Generate the tmpfs specific mount command --------------------------------------------
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.PARTITION.value:
-        working_file.write("mount -t overlay -o lowerdir=" + self.stack_root)
+        working_file.write("# mount -t overlay -o lowerdir=" + self.stack_root)
         working_file.write(item[Key.STACK_ITEM.value][Key.MOUNTPOINT.value])
         working_file.write(",upperdir=" + self.dft_root + "/")
         working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "/mountpoint")
@@ -588,18 +588,10 @@ class AssembleFirmware(CliCommand):
       # Increase item counter
       item_count += 1
 
-    # Debugging sleep, wil be removed soon. Just pause to read error message :)
-    # TODO
-    working_file.write("sleep 60\n")
-
     # We are done here, now close the file
+    working_file.write("sleep 20\n")
     working_file.close()
 
-# Ajouter le type de FS dans le fichier YML et virer l'autre commentaire
-
-# Il faut redebugger le montage overlay
-
-# ptete d'abord tester l'aufs ? a voir
     self.project.logging.debug("Exiting generate_overlayfs_stacking")
 
 

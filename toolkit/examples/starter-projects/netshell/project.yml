@@ -144,7 +144,11 @@ project_definition:
   # definition has to be passed to the tool. Otherwise the BSP will be loaded from the default
   # DFT installation
   #
+  # board can use the __native__ keyword to defines that the board arch is defined accoring to
+  # the host running DFT.
+  #
   targets:
+    # - { version: stretch , board: __native__ }
     - { version: stretch , board: generic-amd64 }
 
 
