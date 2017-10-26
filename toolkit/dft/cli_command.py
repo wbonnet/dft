@@ -63,11 +63,16 @@ class CliCommand(object):
     self.project = project
 
     # Retrieve the architecture of the host
-    self.host_arch = subprocess.check_output("dpkg --print-architecture",
+    self.host_arch = subprocess.check_output("uname -m", shell=True).decode(Key.UTF8.value).rstrip()
+
+    # Retrieve the architecture used by dpkg. This may be different in case of 32 bits systems
+    # running with a 64 bits kernel. Example : kernel is ppc64, host userland is powerpc
+    self.dpkg_arch = subprocess.check_output("dpkg --print-architecture",
                                              shell=True).decode(Key.UTF8.value).rstrip()
 
     # Boolean used to flag the use of QEMU static
     self.use_qemu_static = (self.host_arch != project.get_target_arch())
+    self.use_debootstrap_arch = (self.dpkg_arch != project.get_target_arch())
     self.qemu_binary = None
 
     # Flags used to remove 'mount bind' states

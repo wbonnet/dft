@@ -740,10 +740,12 @@ class Project(object):
             # Build the path to the file containing the BSP definition
             bsp_file = self.get_bsp_base() + "/boards/" + target[Key.BOARD.value] + ".yml"
 
+#FIXME: Does not choose configuration in right order. .dftrc BSP defined path not taken in account
+
           # Check that the BSP file exist
           if not os.path.isfile(bsp_file):
-            self.logging.critical("The BSP file %s does not exist. Cannot continue execution, "
-                                  "please fix target in project file", bsp_file)
+            self.logging.critical("The BSP file %s does not exist !", bsp_file)
+            self.logging.critical("Cannot continue execution, please fix target in project file.")
             exit(1)
           else:
             self.logging.debug("loading BSP file " + bsp_file)

@@ -309,14 +309,21 @@ class BuildRootFS(CliCommand):
     # Generate the base debootstrap command
     debootstrap_command = "debootstrap --no-check-gpg"
 
-    # Add the foreign and arch only if they are different from host, and
-    # thus if use_qemu_static is True
-    if self.use_qemu_static:
-      logging.info("running debootstrap stage 1")
-      debootstrap_command += " --foreign --arch=" + self.project.get_target_arch()
-      debootstrap_command += " --include=gnupg"
+    # Check if the target is different from host dpkg arch. If yes, a --arch flag
+    # Needs to be appended to debootstrap call. It does not mean that qemu muse be
+    # used (64 kernels can run 32 bits userland). QEMU use is checked next
+    if self.use_debootstrap_arch:
+      debootstrap_command += " --arch=" + self.project.get_target_arch()
+
+      # Add the foreign flag if host and target are different (ie: amd64 and armhf)
+      if self.use_qemu_static:
+        logging.info("running debootstrap stage 1")
+        debootstrap_command += " --foreign"
     else:
       logging.info("running debootstrap")
+
+    # Include gnupg package in the list of software installed in the deboostrap chroot
+    debootstrap_command += " --include=gnupg"
 
     # Add the target, mount point and repository url to the debootstrap command
     debootstrap_command += " " +  self.project.get_target_version() + " "
