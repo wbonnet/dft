@@ -38,3 +38,5 @@
     - git
     - debootstrap
     - dh-make
+    - deborphan
+    - autopkgtest
