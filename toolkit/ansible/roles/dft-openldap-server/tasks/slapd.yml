@@ -27,10 +27,9 @@
 #
 
 ---
-- name : DFT - Install slapd with scripts and utils to query server and manange users
+- name : DFT - Install slapd
   apt: name={{ item }}
        state=latest
        install_recommends=no
   with_items:
     - slapd
-    - ldap-utils
