@@ -21,15 +21,10 @@
 #
 #
 
----
-- name : DFT - Install sbuild
-  apt: name={{ item }}
-       state=latest
-       install_recommends=no
-  with_items:
-    - sbuild
-
-- name : DFT - Configure sbuild users
-  shell: sbuild-adduser {{ item.login }} 
-  with_items: "{{ dft_sbuild.users }}"
-  when: dft_sbuild is defined and dft_sbuild.users is defined
+#
+# Sbuild tool configuration
+#
+# dft_sbuild:
+  # User section is list of users granted with sbuild privileges (they can use it)
+  # users:
+  #  - { login: "default-sbuild-user" }
