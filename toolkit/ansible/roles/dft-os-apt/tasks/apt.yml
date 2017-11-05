@@ -34,7 +34,9 @@
         mode=0644
         owner=root
         group=root
-  when: ( dft_os_apt_deactivate_check_valid_until is defined and dft_os_apt_deactivate_check_valid_until == True)
+  when: ( dft_os_apt is defined and dft_os_apt.options is defined and
+          dft_os_apt.options.deactivate_check_valid_until is defined and
+          dft_os_apt.options.deactivate_check_valid_until == True)
 
 
 # Generate the sources.list file
@@ -44,7 +46,8 @@
             owner=root
             group=root
             mode="0644"
-  when: ( dft_os_apt_generate_source_list is defined and dft_os_apt_generate_source_list == True)
+  when: ( dft_os_apt is defined and dft_os_apt.generate_sources_list is defined and
+          dft_os_apt.generate_sources_list == True)
 
 
 # Update APT catalog once new apt list has been deployed

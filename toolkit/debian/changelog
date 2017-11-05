@@ -1,9 +1,9 @@
 dft (0.5.4-1) unstable; urgency=low
 
-  * Fix : firmware integraion in initramfs (not yet completly done)
+  * Fix : firmware integration in initramfs (not yet completly done)
   * Fix : several minor bugs
   * Fix : symlinks in examples are now absolute
-  * New : native target in project. Arch is selecte according to host arch
+  * New : native target in project. Arch is selected according to host arch
   * New : arch and foreign can be controled separatly in debootstrap
 
  -- William Bonnet <wbonnet@theitmakers.com>  Wed, 23 Oct 2017 23:42:00 +0100
