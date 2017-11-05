@@ -23,7 +23,7 @@
 
 ---
 # Then install packages needed to do python3 devel
-- name : DFT - Install jenkins
+- name : DFT - Install python interpreter and main packages
   apt: name={{ item }}
        state=latest
        install_recommends=no

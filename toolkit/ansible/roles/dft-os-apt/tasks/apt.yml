@@ -38,7 +38,6 @@
           dft_os_apt.options.deactivate_check_valid_until is defined and
           dft_os_apt.options.deactivate_check_valid_until == True)
 
-
 # Generate the sources.list file
 - name: DFT - Deploy APT sources main configuration file (/etc/apt/sources.list)
   template: src=sources.list.j2

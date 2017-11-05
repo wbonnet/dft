@@ -22,5 +22,11 @@
 #
 
 ---
-- include: packages.yml
-- include: configuration.yml
+# Then install packages needed to run DFT firmware tools
+- name : DFT - Install DFT
+  apt: name={{ item }}
+       state=latest
+       install_recommends=no
+  with_items:
+    - dft
+    - dft-examples
