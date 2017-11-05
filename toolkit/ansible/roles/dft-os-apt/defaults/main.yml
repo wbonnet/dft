@@ -51,6 +51,18 @@ dft_os_apt:
   generate_sources_list: False
 
   #
+  # This variable defines the list of key to import. These keys are used for signature control.
+  # Each key can be either defined by its URL
+  #
+  repositories_keys:
+    # Id of the key to import
+    - key_id: 3F873450D48C4F9C
+      # Keyserver to use to retrieve the key
+      key_server: keyserver.ubuntu.com
+      # URL of the key to download and import ( alternative to define id and keyserver)
+      # key_url:  https://ftp-master.debian.org/keys/archive-key-6.0.asc
+
+  #
   # Sources.list content
   #
   sources_list_content:
@@ -81,6 +93,26 @@ dft_os_apt:
     - url: 'http://ftp.fr.debian.org/debian/'
       # Suite version. No default value
       suite: 'stretch-updates'
+      # List of sections to use ( comma separated ). No default value
+      sections: 'main'
+      # Are packages URL generated (stating with deb). Default is True
+      deb: True
+      # Are sources URL generated (stating with deb-src). Default is False
+      debsrc: False
+
+  #
+  # Defines additional sources files stored under /etc/apt/sources.list.d
+  #
+  extra_sources_list_content:
+    # Each repository item defines one line (or two if both packages and sources are activated)
+    # in the sources.list file
+
+    # Defines the file basename. It will be stored under /etc/apt/sources.list.d/{{ file }}.list
+    - file: cisofy-lynis
+      # Base URL of the repository. No default value
+      url: 'https://packages.cisofy.com/community/lynis/deb/'
+      # Suite version. No default value
+      suite: 'testing'
       # List of sections to use ( comma separated ). No default value
       sections: 'main'
       # Are packages URL generated (stating with deb). Default is True
