@@ -18,7 +18,8 @@ Depends: ${misc:Depends},
          python3-parted,
          python3-yaml,
          debootstrap,
-         ansible
+         ansible,
+         squashfs-tools
 Description: Debian Framework Toolkit
 
 Package: dft-doc

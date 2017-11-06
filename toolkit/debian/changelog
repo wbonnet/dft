@@ -1,3 +1,9 @@
+dft (0.5.5-1) unstable; urgency=low
+
+  * Fix : firmware building on ARMHF
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 23 Oct 2017 23:42:00 +0100
+
 dft (0.5.4-1) unstable; urgency=low
 
   * Fix : firmware integration in initramfs (not yet completly done)
