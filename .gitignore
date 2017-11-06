@@ -26,7 +26,6 @@ toolkit/debian/files
 toolkit/debian/tmp
 toolkit/build
 toolkit/dft.egg-info
-bsp
 working_dir
 prototypes/casper
 prototypes/squashfs-stacking/overlayfs-test/
