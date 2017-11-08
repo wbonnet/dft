@@ -20,22 +20,23 @@
 #
 
 # Defines the software version
-NEW_BOARD = $*
+NEW_VERSION = $*
 
 # Create a new boar entry in the repository
-new-board-%:
-	@if [ -d "./$(NEW_BOARD)" ] ; then \
-		echo ". Directory ./($(NEW_BOARD) already exist. Doing nothing..." ; \
+new-version-%:
+	@if [ -d "./$(NEW_VERSION)" ] ; then \
+		echo ". Directory ./($(NEW_VERSION) already exist. Doing nothing..." ; \
 	else  \
-		echo ". Creating the directory storing the new board kernerls (./$(NEW_BOARD))" ; \
-		mkdir -p $(NEW_BOARD) ; \
-		echo ". Copying the Makefile template to the new board directory" ; \
-		ln -s ../../buildsystem/current/templates/board-kernel.makefile $(NEW_BOARD)/Makefile ; \
-		echo ". Copying board specific Makefile template" ; \
-		cp ../buildsystem/current/templates/board-specific.makefile $(NEW_BOARD)/$(NEW_BOARD).mk ; \
-		ln -s $(NEW_BOARD).mk $(NEW_BOARD)/board.mk; \
-		echo ". Adding ./$(NEW_BOARD) to git" ; \
-		git add $(NEW_BOARD) ; \
+		echo ". Creating the directory structure (./$(NEW_VERSION))" ; \
+		mkdir -p $(NEW_VERSION) ; \
+		cp -f ../../buildsystem/current/templates/kernel-version.makefile $(NEW_VERSION)/Makefile ; \
+		ln -s ../../../buildsystem/current $(NEW_VERSION)/buildsystem ; \
+		mkdir -p $(NEW_VERSION)/files ; \
+		touch $(NEW_VERSION)/files/.gitkeep ; \
+		mkdir -p $(NEW_VERSION)/patches ; \
+		touch $(NEW_VERSION)/patches/.gitkeep ; \
+		sed -i -e "s/__KERNEL_VERSION__/$(NEW_VERSION)/g" $(NEW_VERSION)/Makefile ; \
+		git add $(NEW_VERSION) ; \
 	fi ; 
 
 # Catch all target. Call the same targets in each subfolder
