@@ -29,7 +29,7 @@ include ../board.mk
 # PATCHFILES += 0000_some_patch.diff
 
 USE_CONFIG_FILE = 
-USE_DEFCONFIG = x86_64_defconfig
+USE_DEFCONFIG = sunxi_defconfig
 
 # Include build system
 include buildsystem/dft.mk
