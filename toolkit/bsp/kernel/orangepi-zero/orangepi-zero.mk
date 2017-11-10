@@ -20,4 +20,8 @@
 #
 
 # Defines board name
-BOARD_NAME=orangpi-zero
+BOARD_NAME ?= orangepi-zero
+
+# Defines the name of the config file to use
+USE_CONFIG_FILE ?= $(BOARD_NAME).config
+
