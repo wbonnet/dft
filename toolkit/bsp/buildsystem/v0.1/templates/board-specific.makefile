@@ -20,4 +20,7 @@
 #
 
 # Defines board name
-BOARD_NAME = __BOARD_NAME__
+BOARD_NAME ?= __BOARD_NAME__
+
+# Defines the name of the config file to use
+USE_CONFIG_FILE ?= $(BOARD_NAME).config

@@ -34,12 +34,25 @@
 # Execute the configure script
 #
 
+# TODO : separate target for make configfile ?
+#		echo "    running configure in $(OBJ_DIR)" ; \
+#		cd "$(OBJ_DIR)" && $(CONFIGURE_ENV) $(abspath $*)/configure $(CONFIGURE_ARGS) ;
 configure-%/configure :
 	@if test -f $(COOKIE_DIR)/configure-$*/configure ; then \
 		true ; \
 	else \
-		echo "    running configure in $(OBJ_DIR)" ; \
-		cd "$(OBJ_DIR)" && $(CONFIGURE_ENV) $(abspath $*)/configure $(CONFIGURE_ARGS) ; \
+		if [ "$(USE_CONFIG_FILE)" != "" ] ; then \
+			echo "    copying $(USE_CONFIG_FILE) to .config" ; \
+			cp -f $(FILE_DIR)/$(USE_CONFIG_FILE) $(OBJ_DIR)/.config ; \
+		else \
+			if [ "$(USE_DEFCONFIG)" != "" ] ; then \
+				echo "    running make $(USE_DEFCONFIG) in $(OBJ_DIR)" ; \
+				cd "$(OBJ_DIR)" && make $(USE_DEFCONFIG) ; \
+			else \
+				echo "    running configure in $(OBJ_DIR)" ; \
+				cd "$(OBJ_DIR)" && $(CONFIGURE_ENV) $(abspath $*)/configure $(CONFIGURE_ARGS) ; \
+			fi ; \
+		fi ; \
 	fi ;
 	$(TARGET_DONE)
 

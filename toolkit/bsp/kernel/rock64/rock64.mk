@@ -20,4 +20,7 @@
 #
 
 # Defines board name
-BOARD_NAME = rock64
+BOARD_NAME ?= rock64
+
+# Defines the name of the config file to use
+USE_CONFIG_FILE ?= $(BOARD_NAME).config
