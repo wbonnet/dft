@@ -112,3 +112,6 @@ USE_DEFCONFIG       ?=
 # store only differences between configuration file privded by kernel, and the
 # config file we want to use
 DEFCONFIG_OVERRIDES ?=
+
+# Defines build args to use all available cpus when running make
+BUILD_ARGS          ?= -j$(shell grep -c ^processor /proc/cpuinfo)
