@@ -20,4 +20,4 @@
 #
 
 # Defines board name
-BOARD_NAME=orangpi-zero
+BOARD_NAME = rock64

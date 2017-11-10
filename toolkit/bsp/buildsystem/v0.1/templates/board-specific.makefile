@@ -18,3 +18,6 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 #
+
+# Defines board name
+BOARD_NAME = __BOARD_NAME__

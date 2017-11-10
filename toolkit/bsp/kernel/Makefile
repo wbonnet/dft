@@ -33,10 +33,11 @@ new-board-%:
 		ln -s ../../buildsystem/current/templates/board-kernel.makefile $(NEW_BOARD)/Makefile ; \
 		echo ". Copying board specific Makefile template" ; \
 		cp ../buildsystem/current/templates/board-specific.makefile $(NEW_BOARD)/$(NEW_BOARD).mk ; \
+		sed -i -e "s/__BOARD_NAME__/$(NEW_BOARD)/g" $(NEW_BOARD)/$(NEW_BOARD).mk ; \
 		ln -s $(NEW_BOARD).mk $(NEW_BOARD)/board.mk; \
 		echo ". Adding ./$(NEW_BOARD) to git" ; \
 		git add $(NEW_BOARD) ; \
-	fi ; 
+	fi ;
 
 # Catch all target. Call the same targets in each subfolder
 %:

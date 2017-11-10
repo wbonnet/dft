@@ -73,14 +73,14 @@ BASE_DIR            ?= $(CURDIR)
 FILE_DIR            ?= files
 PATCH_DIR           ?= patches
 WORK_ROOT_DIR       ?= work
-WORK_DIR            ?= $(WORK_ROOT_DIR)/build-$(BUILDER_ARCHITECTURE)
+WORK_DIR            ?= $(WORK_ROOT_DIR)/build-$(BOARD_NAME)-$(BUILDER_ARCHITECTURE)
 DOWNLOAD_DIR        ?= $(WORK_ROOT_DIR)/download
 PARTIAL_DIR         ?= $(DOWNLOAD_DIR)/partial
-COOKIE_DIR          ?= $(WORK_ROOT_DIR)/cookies-$(BUILDER_ARCHITECTURE)
+COOKIE_DIR          ?= $(WORK_ROOT_DIR)/cookies-$(BOARD_NAME)-$(BUILDER_ARCHITECTURE)
 EXTRACT_DIR         ?= $(WORK_DIR)
 WORK_SRC            ?= $(WORK_DIR)/$(SOFTWARE_FULLNAME)
 OBJ_DIR             ?= $(WORK_SRC)
-INSTALL_DIR         ?= $(WORK_ROOT_DIR)/install-$(BUILDER_ARCHITECTURE)
+INSTALL_DIR         ?= $(WORK_ROOT_DIR)/install-$(BOARD_NAME)-$(BUILDER_ARCHITECTURE)
 TEMP_DIR            ?= $(WORK_DIR)/tmp
 CHECKSUM_FILE       ?= checksums
 LOG_DIR             ?= log
@@ -88,3 +88,27 @@ LOG_DIR             ?= log
 # Defines the default targets used for building
 CONFIGURE_SCRIPTS   ?= $(WORK_SRC)/configure
 BUILD_SCRIPTS       ?= $(WORK_SRC)/Makefile
+
+# ------------------------------------------------------------------------------
+#
+# Defines the default values for build environment and makefiles
+#
+# ------------------------------------------------------------------------------
+
+# Defines board name
+BOARD_NAME          ?= default-board
+
+# If the USE_CONFIG_FILE variale is set, then the given file will be copied to
+# .config in the uild dirctory. Default is to define nothing.
+USE_CONFIG_FILE     ?=
+
+# If this variable is set, and USE_CONFIG_FILE is undefined, a config file will
+# be generated using the given target. Default is to define nothing and let the
+# user set one of the two choice, or run make by himself.
+USE_DEFCONFIG       ?=
+
+# If the cofig file is generated using a defconfi, it is then possibe to rewrite
+# or add some definition after the file has been generated. This is useful to
+# store only differences between configuration file privded by kernel, and the
+# config file we want to use
+DEFCONFIG_OVERRIDES ?=

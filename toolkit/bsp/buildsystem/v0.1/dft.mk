@@ -221,6 +221,11 @@ show-config :
 	@echo "  CONFIGURE_SCRIPTS                 $(CONFIGURE_SCRIPTS)"
 	@echo "  BUILD_SCRIPTS                     $(BUILD_SCRIPTS)"
 	@echo
+	@echo "  BOARD_NAME                        $(BOARD_NAME)"
+	@echo "  USE_CONFIG_FILE                   $(USE_CONFIG_FILE)"
+	@echo "  USE_DEFCONFIG                     $(USE_DEFCONFIG)"
+	@echo "  DEFCONFIG_OVERRIDES               $(DEFCONFIG_OVERRIDES)"
+	@echo
 	@echo "x BUILD_ENV                         $(BUILD_ENV)"
 	@echo "x BUILD_ARGS                        $(BUILD_ARGS)"
 	@echo
