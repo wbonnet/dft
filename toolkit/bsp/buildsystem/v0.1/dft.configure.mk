@@ -43,7 +43,7 @@ configure-%/configure :
 			cp -f $(FILE_DIR)/$(USE_CONFIG_FILE) $(OBJ_DIR)/.config ; \
 		else \
 			if [ "$(USE_DEFCONFIG)" != "" ] ; then \
-				echo "    running make $(USE_DEFCONFIG) in $(OBJ_DIR)" ; \
+				echo "    running make $(BUILD_FLAGS) $(USE_DEFCONFIG) in $(OBJ_DIR)" ; \
 				cd "$(OBJ_DIR)" && make $(USE_DEFCONFIG) ; \
 			else \
 				echo "    running configure in $(OBJ_DIR)" ; \
