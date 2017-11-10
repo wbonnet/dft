@@ -33,10 +33,7 @@
 #
 # Execute the configure script
 #
-
-# TODO : separate target for make configfile ?
-#		echo "    running configure in $(OBJ_DIR)" ; \
-#		cd "$(OBJ_DIR)" && $(CONFIGURE_ENV) $(abspath $*)/configure $(CONFIGURE_ARGS) ;
+# TODO : DELTA DEFCONFIG
 configure-%/configure :
 	@if test -f $(COOKIE_DIR)/configure-$*/configure ; then \
 		true ; \

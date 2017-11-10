@@ -26,4 +26,4 @@ BOARD_NAME ?= orangepi-zero
 USE_CONFIG_FILE ?= $(BOARD_NAME).config
 
 # Defines standard make targets
-BUILD_ARGS += zImage dtbs modules
+BUILD_ARGS ?= zImage dtbs modules
