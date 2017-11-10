@@ -226,8 +226,9 @@ show-config :
 	@echo "  USE_DEFCONFIG                     $(USE_DEFCONFIG)"
 	@echo "  DEFCONFIG_OVERRIDES               $(DEFCONFIG_OVERRIDES)"
 	@echo
+	@echo "  BUILD_FLAGS                       $(BUILD_FLAGS)"
+	@echo "  BUILD_ARGS                        $(BUILD_ARGS)"
 	@echo "x BUILD_ENV                         $(BUILD_ENV)"
-	@echo "x BUILD_ARGS                        $(BUILD_ARGS)"
 	@echo
 
 # ------------------------------------------------------------------------------

@@ -38,7 +38,7 @@ build-%/Makefile :
 		true ; \
 	else \
 		echo "        running make in $*"  ; \
-		$(BUILD_ENV) $(MAKE) -C $(abspath $(OBJ_DIR)) $(BUILD_ARGS) ; \
+		$(BUILD_ENV) $(MAKE) -C $(abspath $(OBJ_DIR)) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
 	fi ;
 	@$(TARGET_DONE)
 
