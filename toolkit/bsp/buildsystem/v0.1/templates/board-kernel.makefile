@@ -35,6 +35,7 @@ new-version-%:
 		touch $(NEW_VERSION)/files/.gitkeep ; \
 		mkdir -p $(NEW_VERSION)/patches ; \
 		touch $(NEW_VERSION)/patches/.gitkeep ; \
+		echo "work/" > $(NEW_VERSION)/.gitignore ; \
 		sed -i -e "s/__KERNEL_VERSION__/$(NEW_VERSION)/g" $(NEW_VERSION)/Makefile ; \
 		git add $(NEW_VERSION) ; \
 	fi ; 
