@@ -228,7 +228,6 @@ show-config :
 	@echo
 	@echo "  BUILD_FLAGS                       $(BUILD_FLAGS)"
 	@echo "  BUILD_ARGS                        $(BUILD_ARGS)"
-	@echo "  BUILD_TARGETS                     $(BUILD_TARGETS)"
 	@echo "  BUILD_PROCESS_COUNT               $(BUILD_PROCESS_COUNT)"
 	@echo "  BUILD_ENV                         $(BUILD_ENV)"
 	@echo
