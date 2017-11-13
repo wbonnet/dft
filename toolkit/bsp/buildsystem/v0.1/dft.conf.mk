@@ -115,3 +115,10 @@ DEFCONFIG_OVERRIDES ?=
 
 # Defines build flags to use all available cpus when running make
 BUILD_FLAGS         ?= -j$(shell grep -c ^processor /proc/cpuinfo)
+
+# Defines the list of architectures using dtb. This variable is used during install
+# Stae to check if the dtb should be copied to installation dir. It is also used for
+# ARCH_FLAGS variable default initialization. If set then dtbs is added to target list
+ARCH_USING_DTB = "armel armhf arm64 mips"
+ARCH_COMMON_BUILD_FLAGS = "modules"
+ARCH_ARMHF_BUILD_FLAGS = "zImage dtbs"
