@@ -25,6 +25,3 @@ BOARD_ARCH ?= armhf
 
 # Defines the name of the config file to use
 USE_CONFIG_FILE ?= $(BOARD_NAME).config
-
-# Defines standard make targets
-BUILD_ARGS ?= $(ARCH_COMMON_BUILD_FLAGS) $(ARCH_$(call, uc, $(BOARD_ARCH))_BUILD_FLAGS)
