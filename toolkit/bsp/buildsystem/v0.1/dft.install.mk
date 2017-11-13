@@ -38,7 +38,10 @@ do-install :
 		true ; \
 	else \
 		echo "        running install in $(OBJ_DIR)"  ; \
-		cd $(OBJ_DIR) && $(BUILD_ENV) $(MAKE) DESTDIR=$(abspath $(INSTALL_DIR)) install ; \
+		mkdir -p $(abspath $(INSTALL_DIR))/boot/dtb ; \
+		cd $(OBJ_DIR) && $(BUILD_ENV) $(MAKE) INSTALL_PATH=$(abspath $(INSTALL_DIR))/boot install ; \
+		$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(abspath $(INSTALL_DIR))/ modules_install ; \
+		cp -fr arch/arm/boot/dts/*.dtb $(abspath $(INSTALL_DIR))/boot/dtb ; \
 	fi ;
 	@$(TARGET_DONE)
 
