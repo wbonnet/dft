@@ -117,13 +117,18 @@ DEFCONFIG_OVERRIDES ?=
 BUILD_PROCESS_COUNT ?= -j$(shell grep -c ^processor /proc/cpuinfo)
 
 # Defines default build arguments, depending on the board architectures
-ARCH_COMMON_BUILD_ARGS ?= "modules"
-ARCH_ARMHF_BUILD_ARGS  ?= "zImage dtbs"
+ARCH_COMMON_BUILD_ARGS ?= modules
+ARCH_ARMHF_BUILD_ARGS  ?= zImage dtbs
 
 # Defines default build targets depending on the board architectures
-ARCH_COMMON_BUILD_FLAGS   ?= ""
-ARCH_ARMHF_BUILD_FLAGS     = ""
+ARCH_COMMON_BUILD_FLAGS   ?= 
+ARCH_ARMHF_BUILD_FLAGS    ?= 
+
+# Defines default build arguments, depending on the board architectures
+# ARCH_COMMON_INSTALL_ARGS ?= 
+# ARCH_ARMHF_INSTALL_ARGS  ?= "zImage dtbs"
 
 # Defines standard make targets
 BUILD_FLAGS   ?= $(ARCH_COMMON_BUILD_FLAGS) $(ARCH_$(shell echo $(BOARD_ARCH) | tr a-z A-Z)_BUILD_FLAGS)
 BUILD_ARGS    ?= $(ARCH_COMMON_BUILD_ARGS) $(ARCH_$(shell echo $(BOARD_ARCH) | tr a-z A-Z)_BUILD_ARGS)
+# INSTALL_ARGS  ?= $(ARCH_COMMON_INSTALL_ARGS) $(ARCH_$(shell echo $(BOARD_ARCH) | tr a-z A-Z)_INSTALL_ARGS)
