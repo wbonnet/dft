@@ -107,11 +107,11 @@ USE_CONFIG_FILE     ?= $(BOARD_NAME).config
 # user set one of the two choice, or run make by himself.
 USE_DEFCONFIG       ?=
 
-# If the config file is generated using a defconfi, it is then possibe to rewrite
-# or add some definition after the file has been generated. This is useful to
-# store only differences between configuration file privded by kernel, and the
-# config file we want to use
-DEFCONFIG_OVERRIDES ?=
+# The config file can be modified once set in the build dir (either using a build
+# defconfig or by copying our own config file) by applying modifications defined
+# in the overrides files. This is useful to store only differences between
+# configuration file privided by kernel, and the config file we want to use
+CONFIG_OVERRIDES    ?=
 
 # Defines build flags to use all available cpus when running make
 BUILD_PROCESS_COUNT ?= -j$(shell grep -c ^processor /proc/cpuinfo)
