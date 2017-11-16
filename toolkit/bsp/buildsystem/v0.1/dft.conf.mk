@@ -100,7 +100,7 @@ BOARD_NAME          ?= default-board
 
 # If the USE_CONFIG_FILE variale is set, then the given file will be copied to
 # .config in the uild dirctory. Default is to define nothing.
-USE_CONFIG_FILE     ?=
+USE_CONFIG_FILE     ?= $(BOARD_NAME).config
 
 # If this variable is set, and USE_CONFIG_FILE is undefined, a config file will
 # be generated using the given target. Default is to define nothing and let the

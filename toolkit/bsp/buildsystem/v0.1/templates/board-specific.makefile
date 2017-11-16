@@ -22,9 +22,3 @@
 # Defines board name
 BOARD_NAME ?= __BOARD_NAME__
 BOARD_ARCH ?= unknown
-
-# Defines the name of the config file to use
-USE_CONFIG_FILE ?= $(BOARD_NAME).config
-
-# Defines standard make targets
-BUILD_ARGS ?= zImage dtbs modules
