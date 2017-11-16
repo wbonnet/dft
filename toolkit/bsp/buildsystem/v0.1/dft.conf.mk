@@ -107,7 +107,7 @@ USE_CONFIG_FILE     ?= $(BOARD_NAME).config
 # user set one of the two choice, or run make by himself.
 USE_DEFCONFIG       ?=
 
-# If the cofig file is generated using a defconfi, it is then possibe to rewrite
+# If the config file is generated using a defconfi, it is then possibe to rewrite
 # or add some definition after the file has been generated. This is useful to
 # store only differences between configuration file privded by kernel, and the
 # config file we want to use
