@@ -18,10 +18,18 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 #
+ 
+# Defines the kernel version
+KERNEL_VERSION=4.14
 
-# Defines board name
-BOARD_NAME ?= nanopi-neo
-BOARD_ARCH ?= armhf
+# Include board specific definitions
+include ../board.mk
 
-# Defines the name of the config file to use
-USE_CONFIG_FILE ?= $(BOARD_NAME).config
+# Defines the patches to apply on the sources
+# PATCHFILES += 0000_some_patch.diff
+
+USE_CONFIG_FILE =
+USE_DEFCONFIG = imx_v6_v7_defconfig
+
+# Include build system
+include buildsystem/dft.mk
