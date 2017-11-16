@@ -22,6 +22,3 @@
 # Defines board name
 BOARD_NAME ?= sabre-qsd-plus
 BOARD_ARCH ?= armhf
-
-# Defines the name of the config file to use
-USE_CONFIG_FILE ?= $(BOARD_NAME).config
