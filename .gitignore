@@ -1,4 +1,3 @@
-.gitignore
 .pybuild
 __pycache__
 dft-ci_*_all.deb
