@@ -121,6 +121,14 @@ include $(BUILD_SYSTEM_ROOT)/dft.install.mk
 
 # ------------------------------------------------------------------------------
 #
+# Includes the build system package definitions
+#
+# ------------------------------------------------------------------------------
+include $(BUILD_SYSTEM_ROOT)/dft.package.mk
+
+
+# ------------------------------------------------------------------------------
+#
 # Defines stub targets so that it is possible to define pre-something or
 # post-something targets in Makefile. These pre/post will be automagically by
 # targets even if not define thanks to stubs
@@ -153,6 +161,7 @@ help :
 	@echo '   configure               Execute the configure script'
 	@echo '   build                   Build the software'
 	@echo '   install                 Install the software to the target directory'
+	@echo '   package                 Build the Debian package containing kernel and all the needed files'
 	@echo
 
 
@@ -207,6 +216,7 @@ show-config :
 	@echo "  WORK_SRC                          $(WORK_SRC)"
 	@echo "  OBJ_DIR                           $(OBJ_DIR)"
 	@echo "  INSTALL_DIR                       $(INSTALL_DIR)"
+	@echo "  PACKAGE_DIR                       $(PACKAGE_DIR)"
 	@echo "  TEMP_DIR                          $(TEMP_DIR)"
 	@echo "  LOG_DIR                           $(LOG_DIR)"
 	@echo "  CHECKSUM_FILE                     $(CHECKSUM_FILE)"
@@ -228,9 +238,13 @@ show-config :
 	@echo
 	@echo "  BUILD_FLAGS                       $(BUILD_FLAGS)"
 	@echo "  BUILD_ARGS                        $(BUILD_ARGS)"
-	@echo "  BUILD_PROCESS_COUNT               $(BUILD_PROCESS_COUNT)"
 	@echo "  BUILD_ENV                         $(BUILD_ENV)"
+	@echo "  BUILD_PROCESS_COUNT               $(BUILD_PROCESS_COUNT)"
 	@echo
+	@echo "  MAKE                              $(MAKE)"
+	@echo "  DEBUILD                           $(DEBUILD)"
+	@echo "  DEBUILD_ARGS                      $(DEBUILD_ARGS)"
+	@echo "  DEBUILD_ENV                       $(DEBUILD_ENV)"
 
 # ------------------------------------------------------------------------------
 #
@@ -375,7 +389,7 @@ makesums : makesum
 
 EXTRACT_TARGETS ?=  $(addprefix extract-archive-,$(SOFTWARE_DIST_FILES))
 
-extract : $(EXTRACT_DIR) checksum pre-extract $(EXTRACT_TARGETS) post-extract
+extract : fetch $(EXTRACT_DIR) pre-extract $(EXTRACT_TARGETS) post-extract
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -455,6 +469,25 @@ install : build $(INSTALL_DIR) pre-install do-install post-install
 #
 
 reinstall : build pre-reinstall do-reinstall install post-reinstall
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
+
+
+# ------------------------------------------------------------------------------
+#
+# Build the Debian package
+#
+
+package : install $(PACKAGE_DIR) pre-package do-package post-package
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
+
+# ------------------------------------------------------------------------------
+#
+# Execute once again the package target
+#
+
+repackage : install pre-repackage do-repackage package post-repackage
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 

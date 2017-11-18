@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-version=__KERNEL_VERSION__
+version=4.14
 image_path=/boot/vmlinuz-$version
 
 if [ "$1" != configure ]; then

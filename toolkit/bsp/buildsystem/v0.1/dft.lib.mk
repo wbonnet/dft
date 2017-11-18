@@ -105,7 +105,7 @@ apply-patch-% :
 #
 # Directory maker used by the base rules
 #
-$(sort $(BUILD_SYSTEM_ROOT) $(FILE_DIR) $(WORK_ROOT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(EXTRACT_DIR) $(WORK_SRC) $(OBJ_DIR) $(INSTALL_DIR) $(PKG_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR)):
+$(sort $(BUILD_SYSTEM_ROOT) $(FILE_DIR) $(WORK_ROOT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(EXTRACT_DIR) $(WORK_SRC) $(OBJ_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR)):
 	@if test -d $@; then : ; else \
 		echo making $@; \
 		install -d $@; \

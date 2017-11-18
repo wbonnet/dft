@@ -81,6 +81,7 @@ EXTRACT_DIR         ?= $(WORK_DIR)
 WORK_SRC            ?= $(WORK_DIR)/$(SOFTWARE_FULLNAME)
 OBJ_DIR             ?= $(WORK_SRC)
 INSTALL_DIR         ?= $(WORK_ROOT_DIR)/install-$(BOARD_NAME)-$(BUILDER_ARCHITECTURE)
+PACKAGE_DIR         ?= $(WORK_ROOT_DIR)/package-$(BOARD_NAME)-$(BUILDER_ARCHITECTURE)
 TEMP_DIR            ?= $(WORK_DIR)/tmp
 CHECKSUM_FILE       ?= checksums
 LOG_DIR             ?= log
@@ -131,4 +132,8 @@ ARCH_ARMHF_BUILD_FLAGS    ?=
 # Defines standard make targets
 BUILD_FLAGS   ?= $(ARCH_COMMON_BUILD_FLAGS) $(ARCH_$(shell echo $(BOARD_ARCH) | tr a-z A-Z)_BUILD_FLAGS)
 BUILD_ARGS    ?= $(ARCH_COMMON_BUILD_ARGS) $(ARCH_$(shell echo $(BOARD_ARCH) | tr a-z A-Z)_BUILD_ARGS)
-# INSTALL_ARGS  ?= $(ARCH_COMMON_INSTALL_ARGS) $(ARCH_$(shell echo $(BOARD_ARCH) | tr a-z A-Z)_INSTALL_ARGS)
+
+# debuild configuration
+DEBUILD        = debuild
+DEBUILD_ARGS   = -us -uc
+DEBUILD_ENV    = DEBUILD_TGZ_CHECK=no
