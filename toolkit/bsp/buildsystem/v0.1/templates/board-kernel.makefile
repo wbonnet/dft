@@ -27,7 +27,7 @@ NEW_VERSION = $*
 
 # Create a new boar entry in the repository
 new-version-%:
-	if [ -d "./$(NEW_VERSION)" ] ; then \
+	@if [ -d "./$(NEW_VERSION)" ] ; then \
 		echo ". Directory ./($(NEW_VERSION) already exist. Doing nothing..." ; \
 	else  \
 		echo ". Creating the directory structure (./$(NEW_VERSION))" ; \
