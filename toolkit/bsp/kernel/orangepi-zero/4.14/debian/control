@@ -11,8 +11,8 @@ Depends: ${misc:Depends}
 Description: Linux kernel, version 4.14 for orangepi-zero
  This packages contains the Linux kernel version 4.14 compiled for orangepi-zero board.
 
-Package: linux-headers-orangepi-zero-4.14
-Architecture: any
-Depends: ${misc:Depends}
-Description: Linux kerneli headers, version 4.14 for orangepi-zero
- This packages contains the Linux kernel headers version 4.14 for orangepi-zero board.
+# Package: linux-headers-orangepi-zero-4.14
+# Architecture: any
+# Depends: ${misc:Depends}
+# Description: Linux kerneli headers, version 4.14 for orangepi-zero
+#  This packages contains the Linux kernel headers version 4.14 for orangepi-zero board.
