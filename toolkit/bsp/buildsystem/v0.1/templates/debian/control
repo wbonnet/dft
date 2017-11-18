@@ -1,0 +1,18 @@
+Source: linux-kernel-__KERNEL_VERSION__-__BOARD_NAME__ 
+Section: kernel
+Priority: optional
+Maintainer: __MAINTAINER_NAME__ <__MAINTAINER_EMAIL__>
+Standards-Version: 3.9.8
+Build-Depends: debhelper (>= 9)
+
+Package: linux-image-__KERNEL_VERSION__-__BOARD_NAME__ 
+Architecture: any
+Depends: ${misc:Depends}
+Description: Linux kernel, version __KERNEL_VERSION__ for __BOARD_NAME__
+ This packages contains the Linux kernel version __KERNEL_VERSION__ compiled for __BOARD_NAME__ board.
+
+Package: linux-headers-__KERNEL_VERSION__-__BOARD_NAME__ 
+Architecture: any
+Depends: ${misc:Depends}
+Description: Linux kerneli headers, version __KERNEL_VERSION__ for __BOARD_NAME__
+ This packages contains the Linux kernel headers version __KERNEL_VERSION__ for __BOARD_NAME__ board.

@@ -1,0 +1,11 @@
+linux-image-__KERNEL_VERSION__-__BOARD_NAME__ (__KERNEL_VERSION_-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- __MAINTAINER_NAME__ <__MAINTAINER_EMAIL__>  __DATE__
+
+linux-headers-__KERNEL_VERSION__-__BOARD_NAME__ (__KERNEL_VERSION_-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- __MAINTAINER_NAME__ <__MAINTAINER_EMAIL__>  __DATE__
