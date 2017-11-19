@@ -28,8 +28,5 @@ include ../board.mk
 # Defines the patches to apply on the sources
 # PATCHFILES += 0000_some_patch.diff
 
-USE_CONFIG_FILE =
-USE_DEFCONFIG   = sunxi_defconfig
-
 # Include build system
 include buildsystem/dft.mk

@@ -37,7 +37,7 @@ new-version-%:
 		cp -f ../../buildsystem/current/templates/kernel-version.makefile $(NEW_VERSION)/Makefile ; \
 		ln -s ../../../buildsystem/current $(NEW_VERSION)/buildsystem ; \
 		mkdir -p $(NEW_VERSION)/files ; \
-		touch $(NEW_VERSION)/files/.gitkeep ; \
+		ln -s ../../config_files/default.$(BOARD_NAME).config $(NEW_VERSION)/files/$(BOARD_NAME).config ; \
 		mkdir -p $(NEW_VERSION)/patches ; \
 		touch $(NEW_VERSION)/patches/.gitkeep ; \
 		echo "work/" > $(NEW_VERSION)/.gitignore ; \

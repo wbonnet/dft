@@ -29,6 +29,8 @@ new-board-%:
 	else  \
 		echo ". Creating the directory storing the new board kernerls (./$(NEW_BOARD))" ; \
 		mkdir -p $(NEW_BOARD) ; \
+		mkdir -p $(NEW_BOARD)/config_files ; \
+		touch $(NEW_BOARD)/config_files/default.$(NEW_BOARD).config ; \
 		echo ". Copying the Makefile template to the new board directory" ; \
 		ln -s ../../buildsystem/current/templates/board-kernel.makefile $(NEW_BOARD)/Makefile ; \
 		echo ". Copying board specific Makefile template" ; \
