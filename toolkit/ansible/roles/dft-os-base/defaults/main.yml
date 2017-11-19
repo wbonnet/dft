@@ -43,6 +43,10 @@ dft_timezone: "Etc/UTC"
 # If not defined a random pssword is set
 # dft_root_password: "{{ 'root' | password_hash('sha512') }}"
 
+# Defines the list of groups to create if absent
+# dft_groups:
+#  - { name: "dft" }
+
 # Defines the list of users to create. By default, create a user named dft
 # and put it into sudo group.
 #
