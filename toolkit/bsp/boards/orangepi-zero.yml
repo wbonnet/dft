@@ -39,7 +39,7 @@ architecture: armhf
 #
 kernel:
   # Defines the upstream site used to provide kernel for this device
-  origin: armbian
+  origin: armwizard
 
   # Defines the public key of the repository if not using default value.
   # Default keys are :
@@ -61,10 +61,7 @@ kernel:
 
   # List of packages to install from the repository
   packages:
-    - linux-jessie-root-orangepizero
-    - linux-dtb-next-sunxi
-    - linux-headers-next-sunxi
-    - linux-image-next-sunxi
+    - linux-image-orangepi-zero-4.14
 
   # Defines if the source generated to install kernel packaged should be kept or not after
   # intallation. Default value is True
