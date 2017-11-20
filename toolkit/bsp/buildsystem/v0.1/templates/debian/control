@@ -1,11 +1,11 @@
-Source: linux-kernel-__BOARD_NAME__-__KERNEL_VERSION__
+Source: linux-kernel-__BOARD_NAME__
 Section: kernel
 Priority: optional
 Maintainer: __MAINTAINER_NAME__ <__MAINTAINER_EMAIL__>
 Standards-Version: 3.9.8
 Build-Depends: debhelper (>= 9)
 
-Package: linux-image-__BOARD_NAME__-__KERNEL_VERSION__
+Package: linux-image-__BOARD_NAME__
 Architecture: any
 Depends: ${misc:Depends},
          kmod, 
