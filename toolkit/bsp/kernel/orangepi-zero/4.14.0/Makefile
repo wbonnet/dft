@@ -21,12 +21,19 @@
  
 # Defines the kernel version
 KERNEL_VERSION=4.14.0
+KERNEL_FILE_VERSION=4.14
 
 # Include board specific definitions
 include ../board.mk
 
 # Defines the patches to apply on the sources
 # PATCHFILES += 0000_some_patch.diff
+
+# Move sources directory to the correct name since it does not include full
+# version in its naming
+post-extract:
+	@mv $(EXTRACT_DIR)/$(SOFTWARE_UPSTREAM_NAME)-$(KERNEL_FILE_VERSION) $(WORK_SRC)
+	$(TARGET_DONE)
 
 # Include build system
 include buildsystem/dft.mk

@@ -192,6 +192,7 @@ show-config :
 	@echo "Software configuration"
 	@echo "  SOFTWARE_UPSTREAM_NAME            $(SOFTWARE_UPSTREAM_NAME)"
 	@echo "  KERNEL_VERSION                    $(KERNEL_VERSION)"
+	@echo "  KERNEL_FILE_VERSION               $(KERNEL_FILE_VERSION)"
 	@echo "  KERNEL_BRANCH                     $(KERNEL_BRANCH)"
 	@echo "  SOFTWARE_FULLNAME                 $(SOFTWARE_FULLNAME)"
 	@echo "  SOFTWARE_DIST_FILES               $(SOFTWARE_DIST_FILES)"

@@ -48,16 +48,17 @@ BUILDER_OPERATING_SYSTEM_VERSION := $(word 2, $(shell lsb_release -c | tr '[:low
 #
 # ------------------------------------------------------------------------------
 
-KERNEL_SITE     = https://cdn.kernel.org/pub/linux/kernel
-KERNEL_SRC_URL  = $(KERNEL_SITE)/$(KERNEL_BRANCH)/linux-$(KERNEL_VERSION).tar.xz
-KERNEL_BRANCH   = v$(shell echo $(KERNEL_VERSION) | head -c 1).x
+KERNEL_SITE             = https://cdn.kernel.org/pub/linux/kernel
+KERNEL_FILE_VERSION    ?= $(KERNEL_VERSION)
+KERNEL_SRC_URL          = $(KERNEL_SITE)/$(KERNEL_BRANCH)/linux-$(KERNEL_FILE_VERSION).tar.xz
+KERNEL_BRANCH           = v$(shell echo $(KERNEL_FILE_VERSION) | head -c 1).x
 
 # Defines the software name if not set
-SOFTWARE_UPSTREAM_NAME = linux
+SOFTWARE_UPSTREAM_NAME  = linux
 
 # Defines the files to retrieve
-SOFTWARE_DIST_FILES     ?= $(SOFTWARE_UPSTREAM_NAME)-$(KERNEL_VERSION).tar.xz
-SOFTWARE_SIGN_FILES     ?= $(SOFTWARE_UPSTREAM_NAME)-$(KERNEL_VERSION).tar.xz.sign
+SOFTWARE_DIST_FILES     ?= $(SOFTWARE_UPSTREAM_NAME)-$(KERNEL_FILE_VERSION).tar.xz
+SOFTWARE_SIGN_FILES     ?= $(SOFTWARE_UPSTREAM_NAME)-$(KERNEL_FILE_VERSION).tar.xz.sign
 
 # Defines the source repository
 SOFTWARE_UPSTREAM_SITES ?= $(KERNEL_SITE)/$(KERNEL_BRANCH)
