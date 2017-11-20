@@ -7,7 +7,10 @@ Build-Depends: debhelper (>= 9)
 
 Package: linux-image-__BOARD_NAME__-__KERNEL_VERSION__
 Architecture: any
-Depends: ${misc:Depends}
+Depends: ${misc:Depends},
+         kmod, 
+         linux-base (>= 4.3~), 
+         initramfs-tools (>= 0.120+deb8u2) | linux-initramfs-tool
 Description: Linux kernel, version __KERNEL_VERSION__ for __BOARD_NAME__
  This packages contains the Linux kernel version __KERNEL_VERSION__ compiled for __BOARD_NAME__ board.
 
