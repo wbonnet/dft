@@ -1,0 +1,1 @@
+marsboard-imx6.mk

@@ -1,0 +1,1 @@
+nanopi-neo-plus2.mk

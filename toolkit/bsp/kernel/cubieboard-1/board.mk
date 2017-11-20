@@ -1,0 +1,1 @@
+cubieboard-1.mk
