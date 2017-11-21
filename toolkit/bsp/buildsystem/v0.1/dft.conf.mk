@@ -48,7 +48,10 @@ BUILDER_OPERATING_SYSTEM_VERSION := $(word 2, $(shell lsb_release -c | tr '[:low
 #
 # ------------------------------------------------------------------------------
 
-KERNEL_SITE             = https://cdn.kernel.org/pub/linux/kernel
+KERNEL_GIT_URL         ?= git://git.kernel.org/pub/scm/linux/kernel/git/stable
+KERNEL_GIT_REPO        ?= linux-stable
+KERNEL_GIT_REPO_EXT    ?= .git
+KERNEL_SITE            ?= $(KERNEL_SITE_TARBALL)
 KERNEL_FILE_VERSION    ?= $(KERNEL_VERSION)
 KERNEL_SRC_URL          = $(KERNEL_SITE)/$(KERNEL_BRANCH)/linux-$(KERNEL_FILE_VERSION).tar.xz
 KERNEL_BRANCH           = v$(shell echo $(KERNEL_FILE_VERSION) | head -c 1).x
@@ -123,11 +126,11 @@ ARCH_COMMON_BUILD_ARGS ?= modules
 ARCH_ARMHF_BUILD_ARGS  ?= zImage dtbs
 
 # Defines default build targets depending on the board architectures
-ARCH_COMMON_BUILD_FLAGS   ?= 
-ARCH_ARMHF_BUILD_FLAGS    ?= 
+ARCH_COMMON_BUILD_FLAGS   ?=
+ARCH_ARMHF_BUILD_FLAGS    ?=
 
 # Defines default build arguments, depending on the board architectures
-# ARCH_COMMON_INSTALL_ARGS ?= 
+# ARCH_COMMON_INSTALL_ARGS ?=
 # ARCH_ARMHF_INSTALL_ARGS  ?= "zImage dtbs"
 
 # Defines standard make targets

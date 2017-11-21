@@ -88,6 +88,18 @@ extract-archive-%.zip :
 	fi ;
 	$(TARGET_DONE)
 
+fetch-git-branch-% :
+	@if test -f $(COOKIE_DIR)/extract-git-branch-$* ; then \
+		true ; \
+	else \
+		echo "        fetching branch $(DOWNLOAD_DIR)/$*" ; \
+		cp -fr $(DOWNLOAD_DIR)/$(KERNEL_GIT_REPO) $(EXTRACT_DIR)/$(SOFTWARE_FULLNAME) ; \
+		cd $(EXTRACT_DIR)/$(SOFTWARE_FULLNAME)
+		git checkout v$* ; \
+		git fetch ; \
+	fi ;
+	$(TARGET_DONE)
+
 # ------------------------------------------------------------------------------
 #
 # patch utilities

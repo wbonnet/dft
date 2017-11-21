@@ -28,5 +28,7 @@ include ../board.mk
 # Defines the patches to apply on the sources
 # PATCHFILES += 0000_some_patch.diff
 
+UPSTREAM_DOWNLOAD_TOOL = git
+
 # Include build system
 include buildsystem/dft.mk

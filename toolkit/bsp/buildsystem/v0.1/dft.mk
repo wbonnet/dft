@@ -279,20 +279,27 @@ fetch : prerequisite $(DOWNLOAD_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) pre-fetch $(FE
 	$(TARGET_DONE)
 
 $(DOWNLOAD_DIR)/% :
-	@if test -f $(COOKIE_DIR)/checksum-$* ; then \
+	if test -f $(COOKIE_DIR)/checksum-$* ; then \
 		true ; \
 	else \
-		if [ "$(UPSTREAM_DOWNLOAD_TOOL)" = "wget" ] ; then \
-			wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SOFTWARE_UPSTREAM_SITES)/$* ; \
-			mv $(PARTIAL_DIR)/$* $@ ; \
-			if test -r $@ ; then \
-				true ; \
-			else \
-				echo 'ERROR : Failed to download $@!' 1>&2; \
-				false; \
-			fi; \
-		else \
-			echo "Fetch method $(UPSTREAM_DOWNLOAD_TOOL) is not implemented" ; \
+		case "$(UPSTREAM_DOWNLOAD_TOOL)" in \
+			"wget") \
+				wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SOFTWARE_UPSTREAM_SITES)/$* ; \
+				mv $(PARTIAL_DIR)/$* $@ ; \
+				if test -r $@ ; then \
+					true ; \
+				else \
+					echo 'ERROR : Failed to download $@!' 1>&2; \
+					false; \
+				fi; \
+				;; \
+			"git") \
+				git clone $(GIT_OPTS) $(KERNEL_GIT_URL)/$(KERNEL_GIT_REPO)$(KERNEL_GIT_REPO_EXT) ; \
+				;; \
+			*) \
+				echo "Fetch method $(UPSTREAM_DOWNLOAD_TOOL) is not implemented" ; \
+				;; \
+			esac ; \
 		fi ; \
 		if [ ! "" = "$(SOFTWARE_CHECKSUM_FILES)" ] ; then \
 			if [ ! "$*" = "$(SOFTWARE_CHECKSUM_FILES)" ] ; then \
