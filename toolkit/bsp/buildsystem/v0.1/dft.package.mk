@@ -39,8 +39,8 @@ do-package :
 	else \
 		echo "        running package in $(PACKAGE_DIR)"  ; \
 		cd $(PACKAGE_DIR) ; \
-		mkdir -p linux-kernel-$(BOARD_NAME)-$(KERNEL_VERSION) ; \
-		cd linux-kernel-$(BOARD_NAME)-$(KERNEL_VERSION) ; \
+		mkdir -p linux-kernel-$(BOARD_NAME) ; \
+		cd linux-kernel-$(BOARD_NAME) ; \
 		rm -f debian ; \
 		cp -fr $(BASE_DIR)/debian debian ; \
 		cp -fr $(abspath $(INSTALL_DIR))/* . ; \
