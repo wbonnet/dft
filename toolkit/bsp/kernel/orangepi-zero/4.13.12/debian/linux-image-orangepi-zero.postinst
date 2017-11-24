@@ -22,5 +22,8 @@ if [ -d /etc/kernel/postinst.d ]; then
 	      --arg=$image_path /etc/kernel/postinst.d
 fi
 
+# Create or update the link to zImage
+ln -sf /boot/vmlinuz-4.13.12 /boot/zImage
+
 exit 0
 
