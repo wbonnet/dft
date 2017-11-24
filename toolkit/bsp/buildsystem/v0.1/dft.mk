@@ -194,14 +194,20 @@ show-config :
 	@echo "  KERNEL_VERSION                    $(KERNEL_VERSION)"
 	@echo "  KERNEL_FILE_VERSION               $(KERNEL_FILE_VERSION)"
 	@echo "  KERNEL_BRANCH                     $(KERNEL_BRANCH)"
+	@echo "  UPSTREAM_DOWNLOAD_TOOL            $(UPSTREAM_DOWNLOAD_TOOL)"
+	@echo
+	@echo "wget download parameters"
 	@echo "  SOFTWARE_FULLNAME                 $(SOFTWARE_FULLNAME)"
 	@echo "  SOFTWARE_DIST_FILES               $(SOFTWARE_DIST_FILES)"
 	@echo "  SOFTWARE_SIGN_FILES               $(SOFTWARE_SIGN_FILES)"
-	@echo
-	@echo "  UPSTREAM_DOWNLOAD_TOOL            $(UPSTREAM_DOWNLOAD_TOOL)"
+	@echo "  KERNEL_SITE                       $(KERNEL_SITE)"
 	@echo "  SOFTWARE_UPSTREAM_SITES           $(SOFTWARE_UPSTREAM_SITES)"
 	@echo
-	@echo "  KERNEL_SITE                       $(KERNEL_SITE)"
+	@echo "git download parameters"
+	@echo "  KERNEL_GIT_URL                    $(KERNEL_GIT_URL)"
+	@echo "  KERNEL_GIT_REPO                   $(KERNEL_GIT_REPO)"
+	@echo "  KERNEL_GIT_REPO_EXT               $(KERNEL_GIT_REPO_EXT)"
+	@echo "  SOFTWARE_DIST_GIT_REPO            $(SOFTWARE_DIST_GIT_REPO)"
 	@echo
 	@echo "Directories configuration"
 	@echo "  BUILD_SYSTEM_ROOT                 $(BUILD_SYSTEM_ROOT)"
@@ -269,38 +275,38 @@ prerequisite : $(COOKIE_DIR) pre-everything
 
 # Construct the list of files path under downloaddir which will be processed by
 # the $(DOWNLOAD_DIR)/% target
+ifeq ($(UPSTREAM_DOWNLOAD_TOOL), wget)
 FETCH_TARGETS ?=  $(addprefix $(DOWNLOAD_DIR)/,$(SOFTWARE_CHECKSUM_FILES)) $(addprefix $(DOWNLOAD_DIR)/,$(SOFTWARE_DIST_FILES))
+else
+ifeq ($(UPSTREAM_DOWNLOAD_TOOL), git)
+FETCH_TARGETS ?=  $(addprefix $(GIT_EXTRACT_DIR)/,$(SOFTWARE_DIST_GIT))
+else
+define error_msg
+Unknown UPSTREAM_DOWNLOAD_TOOL : $(UPSTREAM_DOWNLOAD_TOOL)
+endef
+$(error $(error_msg))
+endif
+endif
 
 fetch-list:
 	@echo $(FETCH_TARGETS)
 
-fetch : prerequisite $(DOWNLOAD_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
+fetch : prerequisite $(COOKIE_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
-$(DOWNLOAD_DIR)/% :
-	if test -f $(COOKIE_DIR)/checksum-$* ; then \
+$(DOWNLOAD_DIR)/% : $(DOWNLOAD_DIR) $(PARTIAL_DIR)
+	if test -f $(COOKIE_DIR)download-$* ; then \
 		true ; \
 	else \
-		case "$(UPSTREAM_DOWNLOAD_TOOL)" in \
-			"wget") \
-				wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SOFTWARE_UPSTREAM_SITES)/$* ; \
-				mv $(PARTIAL_DIR)/$* $@ ; \
-				if test -r $@ ; then \
-					true ; \
-				else \
-					echo 'ERROR : Failed to download $@!' 1>&2; \
-					false; \
-				fi; \
-				;; \
-			"git") \
-				git clone $(GIT_OPTS) $(KERNEL_GIT_URL)/$(KERNEL_GIT_REPO)$(KERNEL_GIT_REPO_EXT) ; \
-				;; \
-			*) \
-				echo "Fetch method $(UPSTREAM_DOWNLOAD_TOOL) is not implemented" ; \
-				;; \
-			esac ; \
-		fi ; \
+		wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SOFTWARE_UPSTREAM_SITES)/$* ; \
+		mv $(PARTIAL_DIR)/$* $@ ; \
+		if test -r $@ ; then \
+			true ; \
+		else \
+			echo 'ERROR : Failed to download $@!' 1>&2; \
+			false; \
+		fi; \
 		if [ ! "" = "$(SOFTWARE_CHECKSUM_FILES)" ] ; then \
 			if [ ! "$*" = "$(SOFTWARE_CHECKSUM_FILES)" ] ; then \
 				if grep -- '$*' $(DOWNLOAD_DIR)/$(SOFTWARE_CHECKSUM_FILES) > /dev/null; then  \
@@ -316,6 +322,18 @@ $(DOWNLOAD_DIR)/% :
 				fi ; \
 			fi ; \
 		fi ; \
+	fi ;
+	$(TARGET_DONE)
+
+$(GIT_EXTRACT_DIR)/% : $(GIT_EXTRACT_DIR)
+	if test -f $(COOKIE_DIR)/download-$* ; then \
+		true ; \
+	else \
+		echo "        cloning into $(GIT_EXTRACT_DIR)/$*" ; \
+		cd $(GIT_EXTRACT_DIR) ; \
+		git clone $(GIT_OPTS) $(KERNEL_GIT_URL)/$(KERNEL_GIT_REPO)$(KERNEL_GIT_REPO_EXT) ; \
+		git checkout v$* ; \
+		git fetch ; \
 	fi ;
 	$(TARGET_DONE)
 
