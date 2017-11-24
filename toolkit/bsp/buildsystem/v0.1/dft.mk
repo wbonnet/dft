@@ -296,7 +296,7 @@ fetch : prerequisite $(COOKIE_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
 	$(TARGET_DONE)
 
 $(DOWNLOAD_DIR)/% : $(DOWNLOAD_DIR) $(PARTIAL_DIR)
-	@if test -f $(COOKIE_DIR)download-$* ; then \
+	@if test -f $(COOKIE_DIR)/$(DOWNLOAD_DIR)/$* ; then \
 		true ; \
 	else \
 		wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SOFTWARE_UPSTREAM_SITES)/$* ; \
@@ -326,14 +326,14 @@ $(DOWNLOAD_DIR)/% : $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 	$(TARGET_DONE)
 
 $(GIT_EXTRACT_DIR)/% : $(GIT_EXTRACT_DIR)
-	@if test -f $(COOKIE_DIR)/download-$* ; then \
+	@if test -f $(COOKIE_DIR)/$(GIT_EXTRACT_DIR)/$* ; then \
 		true ; \
 	else \
 		echo "        cloning into $(GIT_EXTRACT_DIR)/$*" ; \
 		cd $(GIT_EXTRACT_DIR) ; \
 		git clone $(GIT_OPTS) $(KERNEL_GIT_URL)/$(KERNEL_GIT_REPO)$(KERNEL_GIT_REPO_EXT) ; \
-		git checkout -b v$(KERNEL_VERSION) ; \
-		git fetch ; \
+		cd $(KERNEL_GIT_REPO) ; \
+		git checkout -b stable v$(KERNEL_VERSION) ; \
 	fi ;
 	$(TARGET_DONE)
 
@@ -413,7 +413,20 @@ makesums : makesum
 # Extract the contents of the files downloaded by the fetch target
 #
 
+# Construct the list of files path under downloaddir which will be processed by
+# the $(DOWNLOAD_DIR)/% target
+ifeq ($(UPSTREAM_DOWNLOAD_TOOL), wget)
 EXTRACT_TARGETS ?=  $(addprefix extract-archive-,$(SOFTWARE_DIST_FILES))
+else
+ifeq ($(UPSTREAM_DOWNLOAD_TOOL), git)
+EXTRACT_TARGETS ?=  $(addprefix extract-git-,$(SOFTWARE_DIST_GIT))
+else
+define error_msg
+Unknown UPSTREAM_DOWNLOAD_TOOL : $(UPSTREAM_DOWNLOAD_TOOL)
+endef
+$(error $(error_msg))
+endif
+endif
 
 extract : fetch $(EXTRACT_DIR) pre-extract $(EXTRACT_TARGETS) post-extract
 	$(DISPLAY_COMPLETED_TARGET_NAME)

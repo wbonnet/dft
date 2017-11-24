@@ -92,11 +92,8 @@ extract-git-% :
 	@if test -f $(COOKIE_DIR)/extract-git-$* ; then \
 		true ; \
 	else \
-	  echo "        fetching branch $(GIT_DIR)/$*" ; \
-		cd $(EXTRACT_DIR) ; \
-		git clone $(GIT_OPTS) $(KERNEL_GIT_URL)/$(KERNEL_GIT_REPO)$(KERNEL_GIT_REPO_EXT) ; \
-		git checkout v$* ; \
-		git fetch ; \
+	  echo "        copy git data to $(EXTRACT)/$*" ; \
+		mv $(GIT_EXTRACT_DIR)/$(KERNEL_GIT_REPO) $(EXTRACT_DIR)/$(SOFTWARE_FULLNAME) ; \
 	fi ;
 	$(TARGET_DONE)
 
