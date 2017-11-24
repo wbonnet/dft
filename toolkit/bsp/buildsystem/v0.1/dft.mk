@@ -296,7 +296,7 @@ fetch : prerequisite $(COOKIE_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
 	$(TARGET_DONE)
 
 $(DOWNLOAD_DIR)/% : $(DOWNLOAD_DIR) $(PARTIAL_DIR)
-	if test -f $(COOKIE_DIR)download-$* ; then \
+	@if test -f $(COOKIE_DIR)download-$* ; then \
 		true ; \
 	else \
 		wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SOFTWARE_UPSTREAM_SITES)/$* ; \
@@ -326,13 +326,13 @@ $(DOWNLOAD_DIR)/% : $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 	$(TARGET_DONE)
 
 $(GIT_EXTRACT_DIR)/% : $(GIT_EXTRACT_DIR)
-	if test -f $(COOKIE_DIR)/download-$* ; then \
+	@if test -f $(COOKIE_DIR)/download-$* ; then \
 		true ; \
 	else \
 		echo "        cloning into $(GIT_EXTRACT_DIR)/$*" ; \
 		cd $(GIT_EXTRACT_DIR) ; \
 		git clone $(GIT_OPTS) $(KERNEL_GIT_URL)/$(KERNEL_GIT_REPO)$(KERNEL_GIT_REPO_EXT) ; \
-		git checkout v$* ; \
+		git checkout -b v$(KERNEL_VERSION) ; \
 		git fetch ; \
 	fi ;
 	$(TARGET_DONE)
