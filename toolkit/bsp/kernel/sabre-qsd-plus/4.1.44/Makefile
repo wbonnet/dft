@@ -18,7 +18,23 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 #
+ 
+# Defines the kernel version
+KERNEL_VERSION=4.1.44
 
-# Defines board name
-BOARD_NAME = sabre-qsd-plus
-BOARD_ARCH = armhf
+# Include board specific definitions
+include ../board.mk
+
+# Defines the patches to apply on the sources
+# PATCHFILES += 0000_some_patch.diff
+
+# Activate git download method
+UPSTREAM_DOWNLOAD_TOOL = git
+
+# Upstream git server
+KERNEL_GIT_URL    = https://github.com/Freescale
+KERNEL_GIT_REPO   = linux-fslc
+#KERNEL_GIT_BRANCH = 4.1-2.0.x-imx 
+
+# Include build system
+include buildsystem/dft.mk
