@@ -31,7 +31,7 @@
 
 # ------------------------------------------------------------------------------
 #
-# Retrieves informations abo<<ut the host used to build the softwares
+# Retrieves informations about the host used to build the softwares
 #
 # ------------------------------------------------------------------------------
 
@@ -49,9 +49,10 @@ BUILDER_OPERATING_SYSTEM_VERSION := $(word 2, $(shell lsb_release -c | tr '[:low
 # ------------------------------------------------------------------------------
 
 KERNEL_GIT_URL         ?= git://git.kernel.org/pub/scm/linux/kernel/git/stable
-KERNEL_GIT_REPO        ?= linux-stable
+KERNEL_GIT_BRANCH      ?= stable
+KERNEL_GIT_REPO        ?= linux-$(KERNEL_GIT_BRANCH)
 KERNEL_GIT_REPO_EXT    ?= .git
-KERNEL_SITE            ?= http://cdn.kernel.org/pub/linux/kernel
+KERNEL_SITE            ?= $(KERNEL_SITE_TARBALL)
 KERNEL_FILE_VERSION    ?= $(KERNEL_VERSION)
 KERNEL_SRC_URL          = $(KERNEL_SITE)/$(KERNEL_BRANCH)/linux-$(KERNEL_FILE_VERSION).tar.xz
 KERNEL_BRANCH           = v$(shell echo $(KERNEL_FILE_VERSION) | head -c 1).x
@@ -62,8 +63,7 @@ SOFTWARE_UPSTREAM_NAME  = linux
 # Defines the files to retrieve
 SOFTWARE_DIST_FILES     ?= $(SOFTWARE_UPSTREAM_NAME)-$(KERNEL_FILE_VERSION).tar.xz
 SOFTWARE_SIGN_FILES     ?= $(SOFTWARE_UPSTREAM_NAME)-$(KERNEL_FILE_VERSION).tar.xz.sign
-
-SOFTWARE_DIST_GIT       ?= $(KERNEL_GIT_REPO)$(KERNEL_GIT_REPO_EXT)
+SOFTWARE_DIST_GIT       ?= $(SOFTWARE_UPSTREAM_NAME)
 
 # Defines the source repository
 SOFTWARE_UPSTREAM_SITES ?= $(KERNEL_SITE)/$(KERNEL_BRANCH)
@@ -81,6 +81,7 @@ PATCH_DIR           ?= patches
 WORK_ROOT_DIR       ?= work
 WORK_DIR            ?= $(WORK_ROOT_DIR)/build-$(BOARD_NAME)
 DOWNLOAD_DIR        ?= $(WORK_ROOT_DIR)/download
+GIT_EXTRACT_DIR     ?= $(WORK_ROOT_DIR)/git
 PARTIAL_DIR         ?= $(DOWNLOAD_DIR)/partial
 COOKIE_DIR          ?= $(WORK_ROOT_DIR)/cookies-$(BOARD_NAME)
 EXTRACT_DIR         ?= $(WORK_DIR)
@@ -91,7 +92,7 @@ PACKAGE_DIR         ?= $(WORK_ROOT_DIR)/package-$(BOARD_NAME)
 TEMP_DIR            ?= $(WORK_DIR)/tmp
 CHECKSUM_FILE       ?= checksums
 LOG_DIR             ?= log
-GIT_EXTRACT_DIR     ?= $(WORK_ROOT_DIR)/git
+
 # Defines the default targets used for building
 CONFIGURE_SCRIPTS   ?= $(WORK_SRC)/configure
 BUILD_SCRIPTS       ?= $(WORK_SRC)/Makefile

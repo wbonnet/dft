@@ -45,6 +45,24 @@ endif
 
 # ------------------------------------------------------------------------------
 #
+# Check if the board arch is defined, if not output an error before doing anything. 
+# It means this bard has been newly created and arch has to be defined
+#
+ifeq ($(BOARD_ARCH), unknown)
+define error_msg
+
+
+BOARD_ARCH variable as not yet been defined in the $(BOARD_NAME).mk Makefile.
+Please replace "unknown" by the board architecture (arhmf, amd64, ppc64, etc.).
+
+
+endef
+  $(error $(error_msg))
+endif
+
+
+# ------------------------------------------------------------------------------
+#
 # Used for output...
 #
 DISPLAY_TARGET_NOT_IMPLEMENTED = @echo "Target [$@] is not implemented !"
@@ -207,7 +225,8 @@ show-config :
 	@echo "  KERNEL_GIT_URL                    $(KERNEL_GIT_URL)"
 	@echo "  KERNEL_GIT_REPO                   $(KERNEL_GIT_REPO)"
 	@echo "  KERNEL_GIT_REPO_EXT               $(KERNEL_GIT_REPO_EXT)"
-	@echo "  SOFTWARE_DIST_GIT_REPO            $(SOFTWARE_DIST_GIT_REPO)"
+	@echo "  KERNEL_GIT_BRANCH                 $(KERNEL_GIT_BRANCH)"
+	@echo "  SOFTWARE_DIST_GIT                 $(SOFTWARE_DIST_GIT)"
 	@echo
 	@echo "Directories configuration"
 	@echo "  BUILD_SYSTEM_ROOT                 $(BUILD_SYSTEM_ROOT)"
@@ -333,7 +352,7 @@ $(GIT_EXTRACT_DIR)/% : $(GIT_EXTRACT_DIR)
 		cd $(GIT_EXTRACT_DIR) ; \
 		git clone $(GIT_OPTS) $(KERNEL_GIT_URL)/$(KERNEL_GIT_REPO)$(KERNEL_GIT_REPO_EXT) ; \
 		cd $(KERNEL_GIT_REPO) ; \
-		git checkout -b stable v$(KERNEL_VERSION) ; \
+		git checkout -b $(KERNEL_GIT_BRANCH) v$(KERNEL_VERSION) ; \
 	fi ;
 	$(TARGET_DONE)
 
