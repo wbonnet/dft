@@ -1,3 +1,10 @@
+dft (0.5.7-1) unstable; urgency=low
+
+  * Add kernel build from git support
+  * Update kernel used for Sabre boards
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 19 Nov 2017 15:08:00 +0100
+
 dft (0.5.6-1) unstable; urgency=low
 
   * First version of kernel build chain
