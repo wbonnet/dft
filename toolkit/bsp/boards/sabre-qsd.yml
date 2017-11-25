@@ -49,36 +49,30 @@ kernel:
   # pubkey:
 
   # List of packages to install from the repository
-  # packages:
+  packages:
     # Kernel and firmware are the same for both version of sabre qsd and qsd+
-    # - linux-image-kernel-sabreqsd
-    # - linux-image-firmware-sabre-qsd
-    # Only DTB change between sabre qsd and qsd+
-    # - linux-image-dtb-sabre-qsd
-
-#TODO: add flag to define if a specific source list ha to be generated under sources.list.define
+    - linux-image-sabre-qsd
 
 # The uboot section defines the different parameters needed to select and install the uboot
 # used for this board. In some (rare) case, the uboot can include severa binaries, thus this
 # sections defines a list of binary files to copy to the target image, the copy method to use, and
 # its parameters.
-#uboot:
-#  - {
-      # Identification the target image file. This has to be one of the filename defined in the
-      # image.yml configuration file
-#      target_image: "sabre-qsd.image" ,
+# uboot:
+#   - {
+#       # Identification the target image file. This has to be one of the filename defined in the
+#       # image.yml configuration file
+#       target_image: "xxx.image" ,
 
-      # method used to copy the binary to the target image. Valid values are :
-      #  . dd
-#      method: "dd" ,
+#       # method used to copy the binary to the target image. Valid values are :
+#       #  . dd
+#       method: "dd" ,
 
-      # Binary to copy to the target image. Binaries are stored under...
-#      binary: "xxx" ,
+#       # Binary to copy to the target image. Binaries are stored under...
+#       binary: "xxx" ,
 
-      # Copy method parameters. The valid value depends on the method used. You should refer to the
-      # man page of the tool used by the selected method. parameters will be passed to this tool.
-      #
-      # This variable is optional, default value is no arameters passed
-      # parameters: ""
-#    }
-
+#       # Copy method parameters. The valid value depends on the method used. You should refer to the
+#       # man page of the tool used by the selected method. parameters will be passed to this tool.
+#       #
+#       # This variable is optional, default value is no arameters passed
+#       # parameters: ""
+#     }

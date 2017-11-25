@@ -49,14 +49,9 @@ kernel:
   # pubkey:
 
   # List of packages to install from the repository
-#  packages:
+  packages:
     # Kernel and firmware are the same for both version of sabre qsd and qsd+
-#    - linux-image-kernel-sabre-qsd
-#    - linux-image-firmware-sabre-qsd
-#    # Only DTB change between sabre qsd and qsd+
-#    - linux-image-dtb-sabre-qsd-plus
-
-#TODO: add flag to define if a specific source list ha to be generated under sources.list.define
+    - linux-image-sabre-qsd-plus
 
 # The uboot section defines the different parameters needed to select and install the uboot
 # used for this board. In some (rare) case, the uboot can include severa binaries, thus this
