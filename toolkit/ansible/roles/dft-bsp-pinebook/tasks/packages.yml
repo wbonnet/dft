@@ -27,4 +27,4 @@
         state=latest
         install_recommends=no
   with_items:
-    - lm-sensors 
+    - lm-sensors
