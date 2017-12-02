@@ -29,7 +29,7 @@
         group=root
   with_items:
     - bluetooth
-    - dispo
+    - disp
     - hall
     - wifi
 
