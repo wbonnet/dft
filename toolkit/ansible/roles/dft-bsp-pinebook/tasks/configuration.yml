@@ -23,7 +23,7 @@
 
 - name : DFT - Add pinebook module loading configuration files
   copy: src=files/load-pinebook-{{ item }}.conf
-        dest=/etc/modules_load.d/pinebook-{{ item }}.conf
+        dest=/etc/modules-load.d/pinebook-{{ item }}.conf
         mode=0644
         owner=root
         group=root
