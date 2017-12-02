@@ -28,7 +28,7 @@
 
 ---
 - include: chromium.yml
-  when: (dft_browser == "chromium")
+  when: (dft_browser is defined and dft_browser == "chromium")
 
-- include: firefox.yml
-  when: (dft_browser == "firefox")
+- include: firefox.oml
+  when: (dft_browser is defined and dft_browser == "firefox")
