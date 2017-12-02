@@ -21,3 +21,11 @@
 #
 #
 
+# Default is to activate autologin
+dft_lightdm_autologin: True
+
+# Default login user
+dft_lightdm_autologin_user: "dft"
+
+# Default login user timeout
+dft_lightdm_autologin_user_timeout: 0

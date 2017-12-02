@@ -19,6 +19,7 @@ Depends: ${misc:Depends},
          python3-yaml,
          debootstrap,
          ansible,
+         qemu-user-static,
          squashfs-tools
 Description: Debian Framework Toolkit
 

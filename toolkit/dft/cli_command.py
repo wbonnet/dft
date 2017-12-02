@@ -72,6 +72,9 @@ class CliCommand(object):
     if self.host_arch == "armv7l":
       self.host_arch = "armhf"
 
+    if self.host_arch == "aarch64":
+      self.host_arch = "arm64"
+
     # Retrieve the architecture used by dpkg. This may be different in case of 32 bits systems
     # running with a 64 bits kernel. Example : kernel is ppc64, host userland is powerpc
     self.dpkg_arch = subprocess.check_output("dpkg --print-architecture",
