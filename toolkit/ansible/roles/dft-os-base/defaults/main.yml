@@ -30,9 +30,9 @@ dft_locales:
   # Default behavior is to considr that ocl should be installed, thus no need to add state parameter
   - { name: "en_GB.UTF-8" }
   # Nonetheless it can be defined to present
-  - { name: "fr_FR.UTF-8" , state: "present" }
+  # - { name: "fr_FR.UTF-8" , state: "present" }
   # Set it to absent to ensure a locale is not installed
-  - { name: "nl_NL.UTF-8" , state: "absent" }
+  # - { name: "nl_NL.UTF-8" , state: "absent" }
 
 
 # Default timezone to configure if not ovrriden in project variables
