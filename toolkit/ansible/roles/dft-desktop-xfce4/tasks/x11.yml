@@ -29,16 +29,16 @@
   with_items:
     - x11-xserver-utils
     - numlockx
-    - xfonts-base
-    - xfonts-cyrillic
-    - xfonts-75dpi
-    - xfonts-75dpi-transcoded
-    - xfonts-100dpi
-    - xfonts-100dpi-transcoded
-    - xfonts-scalable
+#    - xfonts-base
+#    - xfonts-cyrillic
+#    - xfonts-75dpi
+#    - xfonts-75dpi-transcoded
+#    - xfonts-100dpi
+#    - xfonts-100dpi-transcoded
+#    - xfonts-scalable
     - x11-utils
     - xdg-utils
     - xinit
     - xserver-xorg
-    - console-data
-    - console-setup
+#    - console-data
+#    - console-setup
