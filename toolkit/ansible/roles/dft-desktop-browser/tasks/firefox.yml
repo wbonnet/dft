@@ -30,7 +30,7 @@
 #
 # Install firefox browser
 #
-- name : DFT - Install firefox
+- name : DFT - Install Firefox
   apt: name={{ item }}
        state=latest
        install_recommends=no
