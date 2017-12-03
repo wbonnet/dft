@@ -26,8 +26,8 @@
 #
 dft_lightdm:
   # Flag used to define if autologin is enabled
-  autologin: True
+  autologin: False
   # Default login user
-  autologin_user: "dft"
+  # autologin_user: "dft"
   # Default login user timeout
-  autologin_user_timeout: 0
+  # autologin_user_timeout: 0
