@@ -30,7 +30,7 @@
     - xinit
     - xorg
     - xkb-data
-    - x11-app
+    - x11-apps
     - x11-utils
     - xdg-utils
     - xbitmaps
