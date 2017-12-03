@@ -34,3 +34,4 @@ roles:
   - dft-desktop-mua
   - dft-desktop-browser
   - dft-network-manager
+  - dft-os-common-utils
