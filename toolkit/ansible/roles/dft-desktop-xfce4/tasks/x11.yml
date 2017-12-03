@@ -21,11 +21,24 @@
 #
 #
 
-#
-# Include the list of specific tasks. Tasks are separated into different
-# files, one file per functionnality.
-#
-
 ---
-- include: x11.yml
-- include: xfce.yml
+- name : DFT - Install X11
+  apt: name={{ item }}
+       state=latest
+       install_recommends=no
+  with_items:
+    - x11-xserver-utils
+    - numlockx
+    - xfonts-base
+    - xfonts-cyrillic
+    - xfonts-75dpi
+    - xfonts-75dpi-transcoded
+    - xfonts-100dpi
+    - xfonts-100dpi-transcoded
+    - xfonts-scalable
+    - x11-utils
+    - xdg-utils
+    - xinit
+    - xserver-xorg
+    - console-data
+    - console-setup
