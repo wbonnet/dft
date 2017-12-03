@@ -33,3 +33,4 @@ roles:
   - dft-desktop-xfce4
   - dft-desktop-mua
   - dft-desktop-browser
+  - dft-network-manager
