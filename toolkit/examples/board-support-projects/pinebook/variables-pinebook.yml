@@ -1,2 +1,3 @@
 # Set the hostname according to the project name
 dft_hostname: "pinebook"
+dft_root_password: "root"
