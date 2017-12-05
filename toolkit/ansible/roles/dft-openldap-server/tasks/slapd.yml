@@ -33,3 +33,4 @@
        install_recommends=no
   with_items:
     - slapd
+    - ldap-utils
