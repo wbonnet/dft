@@ -29,11 +29,33 @@ import os
 import subprocess
 import shutil
 import errno
+from enum import Enum
 from dft.model import Key
+from dft.ansi_colors import Colors
 
+
+# -----------------------------------------------------------------------------
+#
+# class Code
+#
+# -----------------------------------------------------------------------------
+class Code(Enum):
+  """This class defines the differente vales for result code when outputing a
+  string ended by a result code.
+  """
+
+  # Define each and every key and associated string used in the tool
+  Code_OK = " OK "
+  Code_KO = " KO "
+  Code_WARNING = "Warn"
+
+
+
+# -----------------------------------------------------------------------------
 #
 #    Class CliCommand
 #
+# -----------------------------------------------------------------------------
 class CliCommand(object):
   """This class implements the base class used for all command fro cli
 
@@ -94,6 +116,11 @@ class CliCommand(object):
     # Flag used to prevent multiple call to cleanup since cleanup is used
     # in exception processing
     self.cleanup_in_progress = False
+
+    # Defines the nu;ber of column used to align text when outputing with right align
+    self.right_align = 80
+
+
 
   # -------------------------------------------------------------------------
   #
@@ -337,6 +364,7 @@ class CliCommand(object):
     self.execute_command(command)
 
 
+
   # -------------------------------------------------------------------------
   #
   # update_package_catalog
@@ -425,3 +453,51 @@ class CliCommand(object):
       self.devpts_is_mounted = False
 
     self.cleanup_in_progress = False
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # output_string_with_result
+  #
+  # -------------------------------------------------------------------------
+  def output_string_with_result(self, msg, code):
+    """ This method output a string followed by a result code. Resultat code
+    is an enumed value. Color depends on code value:
+      . OK      => Green
+      . Warning => Orange
+      . KO      => Red
+
+    Result codes are right aligned to a value defined in this class members
+    at init.
+    """
+
+    # Let's build the output string with padding and ANSI code for colors.
+
+    # First the string fragment with ANSI codes
+    str_code = "["
+
+    # Complete with color according to the code
+    if code == Code.Code_OK:
+      str_code += Colors.FG_GREEN.value
+    elif code == Code.Code_KO:
+      str_code += Colors.FG_RED.value
+    if code == Code.Code_WARNING:
+      str_code += Colors.FG_ORANGE.value
+
+    # Add bold, value, then go back to normal output
+    str_code += Colors.BOLD.value + code.value + Colors.RESET.value + "]"
+
+    # if the string is wider than alignment valuem then result code will be
+    # on a new line. An extra 8 chars are remove from
+    if len(msg) >= (self.right_align - 8):
+      output = msg + "\n"
+      output += "".join(" " for i in range(self.right_align - len(str_code)))
+    else:
+      output += "".join(" " for i in range(self.right_align - len(msg) - len(str_code)))
+
+    # Last thing to do is to concatenate the string with code and colors
+    output += str_code
+
+    # And print it !
+    print(msg)
