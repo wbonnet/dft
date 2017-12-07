@@ -1,3 +1,9 @@
+dft (0.5.9-3) unstable; urgency=low
+
+  * Fix jdk and xfce roles
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 07 Dec 2017 22:22:00 +0100
+
 dft (0.5.9-2) unstable; urgency=low
 
   * Fix version number
