@@ -31,10 +31,6 @@
        state=latest
        install_recommends=no
   with_items:
-#    - xfwm4
-#    - xfce4-settings
-#    - libxfce4ui-utils
-#    - xfce4-session
     - xfce4
     - xfce4-terminal
 

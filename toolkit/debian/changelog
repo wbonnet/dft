@@ -1,3 +1,9 @@
+dft (0.5.9-2) unstable; urgency=low
+
+  * Fix version number
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 05 Dec 2017 12:43:00 +0100
+
 dft (0.5.9-1) unstable; urgency=low
 
   * Rename several ansible roles for consistency
