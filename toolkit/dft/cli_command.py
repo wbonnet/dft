@@ -34,20 +34,40 @@ from dft.model import Key
 from dft.ansi_colors import Colors
 
 
+#-----------------------------------------------------------------------------
+#
+# class Output
+#
 # -----------------------------------------------------------------------------
+class Output(Enum):
+  """This class defines the destination when outputing strings. It can be
+  either a log level or stdout.
+  """
+
+  # Define each and every key and associated string used in the tool
+  DEBUG = "debug"
+  INFO = "info"
+  WARNING = "warning"
+  ERROR = "error"
+  CRITICAL = "critical"
+  STDOUT = "stdout"
+
+
+
+#-----------------------------------------------------------------------------
 #
 # class Code
 #
 # -----------------------------------------------------------------------------
 class Code(Enum):
-  """This class defines the differente vales for result code when outputing a
+  """This class defines the different vales for result code when outputing a
   string ended by a result code.
   """
 
   # Define each and every key and associated string used in the tool
-  Code_OK = " OK "
-  Code_KO = " KO "
-  Code_WARNING = "Warn"
+  SUCCESS = " OK "
+  FAILURE = " KO "
+  WARNING = "Warn"
 
 
 
@@ -94,6 +114,9 @@ class CliCommand(object):
     if self.host_arch == "armv7l":
       self.host_arch = "armhf"
 
+    if self.host_arch == "aarch64":
+      self.host_arch = "arm64"
+
     # Retrieve the architecture used by dpkg. This may be different in case of 32 bits systems
     # running with a 64 bits kernel. Example : kernel is ppc64, host userland is powerpc
     self.dpkg_arch = subprocess.check_output("dpkg --print-architecture",
@@ -117,8 +140,10 @@ class CliCommand(object):
     # in exception processing
     self.cleanup_in_progress = False
 
-    # Defines the nu;ber of column used to align text when outputing with right align
+    # Defines the nuùber of column used to align text when outputing with right align
+    # and the real size in char (without ansi escape codes) or the code
     self.right_align = 80
+    self.len_str_code = 6
 
 
 
@@ -473,16 +498,15 @@ class CliCommand(object):
     """
 
     # Let's build the output string with padding and ANSI code for colors.
-
     # First the string fragment with ANSI codes
     str_code = "["
 
     # Complete with color according to the code
-    if code == Code.Code_OK:
+    if code == Code.SUCCESS:
       str_code += Colors.FG_GREEN.value
-    elif code == Code.Code_KO:
+    elif code == Code.FAILURE:
       str_code += Colors.FG_RED.value
-    if code == Code.Code_WARNING:
+    if code == Code.WARNING:
       str_code += Colors.FG_ORANGE.value
 
     # Add bold, value, then go back to normal output
@@ -490,14 +514,49 @@ class CliCommand(object):
 
     # if the string is wider than alignment valuem then result code will be
     # on a new line. An extra 8 chars are remove from
-    if len(msg) >= (self.right_align - 8):
-      output = msg + "\n"
-      output += "".join(" " for i in range(self.right_align - len(str_code)))
+    output = msg 
+
+    # We cannot use len(str_code) since it includes ANSI codes which are not printable
+    # Instead we use the code_size constant which is the number of actual char printed
+    if len(output) >= (self.right_align - self.len_str_code):
+      output += "\n"
+      output += "".join(" " for i in range(self.right_align - self.len_str_code))
     else:
-      output += "".join(" " for i in range(self.right_align - len(msg) - len(str_code)))
+      output += "".join(" " for i in range(self.right_align - len(output) - self.len_str_code))
 
     # Last thing to do is to concatenate the string with code and colors
     output += str_code
+    output = str_code + " " + msg
 
     # And print it !
-    print(msg)
+    print(output)
+
+
+  # -------------------------------------------------------------------------
+  #
+  # display_test_result
+  #
+  # -------------------------------------------------------------------------
+  def display_test_result(self, msg, target=Output.STDOUT):
+    """ This method output a string either to stdout or log according to 
+    arguments. String is prefixed by the Hint keyword and is targetting
+    hint's to explain why a test has failed.
+    """
+
+    # First add some padding since code are left aligned
+    output = "".join(" " for i in range(self.len_str_code + 1))
+
+    # Complete with color according to the code
+    if target == Output.STDOUT:
+      output += Colors.FG_CYAN.value
+      output += Colors.BOLD.value + "Hint: " + Colors.RESET.value 
+
+    # if the string is wider than alignment valuem then result code will be
+    # on a new line. An extra 8 chars are remove from
+    output += msg
+
+    # And print it !
+    if target == Output.STDOUT:
+      print(output)
+    else:
+      self.project.logging.log(output.value, output)
