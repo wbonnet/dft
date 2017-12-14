@@ -495,10 +495,10 @@ class CheckRootFS(CliCommand):
 
         # If the result is not ok, then output an info an go on checking next keyword
         if return_code > 0:
-          self.project.logging.error("Version " + self.installed_packages[rule[Key.NAME.value]]\
-                                     [Key.VERSION.value] + " of package is older than minimum " +
-                                     "allowed version " + rule[Key.MIN_VERSION.value])
-          return
+          msg = "Version " + self.installed_packages[rule[Key.NAME.value]][Key.VERSION.value]
+          msg += " of package is older than minimum " + "allowed version "
+          msg += rule[Key.MIN_VERSION.value]
+          return msg
 
         else:
           self.project.logging.debug("Version " + self.installed_packages[rule[Key.NAME.value]]\
@@ -542,11 +542,10 @@ class CheckRootFS(CliCommand):
       if rule[Key.NAME.value] in self.installed_packages:
         if self.installed_packages[rule[Key.NAME.value]][Key.VERSION.value] not in \
                                                                     rule[Key.ALLOWED_VERSION.value]:
-          self.project.logging.error("Version " + self.installed_packages[rule[Key.NAME.value]]\
-                                     [Key.VERSION.value] + " of package " + rule[Key.NAME.value] +
-                                     " is not allowed")
+          msg = "Version " + self.installed_packages[rule[Key.NAME.value]][Key.VERSION.value]
+          msg += " of package " + rule[Key.NAME.value] + " is not allowed"
           self.is_rule_check_successfull = False
-          return
+          return msg
         else:
           self.project.logging.debug("Version " + self.installed_packages[rule[Key.NAME.value]]\
                                      [Key.VERSION.value] + " of package " + rule[Key.NAME.value] +
@@ -557,11 +556,10 @@ class CheckRootFS(CliCommand):
       if rule[Key.NAME.value] in self.installed_packages:
         if self.installed_packages[rule[Key.NAME.value]][Key.VERSION.value] in \
                                                                 rule[Key.BLACKLISTED_VERSION.value]:
-          self.project.logging.error("Version " + self.installed_packages[rule[Key.NAME.value]]\
-                                     [Key.VERSION.value] + " of package " + rule[Key.NAME.value] +
-                                     " is blacklisted")
+          msg = "Version " + self.installed_packages[rule[Key.NAME.value]][Key.VERSION.value]
+          msg += " of package " + rule[Key.NAME.value] + " is blacklisted"
           self.is_rule_check_successfull = False
-          return
+          return msg
         else:
           self.project.logging.debug("Version " + self.installed_packages[rule[Key.NAME.value]]\
                                      [Key.VERSION.value] + " of package " + rule[Key.NAME.value] +
@@ -572,11 +570,10 @@ class CheckRootFS(CliCommand):
       if rule[Key.NAME.value] in self.installed_packages:
         if self.installed_packages[rule[Key.NAME.value]][Key.ARCH.value] in \
                                                                   rule[Key.BLACKLISTED_ARCH.value]:
-          self.project.logging.error("Package " + rule[Key.NAME.value] +
-                                     " is blacklisted on architecture " +
-                                     self.installed_packages[rule[Key.NAME.value]][Key.ARCH.value])
+          msg = "Package " + rule[Key.NAME.value] + " is blacklisted on architecture "
+          msg += self.installed_packages[rule[Key.NAME.value]][Key.ARCH.value]
           self.is_rule_check_successfull = False
-          return
+          return msg
         else:
           self.project.logging.debug("Package " + rule[Key.NAME.value] +
                                      " is not blacklisted on architecture " +
@@ -587,11 +584,10 @@ class CheckRootFS(CliCommand):
       if rule[Key.NAME.value] in self.installed_packages:
         if self.installed_packages[rule[Key.NAME.value]][Key.ARCH.value] not in \
                                                                       rule[Key.ALLOWED_ARCH.value]:
-          self.project.logging.error("Package " + rule[Key.NAME.value] +
-                                     " is not allowed for architecture " +
-                                     self.installed_packages[rule[Key.NAME.value]][Key.ARCH.value])
+          msg = "Package " + rule[Key.NAME.value] + " is not allowed for architecture "
+          msg += self.installed_packages[rule[Key.NAME.value]][Key.ARCH.value]
           self.is_rule_check_successfull = False
-          return
+          return msg
         else:
           self.project.logging.debug("Package " + rule[Key.NAME.value] +
                                      " is allowed for architecture " +
@@ -608,18 +604,14 @@ class CheckRootFS(CliCommand):
   #
   # -------------------------------------------------------------------------
   def check_files(self, rules):
-    """This method is in charge of contolling the files (and also
-    directories and symlinks) installed in the rootfs according to the
-    rules loaded from the configurtion file.
+    """This method is in charge of controlling the files, directories
+    and symlinks installed in the rootfs according to the rules loaded from
+    the configuration file.
 
     Files in a term that identify any object in the file system. A 'file'
     can be a standard file, but also a directory or a symlink (special
     devices are not handled, yet...). As a standard file, a package is a
     file.
-
-    Checks on packages from what the check_packages method does. This
-    method wil lookfor the foo.deb file in itself, not if it is installed
-    what is its versions etc.
 
     Files can have several status :
     . mandatory  =>  it MUST  be installed
@@ -649,30 +641,39 @@ class CheckRootFS(CliCommand):
     # Retrieving the complete file list would cost too much
     for rule in rules[Key.FILES.value][Key.MANDATORY.value]:
       # Call the check package method
-      self.check_file_rules(rule, mandatory=True)
+      msg = self.check_file_rules(rule, mandatory=True)
 
       # Process the check results (update counters and output information)
-      self.process_rule_checking_output(rule)
+      if msg != None:
+        self.process_rule_checking_output(rule, msg)
+      else:
+        self.process_rule_checking_output(rule)
 
     #
     # Process the Key.FORBIDDEN.value rules group
     #
     for rule in rules[Key.FILES.value][Key.FORBIDDEN.value]:
       # Call the check package method
-      self.check_file_rules(rule, forbidden=True)
+      msg = self.check_file_rules(rule, forbidden=True)
 
       # Process the check results (update counters and output information)
-      self.process_rule_checking_output(rule)
+      if msg != None:
+        self.process_rule_checking_output(rule, msg)
+      else:
+        self.process_rule_checking_output(rule)
 
     #
     # Process the Key.ALLOWED.value rules group
     #
     for rule in rules[Key.FILES.value][Key.ALLOWED.value]:
       # Call the check package method
-      self.check_file_rules(rule, allowed=True)
+      msg = self.check_file_rules(rule, allowed=True)
 
       # Process the check results (update counters and output information)
-      self.process_rule_checking_output(rule)
+      if msg != None:
+        self.process_rule_checking_output(rule, msg)
+      else:
+        self.process_rule_checking_output(rule)
 
 # TODO handle none for expected in case the  is no unit tests
 
@@ -726,11 +727,10 @@ class CheckRootFS(CliCommand):
       rule[Key.TYPE.value] = Key.FILE.value
     else:
       if rule[Key.TYPE.value] not in [Key.FILE.value, Key.DIRECTORY.value, Key.SYMLINK.value]:
-        self.project.logging.error("Unknown type " + rule[Key.TYPE.value] +
-                                   " when parsing file rule. Rule is ignored")
-        self.project.logging.error("Rule is "+ str(rule))
+        msg = "Unknown type " + rule[Key.TYPE.value] + " when parsing file rule. Rule is ignored"
+        msg += "Rule is "+ str(rule)
         self.is_rule_check_successfull = False
-        return
+        return msg
 
     # Target path is not an attribute, but a computed variable. It contains
     # the path to file or directory ultimatly pointed by symlinks. Computing
@@ -755,68 +755,68 @@ class CheckRootFS(CliCommand):
 # TODO inverser les tests et skip derriere le cas qui marche, par defaut erreur
       # Check for mandatoy directory
       if not os.path.isdir(rule[Key.PATH.value]) and rule[Key.TYPE.value] == Key.DIRECTORY.value:
-        self.project.logging.debug("Missing mandatory directory : " + rule[Key.PATH.value])
+        msg = "Missing mandatory directory : " + rule[Key.PATH.value]
         self.is_rule_check_successfull = False
-        return
+        return msg
 
       # Check for mandatoy symlink
       if not os.path.islink(rule[Key.PATH.value]) and rule[Key.TYPE.value] == Key.SYMLINK.value:
-        self.project.logging.debug("Missing mandatory symlink : " + rule[Key.PATH.value])
+        msg = "Missing mandatory symlink : " + rule[Key.PATH.value]
         self.is_rule_check_successfull = False
-        return
+        return msg
 
       # Check for mandatoy file
       if not os.path.isfile(rule[Key.PATH.value]) and rule[Key.TYPE.value] == Key.FILE.value:
-        self.project.logging.info("Missing mandatory file : " + rule[Key.PATH.value])
+        msg = "Missing mandatory file : " + rule[Key.PATH.value]
         self.is_rule_check_successfull = False
-        return
+        return msg
 
       # If target is defined, we have to check that it does not exist either
       if Key.TARGET.value in rule:
         if not os.path.isdir(rule[Key.PATH.value]) and not os.path.islink(rule[Key.PATH.value]) and\
            not os.path.isfile(rule[Key.PATH.value]):
-          self.project.logging.debug("Missing mandatory target : " + rule[Key.TARGET_PATH.value])
+          msg = "Missing mandatory target : " + rule[Key.TARGET_PATH.value]
           self.is_rule_check_successfull = False
-          return
+          return msg
 
     # Check if forbidden files are installed
     if forbidden:
       # Check for forbidden directory
       if os.path.isdir(rule[Key.PATH.value]) and rule[Key.TYPE.value] == Key.DIRECTORY.value:
-        self.project.logging.debug("Forbidden directory exists : " + rule[Key.PATH.value])
+        msg = "Forbidden directory exists : " + rule[Key.PATH.value]
         self.is_rule_check_successfull = False
-        return
+        return msg
 
       # Check for forbidden symlink
       if os.path.islink(rule[Key.PATH.value]) and rule[Key.TYPE.value] == Key.SYMLINK.value:
-        self.project.logging.debug("Forbidden symlink exists : " + rule[Key.PATH.value])
+        msg = "Forbidden symlink exists : " + rule[Key.PATH.value]
         self.is_rule_check_successfull = False
-        return
+        return msg
 
       # Check for forbidden file
       if os.path.isfile(rule[Key.PATH.value]) and rule[Key.TYPE.value] == Key.FILE.value:
-        self.project.logging.debug("Forbidden file exists : " + rule[Key.PATH.value])
+        msg = "Forbidden file exists : " + rule[Key.PATH.value]
         self.is_rule_check_successfull = False
-        return
+        return msg
 
     # Check the type of the object (can be file directory or symlink)
     if allowed:
       if not os.path.isdir(rule[Key.PATH.value]) and rule[Key.TYPE.value] == Key.DIRECTORY.value:
-        self.project.logging.debug("Object " + rule[Key.PATH.value] + " is not a directory")
+        msg = "Object " + rule[Key.PATH.value] + " is not a directory"
         self.is_rule_check_successfull = False
-        return
+        return msg
 
       # Check for mandatoy symlink
       if not os.path.islink(rule[Key.PATH.value]) and rule[Key.TYPE.value] == Key.SYMLINK.value:
-        self.project.logging.debug("Object " + rule[Key.PATH.value] + " is not a symlink")
+        msg = "Object " + rule[Key.PATH.value] + " is not a symlink"
         self.is_rule_check_successfull = False
-        return
+        return msg
 
       # Check for mandatoy file
       if not os.path.isfile(rule[Key.PATH.value]) and rule[Key.TYPE.value] == Key.FILE.value:
-        self.project.logging.debug("Object " + rule[Key.PATH.value] + " is not a file")
+        msg = "Object " + rule[Key.PATH.value] + " is not a file"
         self.is_rule_check_successfull = False
-        return
+        return msg
 
     # Check the owner of the object
     if Key.OWNER.value in rule:
@@ -825,10 +825,10 @@ class CheckRootFS(CliCommand):
 
       # Compare it to the owner from the rule
       if str(uid) != rule[Key.OWNER.value]:
-        self.project.logging.debug("File " + rule[Key.PATH.value] + " owner is invalid. UID is " +
-                                   str(uid) + " instead of " + rule[Key.OWNER.value])
+        msg = "File " + rule[Key.PATH.value] + " owner is invalid. UID is " + str(uid)
+        msg += " instead of " + rule[Key.OWNER.value]
         self.is_rule_check_successfull = False
-        return
+        return msg
 
     # Check the group of the object
     if Key.GROUP.value in rule:
@@ -837,10 +837,10 @@ class CheckRootFS(CliCommand):
 
       # Compare it to the owner from the rule
       if str(gid) != rule[Key.GROUP.value]:
-        self.project.logging.debug("File " + rule[Key.PATH.value] + " group is invalid. GID is " +
-                                   str(gid) + " instead of " + rule[Key.GROUP.value])
+        msg = "File " + rule[Key.PATH.value] + " group is invalid. GID is " +  str(gid)
+        msg += " instead of " + rule[Key.GROUP.value]
         self.is_rule_check_successfull = False
-        return
+        return msg
 
     # Check the mode of the object
     if Key.MODE.value in rule:
@@ -855,19 +855,19 @@ class CheckRootFS(CliCommand):
 
       # Compare it to the owner from the rule
       if mode != rule[Key.MODE.value]:
-        self.project.logging.debug("File " + rule[Key.PATH.value] + " mode is invalid. Mode is " +
-                                   str(mode) + " instead of " + rule[Key.MODE.value])
+        msg = "File " + rule[Key.PATH.value] + " mode is invalid. Mode is " + str(mode)
+        msg += " instead of " + rule[Key.MODE.value]
         self.is_rule_check_successfull = False
-        return
+        return msg
 
     # Check the target of the symlink
     if Key.TARGET.value in rule:
       if not os.path.isdir(rule[Key.TARGET_PATH.value]) and \
          not os.path.islink(rule[Key.TARGET_PATH.value]) and \
          not os.path.isfile(rule[Key.TARGET_PATH.value]):
-        self.project.logging.debug("Target " + rule[Key.TARGET_PATH.value] + " does not exist")
+        msg = "Target " + rule[Key.TARGET_PATH.value] + " does not exist"
         self.is_rule_check_successfull = False
-        return
+        return msg
 
     # Check the group of the object
     if Key.EMPTY.value in rule:
@@ -878,18 +878,16 @@ class CheckRootFS(CliCommand):
 
         # Compare it to the owner from the rule
         if rule[Key.EMPTY.value] and size != 0:
-          self.project.logging.debug("File " + rule[Key.TARGET_PATH.value] +
-                                     " is not empty. Size is " + str(size) +
-                                     " instead of 0")
+          msg = "File " + rule[Key.TARGET_PATH.value] + " is not empty. Size is " + str(size)
+          msg += " instead of 0"
           self.is_rule_check_successfull = False
-          return
+          return msg
 
         if not rule[Key.EMPTY.value] and size == 0:
-          self.project.logging.debug("File " + rule[Key.TARGET_PATH.value] +
-                                     " is not empty. Size is " + str(size) +
-                                     " instead of 0")
+          msg = "File " + rule[Key.TARGET_PATH.value] + " is not empty. Size is " + str(size)
+          msg += " instead of 0"
           self.is_rule_check_successfull = False
-          return
+          return msg
       else:
         if os.path.isdir(rule[Key.TARGET_PATH.value]):
           # Retrieve the list of files
@@ -897,35 +895,32 @@ class CheckRootFS(CliCommand):
 
           # Compare it to the owner from the rule
           if rule[Key.EMPTY.value] and size != 0:
-            self.project.logging.debug("File " + rule[Key.TARGET_PATH.value] +
-                                       " is not empty. Size is " +
-                                       str(size) + " instead of 0")
+            msg = "File " + rule[Key.TARGET_PATH.value] + " is not empty. Size is " + str(size)
+            msg += " instead of 0"
             self.is_rule_check_successfull = False
-            return
+            return msg
 
           if not rule[Key.EMPTY.value] and size == 0:
-            self.project.logging.debug("File " + rule[Key.TARGET_PATH.value] +
-                                       " is not empty. Size is " +
-                                       str(size) + " instead of 0")
+            msg = "File " + rule[Key.TARGET_PATH.value] + " is not empty. Size is " + str(size)
+            msg += " instead of 0"
             self.is_rule_check_successfull = False
-            return
+            return msg
 
 
           self.project.logging.debug("Directory " + rule[Key.TARGET_PATH.value] +
                                      " contains " + str(size) + " files")
         else:
-          self.project.logging.info("Unknown target (" + rule[Key.TYPE.value] + ") " +
-                                    rule[Key.TARGET_PATH.value])
+          msg = "Unknown target (" + rule[Key.TYPE.value] + ") " + rule[Key.TARGET_PATH.value]
           self.is_rule_check_successfull = False
-          return
+          return msg
 
     # Check the md5 hash of the target
     if Key.MD5.value in rule:
       # Check if the file exist. Use the target path to expand symlinks
       if not os.path.isfile(rule[Key.TARGET_PATH.value]):
-        self.project.logging.debug("Missing target file : " + rule[Key.TARGET_PATH.value])
+        msg = "Missing target file : " + rule[Key.TARGET_PATH.value]
         self.is_rule_check_successfull = False
-        return
+        return msg
 
       # Create the hasher used to parse file and compute hash
       md5_hasher = hashlib.md5()
@@ -944,11 +939,10 @@ class CheckRootFS(CliCommand):
 
         # Compare the hash to the rule, and set the check flag if needed
         if rule[Key.MD5.value] != md5_hasher.hexdigest():
-          self.project.logging.debug("File " + rule[Key.PATH.value] + " has an invalid MD5 hash. " +
-                                     "hash is " + md5_hasher.hexdigest() + " instead of " +
-                                     rule[Key.MD5.value])
+          msg = "File " + rule[Key.PATH.value] + " has an invalid MD5 hash. hash is "
+          msg += md5_hasher.hexdigest() + " instead of " + rule[Key.MD5.value]
           self.is_rule_check_successfull = False
-          return
+          return msg
         else:
           self.project.logging.debug("File " + rule[Key.PATH.value] + " has a valid MD5 hash. " +
                                      "hash is " + md5_hasher.hexdigest())
@@ -958,9 +952,9 @@ class CheckRootFS(CliCommand):
 
       # Check if the file exist. Use the target path to expand symlinks
       if not os.path.isfile(rule[Key.TARGET_PATH.value]):
-        self.project.logging.debug("Missing target file : " + rule[Key.TARGET_PATH.value])
+        msg = "Missing target file : " + rule[Key.TARGET_PATH.value]
         self.is_rule_check_successfull = False
-        return
+        return msg
 
       # Create the hasher used to parse file and compute hash
       sha1_hasher = hashlib.sha1()
@@ -979,11 +973,10 @@ class CheckRootFS(CliCommand):
 
         # Compare the hash to the rule, and set the check flag if needed
         if rule[Key.SHA1.value] != sha1_hasher.hexdigest():
-          self.project.logging.debug("File " + rule[Key.PATH.value] + " has an invalid SHA1 hash. " +
-                                     "hash is " + sha1_hasher.hexdigest() + " instead of " +
-                                     rule[Key.SHA1.value])
+          msg = "File " + rule[Key.PATH.value] + " has an invalid SHA1 hash. hash is "
+          msg += sha1_hasher.hexdigest() + " instead of " + rule[Key.SHA1.value]
           self.is_rule_check_successfull = False
-          return
+          return msg
         else:
           self.project.logging.debug("File " + rule[Key.PATH.value] + " has a valid SHA1 hash. " +
                                      "hash is " + sha1_hasher.hexdigest())
@@ -1016,10 +1009,12 @@ class CheckRootFS(CliCommand):
         if rule[Key.SHA256.value] != sha256_hasher.hexdigest():
           print("in error")
           self.is_rule_check_successfull = False
-          msg = "File " + rule[Key.PATH.value] + " has an invalid SHA256 hash. SHA256 is " + sha256_hasher.hexdigest() + " instead of " + rule[Key.SHA256.value]
+          msg = "File " + rule[Key.PATH.value] + " has an invalid SHA256 hash. SHA256 is "
+          msg += sha256_hasher.hexdigest() + " instead of " + rule[Key.SHA256.value]
         else:
           print("in success")
-          msg = "File " + rule[Key.PATH.value] + " has a valid SHA256 hash. hash is " + sha256_hasher.hexdigest()
+          msg = "File " + rule[Key.PATH.value] + " has a valid SHA256 hash. hash is "
+          msg += sha256_hasher.hexdigest()
 
     # Default exit, return the msg value
-    return msg 
+    return msg

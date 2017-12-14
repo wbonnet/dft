@@ -149,8 +149,7 @@ project_definition:
   #
   targets:
     # - { version: stretch , board: __native__ }
-    # - { version: stretch , board: generic-amd64 }
-    - { version: stretch , board: pinebook }
+    - { version: stretch , board: generic-amd64 }
 
 
 # ----------------------------------------------------------------------------
