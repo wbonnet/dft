@@ -148,8 +148,7 @@ project_definition:
   # the host running DFT.
   #
   targets:
-    # - { version: stretch , board: __native__ }
-    - { version: stretch , board: generic-amd64 }
+    - { version: stretch , board: __native__ }
 
 
 # ----------------------------------------------------------------------------

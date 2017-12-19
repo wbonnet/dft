@@ -28,6 +28,7 @@ their content and definition fom yaml configuration file.
 """
 
 import os
+import subprocess
 import logging
 from enum import Enum
 from datetime import datetime
@@ -177,6 +178,7 @@ class Key(Enum):
   MOUNT_OPTIONS = "mount_options"
   MOUNTPOINT = "mountpoint"
   NAME = "name"
+  NATIVE = "__native__"
   NO_CONSTRAINT = "no_constraint"
   NO_DATABLOCK_COMPRESSION = "no_datablock_compression"
   NO_DUPICATE_CHECK = "no_dupicate_check"
@@ -602,7 +604,7 @@ class Project(object):
     # program
     try:
       #
-      # Load all the ub configuration files from disk
+      # Load all the sub configuration files from disk
       #
       with open(self.project_name, 'r') as working_file:
         self.project = yaml.load(working_file)
@@ -736,6 +738,11 @@ class Project(object):
           if Key.BSP_FILE.value in target:
             bsp_file = target[Key.BSP_FILE.value]
           else:
+            # Check if the __native__ arch is defined. If yesm qrch is change to
+            # generic-what_we_run_on'
+            if target[Key.BOARD.value].lower() == Key.NATIVE.value.lower():
+              target[Key.BOARD.value] = "generic-" + self.get_native_arch()
+
             # There is specific file, thus use the default path
             # Build the path to the file containing the BSP definition
             bsp_file = self.get_bsp_base() + "/boards/" + target[Key.BOARD.value] + ".yml"
@@ -885,3 +892,27 @@ class Project(object):
 
     # Now a value is defined, just return it
     return self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value]
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # get_native_arch
+  #
+  # -------------------------------------------------------------------------
+  def get_native_arch(self):
+    """This method returns the native architecture of the host running DFT.
+    Arch format is the same as dpkg tools if means arm64 instead of aarch64
+    """
+
+    # Retrieve the architecture of the host
+    host_arch = subprocess.check_output("uname -m", shell=True).decode(Key.UTF8.value).rstrip()
+    if host_arch == "x86_64":
+      return "amd64"
+    elif host_arch == "armv7l":
+      return "armhf"
+    elif host_arch == "aarch64":
+      return "arm64"
+    else:
+      return host_arch
+

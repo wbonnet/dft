@@ -428,3 +428,4 @@ class CliCommand(object):
       self.devpts_is_mounted = False
 
     self.cleanup_in_progress = False
+
