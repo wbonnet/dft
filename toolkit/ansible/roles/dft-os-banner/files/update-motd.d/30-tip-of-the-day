@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Defines the pqth to the files contqining tips
+# Defines the path to the files containing tips
 tip_file="/etc/update-motd.d/dft-tips-of-the-day.txt"
 
 # Execute only if the file exists
