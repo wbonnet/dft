@@ -17,4 +17,4 @@ toilet -f standard ${BANNER}
 
 # And finaly the welcome message
 printf '\nWelcome to \e[0;91m%s\e[m %s\n' "$PRETTY_NAME" "$KERNELID"
-
+printf "\n"

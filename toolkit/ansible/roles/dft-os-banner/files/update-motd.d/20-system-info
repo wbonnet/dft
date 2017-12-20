@@ -1,18 +1,37 @@
 #!/bin/bash
 
-# Defines the pqth to the files contqining tips
-tip_file="/etc/update-motd.d/dft-tips-of-the-day.txt"
+# Retrieves the system load
+system_load=$(uptime | awk 'match($0, /[0-9]+\.[0-9]+,/) { print substr($0,RSTART,RLENGTH-1) } ')
 
-# Execute only if the file exists
-if [ -f ${tip_file} ] ;
+# Retrieves the uptime
+uptime=$(uptime | cut -d, -f1 | cut -d\  -f4-)
+
+# Retrieves the number of users
+user_count=$(uptime | awk 'match($0, /[0-9]+ user[s]?,/) { print substr($0,RSTART,RLENGTH-1) } ')
+
+# Retrieves the memory used
+used_mem=$(free -h | grep "^Mem:" | awk '{ print $3 " of " $2}')
+
+# Retrieves the swap used
+used_swap=$(free -h | grep "^Swap:" | awk '{ print $2 }')
+if [ "${used_swap}" == "0B" ] ;
 then
-  position=$(shuf -i 1-$(wc -l < ${tip_file}) -n 1)
-  tip=$(head -n ${position} ${tip_file} | tail -n 1 )
-  if [ ! "${tip}" == "" ] ; 
-  then
-    echo -e  "\n\e[93mTip of the day:\e[39m ${tip}\n"
-  fi
+  used_swap="Deactivated"
+else
+  used_swap=$(free -h | grep "^Swap:" | awk '{ print $3 " of " $2}')
 fi
 
+# Retrieves the root usage
+used_rootfs="$(df -h / | tail -n 1 | awk '{ print $5 " of " $2}')"
 
+# Retrieves the main IP
+main_ip="192.18.1.2"
 
+# Retrieves the CPU temp
+cpu_temp="32"
+
+#printf "0         1         2         3         4         5         6         7\n"
+#printf "01234567890123456789012345678901234567890123456789012345678901234567890123456789\n"
+printf "System load: %-15s Uptime:     %-15s Users     : %s\n" "${system_load}" "${uptime}" "${user_count}"
+printf "Memory used: %-15s Swap used:  %-15s Usage of /: %s\n" "${used_mem}" "${used_swap}" "${used_rootfs}"
+#printf "IP: %-15s   CPU temp:   %3d °C\n" "${main_ip}" "${cpu_temp}"
