@@ -35,3 +35,6 @@ dft_banner:
   
   # If true will copy files/motd to /etc/motd, otherwise do nothing
   install_motd: False
+  
+  # If true will copy files/update-motd.d content to /etc/update-motd.d, otherwise do nothing
+  install_update_motd: False
