@@ -27,5 +27,10 @@
 #
 
 ---
-- include: packages.yml
-- include: configuration.yml
+- name : DFT - Install software used to output banner (figlet and toilet)
+  apt: name={{ item }}
+       state=latest
+       install_recommends=no
+  with_items:
+    - toilet
+    - figlet

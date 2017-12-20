@@ -30,8 +30,7 @@ main_ip="192.18.1.2"
 # Retrieves the CPU temp
 cpu_temp="32"
 
-#printf "0         1         2         3         4         5         6         7\n"
-#printf "01234567890123456789012345678901234567890123456789012345678901234567890123456789\n"
+printf "\n"
 printf "System load: %-15s Uptime:     %-15s Users     : %s\n" "${system_load}" "${uptime}" "${user_count}"
 printf "Memory used: %-15s Swap used:  %-15s Usage of /: %s\n" "${used_mem}" "${used_swap}" "${used_rootfs}"
 #printf "IP: %-15s   CPU temp:   %3d °C\n" "${main_ip}" "${cpu_temp}"
