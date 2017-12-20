@@ -32,4 +32,3 @@
 - include: openssh-server.yml
 - include: openssh-client.yml
 - include: rkhunter.yml
-- include: banner.yml

@@ -74,18 +74,6 @@ dft_sudoers:
 
 # -------------------------------------------------------------------------------------------------
 
-# Defines if a custom banner should be installed. If yes, the file from files/issue
-# and files.issue.net or copied to the target
-dft_banner:
-  # If true will copy files/issue to /etc/isssue, otherwise do nothing
-  install_issue: False
-  # If true will copy files/issue.net to /etc/isssue.net, otherwise do nothing
-  install_issue_net: False
-  # If true will copy files/motd to /etc/motd, otherwise do nothing
-  install_motd: False
-
-# -------------------------------------------------------------------------------------------------
-
 # Defines the kernel parameter to set during rootfs building
 dft_kernel_hardening:
   # The following list defines the default values of kernel parameters.
