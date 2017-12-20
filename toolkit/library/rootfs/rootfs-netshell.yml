@@ -28,3 +28,4 @@ roles:
   - dft-security-base
   - dft-os-apt
   - dft-os-power-management
+  - dft-os-banner
