@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Defines the pqth to the files contqining tips
+tip_file="/etc/update-motd.d/dft-tips-of-the-day.txt"
+
+# Execute only if the file exists
+if [ -f ${tip_file} ] ;
+then
+  position=$(shuf -i 1-$(wc -l < ${tip_file}) -n 1)
+  tip=$(head -n ${position} ${tip_file} | tail -n 1 )
+  if [ ! "${tip}" == "" ] ; 
+  then
+    echo -e  "\n\e[93mTip of the day:\e[39m ${tip}\n"
+  fi
+fi
+
+
+
