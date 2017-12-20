@@ -50,3 +50,15 @@
         owner=root
         group=root
   when: dft_banner.install_motd is defined and dft_banner.install_motd == True
+
+- name : DFT - Install /etc/update-motd.d content
+  copy: src=files/update-motd.d/{{ item }}
+        dest=/etc/update-motd.d/{{ item }}
+        mode=0755
+        owner=root
+        group=root
+  when: dft_banner.install_update_motd is defined and dft_banner.install_update_motd == True
+  with_items:
+    - 10-header
+    - 20-system-info
+    - 30-tip-of-the-day
