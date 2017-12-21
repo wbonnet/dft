@@ -23,18 +23,19 @@
 
 
 # -------------------------------------------------------------------------------------------------
-
+#
 # Defines if a custom banner should be installed. If yes, the file from files/issue
 # and files.issue.net or copied to the target
-dft_banner:
-  # If true will copy files/issue to /etc/isssue, otherwise do nothing
-  install_issue: False
+#
+
+# If true will copy files/issue to /etc/isssue, otherwise do nothing
+dft_banner_install_issue: False
  
-  # If true will copy files/issue.net to /etc/isssue.net, otherwise do nothing
-  install_issue_net: False
+# If true will copy files/issue.net to /etc/isssue.net, otherwise do nothing
+dft_banner_install_issue_net: False
   
-  # If true will copy files/motd to /etc/motd, otherwise do nothing
-  install_motd: False
+# If true will copy files/motd to /etc/motd, otherwise do nothing
+dft_banner_install_motd: False
   
-  # If true will copy files/update-motd.d content to /etc/update-motd.d, otherwise do nothing
-  install_update_motd: True
+# If true will copy files/update-motd.d content to /etc/update-motd.d, otherwise do nothing
+dft_banner_install_update_motd: True
