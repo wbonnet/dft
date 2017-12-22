@@ -800,21 +800,21 @@ files:
     expected_result: False
   # Test that a link to a file is not empty
   - path: "/dft/existing/link-to-non-empty-file"
-    label: "Testing symlink to a non empty file (when expecting the file to be not empty)"
+    label: "Symlink to a non empty file (empty is expected )"
     type: "symlink"
     empty: False
     # Test is supposed to succeed
     expected_result: True
   # Test that a link to a file is empty
   - path: "/dft/existing/link-to-empty-file"
-    label: "Testing symlink to an empty file (when expecting the file to be empty)"
+    label: "Symlink to an empty file (empty is expected)"
     type: "symlink"
     empty: True
     # Test is supposed to succeed
     expected_result: True
   # Test that a link to a file is empty
   - path: "/dft/existing/link-to-non-empty-file"
-    label: "Testing symlink to a non empty file (when expecting the file to be empty)"
+    label: "Symlink to a non empty file (empty is expected)"
     type: "symlink"
     empty: True
     # Test is supposed to fail

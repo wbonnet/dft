@@ -29,11 +29,53 @@ import os
 import subprocess
 import shutil
 import errno
+from enum import Enum
 from dft.model import Key
+from dft.ansi_colors import Colors
 
+
+#-----------------------------------------------------------------------------
+#
+# class Output
+#
+# -----------------------------------------------------------------------------
+class Output(Enum):
+  """This class defines the destination when outputing strings. It can be
+  either a log level or stdout.
+  """
+
+  # Define each and every key and associated string used in the tool
+  DEBUG = "debug"
+  INFO = "info"
+  WARNING = "warning"
+  ERROR = "error"
+  CRITICAL = "critical"
+  STDOUT = "stdout"
+
+
+
+#-----------------------------------------------------------------------------
+#
+# class Code
+#
+# -----------------------------------------------------------------------------
+class Code(Enum):
+  """This class defines the different vales for result code when outputing a
+  string ended by a result code.
+  """
+
+  # Define each and every key and associated string used in the tool
+  SUCCESS = " OK "
+  FAILURE = " KO "
+  WARNING = "Warn"
+
+
+
+# -----------------------------------------------------------------------------
 #
 #    Class CliCommand
 #
+# -----------------------------------------------------------------------------
 class CliCommand(object):
   """This class implements the base class used for all command fro cli
 
@@ -97,6 +139,13 @@ class CliCommand(object):
     # Flag used to prevent multiple call to cleanup since cleanup is used
     # in exception processing
     self.cleanup_in_progress = False
+
+    # Defines the nuùber of column used to align text when outputing with right align
+    # and the real size in char (without ansi escape codes) or the code
+    self.right_align = 80
+    self.len_str_code = 6
+
+
 
   # -------------------------------------------------------------------------
   #
@@ -340,6 +389,7 @@ class CliCommand(object):
     self.execute_command(command)
 
 
+
   # -------------------------------------------------------------------------
   #
   # update_package_catalog
@@ -429,3 +479,84 @@ class CliCommand(object):
 
     self.cleanup_in_progress = False
 
+
+
+  # -------------------------------------------------------------------------
+  #
+  # output_string_with_result
+  #
+  # -------------------------------------------------------------------------
+  def output_string_with_result(self, msg, code):
+    """ This method output a string followed by a result code. Resultat code
+    is an enumed value. Color depends on code value:
+      . OK      => Green
+      . Warning => Orange
+      . KO      => Red
+
+    Result codes are right aligned to a value defined in this class members
+    at init.
+    """
+
+    # Let's build the output string with padding and ANSI code for colors.
+    # First the string fragment with ANSI codes
+    str_code = "["
+
+    # Complete with color according to the code
+    if code == Code.SUCCESS:
+      str_code += Colors.FG_GREEN.value
+    elif code == Code.FAILURE:
+      str_code += Colors.FG_RED.value
+    if code == Code.WARNING:
+      str_code += Colors.FG_ORANGE.value
+
+    # Add bold, value, then go back to normal output
+    str_code += Colors.BOLD.value + code.value + Colors.RESET.value + "]"
+
+    # if the string is wider than alignment valuem then result code will be
+    # on a new line. An extra 8 chars are remove from
+    output = msg 
+
+    # We cannot use len(str_code) since it includes ANSI codes which are not printable
+    # Instead we use the code_size constant which is the number of actual char printed
+    if len(output) >= (self.right_align - self.len_str_code):
+      output += "\n"
+      output += "".join(" " for i in range(self.right_align - self.len_str_code))
+    else:
+      output += "".join(" " for i in range(self.right_align - len(output) - self.len_str_code))
+
+    # Last thing to do is to concatenate the string with code and colors
+    output += str_code
+    output = str_code + " " + msg
+
+    # And print it !
+    print(output)
+
+
+  # -------------------------------------------------------------------------
+  #
+  # display_test_result
+  #
+  # -------------------------------------------------------------------------
+  def display_test_result(self, msg, target=Output.STDOUT):
+    """ This method output a string either to stdout or log according to 
+    arguments. String is prefixed by the Hint keyword and is targetting
+    hint's to explain why a test has failed.
+    """
+
+    # First add some padding since code are left aligned
+    output = "".join(" " for i in range(self.len_str_code + 1))
+
+    # Complete with color according to the code
+    if target == Output.STDOUT:
+      output += Colors.FG_CYAN.value
+      output += Colors.BOLD.value + "Hint: " + Colors.RESET.value 
+
+    # if the string is wider than alignment valuem then result code will be
+    # on a new line. An extra 8 chars are remove from
+    output += msg
+
+    # And print it !
+    if target == Output.STDOUT:
+      print(output)
+    else:
+      self.project.logging.log(output.value, output)
