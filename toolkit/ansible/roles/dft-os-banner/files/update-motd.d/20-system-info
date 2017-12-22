@@ -7,7 +7,7 @@ system_load=$(LC_ALL=C uptime | rev | cut -f2 -d, | rev | tr -d \  )
 uptime=$(LC_ALL=C uptime | cut -d, -f1 | cut -d\  -f4- | sed -e "s/^ +//" )
 
 # Retrieves the number of users
-user_count=$(uptime | awk 'match($0, /[0-9]+ user[s]?,/) { print substr($0,RSTART,RLENGTH-1) } ')
+user_count=$(who | wc -l)
 
 # Retrieves the memory used
 used_mem=$(free -h | grep "^Mem:" | awk '{ print $3 " of " $2}')
@@ -48,5 +48,5 @@ cpu_temp="32"
 printf "\n"
 printf "System load: %-15s Uptime:     %-15s Users:      %s\n" "${system_load}" "${uptime}" "${user_count}"
 printf "Memory used: %-15s Swap used:  %-15s Usage of /: %s\n" "${used_mem}" "${used_swap}" "${used_rootfs}"
-printf "Process:     %-15s Threads:    %-15s Zombies:    %s\n" "${process_count}" "${thread_count}" "${zombie_count}"
+printf "Processes:   %-15s Threads:    %-15s Zombies:    %s\n" "${process_count}" "${thread_count}" "${zombie_count}"
 #printf "IP: %-15s   CPU temp:   %3d °C\n" "${main_ip}" "${cpu_temp}"
