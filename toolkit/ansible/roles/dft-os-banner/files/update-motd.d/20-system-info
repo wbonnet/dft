@@ -24,6 +24,21 @@ fi
 # Retrieves the root usage
 used_rootfs="$(df -h / | tail -n 1 | awk '{ print $5 " of " $2}')"
 
+# Retrieves the number of processes
+process_count=$(ps --no-headers -Ao cmd | grep -v "^\[" | grep -v "\]$" | wc -l)
+
+# Retrieves the number of kernel threads
+kthread_count=$(ps --no-headers -Ao cmd | grep "^\[" | grep "\]$" | wc -l)
+
+# Retrieves the number of threads
+thread_count=$(( $(ps --no-headers -AL | wc -l) - ${process_count} - ${kthread_count} ))
+thread_count="${thread_count} (${kthread_count} kt)"
+
+# Retrieve zombie and defunct processes
+zombie_count=$(ps --no-headers axo stat | grep Z | wc -l)
+defunct_count=$(ps --no-headers axo stat | grep D | wc -l)
+zombie_count=$(( ${zombie_count} + ${defunct_count} ))
+
 # Retrieves the main IP
 main_ip="192.18.1.2"
 
@@ -31,6 +46,7 @@ main_ip="192.18.1.2"
 cpu_temp="32"
 
 printf "\n"
-printf "System load: %-15s Uptime:     %-15s Users     : %s\n" "${system_load}" "${uptime}" "${user_count}"
+printf "System load: %-15s Uptime:     %-15s Users:      %s\n" "${system_load}" "${uptime}" "${user_count}"
 printf "Memory used: %-15s Swap used:  %-15s Usage of /: %s\n" "${used_mem}" "${used_swap}" "${used_rootfs}"
+printf "Process:     %-15s Threads:    %-15s Zombies:    %s\n" "${process_count}" "${thread_count}" "${zombie_count}"
 #printf "IP: %-15s   CPU temp:   %3d °C\n" "${main_ip}" "${cpu_temp}"
