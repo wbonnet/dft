@@ -1,4 +1,4 @@
-dft (0.5.9-1) unstable; urgency=low
+dft (0.5.9-4) unstable; urgency=low
 
   * Improve check_rootfs output
   * Several minor fixes in roles
