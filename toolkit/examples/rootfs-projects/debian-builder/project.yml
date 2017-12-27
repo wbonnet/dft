@@ -82,7 +82,7 @@ configuration:
 project_definition:
 
   # Defines the project name. Mostly used for output and directories creation
-  project_name: "package-builder"
+  project_name: "debian-builder"
 
   # Definition of the repositories used for bootstrapping
   # There can be only one repo, thus its url is defined here
@@ -96,9 +96,10 @@ project_definition:
   rootfs:
     - rootfs.yml
 
-  # Definition of the firmware content and structure
-  firmware:
-    - firmware.yml
+  # Definition of the variables to be passed to rootfs creation. This variable is a list.
+  # Several files can be defined, they will be processed in the list order.
+  variables:
+    - variables.yml
 
   # Definition of the list of targets, with architectures, versions and optionaly board.
   # Firmware will be generated for each of the architecture in this list
@@ -110,4 +111,4 @@ project_definition:
   # DFT installation
   #
   targets:
-    - { version: stretch , board: generic-amd64 }
+    - { version: stretch , board: __native__ }
