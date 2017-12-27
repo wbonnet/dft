@@ -4,11 +4,13 @@ dft_hostname: "debian-builder"
 # Create a group named dft
 dft_groups:
   - { name: "builder" }
+  - { name: "localadmin" }
   - { name: "sshusers" }
 
 # Create the default user add put it into dft group
 dft_users:
-  - { name: "builder" , password: "builder" , createhome: True , groups: 'builder' , group: 'builder' , shell: '/bin/bash'}
+  - { name: "localadmin" , password: "localadmin" , createhome: True , groups: 'sshusers' , group: 'localadmin' , shell: '/bin/bash'}
+  - { name: "builder" , password: "builder" , createhome: True , groups: 'sshusers' , group: 'builder' , shell: '/bin/bash'}
 
   # Defines specific sudo options, and the list of additional files to add into
 # /etc/sudoers.d
@@ -27,4 +29,4 @@ dft_sudoers:
 
   # Define the list of additional configuration files
   config_files:
-    - builder
+    - localadmin
