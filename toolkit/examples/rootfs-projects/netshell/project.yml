@@ -51,7 +51,7 @@ configuration:
   # Defines the path to project configuration files. By default (undefined
   # value) configuration files are searched in the same directory as the
   # current project.yml file
-  # project_path: "~/Devel/dft/examples/starter-projects/netshell"
+  # project_path: "~/Devel/dft/examples/rootfs-projects/netshell"
 
   # Path to the dft installation directory. Default value is /usr/share/dft
   # dft_base: "../ansible"
