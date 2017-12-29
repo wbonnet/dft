@@ -366,6 +366,9 @@ class Configuration(object):
     if not os.path.isfile(self.filename):
       self.filename = "/etc/dft/dftrc"
 
+    # No then it does not matter, let('s continue without ~/.dftrc file
+    self.logging.debug("Using configuration file : " + self.filename)
+
     try:
       # Check it the configuration file exist
       if os.path.isfile(self.filename):
@@ -570,10 +573,12 @@ class Project(object):
     """
 
     # Check if the project path is defined into the project file
-    if Key.PROJECT_PATH.value in self.project[Key.CONFIGURATION.value]:
-      filename = self.project[Key.CONFIGURATION.value][Key.PROJECT_PATH.value] + "/" + filename
+    if Key.CONFIGURATION.value in self.project and \
+       self.project[Key.CONFIGURATION.value] is not None:
+      if Key.PROJECT_PATH.value in self.project[Key.CONFIGURATION.value]:
+        filename = self.project[Key.CONFIGURATION.value][Key.PROJECT_PATH.value] + "/" + filename
     else:
-      filename = os.path.dirname(self.project_name) + "/" + filename
+      filename = "./" + filename
 
     # Return what has been generated
     return filename
@@ -609,22 +614,40 @@ class Project(object):
       with open(self.project_name, 'r') as working_file:
         self.project = yaml.load(working_file)
 
-        # Expand ~ in path since it is not done automagically by Python
-        for key in {Key.DFT_BASE.value, Key.PROJECT_PATH.value, Key.WORKING_DIR.value}:
-          # For iterate the key and check they are defined in the config file
-          if key in self.project[Key.CONFIGURATION.value]:
-            # If yes modifiy its value using expenduser ( replace ~ by /home/foo)
-            self.project[Key.CONFIGURATION.value][key] = \
-                            os.path.expanduser(self.project[Key.CONFIGURATION.value][key])
+        # Check if there is a configuration and working file defined, otherwise copy
+        # it from the general configuration
+        if Key.CONFIGURATION.value not in self.project or \
+           self.project[Key.CONFIGURATION.value] is None:
+          # Create the empty configuration if not defined
+          self.project[Key.CONFIGURATION.value] = {}
 
-        # Expand ~ in path since it is not done automagically by Python
-        for key in {Key.ADDITIONAL_ROLES.value}:
-          # For iterate the key and check they are defined in the config file
-          if key in self.project[Key.CONFIGURATION.value]:
-            # Then iterate the list of values it contains
-            for counter in range(len(self.project[Key.CONFIGURATION.value][key])):
-              self.project[Key.CONFIGURATION.value][key][counter] = \
-                    os.path.expanduser(self.project[Key.CONFIGURATION.value][key][counter])
+        # We try to expand variables only if some keys have been defined under configuration
+        if Key.CONFIGURATION.value in self.project and \
+           self.project[Key.CONFIGURATION.value] is not None:
+          # Expand ~ in path since it is not done automagically by Python
+          for key in {Key.DFT_BASE.value, Key.PROJECT_PATH.value, Key.WORKING_DIR.value}:
+            # For iterate the key and check they are defined in the config file
+            if key in self.project[Key.CONFIGURATION.value] and \
+               self.project[Key.CONFIGURATION.value][key] is not None:
+              # If yes modifiy its value using expenduser ( replace ~ by /home/foo)
+              self.project[Key.CONFIGURATION.value][key] = \
+                              os.path.expanduser(self.project[Key.CONFIGURATION.value][key])
+            else:
+              if key in self.configuration.configuration:
+                self.project[Key.CONFIGURATION.value][key] = self.configuration.configuration[key]
+              else:
+                print("Error : unknown value of self.project[" + Key.CONFIGURATION.value + \
+                      "][" + key + "])")
+
+          # Expand ~ in path since it is not done automagically by Python
+          for key in {Key.ADDITIONAL_ROLES.value}:
+            # For iterate the key and check they are defined in the config file
+            if key in self.project[Key.CONFIGURATION.value] and \
+           self.project[Key.CONFIGURATION.value] is not None:
+              # Then iterate the list of values it contains
+              for counter in range(len(self.project[Key.CONFIGURATION.value][key])):
+                self.project[Key.CONFIGURATION.value][key][counter] = \
+                      os.path.expanduser(self.project[Key.CONFIGURATION.value][key][counter])
 
       # Load the repositories sub configuration files
       if Key.REPOSITORIES.value in self.project[Key.PROJECT_DEFINITION.value]:
@@ -707,18 +730,23 @@ class Project(object):
       # Once configuration have been loaded, compute the values of some
       # configuration variables
       #
-      if Key.WORKING_DIR.value in self.project[Key.CONFIGURATION.value]:
-        self.project_base_workdir = self.project[Key.CONFIGURATION.value][Key.WORKING_DIR.value]
-        self.logging.debug("Using working_dir from project : " + self.project_base_workdir)
+
+      # First use value from configuration, then override it with value from project if defined.
+      # Writing it this way simplifies the if then else processing.
+      self.logging.debug(self.configuration.configuration)
+      if Key.WORKING_DIR.value in self.configuration.configuration[Key.CONFIGURATION.value]:
+        self.project_base_workdir = self.configuration.configuration[Key.CONFIGURATION.value]\
+                                                                    [Key.WORKING_DIR.value]
+        self.logging.debug("Using working_dir from configuration : " + self.project_base_workdir)
       else:
-        self.logging.debug(self.configuration.configuration)
-        if Key.WORKING_DIR.value in self.configuration.configuration[Key.CONFIGURATION.value]:
-          self.project_base_workdir = self.configuration.configuration[Key.CONFIGURATION.value]\
-                                                                      [Key.WORKING_DIR.value]
-          self.logging.debug("Using working_dir from configuration : " + self.project_base_workdir)
-        else:
-          self.logging.debug("configuration/working_dir is not defined, using /tmp/dft as default")
-          self.project_base_workdir = "/tmp/dft"
+        self.logging.debug("configuration/working_dir is not defined, using /tmp/dft as default")
+        self.project_base_workdir = "/tmp/dft"
+
+      # Now check if a value from prject is defined and should override current value
+      if Key.CONFIGURATION.value in self.project:
+        if Key.WORKING_DIR.value in self.project[Key.CONFIGURATION.value]:
+          self.project_base_workdir = self.project[Key.CONFIGURATION.value][Key.WORKING_DIR.value]
+          self.logging.debug("Using working_dir from project : " + self.project_base_workdir)
 
       self.project_base_workdir += "/" + self.project[Key.PROJECT_DEFINITION.value]\
                                                      [Key.PROJECT_NAME.value]
@@ -848,14 +876,25 @@ class Project(object):
     default values.
     """
 
-    # Check if the value is defined
-    if Key.DFT_BASE.value not in self.project[Key.CONFIGURATION.value]:
-      if self.dft.configuration is not None and \
-         Key.DFT_BASE.value in self.dft.configuration[Key.CONFIGURATION.value]:
-        self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] = \
-                      self.dft.configuration[Key.CONFIGURATION.value][Key.DFT_BASE.value]
+    # Check if the value is defined. First let's check configuration key exist
+    if Key.CONFIGURATION.value in self.project:
+      # Then a dft_base key exist
+      if Key.DFT_BASE.value not in self.project[Key.CONFIGURATION.value]:
+        if self.dft.configuration is not None and \
+          Key.DFT_BASE.value in self.dft.configuration[Key.CONFIGURATION.value]:
+          self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] = \
+                        self.dft.configuration[Key.CONFIGURATION.value][Key.DFT_BASE.value]
+        else:
+          # If not default to /usr/share value
+          self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] = "/usr/share/dft"
       else:
+        # If not default to /usr/share value
         self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] = "/usr/share/dft"
+    else:
+      # No key at all, create the dictionnary first
+      self.project[Key.CONFIGURATION.value] = {}
+      # Default to /usr/share/ value
+      self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] = "/usr/share/dft"
 
     # Expand the path starting with ~/
     self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] = \
@@ -877,14 +916,23 @@ class Project(object):
     default values.
     """
 
-    # Check if the value is defined
-    if Key.BSP_BASE.value not in self.project[Key.CONFIGURATION.value]:
-      if self.dft.configuration is not None and \
-         Key.BSP_BASE.value in self.dft.configuration[Key.CONFIGURATION.value]:
-        self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value] = \
-                      self.dft.configuration[Key.CONFIGURATION.value][Key.BSP_BASE.value]
+    # Check if the value is defined. First let's check configuration key exist
+    if Key.CONFIGURATION.value in self.project:
+      # Then a dft_base key exist
+      if Key.BSP_BASE.value not in self.project[Key.CONFIGURATION.value]:
+        if self.dft.configuration is not None and \
+           Key.BSP_BASE.value in self.dft.configuration[Key.CONFIGURATION.value]:
+          self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value] = \
+                        self.dft.configuration[Key.CONFIGURATION.value][Key.BSP_BASE.value]
+        else:
+          self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value] = self.get_dft_base() + "/bsp"
       else:
         self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value] = self.get_dft_base() + "/bsp"
+    else:
+      # No key at all, create the dictionnary first
+      self.project[Key.CONFIGURATION.value] = {}
+      # Default to /usr/share/ value since there is no keys
+      self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value] = self.get_dft_base() + "/bsp"
 
     # Expand the path starting with ~/
     self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value] = \

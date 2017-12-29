@@ -41,7 +41,7 @@
 #   to install additional oftware nd configuration to the firmware.
 #
 # ----------------------------------------------------------------------------
-configuration:
+#configuration:
 
   # Defines the root of the working directories. A dirctory named after
   # project name will be created under this path, and subdirectories used to
@@ -60,8 +60,8 @@ configuration:
   # which are copied to /dft_bootstrap during rootfs bootstrapping. These paths
   # contains project specific definition (which are not included in the dft
   # open-source tool)
-  additional_roles:
-   - "/usr/share/dft/examples/redefined-roles"
+  # additional_roles:
+  #  - "/usr/share/dft/examples/redefined-roles"
 
   # Defines if the file /etc/apt/apt.conf.d/10no-check-valid-until should be generated or not
   # If generated this file contains Acquire::Check-Valid-Until: "0"; which disables validity
@@ -108,13 +108,13 @@ project_definition:
     - rootfs.yml
 
   # Definition of the firmware content and structure
-  firmware:
-    - firmware.yml
+#  firmware:
+#    - firmware.yml
 
   # Definition of the image structure
 # TODO ? list ?
-  image:
-    - image.yml
+#  image:
+#    - image.yml
 
   # Definition of the control to apply on the rootfs. This variable is a list. Several files
   # can be defined, they will be processed in the list order.

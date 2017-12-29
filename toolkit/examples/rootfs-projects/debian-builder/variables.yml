@@ -3,8 +3,8 @@ dft_hostname: "debian-builder"
 
 # Create a group named dft
 dft_groups:
-  - { name: "builder" }
   - { name: "localadmin" }
+  - { name: "builder" }
   - { name: "sshusers" }
 
 # Create the default user add put it into dft group

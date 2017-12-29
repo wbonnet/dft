@@ -31,5 +31,4 @@ roles:
   - dft-os-banner
   - dft-devel-kernel-building
   - dft-devel-debian-package-building
-  - dft-devel-firmware-building
   - dft-devel-python

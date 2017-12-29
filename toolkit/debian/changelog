@@ -1,3 +1,9 @@
+dft (0.5.10-1) unstable; urgency=low
+
+  * Fix project configuration issues when section was empty
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 27 Dec 2017 13:37:00 +0100
+
 dft (0.5.9-4) unstable; urgency=low
 
   * Improve check_rootfs output
@@ -5,6 +11,8 @@ dft (0.5.9-4) unstable; urgency=low
   * Add OS Banner
 
  -- William Bonnet <wbonnet@theitmakers.com>  Sat, 23 Dec 2017 19:37:00 +0100
+
+dft (0.5.8-1) unstable; urgency=low
 
 dft (0.5.8-1) unstable; urgency=low
 
