@@ -514,7 +514,7 @@ class CliCommand(object):
 
     # if the string is wider than alignment valuem then result code will be
     # on a new line. An extra 8 chars are remove from
-    output = msg 
+    output = msg
 
     # We cannot use len(str_code) since it includes ANSI codes which are not printable
     # Instead we use the code_size constant which is the number of actual char printed
@@ -538,7 +538,7 @@ class CliCommand(object):
   #
   # -------------------------------------------------------------------------
   def display_test_result(self, msg, target=Output.STDOUT):
-    """ This method output a string either to stdout or log according to 
+    """ This method output a string either to stdout or log according to
     arguments. String is prefixed by the Hint keyword and is targetting
     hint's to explain why a test has failed.
     """
@@ -549,7 +549,7 @@ class CliCommand(object):
     # Complete with color according to the code
     if target == Output.STDOUT:
       output += Colors.FG_CYAN.value
-      output += Colors.BOLD.value + "Hint: " + Colors.RESET.value 
+      output += Colors.BOLD.value + "Hint: " + Colors.RESET.value
 
     # if the string is wider than alignment valuem then result code will be
     # on a new line. An extra 8 chars are remove from

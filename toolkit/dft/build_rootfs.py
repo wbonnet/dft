@@ -264,12 +264,23 @@ class BuildRootFS(CliCommand):
                       self.project.project[Key.PROJECT_DEFINITION.value][Key.ROOTFS.value][0]))
 
     # Generate the command line to execute Ansible in the chrooted environment
+    # The HOME variable is redefined to prevent creation of an extra dir in home of the chroot
     logging.info("running ansible")
     command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
-    command += " /bin/bash -c \"cd /dft_bootstrap && /usr/bin/ansible-playbook -i"
+    command += " /bin/bash -c \"cd /dft_bootstrap && HOME=/root /usr/bin/ansible-playbook -i"
     command += " inventory.yml -c local site.yml\""
     self.execute_command(command)
-    logging.info("ansible stage successfull")
+
+    # Depending on Ansible version, a .rnd file and two directories may be left in /root
+    # The following commands do the cleanup
+    command = "rm -f " + self.project.get_rootfs_mountpoint() + "/root/.rnd"
+    self.execute_command(command)
+
+    command = "rmdir " + self.project.get_rootfs_mountpoint() + "/root/.ansible/tmp/"
+    self.execute_command(command)
+
+    command = "rmdir " + self.project.get_rootfs_mountpoint() + "/root/.ansible/"
+    self.execute_command(command)
 
 
   # -------------------------------------------------------------------------
