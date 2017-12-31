@@ -1,3 +1,9 @@
+dft (0.5.11-1) unstable; urgency=low
+
+  * Fix default value for working path
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 31 Dec 2017 18:10:00 +0100
+
 dft (0.5.10-1) unstable; urgency=low
 
   * Fix project configuration issues when section was empty

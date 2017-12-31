@@ -633,10 +633,18 @@ class Project(object):
               self.project[Key.CONFIGURATION.value][key] = \
                               os.path.expanduser(self.project[Key.CONFIGURATION.value][key])
             else:
-              if key in self.configuration.configuration:
-                self.project[Key.CONFIGURATION.value][key] = self.configuration.configuration[key]
+              if key in self.configuration.configuration[Key.CONFIGURATION.value]:
+                self.project[Key.CONFIGURATION.value][key] = \
+                                      self.configuration.configuration[Key.CONFIGURATION.value][key]
               else:
-                print("Error : unknown value of self.project[" + Key.CONFIGURATION.value + \
+                # If key is not found, use ./ as default value but not for project_path.
+                # If project_pathis not defined, then we use the directory containing the prject
+                # file we have loaded
+                if key == Key.PROJECT_PATH.value:
+                  self.project[Key.CONFIGURATION.value][key] = os.path.dirname(self.project_name)
+                else:
+                  self.project[Key.CONFIGURATION.value][key] = "./"
+                  print("Using ./ default value for self.project[" + Key.CONFIGURATION.value + \
                       "][" + key + "])")
 
           # Expand ~ in path since it is not done automagically by Python
