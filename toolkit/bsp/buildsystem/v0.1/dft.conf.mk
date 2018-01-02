@@ -52,7 +52,7 @@ KERNEL_GIT_URL         ?= git://git.kernel.org/pub/scm/linux/kernel/git/stable
 KERNEL_GIT_BRANCH      ?= stable
 KERNEL_GIT_REPO        ?= linux-$(KERNEL_GIT_BRANCH)
 KERNEL_GIT_REPO_EXT    ?= .git
-KERNEL_SITE            ?= $(KERNEL_SITE_TARBALL)
+KERNEL_SITE             = https://cdn.kernel.org/pub/linux/kernel
 KERNEL_FILE_VERSION    ?= $(KERNEL_VERSION)
 KERNEL_SRC_URL          = $(KERNEL_SITE)/$(KERNEL_BRANCH)/linux-$(KERNEL_FILE_VERSION).tar.xz
 KERNEL_BRANCH           = v$(shell echo $(KERNEL_FILE_VERSION) | head -c 1).x
@@ -139,6 +139,14 @@ ARCH_ARMHF_BUILD_FLAGS    ?=
 # Defines standard make targets
 BUILD_FLAGS   ?= $(ARCH_COMMON_BUILD_FLAGS) $(ARCH_$(shell echo $(BOARD_ARCH) | tr a-z A-Z)_BUILD_FLAGS)
 BUILD_ARGS    ?= $(ARCH_COMMON_BUILD_ARGS) $(ARCH_$(shell echo $(BOARD_ARCH) | tr a-z A-Z)_BUILD_ARGS)
+
+# Defines default installation arguments, depending on the board architectures
+ARCH_COMMON_INSTALL_ARGS ?= 
+ARCH_ARMHF_INSTALL_ARGS  ?= zinstall
+ARCH_AMD64_INSTALL_ARGS  ?= zinstall
+ARCH_I386_INSTALL_ARGS  ?= zinstall
+
+INSTALL_ARGS    ?= $(ARCH_COMMON_INSTALL_ARGS) $(ARCH_$(shell echo $(BOARD_ARCH) | tr a-z A-Z)_INSTALL_ARGS)
 
 # debuild configuration
 DEBUILD        = debuild

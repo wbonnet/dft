@@ -34,12 +34,12 @@
 #
 
 do-install :
-	if test -f $(COOKIE_DIR)/do-install ; then \
+	@if test -f $(COOKIE_DIR)/do-install ; then \
 		true ; \
 	else \
 		echo "        running install in $(OBJ_DIR)"  ; \
 		mkdir -p $(abspath $(INSTALL_DIR))/boot/dtb ; \
-		cd $(OBJ_DIR) && $(BUILD_ENV) $(MAKE) INSTALL_PATH=$(abspath $(INSTALL_DIR))/boot install ; \
+		cd $(OBJ_DIR) && $(BUILD_ENV) $(MAKE) INSTALL_PATH=$(abspath $(INSTALL_DIR))/boot $(INSTALL_ARGS) ; \
 		$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(abspath $(INSTALL_DIR))/ modules_install ; \
 		cp -fr arch/arm/boot/dts/*.dtb $(abspath $(INSTALL_DIR))/boot/dtb ; \
 	fi ;
