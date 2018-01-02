@@ -1,3 +1,25 @@
+dft (0.5.11-1) unstable; urgency=low
+
+  * Fix default value for working path
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 31 Dec 2017 18:10:00 +0100
+
+dft (0.5.10-1) unstable; urgency=low
+
+  * Fix project configuration issues when section was empty
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 27 Dec 2017 13:37:00 +0100
+
+dft (0.5.9-4) unstable; urgency=low
+
+  * Improve check_rootfs output
+  * Several minor fixes in roles
+  * Add OS Banner
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 23 Dec 2017 19:37:00 +0100
+
+dft (0.5.8-1) unstable; urgency=low
+
 dft (0.5.8-1) unstable; urgency=low
 
   * Fix arm64 detection of qemu_static use

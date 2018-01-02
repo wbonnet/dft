@@ -4,7 +4,7 @@
 system_load=$(LC_ALL=C uptime | rev | cut -f2 -d, | rev | tr -d \  )
 
 # Retrieves the uptime
-uptime=$(LC_ALL=C uptime | cut -d, -f1 | cut -d\  -f5-)
+uptime=$(LC_ALL=C uptime | cut -d, -f1 | cut -d\  -f4- | sed -e "s/^ //")
 
 # Retrieves the number of users
 user_count=$(who | wc -l)
