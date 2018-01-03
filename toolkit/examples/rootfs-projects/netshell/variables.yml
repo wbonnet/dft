@@ -1,13 +1,13 @@
 # Set the hostname according to the project name
 dft_hostname: "netshell"
 
-# Create a group named dft
+# Create a group named localadmin
 dft_groups:
-  - { name: "dft" }
+  - { name: "localadmin" }
 
-# Create the default user add put it into dft group
+# Create the default user add put it into localadmin group
 dft_users:
-  - { name: "dft" , password: "dft" , createhome: True , groups: 'dft' , group: 'dft' , shell: '/bin/bash'}
+  - { name: "localadmin" , password: "localadin" , createhome: True , groups: 'localadmin' , group: 'localadmin' , shell: '/bin/bash'}
 
   # Defines specific sudo options, and the list of additional files to add into
 # /etc/sudoers.d
@@ -26,4 +26,4 @@ dft_sudoers:
 
   # Define the list of additional configuration files
   config_files:
-    - dft
+    - localadmin
