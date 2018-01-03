@@ -1,4 +1,1 @@
-dft_hostname: "firmware-dual-bank-overlayfs"
-dft_users:
-  - { name: "dft" , password: "dft" , createhome: True , groups: 'sudo' , group: 'sudo' , shell: '/bin/bash'}
-
+/usr/share/dft/examples/rootfs-projects/netshell/variables.yml
