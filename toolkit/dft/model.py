@@ -642,6 +642,10 @@ class Project(object):
                 # file we have loaded
                 if key == Key.PROJECT_PATH.value:
                   self.project[Key.CONFIGURATION.value][key] = os.path.dirname(self.project_name)
+                  # We need to check that the pathis not empty, otherwise we may generate some
+                  # absolute path. This to prevent this case to happen the path is replaced by "."
+                  if self.project[Key.CONFIGURATION.value][key] == "":
+                    self.project[Key.CONFIGURATION.value][key] = "."
                 else:
                   self.project[Key.CONFIGURATION.value][key] = "./"
                   print("Using ./ default value for self.project[" + Key.CONFIGURATION.value + \
