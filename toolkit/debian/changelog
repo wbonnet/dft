@@ -2,6 +2,7 @@ dft (0.5.12-1) unstable; urgency=low
 
   * Fix path to variables file in board support projects
   * Default user renamed localadmin in netshell rootfs
+  * Fix path generation when project is using current directory
 
  -- William Bonnet <wbonnet@theitmakers.com>  Wed, 03 Jan 2018 09:20:00 +0100
 
