@@ -1,9 +1,5 @@
 #
-# The contents of this file are subject to the Apache 2.0 license you may not
-# use this file except in compliance with the License.
 #
-# Software distributed under the License is distributed on an "AS IS" basis,
-# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
 # for the specific language governing rights and limitations under the
 # License.
 #
@@ -60,8 +56,8 @@ configuration:
   # which are copied to /dft_bootstrap during rootfs bootstrapping. These paths
   # contains project specific definition (which are not included in the dft
   # open-source tool)
-  additional_roles:
-    - "/usr/share/dft/examples/redefined-roles"
+  # additional_roles:
+  #  - "/usr/share/dft/examples/redefined-roles"
 
   # Defines if the file /etc/apt/apt.conf.d/10no-check-valid-until should be generated or not
   # If generated this file contains Acquire::Check-Valid-Until: "0"; which disables validity
