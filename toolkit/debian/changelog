@@ -1,3 +1,10 @@
+dft (0.5.13-1) unstable; urgency=low
+
+  * Fix copy of default configuration value to project (when these values are
+    not in project file and thus needed as default)
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 08 Jan 2018 19:38:00 +0100
+
 dft (0.5.12-1) unstable; urgency=low
 
   * Fix path to variables file in board support projects
