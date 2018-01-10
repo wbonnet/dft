@@ -229,6 +229,7 @@ class Key(Enum):
   PUBKEY = "pubkey"
   PUBKEY_GPG = "pubkey_gpg"
   PUBKEY_URL = "pubkey_url"
+  REMOVE_DOWNLOADED_ARCHIVES = "remove_downloaded_archives"
   REMOVE_VALIDITY_CHECK = "remove_validity_check"
   REPOSITORIES = "repositories"
   RESERVED_SIZE = "reserved_size"

@@ -122,6 +122,10 @@ class BuildRootFS(CliCommand):
     # Setup the chrooted environment (mount bind dev and proc
     self.teardown_chrooted_environment()
 
+    # Instqllqtion is finished, remove all downloaded .deb files if flag
+    # is activated. This will save a few tens to a few hundreds MB
+    self.remove_downloaded_archives()
+
     # Once installation has been played, we need to do some cleanup
     # like ensute that no mount bind is still mounted, or delete the
     # DFT ansible files
@@ -509,6 +513,47 @@ class BuildRootFS(CliCommand):
     command = "mv -f " + working_file.name + " " + filepath
     self.execute_command(command)
 
+
+
+  # -------------------------------------------------------------------------
+  #
+  # remove_downloaded_archives
+  #
+  # -------------------------------------------------------------------------
+  def remove_downloaded_archives(self):
+    """ This method is in charge of removing .deb files downoaded during 
+    installation process. The files are stored under var/cache/apt/archives
+
+    According to the rootfs content files size vary from a few tens of MB to
+    several hundreds. TReoving this files can save a lot of space from thei
+    generated rootfs.
+
+    Removal is control by the remove_downloaded_archives from the project
+    configuration. Default value is True (archives are removed)
+    """
+
+    # Check if the removal flag is deactivated
+    if (Key.REMOVE_DOWNLOADED_ARCHIVES.value not in \
+            self.project.project[Key.CONFIGURATION.value] or
+            self.project.project[Key.CONFIGURATION.value][Key.REMOVE_DOWNLOADED_ARCHIVES] == False):
+      # Yes, thus no need to remove iany files just exit
+      return
+
+    # Still here ? thus remove all archives from var/cache/apt/archives
+    # in the target filesystem
+    filepath = self.project.get_rootfs_mountpoint()
+    filepath += "/var/cache/apt/archives/*.deb"
+
+    # Iterate the list of deb files and remove them one by one. Generating
+    # a rm comand with a wildcard will not work since it is likely that it
+    # expansion won't happen
+    for deb_target in glob.glob(filepath):
+      logging.debug("Removing .deb archve : " + deb_target)
+      print("Removing .deb archve : " + deb_target)
+
+
+
+
   # -------------------------------------------------------------------------
   #
   # generate_fstab
@@ -520,7 +565,7 @@ class BuildRootFS(CliCommand):
 
     This table describes the various file systems to mount into the rootfs
     during the boot process. The file systems can override the definition
-    fromvthe initial boot, before changing root to firware.
+    from the initial boot, before changing root to firware.
 
     If the rootfs is used in standard mode (not a squashfs based firmware),
     then this file is the only fstab know and used by the system.
