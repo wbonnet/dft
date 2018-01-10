@@ -23,6 +23,7 @@
 
 # Defines if the headless version should be installed. Default value is False, meaning the standard
 # version will be installed. Set this variable to True to install -headless packages
+dft_openjre_is_headless: True
 dft_openjdk_is_headless: True
 
 # Defines if the JDK packages should be installed. Default value is True, JDK is installed
