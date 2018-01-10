@@ -27,6 +27,7 @@ based upon the definition stored in a configuration file and a set of Ansible ro
 
 import logging
 import os
+import glob
 import tempfile
 from shutil import rmtree
 from distutils import dir_util
@@ -521,7 +522,7 @@ class BuildRootFS(CliCommand):
   #
   # -------------------------------------------------------------------------
   def remove_downloaded_archives(self):
-    """ This method is in charge of removing .deb files downoaded during 
+    """ This method is in charge of removing .deb files downoaded during
     installation process. The files are stored under var/cache/apt/archives
 
     According to the rootfs content files size vary from a few tens of MB to
@@ -533,10 +534,10 @@ class BuildRootFS(CliCommand):
     """
 
     # Check if the removal flag is deactivated
-    if (Key.REMOVE_DOWNLOADED_ARCHIVES.value not in \
-            self.project.project[Key.CONFIGURATION.value] or
-            self.project.project[Key.CONFIGURATION.value][Key.REMOVE_DOWNLOADED_ARCHIVES] == False):
-      # Yes, thus no need to remove iany files just exit
+    if (Key.REMOVE_DOWNLOADED_ARCHIVES.value in \
+            self.project.project[Key.CONFIGURATION.value] and
+            self.project.project[Key.CONFIGURATION.value][Key.REMOVE_DOWNLOADED_ARCHIVES.value] == False):
+      # Yes, thus no need to remove any files just exit
       return
 
     # Still here ? thus remove all archives from var/cache/apt/archives
@@ -548,9 +549,8 @@ class BuildRootFS(CliCommand):
     # a rm comand with a wildcard will not work since it is likely that it
     # expansion won't happen
     for deb_target in glob.glob(filepath):
-      logging.debug("Removing .deb archve : " + deb_target)
-      print("Removing .deb archve : " + deb_target)
-
+      logging.debug("Removing " + deb_target)
+      os.remove(deb_target)
 
 
 
