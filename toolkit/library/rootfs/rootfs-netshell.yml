@@ -29,4 +29,3 @@ roles:
   - dft-os-apt
   - dft-os-power-management
   - dft-os-banner
-  - dft-openjdk
