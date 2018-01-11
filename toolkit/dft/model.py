@@ -211,7 +211,7 @@ class Key(Enum):
   OUTPUT_PKG_NAME = "output_pkg_name"
   OUTPUT_PKG_SHA256 = "output_pkg_sha256"
   OUTPUT_PKG_SIZE = "output_pkg_size"
-  OUTPUT_PKG_STATUS = "output_pkg_status"
+  OUTPUT_PKG_STATUS = "outpuat_pkg_status"
   OUTPUT_PKG_VERSION = "output_pkg_version"
   OVERLAYFS = "overlayfs"
   OVERRIDE_DEBIAN_MIRROR = "override_debian_mirror"

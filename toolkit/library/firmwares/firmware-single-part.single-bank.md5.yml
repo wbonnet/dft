@@ -46,6 +46,14 @@ layout:
 
   # Definition of the different things to stack to assemble the firmware
   stack_definition:
+    # Defines the filesystem of the partition used to store squashfs files
+    # This partition is mounted by initrd script during boot process in order
+    # to mount squshfs files using loopback
+    filesystem: ext4
+
+    # Identification of the physical partition containing the squshfs files 
+    partition: /dev/mmcblk0p2
+
     # Stack items are individual element of the stack. They are processed
     # and added to the aufs o overlayfs according to their order of
     # definition
