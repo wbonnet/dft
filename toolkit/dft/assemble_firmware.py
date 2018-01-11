@@ -421,8 +421,11 @@ class AssembleFirmware(CliCommand):
 
     # Mount the partition containing all the squashfs files
     working_file.write("mount -t " + self.project.firmware[Key.LAYOUT.value][Key.FILESYSTEM.value]) 
-    working_file.write(" " + + self.project.firmware[Key.LAYOUT.value][Key.PARTITION.value])
+    working_file.write(" " + self.project.firmware[Key.LAYOUT.value][Key.PARTITION.value])
     working_file.write(" " + self.dft_root + "\n")
+
+    working_file.write("mount\n")
+    working_file.write("ls /dev/\n")
 
     # Iterates the stack items
     item_count = 0
@@ -460,7 +463,7 @@ class AssembleFirmware(CliCommand):
       # ----- Generate the mount command to be used for a SQUASHFS file ----------------------------
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.SQUASHFS.value:
         working_file.write("DEV=$(losetup -f)\n")
-        working_file.write("losetup ${DEV} " + self.dft_root + "/boot/")
+        working_file.write("losetup ${DEV} " + self.dft_root + "/" + self.project.firmware[Key.LAYOUT.value][Key.PATH.value] + "/")
         working_file.write(item[Key.STACK_ITEM.value][Key.SQUASHFS_FILE.value] + "\n")
         working_file.write("mount -t squashfs -o loop")
 
