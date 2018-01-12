@@ -1,7 +1,13 @@
+dft (0.5.15-1) unstable; urgency=low
+
+  * Add partition and fs type generation for partition containing squashfs
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 09 Jan 2018 19:47:00 +0100
+
 dft (0.5.14-1) unstable; urgency=low
 
   * Seperate openjdk iand openjre installation (role dft-openjdk)
-  * Cleanup doznloaded .deb files after rootfs generation
+  * Cleanup downloaded .deb files after rootfs generation
 
  -- William Bonnet <wbonnet@theitmakers.com>  Tue, 09 Jan 2018 09:27:00 +0100
 
