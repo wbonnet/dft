@@ -46,10 +46,10 @@ layout:
 
   # Defines the filesystem of the partition used to store squashfs files
   # This partition is mounted by initrd script during boot process in order
-  # to mount squshfs files using loopback
+  # to mount squashfs files using loopback
   filesystem: ext4
 
-  # Identification of the physical partition containing the squshfs files 
+  # Identification of the physical partition containing the squashfs files 
   partition: /dev/mmcblk0p2
 
   # Defines the path under which the squashfs files are stored in the 
