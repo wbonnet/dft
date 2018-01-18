@@ -31,4 +31,3 @@
 - include: sudo.yml
 - include: openssh-server.yml
 - include: openssh-client.yml
-- include: rkhunter.yml
