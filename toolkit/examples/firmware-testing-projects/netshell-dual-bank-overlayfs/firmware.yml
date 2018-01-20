@@ -25,6 +25,20 @@
 
 # ----------------------------------------------------------------------------
 #
+# Initramfs customization
+#
+# ----------------------------------------------------------------------------
+# initramfs:
+  # Provides a list of modules added in /usr/share/initramfs-tools/modules.d/
+  # before running update-initramfs. The modules listed below will be included
+  # in the initrd archive.
+  # additional_modules:
+  #  - module1
+  #  - module2
+
+
+# ----------------------------------------------------------------------------
+#
 # Definition of the firmware layout
 #
 # ----------------------------------------------------------------------------
@@ -32,6 +46,18 @@ layout:
   # Method to use to assembl the systm in memory. Can be either aufs 
   # or overlayfs
   method: overlayfs
+
+  # Defines the filesystem of the partition used to store squashfs files
+  # This partition is mounted by initrd script during boot process in order
+  # to mount squashfs files using loopback
+  filesystem: ext4
+
+  # Identification of the physical partition containing the squashfs files 
+  partition: /dev/sda1
+
+  # Defines the path under which the squashfs files are stored in the 
+  # partition defined previously
+  path: /
 
   # Definition of the different things to stack to assemble the firmware
   stack_definition:
@@ -77,34 +103,8 @@ layout:
       mountpoint: /
 
       # Specify the size of the tmpfs 
-      mount_options: "size=1G,nr_inodes=10k,mode=777"
+      mount_options: "size=256M,nr_inodes=10k,mode=777"
 
-    # Defines a tmpfs to stack over the root 
-  - stack_item:
-      # Name of the mount point
-      name: data
-
-      # Item type (tmpfs, partition or squashfs)
-      type: partition
-
-      # Partition to mount
-      partition: /dev/sda1
-
-      # Target mount point
-      mountpoint: /
-
-      # Specify the size of the tmpfs 
-      mount_options: "noatime,nodiratime"
-
-
-# TODO name + stack_over ?
-
-# TODO globa  l ?
-  auto_commit: False
-#   defines mapping over squashfs
-#   => direct write ?
-# stacking ? 
-# how to define cow ?
 
 # ----------------------------------------------------------------------------
 #
@@ -115,7 +115,7 @@ security:
   # Defines security paramters such as the use of hash, digital ignature, etc.
   # TODO  not at start, but need to check for hashes or signatures
   # TODO  how to handle ciphering, keygen, secure storage
-  hash_method: none
+  hash_method: md5
 
 # ----------------------------------------------------------------------------
 #
