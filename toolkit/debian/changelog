@@ -1,3 +1,9 @@
+dft (0.5.16-1) unstable; urgency=low
+
+  * Rename bind server role and improve configuration files generation
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 18 Jan 2018 08:36:00 +0100
+
 dft (0.5.15-1) unstable; urgency=low
 
   * Add partition and fs type generation for partition containing squashfs
