@@ -61,7 +61,7 @@ kernel:
 
   # List of packages to install from the repository
   packages:
-    - linux-image-orangepi-zero-4.14
+    - linux-image-orangepi-zero
 
   # Defines if the source generated to install kernel packaged should be kept or not after
   # intallation. Default value is True
