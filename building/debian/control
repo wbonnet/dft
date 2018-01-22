@@ -1,0 +1,16 @@
+Source: dft-buildsystem
+Maintainer: William Bonnet <wbonnet@theitmakers.com>
+Section: admin
+Priority: optional
+Build-Depends: debhelper (>= 9),
+               bash
+Standards-Version: 3.9.8
+Homepage: https://www.github.com/wbonnet/dft
+
+Package: dft-buildsystem
+Architecture: all
+Depends: ${misc:Depends},
+         bash,
+         git,
+         make
+Description: Debian Framework Toolkit build system

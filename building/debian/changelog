@@ -1,0 +1,5 @@
+dft-buildsystem (0.6.0-1) unstable; urgency=low
+
+  * Release build system s a distinct package
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 22 Jan 2018 08:56:00 +0100

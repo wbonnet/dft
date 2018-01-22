@@ -1,0 +1,3 @@
+buildsystem /usr/share/dft-buildsystem
+kernel /usr/share/dft-buildsystem
+uboot /usr/share/dft-buildsystem
