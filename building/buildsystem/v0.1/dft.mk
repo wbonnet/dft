@@ -350,9 +350,12 @@ $(GIT_EXTRACT_DIR)/% : $(GIT_EXTRACT_DIR)
 	else \
 		echo "        cloning into $(GIT_EXTRACT_DIR)/$*" ; \
 		cd $(GIT_EXTRACT_DIR) ; \
-		git clone $(GIT_OPTS) $(KERNEL_GIT_URL)/$(KERNEL_GIT_REPO)$(KERNEL_GIT_REPO_EXT) ; \
-		cd $(KERNEL_GIT_REPO) ; \
-		git checkout -b $(KERNEL_GIT_BRANCH) v$(KERNEL_VERSION) ; \
+        if [ "$(KERNEL_GIT_BRANCH)x" != "x" ] ; \
+        then \
+            git clone --single-branch $(GIT_OPTS) -b $(KERNEL_GIT_BRANCH) $(KERNEL_GIT_URL)/$(KERNEL_GIT_REPO)$(KERNEL_GIT_REPO_EXT) ; \
+        else \
+            git clone --single-branch $(GIT_OPTS) $(KERNEL_GIT_URL)/$(KERNEL_GIT_REPO)$(KERNEL_GIT_REPO_EXT) ; \
+        fi \
 	fi ;
 	$(TARGET_DONE)
 
