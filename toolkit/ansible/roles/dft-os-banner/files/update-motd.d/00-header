@@ -5,9 +5,9 @@ if [ -f /etc/os-release ] ; then . /etc/os-release ; fi
 
 # Populate local variable with system information
 KERNEL_VERSION=$(uname -r)
-if [ -f /etc/update-motd.d/dft-bannner ] ;
+if [ -f /etc/update-motd.d/dft-banner ] ;
 then
-  BANNER=$(cat /etc/update.d/dft-banner)
+  BANNER=$(cat /etc/update-motd.d/dft-banner)
 else
   BANNER=$(hostname)
 fi
