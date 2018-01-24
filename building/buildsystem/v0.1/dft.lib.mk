@@ -92,7 +92,7 @@ extract-git-% :
 	@if test -f $(COOKIE_DIR)/extract-git-$* ; then \
 		true ; \
 	else \
-	  echo "        copy git data to $(EXTRACT)/$*" ; \
+	  echo "        moving git data to $(EXTRACT)/$*" ; \
 		mv $(GIT_EXTRACT_DIR)/$(KERNEL_GIT_REPO) $(EXTRACT_DIR)/$(SOFTWARE_FULLNAME) ; \
 	fi ;
 	$(TARGET_DONE)
