@@ -78,7 +78,11 @@ SOFTWARE_UPSTREAM_SITES ?= $(KERNEL_SITE)/$(KERNEL_BRANCH)
 BASE_DIR            ?= $(CURDIR)
 FILE_DIR            ?= files
 PATCH_DIR           ?= patches
-WORK_ROOT_DIR       ?= work
+ifeq ($(DFT_BUILDSYSTEM_WORKDIR),)
+  WORK_ROOT_DIR       ?= work
+else
+  WORK_ROOT_DIR       ?= $(DFT_BUILDSYSTEM_WORKDIR)
+endif
 WORK_DIR            ?= $(WORK_ROOT_DIR)/build-$(BOARD_NAME)
 DOWNLOAD_DIR        ?= $(WORK_ROOT_DIR)/download
 GIT_EXTRACT_DIR     ?= $(WORK_ROOT_DIR)/git

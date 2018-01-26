@@ -1,3 +1,9 @@
+dft (0.6.0-1) unstable; urgency=low
+
+  * Build system is oved out of main dft package
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 23 Jan 2018 21:19:00 +0100
+
 dft (0.5.16-1) unstable; urgency=low
 
   * Rename bind server role and improve configuration files generation
