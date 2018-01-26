@@ -1,3 +1,10 @@
+dft-buildsystem (0.6.1-1) unstable; urgency=low
+
+  * Add DFT_BUILDSYSTEM_WORKDIR env variable to move working dir out of git
+    tree or out of /usr directory in package mode
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 26 Jan 2018 09:26:00 +0100
+
 dft-buildsystem (0.6.0-1) unstable; urgency=low
 
   * Release build system s a distinct package
