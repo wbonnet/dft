@@ -28,7 +28,8 @@ include ../board.mk
 # Defines the patches to apply on the sources
 # PATCHFILES += 0000_some_patch.diff
 
-SOFTWARE_UPSTREAM_SITES=https://git.kernel.org/torvalds/t/
+SOFTWARE_UPSTREAM_SITES = http://git.kernel.org/torvalds/t/
+SOFTWARE_DIST_FILES     = $(SOFTWARE_UPSTREAM_NAME)-$(KERNEL_FILE_VERSION).tar.gz
 
 # Include build system
 include buildsystem/dft.mk
