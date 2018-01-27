@@ -79,9 +79,9 @@ BASE_DIR            ?= $(CURDIR)
 FILE_DIR            ?= files
 PATCH_DIR           ?= patches
 ifeq ($(DFT_BUILDSYSTEM_WORKDIR),)
-  WORK_ROOT_DIR       ?= work
+  WORK_ROOT_DIR       ?= work-$(BOARD_NAME)
 else
-  WORK_ROOT_DIR       ?= $(DFT_BUILDSYSTEM_WORKDIR)
+  WORK_ROOT_DIR       ?= $(DFT_BUILDSYSTEM_WORKDIR)/work-$(BOARD_NAME)
 endif
 WORK_DIR            ?= $(WORK_ROOT_DIR)/build-$(BOARD_NAME)
 DOWNLOAD_DIR        ?= $(WORK_ROOT_DIR)/download
