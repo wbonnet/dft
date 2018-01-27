@@ -288,8 +288,6 @@ class AssembleFirmware(CliCommand):
 
       # Generate file header
       working_file.write("#/bin/sh -e\n")
-      working_file.write("#\n")
-      working_file.write("set -x\n")
       working_file.write("\n")
       working_file.write("\n")
       working_file.write("\n")
@@ -420,12 +418,9 @@ class AssembleFirmware(CliCommand):
     working_file.write("mkdir -p " + self.stack_root + "\n")
 
     # Mount the partition containing all the squashfs files
-    working_file.write("mount -t " + self.project.firmware[Key.LAYOUT.value][Key.FILESYSTEM.value]) 
+    working_file.write("mount -t " + self.project.firmware[Key.LAYOUT.value][Key.FILESYSTEM.value])
     working_file.write(" " + self.project.firmware[Key.LAYOUT.value][Key.PARTITION.value])
     working_file.write(" " + self.dft_root + "\n")
-
-    working_file.write("mount\n")
-    working_file.write("ls /dev/\n")
 
     # Iterates the stack items
     item_count = 0
