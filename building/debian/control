@@ -12,5 +12,7 @@ Architecture: all
 Depends: ${misc:Depends},
          bash,
          git,
+         build-essential,
+         libssl-dev,
          make
 Description: Debian Framework Toolkit build system
