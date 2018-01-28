@@ -11,11 +11,11 @@ Depends: ${misc:Depends},
          kmod, 
          linux-base (>= 4.3~), 
          initramfs-tools (>= 0.120+deb8u2) | linux-initramfs-tool
-Description: Linux kernel, version 4.15-rc9 for orangepi-zero
- This packages contains the Linux kernel version 4.15-rc9 compiled for orangepi-zero board.
+Description: Linux kernel, version 4.15.0-rc9 for orangepi-zero
+ This packages contains the Linux kernel version 4.15.0-rc9 compiled for orangepi-zero board.
 
-# Package: linux-headers-orangepi-zero-4.15-rc9
+# Package: linux-headers-orangepi-zero-4.15.0-rc9
 # Architecture: any
 # Depends: ${misc:Depends}
-# Description: Linux kerneli headers, version 4.15-rc9 for orangepi-zero
-#  This packages contains the Linux kernel headers version 4.15-rc9 for orangepi-zero board.
+# Description: Linux kerneli headers, version 4.15.0-rc9 for orangepi-zero
+#  This packages contains the Linux kernel headers version 4.15.0-rc9 for orangepi-zero board.

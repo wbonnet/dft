@@ -1,16 +1,16 @@
-linux-kernel-orangepi-zero (4.15-rc9-1) unstable; urgency=medium
+linux-kernel-orangepi-zero (4.15.0-rc9-1) unstable; urgency=medium
 
   * Initial release.
 
  -- William Bonnet <wbonnet@theitmakers.com>  Sat, 27 Jan 2018 17:42:16 +0100
 
-linux-image-orangepi-zero (4.15-rc9-1) unstable; urgency=medium
+linux-image-orangepi-zero (4.15.0-rc9-1) unstable; urgency=medium
 
   * Initial release.
 
  -- William Bonnet <wbonnet@theitmakers.com>  Sat, 27 Jan 2018 17:42:16 +0100
 
-linux-headers-orangepi-zero (4.15-rc9-1) unstable; urgency=medium
+linux-headers-orangepi-zero (4.15.0-rc9-1) unstable; urgency=medium
 
   * Initial release.
  
