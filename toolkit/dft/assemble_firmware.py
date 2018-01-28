@@ -29,6 +29,7 @@ import logging
 import os
 import stat
 import tempfile
+import datetime
 from dft.cli_command import CliCommand
 from dft.model import Key
 
@@ -291,11 +292,7 @@ class AssembleFirmware(CliCommand):
       working_file.write("# This script has been generated automatically by the DFT toolkit.\n")
       working_file.write("# It is in charge of copying the needed binaries into initramfs\n")
       working_file.write("# while it is updated.\n")
-      working_file.write("#\n")
-      working_file.write("# Generation date : " + today.strftime("%d/%m/%Y - %H:%M.%S") + "\n")
-      working_file.write("#\n")
       working_file.write("\n")
-
       working_file.write("PREREQ=""\n")
       working_file.write("prereqs()\n")
       working_file.write("{\n")
@@ -311,10 +308,12 @@ class AssembleFirmware(CliCommand):
       working_file.write("\n")
       working_file.write("\n")
       working_file.write("\n")
+      working_file.write(". /usr/share/initramfs-tools/hook-functions\n")
+      working_file.write("\n")
       # Ensure that loopback device is enabled
       working_file.write("# ----- Copy the binaries using copy_exec -----\n")
-      working_file.write("copy_exec /sbin/fsck.ext4 /bin\n")
-      working_file.write("copy_exec /sbin/e2fsck    /bin\n")
+      working_file.write("copy_exec /sbin/fsck.ext4 /sbin\n")
+      working_file.write("copy_exec /sbin/e2fsck    /sbin\n")
 
       # Check if there is an initramfs customization section
       if Key.INITRAMFS.value in self.project.firmware:
@@ -332,6 +331,11 @@ class AssembleFirmware(CliCommand):
 
     # Done close the file
     working_file.close()
+
+    # Update stack script permissions. It has to be executable and world readable (not reuiered
+    # but easier to handle)
+    os.chmod(working_file.name, stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | \
+             stat.S_IROTH | stat.S_IXOTH)
 
     # And now we can move the temporary file under the rootfs tree
     filepath = self.project.get_rootfs_mountpoint() + '/usr/share/initramfs-tools/hooks/'
@@ -354,6 +358,9 @@ class AssembleFirmware(CliCommand):
     (using aufs or overlayfs).
     """
 
+    # Retrieve generation date
+    today = datetime.datetime.now()
+
     # Output current task to logs
     logging.info("Generating stacking scripts")
 
@@ -367,6 +374,10 @@ class AssembleFirmware(CliCommand):
       working_file.write("# This script has been generated automatically by the DFT toolkit.\n")
       working_file.write("# It is in charge of mounting and stacking the different items\n")
       working_file.write("# of the firmware.\n")
+      working_file.write("\n")
+      working_file.write("#\n")
+      working_file.write("# Generation date : " + today.strftime("%d/%m/%Y - %H:%M.%S") + "\n")
+      working_file.write("#\n")
       working_file.write("\n")
       working_file.write("PREREQ=""\n")
       working_file.write("prereqs()\n")
