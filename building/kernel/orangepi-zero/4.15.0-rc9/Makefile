@@ -20,7 +20,9 @@
 #
  
 # Defines the kernel version
-KERNEL_VERSION=4.15-rc9
+KERNEL_VERSION=4.15.0-rc9
+KERNEL_FILE_VERSION=4.15-rc9
+
 
 # Include board specific definitions
 include ../board.mk
