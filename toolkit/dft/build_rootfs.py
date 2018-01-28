@@ -535,8 +535,9 @@ class BuildRootFS(CliCommand):
 
     # Check if the removal flag is deactivated
     if (Key.REMOVE_DOWNLOADED_ARCHIVES.value in \
-            self.project.project[Key.CONFIGURATION.value] and
-            self.project.project[Key.CONFIGURATION.value][Key.REMOVE_DOWNLOADED_ARCHIVES.value] == False):
+        self.project.project[Key.CONFIGURATION.value] and
+        self.project.project[Key.CONFIGURATION.value]\
+                            [Key.REMOVE_DOWNLOADED_ARCHIVES.value] == False):
       # Yes, thus no need to remove any files just exit
       return
 

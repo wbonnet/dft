@@ -51,6 +51,7 @@ class Key(Enum):
 
   ABSENT = "absent"
   ACTION = "action"
+  ADDITIONAL_BINARIES = "additional_binaries"
   ADDITIONAL_MODULES = "additional_modules"
   ADDITIONAL_ROLES = "additional_roles"
   ALIGNMENT = "alignment"
@@ -962,4 +963,3 @@ class Project(object):
       return "arm64"
     else:
       return host_arch
-
