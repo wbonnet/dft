@@ -1,3 +1,9 @@
+dft (0.6.2-1) unstable; urgency=low
+
+  * Add additional binaries list generation when creating initiramfs
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 28 Jan 2018 21:54:00 +0100
+
 dft (0.6.1-1) unstable; urgency=low
 
   * Remove debug info from stacking script
