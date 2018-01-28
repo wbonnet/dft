@@ -29,7 +29,6 @@ import logging
 import os
 import stat
 import tempfile
-import datetime
 from dft.cli_command import CliCommand
 from dft.model import Key
 
@@ -123,8 +122,9 @@ class AssembleFirmware(CliCommand):
     # Install the packages and tools needed to create the updated bootchain
     self.install_initramfs_tools()
 
-    # Customize the content of the rootfs
-    self.customize_initramfs()
+    # Customize the content of the initramfs
+    self.customize_initramfs_modules()
+    self.customize_initramfs_binaries()
 
     # Regenerate the initramfs to include our custum stacking script and some modification
     # to the init script ( needed to call the stacking script )
@@ -209,10 +209,10 @@ class AssembleFirmware(CliCommand):
 
   # -------------------------------------------------------------------------
   #
-  # customize_initramfs
+  # customize_initramfs_modules
   #
   # -------------------------------------------------------------------------
-  def customize_initramfs(self):
+  def customize_initramfs_modules(self):
     """This method customize the list of modules loaded in the initramfs, and
     copy the stacking scipt to the scipt directory, so it will be included in
     the initramfs once generated.
@@ -265,6 +265,83 @@ class AssembleFirmware(CliCommand):
 
   # -------------------------------------------------------------------------
   #
+  # customize_initramfs_binaries
+  #
+  # -------------------------------------------------------------------------
+  def customize_initramfs_binaries(self):
+    """This method customize the list of binaires included in the initramfs.
+    It is done by adding a hook script doing the copy_exec call when
+    updateinitramfs runs.
+    """
+
+    # Output current task to logs
+    logging.info("Customize binaries list in target")
+
+    # Create a file in hooks to ensure that some mandatory binary commands are present
+    # Also install any modules needed by the firmware to stack the file systems (overlay or aufs)
+    # or declared in the configuration file as additional
+    with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
+      working_file.write("#/bin/sh -e\n")
+      working_file.write("\n")
+      working_file.write("\n")
+      working_file.write("\n")
+      working_file.write("#\n")
+      working_file.write("# Copy necessary binaries to initramfs\n")
+      working_file.write("#\n")
+      working_file.write("# This script has been generated automatically by the DFT toolkit.\n")
+      working_file.write("# It is in charge of copying the needed binaries into initramfs\n")
+      working_file.write("# while it is updated.\n")
+      working_file.write("#\n")
+      working_file.write("# Generation date : " + today.strftime("%d/%m/%Y - %H:%M.%S") + "\n")
+      working_file.write("#\n")
+      working_file.write("\n")
+
+      working_file.write("PREREQ=""\n")
+      working_file.write("prereqs()\n")
+      working_file.write("{\n")
+      working_file.write("    echo \"$PREREQ\"\n")
+      working_file.write("}\n")
+      working_file.write("\n")
+      working_file.write("case $1 in\n")
+      working_file.write("prereqs)\n")
+      working_file.write("    prereqs\n")
+      working_file.write("    exit 0\n")
+      working_file.write("    ;;\n")
+      working_file.write("esac\n")
+      working_file.write("\n")
+      working_file.write("\n")
+      working_file.write("\n")
+      # Ensure that loopback device is enabled
+      working_file.write("# ----- Copy the binaries using copy_exec -----\n")
+      working_file.write("copy_exec /sbin/fsck.ext4 /bin\n")
+      working_file.write("copy_exec /sbin/e2fsck    /bin\n")
+
+      # Check if there is an initramfs customization section
+      if Key.INITRAMFS.value in self.project.firmware:
+        # Yes, so now look for an additional module section
+        if Key.ADDITIONAL_BINARIES.value in self.project.firmware[Key.INITRAMFS.value]:
+          # Generate an entry for additional each module to load in initramfs as defined in
+          # the configuration file
+          for binary in self.project.firmware[Key.INITRAMFS.value][Key.ADDITIONAL_BINARIES.value]:
+            working_file.write("copy_exec /usr/bin/" + binary + " /bin\n")
+            logging.debug("adding additional binary : " + binary + " to initramfs")
+        else:
+          logging.debug("initramfs section found, but no additional binary to include are defined")
+      else:
+        logging.debug("no initramfs section found")
+
+    # Done close the file
+    working_file.close()
+
+    # And now we can move the temporary file under the rootfs tree
+    filepath = self.project.get_rootfs_mountpoint() + '/usr/share/initramfs-tools/hooks/'
+    command = "mv -f " + working_file.name + " " + filepath + "extra-binaries"
+    self.execute_command(command)
+
+
+
+  # -------------------------------------------------------------------------
+  #
   # generate_stacking_script
   #
   # -------------------------------------------------------------------------
@@ -283,25 +360,14 @@ class AssembleFirmware(CliCommand):
     # Generate the stacking script
     # configuration, then move  roles to the target rootfs
     with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
-      # Retrieve generation date
-      today = datetime.datetime.now()
 
       # Generate file header
       working_file.write("#/bin/sh -e\n")
       working_file.write("\n")
-      working_file.write("\n")
-      working_file.write("\n")
-      working_file.write("#\n")
-      working_file.write("# DFT Create Stack\n")
-      working_file.write("#\n")
       working_file.write("# This script has been generated automatically by the DFT toolkit.\n")
       working_file.write("# It is in charge of mounting and stacking the different items\n")
       working_file.write("# of the firmware.\n")
-      working_file.write("#\n")
-      working_file.write("# Generation date : " + today.strftime("%d/%m/%Y - %H:%M.%S") + "\n")
-      working_file.write("#\n")
       working_file.write("\n")
-
       working_file.write("PREREQ=""\n")
       working_file.write("prereqs()\n")
       working_file.write("{\n")
@@ -458,7 +524,8 @@ class AssembleFirmware(CliCommand):
       # ----- Generate the mount command to be used for a SQUASHFS file ----------------------------
       if item[Key.STACK_ITEM.value][Key.TYPE.value] == Key.SQUASHFS.value:
         working_file.write("DEV=$(losetup -f)\n")
-        working_file.write("losetup ${DEV} " + self.dft_root + "/" + self.project.firmware[Key.LAYOUT.value][Key.PATH.value] + "/")
+        working_file.write("losetup ${DEV} " + self.dft_root + "/")
+        working_file.write(self.project.firmware[Key.LAYOUT.value][Key.PATH.value] + "/")
         working_file.write(item[Key.STACK_ITEM.value][Key.SQUASHFS_FILE.value] + "\n")
         working_file.write("mount -t squashfs -o loop")
 
