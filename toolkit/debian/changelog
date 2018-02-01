@@ -1,3 +1,9 @@
+dft (0.6.3-1) unstable; urgency=low
+
+  * Add support for sha224 sha384 and sha512 hash
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 01 Feb 2018 21:00:00 +0100
+
 dft (0.6.2-1) unstable; urgency=low
 
   * Add additional binaries list generation when creating initiramfs
