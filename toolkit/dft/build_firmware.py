@@ -117,10 +117,10 @@ class BuildFirmware(CliCommand):
         self.project.firmware[Key.SECURITY.value][Key.HASH_METHOD.value] = self.project.\
                                     firmware[Key.SECURITY.value][Key.HASH_METHOD.value].lower()
 
-        # Check that the algorith is valid (authorized values are md5 sha1 sha224 sha256 sha384 sha512)
+        # Check that the algorith is valid (valid values are md5 sha1 sha224 sha256 sha384 sha512)
         if self.project.firmware[Key.SECURITY.value][Key.HASH_METHOD.value] in \
-                                    [Key.MD5.value, Key.SHA1.value, Key.SHA224.value, Key.SHA256.value, \
-                                     Key.SHA384, Key.SHA512]:
+                                    [Key.MD5.value, Key.SHA1.value, Key.SHA224.value, \
+                                     Key.SHA256.value, Key.SHA384, Key.SHA512]:
           # Output some fancy logs :)
           self.project.logging.info("Generating hash file " + self.project.firmware_filename + "." +
                                     self.project.firmware[Key.SECURITY.value]\
