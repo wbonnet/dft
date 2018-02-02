@@ -535,7 +535,11 @@ class BuildImage(CliCommand):
 
       # Add the partition to the disk
       disk.addPartition(partition=new_partition, constraint=constraint)
+TODO hqndle execption. Test => oversized partition
+Need to cleanup losetup and file
 
+Ca pete aussi si le uboot est pas la. Du nettoyage en vue !
+Et faut traiter enfin le d2ploiement des uboot
     # Make modification persistent to disk
     disk.commit()
 
@@ -940,10 +944,30 @@ class BuildImage(CliCommand):
       self.project.logging.debug("Compressed image aldredy exist, removing it")
       os.remove(self.image_path + compression_suffix)
 
-
     # Let's run dd to copy to the image
     command = compression_tool + ' ' + compression_options + '"' + self.image_path + '"'
     self.execute_command(command)
 
     # Update the image file name
     self.image_path = self.image_path + compression_suffix
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # cleanup
+  #
+  # -------------------------------------------------------------------------
+  def cleanup(self):
+    """This method is in charge of cleaning the environment in cqse of errors
+    It is mainly umounting the image and removing the losetup mount. 
+    The generated image is left for post mortem anaysis.
+    """
+    self.project.logging.info("starting to cleanup")
+
+    # Umount the image and remove the losetup mount
+    self.umount_image()
+
+    # Finally umount all the chrooted environment
+    self.teardown_chrooted_environment()
+
