@@ -171,7 +171,7 @@ class CliCommand(object):
       return completed.stdout
 
     except subprocess.CalledProcessError as exception:
-      self.cleanup_installation_files()
+      self.cleanup()
       self.project.logging.critical("Error %d occured when executing %s",
                                     exception.returncode, exception.cmd)
       self.project.logging.debug("stdout was :")
@@ -276,60 +276,6 @@ class CliCommand(object):
 
     # Empty the binary name
     self.qemu_binary = None
-
-
-
-  # -------------------------------------------------------------------------
-  #
-  # cleanup_installation_files
-  #
-  # -------------------------------------------------------------------------
-  def cleanup_installation_files(self):
-    """This method is in charge of cleaning processes after Ansible has
-    been launched. In some case some daemons are still running inside the
-    chroot, and they have to be stopped manually, or even killed in order
-    to be able to umount /dev/ and /proc from inside the chroot
-    """
-    self.project.logging.info("starting to cleanup installation files")
-
-    # Delete the DFT files from the rootfs
-    if not self.project.dft.keep_bootstrap_files:
-      if os.path.isdir(self.project.get_rootfs_mountpoint() + "/dft_bootstrap"):
-        shutil.rmtree(self.project.get_rootfs_mountpoint() + "/dft_bootstrap")
-    else:
-      self.project.logging.debug("keep_bootstrap_files is activated, keeping DFT bootstrap " +
-                                 "files in " + self.project.get_rootfs_mountpoint() +
-                                 "/dft_bootstrap")
-
-    # Test if the generate_validity_check is defined, if not set the default value
-    if "remove_validity_check" not in self.project.project["configuration"]:
-      self.project.project["configuration"]["remove_validity_check"] = False
-
-    if self.project.project["configuration"]["remove_validity_check"]:
-      self.project.logging.debug("remove generated /etc/apt/apt.conf.d/10no-check-valid-until")
-
-      # Generate the file path
-      filepath = self.project.get_rootfs_mountpoint() + "/etc/apt/apt.conf.d/10no-check-valid-until"
-
-      # Test if the file exists
-      if os.path.isfile(filepath):
-        try:
-          os.remove(filepath)
-
-        # Catch OSError in case of file removal error
-        except OSError as err:
-          # If file does not exit errno value will be ENOENT
-          if err.errno != errno.ENOENT:
-            # Thus if exception was caused by something else, throw it upward
-            raise
-
-    else:
-      msg = "remove_validity_check is set to False. Generated "
-      msg += "/etc/apt/apt.conf.d/10no-check-valid-until is not removed"
-      self.project.logging.debug(msg)
-
-    # Finally umount all the chrooted environment
-    self.teardown_chrooted_environment()
 
 
 
