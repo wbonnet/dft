@@ -395,155 +395,158 @@ class BuildImage(CliCommand):
 
     self.project.logging.debug("Using partition alignment '" + alignment + "'")
 
-    # Create the partition tabl on the device
-    device = parted.getDevice(self.loopback_device)
+    # Starting from here we start to interact with parted binding. Thus it may fail and raise
+    # an exception
+    try:
 
-    # Create a new disk object
-    disk = parted.freshDisk(device, label)
+      # Create the partition tabl on the device
+      device = parted.getDevice(self.loopback_device)
 
-    # Check that there is a partition table inthe configuration file. If not it will fail later,
-    # thus better fail now.
-    if Key.PARTITIONS.value not in self.project.image[Key.DEVICES.value]:
-      self.project.logging.error("Partition table is not defined, nothing to do. Aborting")
-      exit(1)
+      # Create a new disk object
+      disk = parted.freshDisk(device, label)
 
-    # Nox iterate the partitiontables and create them
-    for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
-
-      # Retrieve the partition name
-      if Key.NAME.value in partition:
-        part_name = partition[Key.NAME.value]
-      else:
-        part_name = ""
-
-      self.project.logging.debug("Partition name =>  '" + part_name + "'")
-
-      # Retrieve the partition type
-      if Key.TYPE.value in partition:
-        part_type = partition[Key.TYPE.value]
-      else:
-        part_type = "primary"
-
-      # Check that the partition type is valid and convert in parted "define"
-      if part_type == "primary":
-        parted_type = parted.PARTITION_NORMAL
-      elif part_type == "extended":
-        parted_type = parted.PARTITION_EXTENDED
-      elif part_type == "logical":
-        parted_type = parted.PARTITION_LOGICAL
-      else:
-        self.project.logging.critical("Unknown partition type '" + part_type + "' . Aborting")
+      # Check that there is a partition table inthe configuration file. If not it will fail later,
+      # thus better fail now.
+      if Key.PARTITIONS.value not in self.project.image[Key.DEVICES.value]:
+        self.project.logging.error("Partition table is not defined, nothing to do. Aborting")
         exit(1)
 
-      self.project.logging.debug("Partition type =>  '" + part_type + "'")
+      # Nox iterate the partitiontables and create them
+      for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
 
-      # Retrieve the partition size
-      if Key.SIZE.value not in partition:
-        self.project.logging.critical("Partition size is not defined. Aborting")
-        exit(1)
-      else:
-        # Retrieve the value and control it is an integer
-        try:
-          part_size = int(partition[Key.SIZE.value])
-        except ValueError:
-          self.project.logging.critical("Partition size is not a number : " +
-                                        partition[Key.SIZE.value])
+        # Retrieve the partition name
+        if Key.NAME.value in partition:
+          part_name = partition[Key.NAME.value]
+        else:
+          part_name = ""
+
+        self.project.logging.debug("Partition name =>  '" + part_name + "'")
+
+        # Retrieve the partition type
+        if Key.TYPE.value in partition:
+          part_type = partition[Key.TYPE.value]
+        else:
+          part_type = "primary"
+
+        # Check that the partition type is valid and convert in parted "define"
+        if part_type == "primary":
+          parted_type = parted.PARTITION_NORMAL
+        elif part_type == "extended":
+          parted_type = parted.PARTITION_EXTENDED
+        elif part_type == "logical":
+          parted_type = parted.PARTITION_LOGICAL
+        else:
+          self.project.logging.critical("Unknown partition type '" + part_type + "' . Aborting")
           exit(1)
 
-      self.project.logging.debug("Partition size => '" + str(part_size) + "'")
+        self.project.logging.debug("Partition type =>  '" + part_type + "'")
 
-      # Retrieve the partition unit
-      if Key.UNIT.value not in partition:
-        self.project.logging.warning("Partition size unit is not defined, defaultig to MB.")
-        part_unit = "MB"
-      else:
-        part_unit = partition[Key.UNIT.value]
-
-      # Compute the block size to use based on the unit
-      if part_unit not in "s" "B" "KB" "KiB" "MB" "MiB" "GB" "GiB" "TB" "TiB":
-        self.project.logging.critical("Unknwon unit '" + part_unit + "' . Aborting")
-        exit(1)
-      else:
-        self.project.logging.debug("Partition unit => '" + part_unit + "'")
-
-      # Retrieve the partition start sector
-      if Key.START_SECTOR.value not in partition:
-        self.project.logging.warning("Partition start_sector is not defined. " +
-                                     "Using next available in sequence")
-        part_start_sector = -1
-      else:
-        # Retrieve the value and control it is an integer
-        try:
-          part_start_sector = int(partition[Key.START_SECTOR.value])
-        except ValueError:
-          self.project.logging.critical("Partition start_sector is not a number : " +
-                                        partition[Key.START_SECTOR.value])
-          exit(1)
-
-      self.project.logging.debug("Partition start sector => '" + str(part_start_sector) + "'")
-
-      # Retrieve the partition flags
-      if Key.FLAGS.value not in partition:
-        self.project.logging.debug("Partition flags are not defined. Skipping...")
-        part_flags = None
-      else:
-        part_flags = partition[Key.FLAGS.value]
-        self.project.logging.debug("Partition flags => '" + part_flags + "'")
-
-      # Retrieve the partition file system type
-      if Key.FILESYSTEM.value not in partition:
-        self.project.logging.debug("File system to create on the partition is not defined.")
-        part_filesystem = None
-      else:
-        part_filesystem = partition[Key.FILESYSTEM.value].lower()
-        # Check that the value is in the list of valid values
-        if part_filesystem not in  parted.fileSystemType:
-          self.project.logging.critical("Unknown filesystem type '" + part_filesystem +
-                                        "' . Aborting")
+        # Retrieve the partition size
+        if Key.SIZE.value not in partition:
+          self.project.logging.critical("Partition size is not defined. Aborting")
           exit(1)
         else:
-          self.project.logging.debug("Filesystem type =>  '" + part_filesystem + "'")
+          # Retrieve the value and control it is an integer
+          try:
+            part_size = int(partition[Key.SIZE.value])
+          except ValueError:
+            self.project.logging.critical("Partition size is not a number : " +
+                                          partition[Key.SIZE.value])
+            exit(1)
 
-      # Retrieve the partition format flag
-      if Key.FORMAT.value not in partition:
-        self.project.logging.debug("File system format flag is not defined. Defaulting to True")
-        part_format = True
-      else:
-        part_format = partition[Key.FORMAT.value]
-        self.project.logging.debug("File system format flag => '" + str(part_format) + "'")
+        self.project.logging.debug("Partition size => '" + str(part_size) + "'")
 
-      #
-      # All information have been parsed,now let's create the partition in the loopback device
-      #
+        # Retrieve the partition unit
+        if Key.UNIT.value not in partition:
+          self.project.logging.warning("Partition size unit is not defined, defaultig to MB.")
+          part_unit = "MB"
+        else:
+          part_unit = partition[Key.UNIT.value]
 
-      # Compute the sector count based on size and unit. Need for parted
-      sector_count = parted.sizeToSectors(part_size, part_unit, device.sectorSize)
+        # Compute the block size to use based on the unit
+        if part_unit not in "s" "B" "KB" "KiB" "MB" "MiB" "GB" "GiB" "TB" "TiB":
+          self.project.logging.critical("Unknwon unit '" + part_unit + "' . Aborting")
+          exit(1)
+        else:
+          self.project.logging.debug("Partition unit => '" + part_unit + "'")
 
-      # Compute the geometry for this device
-      geometry = parted.Geometry(start=part_start_sector, length=sector_count, device=device)
+        # Retrieve the partition start sector
+        if Key.START_SECTOR.value not in partition:
+          self.project.logging.warning("Partition start_sector is not defined. " +
+                                       "Using next available in sequence")
+          part_start_sector = -1
+        else:
+          # Retrieve the value and control it is an integer
+          try:
+            part_start_sector = int(partition[Key.START_SECTOR.value])
+          except ValueError:
+            self.project.logging.critical("Partition start_sector is not a number : " +
+                                          partition[Key.START_SECTOR.value])
+            exit(1)
 
-      # Create the arted filesystem object
-      filesys = parted.FileSystem(type=part_filesystem, geometry=geometry)
+        self.project.logging.debug("Partition start sector => '" + str(part_start_sector) + "'")
 
-      # Create the partition object in the loopback device
-      new_partition = parted.Partition(disk=disk, type=parted_type, geometry=geometry, fs=filesys)
+        # Retrieve the partition flags
+        if Key.FLAGS.value not in partition:
+          self.project.logging.debug("Partition flags are not defined. Skipping...")
+          part_flags = None
+        else:
+          part_flags = partition[Key.FLAGS.value]
+          self.project.logging.debug("Partition flags => '" + part_flags + "'")
 
-      # Create the constraint object for alignment, etc.
-      # constraint = parted.Constraint(startAlign=parted_alignment, endAlign=parted_alignment, \
-      #              startRange=start, endRange=end, minSize=min_size, maxSize=max_size)
-      constraint = parted.Constraint(exactGeom=new_partition.geometry)
+        # Retrieve the partition file system type
+        if Key.FILESYSTEM.value not in partition:
+          self.project.logging.debug("File system to create on the partition is not defined.")
+          part_filesystem = None
+        else:
+          part_filesystem = partition[Key.FILESYSTEM.value].lower()
+          # Check that the value is in the list of valid values
+          if part_filesystem not in  parted.fileSystemType:
+            self.project.logging.critical("Unknown filesystem type '" + part_filesystem +
+                                          "' . Aborting")
+            exit(1)
+          else:
+            self.project.logging.debug("Filesystem type =>  '" + part_filesystem + "'")
 
-      # Add the partition to the disk
-      disk.addPartition(partition=new_partition, constraint=constraint)
-TODO hqndle execption. Test => oversized partition
-Need to cleanup losetup and file
+        # Retrieve the partition format flag
+        if Key.FORMAT.value not in partition:
+          self.project.logging.debug("File system format flag is not defined. Defaulting to True")
+          part_format = True
+        else:
+          part_format = partition[Key.FORMAT.value]
+          self.project.logging.debug("File system format flag => '" + str(part_format) + "'")
 
-Ca pete aussi si le uboot est pas la. Du nettoyage en vue !
-Et faut traiter enfin le d2ploiement des uboot
-    # Make modification persistent to disk
-    disk.commit()
+        #
+        # All information have been parsed,now let's create the partition in the loopback device
+        #
 
+        # Compute the sector count based on size and unit. Need for parted
+        sector_count = parted.sizeToSectors(part_size, part_unit, device.sectorSize)
 
+        # Compute the geometry for this device
+        geometry = parted.Geometry(start=part_start_sector, length=sector_count, device=device)
+
+        # Create the arted filesystem object
+        filesys = parted.FileSystem(type=part_filesystem, geometry=geometry)
+
+        # Create the partition object in the loopback device
+        new_partition = parted.Partition(disk=disk, type=parted_type, geometry=geometry, fs=filesys)
+
+        # Create the constraint object for alignment, etc.
+        # constraint = parted.Constraint(startAlign=parted_alignment, endAlign=parted_alignment, \
+        #              startRange=start, endRange=end, minSize=min_size, maxSize=max_size)
+        constraint = parted.Constraint(exactGeom=new_partition.geometry)
+
+        # Add the partition to the disk
+        disk.addPartition(partition=new_partition, constraint=constraint)
+
+      # Make modification persistent to disk
+      disk.commit()
+
+    except parted.PartitionException as exception:
+      self.cleanup()
+      self.project.logging.critical("Error occured : %s", exception)
+      exit(1)
 
   # -------------------------------------------------------------------------
   #
@@ -960,7 +963,7 @@ Et faut traiter enfin le d2ploiement des uboot
   # -------------------------------------------------------------------------
   def cleanup(self):
     """This method is in charge of cleaning the environment in cqse of errors
-    It is mainly umounting the image and removing the losetup mount. 
+    It is mainly umounting the image and removing the losetup mount.
     The generated image is left for post mortem anaysis.
     """
     self.project.logging.info("starting to cleanup")
