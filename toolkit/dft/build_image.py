@@ -99,6 +99,9 @@ class BuildImage(CliCommand):
     # Create and format the filesystems on the newly created partitions
     self.create_filesystems()
 
+    # Label the filesystems on the newly created partitions
+    self.label_filesystems()
+
     # Copy rootfs to the image
     self.install_image_content()
 
@@ -411,7 +414,7 @@ class BuildImage(CliCommand):
         self.project.logging.error("Partition table is not defined, nothing to do. Aborting")
         exit(1)
 
-      # Nox iterate the partitiontables and create them
+      # Now iterate the partition table and create them
       for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
 
         # Retrieve the partition name
@@ -532,6 +535,14 @@ class BuildImage(CliCommand):
         # Create the partition object in the loopback device
         new_partition = parted.Partition(disk=disk, type=parted_type, geometry=geometry, fs=filesys)
 
+        # Setting the name of the partitionis not yet supported / fixed in pyparted.
+        # It should be done here, but since it is not working an extra loop is added after
+        # commiting changes to the disk. The loop will iterate once again the partition loop and
+        # call the program in charge of setting the partition name, according to the filesystem
+        # below.
+        # if ( part_name != ""):
+        #  new_partition.set_name(name
+
         # Create the constraint object for alignment, etc.
         # constraint = parted.Constraint(startAlign=parted_alignment, endAlign=parted_alignment, \
         #              startRange=start, endRange=end, minSize=min_size, maxSize=max_size)
@@ -547,6 +558,8 @@ class BuildImage(CliCommand):
       self.cleanup()
       self.project.logging.critical("Error occured : %s", exception)
       exit(1)
+
+
 
   # -------------------------------------------------------------------------
   #
@@ -573,7 +586,7 @@ class BuildImage(CliCommand):
     # Output current task to logs
     logging.info("Installating image content")
 
-    # Defines a partition counter. Starts at zerp and is incremented at each iteration
+    # Defines a partition counter. Starts at zero and is incremented at each iteration
     # beginning. It means first partition is 1.
     part_index = 0
 
@@ -884,6 +897,63 @@ class BuildImage(CliCommand):
           command = tune_tool + ' ' + partition[Key.EXT_FS_TUNE.value]
           command += ' ' + self.loopback_device + 'p' + str(part_index)
           self.execute_command(command)
+
+  # -------------------------------------------------------------------------
+  #
+  # label_filesystes
+  #
+  # -------------------------------------------------------------------------
+  def label_filesystems(self):
+    """This method set the file systems labels on the partition created by the
+    create_partitions_inside_image method. It uses the same configuration file.
+    """
+
+    # Output current task to logs
+    logging.info("Labeling the filesystems in the newly created partitions")
+
+    # Defines a partition counter. Starts at zero and is incremented at each iteration
+    # beginning. It means first partition is 1.
+    part_index = 0
+
+    # Now iterate once again the partition tables to set labels
+    for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
+
+      # Increase partition index
+      part_index += 1
+
+      # Retrieve the partition name, and process only if there is a name
+      if Key.NAME.value in partition:
+        part_name = partition[Key.NAME.value]
+
+        # Retrieve the partition file system type. It should be defined or we can't label it
+        if Key.FILESYSTEM.value not in partition:
+          self.project.logging.error("Partition label is defined but there is no filesystem set \
+                                     for partition " + part_index)
+        else:
+          part_filesystem = partition[Key.FILESYSTEM.value].lower()
+
+          # Retrieve the partition format flag. It should be formatted or we can't label it.
+          if Key.FORMAT.value in partition and not partition[Key.FORMAT.value]:
+            self.project.logging.error("Partition label is defined, but partition " + part_index + \
+                                       " is not formatted")
+          else:
+            # Go so far, thus all checks are ok we can label and select tool according to FS
+            label_tool = None
+
+            # Check that the value is in the list of valid values
+            if part_filesystem == "ext2" or part_filesystem == "ext3" or part_filesystem == "ext4":
+              label_tool = "e2label"
+            elif part_filesystem == "fat32":
+              label_tool = "fatlabel"
+
+            # If the label tool is defined let's call it
+            if label_tool:
+              command = label_tool + ' ' + self.loopback_device + 'p' + str(part_index)
+              command += ' ' + part_name
+              self.execute_command(command)
+            else:
+              self.project.logging.error("No labelling tool is defined for partition " + \
+                                         part_index + " with file system " + part_filesystem)
 
 
 
