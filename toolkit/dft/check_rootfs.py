@@ -33,7 +33,6 @@ import stat
 import hashlib
 from dft.cli_command import CliCommand
 from dft.cli_command import Code
-from dft.cli_command import Output
 from dft.model import Key
 
 #
@@ -165,9 +164,6 @@ class CheckRootFS(CliCommand):
     # Test if the label field is defined, if yes we have to output a message
     # for this rule with the result of the check
     if Key.LABEL.value in rule:
-      # Call the output method dealing with formatting result codes
-      # Define an empty result
-      label_check_result = ""
       # If the check is successful, set the label to OK
       if self.is_rule_check_successfull:
         self.output_string_with_result(rule[Key.LABEL.value], Code.SUCCESS)

@@ -27,7 +27,6 @@ cli targets.
 
 import os
 import subprocess
-import shutil
 import errno
 from enum import Enum
 from dft.model import Key

@@ -1043,4 +1043,3 @@ class BuildImage(CliCommand):
 
     # Finally umount all the chrooted environment
     self.teardown_chrooted_environment()
-
