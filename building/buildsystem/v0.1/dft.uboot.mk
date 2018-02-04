@@ -41,16 +41,3 @@ BUILD_ARGS             =
 UBOOT_TARGETS         ?= u-boot.bin
 
 include buildsystem/dft.mk
-
-# ------------------------------------------------------------------------------
-# Redefinition of the install target
-#
-do-install :
-	if test -f $(COOKIE_DIR)/do-install ; then \
-		true ; \
-	else \
-		echo "        running install in $(OBJ_DIR)"  ; \
-		mkdir -p $(abspath $(INSTALL_DIR))/ ; \
-		cd $(OBJ_DIR) && cp -fr $(UBOOT_TARGETS) $(abspath $(INSTALL_DIR))/ ; \
-	fi ;
-	@$(TARGET_DONE)
