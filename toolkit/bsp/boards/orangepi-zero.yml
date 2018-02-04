@@ -75,7 +75,7 @@ u-boot:
 
   # List of packages to install from the repository to add u-boot.
   packages:
-    - u-boot-image-orangepi-zero
+    - u-boot-orangepi-zero
 
   # List of action needed to install the u-boot binary to the image
   installation:
