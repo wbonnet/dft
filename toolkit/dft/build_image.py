@@ -746,6 +746,7 @@ class BuildImage(CliCommand):
 
           # Setup the packages sources
           self.setup_kernel_apt_sources(target)
+
           # Install the kernel packages
           self.install_kernel_apt_packages(target)
 
