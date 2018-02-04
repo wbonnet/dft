@@ -698,7 +698,7 @@ class BuildImage(CliCommand):
       script += ".boot.scr"
 
       # Generate the destination path. boot.scr is stored under boot
-      target = os.path.join(image_mount_root, "/boot/boot.scr")
+      target = image_mount_root + "/boot/boot.scr")
 
       # Let's do the copy
       command = "cp " + script + " " + target
