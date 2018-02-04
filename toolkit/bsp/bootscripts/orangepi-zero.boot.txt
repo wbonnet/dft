@@ -1,7 +1,7 @@
 setenv loadinitrd 'ext4load mmc ${mmcdev}:${mmcpart} ${initrd_addr} ${initrd_file}'
 setenv initrd_addr 0x43300000
 setenv initrd_file initrd.img
-setenv initrd_size 2A1BC1
+setenv initrd_size 2A1BA1
 setenv fdtfile 'dtb/sun8i-h2-plus-orangepi-zero.dtb'
 setenv image zImage
 setenv mmcroot '/dev/mmcblk0p1 rootwait ro'
