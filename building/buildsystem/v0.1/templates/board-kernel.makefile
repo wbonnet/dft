@@ -42,7 +42,7 @@ new-version-%:
 		touch $(NEW_VERSION)/patches/.gitkeep ; \
 		echo "work/" > $(NEW_VERSION)/.gitignore ; \
 		sed -i -e "s/__KERNEL_VERSION__/$(NEW_VERSION)/g" $(NEW_VERSION)/Makefile ; \
-		cp -fr ../../buildsystem/current/templates/debian $(NEW_VERSION)/debian ; \
+		cp -fr ../../buildsystem/current/templates/debian.kernel $(NEW_VERSION)/debian; \
 		cd $(NEW_VERSION)/debian ; \
 		mv linux-image.postinst  linux-image-$(BOARD_NAME).postinst ; \
 		mv linux-image.postrm    linux-image-$(BOARD_NAME).postrm ; \
@@ -65,7 +65,7 @@ new-version-%:
 			find $(NEW_VERSION)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/${DEBFULLNAME}/g" ; \
 		fi ; \
 		git add $(NEW_VERSION) ; \
-	fi ; 
+	fi ;
 
 # Catch all target. Call the same targets in each subfolder
 %:

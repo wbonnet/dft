@@ -17,5 +17,5 @@ Description: Linux kernel, version __KERNEL_VERSION__ for __BOARD_NAME__
 # Package: linux-headers-__BOARD_NAME__-__KERNEL_VERSION__
 # Architecture: any
 # Depends: ${misc:Depends}
-# Description: Linux kerneli headers, version __KERNEL_VERSION__ for __BOARD_NAME__
+# Description: Linux kernel headers, version __KERNEL_VERSION__ for __BOARD_NAME__
 #  This packages contains the Linux kernel headers version __KERNEL_VERSION__ for __BOARD_NAME__ board.

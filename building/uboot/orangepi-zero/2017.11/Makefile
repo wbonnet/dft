@@ -20,7 +20,7 @@
 #
 
 # Defines the kernel version
-UBOOT_VERSION=__UBOOT_VERSION__
+UBOOT_VERSION=2017.11
 
 # Include board specific definitions
 include ../board.mk
@@ -29,4 +29,5 @@ include ../board.mk
 # PATCHFILES += 0000_some_patch.diff
 
 # Include build system
+include buildsystem/dft.uboot.mk
 include buildsystem/dft.mk

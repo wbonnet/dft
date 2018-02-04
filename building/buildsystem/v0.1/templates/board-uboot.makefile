@@ -19,21 +19,46 @@
 #
 #
 
+# Include the board definition
+include board.mk
+
 # Defines the software version
 NEW_VERSION = $*
+PACAKGE_DATE = $(shell LC_ALL=C date +"%a, %d %b %Y %T %z")
+PACAKGE_DATE = $(shell date )
 
 # Create a new boar entry in the repository
 new-version-%:
 	@if [ -d "./$(NEW_VERSION)" ] ; then \
 		echo ". Directory ./($(NEW_VERSION) already exist. Doing nothing..." ; \
 	else  \
-		echo ". Creating the directory storing the kernerl sources for given version (./$(NEW_VERSION))" ; \
+		echo ". Creating the directory structure (./$(NEW_VERSION))" ; \
 		mkdir -p $(NEW_VERSION) ; \
-		echo ". Copying the Makefile template to the new version directory" ; \
 		cp -f ../../buildsystem/current/templates/uboot-version.makefile $(NEW_VERSION)/Makefile ; \
-		echo ". Adding ./$(NEW_VERSION) to git" ; \
+		ln -s ../../../buildsystem/current $(NEW_VERSION)/buildsystem ; \
+		mkdir -p $(NEW_VERSION)/patches ; \
+		touch $(NEW_VERSION)/patches/.gitkeep ; \
+		echo "work/" > $(NEW_VERSION)/.gitignore ; \
+		sed -i -e "s/__UBOOT_VERSION__/$(NEW_VERSION)/g" $(NEW_VERSION)/Makefile ; \
+		cp -fr ../../buildsystem/current/templates/debian.uboot $(NEW_VERSION)/debian ; \
+		cd $(NEW_VERSION)/debian ; \
+		mv uboot.install uboot-$(BOARD_NAME).install ; \
+		cd ../.. ; \
+		find $(NEW_VERSION)/debian -type f | xargs sed -i -e "s/__UBOOT_VERSION__/$(NEW_VERSION)/g" \
+	                                         -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" \
+	                                         -e "s/__DATE__/$(shell LC_ALL=C date +"%a, %d %b %Y %T %z")/g" ; \
+        if [ "${DEBEMAIL}" = "" ] ; then \
+			find $(NEW_VERSION)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/unknown/g" ; \
+		else \
+			find $(NEW_VERSION)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/${DEBEMAIL}/g" ; \
+		fi ; \
+		if [ "${DEBFULLNAME}" = "" ] ; then \
+			find $(NEW_VERSION)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/unknown/g" ; \
+		else \
+			find $(NEW_VERSION)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/${DEBFULLNAME}/g" ; \
+		fi ; \
 		git add $(NEW_VERSION) ; \
-	fi ; 
+	fi ;
 
 # Catch all target. Call the same targets in each subfolder
 %:

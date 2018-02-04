@@ -45,7 +45,7 @@ endif
 
 # ------------------------------------------------------------------------------
 #
-# Check if the board arch is defined, if not output an error before doing anything. 
+# Check if the board arch is defined, if not output an error before doing anything.
 # It means this bard has been newly created and arch has to be defined
 #
 ifeq ($(BOARD_ARCH), unknown)

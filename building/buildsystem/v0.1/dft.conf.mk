@@ -52,13 +52,13 @@ KERNEL_GIT_URL         ?= git://git.kernel.org/pub/scm/linux/kernel/git/stable
 KERNEL_GIT_BRANCH      ?= stable
 KERNEL_GIT_REPO        ?= linux-$(KERNEL_GIT_BRANCH)
 KERNEL_GIT_REPO_EXT    ?= .git
-KERNEL_SITE             = https://cdn.kernel.org/pub/linux/kernel
+KERNEL_SITE            ?= https://cdn.kernel.org/pub/linux/kernel
 KERNEL_FILE_VERSION    ?= $(KERNEL_VERSION)
-KERNEL_SRC_URL          = $(KERNEL_SITE)/$(KERNEL_BRANCH)/linux-$(KERNEL_FILE_VERSION).tar.xz
-KERNEL_BRANCH           = v$(shell echo $(KERNEL_FILE_VERSION) | head -c 1).x
+KERNEL_SRC_URL         ?= $(KERNEL_SITE)/$(KERNEL_BRANCH)/linux-$(KERNEL_FILE_VERSION).tar.xz
+KERNEL_BRANCH          ?= v$(shell echo $(KERNEL_FILE_VERSION) | head -c 1).x
 
 # Defines the software name if not set
-SOFTWARE_UPSTREAM_NAME  = linux
+SOFTWARE_UPSTREAM_NAME  ?= linux
 
 # Defines the files to retrieve
 SOFTWARE_DIST_FILES     ?= $(SOFTWARE_UPSTREAM_NAME)-$(KERNEL_FILE_VERSION).tar.xz
@@ -79,9 +79,9 @@ BASE_DIR            ?= $(CURDIR)
 FILE_DIR            ?= files
 PATCH_DIR           ?= patches
 ifeq ($(DFT_BUILDSYSTEM_WORKDIR),)
-  WORK_ROOT_DIR       ?= work-$(BOARD_NAME)
+  WORK_ROOT_DIR     ?= work-$(BOARD_NAME)
 else
-  WORK_ROOT_DIR       ?= $(DFT_BUILDSYSTEM_WORKDIR)/work-$(BOARD_NAME)
+  WORK_ROOT_DIR     ?= $(DFT_BUILDSYSTEM_WORKDIR)/work-$(BOARD_NAME)
 endif
 WORK_DIR            ?= $(WORK_ROOT_DIR)/build-$(BOARD_NAME)
 DOWNLOAD_DIR        ?= $(WORK_ROOT_DIR)/download
@@ -145,7 +145,7 @@ BUILD_FLAGS   ?= $(ARCH_COMMON_BUILD_FLAGS) $(ARCH_$(shell echo $(BOARD_ARCH) | 
 BUILD_ARGS    ?= $(ARCH_COMMON_BUILD_ARGS) $(ARCH_$(shell echo $(BOARD_ARCH) | tr a-z A-Z)_BUILD_ARGS)
 
 # Defines default installation arguments, depending on the board architectures
-ARCH_COMMON_INSTALL_ARGS ?= 
+ARCH_COMMON_INSTALL_ARGS ?=
 ARCH_ARMHF_INSTALL_ARGS  ?= zinstall
 ARCH_AMD64_INSTALL_ARGS  ?= zinstall
 ARCH_I386_INSTALL_ARGS  ?= zinstall
