@@ -41,6 +41,8 @@ do-install :
 	 	if [ ! "" = "$(UBOOT_VERSION)" ] ; then \
 			mkdir -p $(abspath $(INSTALL_DIR))/u-boot/ ; \
 			cd $(OBJ_DIR) && cp -fr $(UBOOT_BINARY_FILE) $(abspath $(INSTALL_DIR))/u-boot/u-boot-$(BOARD_NAME)-$(UBOOT_VERSION) ; \
+			cd $(abspath $(INSTALL_DIR))/u-boot/ ; \
+			ln -s u-boot-$(BOARD_NAME)-$(UBOOT_VERSION) u-boot-$(BOARD_NAME); \
 	 	else \
 			echo "        running install in $(OBJ_DIR)"  ; \
 			cd $(OBJ_DIR) && $(BUILD_ENV) $(MAKE) INSTALL_PATH=$(abspath $(INSTALL_DIR))/boot $(INSTALL_ARGS) ; \
