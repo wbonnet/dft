@@ -28,6 +28,7 @@ cli targets.
 import os
 import subprocess
 import logging
+import tempfile
 import errno
 from enum import Enum
 from dft.model import Key
