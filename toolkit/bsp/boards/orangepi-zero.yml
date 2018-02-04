@@ -70,7 +70,10 @@ kernel:
 # The uboot section defines the different parameters needed to select and install the uboot
 # used to boot the board an run kernel. It is defined by XXX
 u-boot:
-  # List of packages to install from the repository to add u-boot
+  # Defines the upstream site used to provide kernel for this device
+  origin: armwizard
+
+  # List of packages to install from the repository to add u-boot.
   packages:
     - u-boot-image-orangepi-zero
 

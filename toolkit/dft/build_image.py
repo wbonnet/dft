@@ -725,6 +725,53 @@ class BuildImage(CliCommand):
     generated rootfs.
     """
 
+    # Check if a BSP section is defined. It should be, or we certainly have failed before anyways
+    if Key.BSP.value in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]:
+
+      # And that it contains a uboot section. Otherwise it may be a grub section
+      if Key.UBOOT.value in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value]\
+                                              [0][Key.BSP.value]:
+
+        # Is there somepackages to install ?
+        if Key.PACKAGES.value in self.project.project[Key.PROJECT_DEFINITION.value]\
+                                                         [Key.TARGETS.value][0]\
+                                                         [Key.BSP.value][Key.UBOOT.value]:
+          logging.info("Installing the boot support packages (uboot or grub)")
+
+          # Check if we are working with foreign arch, then ...
+          if self.use_qemu_static:
+            # QEMU is used, and we have to install it into the target
+            self.setup_qemu()
+
+          # Iterate the list of targets in order to load th BSP definition file
+          for pkg in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
+                                            [Key.BSP.value][Key.PACKAGES.value]:
+
+            # Check if the BSP if defined, otherwise there is nothing to do
+            if Key.BSP.value in target:
+              # Check that the uboot entry is defined in the BSP
+              if Key.UBOOT.value in target[Key.BSP.value]:
+                # Setup the packages sources
+                self.setup_kernel_apt_sources(target[Key.BSP.value][Key.UBOOT.value])
+                # Install the kernel packages
+                self.install_kernel_apt_packages(target[Key.BSP.value][Key.UBOOT.value])
+              else:
+                logging.debug("No u-boot entry in the BSP. Nothing to do...")
+            else:
+              logging.warning("The '" + Key.BSP.value + "' key is not defined for target '" +
+                              target[Key.BOARD.value] + "'")
+
+          else:
+            logging.error("The '" + Key.TARGETS.value + "' key is not defined in the project file")
+            exit(1)
+
+          # Remove QEMU if it has been isntalled. It has to be done in the end
+          # since some cleanup tasks could need QEMU
+          if self.use_qemu_static:
+            self.cleanup_qemu()
+
+
+
     # Output current task to logs
     logging.info("Installing the boot (uboot or grub)")
 
@@ -735,34 +782,37 @@ class BuildImage(CliCommand):
       if Key.UBOOT.value in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value]\
                                               [0][Key.BSP.value]:
 
-        # Iterate the list of actions. An action is a dd call to copy binary data to the image
-        for action in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value]\
-                                          [0][Key.BSP.value][Key.UBOOT.value]:
+        if Key.INSTALLATION.value in self.project.project[Key.PROJECT_DEFINITION.value]\
+                                                         [Key.TARGETS.value][0]\
+                                                         [Key.BSP.value][Key.UBOOT.value]:
+          # Iterate the list of actions. An action is a dd call to copy binary data to the image
+          for action in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
+                                            [Key.BSP.value][Key.UBOOT.value][Key.INSTALLATION.value]:
 
-          # Check that the source is defined. Otherwise it will not be able to call dd
-          if Key.SOURCE.value not in action:
-            logging.critical("No source defined in the uboot installation action. Aborting.")
-            exit(1)
-          else:
-            # Copy the source
-            source = action[Key.SOURCE.value]
+            # Check that the source is defined. Otherwise it will not be able to call dd
+            if Key.SOURCE.value not in action:
+              logging.critical("No source defined in the uboot installation action. Aborting.")
+              exit(1)
+            else:
+              # Copy the source
+              source = action[Key.SOURCE.value]
 
-            # If the source is an absolute path, then use it "as is", otherwise prefix with
-            # the bsp root
-            if not os.path.isabs(source):
-              source = self.project.get_bsp_base() + "/uboot/" + source
+              # If the source is an absolute path, then use it "as is", otherwise prefix with
+              # the bsp root
+              if not os.path.isabs(source):
+                source = self.project.get_bsp_base() + "/uboot/" + source
 
-          # Check if options is defined, if not default to an empty string, many "jut call dd
-          # without options"
-          if Key.OPTIONS.value not in action:
-            logging.debug("No options defined.")
-            options = ""
-          else:
-            options = action[Key.OPTIONS.value]
+            # Check if options is defined, if not default to an empty string, many "jut call dd
+            # without options"
+            if Key.OPTIONS.value not in action:
+              logging.debug("No options defined.")
+              options = ""
+            else:
+              options = action[Key.OPTIONS.value]
 
-          # Let's run dd to copy to the image
-          command = 'dd if="' + source + '" of="' + self.loopback_device + '" ' + options
-          self.execute_command(command)
+            # Let's run dd to copy to the image
+            command = 'dd if="' + source + '" of="' + self.loopback_device + '" ' + options
+            self.execute_command(command)
       else:
         logging.debug("No UBOOT defined, skipping.")
     else:
