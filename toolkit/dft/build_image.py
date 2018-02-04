@@ -786,12 +786,14 @@ class BuildImage(CliCommand):
               exit(1)
             else:
               # Copy the source
-              source = action[Key.SOURCE.value]
+              source = self.project.get_rootfs_base() + "/" action[Key.SOURCE.value]
 
               # If the source is an absolute path, then use it "as is", otherwise prefix with
               # the bsp root
               if not os.path.isabs(source):
-                source = self.project.get_rootfs_base() + "/" + source
+                logging.critical("Source is not an absolute path. Meaning roootfs_base is not \
+                                 neither. Aborting.")
+                exit(1)
 
             # Check if options is defined, if not default to an empty string, many "jut call dd
             # without options"
