@@ -20,7 +20,8 @@
 #
 
 # Defines the kernel version
-UBOOT_VERSION=__UBOOT_VERSION__
+UBOOT_VERSION     =__UBOOT_VERSION__
+KERNEL_GIT_BRANCH = v$(UBOOT_VERSION)
 
 # Include board specific definitions
 include ../board.mk
