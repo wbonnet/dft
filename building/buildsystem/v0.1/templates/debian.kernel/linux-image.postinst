@@ -23,7 +23,9 @@ if [ -d /etc/kernel/postinst.d ]; then
 fi
 
 # Create or update the link to zImage
-ln -sf /boot/vmlinuz-__KERNEL_VERSION__ /boot/zImage
+cd /boot
+ln -sf vmlinuz-__KERNEL_VERSION__ zImage
+ln -sf initrd.img-__KERNEL_VERSION__ initrd.img
 
 exit 0
 
