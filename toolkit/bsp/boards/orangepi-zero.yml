@@ -69,7 +69,7 @@ kernel:
 
 # The uboot section defines the different parameters needed to select and install the uboot
 # used to boot the board an run kernel. It is defined by XXX
-uboot:
+u-boot:
   # List of packages to install from the repository to add u-boot
   packages:
     - u-boot-image-orangepi-zero
