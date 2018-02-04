@@ -38,7 +38,7 @@ new-version-%:
 		ln -s ../../../buildsystem/current $(NEW_VERSION)/buildsystem ; \
 		mkdir -p $(NEW_VERSION)/patches ; \
 		touch $(NEW_VERSION)/patches/.gitkeep ; \
-		echo "work/" > $(NEW_VERSION)/.gitignore ; \
+		echo "work-$(BOARD_NAME)/" > $(NEW_VERSION)/.gitignore ; \
 		sed -i -e "s/__UBOOT_VERSION__/$(NEW_VERSION)/g" $(NEW_VERSION)/Makefile ; \
 		cp -fr ../../buildsystem/current/templates/debian.u-boot $(NEW_VERSION)/debian ; \
 		cd $(NEW_VERSION)/debian ; \
