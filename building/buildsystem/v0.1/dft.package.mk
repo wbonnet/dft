@@ -44,7 +44,11 @@ do-package :
 		rm -f debian ; \
 		cp -fr $(BASE_DIR)/debian debian ; \
 		cp -fr $(abspath $(INSTALL_DIR))/* . ; \
-		tar cvfz ../linux-kernel-$(BOARD_NAME)_$(KERNEL_VERSION).orig.tar.gz * ; \
+	 	if [ ! "" = "$(UBOOT_VERSION)" ] ; then \
+			tar cvfz ../uboot-$(BOARD_NAME)_$(KERNEL_VERSION).orig.tar.gz * ; \
+		else \
+			tar cvfz ../linux-kernel-$(BOARD_NAME)_$(KERNEL_VERSION).orig.tar.gz * ; \
+	 	fi ; \
 		$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ; \
 	fi ;
 	@$(TARGET_DONE)
