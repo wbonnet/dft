@@ -1,3 +1,9 @@
+dft-buildsystem (0.6.3-1) unstable; urgency=low
+
+  * Add u-boot compilation procedure
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 04 Feb 2018 19:26:00 +0100
+
 dft-buildsystem (0.6.1-1) unstable; urgency=low
 
   * Add DFT_BUILDSYSTEM_WORKDIR env variable to move working dir out of git
