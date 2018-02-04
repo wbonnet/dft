@@ -28,34 +28,13 @@
 #
 #
 
-
 # ------------------------------------------------------------------------------
 #
-# Execute the configure script
+# overrides some definition to compile uboot using the same makefiles
 #
-# TODO : DELTA DEFCONFIG
-configure-%/configure :
-	@if test -f $(COOKIE_DIR)/configure-$*/configure ; then \
-		true ; \
-	else \
-		if [ "$(USE_CONFIG_FILE)" != "" ] ; then \
-			echo "    copying $(USE_CONFIG_FILE) to .config" ; \
-			cp -f $(FILE_DIR)/$(USE_CONFIG_FILE) $(OBJ_DIR)/.config ; \
-		else \
-			if [ "$(USE_DEFCONFIG)" != "" ] ; then \
-				echo "    running make $(BUILD_FLAGS) $(USE_DEFCONFIG) in $(OBJ_DIR)" ; \
-				cd "$(OBJ_DIR)" && make $(USE_DEFCONFIG) ; \
-			else \
-				echo "    running configure in $(OBJ_DIR)" ; \
-				cd "$(OBJ_DIR)" && $(CONFIGURE_ENV) $(abspath $*)/configure $(CONFIGURE_ARGS) ; \
-			fi ; \
-		fi ; \
-	fi ;
-	$(TARGET_DONE)
 
-reconfigure-%/configure :
-	@if test -f $(COOKIE_DIR)/configure-$*/configure ; then \
-		rm -f $(COOKIE_DIR)/configure-$*/configure ; \
-	fi ;
-	$(TARGET_DONE)
-
+UPSTREAM_DOWNLOAD_TOOL = git
+SOFTWARE_DIST_GIT      = uboot
+SOFTWARE_UPSTREAM_NAME = uboot
+KERNEL_VERSION				 = $(UBOOT_VERSION)
+BUILD_ARGS             =
