@@ -786,7 +786,7 @@ class BuildImage(CliCommand):
               exit(1)
             else:
               # Copy the source
-              source = self.project.get_rootfs_base() + "/" action[Key.SOURCE.value]
+              source = self.project.get_rootfs_base() + "/" + action[Key.SOURCE.value]
 
               # If the source is an absolute path, then use it "as is", otherwise prefix with
               # the bsp root
