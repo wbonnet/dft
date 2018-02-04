@@ -26,6 +26,7 @@ cli targets.
 """
 
 import os
+import stat
 import subprocess
 import logging
 import tempfile
