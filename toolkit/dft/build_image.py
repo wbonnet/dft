@@ -692,7 +692,7 @@ class BuildImage(CliCommand):
         self.execute_command(command)
 
       # Copy the bootscript to target
-      script = self.project.get_base() + "/bootscripts/"
+      script = self.project.get_bsp_base() + "/bootscripts/"
       script += self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
                                     [Key.BOARD.value]
       script += ".boot.scr"
