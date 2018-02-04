@@ -648,3 +648,4 @@ class CliCommand(object):
         logging.debug("Installing package " + pkg)
         self.install_package(pkg)
     else:
+      logging.debug("No packages entry found. Nothing to do...")
