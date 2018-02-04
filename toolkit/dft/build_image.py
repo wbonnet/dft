@@ -745,7 +745,9 @@ class BuildImage(CliCommand):
             self.setup_qemu()
 
           # Setup the packages sources
-          self.setup_kernel_apt_sources(target)
+          self.setup_kernel_apt_sources(target, self.project.project[Key.PROJECT_DEFINITION.value]\
+                                                                    [Key.TARGETS.value][0]\
+                                                                    [Key.VERSION.value])
 
           # Install the kernel packages
           self.install_kernel_apt_packages(target)

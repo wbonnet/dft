@@ -513,7 +513,7 @@ class CliCommand(object):
   # setup_kernel_apt_sources
   #
   # -------------------------------------------------------------------------
-  def setup_kernel_apt_sources(self, target):
+  def setup_kernel_apt_sources(self, target, version):
     """This method implement the installation of the bootchain in the
     generated rootfs. The bootchain inludes the kernel itself, uboot,
     dtb files etc.
@@ -578,7 +578,7 @@ class CliCommand(object):
           # Defines the file name and content for armbian APT sources
           logging.debug("Using ArmWizard repo as source provider. Adding armwizard.list")
           filepath += "armwizard_repository.list"
-          working_file.write("deb http://apt.armwizard.org/armwizard " + target[Key.VERSION.value])
+          working_file.write("deb http://apt.armwizard.org/armwizard " + version)
           working_file.write(" bsp\n")
 
           # Check if the public key of the repository is defined in the BSP file, otherwise

@@ -88,7 +88,8 @@ class InstallBootChain(CliCommand):
           # Check that the kernel entry is defined in the BSP
           if Key.KERNEL.value in target[Key.BSP.value]:
             # Setup the packages sources
-            self.setup_kernel_apt_sources(target[Key.BSP.value][Key.KERNEL.value])
+            self.setup_kernel_apt_sources(target[Key.BSP.value][Key.KERNEL.value], \
+                                          target[Key.VERSION.value])
             # Install the kernel packages
             self.install_kernel_apt_packages(target[Key.BSP.value][Key.KERNEL.value])
           else:
