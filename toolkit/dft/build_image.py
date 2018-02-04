@@ -684,7 +684,12 @@ class BuildImage(CliCommand):
         command = "cp -fra " + copy_source_path + " " + copy_target_path
         self.execute_command(command)
     else:
-      logging.error("Firmware copy is not yet available. Doing nothing")
+      # Iterate the list of files in the rootfs and copy them to image
+      for copy_target in os.listdir(self.project.get_firmware_directory()):
+        copy_source_path = os.path.join(self.project.get_firmware_directory(), copy_target)
+        copy_target_path = os.path.join(image_mount_root, copy_target)
+        command = "cp -fra " + copy_source_path + " " + copy_target_path
+        self.execute_command(command)
 
     #
     # Data have been copied, lets unmount all the partitions before teardown the loopback
