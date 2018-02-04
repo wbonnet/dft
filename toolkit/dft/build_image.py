@@ -691,6 +691,19 @@ class BuildImage(CliCommand):
         command = "cp -fra " + copy_source_path + " " + copy_target_path
         self.execute_command(command)
 
+      # Copy the bootscript to target
+      script = self.project.get_base() + "/bootscripts/"
+      script += self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
+                                    [Key.BOARD.value]
+      script += ".boot.scr"
+
+      # Generate the destination path. boot.scr is stored under boot
+      target = os.path.join(image_mount_root, "/boot/boot.scr")
+
+      # Let's do the copy
+      command = "cp " + script + " " + target
+      self.execute_command(command)
+
     #
     # Data have been copied, lets unmount all the partitions before teardown the loopback
     #
@@ -766,7 +779,8 @@ class BuildImage(CliCommand):
         logging.debug("No u-boot entry in the BSP. Nothing to do...")
     else:
       logging.warning("The '" + Key.BSP.value + "' key is not defined for target '" +
-                      target[Key.BOARD.value] + "'")
+                      self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
+                                          [Key.BOARD.value] + "'")
 
     # Output current task to logs
     logging.info("Installing the boot (uboot or grub)")
