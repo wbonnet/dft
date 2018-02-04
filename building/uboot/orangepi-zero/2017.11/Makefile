@@ -30,4 +30,3 @@ include ../board.mk
 
 # Include build system
 include buildsystem/dft.uboot.mk
-include buildsystem/dft.mk

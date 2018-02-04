@@ -31,3 +31,5 @@ KERNEL_GIT_BRANCH 	   = mirror/master
 # Set config file to empty and define the name of the board to use a defconfig
 USE_CONFIG_FILE        =
 USE_DEFCONFIG					 = orangepi_zero_defconfig
+
+# Defines the list of files to copy (path is relative to build dir)

@@ -30,7 +30,7 @@
 
 # ------------------------------------------------------------------------------
 #
-# overrides some definition to compile uboot using the same makefiles
+# Overrides some definition to compile uboot using the same makefiles
 #
 
 UPSTREAM_DOWNLOAD_TOOL = git
@@ -38,3 +38,19 @@ SOFTWARE_DIST_GIT      = uboot
 SOFTWARE_UPSTREAM_NAME = uboot
 KERNEL_VERSION				 = $(UBOOT_VERSION)
 BUILD_ARGS             =
+UBOOT_TARGETS					?= u-boot.bin
+
+include dft.mk
+
+# ------------------------------------------------------------------------------
+# Redefinition of the install target
+#
+do-install :
+	if test -f $(COOKIE_DIR)/do-install ; then \
+		true ; \
+	else \
+		echo "        running install in $(OBJ_DIR)"  ; \
+		mkdir -p $(abspath $(INSTALL_DIR))/ ; \
+		cd $(OBJ_DIR) && cp -fr $(UBOOT_TARGETS) $(abspath $(INSTALL_DIR))/ ; \
+	fi ;
+	@$(TARGET_DONE)
