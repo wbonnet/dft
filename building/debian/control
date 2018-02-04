@@ -14,5 +14,7 @@ Depends: ${misc:Depends},
          git,
          build-essential,
          libssl-dev,
+         swig,
+         python3-cxx-dev,
          make
 Description: Debian Framework Toolkit build system
