@@ -105,3 +105,15 @@ class InstallBootChain(CliCommand):
     # since some cleanup tasks could need QEMU
     if self.use_qemu_static:
       self.cleanup_qemu()
+
+  # -------------------------------------------------------------------------
+  #
+  # cleanup
+  #
+  # -------------------------------------------------------------------------
+  def cleanup(self):
+    """This method is in charge of cleaning the environment in cqse of errors
+    It is mainly umounting the image and removing the losetup mount.
+    The generated image is left for post mortem anaysis.
+    """
+    self.project.logging.info("starting to cleanup")

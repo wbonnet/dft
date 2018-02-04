@@ -642,7 +642,7 @@ class CliCommand(object):
     """
 
     # Output current task to logs
-    logging.info("Installing kernel sources")
+    logging.info("Installing kernel packages")
 
     # Check that the packages list is defined under kernel entry
     if Key.PACKAGES.value in target:
