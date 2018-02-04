@@ -2,4 +2,4 @@ uboot-orangepi-zero (__KERNEL_VERSION__-1) unstable; urgency=medium
 
   * Initial release.
 
- -- William Bonnet <wbonnet@theitmakers.com>  Sun, 04 Feb 2018 13:39:27 +0100
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 04 Feb 2018 15:57:19 +0100

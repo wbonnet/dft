@@ -36,11 +36,11 @@
 UPSTREAM_DOWNLOAD_TOOL = git
 SOFTWARE_DIST_GIT      = uboot
 SOFTWARE_UPSTREAM_NAME = uboot
-KERNEL_VERSION				 = $(UBOOT_VERSION)
+KERNEL_VERSION         = $(UBOOT_VERSION)
 BUILD_ARGS             =
-UBOOT_TARGETS					?= u-boot.bin
+UBOOT_TARGETS         ?= u-boot.bin
 
-include dft.mk
+include buildsystem/dft.mk
 
 # ------------------------------------------------------------------------------
 # Redefinition of the install target

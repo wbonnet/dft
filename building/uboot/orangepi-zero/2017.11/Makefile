@@ -29,4 +29,4 @@ include ../board.mk
 # PATCHFILES += 0000_some_patch.diff
 
 # Include build system
-include buildsystem/dft.uboot.mk
+include buildsystem/dft.mk

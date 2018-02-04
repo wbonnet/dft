@@ -628,7 +628,7 @@ class BuildRootFS(CliCommand):
     # Delete the DFT files from the rootfs
     if not self.project.dft.keep_bootstrap_files:
       if os.path.isdir(self.project.get_rootfs_mountpoint() + "/dft_bootstrap"):
-        shutil.rmtree(self.project.get_rootfs_mountpoint() + "/dft_bootstrap")
+        rmtree(self.project.get_rootfs_mountpoint() + "/dft_bootstrap")
     else:
       self.project.logging.debug("keep_bootstrap_files is activated, keeping DFT bootstrap " +
                                  "files in " + self.project.get_rootfs_mountpoint() +
