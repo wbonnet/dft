@@ -19,18 +19,14 @@
 #
 #
 
-# Defines board name
-BOARD_NAME = orangepi-zero
-BOARD_ARCH = armhf
+# Defines the kernel version
+UBOOT_VERSION=__UBOOT_VERSION__
 
-# Defines the git repository to use
-KERNEL_GIT_URL         = https://github.com/linux-sunxi
-KERNEL_GIT_REPO        = u-boot-sunxi
-KERNEL_GIT_BRANCH      = mirror/master
+# Include board specific definitions
+include ../board.mk
 
-# Set config file to empty and define the name of the board to use a defconfig
-USE_CONFIG_FILE        =
-USE_DEFCONFIG          = orangepi_zero_defconfig
+# Defines the patches to apply on the sources
+# PATCHFILES += 0000_some_patch.diff
 
-# Defines the list of files to copy (path is relative to build dir)
-UBOOT_TARGETS          = u-boot-sunxi-with-spl.bin
+# Include build system
+include buildsystem/dft.u-boot.mk

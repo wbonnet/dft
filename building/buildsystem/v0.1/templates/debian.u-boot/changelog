@@ -1,4 +1,4 @@
-uboot-__BOARD_NAME__ (__UBOOT_VERSION__-1) unstable; urgency=medium
+u-boot-__BOARD_NAME__ (__UBOOT_VERSION__-1) unstable; urgency=medium
 
   * Initial release.
 

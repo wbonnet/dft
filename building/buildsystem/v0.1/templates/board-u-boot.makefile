@@ -34,15 +34,15 @@ new-version-%:
 	else  \
 		echo ". Creating the directory structure (./$(NEW_VERSION))" ; \
 		mkdir -p $(NEW_VERSION) ; \
-		cp -f ../../buildsystem/current/templates/uboot-version.makefile $(NEW_VERSION)/Makefile ; \
+		cp -f ../../buildsystem/current/templates/u-boot-version.makefile $(NEW_VERSION)/Makefile ; \
 		ln -s ../../../buildsystem/current $(NEW_VERSION)/buildsystem ; \
 		mkdir -p $(NEW_VERSION)/patches ; \
 		touch $(NEW_VERSION)/patches/.gitkeep ; \
 		echo "work/" > $(NEW_VERSION)/.gitignore ; \
 		sed -i -e "s/__UBOOT_VERSION__/$(NEW_VERSION)/g" $(NEW_VERSION)/Makefile ; \
-		cp -fr ../../buildsystem/current/templates/debian.uboot $(NEW_VERSION)/debian ; \
+		cp -fr ../../buildsystem/current/templates/debian.u-boot $(NEW_VERSION)/debian ; \
 		cd $(NEW_VERSION)/debian ; \
-		mv uboot.install uboot-$(BOARD_NAME).install ; \
+		mv u-boot.install u-boot-$(BOARD_NAME).install ; \
 		cd ../.. ; \
 		find $(NEW_VERSION)/debian -type f | xargs sed -i -e "s/__UBOOT_VERSION__/$(NEW_VERSION)/g" \
 	                                         -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" \
