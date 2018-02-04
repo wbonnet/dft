@@ -733,9 +733,10 @@ class BuildImage(CliCommand):
                                               [0][Key.BSP.value]:
 
         # Is there somepackages to install ?
-        if Key.PACKAGES.value in self.project.project[Key.PROJECT_DEFINITION.value]\
-                                                         [Key.TARGETS.value][0]\
-                                                         [Key.BSP.value][Key.UBOOT.value]:
+        target = self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
+                                     [Key.BSP.value][Key.UBOOT.value]
+
+        if Key.PACKAGES.value in target:
           logging.info("Installing the boot support packages (uboot or grub)")
 
           # Check if we are working with foreign arch, then ...
@@ -743,34 +744,21 @@ class BuildImage(CliCommand):
             # QEMU is used, and we have to install it into the target
             self.setup_qemu()
 
-          # Iterate the list of targets in order to load th BSP definition file
-          for pkg in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
-                                            [Key.BSP.value][Key.PACKAGES.value]:
-
-            # Check if the BSP if defined, otherwise there is nothing to do
-            if Key.BSP.value in target:
-              # Check that the uboot entry is defined in the BSP
-              if Key.UBOOT.value in target[Key.BSP.value]:
-                # Setup the packages sources
-                self.setup_kernel_apt_sources(target[Key.BSP.value][Key.UBOOT.value])
-                # Install the kernel packages
-                self.install_kernel_apt_packages(target[Key.BSP.value][Key.UBOOT.value])
-              else:
-                logging.debug("No u-boot entry in the BSP. Nothing to do...")
-            else:
-              logging.warning("The '" + Key.BSP.value + "' key is not defined for target '" +
-                              target[Key.BOARD.value] + "'")
-
-          else:
-            logging.error("The '" + Key.TARGETS.value + "' key is not defined in the project file")
-            exit(1)
+          # Setup the packages sources
+          self.setup_kernel_apt_sources(target)
+          # Install the kernel packages
+          self.install_kernel_apt_packages(target)
 
           # Remove QEMU if it has been isntalled. It has to be done in the end
           # since some cleanup tasks could need QEMU
           if self.use_qemu_static:
             self.cleanup_qemu()
 
-
+      else:
+        logging.debug("No u-boot entry in the BSP. Nothing to do...")
+    else:
+      logging.warning("The '" + Key.BSP.value + "' key is not defined for target '" +
+                      target[Key.BOARD.value] + "'")
 
     # Output current task to logs
     logging.info("Installing the boot (uboot or grub)")
