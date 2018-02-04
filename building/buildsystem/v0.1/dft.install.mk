@@ -34,20 +34,18 @@
 #
 
 do-install :
-	if test -f $(COOKIE_DIR)/do-install ; then \
+	@if test -f $(COOKIE_DIR)/do-install ; then \
 		true ; \
 	else \
-	 	if [ ! "" = "$(KERNEL_VERSION)" ] ; then \
-			echo "        running install in $(OBJ_DIR)"  ; \
-			mkdir -p $(abspath $(INSTALL_DIR))/boot/dtb ; \
-			cd $(OBJ_DIR) && $(BUILD_ENV) $(MAKE) INSTALL_PATH=$(abspath $(INSTALL_DIR))/boot $(INSTALL_ARGS) ; \
-			$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(abspath $(INSTALL_DIR))/ modules_install ; \
-		fi ; \
-			cp -fr arch/arm/boot/dts/*.dtb $(abspath $(INSTALL_DIR))/boot/dtb ; \
+		echo "        running install in $(OBJ_DIR)"  ; \
 	 	if [ ! "" = "$(UBOOT_VERSION)" ] ; then \
-			echo "        running install in $(OBJ_DIR)"  ; \
 			mkdir -p $(abspath $(INSTALL_DIR))/ ; \
 			cd $(OBJ_DIR) && cp -fr $(UBOOT_TARGETS) $(abspath $(INSTALL_DIR))/ ; \
+	 	else \
+			echo "        running install in $(OBJ_DIR)"  ; \
+			cd $(OBJ_DIR) && $(BUILD_ENV) $(MAKE) INSTALL_PATH=$(abspath $(INSTALL_DIR))/boot $(INSTALL_ARGS) ; \
+			$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(abspath $(INSTALL_DIR))/ modules_install ; \
+			cp -fr arch/arm/boot/dts/*.dtb $(abspath $(INSTALL_DIR))/boot/dtb ; \
 		fi ; \
 	fi ;
 	@$(TARGET_DONE)
