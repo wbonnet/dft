@@ -59,7 +59,7 @@ kernel:
   # internet connection and use MIT server as key server)
   # pubkey_gpg: "http://custom.example.com/debian/key.pub"
 
-  # List of packages to install from the repository
+  # List of packages to install from the repository to add kernel
   packages:
     - linux-image-orangepi-zero
 
@@ -67,11 +67,15 @@ kernel:
   # intallation. Default value is True
   # keep_source: True
 
-#TODO: add flag to define if a specific source list ha to be generated under sources.list.define
-
 # The uboot section defines the different parameters needed to select and install the uboot
 # used to boot the board an run kernel. It is defined by XXX
 uboot:
+  # List of packages to install from the repository to add u-boot
+  packages:
+    - u-boot-image-orangepi-zero
+
+  # List of action needed to install the u-boot binary to the image
+  installation:
   - {
       # Defines the source of the data to be copied to the image
       # The source can be either a file or a special device like /dev/zero or /dev/random
@@ -83,6 +87,6 @@ uboot:
       options: "bs=1k count=1023 seek=1 status=noxfer"
     }
   - {
-      source: "u-boot-sunxi-with-spl.bin" ,
+      source: "/boot/u-boot/u-boot-orangepi-zero" ,
       options: "bs=1024 seek=8 status=noxfer"
     }
