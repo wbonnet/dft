@@ -1,0 +1,19 @@
+setenv initrd_addr 0x43300000
+setenv initrd_file initrd.img
+setenv initrd_size 2A1BC1
+setenv fwboot 'run mmcargs ; run loadimage ; run loadinitrd ; run loadfdt ; bootz ${kernel_addr_r} ${initrd_addr} ${fdt_addr_r}'
+setenv bootcmd 'run fwboot'
+setenv fdtfile 'dtb/sun8i-h2-plus-orangepi-zero.dtb'
+setenv image vmlinuz-4.15.0
+setenv initrd_file initrd.img-4.15.0
+setenv loadinitrd 'ext4load mmc ${mmcdev}:${mmcpart} ${initrd_addr} ${initrd_file}'
+setenv mmcroot '/dev/mmcblk0p1 rootwait ro'
+setenv mmcargs 'setenv bootargs console=${console} root=${mmcroot} rootfstype=${fs_type}'
+setenv mmcdev 0
+setenv mmcpart 1
+setenv loadfdt 'ext4load mmc ${mmcdev}:${mmcpart} ${fdt_addr_r} ${fdtfile}'
+setenv loadimage 'ext4load mmc ${mmcdev}:${mmcpart} ${kernel_addr_r} ${image}'
+setenv fs_type ext4
+setenv fwboot 'run mmcargs ; run loadimage ; run loadinitrd ; run loadfdt ; bootz ${kernel_addr_r} ${initrd_addr}:${initrd_size} ${fdt_addr_r}'
+
+run fwboot
