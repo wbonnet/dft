@@ -50,7 +50,7 @@ layout:
   filesystem: ext4
 
   # Identification of the physical partition containing the squashfs files 
-  partition: /dev/mmcblk0p2
+  partition: /dev/mmcblk0p1
 
   # Defines the path under which the squashfs files are stored in the 
   # partition defined previously
@@ -102,49 +102,7 @@ layout:
         # Specify the size of the tmpfs
         mount_options: "size=256M,nr_inodes=10k,mode=777"
 
-    #   # Defines a tmpfs to stack over the root
-    - stack_item:
-        # Name of the mount point
-        name: data
-
-        # Item type (tmpfs, partition or squashfs)
-        type: partition
-
-        # Partition to mount
-        partition: /dev/mmcblk0p3
-
-        # Target mount point
-        mountpoint: /mnt/
-
-        # Specify the size of the tmpfs
-        mount_options: "noatime,nodiratime"
-
-      # Defines a tmpfs to stack over the root
-    - stack_item:
-        # Name of the mount point
-        name: varlog
-
-        # Item type (tmpfs, partition or squashfs)
-        type: partition
-
-        # Partition to mount
-        partition: /dev/mmcblk0p4
-
-        # Target mount point
-        mountpoint: /var/log
-
-        # Specify the size of the tmpfs
-        mount_options: "noatime,nodiratime"
-
-
-# TODO name + stack_over ?
-
-# TODO global ?
   auto_commit: False
-#   defines mapping over squashfs
-#   => direct write ?
-# stacking ?
-# how to define cow ?
 
 # ----------------------------------------------------------------------------
 #
