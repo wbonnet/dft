@@ -691,18 +691,27 @@ class BuildImage(CliCommand):
         command = "cp -fra " + copy_source_path + " " + copy_target_path
         self.execute_command(command)
 
-      # Copy the bootscript to target
-      script = self.project.get_bsp_base() + "/bootscripts/"
-      script += self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
-                                    [Key.BOARD.value]
-      script += ".boot.scr"
+    # Defines the name of the script toCopy the bootscript to target
+    script = self.project.get_bsp_base() + "/bootscripts/"
+    script += self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
+                                  [Key.BOARD.value]
+    script += ".boot."
 
-      # Generate the destination path. boot.scr is stored under boot
-      target = image_mount_root + "/boot.scr"
+    # Name has to be either board_name.boot.[firmware|rootfs].scr
+    if copy_rootfs:
+      script += "rootfs"
+    else:
+      script += "firmare"
+    script += ".scr"
 
-      # Let's do the copy
-      command = "cp " + script + " " + target
-      self.execute_command(command)
+# TODO generate it on the fly zith macro expension
+
+    # Generate the destination path. boot.scr is stored under boot
+    target = image_mount_root + "/boot.scr"
+
+    # Let's do the copy
+    command = "cp " + script + " " + target
+    self.execute_command(command)
 
     #
     # Data have been copied, lets unmount all the partitions before teardown the loopback
