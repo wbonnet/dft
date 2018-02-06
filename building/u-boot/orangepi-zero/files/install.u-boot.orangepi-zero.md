@@ -1,4 +1,4 @@
-# u-boot installation for __BOARD_NAME__
+# u-boot installation for orangepi-zero
 
 ## Disclaimer
 
@@ -12,20 +12,19 @@ You have been warned :)
 ## u-boot installation
 
 The u-boot binary to install has been copied by this package to :
-/boot/u-boot/u-boot-__BOARD_NAME__
+/boot/u-boot/u-boot-orangepi-zero
 
 This is a symlink to the current u-boot file stored at the same location in a
-file named u-boot-__BOARD_NAME__.VERSION
+file named u-boot-orangepi-zero.VERSION
 
 u-boot binary has to be installed on the first sectors of the device used by 
 the board to boot. This can be done by the following commands, assuming that :
 
 . The commands are run as root or using sudo ( that's the example)
 
-. The commands are run on the target board (__BOARD_NAME__)
+. The commands are run on the target board (orangepi-zero)
 
-# XXX check this depending on board 
-# . Which means the /dev/mmcblk0 is the internal CF card used to boot
+. Which means the /dev/mmcblk0 is the internal CF card used to boot
 
 First the commands will cleanup the sectors used on the flash, then copy the
 u-boot itself.
@@ -33,7 +32,5 @@ u-boot itself.
  
 ## shell commands
 
-# Given as example (copied from orangepi-zero) this comment has to be removed 
-# after validation of the following lines
-# sudo dd if=/dev/zero of=/dev/mmcblk0 bs=1k count=1023 seek=1 status=noxfer
-# sudo dd if=/boot/u-boot/u-boot-__BOARD_NAME__ of=/dev/mmcblk0 bs=1024 seek=8 status=noxfer
+sudo dd if=/dev/zero of=/dev/mmcblk0 bs=1k count=1023 seek=1 status=noxfer
+sudo dd if=/boot/u-boot/u-boot-orangepi-zero of=/dev/mmcblk0 bs=1024 seek=8 status=noxfer
