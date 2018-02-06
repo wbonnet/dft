@@ -21,4 +21,15 @@
 
 # Defines board name
 BOARD_NAME = cubieboard-5
-BOARD_ARCH = armhf 
+BOARD_ARCH = armhf
+
+# Defines the git repository to use
+KERNEL_GIT_URL         = https://github.com/u-boot
+KERNEL_GIT_REPO        = u-boot
+
+# Set config file to empty and define the name of the board to use a defconfig
+USE_CONFIG_FILE        =
+USE_DEFCONFIG          = Cubietruck_plus_defconfig
+
+# Defines the list of files to copy (path is relative to build dir)
+UBOOT_BINARY_FILE      = u-boot-sunxi-with-spl.bin
