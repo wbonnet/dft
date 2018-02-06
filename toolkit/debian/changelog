@@ -1,3 +1,10 @@
+dft (0.6.4-1) unstable; urgency=low
+
+  * Fix image name
+  * initrd size is generated in bootscript
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 04 Feb 2018 21:00:00 +0100
+
 dft (0.6.3-1) unstable; urgency=low
 
   * Add support for sha224 sha384 and sha512 hash

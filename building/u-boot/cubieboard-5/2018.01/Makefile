@@ -20,7 +20,7 @@
 #
 
 # Defines the kernel version
-UBOOT_VERSION     =2018.01
+UBOOT_VERSION     = 2018.01
 KERNEL_GIT_BRANCH = v$(UBOOT_VERSION)
 
 # Include board specific definitions
