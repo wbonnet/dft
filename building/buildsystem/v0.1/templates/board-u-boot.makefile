@@ -36,6 +36,9 @@ new-version-%:
 		mkdir -p $(NEW_VERSION) ; \
 		cp -f ../../buildsystem/current/templates/u-boot-version.makefile $(NEW_VERSION)/Makefile ; \
 		ln -s ../../../buildsystem/current $(NEW_VERSION)/buildsystem ; \
+		mkdir -p $(NEW_VERSION)/files ; \
+		touch $(NEW_VERSION)/files/.gitkeep ; \
+		ln -s ../../files/install.u-boot.$(BOARD_NAME).md $(NEW_VERSION)/files/ ; \
 		mkdir -p $(NEW_VERSION)/patches ; \
 		touch $(NEW_VERSION)/patches/.gitkeep ; \
 		echo "work-$(BOARD_NAME)/" > $(NEW_VERSION)/.gitignore ; \

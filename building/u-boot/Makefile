@@ -29,6 +29,10 @@ new-board-%:
 	else  \
 		echo ". Creating the directory storing the new board kernerls (./$(NEW_BOARD))" ; \
 		mkdir -p $(NEW_BOARD) ; \
+		mkdir -p $(NEW_BOARD)/files ; \
+		echo ". Copying install procedure template" ; \
+		cp ../buildsystem/current/templates/u-boot.install.template $(NEW_BOARD)/files/install.u-boot.$(NEW_BOARD).md ; \
+		sed -i -e "s/__BOARD_NAME__/$(NEW_BOARD)/g" $(NEW_BOARD)/files/install.u-boot.$(NEW_BOARD).md ; \
 		echo ". Copying the Makefile template to the new board directory" ; \
 		ln -s ../../buildsystem/current/templates/board-u-boot.makefile $(NEW_BOARD)/Makefile ; \
 		echo ". Copying board specific Makefile template" ; \

@@ -1,0 +1,14 @@
+# u-boot installation for __BOARD_NAME__
+
+## Disclaimer
+
+This procedure is provided as is, and should be check by yourself before
+blindly executing it. Errors in the procedure it self, or user errors when
+applying the procedure may result in irreversible data loss, or even bricking
+the board.
+
+You have been warned :)
+
+## u-boot installation
+
+XXX
