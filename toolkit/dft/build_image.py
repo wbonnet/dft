@@ -31,6 +31,8 @@ import os
 import tempfile
 import shutil
 import parted
+from datetime import datetime
+from distutils import file_util
 from dft.cli_command import CliCommand
 from dft.model import Key
 
@@ -701,10 +703,31 @@ class BuildImage(CliCommand):
     if copy_rootfs:
       script += "rootfs"
     else:
-      script += "firmare"
-    script += ".scr"
+      script += "firmware"
+    script += ".txt"
 
-# TODO generate it on the fly zith macro expension
+    # Create a temp file in with the script template is copied in text format. Then we do
+    # variables expansion, before generating the binary script into the target file system.
+    output_file = tempfile.mktemp()
+    file_util.copy_file(script, output_file)
+    
+    # Replace the generation date
+    ts = datetime.now().strftime("%Y %m %d - %H %M %S")
+    command = 'sed -i -e "s/__GENERATION_DATE__/' + ts + '/g" ' + output_file
+    self.execute_command(command)
+
+    # Replace the dft version
+#__INITRD_SIZE__
+#__FILESYSTEM_TYPE__
+#__DFT_VERSION__
+
+    # Replace the file system
+
+    # Replace the initrd size
+
+    # Generate the boot script on the fly with macro expension
+    command = "mkimage -C none -T script -d " + output_file + " " + image_mount_root + "/boot.scr" 
+    self.execute_command(command)
 
     # Generate the destination path. boot.scr is stored under boot
     target = image_mount_root + "/boot.scr"
