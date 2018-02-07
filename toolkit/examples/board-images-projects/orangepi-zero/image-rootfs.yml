@@ -184,4 +184,4 @@ content:
   # . rootfs
   #
   # Default value is rootfs (even if content section is not defined)
-  type: firmware
+  type: rootfs
