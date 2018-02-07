@@ -35,6 +35,7 @@ from datetime import datetime
 from distutils import file_util
 from dft.cli_command import CliCommand
 from dft.model import Key
+from dft import release
 
 #
 #    Class BuildImage
@@ -711,31 +712,30 @@ class BuildImage(CliCommand):
     output_file = tempfile.mktemp()
     file_util.copy_file(script, output_file)
     
-    # Replace the generation date
-    ts = datetime.now().strftime("%Y %m %d - %H %M %S")
-    command = 'sed -i -e "s/__GENERATION_DATE__/' + ts + '/g" ' + output_file
+    # Replace the generation date, the dft version, the filesystem 
+    fs = self.project.image[Key.DEVICES.value][Key.PARTITIONS.value][0][Key.FILESYSTEM.value].lower()
+    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    command = 'sed -i -e "s/__FILESYSTEM_TYPE__/' + fs + '/g" ' 
+    command += ' -e "s/__DFT_VERSION__/' + release.__version__ + '/g" '
+    command += ' -e "s/__GENERATION_DATE__/' + ts + '/g" '
+
+    # Replace the initrd size only for firmware mode
+    if copy_rootfs is False:
+      path = self.project.get_firmware_directory() + "/initrd.img"
+      size = os.stat(path).st_size
+      command += ' -e "s/__INITRD_SIZE__/' + hex(size) + '/g" '
+
+    # Command has been generated, let's execute the replacement with sed
+    command += " " + output_file
     self.execute_command(command)
-
-    # Replace the dft version
-#__INITRD_SIZE__
-#__FILESYSTEM_TYPE__
-#__DFT_VERSION__
-
-    # Replace the file system
-
-    # Replace the initrd size
 
     # Generate the boot script on the fly with macro expension
     command = "mkimage -C none -T script -d " + output_file + " " + image_mount_root + "/boot.scr" 
     self.execute_command(command)
 
-    # Generate the destination path. boot.scr is stored under boot
-    target = image_mount_root + "/boot.scr"
-
-    # Let's do the copy
-    command = "cp " + script + " " + target
-    self.execute_command(command)
-
+    # Remove temp file once binary boot.scr has been generated
+    os.remove(output_file)
     #
     # Data have been copied, lets unmount all the partitions before teardown the loopback
     #

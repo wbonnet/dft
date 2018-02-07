@@ -1,5 +1,6 @@
 
 # ----------------------------------------------------------------------------
+#
 # DFT firmare u-boot script for Orange PI Zero
 #
 # Generation date : __GENERATION_DATE__
