@@ -1,1 +1,214 @@
-/usr/share/dft//library/firmwares/firmware-single-part.single-bank.md5.yml
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).
+# All rights reserved. Use is subject to license terms.
+#
+# Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
+#
+#
+# Contributors list :
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#
+#
+
+# ----------------------------------------------------------------------------
+#
+# Initramfs customization
+#
+# ----------------------------------------------------------------------------
+# initramfs:
+  # Provides a list of modules added in /usr/share/initramfs-tools/modules.d/
+  # before running update-initramfs. The modules listed below will be included
+  # in the initrd archive.
+  # additional_modules:
+  #  - module1
+  #  - module2
+
+# ----------------------------------------------------------------------------
+#
+# Definition of the firmware layout
+#
+# ----------------------------------------------------------------------------
+layout:
+  # Method to use to assembl the systm in memory. Can be either aufs
+  # or overlayfs
+  method: overlayfs
+
+  # Defines the filesystem of the partition used to store squashfs files
+  # This partition is mounted by initrd script during boot process in order
+  # to mount squashfs files using loopback
+  filesystem: ext4
+
+  # Identification of the physical partition containing the squashfs files 
+  partition: /dev/mmcblk0p1
+
+  # Defines the path under which the squashfs files are stored in the 
+  # partition defined previously
+  path: /
+
+  # Definition of the different things to stack to assemble the firmware
+  stack_definition:
+    # Stack items are individual element of the stack. They are processed
+    # and added to the aufs o overlayfs according to their order of
+    # definition
+    - stack_item:
+        # Name under which the item is known and used in the scripts
+        # Name is used to mount the item in host filesystem under /mnt/dft/name
+        name: system
+
+        # Type of the 'source' to use for this mountpoint. It can be :
+        # squashfs, partition, or tmpfs. This information is mandatory
+        type: squashfs
+
+        # Path to the squashfs file to mount
+        # This information is ignored if type is ot squashfs
+        # Default value is generated based upon the project information
+        squashfs_file: system.fw
+
+        # Name of the partition device to mount when type is partition
+        # This information is ignored if type is not partition
+        # There is no default vallue ( it's too dangerous too guess that  :) )
+        # partition:
+
+        # Path under which this object has to be mounted in the host file
+        # This information is mandatory
+        mountpoint: /
+
+        # Options to pass to the mount command.
+        # Default is TODO
+        # mount-options:
+
+    # Defines a tmpfs to stack over the root
+    - stack_item:
+        # Name of the mount point
+        name: volatile
+
+        # Item type (tmpfs, partition or squashfs)
+        type: tmpfs
+
+        # Target mount point
+        mountpoint: /
+
+        # Specify the size of the tmpfs
+        mount_options: "size=256M,nr_inodes=10k,mode=777"
+
+  auto_commit: False
+
+# ----------------------------------------------------------------------------
+#
+# Definition of the firmware security parameters
+#
+# ----------------------------------------------------------------------------
+security:
+  # Defines security paramters such as the use of hash, digital ignature, etc.
+  # TODO  not at start, but need to check for hashes or signatures
+  # TODO  how to handle ciphering, keygen, secure storage
+  hash_method: md5
+
+# ----------------------------------------------------------------------------
+#
+# Definition of the firmware resilience and safety parameters
+#
+# Remember that Safety is not security
+#
+# ----------------------------------------------------------------------------
+resilience:
+  # Number of banks used ifor firmware installation
+  banks: 1
+
+# ----------------------------------------------------------------------------
+#
+# Definition of the squashfs parameters
+#
+# ----------------------------------------------------------------------------
+configuration:
+
+  # Defines the block size. Default is 131072 bytes
+  block_size: "256K"
+
+  # Compressors available are gzip (default), lzo, xz
+  compressor: "xz"
+
+  # Don't make the filesystem exportable via NFS.
+  # no_exports: True
+
+  # Don't detect sparse files. Default is False
+  # no_sparse: True
+
+  # Store or not extended attributes. Default is True
+  # xattrs: False
+
+  # Do not compress inode table. Default is False
+  # no_inode_compression: True
+
+  # Do not compress data blocks. Default is False
+  # no_datablock_compression: True
+
+  # Do not compress fragment blocks. Default is False
+  # no_fragment_compression: True
+
+  # Do not compress extended attributes. Default is False
+  # no_xattrs_compression: True
+
+  # Use or not fragments.
+  # use_fragments: True
+
+  # Do not perform duplicate checking.
+  # no_duplicates_check: True
+
+  # Make all files owned by root.
+  # all_root: False
+
+  # Set all file uids to uid.
+  # force_uid: "1234"
+
+  # Set all file gids to gid.
+  # force_gid: "1234"
+
+  # Do not pad filesystem to a multiple of 4K.
+  # nopad: True
+
+
+#        -keep-as-directory
+#            if  one source directory is specified, create a root directory contain
+#            ing that directory, rather than the contents of the directory.
+
+#    Filesystem filter options
+#        -p PSEUDO_DEFINITION
+#            Add pseudo file definition.
+
+#        -pf PSEUDO_FILE
+#            Add list of pseudo file definitions.
+
+#        -sort SORT_FILE
+#            sort files according to priorities in SORT_FILE. One file or  dir  with
+#            priority per line. Priority -32768 to 32767, default priority 0.
+
+#        -ef EXCLUDE_FILE
+#            list of exclude dirs/files. One per line.
+
+#        -wildcards
+#            Allow  extended  shell  wildcards  (globbing)  to  be  used  in exclude
+#            dirs/files
+
+#        -regex
+#            Allow POSIX regular expressions to be used in exclude dirs/files.
+
+#    Filesystem append options
+#        -noappend
+#            do not append to existing filesystem.
+
+#        -root-becomes NAME
+#            when appending source files/directories, make the original root  become
+#            a  subdirectory in the new root called NAME, rather than adding the new
+#            source items to the original root.
