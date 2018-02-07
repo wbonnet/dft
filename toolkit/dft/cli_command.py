@@ -332,8 +332,9 @@ class CliCommand(object):
     """
 
     # Import the public key in the APT tools
+#TODO keyserver should be a configuration value
     command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
-    command += " apt-key adv --recv-keys --keyserver pgp.mit.edu " + key
+    command += " apt-key adv --recv-keys --keyserver keyserver.ubuntu.com " + key
     self.execute_command(command)
 
 
