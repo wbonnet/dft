@@ -106,25 +106,9 @@ project_definition:
   rootfs:
     - rootfs.yml
 
-  # Definition of the firmware content and structure
-  firmware:
-    - firmware.yml
-
   # Definition of the image structure
   image:
-    - image.yml
-
-  # Definition of the control to apply on the rootfs
-#  check:
-#    - check_rootfs.yml
-
-  # Definition of the stripping rules (to remove extra packages, files etc.)
-#  stripping:
-#    - stripping.yml
-
-  # Definition of the content to generate
-#  content_information:
-#    - content.yml
+    - image-rootfs.yml
 
   # Definition of the variables to be passed to rootfs creation
   variables:
