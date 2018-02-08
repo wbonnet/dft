@@ -811,9 +811,9 @@ class Project(object):
 
       # Defines the full path and filename to the firmware
       self.firmware_filename = self.get_firmware_directory() + "/"
-      if Key.FILENAME.value in self.project.firmware[Key.CONFIGURATION.value] and \
-                               len(self.project.firmware[Key.CONFIGURATION.value][Key.FILENAME.value] > 0):
-        self.firmware_filename += self.project.firmware[Key.CONFIGURATION.value][Key.FILENAME.value]
+      if Key.FILENAME.value in self.firmware[Key.CONFIGURATION.value] and \
+                               len(self.firmware[Key.CONFIGURATION.value][Key.FILENAME.value]) > 0:
+        self.firmware_filename += self.firmware[Key.CONFIGURATION.value][Key.FILENAME.value]
       else:
         self.firmware_filename += self.project[Key.PROJECT_DEFINITION.value][Key.PROJECT_NAME.value]
         self.firmware_filename += ".squashfs"
