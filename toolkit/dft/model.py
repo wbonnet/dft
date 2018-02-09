@@ -811,7 +811,7 @@ class Project(object):
 
       # Defines the full path and filename to the firmware
       self.firmware_filename = self.get_firmware_directory() + "/"
-      if Key.FILENAME.value in self.firmware[Key.CONFIGURATION.value] and \
+      if self.firmware and Key.FILENAME.value in self.firmware[Key.CONFIGURATION.value] and \
                                len(self.firmware[Key.CONFIGURATION.value][Key.FILENAME.value]) > 0:
         self.firmware_filename += self.firmware[Key.CONFIGURATION.value][Key.FILENAME.value]
       else:

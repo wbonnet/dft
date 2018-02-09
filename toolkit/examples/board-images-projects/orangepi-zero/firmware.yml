@@ -73,7 +73,7 @@ layout:
         # Path to the squashfs file to mount
         # This information is ignored if type is ot squashfs
         # Default value is generated based upon the project information
-        squashfs_file: orangepi-zero.squashfs 
+        squashfs_file: system.fw
 
         # Name of the partition device to mount when type is partition
         # This information is ignored if type is not partition
