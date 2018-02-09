@@ -171,7 +171,7 @@ building_sequences:
 
   # Name of the sequence - Sequence name can be any string, but __dft_default_sequence__
   # which is reserved for internal use.
-  - sequence_name: "produce-rootfs-image"
+  - sequence_name: "produce-image"
     # This list defines each the steps composing the sequence of action to execute
     # Order of steps in the list is order of execution
     steps:
