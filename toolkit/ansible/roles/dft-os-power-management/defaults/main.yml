@@ -52,5 +52,5 @@
 # Fall documentation is available from :
 #     https://www.kernel.org/doc/Documentation/cpu-freq/governors.txt
 #
-dft_cpufrequtils_gouvernor: powersave
+dft_cpufrequtils_gouvernor: ondemand
 
