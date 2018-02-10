@@ -34,7 +34,7 @@
 # ----------------------------------------------------------------------------
 devices:
   # Defines the size of the device to create. The size value is numerical
-  size: "800"
+  size: "1024"
 
   # Defines the unit used for size. Valid values are :
   # "s" (sectors), "B" (bytes),  "kB",  "MB",  "MiB", "GB",  "GiB",  "TB",  "TiB"
@@ -53,7 +53,7 @@ devices:
 
   # Defines the filename used to store the device image. This file is created and allocated at
   # image creation.
-  filename: "netshell.img"
+  filename: "cubieboard-5-netshell-rootfs.img"
 
   # Defines the kind of compression to apply on the image once its created. Valid values are :
   # . bzip2
@@ -98,7 +98,7 @@ devices:
         type: "primary" ,
 
         # Defines the size of the partition to create. The size value is numerical
-        size: "256" ,
+        size: "1020" ,
 
         # Defines the unit used for size. Valid values are :
         # "s" (sectors), "B" (bytes),  "kB",  "MB",  "MiB", "GB",  "GiB",  "TB",  "TiB",
@@ -144,26 +144,6 @@ devices:
         # Default value is undefined, which means no content to be copied
         install_content_partition_mapping: "/"
       }
-    - {
-        name: "system_1" ,
-        type: "primary" ,
-        size: "256" ,
-        unit: "MB" ,
-        start_sector: "532480" ,
-        format: True ,
-        filesystem: "ext4" ,
-        ext_fs_tune: "-m 0"
-      }
-    - {
-        name: "updates" ,
-        type: "primary" ,
-        size: "256" ,
-        unit: "MB" ,
-        start_sector: "1056768" ,
-        format: True ,
-        filesystem: "ext4" ,
-        ext_fs_tune: "-m 0"
-      }
 
 
 # ----------------------------------------------------------------------------
@@ -204,4 +184,4 @@ content:
   # . rootfs
   #
   # Default value is rootfs (even if content section is not defined)
-  type: firmware
+  type: rootfs

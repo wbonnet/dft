@@ -133,6 +133,10 @@ resilience:
 # ----------------------------------------------------------------------------
 configuration:
 
+  # Define the filename used when generatig the squashfs file
+  # Currently only one file is hqndled
+  filename: system.fw
+
   # Defines the block size. Default is 131072 bytes
   block_size: "256K"
 
