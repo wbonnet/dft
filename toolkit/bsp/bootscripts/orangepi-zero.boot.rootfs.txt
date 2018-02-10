@@ -13,7 +13,7 @@
 setenv fstype   __FILESYSTEM_TYPE__
 setenv fdtfile  'boot/dtb/sun8i-h2-plus-orangepi-zero.dtb'
 setenv image    'boot/zImage'
-setenv mmcroot  '/dev/mmcblk0p1 rootwait ro'
+setenv mmcroot  '/dev/mmcblk0p1 rootwait rw'
 setenv mmcargs  'setenv bootargs console=${console} root=${mmcroot} rootfstype=${fstype}'
 setenv mmcdev   0
 setenv mmcpart  1
