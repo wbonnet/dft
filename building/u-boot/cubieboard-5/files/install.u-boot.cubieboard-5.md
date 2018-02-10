@@ -1,4 +1,4 @@
-# u-boot installation for orangepi-zero
+# u-boot installation for cubieboard-5
 
 ## Disclaimer
 
@@ -12,17 +12,17 @@ You have been warned :)
 ## u-boot installation
 
 The u-boot binary to install has been copied by this package to :
-/boot/u-boot/u-boot-orangepi-zero
+/boot/u-boot/u-boot-cubieboard-5
 
 This is a symlink to the current u-boot file stored at the same location in a
-file named u-boot-orangepi-zero.VERSION
+file named u-boot-cubieboard-5.VERSION
 
 u-boot binary has to be installed on the first sectors of the device used by 
 the board to boot. This can be done by the following commands, assuming that :
 
 . The commands are run as root or using sudo ( that's the example)
 
-. The commands are run on the target board (orangepi-zero)
+. The commands are run on the target board (cubieboard-5)
 
 . Which means the /dev/mmcblk0 is the internal CF card used to boot
 
@@ -33,4 +33,4 @@ u-boot itself.
 ## shell commands
 
 sudo dd if=/dev/zero of=/dev/mmcblk0 bs=1k count=1023 seek=1 status=noxfer
-sudo dd if=/boot/u-boot/u-boot-orangepi-zero of=/dev/mmcblk0 bs=1024 seek=8 status=noxfer
+sudo dd if=/boot/u-boot/u-boot-cubieboard-5 of=/dev/mmcblk0 bs=1024 seek=8 status=noxfer
