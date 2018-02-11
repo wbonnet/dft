@@ -60,8 +60,8 @@ configuration:
   # which are copied to /dft_bootstrap during rootfs bootstrapping. These paths
   # contains project specific definition (which are not included in the dft
   # open-source tool)
-  additional_roles:
-    - "/usr/share/dft/examples/redefined-roles"
+  # additional_roles:
+  #  - "/usr/share/dft/examples/redefined-roles"
 
   # Defines if the file /etc/apt/apt.conf.d/10no-check-valid-until should be generated or not
   # If generated this file contains Acquire::Check-Valid-Until: "0"; which disables validity
@@ -106,25 +106,9 @@ project_definition:
   rootfs:
     - rootfs.yml
 
-  # Definition of the firmware content and structure
-  firmware:
-    - firmware.yml
-
   # Definition of the image structure
   image:
-    - image.yml
-
-  # Definition of the control to apply on the rootfs
-#  check:
-#    - check_rootfs.yml
-
-  # Definition of the stripping rules (to remove extra packages, files etc.)
-#  stripping:
-#    - stripping.yml
-
-  # Definition of the content to generate
-#  content_information:
-#    - content.yml
+    - image-rootfs.yml
 
   # Definition of the variables to be passed to rootfs creation
   variables:
