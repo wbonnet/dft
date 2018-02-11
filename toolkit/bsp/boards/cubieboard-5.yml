@@ -56,7 +56,7 @@ kernel:
 # used for this board. In some (rare) case, the uboot can include severa binaries, thus this
 # sections defines a list of binary files to copy to the target image, the copy method to use, and
 # its parameters.
-uboot:
+u-boot:
   # Defines the upstream site used to provide kernel for this device
   origin: armwizard
   
