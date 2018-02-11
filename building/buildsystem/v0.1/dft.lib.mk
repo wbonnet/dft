@@ -101,7 +101,7 @@ extract-git-% :
 #
 # patch utilities
 #
-PATCH_DIR_LEVEL ?= 0
+PATCH_DIR_LEVEL ?= 1
 PATCH_DIR_FUZZ  ?= 2
 PATCH_ARGS       = --directory=$(WORK_SRC) --strip=$(PATCH_DIR_LEVEL) --fuzz=$(PATCH_DIR_FUZZ)
 

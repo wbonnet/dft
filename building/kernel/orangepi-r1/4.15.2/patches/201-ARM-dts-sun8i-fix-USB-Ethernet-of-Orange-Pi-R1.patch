@@ -1,9 +1,9 @@
 --- a/arch/arm/boot/dts/sun8i-h2-plus-orangepi-r1.dts
 +++ b/arch/arm/boot/dts/sun8i-h2-plus-orangepi-r1.dts
 @@ -49,6 +49,20 @@
- 
+
  	/delete-node/ reg_vcc_wifi;
- 
+
 +	/*
 +	 * Ths pin of this regulator is the same with the Wi-Fi extra
 +	 * regulator on the original Zero. However it's used for USB
