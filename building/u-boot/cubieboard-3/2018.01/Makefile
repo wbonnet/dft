@@ -19,6 +19,15 @@
 #
 #
 
-# Defines board name
-BOARD_NAME = cubieboard-3
-BOARD_ARCH = armhf
+# Defines the kernel version
+UBOOT_VERSION     = 2018.01
+KERNEL_GIT_BRANCH = v$(UBOOT_VERSION)
+
+# Include board specific definitions
+include ../board.mk
+
+# Defines the patches to apply on the sources
+# PATCHFILES += 0000_some_patch.diff
+
+# Include build system
+include buildsystem/dft.u-boot.mk

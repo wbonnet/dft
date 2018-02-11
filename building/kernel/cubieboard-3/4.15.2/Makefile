@@ -18,7 +18,15 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 #
+ 
+# Defines the kernel version
+KERNEL_VERSION=4.15.2
 
-# Defines board name
-BOARD_NAME = cubieboard-3
-BOARD_ARCH = armhf
+# Include board specific definitions
+include ../board.mk
+
+# Defines the patches to apply on the sources
+# PATCHFILES += 0000_some_patch.diff
+
+# Include build system
+include buildsystem/dft.mk
