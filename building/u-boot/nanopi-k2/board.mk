@@ -1,0 +1,1 @@
+nanopi-k2.mk
