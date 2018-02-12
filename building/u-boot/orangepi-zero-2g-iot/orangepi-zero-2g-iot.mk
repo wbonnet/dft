@@ -21,4 +21,4 @@
 
 # Defines board name
 BOARD_NAME = orangepi-zero-2g-iot
-BOARD_ARCH = unknown
+BOARD_ARCH = armhf

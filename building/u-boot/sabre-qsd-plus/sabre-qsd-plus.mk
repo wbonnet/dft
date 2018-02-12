@@ -21,4 +21,4 @@
 
 # Defines board name
 BOARD_NAME = sabre-qsd-plus
-BOARD_ARCH = unknown
+BOARD_ARCH = armhf

@@ -21,4 +21,4 @@
 
 # Defines board name
 BOARD_NAME = raspberry-pi1
-BOARD_ARCH = unknown
+BOARD_ARCH = armel

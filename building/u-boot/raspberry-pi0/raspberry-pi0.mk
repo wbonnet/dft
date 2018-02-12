@@ -21,4 +21,4 @@
 
 # Defines board name
 BOARD_NAME = raspberry-pi0
-BOARD_ARCH = unknown
+BOARD_ARCH = armhf

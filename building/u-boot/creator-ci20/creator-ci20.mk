@@ -21,4 +21,4 @@
 
 # Defines board name
 BOARD_NAME = creator-ci20
-BOARD_ARCH = unknown
+BOARD_ARCH = mips

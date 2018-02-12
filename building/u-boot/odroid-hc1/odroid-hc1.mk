@@ -20,5 +20,5 @@
 #
 
 # Defines board name
-BOARD_NAME = marsboard-imx6
-BOARD_ARCH = armhf
+BOARD_NAME = odroid-hc1
+BOARD_ARCH = mnknown

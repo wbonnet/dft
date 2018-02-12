@@ -21,4 +21,4 @@
 
 # Defines board name
 BOARD_NAME = rock64
-BOARD_ARCH = unknown
+BOARD_ARCH = aarch64
