@@ -46,3 +46,18 @@ new-board-%:
 	@for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \
 		$(MAKE) -C $$i $* || exit 1 ; \
 	done
+
+
+# ------------------------------------------------------------------------------
+#
+# Target that prints the help
+#
+help :
+	@echo "Available targets are :"
+	@echo '   new-board-[BOARD-NAME]  Create a new board entry. ex: make new-board-orangepi-zero'
+	@echo '                           This target create a new directory named after the BOARD-NAME'
+	@echo '                           It will generate the Makefile and a blank configfile.'
+	@echo '                           After creation you have to set the architecture in board.mk'
+	@echo '                           and fill config content.'
+	@echo 
+	@echo '                           Do not forget to add bsp definition and bootscripts to DFT tree'

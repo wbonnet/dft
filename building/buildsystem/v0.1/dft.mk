@@ -218,9 +218,9 @@ help :
 	@echo '   configure               Execute the configure script'
 	@echo '   build                   Build the software'
 	@echo '   install                 Install the software to the target directory'
-	@echo '   package                 Build the Debian package containing kernel and all the needed files'
+	@echo '   package                 Build the Debian package containing kernel or u-boot and all the related files'
 	@echo
-
+	@echo '   re[target]              Force execution of [target] even if already done (without execution of its depends)'
 
 # ------------------------------------------------------------------------------
 #

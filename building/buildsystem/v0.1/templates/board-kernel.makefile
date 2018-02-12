@@ -72,3 +72,14 @@ new-version-%:
 	@for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \
 		$(MAKE) -C $$i $* || exit 1 ; \
 	done
+
+# ------------------------------------------------------------------------------
+#
+# Target that prints the help
+#
+help :
+	@echo "Available targets are :"
+	@echo '   new-version-[VERSION]   Create a new version entry. ex: make new-version-4.15.3'
+	@echo '                           This target will create a subdirectory name VERSION, containing'
+	@echo '                           the Makefile and all the files needed to fetch and build given'
+	@echo '                           version. It also instanciate Debian package template'
