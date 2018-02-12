@@ -43,6 +43,7 @@ endef
 endif
 
 
+
 # ------------------------------------------------------------------------------
 #
 # Check if the board arch is defined, if not output an error before doing anything.
@@ -55,6 +56,44 @@ define error_msg
 BOARD_ARCH variable as not yet been defined in the $(BOARD_NAME).mk Makefile.
 Please replace "unknown" by the board architecture (arhmf, amd64, ppc64, etc.).
 
+
+endef
+  $(error $(error_msg))
+endif
+
+
+# ------------------------------------------------------------------------------
+#
+# Check if the DEBFULLNAME is defined. Otherwise package template will not be
+# instanciated properly.
+#
+ifeq ($(DEBFULLNAME), )
+define error_msg
+
+
+DEBFULLNAME environment variable should be defined. You have to set it before
+continuing. This can be done by adding the following line to ~/.bash_aliases
+
+export DEBFULLNAME "John Doe"
+
+endef
+  $(error $(error_msg))
+endif
+
+
+# ------------------------------------------------------------------------------
+#
+# Check if the DEBEMAIL is defined. Otherwise package template will not be
+# instanciated properly.
+#
+ifeq ($(DEBEMAIL), )
+define error_msg
+
+
+DEBEMAIL environment variable shoould be defined. You have to set it before
+continuing. This can be done by adding the following line to ~/.bash_aliases
+
+export DEBEMAIL "john@doe.org"
 
 endef
   $(error $(error_msg))
