@@ -26,9 +26,7 @@ KERNEL_VERSION=4.15.2
 include ../board.mk
 
 # Defines the patches to apply on the sources
-PATCHFILES += 200-ARM-dts-sunxi-add-support-for-Orange-Pi-R1-board.patch
-PATCHFILES += 201-ARM-dts-sun8i-fix-USB-Ethernet-of-Orange-Pi-R1.patch
-PATCHFILES += 202-ARM-dts-sun8i-activate-SPI-on-Orange-Pi-R1.patch
+PATCHFILES += 0000-Add-support-for-Orange-PI-R1-board-from-Kernel-4.16-rc1.patch
 
 # Include build system
 include buildsystem/dft.mk
