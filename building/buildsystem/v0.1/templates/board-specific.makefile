@@ -20,5 +20,6 @@
 #
 
 # Defines board name
-BOARD_NAME = __BOARD_NAME__
-BOARD_ARCH = unknown
+BOARD_NAME  = __BOARD_NAME__
+BOARD_ARCH  = unknown
+DEFAULT_DTB = unknown

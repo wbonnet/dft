@@ -57,7 +57,7 @@ help :
 	@echo '   new-board-[BOARD-NAME]  Create a new board entry. ex: make new-board-orangepi-zero'
 	@echo '                           This target create a new directory named after the BOARD-NAME'
 	@echo '                           It will generate the Makefile and a blank configfile.'
-	@echo '                           After creation you have to set the architecture in board.mk'
-	@echo '                           and fill config content.'
+	@echo '                           After creation you have to set the architecture and default dtb'
+	@echo '                           filename in the board.mk file, and fill config content.'
 	@echo 
 	@echo '                           Do not forget to add bsp definition and bootscripts to DFT tree'
