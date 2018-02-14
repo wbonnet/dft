@@ -42,17 +42,21 @@ do-install :
 			mkdir -p $(abspath $(INSTALL_DIR))/u-boot/ ; \
 			mkdir -p $(INSTALL_DIR)/doc ; \
 			cp files/* $(INSTALL_DIR)/doc ; \
-			cd $(OBJ_DIR) ; \
+			cd $(abspath $(OBJ_DIR)) ; \
 			cp -fr $(UBOOT_BINARY_FILE) $(abspath $(INSTALL_DIR))/u-boot/u-boot-$(BOARD_NAME)-$(UBOOT_VERSION) ; \
 			cd $(abspath $(INSTALL_DIR))/u-boot/ ; \
-			ln -s u-boot-$(BOARD_NAME)-$(UBOOT_VERSION) u-boot-$(BOARD_NAME); \
+			ln -sf u-boot-$(BOARD_NAME)-$(UBOOT_VERSION) u-boot-$(BOARD_NAME); \
 	 	else \
 			echo "        running install in $(OBJ_DIR)"  ; \
 			mkdir -p $(abspath $(INSTALL_DIR))/boot/dtb ; \
-			cd $(OBJ_DIR) ; \
+			cd $(abspath $(OBJ_DIR)) ; \
 			$(BUILD_ENV) $(MAKE) INSTALL_PATH=$(abspath $(INSTALL_DIR))/boot $(INSTALL_ARGS) ; \
 			$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(abspath $(INSTALL_DIR))/ modules_install ; \
 			cp -fr arch/arm/boot/dts/*.dtb $(abspath $(INSTALL_DIR))/boot/dtb ; \
+	 	    if [ ! "" = "$(DEFAULT_DTB)" ] ; then \
+			    cd $(abspath $(INSTALL_DIR)/boot) ; \
+			    ln -sf dtb/$(DEFAULT_DTB) default.dtb ; \
+		    fi ; \
 		fi ; \
 	fi ;
 	@$(TARGET_DONE)

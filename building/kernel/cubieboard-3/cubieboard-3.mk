@@ -20,5 +20,6 @@
 #
 
 # Defines board name
-BOARD_NAME = cubieboard-3
-BOARD_ARCH = armhf
+BOARD_NAME  = cubieboard-3
+BOARD_ARCH  = armhf
+DEFAULT_DTB = sun7i-a20-cubietruck.dtb 
