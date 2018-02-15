@@ -19,13 +19,15 @@
 #
 #
 
-# Defines board name
-BOARD_NAME = nanopi-neo-plus2
-BOARD_ARCH = aarch64
+# Defines the kernel version
+UBOOT_VERSION     = 2018-01
+KERNEL_GIT_BRANCH = v$(UBOOT_VERSION)
 
-# Set config file to empty and define the name of the board to use a defconfig
-USE_CONFIG_FILE        =
-USE_DEFCONFIG          = nanopi_neo_plus2_defconfig
+# Include board specific definitions
+include ../board.mk
 
-# Defines the list of files to copy (#path is relative to build dir)
-UBOOT_BINARY_FILE      = u-boot-sunxi-with-spl.bin
+# Defines the patches to apply on the sources
+# PATCHFILES += 0000_some_patch.diff
+
+# Include build system
+include buildsystem/dft.u-boot.mk
