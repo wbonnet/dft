@@ -23,9 +23,10 @@
 include board.mk
 
 # Defines the software version
-NEW_VERSION = $*
+NEW_VERSION  = $*
 PACAKGE_DATE = $(shell LC_ALL=C date +"%a, %d %b %Y %T %z")
 PACAKGE_DATE = $(shell date )
+FILTER_DIRS  = files/
 
 # Create a new boar entry in the repository
 new-version-%:

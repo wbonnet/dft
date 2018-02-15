@@ -312,6 +312,9 @@ show-config :
 	@echo "  DEBUILD                           $(DEBUILD)"
 	@echo "  DEBUILD_ARGS                      $(DEBUILD_ARGS)"
 	@echo "  DEBUILD_ENV                       $(DEBUILD_ENV)"
+	@echo
+	@echo "Internal variables"
+	@echo "  FILTER_DIRS                       $(FILTER_DIRS)"
 
 # ------------------------------------------------------------------------------
 #
