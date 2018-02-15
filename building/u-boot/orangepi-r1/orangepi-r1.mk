@@ -23,10 +23,6 @@
 BOARD_NAME = orangepi-r1
 BOARD_ARCH = armhf
 
-# Defines the git repository to use
-KERNEL_GIT_URL         = https://github.com/u-boot
-KERNEL_GIT_REPO        = u-boot
-
 # Set config file to empty and define the name of the board to use a defconfig
 USE_CONFIG_FILE        =
 USE_DEFCONFIG          = orangepi_zero_defconfig

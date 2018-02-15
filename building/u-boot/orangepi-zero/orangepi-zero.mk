@@ -23,14 +23,9 @@
 BOARD_NAME = orangepi-zero
 BOARD_ARCH = armhf
 
-# Defines the git repository to use
-KERNEL_GIT_URL         = https://github.com/u-boot
-KERNEL_GIT_REPO        = u-boot
-
 # Set config file to empty and define the name of the board to use a defconfig
 USE_CONFIG_FILE        =
 USE_DEFCONFIG          = orangepi_zero_defconfig
 
 # Defines the list of files to copy (path is relative to build dir)
 UBOOT_BINARY_FILE      = u-boot-sunxi-with-spl.bin
-

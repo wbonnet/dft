@@ -22,3 +22,10 @@
 # Defines board name
 BOARD_NAME = pine64
 BOARD_ARCH = aarch64
+
+# Set config file to empty and define the name of the board to use a defconfig
+USE_CONFIG_FILE        =
+#USE_DEFCONFIG          = orangepi_zerio_defconfig
+
+# Defines the list of files to copy (#path is relative to build dir)
+#UBOOT_BINARY_FILE      = u-boot-sunxi-with-spl.bin
