@@ -1,6 +1,8 @@
-dft-buildsystem (0.6.4-1) unstable; urgency=low
+dft-buildsystem (0.6.5-1) unstable; urgency=low
 
-  * xxx
+  * Add missing board entries for kernel and u-boot
+  * Add default dtb symlink
+  * Kernel packages now only ship by default the desgnated default dtb
 
  -- William Bonnet <wbonnet@theitmakers.com>  Mon, 05 Feb 2018 09:00:00 +0100
 

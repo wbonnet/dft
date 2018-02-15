@@ -25,7 +25,7 @@ BOARD_ARCH = armhf
 
 # Set config file to empty and define the name of the board to use a defconfig
 USE_CONFIG_FILE        =
-#USE_DEFCONFIG          = orangepi_zerio_defconfig
+USE_DEFCONFIG          = rpi_defconfig
 
 # Defines the list of files to copy (#path is relative to build dir)
 #UBOOT_BINARY_FILE      = u-boot-sunxi-with-spl.bin
