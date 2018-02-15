@@ -21,4 +21,14 @@
 
 # Defines board name
 BOARD_NAME = bananapi-r2
+
+# Defines boards architecture (armhf, armel, aarch64, amd64, i368, etc.)
 BOARD_ARCH = armhf
+
+# Defines the default dtb to use (symlink used by generic boot.scr)
+DEFAULT_DTB = unknown
+
+# Defines if all dtb should be included in the generated package (uncomment
+# and set value to 1) or if only default dtb is included (keep commented or
+# set the value to 0) 
+# INCLUDE_ALL_DTB_IN_PACKAGE = 0
