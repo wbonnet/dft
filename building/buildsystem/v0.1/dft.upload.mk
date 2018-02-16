@@ -30,40 +30,35 @@
 
 # ------------------------------------------------------------------------------
 #
-# Execute the install target script
+# Execute the upload target script
 #
 
-do-install :
-	@if test -f $(COOKIE_DIR)/do-install ; then \
+do-upload :
+	@if test -f $(COOKIE_DIR)/do-upload ; then \
 		true ; \
 	else \
-		echo "        running install in $(OBJ_DIR)"  ; \
-	 	if [ ! "" = "$(UBOOT_VERSION)" ] ; then \
-			mkdir -p $(abspath $(INSTALL_DIR))/u-boot/ ; \
-			mkdir -p $(INSTALL_DIR)/doc ; \
-			cp files/* $(INSTALL_DIR)/doc ; \
-			cd $(abspath $(OBJ_DIR)) ; \
-			cp -fr $(UBOOT_BINARY_FILE) $(abspath $(INSTALL_DIR))/u-boot/u-boot-$(BOARD_NAME)-$(UBOOT_VERSION) ; \
-			cd $(abspath $(INSTALL_DIR))/u-boot/ ; \
-			ln -sf u-boot-$(BOARD_NAME)-$(UBOOT_VERSION) u-boot-$(BOARD_NAME); \
+		echo "        running upload"  ; \
+	 	if [ ! "" = "$(DFT_DEB_UPLOAD_PATH)" ] && [ ! "" = "$(DFT_DEB_UPLOAD_SERVER)" ] ; then \
+			scp $(abspath $(PACKAGE_DIR))/*.deb $(DFT_DEB_UPLOAD_SERVER):$(DFT_DEB_UPLOAD_PATH) ; \
 	 	else \
-			echo "        running install in $(OBJ_DIR)"  ; \
-			mkdir -p $(abspath $(INSTALL_DIR))/boot/dtb ; \
-			cd $(abspath $(OBJ_DIR)) ; \
-			$(BUILD_ENV) $(MAKE) INSTALL_PATH=$(abspath $(INSTALL_DIR))/boot $(INSTALL_ARGS) ; \
-			$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(abspath $(INSTALL_DIR))/ modules_install ; \
-			cp -fr arch/arm/boot/dts/*.dtb $(abspath $(INSTALL_DIR))/boot/dtb ; \
-	 	    if [ ! "" = "$(DEFAULT_DTB)" ] ; then \
-			    cd $(abspath $(INSTALL_DIR)/boot) ; \
-			    ln -sf dtb/$(DEFAULT_DTB) default.dtb ; \
-		    fi ; \
+	 	    if [ "" = "$(DFT_DEB_UPLOAD_SERVER)" ] ; then \
+			    echo "        Variable DFT_DEB_UPLOAD_SERVER is not set, please define it your shell environment."  ; \
+			else \
+			    echo "        DFT_DEB_UPLOAD_SERVER = $(DFT_DEB_UPLOAD_SERVER)."  ; \
+			fi ; \
+	 	    if [ "" = "$(DFT_DEB_UPLOAD_PATH)" ] ; then \
+			    echo "        Variable DFT_DEB_UPLOAD_PATH is not set, please define it your shell environment."  ; \
+			else \
+			    echo "        DFT_DEB_UPLOAD_PATH = $(DFT_DEB_UPLOAD_PATH)."  ; \
+			fi ; \
+			false ; \
 		fi ; \
 	fi ;
 	@$(TARGET_DONE)
 
-do-reinstall :
-	@if test -f $(COOKIE_DIR)/do-install ; then \
-		rm -f $(COOKIE_DIR)/do-install ; \
+do-reupload :
+	@if test -f $(COOKIE_DIR)/do-upload ; then \
+		rm -f $(COOKIE_DIR)/do-upload ; \
 		rm -fr $(abspath $(INSTALL_DIR)) ; \
 	fi ;
 	$(TARGET_DONE)

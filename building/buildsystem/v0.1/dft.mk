@@ -186,6 +186,14 @@ include $(BUILD_SYSTEM_ROOT)/dft.package.mk
 
 # ------------------------------------------------------------------------------
 #
+# Includes the build system upload definitions
+#
+# ------------------------------------------------------------------------------
+include $(BUILD_SYSTEM_ROOT)/dft.upload.mk
+
+
+# ------------------------------------------------------------------------------
+#
 # Defines stub targets so that it is possible to define pre-something or
 # post-something targets in Makefile. These pre/post will be automagically by
 # targets even if not define thanks to stubs
@@ -575,12 +583,13 @@ reinstall : build pre-reinstall do-reinstall install post-reinstall
 
 # ------------------------------------------------------------------------------
 #
-# Build the Debian package
+# Create the Debian package
 #
 
 package : install $(PACKAGE_DIR) pre-package do-package post-package
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
+
 
 # ------------------------------------------------------------------------------
 #
@@ -588,6 +597,25 @@ package : install $(PACKAGE_DIR) pre-package do-package post-package
 #
 
 repackage : install pre-repackage do-repackage package post-repackage
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
+
+
+# ------------------------------------------------------------------------------
+#
+# Upload the Debian package
+#
+
+upload : package pre-upload do-upload post-upload
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
+
+# ------------------------------------------------------------------------------
+#
+# Execute once again the upload target
+#
+
+reupload : package pre-reupload do-reupload upload post-repupload
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
