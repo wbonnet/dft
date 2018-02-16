@@ -397,7 +397,7 @@ $(DOWNLOAD_DIR)/% : $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 	$(TARGET_DONE)
 
 $(GIT_EXTRACT_DIR)/% : $(GIT_EXTRACT_DIR)
-	@if test -f $(COOKIE_DIR)/$(GIT_EXTRACT_DIR)/$* ; then \
+	if test -f $(COOKIE_DIR)/$(GIT_EXTRACT_DIR)/$* ; then \
 		true ; \
 	else \
 		echo "        cloning into $(GIT_EXTRACT_DIR)/$*" ; \
