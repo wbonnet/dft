@@ -3,6 +3,8 @@ dft-buildsystem (0.6.5-1) unstable; urgency=low
   * Add missing board entries for kernel and u-boot
   * Add default dtb symlink
   * Kernel packages now only ship by default the desgnated default dtb
+  * Add upload target to buildsystem (scp .deb files after generation to a
+    remote server)
 
  -- William Bonnet <wbonnet@theitmakers.com>  Mon, 05 Feb 2018 09:00:00 +0100
 
