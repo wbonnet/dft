@@ -54,7 +54,7 @@ define error_msg
 
 
 BOARD_ARCH variable as not yet been defined in the $(BOARD_NAME).mk Makefile.
-Please replace "unknown" by the board architecture (arhmf, amd64, ppc64, etc.).
+Please replace "unknown" by the board architecture (armv7l, x86_64, ppc64, etc.).
 
 
 endef
@@ -397,7 +397,7 @@ $(DOWNLOAD_DIR)/% : $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 	$(TARGET_DONE)
 
 $(GIT_EXTRACT_DIR)/% : $(GIT_EXTRACT_DIR)
-	if test -f $(COOKIE_DIR)/$(GIT_EXTRACT_DIR)/$* ; then \
+	@if test -f $(COOKIE_DIR)/$(GIT_EXTRACT_DIR)/$* ; then \
 		true ; \
 	else \
 		echo "        cloning into $(GIT_EXTRACT_DIR)/$*" ; \
