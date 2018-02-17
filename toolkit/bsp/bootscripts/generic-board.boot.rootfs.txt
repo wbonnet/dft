@@ -11,7 +11,7 @@
 # Definition of environment variables
 #
 setenv fstype   __FILESYSTEM_TYPE__
-setenv fdtfile  'boot/default.dtb
+setenv fdtfile  'boot/default.dtb'
 setenv image    'boot/zImage'
 setenv mmcroot  '/dev/mmcblk0p1 rootwait rw'
 setenv mmcargs  'setenv bootargs console=${console} root=${mmcroot} rootfstype=${fstype}'
