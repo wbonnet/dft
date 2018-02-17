@@ -130,15 +130,15 @@ BUILD_PROCESS_COUNT ?= -j$(shell grep -c ^processor /proc/cpuinfo)
 
 # Defines default build arguments, depending on the board architectures
 ARCH_COMMON_BUILD_ARGS ?= modules
-ARCH_ARMHF_BUILD_ARGS  ?= zImage dtbs
+ARCH_ARMV7L_BUILD_ARGS  ?= zImage dtbs
 
 # Defines default build targets depending on the board architectures
 ARCH_COMMON_BUILD_FLAGS   ?=
-ARCH_ARMHF_BUILD_FLAGS    ?=
+ARCH_ARMV7L_BUILD_FLAGS    ?=
 
 # Defines default build arguments, depending on the board architectures
 # ARCH_COMMON_INSTALL_ARGS ?=
-# ARCH_ARMHF_INSTALL_ARGS  ?= "zImage dtbs"
+# ARCH_ARMV7L_INSTALL_ARGS  ?= "zImage dtbs"
 
 # Defines standard make targets
 BUILD_FLAGS   ?= $(ARCH_COMMON_BUILD_FLAGS) $(ARCH_$(shell echo $(BOARD_ARCH) | tr a-z A-Z)_BUILD_FLAGS)
@@ -146,8 +146,8 @@ BUILD_ARGS    ?= $(ARCH_COMMON_BUILD_ARGS) $(ARCH_$(shell echo $(BOARD_ARCH) | t
 
 # Defines default installation arguments, depending on the board architectures
 ARCH_COMMON_INSTALL_ARGS ?=
-ARCH_ARMHF_INSTALL_ARGS  ?= zinstall
-ARCH_AMD64_INSTALL_ARGS  ?= zinstall
+ARCH_ARMV7L_INSTALL_ARGS  ?= zinstall
+ARCH_X86_64_INSTALL_ARGS  ?= zinstall
 ARCH_I386_INSTALL_ARGS  ?= zinstall
 
 INSTALL_ARGS    ?= $(ARCH_COMMON_INSTALL_ARGS) $(ARCH_$(shell echo $(BOARD_ARCH) | tr a-z A-Z)_INSTALL_ARGS)
