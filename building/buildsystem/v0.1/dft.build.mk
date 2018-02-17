@@ -34,7 +34,7 @@
 #
 
 build-%/Makefile :
-	if test -f $(COOKIE_DIR)/build-$*/Makefile ; then \
+	@if test -f $(COOKIE_DIR)/build-$*/Makefile ; then \
 		true ; \
 	else \
 		echo "        running make in $*"  ; \
