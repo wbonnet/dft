@@ -26,7 +26,7 @@ BOARD_NAME  = orangepi-zero-plus
 BOARD_ARCH  = aarch64
 
 # Defines the default dtb to use (symlink used by generic boot.scr)
-DEFAULT_DTB = unknown
+DEFAULT_DTB = sun50i-h5-orangepi-zero-plus2.dtb 
 
 # Defines if all dtb should be included in the generated package (uncomment
 # and set value to 1) or if only default dtb is included (keep commented or

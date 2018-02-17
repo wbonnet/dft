@@ -26,7 +26,7 @@ BOARD_NAME  = nanopi-neo2
 BOARD_ARCH  = aarch64
 
 # Defines the default dtb to use (symlink used by generic boot.scr)
-DEFAULT_DTB = unknown
+DEFAULT_DTB = sun50i-h5-nanopi-neo2.dtb 
 
 # Defines if all dtb should be included in the generated package (uncomment
 # and set value to 1) or if only default dtb is included (keep commented or
