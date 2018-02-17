@@ -22,7 +22,7 @@
 # Defines board name
 BOARD_NAME  = __BOARD_NAME__
 
-# Defines boards architecture (armhf, armel, aarch64, amd64, i368, etc.)
+# Defines boards architecture (armv7l, armel, aarch64, x86_64, i686, etc.)
 BOARD_ARCH  = unknown
 
 # Defines the default dtb to use (symlink used by generic boot.scr)
