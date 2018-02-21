@@ -22,11 +22,13 @@
 # Includes common definition for all examples Makefiles
 include ../../examples-common.mk
 
+
 # ------------------------------------------------------------------------------
 #
 # Targets not associated with a file (aka PHONY)
 #
 .PHONY: create-rootfs upload-rootfs create-firmware upload-firmware create-firmware-update upload-firmware-update distclean clean
+
 
 # ------------------------------------------------------------------------------
 #
@@ -34,15 +36,15 @@ include ../../examples-common.mk
 #
 help :
 	@echo "Available targets are :"
-	@echo '   create-firmware         Run the DFT sequence used to build the firmware image'
+	@echo '   firmware                Run the DFT sequence used to build the firmware image'
 	@echo '   upload-firmware         Upload the firmware image to a remote server'
 	@echo '                           (this target use the DFT_FIRMWARE_UPLOAD_SERVER and'
 	@echo '                           DFT_FIRMWARE_UPLOAD_PATH variables from your shell env)'
-	@echo '   create-firmware-update  Run the DFT sequence used to build a firmwareupdate image'
+	@echo '   firmware-update         Run the DFT sequence used to build a firmwareupdate image'
 	@echo '   upload-firmware-update  Upload the firmware update image to a remote server'
 	@echo '                           (this target also use the DFT_FIRMWARE_UPLOAD_SERVER and'
 	@echo '                           DFT_FIRMWARE_UPLOAD_PATH variables from your shell env)'
-	@echo '   create-rootfs           Runs the DFT sequence used to build the firmware image'
+	@echo '   rootfs                  Runs the DFT sequence used to build the firmware image'
 	@echo '   upload-rootfs           Runs the DFT sequence used to build the rootfs image'
 	@echo '                           (this target use the DFT_ROOTFS_UPLOAD_SERVER and'
 	@echo '                           DFT_ROOTFS_UPLOAD_PATH variables from your shell env)'
@@ -58,6 +60,17 @@ firmware:
 	fi ;
 	$(TARGET_DONE)
 
+
+# Run a full dft sequence to produce the firmware update archive
+firmware-update:
+	@if test -f $(COOKIE_DIR)/firmware-update ; then \
+		true ; \
+	else \
+		sudo -E dft build_firmware_update --project project-firmware.yml ; \
+	fi ;
+	$(TARGET_DONE)
+
+
 # Run a full dft sequence to produce the rootfs image
 rootfs:
 	@if test -f $(COOKIE_DIR)/rootfs ; then \
@@ -66,6 +79,7 @@ rootfs:
 		sudo -E dft run_sequence --sequence produce-image --project project-rootfs.yml ; \
 	fi ;
 	$(TARGET_DONE)
+
 
 # Upload the firmware to a remote server
 upload-firmware: firmware
@@ -91,6 +105,8 @@ upload-firmware: firmware
 	fi ;
 	$(TARGET_DONE)
 
+
+# Some cleaning targets
 distclean: clean
 clean:
 	@rm -fr $(COOKIE_DIR)
