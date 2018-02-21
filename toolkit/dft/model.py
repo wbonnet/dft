@@ -866,6 +866,7 @@ class Project(object):
     """
 
     # Compute the value of the firmware_directory
+    print(self.firmware_base_workdir + "/" + self.__get_target_directory(0) + "/content")
     return self.firmware_base_workdir + "/" + self.__get_target_directory(0) + "/content"
 
 
