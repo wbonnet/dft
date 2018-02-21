@@ -575,7 +575,7 @@ Available commands are :
     """
 
     # Create the business object
-    command = build_firmware_Update.BuildFirmwareUpdate(self.dft, self.project)
+    command = build_firmware_update.BuildFirmwareUpdate(self.dft, self.project)
 
     # Then call the dedicated method
     command.build_update_archive()
