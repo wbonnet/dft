@@ -26,9 +26,7 @@ include ../../examples-common.mk
 #
 # Targets not associated with a file (aka PHONY)
 #
-.PHONY: create-rootfs upload-rootfs
-	      create-firmware upload-firmware
-				create-firmware-update upload-firmware-update
+.PHONY: create-rootfs upload-rootfs create-firmware upload-firmware create-firmware-update upload-firmware-update distclean clean
 
 # ------------------------------------------------------------------------------
 #
@@ -69,6 +67,7 @@ rootfs:
 	fi ;
 	$(TARGET_DONE)
 
+# Upload the firmware to a remote server
 upload-firmware: firmware
 	@if test -f $(COOKIE_DIR)/upload-firmware ; then \
 		true ; \
@@ -91,3 +90,7 @@ upload-firmware: firmware
 		fi ; \
 	fi ;
 	$(TARGET_DONE)
+
+distclean: clean
+clean:
+	@rm -fr $(COOKIE_DIR)

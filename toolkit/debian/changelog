@@ -1,6 +1,10 @@
 dft (0.6.5-1) unstable; urgency=low
 
   * Add support for nanopi neo and cubieboard-3
+  * Rename configuration to squashfs-configuratio in firmware.yml
+  * Add several board support
+  * Add Makefile for board support project (starting with orange pi 0)
+  * Add firmware update archive generation
 
  -- William Bonnet <wbonnet@theitmakers.com>  Sun, 11 Feb 2018 18:00:00 +0100
 
