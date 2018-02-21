@@ -688,8 +688,8 @@ class BuildImage(CliCommand):
         self.execute_command(command)
     else:
       # Iterate the list of files in the rootfs and copy them to image
-      for copy_target in os.listdir(self.project.get_firmware_directory()):
-        copy_source_path = os.path.join(self.project.get_firmware_directory(), copy_target)
+      for copy_target in os.listdir(self.project.get_firmware_content_directory()):
+        copy_source_path = os.path.join(self.project.get_firmware_content_directory(), copy_target)
         copy_target_path = os.path.join(image_mount_root, copy_target)
         command = "cp -fra " + copy_source_path + " " + copy_target_path
         self.execute_command(command)
@@ -723,7 +723,7 @@ class BuildImage(CliCommand):
 
     # Replace the initrd size only for firmware mode
     if copy_rootfs is False:
-      path = self.project.get_firmware_directory() + "/initrd.img"
+      path = self.project.get_firmware_content_directory() + "/initrd.img"
       size = os.stat(path).st_size
       command += ' -e "s/__INITRD_SIZE__/' + hex(size) + '/g" '
 

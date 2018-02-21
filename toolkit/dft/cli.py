@@ -38,6 +38,7 @@ from dft import assemble_firmware
 from dft import install_bootchain
 from dft import build_image
 from dft import build_firmware
+from dft import build_firmware_update
 from dft import build_rootfs
 from dft import check_rootfs
 from dft import strip_rootfs
@@ -76,6 +77,9 @@ Available commands are :
                         and bootchain
 . build_firmware        Build the firmware configuration files and scripts
                         used to load in memory the firmware
+. build_firmware_update Build the signed archive containing the firmware
+                        and all the scripts needed to update a target update
+                        Use this way to deploy online updates instead of images
 . build_partitions      Build the disk partitions and store them into
                         separate files
 . build_rootfs          Generate a rootfs from a Debian repository, install
@@ -127,6 +131,8 @@ Available commands are :
       self.__add_parser_build_partitions()
     elif self.command == Key.BUILD_FIRMWARE.value:
       self.__add_parser_build_firmware()
+    elif self.command == Key.BUILD_FIRMWARE_UPDATE.value:
+      self.__add_parser_build_firmware_update()
     elif self.command == Key.CHECK_ROOTFS.value:
       self.__add_parser_check_rootfs()
     elif self.command == Key.CONTENT_INFO.value:
@@ -220,6 +226,15 @@ Available commands are :
 
     # Add the arguments
     self.parser.add_argument(Key.BUILD_FIRMWARE.value,
+                             help=Key.OPT_HELP_LABEL.value)
+
+
+def __add_parser_build_firmware_update(self):
+    """ This method add parser options specific to build_firmware_update command
+    """
+
+    # Add the arguments
+    self.parser.add_argument(Key.BUILD_FIRMWARE_UPDATE.value,
                              help=Key.OPT_HELP_LABEL.value)
 
 
@@ -404,6 +419,8 @@ Available commands are :
       self.__run_build_image()
     elif self.command == Key.BUILD_FIRMWARE.value:
       self.__run_build_firmware()
+    elif self.command == Key.BUILD_FIRMWARE_UPDATE.value:
+      self.__run_build_firmware_upate()
     elif self.command == Key.BUILD_PARTITIONS.value:
       self.__run_build_partitions()
     elif self.command == Key.CHECK_ROOTFS.value:
@@ -545,6 +562,23 @@ Available commands are :
 
     # Then call the dedicated method
     command.build_firmware()
+
+
+  # -------------------------------------------------------------------------
+  #
+  # __run_build_firmware_update
+  #
+  # -------------------------------------------------------------------------
+  def __run_build_firmware_update(self):
+    """ Method used to handle the build_firmware_update command.
+    Create the business objet, then execute the entry point.
+    """
+
+    # Create the business object
+    command = build_firmware_Update.BuildFirmwareUpdate(self.dft, self.project)
+
+    # Then call the dedicated method
+    command.build_update_archive()
 
 
 

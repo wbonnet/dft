@@ -139,9 +139,6 @@ class AssembleFirmware(CliCommand):
     # Copy the new / updated bootchain from the rootfs to the output directory
     self.copy_bootchain_to_output()
 
-    # Create the tar file containing the firmware components
-    self.create_firmware_update()
-
 
 
   # -------------------------------------------------------------------------
@@ -700,22 +697,3 @@ class AssembleFirmware(CliCommand):
 
     # We are done here, now close the file
     working_file.close()
-
-
-
-  # -------------------------------------------------------------------------
-  #
-  # create_firmware_update
-  #
-  # -------------------------------------------------------------------------
-  def create_firmware_update(self):
-    """This method generates the final archive containing the elements of the
-    firmware. The main steps :
-    . Creating a manisfest describing the content items (hash value)
-    . Creat a tar file, containing all the data from the content subirectory
-    . Create a detached signature using either gnupg or openssl
-
-    The two generated files are stored under firmware (same levelas content)
-    """
-
-    pass
