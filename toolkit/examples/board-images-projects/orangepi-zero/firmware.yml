@@ -36,6 +36,16 @@
 
 # ----------------------------------------------------------------------------
 #
+# Definition of the generic configuration parameters
+#
+# ----------------------------------------------------------------------------
+configuration:
+  # Define the filename used when generatig the squashfs file
+  # Currently only one file is hqndled
+  filename: orangepi-zero.fw
+
+# ----------------------------------------------------------------------------
+#
 # Definition of the firmware layout
 #
 # ----------------------------------------------------------------------------
@@ -49,10 +59,10 @@ layout:
   # to mount squashfs files using loopback
   filesystem: ext4
 
-  # Identification of the physical partition containing the squashfs files 
+  # Identification of the physical partition containing the squashfs files
   partition: /dev/mmcblk0p1
 
-  # Defines the path under which the squashfs files are stored in the 
+  # Defines the path under which the squashfs files are stored in the
   # partition defined previously
   path: /
 
@@ -73,7 +83,7 @@ layout:
         # Path to the squashfs file to mount
         # This information is ignored if type is ot squashfs
         # Default value is generated based upon the project information
-        squashfs_file: system.fw
+        squashfs_file: system.squashfs
 
         # Name of the partition device to mount when type is partition
         # This information is ignored if type is not partition
@@ -131,11 +141,11 @@ resilience:
 # Definition of the squashfs parameters
 #
 # ----------------------------------------------------------------------------
-configuration:
+sqaushfs_configuration:
 
   # Define the filename used when generatig the squashfs file
   # Currently only one file is hqndled
-  filename: system.fw
+  filename: system.squashfs
 
   # Defines the block size. Default is 131072 bytes
   block_size: "256K"

@@ -254,6 +254,7 @@ class Key(Enum):
   SKIP_MISSING_SOFTWARE = "skip_missing_software"
   SOURCE = "source"
   SQUASHFS = "squashfs"
+  SQUASHFS_CONFIGURATION = "squashfs_configuration"
   SQUASHFS_FILE = "squashfs_file"
   STACK_DEFINITION = "stack_definition"
   STACK_ITEM = "stack_item"
@@ -810,16 +811,18 @@ class Project(object):
               target[Key.BSP.value] = yaml.load(working_file)
 
       # Defines the full path and filename to the firmware
-      self.firmware_filename = self.get_firmware_directory() + "/"
-      if self.firmware and Key.FILENAME.value in self.firmware[Key.CONFIGURATION.value] and \
-                               len(self.firmware[Key.CONFIGURATION.value][Key.FILENAME.value]) > 0:
-        self.firmware_filename += self.firmware[Key.CONFIGURATION.value][Key.FILENAME.value]
+      self.firmware_filename = self.get_firmware_content_directory() + "/"
+      if self.firmware and Key.FILENAME.value in self.firmware[Key.SQUASHFS_CONFIGURATION.value] \
+                       and len(self.firmware[Key.SQUASHFS_CONFIGURATION.value] \
+                                            [Key.FILENAME.value]) > 0:
+        self.firmware_filename += self.firmware[Key.SQUASHFS_CONFIGURATION.value]\
+                                               [Key.FILENAME.value]
       else:
         self.firmware_filename += self.project[Key.PROJECT_DEFINITION.value][Key.PROJECT_NAME.value]
         self.firmware_filename += ".squashfs"
 
       # Defines the full path and filename to the init used by firmware
-      self.init_filename = self.get_firmware_directory() + "/init"
+      self.init_filename = self.get_firmware_content_directory() + "/init"
 
     # Handle exception that may occur when trying to open unknown files
     except OSError as exception:
@@ -852,12 +855,28 @@ class Project(object):
 
   # ---------------------------------------------------------------------------
   #
-  # get_firmware_directory
+  # get_firmware_content_directory
   #
   # ---------------------------------------------------------------------------
-  def get_firmware_directory(self):
-    """ This method compute and return the firmware_directory value based using
-    the value of current target (arch, board name and version).
+  def get_firmware_content_directory(self):
+    """ This method compute and return the directory where the element
+    composing are stored before final assembly. It is a subdirectory of the
+    firmware directory itself, named components.
+    """
+
+    # Compute the value of the firmware_directory
+    return self.firmware_base_workdir + "/" + self.__get_target_directory(0) + "/content"
+
+
+
+  # ---------------------------------------------------------------------------
+  #
+  # get_firmware_output_directory
+  #
+  # ---------------------------------------------------------------------------
+  def get_firmware_output_directory(self):
+    """ This method compute and return the directory where the final fiware
+    file and signature are stored.
     """
 
     # Compute the value of the firmware_directory

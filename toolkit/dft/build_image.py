@@ -30,9 +30,9 @@ import logging
 import os
 import tempfile
 import shutil
-import parted
 from datetime import datetime
 from distutils import file_util
+import parted
 from dft.cli_command import CliCommand
 from dft.model import Key
 from dft import release
@@ -711,14 +711,15 @@ class BuildImage(CliCommand):
     # variables expansion, before generating the binary script into the target file system.
     output_file = tempfile.mktemp()
     file_util.copy_file(script, output_file)
-    
-    # Replace the generation date, the dft version, the filesystem 
-    fs = self.project.image[Key.DEVICES.value][Key.PARTITIONS.value][0][Key.FILESYSTEM.value].lower()
-    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    command = 'sed -i -e "s/__FILESYSTEM_TYPE__/' + fs + '/g" ' 
+    # Replace the generation date, the dft version, the filesystem
+    filesys = self.project.image[Key.DEVICES.value][Key.PARTITIONS.value][0]\
+                                [Key.FILESYSTEM.value].lower()
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    command = 'sed -i -e "s/__FILESYSTEM_TYPE__/' + filesys + '/g" '
     command += ' -e "s/__DFT_VERSION__/' + release.__version__ + '/g" '
-    command += ' -e "s/__GENERATION_DATE__/' + ts + '/g" '
+    command += ' -e "s/__GENERATION_DATE__/' + timestamp + '/g" '
 
     # Replace the initrd size only for firmware mode
     if copy_rootfs is False:
@@ -731,7 +732,7 @@ class BuildImage(CliCommand):
     self.execute_command(command)
 
     # Generate the boot script on the fly with macro expension
-    command = "mkimage -C none -T script -d " + output_file + " " + image_mount_root + "/boot.scr" 
+    command = "mkimage -C none -T script -d " + output_file + " " + image_mount_root + "/boot.scr"
     self.execute_command(command)
 
     # Remove temp file once binary boot.scr has been generated
@@ -829,7 +830,8 @@ class BuildImage(CliCommand):
                                                          [Key.BSP.value][Key.UBOOT.value]:
           # Iterate the list of actions. An action is a dd call to copy binary data to the image
           for action in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
-                                            [Key.BSP.value][Key.UBOOT.value][Key.INSTALLATION.value]:
+                                            [Key.BSP.value][Key.UBOOT.value]\
+                                            [Key.INSTALLATION.value]:
 
             # Check that the source is defined. Otherwise it will not be able to call dd
             if Key.SOURCE.value not in action:

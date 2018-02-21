@@ -101,7 +101,7 @@ class AssembleFirmware(CliCommand):
       exit(1)
 
     # Ensure firmware generation path exists and is a dir
-    os.makedirs(self.project.get_firmware_directory(), exist_ok=True)
+    os.makedirs(self.project.get_firmware_content_directory(), exist_ok=True)
 
     # Ensure firmware exists
     if not os.path.isfile(self.project.firmware_filename):
@@ -202,7 +202,7 @@ class AssembleFirmware(CliCommand):
 
     for copy_target in os.listdir(source_dir):
       copy_source_path = os.path.join(source_dir, copy_target)
-      copy_target_path = os.path.join(self.project.get_firmware_directory(), copy_target)
+      copy_target_path = os.path.join(self.project.get_firmware_content_directory(), copy_target)
       command = "cp -fra " + copy_source_path + " " + copy_target_path
       self.execute_command(command)
 
