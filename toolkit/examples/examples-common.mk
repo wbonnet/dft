@@ -33,12 +33,3 @@ DISPLAY_COMPLETED_TARGET_NAME  = @echo "    completed [$@] "
 #
 COOKIE_DIR  ?= $(CURDIR)/.cookies
 TARGET_DONE = @mkdir -p $(dir $(COOKIE_DIR)/$@) && touch $(COOKIE_DIR)/$@
-
-# ------------------------------------------------------------------------------
-#
-# Targets not associated with a file (aka PHONY)
-#
-.PHONY: create-rootfs upload-rootfs
-	      create-firmware upload-firmware
-				create-firmware-update upload-firmware-update
-

@@ -56,7 +56,7 @@ firmware:
 	@if test -f $(COOKIE_DIR)/firmware ; then \
 		true ; \
 	else \
-		sudo -E dft run_sequence --sequence produce-image --project project-firmware.yml
+		sudo -E dft run_sequence --sequence produce-image --project project-firmware.yml ; \
 	fi ;
 	$(TARGET_DONE)
 
@@ -65,7 +65,7 @@ rootfs:
 	@if test -f $(COOKIE_DIR)/rootfs ; then \
 		true ; \
 	else \
-		sudo -E dft run_sequence --sequence produce-image --project project-rootfs.yml
+		sudo -E dft run_sequence --sequence produce-image --project project-rootfs.yml ; \
 	fi ;
 	$(TARGET_DONE)
 
