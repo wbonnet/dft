@@ -30,6 +30,7 @@ import os
 import stat
 import tempfile
 import datetime
+import tarfile
 from dft.cli_command import CliCommand
 from dft.model import Key
 
@@ -54,6 +55,10 @@ class BuildFirmwareUpdate(CliCommand):
 
     # Initialize ancestor
     CliCommand.__init__(self, dft, project)
+
+    # Tar archive object
+    tar = None
+
 
 
   # -------------------------------------------------------------------------
@@ -111,6 +116,23 @@ class BuildFirmwareUpdate(CliCommand):
 
     # Output current task to logs
     logging.info("Creating the main archive")
+
+    # Creating the manifest
+
+    # Creating the archive
+    dest_archive = self.project.get_firmware_output_directory()
+    dest_archive += "/" + self.project.firmware[Key.CONFIGURATION.value][Key.FILENAME.value]:
+
+    # Create the tar itself
+    self.tar = tarfile.open(name=dest_archive, mode='w')
+
+    # Iterate firmware content directory
+    for name in os.listdir(self.project.get_firmware_content_directory()):
+      # And add each and every file
+      tar.add(name)
+
+    # Let's close the tar to flushit
+    tar.close()
 
 
 
