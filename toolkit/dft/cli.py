@@ -229,7 +229,7 @@ Available commands are :
                              help=Key.OPT_HELP_LABEL.value)
 
 
-def __add_parser_build_firmware_update(self):
+  def __add_parser_build_firmware_update(self):
     """ This method add parser options specific to build_firmware_update command
     """
 
