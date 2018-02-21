@@ -708,7 +708,7 @@ class AssembleFirmware(CliCommand):
   # create_firmware_update
   #
   # -------------------------------------------------------------------------
-  def create_firmware_update(self, working_file_name):
+  def create_firmware_update(self):
     """This method generates the final archive containing the elements of the
     firmware. The main steps :
     . Creating a manisfest describing the content items (hash value)
