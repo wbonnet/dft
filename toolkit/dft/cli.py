@@ -420,7 +420,7 @@ Available commands are :
     elif self.command == Key.BUILD_FIRMWARE.value:
       self.__run_build_firmware()
     elif self.command == Key.BUILD_FIRMWARE_UPDATE.value:
-      self.__run_build_firmware_upate()
+      self.__run_build_firmware_update()
     elif self.command == Key.BUILD_PARTITIONS.value:
       self.__run_build_partitions()
     elif self.command == Key.CHECK_ROOTFS.value:
