@@ -86,8 +86,9 @@ class BuildFirmware(CliCommand):
                                 self.project.get_firmware_output_directory())
       rmtree(self.project.get_firmware_output_directory())
 
-    # Ensure firmware generation path exists and is a dir
-    os.makedirs(self.project.get_firmware_output_directory())
+    # Ensure firmware generation path exists and is a dir. We remove output and create
+    # Content, since content is a subdir. Remove the top level recursivly and create the deepest
+    os.makedirs(self.project.get_firmware_content_directory())
 
     # Generate the squashfs files
     self.create_squashfs_files()
