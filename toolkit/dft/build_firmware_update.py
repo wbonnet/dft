@@ -27,9 +27,6 @@ setting up the firmware in memory at system boot.
 
 import logging
 import os
-import stat
-import tempfile
-import datetime
 import tarfile
 from dft.cli_command import CliCommand
 from dft.model import Key
