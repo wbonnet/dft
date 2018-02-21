@@ -28,7 +28,13 @@ PACAKGE_DATE = $(shell LC_ALL=C date +"%a, %d %b %Y %T %z")
 PACAKGE_DATE = $(shell date )
 FILTER_DIRS  = config_files/
 
-# Create a new boar entry in the repository
+# ------------------------------------------------------------------------------
+#
+# Targets not associated with a file (aka PHONY)
+#
+.PHONY: help
+
+# Create a new board entry in the repository
 new-version-%:
 	@if [ -d "./$(NEW_VERSION)" ] ; then \
 		echo ". Directory ./($(NEW_VERSION) already exist. Doing nothing..." ; \
