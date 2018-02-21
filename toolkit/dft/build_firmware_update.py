@@ -129,8 +129,9 @@ class BuildFirmwareUpdate(CliCommand):
     # Iterate firmware content directory
     for name in os.listdir(self.project.get_firmware_content_directory()):
       # And add each and every file
-      self.tar.add(tarfile.TarInfo(name), open(self.project.get_firmware_content_directory() + \
-                   "/" + name), recursive=True)
+      filename = self.project.get_firmware_content_directory() + "/" + name
+      print("Adding " + name + " as " + filename)
+      self.tar.add(tarfile.TarInfo(name), open(filename), recursive=True)
 
     # Let's close the tar to flushit
     self.tar.close()
