@@ -121,7 +121,7 @@ class BuildFirmwareUpdate(CliCommand):
 
     # Creating the archive
     dest_archive = self.project.get_firmware_output_directory()
-    dest_archive += "/" + self.project.firmware[Key.CONFIGURATION.value][Key.FILENAME.value]:
+    dest_archive += "/" + self.project.firmware[Key.CONFIGURATION.value][Key.FILENAME.value]
 
     # Create the tar itself
     self.tar = tarfile.open(name=dest_archive, mode='w')
