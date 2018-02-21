@@ -141,7 +141,7 @@ resilience:
 # Definition of the squashfs parameters
 #
 # ----------------------------------------------------------------------------
-sqaushfs_configuration:
+squashfs_configuration:
 
   # Define the filename used when generatig the squashfs file
   # Currently only one file is hqndled
