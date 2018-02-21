@@ -131,7 +131,7 @@ class BuildFirmwareUpdate(CliCommand):
       # And add each and every file
       filename = self.project.get_firmware_content_directory() + "/" + name
       print("Adding " + name + " as " + filename)
-      self.tar.add(tarfile.TarInfo(name), open(filename), recursive=True)
+      self.tar.add(filename, name, recursive=True)
 
     # Let's close the tar to flushit
     self.tar.close()
