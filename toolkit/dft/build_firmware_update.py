@@ -179,8 +179,8 @@ class BuildFirmwareUpdate(CliCommand):
             # Yes, let's append --armor to the command
             signing_tool += " --armor"
 
-          command += " --output " + dest_sign + "  --detach-sig " + dest_archive
-          self.execute_command(command)
+          signing_tool += " --output " + dest_sign + "  --detach-sig " + dest_archive
+          self.execute_command(signing_tool)
 
         # Or is it OpenSSL ?
         elif signing_tool == Key.OPENSSL.value:
