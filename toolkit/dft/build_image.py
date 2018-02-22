@@ -739,6 +739,7 @@ class BuildImage(CliCommand):
 
     # Remove temp file once binary boot.scr has been generated
     os.remove(output_file)
+
     #
     # Data have been copied, lets unmount all the partitions before teardown the loopback
     #
