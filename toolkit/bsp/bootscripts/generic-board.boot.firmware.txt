@@ -34,6 +34,7 @@ else
     env import -t ${uenv_addr_r} ${filesize}
     echo "Failed to load the uEnv.txt backup file."
     echo "Bork ! Bork ! Bork !"
+  fi
 fi
 
 # Set this variables only now, because root and partition can be supereded in uEnv.txt
