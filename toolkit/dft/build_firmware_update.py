@@ -148,12 +148,10 @@ class BuildFirmwareUpdate(CliCommand):
     logging.info("Signing the main archive")
 
     # Check if signature is activated
-    if  Key.SECURITY.value in self.project.firmware[Key.CONFIGURATION.value]:
-      if Key.SIGNATURE.value in self.project.firmware[Key.CONFIGURATION.value] \
-                                                    [Key.SECURITY.value]:
+    if  Key.SECURITY.value in self.project.firmware:
+      if Key.SIGNATURE.value in self.project.firmware[Key.SECURITY.value]:
         # Retrieve the signature tool to use
-        signing_tool = self.project.firmware[Key.CONFIGURATION.value][Key.SECURITY.value]\
-                                            [Key.SIGNATURE.value]
+        signing_tool = self.project.firmware[Key.SECURITY.value][Key.SIGNATURE.value]
 
         # Generate the path to the archive and detached signature file
         dest_archive = self.project.get_firmware_output_directory()
