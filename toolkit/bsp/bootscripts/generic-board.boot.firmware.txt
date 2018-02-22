@@ -62,7 +62,7 @@ fi
 # ----------------------------------------------------------------------------
 
 #
-# Try to load the script, if fails try to load backup file instead.
+# Try to load the script, if it fails try to load backup file instead.
 #
 if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${uenv_addr_r} ${uenv_file} uEnv.txt ; then
   # Filesize variable is set by the load command
