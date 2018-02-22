@@ -163,14 +163,23 @@ class BuildFirmwareUpdate(CliCommand):
           self.project.logging.info("Signature is not activated in the security section of the \
                                      firmware definition file")
 
-        # Are we using GnuPG 2
-        elif signing_tool == Key.GPG2.value or signing_tool == Key.GNUPG2.value:
-          command = Key.GPG2.value + " --output " + dest_sign + "  --detach-sig " + dest_archive
-          self.execute_command(command)
+        # Are we using a known tool
+        elif signing_tool not in Key.GPG.value Key.GPG2.value Key.OPENSSL.value:
+          self.project.logging.critical("Unknown signing tool : " + signing_tool)
+          self.project.logging.critical("Valid values are gpg, gpg2, openssl or empty string to \
+                                         deactivate signature"))
+          exit(1)
 
-        # Or version 1 of GnuPG ?
-        elif signing_tool == Key.GPG.value or signing_tool == Key.GNUPG.value:
-          command = Key.GPG.value + " --output " + dest_sign + "  --detach-sig " + dest_archive
+        # Signing tool is valid, now let's generate the command to do it
+        # First case, are we using GnuPG 1 or 2
+        if signing_tool == Key.GPG.value or signing_tool == Key.GPG2.value:
+          # Are we using armor format export ?
+          if Key.GPG_ARMOR_SIGNATURE.value in self.project.firmware[Key.SECURITY.value] and \
+             self.project.firmware[Key.SECURITY.value][Key.GPG_ARMOR_SIGNATURE.value]:
+            # Yes, let's append --armor to the command
+            signing_tool += " --armor"
+
+          command += " --output " + dest_sign + "  --detach-sig " + dest_archive
           self.execute_command(command)
 
         # Or is it OpenSSL ?

@@ -137,6 +137,8 @@ security:
   # Defines the GnuPG key to use
   gpg_key: A907E9357B5C4CDF4207B2397596433946480261
 
+  # Use --armor when creating the signature, so it is exported as ASCII. Default is false
+  gpg_armor_signature: True
 
 # ----------------------------------------------------------------------------
 #
