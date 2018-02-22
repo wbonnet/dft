@@ -123,7 +123,20 @@ security:
   # Defines security paramters such as the use of hash, digital ignature, etc.
   # TODO  not at start, but need to check for hashes or signatures
   # TODO  how to handle ciphering, keygen, secure storage
-  hash_method: md5
+  # hash_method: md5
+
+  # Activate firmware signature. Valid values are :
+  # . "empty" or not defined    Signature is deactivated
+  # . gpg2                      Firmware is signed using gpg2.
+  #                             gpg_key variable must be defined
+  # . openssl                   Firmware is signed with openssl using x509
+  #                             certificate. The variable openssl_certificate
+  #                             must be defined.
+  signature: gpg2
+
+  # Defines the GnuPG key to use
+  gpg_key: A907E9357B5C4CDF4207B2397596433946480261
+
 
 # ----------------------------------------------------------------------------
 #

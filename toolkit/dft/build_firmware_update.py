@@ -86,8 +86,6 @@ class BuildFirmwareUpdate(CliCommand):
                                      self.project.get_firmware_content_directory())
       exit(1)
 
-
-
     # Create the tar archive
     self.create_main_archive()
 
@@ -127,11 +125,11 @@ class BuildFirmwareUpdate(CliCommand):
     for name in os.listdir(self.project.get_firmware_content_directory()):
       # And add each and every file
       filename = self.project.get_firmware_content_directory() + "/" + name
-      print("Adding " + name + " as " + filename)
       self.tar.add(filename, name, recursive=True)
 
     # Let's close the tar to flushit
     self.tar.close()
+    logging.debug("Archive " + dest_archive + " has been created")
 
 
 
@@ -147,4 +145,45 @@ class BuildFirmwareUpdate(CliCommand):
     """
 
     # Output current task to logs
-    logging.info("Signin the main archive")
+    logging.info("Signing the main archive")
+
+    # Check if signature is activated
+    if  Key.SECURITY.value in self.project.firmware[Key.CONFIGURATION.value]:
+      if Key.SIGNATURE.value in self.project.firmware[Key.CONFIGURATION.value] \
+                                                    [Key.SECURITY.value]:
+        # Retrieve the signature tool to use
+        signing_tool = self.project.firmware[Key.CONFIGURATION.value][Key.SECURITY.value]\
+                                            [Key.SIGNATURE.value]
+
+        # Generate the path to the archive and detached signature file
+        dest_archive = self.project.get_firmware_output_directory()
+        dest_archive += "/" + self.project.firmware[Key.CONFIGURATION.value][Key.FILENAME.value]
+        dest_sign = dest_archive  + ".sig"
+
+        # Expected values are empty (means deactivated), gpg2 (or gnupg2), or openssl
+        if len(signing_tool) == 0:
+          self.project.logging.info("Signature is not activated in the security section of the \
+                                     firmware definition file")
+
+        # Are we using GnuPG 2
+        elif signing_tool == Key.GPG2.value or signing_tool == Key.GNUPG2.value:
+          command = Key.GPG2.value + " --output " + dest_sign + "  --detach-sig " + dest_archive
+          self.execute_command(command)
+
+        # Or version 1 of GnuPG ?
+        elif signing_tool == Key.GPG.value or signing_tool == Key.GNUPG.value:
+          command = Key.GPG.value + " --output " + dest_sign + "  --detach-sig " + dest_archive
+          self.execute_command(command)
+
+        # Or is it OpenSSL ?
+        elif signing_tool == Key.OPENSSL.value:
+          # TODO OpenSSL support
+          self.project.logging.critical("OpenSSL is not yet supported for firmware signature")
+          self.project.logging.critical("Please use GnuPG until support is available")
+          exit(1)
+      else:
+        self.project.logging.info("Signature is not activated in the security section of the \
+                                   firmware definition file")
+    else:
+      self.project.logging.error("The firmware definition file does not include a security section")
+      self.project.logging.error("Unable to create signature file. You should add security.")
