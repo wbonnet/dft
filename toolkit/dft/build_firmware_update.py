@@ -164,10 +164,10 @@ class BuildFirmwareUpdate(CliCommand):
                                      firmware definition file")
 
         # Are we using a known tool
-        elif signing_tool not in Key.GPG.value Key.GPG2.value Key.OPENSSL.value:
+        elif signing_tool not in [Key.GPG.value, Key.GPG2.value, Key.OPENSSL.value]:
           self.project.logging.critical("Unknown signing tool : " + signing_tool)
           self.project.logging.critical("Valid values are gpg, gpg2, openssl or empty string to \
-                                         deactivate signature"))
+                                         deactivate signature")
           exit(1)
 
         # Signing tool is valid, now let's generate the command to do it
