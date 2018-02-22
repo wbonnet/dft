@@ -144,6 +144,7 @@ class Key(Enum):
   GENERATE_DEB = "generate_deb"
   GENERATE_SRC = "generate_src"
   GENERATE_VALIDITY_CHECK = "generate_validity_check"
+  GPG_ARMOR_SIGNATURE = "gpg_armor_signature"
   GPG_KEY = "gpg_key"
   GPG = "gpg"
   GPG2 = "gpg2"
