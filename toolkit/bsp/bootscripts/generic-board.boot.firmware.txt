@@ -8,28 +8,44 @@
 #
 
 #
-# Definition of environment variables
+# Definition of environment constants. These should not be redefined unless your really know
+# what you are hacking.
 #
-setenv initrd_file    initrd.img
-setenv fdtfile        'default.dtb'
-setenv uenvfile       'uEnv.txt'
-setenv uenvbackup     'uEnv.back'
-setenv image          zImage
-setenv mmcdev         0
-setenv mmcpart        1
+setenv initrd_file        initrd.img
+setenv fdtfile            'default.dtb'
+setenv uenvfile           'uEnv.txt'
+setenv uenvbackup         'uEnv.back'
+setenv image              zImage
 
-# Compute the address used to env script. It is loaded at bootscript addr since
-# The boot.scr has already bee loaded and imported into environnement.
-# setexpr uenv_addr_r   ${scriptaddr} + 0x080000
+# Defines the address used to env script. It is loaded at scriptaddr since
+# the boot.scr has already bee loaded and imported into environnement.
 setenv uenv_addr_r    ${scriptaddr}
 
+# Defines the current values for type device and partition only if not existing
+# These are used to load uEnv, kernel, dtb and initrd
+if itest.s "x${dft_curr_type}" == "x" ; then
+  setenv dft_curr_type      mmc
+  echo "Variable dft_curr_type not yet defined adding its default value => mmc"
+fi
+
+if itest.s "x${dft_curr_dev}" == "x" ; then
+  setenv dft_curr_dev       0
+  echo "Variable dft_curr_dev not yet defined adding its default value => 0"
+fi
+
+if itest.s "x${dft_curr_part}" == "x" ; then
+  setenv dft_curr_part      1
+  echo "Variable dft_curr_part not yet defined adding its default value => 1"
+fi
+
+
 # Try to load the script, if fails try to load backup file instead.
-if load mmc ${mmcdev}:${mmcpart} ${uenv_addr_r} ${uenv_file} uEnv.txt ; then
+if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${uenv_addr_r} ${uenv_file} uEnv.txt ; then
   # Filesize variable is set by the load command
   env import -t ${uenv_addr_r} ${filesize}
 else
   echo "Failed to load the uEnv.txt file. Switching to backup file"
-  if load mmc ${mmcdev}:${mmcpart} ${uenv_addr_r} ${uenv_file} uEnv.txt.back ; then
+  if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${uenv_addr_r} ${uenv_file} uEnv.txt.back ; then
     # Filesize variable is set by the load command
     env import -t ${uenv_addr_r} ${filesize}
     echo "Failed to load the uEnv.txt backup file."
@@ -38,13 +54,13 @@ else
 fi
 
 # Set this variables only now, because root and partition can be supereded in uEnv.txt
-setenv mmcroot  '/dev/mmcblk${mmcpart}p${mmcpart} rootwait ro'
+setenv mmcroot  /dev/mmcblk${dft_curr_dev}p${dft_curr_part} rootwait ro
 setenv bootargs console=${console} root=${mmcroot} rootfstype=${fstype}
 
 #
 # Load the initrd into memory
 #
-if load mmc ${mmcdev}:${mmcpart} ${ramdisk_addr_r} ${initrd_file} ; then
+if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${ramdisk_addr_r} ${initrd_file} ; then
   # Filesize variable is set by the load command. We need to store it for bootz call
   setexpr initrd_size ${filesize}
   echo "InitRD successully loaded"
@@ -56,7 +72,7 @@ fi
 #
 # Load the DTB into memory
 #
-if load mmc ${mmcdev}:${mmcpart} ${fdt_addr_r} ${fdtfile} ; then
+if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${fdt_addr_r} ${fdtfile} ; then
   echo "DTB successully loaded"
 else
   echo "Failed to the DTB into memory."
@@ -66,12 +82,12 @@ fi
 #
 # Load the kernel into memory
 #
-if load mmc ${mmcdev}:${mmcpart} ${kernel_addr_r} ${image} ; then
+if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${kernel_addr_r} ${image} ; then
   echo "Kernel successully loaded"
 else
   echo "Failed to the kernel into memory."
   echo "Bork ! Bork ! Bork !"
-if
+fi
 
 #
 # Thunderbirds are go !
