@@ -997,3 +997,23 @@ class Project(object):
       return "arm64"
     else:
       return host_arch
+
+  # -------------------------------------------------------------------------
+  #
+  # get_mkimage_arch
+  #
+  # -------------------------------------------------------------------------
+  def get_mkimage_arch(self):
+    """This method returns the native architecture of the host running DFT.
+    Arch format is the same as dpkg tools if means arm64 instead of aarch64
+    """
+
+    # Retrieve the architecture of the host
+    host_arch = subprocess.check_output("uname -m", shell=True).decode(Key.UTF8.value).rstrip()
+    if arch == "ppc64" or arch == "ppc64el" or arch == "ppc" :
+      return "powerpc"
+    elif arch == "armv7l" or arch == "aarch64":
+      return "arm"
+
+    # Return arch in any case
+    return host_arch
