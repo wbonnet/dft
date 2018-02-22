@@ -91,7 +91,7 @@ else
   # TODO : Nope it does not work we have to exchange a token between u-boot and u-env
   # Should be something like i give you a token, you sent back this token in uEnv
   if itest.s "x${dft_last_boot_clean}" != "x1" ; then
-    echo "Variable dft_uenv_dev is not what was expected. Needs to do something !"
+    echo "Variable dft_last_boot_clean is not what was expected. Needs to do something !"
     echo "It is time to switch to next system in sequence"
   fi
 fi
