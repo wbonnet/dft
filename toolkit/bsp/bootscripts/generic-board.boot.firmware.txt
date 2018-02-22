@@ -10,30 +10,69 @@
 #
 # Definition of environment variables
 #
-setenv initrd_addr    0x43300000
 setenv initrd_file    initrd.img
-setenv initrd_size    __INITRD_SIZE__
-setenv fstype         __FILESYSTEM_TYPE__
 setenv fdtfile        'default.dtb'
+setenv uenvfile       'uEnv.txt'
+setenv uenvbackup     'uEnv.back'
 setenv image          zImage
-setenv mmcroot        '/dev/mmcblk0p1 rootwait ro'
-setenv mmcargs        'setenv bootargs console=${console} root=${mmcroot} rootfstype=${fstype}'
 setenv mmcdev         0
 setenv mmcpart        1
 
-#
-# Definition of the macro needed to load DTB Kernel and initrd to ram
-#
-setenv loadinitrd     '${fstype}load mmc ${mmcdev}:${mmcpart} ${initrd_addr} ${initrd_file}'
-setenv loadfdt        '${fstype}load mmc ${mmcdev}:${mmcpart} ${fdt_addr_r} ${fdtfile}'
-setenv loadimage      '${fstype}load mmc ${mmcdev}:${mmcpart} ${kernel_addr_r} ${image}'
+# Compute the address used to env script. It is loaded at bootscript addr since
+# The boot.scr has already bee loaded and imported into environnement.
+# setexpr uenv_addr_r   ${scriptaddr} + 0x080000
+setenv uenv_addr_r    ${scriptaddr}
+
+# Try to load the script, if fails try to load backup file instead.
+if load mmc ${mmcdev}:${mmcpart} ${uenv_addr_r} ${uenv_file} uEnv.txt ; then
+  # Filesize variable is set by the load command
+  env import -t ${uenv_addr_r} ${filesize}
+else
+  echo "Failed to load the uEnv.txt file. Switching to backup file"
+  if load mmc ${mmcdev}:${mmcpart} ${uenv_addr_r} ${uenv_file} uEnv.txt.back ; then
+    # Filesize variable is set by the load command
+    env import -t ${uenv_addr_r} ${filesize}
+    echo "Failed to load the uEnv.txt backup file."
+    echo "Bork ! Bork ! Bork !"
+fi
+
+# Set this variables only now, because root and partition can be supereded in uEnv.txt
+setenv mmcroot  '/dev/mmcblk${mmcpart}p${mmcpart} rootwait ro'
+setenv bootargs console=${console} root=${mmcroot} rootfstype=${fstype}
 
 #
-# Definition of the macro needed to run the kernel using initrd and dtb
+# Load the initrd into memory
 #
-setenv fwboot 'run mmcargs ; run loadimage ; run loadinitrd ; run loadfdt ; bootz ${kernel_addr_r} ${initrd_addr}:${initrd_size} ${fdt_addr_r}'
+if load mmc ${mmcdev}:${mmcpart} ${ramdisk_addr_r} ${initrd_file} ; then
+  # Filesize variable is set by the load command. We need to store it for bootz call
+  setexpr initrd_size ${filesize}
+  echo "InitRD successully loaded"
+else
+  echo "Failed to the InitRD into memory."
+  echo "Bork ! Bork ! Bork !"
+fi
+
+#
+# Load the DTB into memory
+#
+if load mmc ${mmcdev}:${mmcpart} ${fdt_addr_r} ${fdtfile} ; then
+  echo "DTB successully loaded"
+else
+  echo "Failed to the DTB into memory."
+  echo "Bork ! Bork ! Bork !"
+fi
+
+#
+# Load the kernel into memory
+#
+if load mmc ${mmcdev}:${mmcpart} ${kernel_addr_r} ${image} ; then
+  echo "Kernel successully loaded"
+else
+  echo "Failed to the kernel into memory."
+  echo "Bork ! Bork ! Bork !"
+if
 
 #
 # Thunderbirds are go !
 #
-run fwboot
+bootz ${kernel_addr_r} ${ramdisk_addr_r}:${initrd_size} ${fdt_addr_r}

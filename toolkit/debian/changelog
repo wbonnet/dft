@@ -1,3 +1,10 @@
+dft (0.6.6-1) unstable; urgency=low
+
+  * Add upgrade verification and deployment script
+  * Add bank switching in uboot scripts
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 22 Feb 2018 13:54:00 +0100
+
 dft (0.6.5-1) unstable; urgency=low
 
   * Add support for nanopi neo and cubieboard-3

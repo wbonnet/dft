@@ -713,26 +713,28 @@ class BuildImage(CliCommand):
     file_util.copy_file(script, output_file)
 
     # Replace the generation date, the dft version, the filesystem
-    filesys = self.project.image[Key.DEVICES.value][Key.PARTITIONS.value][0]\
-                                [Key.FILESYSTEM.value].lower()
+    # filesys = self.project.image[Key.DEVICES.value][Key.PARTITIONS.value][0]\
+    #                             [Key.FILESYSTEM.value].lower()
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    command = 'sed -i -e "s/__FILESYSTEM_TYPE__/' + filesys + '/g" '
+    command = 'sed -i '
+    # command = 'sed -i -e "s/__FILESYSTEM_TYPE__/' + filesys + '/g" '
     command += ' -e "s/__DFT_VERSION__/' + release.__version__ + '/g" '
     command += ' -e "s/__GENERATION_DATE__/' + timestamp + '/g" '
 
     # Replace the initrd size only for firmware mode
-    if copy_rootfs is False:
-      path = self.project.get_firmware_content_directory() + "/initrd.img"
-      size = os.stat(path).st_size
-      command += ' -e "s/__INITRD_SIZE__/' + hex(size) + '/g" '
+    # if copy_rootfs is False:
+    #   path = self.project.get_firmware_content_directory() + "/initrd.img"
+    #   size = os.stat(path).st_size
+    #   command += ' -e "s/__INITRD_SIZE__/' + hex(size) + '/g" '
 
     # Command has been generated, let's execute the replacement with sed
     command += " " + output_file
     self.execute_command(command)
 
     # Generate the boot script on the fly with macro expension
-    command = "mkimage -C none -T script -d " + output_file + " " + image_mount_root + "/boot.scr"
+    arch = self.project.get_mkimage_arch()
+    command = "mkimage -A " + arch + " -C none -T script -d " + output_file + " " + image_mount_root + "/boot.scr"
     self.execute_command(command)
 
     # Remove temp file once binary boot.scr has been generated
