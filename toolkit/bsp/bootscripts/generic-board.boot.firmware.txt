@@ -7,53 +7,139 @@
 # DFT version     : __DFT_VERSION__
 #
 
+
+# ----------------------------------------------------------------------------
 #
-# Definition of environment constants. These should not be redefined unless your really know
-# what you are hacking.
+# Environnement section
 #
-setenv initrd_file        initrd.img
-setenv fdtfile            'default.dtb'
-setenv uenvfile           'uEnv.txt'
-setenv uenvbackup         'uEnv.back'
-setenv image              zImage
+# Definition of environment constants. These should not be redefined unless
+# your really know what you are hacking.
+#
+# ----------------------------------------------------------------------------
+setenv initrd_file    initrd.img
+setenv fdtfile        'default.dtb'
+setenv uenvfile       'uEnv.txt'
+setenv uenvbackup     'uEnv.back'
+setenv image          zImage
 
 # Defines the address used to env script. It is loaded at scriptaddr since
 # the boot.scr has already bee loaded and imported into environnement.
 setenv uenv_addr_r    ${scriptaddr}
 
+# Defines a flag used to trak that we modified default environnement
+setenv flag_env_modified 0
+
 # Defines the current values for type device and partition only if not existing
 # These are used to load uEnv, kernel, dtb and initrd
 if itest.s "x${dft_curr_type}" == "x" ; then
   setenv dft_curr_type      mmc
+  setenv flag_env_modified  1
   echo "Variable dft_curr_type not yet defined adding its default value => mmc"
 fi
 
 if itest.s "x${dft_curr_dev}" == "x" ; then
   setenv dft_curr_dev       0
-  echo "Variable dft_curr_dev not yet defined adding its default value => 0"
+  setenv flag_env_modified  1
+  echo "Variable dft_curr_dev  not yet defined adding its default value => 0"
 fi
 
 if itest.s "x${dft_curr_part}" == "x" ; then
   setenv dft_curr_part      1
+  setenv flag_env_modified  1
   echo "Variable dft_curr_part not yet defined adding its default value => 1"
 fi
 
+# Adding a x in variable test prevents errors in case setenv went wrong
+if itest.s "x${flag_env_modified}" == "x1" ; then
+  echo "One or more default variables were defined, environment is now saved"
+  saveenv
+fi
 
+# ----------------------------------------------------------------------------
+#
+# Bootchain loading section
+#
+# ----------------------------------------------------------------------------
+
+#
 # Try to load the script, if fails try to load backup file instead.
+#
 if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${uenv_addr_r} ${uenv_file} uEnv.txt ; then
   # Filesize variable is set by the load command
   env import -t ${uenv_addr_r} ${filesize}
 else
   echo "Failed to load the uEnv.txt file. Switching to backup file"
   if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${uenv_addr_r} ${uenv_file} uEnv.txt.back ; then
-    # Filesize variable is set by the load command
+    # filesize variable is set by the load command
     env import -t ${uenv_addr_r} ${filesize}
     echo "Failed to load the uEnv.txt backup file."
     echo "Bork ! Bork ! Bork !"
   fi
 fi
 
+#
+# First let's reset the flag meaning we have modified u-boot environment and need to save it
+#
+setenv flag_env_modified 0
+
+# Checking for the last_boot_clean variable
+if itest.s "x${dft_last_boot_clean}" == "x" ; then
+  # Variable was not yet defined, there is nothing to do but continue with u-boot value
+  echo "Variable dft_last_boot_clean. This should not happen ! Something went wrong..."
+else
+  # Current dev is define, let's compare it with what we expect
+  # TODO : Nope it does not work we have to exchange a token between u-boot and u-env
+  # Should be something like i give you a token, you sent back this token in uEnv
+  if itest.s "x${dft_last_boot_clean}" != "x1" ; then
+    echo "Variable dft_uenv_dev is not what was expected. Needs to do something !"
+    echo "It is time to switch to next system in sequence"
+  fi
+fi
+
+# Check if uEnv defines a current type
+if itest.s "x${dft_uenv_type}" == "x" ; then
+  # Variable was not yet defined, there is nothing to do but continue with u-boot value
+  echo "Variable dft_uenv_type not defined. Continuing with current value"
+else
+  # Current type is define, let's compare it with what we expect
+  if itest.s "x${dft_curr_type}" != "x${dft_uenv_type}" ; then
+    echo "Variable dft_uenv_type is not what was expected. Needs to do something !"
+  fi
+fi
+
+# Check if uEnv defines a current dev
+if itest.s "x${dft_uenv_dev}" == "x" ; then
+  # Variable was not yet defined, there is nothing to do but continue with u-boot value
+  echo "Variable dft_uenv_dev not defined. Continuing with current value"
+else
+  # Current dev is define, let's compare it with what we expect
+  if itest.s "x${dft_curr_dev}" != "x${dft_uenv_dev}" ; then
+    echo "Variable dft_uenv_dev is not what was expected. Needs to do something !"
+  fi
+fi
+
+# Check if uEnv defines a current part
+if itest.s "x${dft_uenv_part}" == "x" ; then
+  # Variable was not yet defined, there is nothing to do but continue with u-boot value
+  echo "Variable dft_uenv_part not defined. Continuing with current value"
+else
+  # Current part is define, let's compare it with what we expect
+  if itest.s "x${dft_curr_part}" != "x${dft_uenv_part}" ; then
+    echo "Variable dft_uenv_part is not what was expected. Needs to do something !"
+  fi
+fi
+
+# Adding a x in variable test prevents errors in case setenv went wrong
+if itest.s "x${flag_env_modified}" == "x1" ; then
+  echo "One or more uenv variables are different from expected values, environment is now saved"
+  saveenv
+fi
+
+
+
+#
 # Set this variables only now, because root and partition can be supereded in uEnv.txt
+#
 setenv mmcroot  /dev/mmcblk${dft_curr_dev}p${dft_curr_part} rootwait ro
 setenv bootargs console=${console} root=${mmcroot} rootfstype=${fstype}
 
@@ -61,7 +147,6 @@ setenv bootargs console=${console} root=${mmcroot} rootfstype=${fstype}
 # Load the initrd into memory
 #
 if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${ramdisk_addr_r} ${initrd_file} ; then
-  # Filesize variable is set by the load command. We need to store it for bootz call
   setexpr initrd_size ${filesize}
   echo "InitRD successully loaded"
 else
