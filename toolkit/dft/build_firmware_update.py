@@ -159,7 +159,7 @@ class BuildFirmwareUpdate(CliCommand):
         dest_sign = dest_archive  + ".sig"
 
         # Remove any exsting signature
-        if not os.path.isfile(dest_sign):
+        if os.path.isfile(dest_sign):
           os.remove(dest_sign)
           self.project.logging.info("Existing " + dest_archive + " has been removed")
 
