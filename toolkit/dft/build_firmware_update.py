@@ -158,6 +158,11 @@ class BuildFirmwareUpdate(CliCommand):
         dest_archive += "/" + self.project.firmware[Key.CONFIGURATION.value][Key.FILENAME.value]
         dest_sign = dest_archive  + ".sig"
 
+        # Remove any exsting signature
+        if not os.path.isfile(dest_sign):
+          os.remove(dest_sign)
+          self.project.logging.info("Existing " + dest_archive + " has been removed")
+
         # Expected values are empty (means deactivated), gpg2 (or gnupg2), or openssl
         if len(signing_tool) == 0:
           self.project.logging.info("Signature is not activated in the security section of the \
@@ -181,6 +186,7 @@ class BuildFirmwareUpdate(CliCommand):
 
           signing_tool += " --output " + dest_sign + "  --detach-sig " + dest_archive
           self.execute_command(signing_tool)
+          self.project.logging.info(dest_archive + " have been created and signed successfully")
 
         # Or is it OpenSSL ?
         elif signing_tool == Key.OPENSSL.value:
