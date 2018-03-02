@@ -1009,11 +1009,11 @@ class Project(object):
     """
 
     # Retrieve the architecture of the host
-    host_arch = subprocess.check_output("uname -m", shell=True).decode(Key.UTF8.value).rstrip()
+    arch = subprocess.check_output("uname -m", shell=True).decode(Key.UTF8.value).rstrip()
     if arch == "ppc64" or arch == "ppc64el" or arch == "ppc" :
       return "powerpc"
     elif arch == "armv7l" or arch == "aarch64":
       return "arm"
 
     # Return arch in any case
-    return host_arch
+    return arch
