@@ -694,51 +694,58 @@ class BuildImage(CliCommand):
         command = "cp -fra " + copy_source_path + " " + copy_target_path
         self.execute_command(command)
 
-    # Defines the name of the script toCopy the bootscript to target
-    script = self.project.get_bsp_base() + "/bootscripts/"
-    script += self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
-                                  [Key.BOARD.value]
-    script += ".boot."
-
-    # Name has to be either board_name.boot.[firmware|rootfs].scr
-    if copy_rootfs:
-      script += "rootfs"
+    # Check if we have to generate a bootscript in the image
+    if Key.GENERATE_BOOTSCR.value in self.project.image[Key.CONTENT.value] and \
+       not self.project.image[Key.CONTENT.value][Key.GENERATE_BOOTSCR.value]:
+      # Generation is deactivated, just log it
+      logging.debug("boot.scr generation was deactivated by configuration")
     else:
-      script += "firmware"
-    script += ".txt"
+      # Defines the name of the script to copy the bootscript to target
+      script = self.project.get_bsp_base() + "/bootscripts/"
+      script += self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
+                                    [Key.BOARD.value]
+      script += ".boot."
 
-    # Create a temp file in with the script template is copied in text format. Then we do
-    # variables expansion, before generating the binary script into the target file system.
-    output_file = tempfile.mktemp()
-    file_util.copy_file(script, output_file)
+      # Name has to be either board_name.boot.[firmware|rootfs].scr
+      if copy_rootfs:
+        script += "rootfs"
+      else:
+        script += "firmware"
+      script += ".txt"
 
-    # Replace the generation date, the dft version, the filesystem
-    # filesys = self.project.image[Key.DEVICES.value][Key.PARTITIONS.value][0]\
-    #                             [Key.FILESYSTEM.value].lower()
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+      # Create a temp file in with the script template is copied in text format. Then we do
+      # variables expansion, before generating the binary script into the target file system.
+      output_file = tempfile.mktemp()
+      file_util.copy_file(script, output_file)
 
-    command = 'sed -i '
-    # command = 'sed -i -e "s/__FILESYSTEM_TYPE__/' + filesys + '/g" '
-    command += ' -e "s/__DFT_VERSION__/' + release.__version__ + '/g" '
-    command += ' -e "s/__GENERATION_DATE__/' + timestamp + '/g" '
+      # Replace the generation date, the dft version, the filesystem
+      # filesys = self.project.image[Key.DEVICES.value][Key.PARTITIONS.value][0]\
+      #                             [Key.FILESYSTEM.value].lower()
+      timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # Replace the initrd size only for firmware mode
-    # if copy_rootfs is False:
-    #   path = self.project.get_firmware_content_directory() + "/initrd.img"
-    #   size = os.stat(path).st_size
-    #   command += ' -e "s/__INITRD_SIZE__/' + hex(size) + '/g" '
+      command = 'sed -i '
+      # command = 'sed -i -e "s/__FILESYSTEM_TYPE__/' + filesys + '/g" '
+      command += ' -e "s/__DFT_VERSION__/' + release.__version__ + '/g" '
+      command += ' -e "s/__GENERATION_DATE__/' + timestamp + '/g" '
 
-    # Command has been generated, let's execute the replacement with sed
-    command += " " + output_file
-    self.execute_command(command)
+      # Replace the initrd size only for firmware mode
+      # if copy_rootfs is False:
+      #   path = self.project.get_firmware_content_directory() + "/initrd.img"
+      #   size = os.stat(path).st_size
+      #   command += ' -e "s/__INITRD_SIZE__/' + hex(size) + '/g" '
 
-    # Generate the boot script on the fly with macro expension
-    arch = self.project.get_mkimage_arch()
-    command = "mkimage -A " + arch + " -C none -T script -d " + output_file + " " + image_mount_root + "/boot.scr"
-    self.execute_command(command)
+      # Command has been generated, let's execute the replacement with sed
+      command += " " + output_file
+      self.execute_command(command)
 
-    # Remove temp file once binary boot.scr has been generated
-    os.remove(output_file)
+      # Generate the boot script on the fly with macro expension
+      arch = self.project.get_mkimage_arch()
+      command = "mkimage -A " + arch + " -C none -T script -d " + output_file
+      command += " " + image_mount_root + "/boot.scr"
+      self.execute_command(command)
+
+      # Remove temp file once binary boot.scr has been generated
+      os.remove(output_file)
 
     #
     # Data have been copied, lets unmount all the partitions before teardown the loopback

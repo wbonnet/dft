@@ -141,6 +141,7 @@ class Key(Enum):
   FORBIDDEN = "forbidden"
   FORCE_UID = "force_uid"
   FORMAT = "format"
+  GENERATE_BOOTSCR = "generate_bootscr"
   GENERATE_DEB = "generate_deb"
   GENERATE_SRC = "generate_src"
   GENERATE_VALIDITY_CHECK = "generate_validity_check"
@@ -931,9 +932,9 @@ class Project(object):
     # Project configuration exist. Is there a DFT base defined ?
     if Key.DFT_BASE.value not in self.project[Key.CONFIGURATION.value]:
       # No, then let's copy the key from global configuration, or use its default value
-      if Key.DFT_BASE.value in self.configuration[Key.CONFIGURATION.value]:
+      if Key.DFT_BASE.value in self.project[Key.CONFIGURATION.value]:
         self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] = \
-                      self.configuration[Key.CONFIGURATION.value][Key.DFT_BASE.value]
+                      self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value]
       else:
         # Global is not defined, then default to /usr/share value
         self.project[Key.CONFIGURATION.value][Key.DFT_BASE.value] = "/usr/share/dft"
@@ -1010,7 +1011,7 @@ class Project(object):
 
     # Retrieve the architecture of the host
     arch = subprocess.check_output("uname -m", shell=True).decode(Key.UTF8.value).rstrip()
-    if arch == "ppc64" or arch == "ppc64el" or arch == "ppc" :
+    if arch == "ppc64" or arch == "ppc64el" or arch == "ppc":
       return "powerpc"
     elif arch == "armv7l" or arch == "aarch64":
       return "arm"

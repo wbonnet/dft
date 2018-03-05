@@ -535,10 +535,8 @@ class BuildRootFS(CliCommand):
     """
 
     # Check if the removal flag is deactivated
-    if (Key.REMOVE_DOWNLOADED_ARCHIVES.value in \
-        self.project.project[Key.CONFIGURATION.value] and
-        self.project.project[Key.CONFIGURATION.value]\
-                            [Key.REMOVE_DOWNLOADED_ARCHIVES.value] == False):
+    if Key.REMOVE_DOWNLOADED_ARCHIVES.value in self.project.project[Key.CONFIGURATION.value] and \
+        not self.project.project[Key.CONFIGURATION.value][Key.REMOVE_DOWNLOADED_ARCHIVES.value]:
       # Yes, thus no need to remove any files just exit
       return
 
@@ -663,4 +661,3 @@ class BuildRootFS(CliCommand):
 
     # Finally umount all the chrooted environment
     self.teardown_chrooted_environment()
-

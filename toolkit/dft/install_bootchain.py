@@ -26,9 +26,7 @@ generated rootfs. This chain contains uboot, kernel; initramfs and DTB.
 """
 
 import os
-import stat
 import logging
-import tempfile
 from dft.cli_command import CliCommand
 from dft.model import Key
 
