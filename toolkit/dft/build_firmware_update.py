@@ -53,9 +53,6 @@ class BuildFirmwareUpdate(CliCommand):
     # Initialize ancestor
     CliCommand.__init__(self, dft, project)
 
-    # Tar archive object
-    tar = None
-
 
 
   # -------------------------------------------------------------------------
@@ -119,16 +116,16 @@ class BuildFirmwareUpdate(CliCommand):
     dest_archive += "/" + self.project.firmware[Key.CONFIGURATION.value][Key.FILENAME.value]
 
     # Create the tar itself
-    self.tar = tarfile.open(name=dest_archive, mode='w')
+    tar = tarfile.open(name=dest_archive, mode='w')
 
     # Iterate firmware content directory
     for name in os.listdir(self.project.get_firmware_content_directory()):
       # And add each and every file
       filename = self.project.get_firmware_content_directory() + "/" + name
-      self.tar.add(filename, name, recursive=True)
+      tar.add(filename, name, recursive=True)
 
     # Let's close the tar to flushit
-    self.tar.close()
+    tar.close()
     logging.debug("Archive " + dest_archive + " has been created")
 
 

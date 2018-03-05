@@ -72,7 +72,8 @@ else
   if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${uenv_addr_r} ${uenv_file} uEnv.txt.back ; then
     # filesize variable is set by the load command
     env import -t ${uenv_addr_r} ${filesize}
-    echo "Failed to load the uEnv.txt backup file."
+  else
+    echo "Failed to load the uEnv.txt.back backup file."
     echo "Bork ! Bork ! Bork !"
   fi
 fi
@@ -85,8 +86,12 @@ setenv flag_env_modified 0
 # Checking for the last_boot_clean variable
 if itest.s "x${dft_last_boot_clean}" == "x" ; then
   # Variable was not yet defined, there is nothing to do but continue with u-boot value
-  echo "Variable dft_last_boot_clean. This should not happen ! Something went wrong..."
-  echo "This boot is likely to fail :("
+  echo "Variable dft_last_boot_clean is not defined. This should not happen ! Something went wrong..."
+  echo "This should not happen ! Something went wrong... and uEnv.txt has probably be lost"
+  echo "Trying to regenerate it, but this boot is likely to fail :("
+
+  # Here generate env
+
 else
   # Current dft_last_boot_state is defined, let's compare it with what we expect
   # TODO : Nope it does not work we have to exchange a token between u-boot and u-env

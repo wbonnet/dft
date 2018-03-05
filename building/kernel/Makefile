@@ -59,5 +59,5 @@ help :
 	@echo '                           It will generate the Makefile and a blank configfile.'
 	@echo '                           After creation you have to set the architecture and default dtb'
 	@echo '                           filename in the board.mk file, and fill config content.'
-	@echo 
+	@echo
 	@echo '                           Do not forget to add bsp definition and bootscripts to DFT tree'

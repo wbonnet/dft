@@ -132,7 +132,7 @@ Available commands are :
     elif self.command == Key.BUILD_FIRMWARE.value:
       self.__add_parser_build_firmware()
     elif self.command == Key.BUILD_FIRMWARE_UPDATE.value:
-      self.__add_parser_build_firmware_update()
+      self.__add_parser_firmware_update()
     elif self.command == Key.CHECK_ROOTFS.value:
       self.__add_parser_check_rootfs()
     elif self.command == Key.CONTENT_INFO.value:
@@ -229,7 +229,7 @@ Available commands are :
                              help=Key.OPT_HELP_LABEL.value)
 
 
-  def __add_parser_build_firmware_update(self):
+  def __add_parser_firmware_update(self):
     """ This method add parser options specific to build_firmware_update command
     """
 
