@@ -27,6 +27,7 @@ NEW_VERSION  = $*
 PACAKGE_DATE = $(shell LC_ALL=C date +"%a, %d %b %Y %T %z")
 PACAKGE_DATE = $(shell date )
 FILTER_DIRS  = config_files/
+HOST_ARCH    = $(shell uname -m)
 
 # ------------------------------------------------------------------------------
 #
@@ -79,6 +80,19 @@ new-version-%:
 	@for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \
 		$(MAKE) -C $$i $* || exit 1 ; \
 	done
+
+# Catch all target. Call the same targets in each subfolder
+%:
+	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
+	then \
+	    echo "Board is $(BOARD_ARCH) and i run on $(HOST_ARCH). Skipping recursive target call..." ; \
+	    true ; \
+	else \
+		for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \
+			$(MAKE) -C $$i $* || exit 1 ; \
+		done \
+	fi
+
 
 # ------------------------------------------------------------------------------
 #
