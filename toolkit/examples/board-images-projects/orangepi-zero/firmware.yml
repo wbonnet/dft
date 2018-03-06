@@ -144,12 +144,18 @@ security:
 #
 # Definition of the firmware resilience and safety parameters
 #
-# Remember that Safety is not security
+# Remember that safety is not security
 #
 # ----------------------------------------------------------------------------
 resilience:
-  # Number of banks used ifor firmware installation
-  banks: 1
+  # Number of banks used for firmware installation
+  banks: 2
+
+  # Flag used to know if a rescue system is used or not. Default is false
+  rescue_image: True
+
+  # Flag used to know if an update partition is used or not. Default is false
+  update_partition: True
 
 # ----------------------------------------------------------------------------
 #
