@@ -1,4 +1,4 @@
-dft (0.6.6-1) unstable; urgency=low
+dft-buildsystem (0.6.6-1) unstable; urgency=low
 
   * Add a few boards (H64, orangepi one plus). Not yet working
   * Cubieboard 3 image is validated
