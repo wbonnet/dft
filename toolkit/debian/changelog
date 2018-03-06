@@ -2,6 +2,8 @@ dft (0.6.6-1) unstable; urgency=low
 
   * Add upgrade verification and deployment script
   * Add bank switching in uboot scripts
+  * Add a few boards (H64, orangepi one plus). Not yet working
+  * Cubieboard 3 image is validated
 
  -- William Bonnet <wbonnet@theitmakers.com>  Thu, 22 Feb 2018 13:54:00 +0100
 
