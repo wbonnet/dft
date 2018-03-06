@@ -175,15 +175,25 @@ class BuildFirmwareUpdate(CliCommand):
         # Signing tool is valid, now let's generate the command to do it
         # First case, are we using GnuPG 1 or 2
         if signing_tool == Key.GPG.value or signing_tool == Key.GPG2.value:
+
+          # Now let's prepare the signing command
+          command = signing_tool
+
           # Are we using armor format export ?
           if Key.GPG_ARMOR_SIGNATURE.value in self.project.firmware[Key.SECURITY.value] and \
              self.project.firmware[Key.SECURITY.value][Key.GPG_ARMOR_SIGNATURE.value]:
             # Yes, let's append --armor to the command
-            signing_tool += " --armor"
+            command += " --armor"
 
-          signing_tool += " --output " + dest_sign + "  --detach-sig " + dest_archive
-          self.execute_command(signing_tool)
-          self.project.logging.info(dest_archive + " have been created and signed successfully")
+          command += " --output " + dest_sign + "  --detach-sig " + dest_archive
+          self.execute_command(command)
+          self.project.logging.info(dest_archive + " has been created and signed successfully")
+
+          # Update archive has been signed, let's verify signature before finishing
+          command = signing_tool + " --verify " + dest_sign + " " + dest_archive
+          self.execute_command(command)
+#TODO : add test case
+          self.project.logging.info(dest_sign + " has been verfied successfully")
 
         # Or is it OpenSSL ?
         elif signing_tool == Key.OPENSSL.value:
