@@ -20,15 +20,12 @@
 #
 
 # Defines board name
-BOARD_NAME  = odroid-c1-plus
+BOARD_NAME = odroid-c1-plus
+BOARD_ARCH = armv7l
 
-# Defines boards architecture (armv7l, armel, aarch64, x86_64, i686, etc.)
-BOARD_ARCH  = unknown
+# Set config file to empty and define the name of the board to use a defconfig
+USE_CONFIG_FILE        =
+USE_DEFCONFIG          = odroid_defconfig
 
-# Defines the default dtb to use (symlink used by generic boot.scr)
-DEFAULT_DTB = unknown
-
-# Defines if all dtb should be included in the generated package (uncomment
-# and set value to 1) or if only default dtb is included (keep commented or
-# set the value to 0) 
-# INCLUDE_ALL_DTB_IN_PACKAGE = 0
+# Defines the list of files to copy (path is relative to build dir)
+UBOOT_BINARY_FILE      = unknown

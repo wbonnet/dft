@@ -36,7 +36,7 @@ new-board-%:
 		echo ". Copying the Makefile template to the new board directory" ; \
 		ln -s ../../buildsystem/current/templates/board-u-boot.makefile $(NEW_BOARD)/Makefile ; \
 		echo ". Copying board specific Makefile template" ; \
-		cp ../buildsystem/current/templates/board-specific.makefile $(NEW_BOARD)/$(NEW_BOARD).mk ; \
+		cp ../buildsystem/current/templates/board-specific.u-boot.makefile $(NEW_BOARD)/$(NEW_BOARD).mk ; \
 		sed -i -e "s/__BOARD_NAME__/$(NEW_BOARD)/g" $(NEW_BOARD)/$(NEW_BOARD).mk ; \
 		ln -s $(NEW_BOARD).mk $(NEW_BOARD)/board.mk; \
 		echo ". Adding ./$(NEW_BOARD) to git" ; \
