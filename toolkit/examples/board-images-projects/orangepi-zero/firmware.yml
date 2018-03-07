@@ -148,8 +148,8 @@ security:
 #
 # ----------------------------------------------------------------------------
 resilience:
-  # Number of banks used for firmware installation
-  banks: 2
+  # Use dual banks for high availability
+  dual_banks: True
 
   # Flag used to know if a rescue system is used or not. Default is false
   rescue_image: True
