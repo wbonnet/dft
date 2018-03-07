@@ -22,7 +22,7 @@
 # Defines the software version
 NEW_BOARD = $*
 
-# Create a new boar entry in the repository
+# Create a new board entry in the repository
 new-board-%:
 	@if [ -d "./$(NEW_BOARD)" ] ; then \
 		echo ". Directory ./($(NEW_BOARD) already exist. Doing nothing..." ; \
