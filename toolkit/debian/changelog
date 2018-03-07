@@ -1,3 +1,10 @@
+dft (0.6.7-1) unstable; urgency=low
+
+  * Bank switching is actiated in firmware
+  * Add a few boards (Odroid C0, Odroid C1+). Not yet working
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 07 Mar 2018 09:14:00 +0100
+
 dft (0.6.6-1) unstable; urgency=low
 
   * Add upgrade verification and deployment script
