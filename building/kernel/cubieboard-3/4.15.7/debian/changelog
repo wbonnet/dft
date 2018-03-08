@@ -1,3 +1,9 @@
+linux-kernel-cubieboard-3 (4.15.7-2) unstable; urgency=medium
+
+  * Activate CONFIG_VETH=m
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 08 Mar 2018 21:35:45 +0100
+
 linux-kernel-cubieboard-3 (4.15.7-1) unstable; urgency=medium
 
   * Initial release.
