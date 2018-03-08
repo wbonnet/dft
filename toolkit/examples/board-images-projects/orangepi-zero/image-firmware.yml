@@ -155,7 +155,7 @@ devices:
         ext_fs_tune: "-m 0"
       }
     - {
-        name: "updates" ,
+        name: "rescue" ,
         type: "primary" ,
         size: "256" ,
         unit: "MB" ,
@@ -165,7 +165,7 @@ devices:
         ext_fs_tune: "-m 0"
       }
     - {
-        name: "rescue" ,
+        name: "update" ,
         type: "primary" ,
         size: "256" ,
         unit: "MB" ,
