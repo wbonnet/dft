@@ -49,10 +49,10 @@ layout:
   # to mount squashfs files using loopback
   filesystem: ext4
 
-  # Identification of the physical partition containing the squashfs files 
+  # Identification of the physical partition containing the squashfs files
   partition: /dev/mmcblk0p1
 
-  # Defines the path under which the squashfs files are stored in the 
+  # Defines the path under which the squashfs files are stored in the
   # partition defined previously
   path: /
 
@@ -102,7 +102,6 @@ layout:
         # Specify the size of the tmpfs
         mount_options: "size=256M,nr_inodes=10k,mode=777"
 
-  auto_commit: False
 
 # ----------------------------------------------------------------------------
 #

@@ -112,7 +112,6 @@ layout:
         # Specify the size of the tmpfs
         mount_options: "size=256M,nr_inodes=10k,mode=777"
 
-  auto_commit: False
 
 # ----------------------------------------------------------------------------
 #

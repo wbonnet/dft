@@ -26,10 +26,10 @@ setenv dft_flag_file  dft_boot_was_dirty
 setenv uenv_addr_r    ${scriptaddr}
 
 # Defines if the rescue partition is used or not
-setenv use_rescue 1
+setenv dft_use_rescue 1
 
 # Defines if the dual_banks mode is activated
-setenv dual_banks 1
+setenv dft_dual_banks 1
 
 # Defines the current values for type device and partition only if not existing
 # These are used to load uEnv, kernel, dtb and initrd
@@ -91,12 +91,25 @@ fi
 # We have to switch bank, if multi bank is activated, and try again exactly the same code
 # once banks switch.
 
-# Switch banks. Failover becomes active
+# Test if multi bank is activated
+if itest.s "${dft_multi_banks}" == "1" ; then
+  # Yes, thus switch banks. Failover becomes active
+  if itest.s "${dft_curr_bank}" == "0" ; then
+    setenv dft_curr_bank      1
+    setenv dft_curr_part      2
+  else
+    setenv dft_curr_bank      0
+    setenv dft_curr_part      1
+  fi
 
-# Try again
-if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${uenv_addr_r} ${dft_flag_file} ; then
-  echo "Normal boot"
-  save ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${script_addr} ${dft_flag_file} 0
+  # Banks have been switched, need to save env
+  saveenv
+
+  # Try again
+  if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${uenv_addr_r} ${dft_flag_file} ; then
+    echo "Normal boot"
+    save ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${script_addr} ${dft_flag_file} 0
+  fi
 fi
 
 
@@ -112,9 +125,12 @@ fi
 
 # Switch to rescue bank
 
-# And try to boot
-if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${uenv_addr_r} ${dft_flag_file} ; then
-  echo "Normal boot"
+# Test if multi bank is activated
+if itest.s "${dft_use_rescue}" == "1" ; then
+  # And try to boot
+  if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${uenv_addr_r} ${dft_flag_file} ; then
+    echo "Normal boot"
+  fi
 fi
 
 
