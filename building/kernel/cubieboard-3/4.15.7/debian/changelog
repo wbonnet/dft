@@ -1,3 +1,9 @@
+linux-kernel-cubieboard-3 (4.15.7-3) unstable; urgency=medium
+
+  * Activate CONFIG_VLAN_8021Q_GVRP=m
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 08 Mar 2018 22:41:45 +0100
+
 linux-kernel-cubieboard-3 (4.15.7-2) unstable; urgency=medium
 
   * Activate CONFIG_VETH=m
