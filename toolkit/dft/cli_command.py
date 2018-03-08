@@ -32,7 +32,7 @@ import logging
 import tempfile
 import errno
 from enum import Enum
-from dft.model import Key
+from dft.enumkey import Key
 from dft.ansi_colors import Colors
 
 

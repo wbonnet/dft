@@ -34,7 +34,7 @@ from datetime import datetime
 from distutils import file_util
 import parted
 from dft.cli_command import CliCommand
-from dft.model import Key
+from dft.enumkey import Key
 from dft import release
 
 #

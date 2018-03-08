@@ -29,7 +29,7 @@ import logging
 import os
 import tempfile
 from dft.cli_command import CliCommand
-from dft.model import Key
+from dft.enumkey import Key
 
 #
 #    Class ContentOutputWriter

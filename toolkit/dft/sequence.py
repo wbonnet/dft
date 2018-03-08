@@ -28,7 +28,7 @@ different steps needed to build a firmware image from scratch.
 
 import logging
 from dft.cli_command import CliCommand
-from dft.model import Key
+from dft.enumkey import Key
 from dft import assemble_firmware
 from dft import install_bootchain
 from dft import build_image

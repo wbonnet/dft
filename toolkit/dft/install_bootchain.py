@@ -28,7 +28,7 @@ generated rootfs. This chain contains uboot, kernel; initramfs and DTB.
 import os
 import logging
 from dft.cli_command import CliCommand
-from dft.model import Key
+from dft.enumkey import Key
 
 #
 #    Class Installbootchain

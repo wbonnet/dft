@@ -33,7 +33,7 @@ import stat
 import hashlib
 from dft.cli_command import CliCommand
 from dft.cli_command import Code
-from dft.model import Key
+from dft.enumkey import Key
 
 #
 #    Class CheckRootFS

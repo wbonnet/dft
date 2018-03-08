@@ -29,7 +29,7 @@ of removing files and packages.
 import os
 import errno
 from shutil import rmtree
-from dft.model import Key
+from dft.enumkey import Key
 from dft.cli_command import CliCommand
 
 #

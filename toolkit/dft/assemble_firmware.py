@@ -31,7 +31,7 @@ import stat
 import tempfile
 import datetime
 from dft.cli_command import CliCommand
-from dft.model import Key
+from dft.enumkey import Key
 
 
 #

@@ -30,7 +30,7 @@ import logging
 import os
 from shutil import rmtree
 from dft.cli_command import CliCommand
-from dft.model import Key
+from dft.enumkey import Key
 
 #
 #    Class BuildFirmware

@@ -34,7 +34,7 @@ from shutil import rmtree
 from distutils import dir_util
 from distutils import file_util
 from dft.cli_command import CliCommand
-from dft.model import Key
+from dft.enumkey import Key
 
 
 #

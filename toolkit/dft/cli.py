@@ -33,7 +33,7 @@ import logging
 
 from dft.release import __version__
 from dft import model
-from dft.model import Key
+from dft.enumkey import Key
 from dft import assemble_firmware
 from dft import install_bootchain
 from dft import build_image
