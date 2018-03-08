@@ -1,4 +1,4 @@
-linux-image-orangepi-zero (4.15.7-2) unstable; urgency=medium
+linux-kernel-orangepi-zero (4.15.7-2) unstable; urgency=medium
 
   * Activate CONFIG_VETH=m
 

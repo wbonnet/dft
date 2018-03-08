@@ -1,3 +1,9 @@
+linux-kernel-cubieboard-2 (4.15.7-2) unstable; urgency=medium
+
+  * Activate CONFIG_VETH an CONFIG_TUN as module
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 08 Mar 2018 22:05:52 +0100
+
 linux-kernel-cubieboard-2 (4.15.7-1) unstable; urgency=medium
 
   * Initial release.
