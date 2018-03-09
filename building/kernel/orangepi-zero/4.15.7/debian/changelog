@@ -1,3 +1,9 @@
+linux-kernel-orangepi-zero (4.15.7-4) unstable; urgency=medium
+
+  * Activate CONFIG_BRIDGE=y
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 09 Mar 2018 12:43:20 +0100
+
 linux-kernel-orangepi-zero (4.15.7-3) unstable; urgency=medium
 
   * Activate CONFIG_VLAN_8021Q_GVRP=m
