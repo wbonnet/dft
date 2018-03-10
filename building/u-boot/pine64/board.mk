@@ -24,8 +24,8 @@ BOARD_NAME = pine64
 BOARD_ARCH = aarch64
 
 # Set config file to empty and define the name of the board to use a defconfig
-USE_CONFIG_FILE        =
-USE_DEFCONFIG          = pine64_defconfig
+USE_CONFIG_FILE =
+USE_DEFCONFIG   = pine64_plus_defconfig
 
 # Defines the list of files to copy (#path is relative to build dir)
-#UBOOT_BINARY_FILE      = u-boot-sunxi-with-spl.bin64
+UBOOT_BINARY_FILE = u-boot
