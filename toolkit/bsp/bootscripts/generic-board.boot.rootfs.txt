@@ -10,7 +10,6 @@
 #
 # Definition of environment variables
 #
-setenv fstype   __FILESYSTEM_TYPE__
 setenv fdtfile  'boot/default.dtb'
 setenv image    'boot/zImage'
 setenv mmcroot  '/dev/mmcblk0p1 rootwait rw'
@@ -21,8 +20,8 @@ setenv mmcpart  1
 #
 # Definition of the macro needed to load DTB Kernel and initrd to ram
 #
-setenv loadfdt '${fstype}load mmc ${mmcdev}:${mmcpart} ${fdt_addr_r} ${fdtfile}'
-setenv loadimage '${fstype}load mmc ${mmcdev}:${mmcpart} ${kernel_addr_r} ${image}'
+setenv loadfdt 'load mmc ${mmcdev}:${mmcpart} ${fdt_addr_r} ${fdtfile}'
+setenv loadimage 'load mmc ${mmcdev}:${mmcpart} ${kernel_addr_r} ${image}'
 
 #
 # Definition of the macro needed to run the kernel using only dtb (no initrd in rootfs mode)
