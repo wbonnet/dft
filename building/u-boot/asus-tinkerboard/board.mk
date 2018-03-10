@@ -24,8 +24,8 @@ BOARD_NAME = asus-tinkerboard
 BOARD_ARCH = armv7l
 
 # Set config file to empty and define the name of the board to use a defconfig
-USE_CONFIG_FILE        =
-USE_DEFCONFIG          = tinker-rk3288_defconfig
+USE_CONFIG_FILE =
+USE_DEFCONFIG   = tinker-rk3288_defconfig
 
 # Defines the list of files to copy (path is relative to build dir)
-#UBOOT_BINARY_FILE      = u-boot-sunxi-with-spl.bin
+UBOOT_BINARY_FILE  = u-boot
