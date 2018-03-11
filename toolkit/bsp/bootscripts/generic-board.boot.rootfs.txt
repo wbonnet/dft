@@ -10,7 +10,7 @@
 #
 # Definition of environment variables
 #
-setenv rootfstype   __FILESYSTEM_TYPE__
+setenv fstype       __FILESYSTEM_TYPE__
 setenv fdtfile      'boot/default.dtb'
 setenv image        'boot/zImage'
 setenv mmcroot      '/dev/mmcblk0p1 rootwait rw'
