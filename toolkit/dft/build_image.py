@@ -1339,94 +1339,94 @@ class BuildImage(CliCommand):
           self.project.logging.critical("Device partition for bank 0 is not defined in partitions")
           missing_configuration_found = True
 
-    # Check if dual banks are activated, and bank_1 is defined
-    if Key.DUAL_BANKS.value in self.project.firmware[Key.RESILIENCE.value] and \
-                               self.project.firmware[Key.RESILIENCE.value][Key.DUAL_BANKS.value]:
-      # If dual bank is activated, then bank 1 must be defined
-      if not Key.BANK_1.value in self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]:
-        self.project.logging.critical("Dual bank is activated, but bank 1 is not defined in the "
-                                      "partitions section")
-        missing_configuration_found = True
-      else:
-        # Device type must be defined for bank 1
-        if not Key.DEVICE_TYPE.value in self.project.firmware[Key.RESILIENCE.value]\
-                                                             [Key.PARTITIONS.value]\
-                                                             [Key.BANK_1.value]:
-          self.project.logging.critical("Device type for bank 1 is not defined in partitions")
+      # Check if dual banks are activated, and bank_1 is defined
+      if Key.DUAL_BANKS.value in self.project.firmware[Key.RESILIENCE.value] and \
+                                 self.project.firmware[Key.RESILIENCE.value][Key.DUAL_BANKS.value]:
+        # If dual bank is activated, then bank 1 must be defined
+        if not Key.BANK_1.value in self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]:
+          self.project.logging.critical("Dual bank is activated, but bank 1 is not defined in the "
+                                        "partitions section")
           missing_configuration_found = True
-
-        # Device number must be defined for bank 1
-        if not Key.DEVICE_NUMBER.value in self.project.firmware[Key.RESILIENCE.value]\
+        else:
+          # Device type must be defined for bank 1
+          if not Key.DEVICE_TYPE.value in self.project.firmware[Key.RESILIENCE.value]\
                                                                [Key.PARTITIONS.value]\
                                                                [Key.BANK_1.value]:
-          self.project.logging.critical("Device number for bank 1 is not defined in partitions")
-          missing_configuration_found = True
+            self.project.logging.critical("Device type for bank 1 is not defined in partitions")
+            missing_configuration_found = True
 
-        # Device partition must be defined for bank 1
-        if not Key.PARTITION.value in self.project.firmware[Key.RESILIENCE.value]\
-                                                           [Key.PARTITIONS.value][Key.BANK_1.value]:
-          self.project.logging.critical("Device partition for bank 1 is not defined in partitions")
-          missing_configuration_found = True
+          # Device number must be defined for bank 1
+          if not Key.DEVICE_NUMBER.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                                 [Key.PARTITIONS.value]\
+                                                                 [Key.BANK_1.value]:
+            self.project.logging.critical("Device number for bank 1 is not defined in partitions")
+            missing_configuration_found = True
 
-    # Check if dual banks are activated, and bank_1 is defined
-    if Key.RESCUE_IMAGE.value in self.project.firmware[Key.RESILIENCE.value] and \
-                                 self.project.firmware[Key.RESILIENCE.value]\
-                                                      [Key.RESCUE_IMAGE.value]:
-      # If dual bank is activated, then bank 1 must be defined
-      if not Key.RESCUE.value in self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]:
-        self.project.logging.critical("Rescue image is activated, but rescue is not defined in the "
-                                      "partitions section")
-        missing_configuration_found = True
-      else:
-        # Device type must be defined for bank 1
-        if not Key.DEVICE_TYPE.value in self.project.firmware[Key.RESILIENCE.value]\
-                                                             [Key.PARTITIONS.value]\
-                                                             [Key.RESCUE.value]:
-          self.project.logging.critical("Device type for rescue is not defined in partitions")
-          missing_configuration_found = True
+          # Device partition must be defined for bank 1
+          if not Key.PARTITION.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                             [Key.PARTITIONS.value][Key.BANK_1.value]:
+            self.project.logging.critical("Device partition for bank 1 is not defined in partitions")
+            missing_configuration_found = True
 
-        # Device number must be defined for bank 1
-        if not Key.DEVICE_NUMBER.value in self.project.firmware[Key.RESILIENCE.value]\
+      # Check if dual banks are activated, and bank_1 is defined
+      if Key.RESCUE_IMAGE.value in self.project.firmware[Key.RESILIENCE.value] and \
+                                   self.project.firmware[Key.RESILIENCE.value]\
+                                                        [Key.RESCUE_IMAGE.value]:
+        # If dual bank is activated, then bank 1 must be defined
+        if not Key.RESCUE.value in self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]:
+          self.project.logging.critical("Rescue image is activated, but rescue is not defined in the "
+                                        "partitions section")
+          missing_configuration_found = True
+        else:
+          # Device type must be defined for bank 1
+          if not Key.DEVICE_TYPE.value in self.project.firmware[Key.RESILIENCE.value]\
                                                                [Key.PARTITIONS.value]\
                                                                [Key.RESCUE.value]:
-          self.project.logging.critical("Device number for rescue is not defined in partitions")
-          missing_configuration_found = True
+            self.project.logging.critical("Device type for rescue is not defined in partitions")
+            missing_configuration_found = True
 
-        # Device partition must be defined for bank 1
-        if not Key.PARTITION.value in self.project.firmware[Key.RESILIENCE.value]\
-                                                           [Key.PARTITIONS.value][Key.RESCUE.value]:
-          self.project.logging.critical("Device partition for rescue is not defined in partitions")
-          missing_configuration_found = True
+          # Device number must be defined for bank 1
+          if not Key.DEVICE_NUMBER.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                                 [Key.PARTITIONS.value]\
+                                                                 [Key.RESCUE.value]:
+            self.project.logging.critical("Device number for rescue is not defined in partitions")
+            missing_configuration_found = True
 
-    # Check if dual banks are activated, and bank_1 is defined
-    if Key.UPDATE_PARTITION.value in self.project.firmware[Key.RESILIENCE.value] and \
-                                     self.project.firmware[Key.RESILIENCE.value]\
-                                                          [Key.UPDATE_PARTITION.value]:
-      # If dual bank is activated, then bank 1 must be defined
-      if not Key.UPDATE.value in self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]:
-        self.project.logging.critical("Update partition is activated, but update is not defined in the "
-                                      "partitions section")
-        missing_configuration_found = True
-      else:
-        # Device type must be defined for bank 1
-        if not Key.DEVICE_TYPE.value in self.project.firmware[Key.RESILIENCE.value]\
-                                                             [Key.PARTITIONS.value]\
-                                                             [Key.UPDATE.value]:
-          self.project.logging.critical("Device type for update is not defined in partitions")
-          missing_configuration_found = True
+          # Device partition must be defined for bank 1
+          if not Key.PARTITION.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                             [Key.PARTITIONS.value][Key.RESCUE.value]:
+            self.project.logging.critical("Device partition for rescue is not defined in partitions")
+            missing_configuration_found = True
 
-        # Device number must be defined for bank 1
-        if not Key.DEVICE_NUMBER.value in self.project.firmware[Key.RESILIENCE.value]\
+      # Check if dual banks are activated, and bank_1 is defined
+      if Key.UPDATE_PARTITION.value in self.project.firmware[Key.RESILIENCE.value] and \
+                                       self.project.firmware[Key.RESILIENCE.value]\
+                                                            [Key.UPDATE_PARTITION.value]:
+        # If dual bank is activated, then bank 1 must be defined
+        if not Key.UPDATE.value in self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]:
+          self.project.logging.critical("Update partition is activated, but update is not defined in the "
+                                        "partitions section")
+          missing_configuration_found = True
+        else:
+          # Device type must be defined for bank 1
+          if not Key.DEVICE_TYPE.value in self.project.firmware[Key.RESILIENCE.value]\
                                                                [Key.PARTITIONS.value]\
                                                                [Key.UPDATE.value]:
-          self.project.logging.critical("Device number for update is not defined in partitions")
-          missing_configuration_found = True
+            self.project.logging.critical("Device type for update is not defined in partitions")
+            missing_configuration_found = True
 
-        # Device partition must be defined for bank 1
-        if not Key.PARTITION.value in self.project.firmware[Key.RESILIENCE.value]\
-                                                           [Key.PARTITIONS.value][Key.UPDATE.value]:
-          self.project.logging.critical("Device partition for update is not defined in partitions")
-          missing_configuration_found = True
+          # Device number must be defined for bank 1
+          if not Key.DEVICE_NUMBER.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                                 [Key.PARTITIONS.value]\
+                                                                 [Key.UPDATE.value]:
+            self.project.logging.critical("Device number for update is not defined in partitions")
+            missing_configuration_found = True
+
+          # Device partition must be defined for bank 1
+          if not Key.PARTITION.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                             [Key.PARTITIONS.value][Key.UPDATE.value]:
+            self.project.logging.critical("Device partition for update is not defined in partitions")
+            missing_configuration_found = True
 
     # Is there any missing information ?
     if missing_configuration_found:
