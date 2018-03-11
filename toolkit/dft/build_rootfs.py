@@ -110,7 +110,7 @@ class BuildRootFS(CliCommand):
 
     # Create the bootstrap directory
     dft_target_path = self.project.get_rootfs_mountpoint() + "/dft_bootstrap/"
-    os.mkdir(dft_target_path)
+    os.makedirs(dft_target_path, exist_ok=True)
 
     # Do the debootstrap call
     self.generate_debootstrap_rootfs()
@@ -164,7 +164,7 @@ class BuildRootFS(CliCommand):
       dft_target_path = self.project.get_rootfs_mountpoint() + "/dft_bootstrap/"
       if not os.path.exists(dft_target_path):
         logging.debug("creating dft_bootstrap under " + dft_target_path)
-        os.mkdir(dft_target_path)
+        os.makedirs(dft_target_path, exist_ok=True)
         logging.debug("created !")
       else:
         logging.debug("dft_bootstrap already exist under " + dft_target_path)

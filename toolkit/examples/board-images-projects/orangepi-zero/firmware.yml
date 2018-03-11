@@ -146,7 +146,7 @@ security:
 resilience:
   # Use dual banks for high availability
   dual_banks: True
-  
+
   # Flag used to know if a rescue system is used or not. Default is false
   rescue_image: True
 
@@ -156,17 +156,17 @@ resilience:
   # Identification of the physical partitions containing the squashfs files
   # This version of DFT support at most 4 partitions, dual banking, rescue and
   # update. If a given partition is not used, just comment it out.
-  # Only bank_0 is mandatory. 
+  # Only bank_0 is mandatory.
   #
   # Partition are not defined as a standard /dev/sdX path (seen from linux)
-  # but as device type, device number and part number. Thus it can be easily 
+  # but as device type, device number and part number. Thus it can be easily
   # used to reconstruct linux dev path, and provide information needed for
   # u-boot.
   partitions:
     # Defines the first system bank. This information are mandatory
     bank_0:
-      # Defines the type of device used for bank_0 storage. The type has to 
-      # be a valid u-boot device type. Valid values are : mmc usb 
+      # Defines the type of device used for bank_0 storage. The type has to
+      # be a valid u-boot device type. Valid values are : mmc usb
       device_type:   mmc
 
       # Defines the device number as seen from both u-boot and linux
@@ -174,15 +174,15 @@ resilience:
 
       # Defines the partition number on the device (reminder, it starts @ 1)
       partition:     1
-    
+
     # Defines the second system bank. Used for failover, this information are
     # are needed only if dual bank is activated
     bank_1:
       device_type:   mmc
       device_number: 0
       partition:     2
-    
-    # Defines the rescue bank. Store the rescue system used when none of the 
+
+    # Defines the rescue bank. Store the rescue system used when none of the
     # system bank are in working order. This information are needed only if
     # rescue_imge is activated.
     rescue:
@@ -196,7 +196,7 @@ resilience:
       device_type:   mmc
       device_number: 0
       partition:     4
-    
+
 # ----------------------------------------------------------------------------
 #
 # Definition of the squashfs parameters

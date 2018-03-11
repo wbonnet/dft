@@ -90,6 +90,9 @@ class BuildImage(CliCommand):
     . Compress image file if reuired
     """
 
+    # Control configuration file, and search for any missing information that could be a showstopper
+    self.check_configuration_file()
+
     # Create the image file
     self.create_image_storage()
 
@@ -641,8 +644,7 @@ class BuildImage(CliCommand):
       path = path_to_mount.pop()
 
       # Create the local mount point if needed
-      command = 'mkdir -p "' + path["path"] + '"'
-      self.execute_command(command)
+      os.makedirs(path["path"], exist_ok=True)
 
       # Generate the ount command
       command = 'mount "' + path["device"] + '" "' + path["path"] + '"'
@@ -663,44 +665,8 @@ class BuildImage(CliCommand):
       command = "cp -fra " + copy_source_path + " " + copy_target_path
       self.execute_command(command)
 
-    # Check if we have to generate a bootscript in the image
-    if Key.GENERATE_BOOTSCR.value in self.project.image[Key.CONTENT.value] and \
-       not self.project.image[Key.CONTENT.value][Key.GENERATE_BOOTSCR.value]:
-      # Generation is deactivated, just log it
-      logging.debug("boot.scr generation was deactivated by configuration")
-    else:
-      # Defines the name of the script to copy the bootscript to target
-      script = self.project.get_bsp_base() + "/bootscripts/"
-      script += self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
-                                    [Key.BOARD.value]
-      script += ".boot.rootfs.txt"
-
-      # Create a temp file in with the script template is copied in text format. Then we do
-      # variables expansion, before generating the binary script into the target file system.
-      output_file = tempfile.mktemp()
-      file_util.copy_file(script, output_file)
-
-      # Replace the generation date, the dft version, the filesystem
-      filesys = self.project.image[Key.DEVICES.value][Key.PARTITIONS.value][0]\
-                                  [Key.FILESYSTEM.value].lower()
-      timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-      command = 'sed -i -e "s/__FILESYSTEM_TYPE__/' + filesys + '/g" '
-      command += ' -e "s/__DFT_VERSION__/' + release.__version__ + '/g" '
-      command += ' -e "s/__GENERATION_DATE__/' + timestamp + '/g" '
-
-      # Command has been generated, let's execute the replacement with sed
-      command += " " + output_file
-      self.execute_command(command)
-
-      # Generate the boot script on the fly with macro expension
-      arch = self.project.get_mkimage_arch()
-      command = "mkimage -A " + arch + " -C none -T script -d " + output_file
-      command += " " + image_mount_root + "/boot.scr"
-      self.execute_command(command)
-
-      # Remove temp file once binary boot.scr has been generated
-      os.remove(output_file)
+    # Generate the bootscript
+    self.generate_bootscript(image_mount_root)
 
     #
     # Data have been copied, lets unmount all the partitions before teardown the loopback
@@ -711,8 +677,7 @@ class BuildImage(CliCommand):
     path_to_umount.sort()
     while len(path_to_umount) > 0:
       # Generate the uount command
-      command = 'umount "' + path_to_umount.pop() + '"'
-      self.execute_command(command)
+      self.umount_mountpoint(path_to_umount.pop())
 
     # Remove the temporary mount point before exiting
     shutil.rmtree(image_mount_root)
@@ -1168,110 +1133,318 @@ class BuildImage(CliCommand):
     # Output current task to logs
     logging.info("Installating firmware image content")
 
+    # ---------------------------------------------------------------------------------------------
+    #
+    # Populate bank 0 partitions (mandatory)
+    #
+    # ---------------------------------------------------------------------------------------------
+
     # Get a temporary directory used as root for image mounting
     image_mount_root = tempfile.mkdtemp(dir=self.project.get_image_directory())
 
-    # Check if Bank 0 is defined. It has to, that is the only mandatory partition
-      dual_banks: True
+    # Bank 0 has to be defined (already checked for), mount it under bank_0
+    bank_0_mountpoint = image_mount_root + "/" + Key.BANK_0.value
 
-    # Check if rescue image is activated
-      rescue_image: True
+    # Create the local mount point if needed
+    os.makedirs(bank_0_mountpoint, exist_ok=True)
 
-    # Check if update partition is activated
-      update_partition: True
+    # Generate the device string based upon partitions informations (and no part index as in rootfs)
+    device = self.loopback_device + "p" + self.project.firmware[Key.RESILIENCE.value]\
+                                                               [Key.PARTITIONS.value]\
+                                                               [Key.BANK_0.value]\
+                                                               [Key.PARTITION.value]
+
+    # Mount the device
+    command = 'mount "' + device + '" "' + bank_0_mountpoint + '"'
+    self.execute_command(command)
+
+    # Iterate the list of files in the rootfs and copy them to image
+    for copy_target in os.listdir(self.project.get_firmware_content_directory()):
+      copy_source_path = os.path.join(self.project.get_firmware_content_directory(), copy_target)
+      copy_target_path = os.path.join(bank_0_mountpoint, copy_target)
+      command = "cp -fra " + copy_source_path + " " + copy_target_path
+      self.execute_command(command)
+
+    # Generate the boootscript into the current bank partition
+    self.generate_bootscript(bank_0_mountpoint)
+
+    # Copy is done, let's umount the device
+    self.umount_mountpoint(bank_0_mountpoint)
 
 
-    # Now iterate the partition tables and create them
-    for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
-
-      # Increase partition index
-      part_index += 1
-
-      # Retrieve the partition format flag
-      if Key.FORMAT.value not in partition:
-        self.project.logging.debug("File system format flag is not defined. Defaulting to True")
-        part_format = True
-      else:
-        part_format = partition[Key.FORMAT.value]
-        self.project.logging.debug("File system format flag => '" + str(part_format) + "'")
-
-      # Process only if the partition has been formatted and mapping is defined
-      if part_format and Key.CONTENT_PARTITION_MAPPING.value in partition:
-
-        # Generate the mount point for the given partition
-        path = {}
-        path["device"] = self.loopback_device + "p" + str(part_index)
-        path["path"] = image_mount_root + partition[Key.CONTENT_PARTITION_MAPPING.value]
-        path_to_mount.append(path)
-        device_to_fsck.append(path["device"])
-
+    # ---------------------------------------------------------------------------------------------
     #
-    # All the partitions have been identified, now let's sot them in mount order and do mount
+    # Populate bank 1 partition (optional)
     #
+    # ---------------------------------------------------------------------------------------------
 
-    # Sort the list usingpath as the key, in reverse order sinc path will be popped
-    path_to_mount.sort(key=lambda p: p["path"], reverse=True)
-    while len(path_to_mount) > 0:
-      # Get the next item to mount
-      path = path_to_mount.pop()
+    # Check if Bank 1 is activated. If yes, it is mounted under bank_1
+    if Key.DUAL_BANKS.value in self.project.firmware[Key.RESILIENCE.value] and \
+                               self.project.firmware[Key.RESILIENCE.value][Key.DUAL_BANKS.value]:
+      # Generate mount point
+      bank_1_mountpoint = image_mount_root + "/" + Key.BANK_1.value
 
       # Create the local mount point if needed
-      command = 'mkdir -p "' + path["path"] + '"'
+      os.makedirs(bank_1_mountpoint, exist_ok=True)
+
+      # Generate the device string based upon partitions informations (and no part index as in rootfs)
+      device = self.loopback_device + "p" + self.project.firmware[Key.RESILIENCE.value]\
+                                                                 [Key.PARTITIONS.value]\
+                                                                 [Key.BANK_1.value]\
+                                                                 [Key.PARTITION.value]
+
+      # Mount the device
+      command = 'mount "' + device + '" "' + bank_1_mountpoint + '"'
       self.execute_command(command)
 
-      # Generate the ount command
-      command = 'mount "' + path["device"] + '" "' + path["path"] + '"'
-      self.execute_command(command)
-
-      # Mount was successful, thus push the path in the umount list
-      path_to_umount.append(path["path"])
-
-    #
-    # All the partitions have been mounted now let's copy the data
-    #
-
-    # Defines the default behavior, to copy the rootfs. True means rootfs, thus false means firmware
-    copy_rootfs = True
-
-    # Test if we should copy the firmware or the rootfs
-    if not Key.CONTENT.value in self.project.image:
-      logging.info("No content section in image configuration file. Defaulting to copy rootfs")
-    else:
-      if self.project.image[Key.CONTENT.value] is None or \
-         not Key.TYPE.value in self.project.image[Key.CONTENT.value]:
-        logging.info("No type defined in content section of image configuration file. Defaulting " +
-                     " to copy rootfs")
-      else:
-        logging.debug("Image content : " + self.project.image[Key.CONTENT.value][Key.TYPE.value])
-        if self.project.image[Key.CONTENT.value][Key.TYPE.value].lower() == "rootfs":
-          copy_rootfs = True
-        elif self.project.image[Key.CONTENT.value][Key.TYPE.value].lower() == "firmware":
-          copy_rootfs = False
-        else:
-          logging.critical("Unknown image content : " + self.project.image[Key.CONTENT.value]\
-                           [Key.TYPE.value] + ". Aborting.")
-
-          # Remove the temporary mount point before exiting
-          shutil.rmtree(image_mount_root)
-
-          # And now exit program
-          exit(1)
-
-    # Switch between firmware and rootfs copy
-    if copy_rootfs:
-      # Iterate the list of files in the rootfs and copy them to image
-      for copy_target in os.listdir(self.project.get_rootfs_mountpoint()):
-        copy_source_path = os.path.join(self.project.get_rootfs_mountpoint(), copy_target)
-        copy_target_path = os.path.join(image_mount_root, copy_target)
-        command = "cp -fra " + copy_source_path + " " + copy_target_path
-        self.execute_command(command)
-    else:
       # Iterate the list of files in the rootfs and copy them to image
       for copy_target in os.listdir(self.project.get_firmware_content_directory()):
         copy_source_path = os.path.join(self.project.get_firmware_content_directory(), copy_target)
-        copy_target_path = os.path.join(image_mount_root, copy_target)
+        copy_target_path = os.path.join(bank_0_mountpoint, copy_target)
         command = "cp -fra " + copy_source_path + " " + copy_target_path
         self.execute_command(command)
+
+      # Generate the boootscript into the current bank partition
+      self.generate_bootscript(bank_1_mountpoint)
+
+      # Copy is done, let's umount the device
+      self.umount_mountpoint(bank_1_mountpoint)
+
+    # ---------------------------------------------------------------------------------------------
+    #
+    # Populate rescue partition (optional)
+    #
+    # ---------------------------------------------------------------------------------------------
+
+    # Check if rescue image is activated
+    if Key.RESCUE_IMAGE.value in self.project.firmware[Key.RESILIENCE.value] and \
+                                 self.project.firmware[Key.RESILIENCE.value]\
+                                                      [Key.RESCUE_IMAGE.value]:
+      # Generate mount point
+      rescue_mountpoint = image_mount_root + "/" + Key.RESCUE.value
+
+      # Create the local mount point if needed
+      os.makedirs(rescue_mountpoint, exist_ok=True)
+
+      # Generate the device string based upon partitions informations (and no part index as in rootfs)
+      device = self.loopback_device + "p" + self.project.firmware[Key.RESILIENCE.value]\
+                                                                 [Key.PARTITIONS.value]\
+                                                                 [Key.RESCUE.value]\
+                                                                 [Key.PARTITION.value]
+
+      # Mount the device
+      command = 'mount "' + device + '" "' + rescue_mountpoint + '"'
+      self.execute_command(command)
+
+
+      # Not yet implemented...
+      self.project.logging.info("Rescue firmware copy is not yet implemented")
+
+      # Generate the boootscript into the current bank partition
+      self.generate_bootscript(rescue_mountpoint)
+
+      # Copy is done, let's umount the device
+      self.umount_mountpoint(rescue_mountpoint)
+
+
+    # ---------------------------------------------------------------------------------------------
+    #
+    # Populate update partition (optional)
+    #
+    # ---------------------------------------------------------------------------------------------
+
+    # Check if update partition is activated
+    if Key.UPDATE_PARTITION.value in self.project.firmware[Key.RESILIENCE.value] and \
+                                     self.project.firmware[Key.RESILIENCE.value]\
+                                                          [Key.UPDATE_PARTITION.value]:
+      # Generate mount point
+      update_mountpoint = image_mount_root + "/" + Key.UPDATE.value
+
+      # Create the local mount point if needed
+      os.makedirs(update_mountpoint, exist_ok=True)
+
+      # Generate the device string based upon partitions informations (and no part index as in rootfs)
+      device = self.loopback_device + "p" + self.project.firmware[Key.RESILIENCE.value]\
+                                                                 [Key.PARTITIONS.value]\
+                                                                 [Key.UPDATE.value]\
+                                                                 [Key.PARTITION.value]
+
+      # Mount the device
+      command = 'mount "' + device + '" "' + update_mountpoint + '"'
+      self.execute_command(command)
+
+      # Not yet implemented...
+      self.project.logging.info("Update partition copy is not yet implemented. Nothing to do ?")
+
+      # Copy is done, let's umount the device
+      self.umount_mountpoint(update_mountpoint)
+
+    #
+    # Data have been copied, lets unmount all the partitions before teardown the loopback
+    #
+
+    # Remove the temporary mount point before exiting
+    shutil.rmtree(image_mount_root)
+
+
+  # -------------------------------------------------------------------------
+  #
+  # check_configuration_file
+  #
+  # -------------------------------------------------------------------------
+  def check_configuration_file(self):
+    """This method check the configuration file for any missing information
+    that would stop the process. All the missing keys are output, then the
+    execution fails.
+    """
+
+    # Flag if an error has bee found
+    missing_configuration_found = False
+
+    # Check for mandatory information in firmware mode
+    if self.project.is_image_content_firmware():
+      # Resilience has to be defined
+      if Key.RESILIENCE.value not in self.project.firmware:
+        self.project.logging.critical("Resilience section is not defined firmware")
+        missing_configuration_found = True
+
+      # Partition section has to be defined
+      if Key.PARTITIONS.value not in self.project.firmware[Key.RESILIENCE.value]:
+        self.project.logging.critical("Partitions section is not defined firmware resilience")
+        missing_configuration_found = True
+
+      # At least bank0 has to be defiend
+      if Key.BANK_0.value not in self.project.firmware[Key.RESILIENCE.value]\
+                                                      [Key.PARTITIONS.value]:
+        self.project.logging.critical("Partitions section is not defined firmware partitions")
+        missing_configuration_found = True
+      else:
+        # Device type must be defined for bank 0
+        if not Key.DEVICE_TYPE.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                             [Key.PARTITIONS.value]\
+                                                             [Key.BANK_0.value]:
+          self.project.logging.critical("Device type for bank 0 is not defined in partitions")
+          missing_configuration_found = True
+
+        # Device number must be defined for bank 1
+        if not Key.DEVICE_NUMBER.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                               [Key.PARTITIONS.value]\
+                                                               [Key.BANK_0.value]:
+          self.project.logging.critical("Device number for bank 0 is not defined in partitions")
+          missing_configuration_found = True
+
+        # Device partition must be defined for bank 1
+        if not Key.PARTITION.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                           [Key.PARTITIONS.value][Key.BANK_0.value]:
+          self.project.logging.critical("Device partition for bank 0 is not defined in partitions")
+          missing_configuration_found = True
+
+    # Check if dual banks are activated, and bank_1 is defined
+    if Key.DUAL_BANKS.value in self.project.firmware[Key.RESILIENCE.value] and \
+                               self.project.firmware[Key.RESILIENCE.value][Key.DUAL_BANKS.value]:
+      # If dual bank is activated, then bank 1 must be defined
+      if not Key.BANK_1.value in self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]:
+        self.project.logging.critical("Dual bank is activated, but bank 1 is not defined in the "
+                                      "partitions section")
+        missing_configuration_found = True
+      else:
+        # Device type must be defined for bank 1
+        if not Key.DEVICE_TYPE.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                             [Key.PARTITIONS.value]\
+                                                             [Key.BANK_1.value]:
+          self.project.logging.critical("Device type for bank 1 is not defined in partitions")
+          missing_configuration_found = True
+
+        # Device number must be defined for bank 1
+        if not Key.DEVICE_NUMBER.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                               [Key.PARTITIONS.value]\
+                                                               [Key.BANK_1.value]:
+          self.project.logging.critical("Device number for bank 1 is not defined in partitions")
+          missing_configuration_found = True
+
+        # Device partition must be defined for bank 1
+        if not Key.PARTITION.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                           [Key.PARTITIONS.value][Key.BANK_1.value]:
+          self.project.logging.critical("Device partition for bank 1 is not defined in partitions")
+          missing_configuration_found = True
+
+    # Check if dual banks are activated, and bank_1 is defined
+    if Key.RESCUE_IMAGE.value in self.project.firmware[Key.RESILIENCE.value] and \
+                                 self.project.firmware[Key.RESILIENCE.value]\
+                                                      [Key.RESCUE_IMAGE.value]:
+      # If dual bank is activated, then bank 1 must be defined
+      if not Key.RESCUE.value in self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]:
+        self.project.logging.critical("Rescue image is activated, but rescue is not defined in the "
+                                      "partitions section")
+        missing_configuration_found = True
+      else:
+        # Device type must be defined for bank 1
+        if not Key.DEVICE_TYPE.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                             [Key.PARTITIONS.value]\
+                                                             [Key.RESCUE.value]:
+          self.project.logging.critical("Device type for rescue is not defined in partitions")
+          missing_configuration_found = True
+
+        # Device number must be defined for bank 1
+        if not Key.DEVICE_NUMBER.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                               [Key.PARTITIONS.value]\
+                                                               [Key.RESCUE.value]:
+          self.project.logging.critical("Device number for rescue is not defined in partitions")
+          missing_configuration_found = True
+
+        # Device partition must be defined for bank 1
+        if not Key.PARTITION.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                           [Key.PARTITIONS.value][Key.RESCUE.value]:
+          self.project.logging.critical("Device partition for rescue is not defined in partitions")
+          missing_configuration_found = True
+
+    # Check if dual banks are activated, and bank_1 is defined
+    if Key.UPDATE_PARTITION.value in self.project.firmware[Key.RESILIENCE.value] and \
+                                     self.project.firmware[Key.RESILIENCE.value]\
+                                                          [Key.UPDATE_PARTITION.value]:
+      # If dual bank is activated, then bank 1 must be defined
+      if not Key.UPDATE.value in self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]:
+        self.project.logging.critical("Update partition is activated, but update is not defined in the "
+                                      "partitions section")
+        missing_configuration_found = True
+      else:
+        # Device type must be defined for bank 1
+        if not Key.DEVICE_TYPE.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                             [Key.PARTITIONS.value]\
+                                                             [Key.UPDATE.value]:
+          self.project.logging.critical("Device type for update is not defined in partitions")
+          missing_configuration_found = True
+
+        # Device number must be defined for bank 1
+        if not Key.DEVICE_NUMBER.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                               [Key.PARTITIONS.value]\
+                                                               [Key.UPDATE.value]:
+          self.project.logging.critical("Device number for update is not defined in partitions")
+          missing_configuration_found = True
+
+        # Device partition must be defined for bank 1
+        if not Key.PARTITION.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                           [Key.PARTITIONS.value][Key.UPDATE.value]:
+          self.project.logging.critical("Device partition for update is not defined in partitions")
+          missing_configuration_found = True
+
+    # Is there any missing information ?
+    if missing_configuration_found:
+      self.project.logging.critical("Some information aremissing please fix configuration files.")
+      self.project.logging.critical("Aborting.")
+      exit(1)
+
+
+  # -------------------------------------------------------------------------
+  #
+  # generate_bootscript
+  #
+  # -------------------------------------------------------------------------
+  def generate_bootscript(self, target):
+    """This method generate the bootscript, either for rootfs or firmware
+    mode. target is the path under which the file file be generated. target
+    is a directory. The filename will be boot.scr.
+    """
 
     # Check if we have to generate a bootscript in the image
     if Key.GENERATE_BOOTSCR.value in self.project.image[Key.CONTENT.value] and \
@@ -1286,7 +1459,7 @@ class BuildImage(CliCommand):
       script += ".boot."
 
       # Name has to be either board_name.boot.[firmware|rootfs].scr
-      if copy_rootfs:
+      if self.project.is_image_content_rootfs():
         script += "rootfs"
       else:
         script += "firmware"
@@ -1298,20 +1471,13 @@ class BuildImage(CliCommand):
       file_util.copy_file(script, output_file)
 
       # Replace the generation date, the dft version, the filesystem
-      # filesys = self.project.image[Key.DEVICES.value][Key.PARTITIONS.value][0]\
-      #                             [Key.FILESYSTEM.value].lower()
+      filesys = self.project.image[Key.DEVICES.value][Key.PARTITIONS.value][0]\
+                                  [Key.FILESYSTEM.value].lower()
       timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-      command = 'sed -i '
-      # command = 'sed -i -e "s/__FILESYSTEM_TYPE__/' + filesys + '/g" '
+      command = 'sed -i -e "s/__FILESYSTEM_TYPE__/' + filesys + '/g" '
       command += ' -e "s/__DFT_VERSION__/' + release.__version__ + '/g" '
       command += ' -e "s/__GENERATION_DATE__/' + timestamp + '/g" '
-
-      # Replace the initrd size only for firmware mode
-      # if copy_rootfs is False:
-      #   path = self.project.get_firmware_content_directory() + "/initrd.img"
-      #   size = os.stat(path).st_size
-      #   command += ' -e "s/__INITRD_SIZE__/' + hex(size) + '/g" '
 
       # Command has been generated, let's execute the replacement with sed
       command += " " + output_file
@@ -1320,33 +1486,8 @@ class BuildImage(CliCommand):
       # Generate the boot script on the fly with macro expension
       arch = self.project.get_mkimage_arch()
       command = "mkimage -A " + arch + " -C none -T script -d " + output_file
-      command += " " + image_mount_root + "/boot.scr"
+      command += " " + target + "/boot.scr"
       self.execute_command(command)
 
       # Remove temp file once binary boot.scr has been generated
       os.remove(output_file)
-
-    #
-    # Data have been copied, lets unmount all the partitions before teardown the loopback
-    #
-
-    # First let's sort the list to umount in the same order as the fs have been mounted
-    # (never umout /var before /var/log). Sort is in normal order since we pop the list
-    path_to_umount.sort()
-    while len(path_to_umount) > 0:
-      # Generate the uount command
-      command = 'umount "' + path_to_umount.pop() + '"'
-      self.execute_command(command)
-
-    # Remove the temporary mount point before exiting
-    shutil.rmtree(image_mount_root)
-
-    # Content have been copied and partition umount, now let's control the filesystems
-    # It is done by calling fsck on evey path from the device_to_fsck list
-    while len(device_to_fsck) > 0:
-      # Generate the umount command
-      command = 'fsck -f -y ' + device_to_fsck.pop()
-      self.execute_command(command)
-
-
-

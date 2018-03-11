@@ -653,3 +653,35 @@ class CliCommand(object):
         self.install_package(pkg)
     else:
       logging.debug("No packages entry found. Nothing to do...")
+
+
+  # -------------------------------------------------------------------------
+  #
+  # umount_mountpoint
+  #
+  # -------------------------------------------------------------------------
+  def umount_mountpoint(self, target):
+    """This method make the call to the umount system utilities. It controls
+    that the mountpoint exist and is mounted before calling the umount command
+    """
+
+    # Output current task to logs
+    logging.debug("Umounting " + target)
+
+    # TODO check mount point exist
+    # TODO check that mount point is mounted
+
+    # Generate the umount command and execute it
+    command = 'umount "' + target + '"'
+    self.execute_command(command)
+
+  # -------------------------------------------------------------------------
+  #
+  # cleanup
+  #
+  # -------------------------------------------------------------------------
+  def cleanup(self):
+    """This method is in charge of cleaning the environment in case of errors.
+    It should not be called from here but from children classes.
+    """
+    self.project.logging.critical("Should not be called from parent class !")

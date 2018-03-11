@@ -142,7 +142,7 @@ devices:
         # left empty (only formatted).
         #
         # Default value is undefined, which means no content to be copied
-        install_content_partition_mapping: "/"
+        # install_content_partition_mapping: /
       }
     - {
         name: "system1" ,
