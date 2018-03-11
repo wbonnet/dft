@@ -576,8 +576,6 @@ class AssembleFirmware(CliCommand):
       # Increments item counter
       item_count += 1
 
-    working_file.write("exit 1\n")
-
     # We are done here, now close the file
     working_file.close()
 
