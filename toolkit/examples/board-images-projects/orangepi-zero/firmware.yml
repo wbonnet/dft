@@ -63,8 +63,6 @@ layout:
   # partitions storing either system or rescue
   path: /
 
-  partition: /dev/mmcblk0p1
-
   # Definition of the different things to stack to assemble the firmware
   stack_definition:
     # Stack items are individual element of the stack. They are processed

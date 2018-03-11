@@ -497,8 +497,8 @@ class AssembleFirmware(CliCommand):
 
     # Mount the partition containing all the squashfs files
     working_file.write("mount -t " + self.project.firmware[Key.LAYOUT.value][Key.FILESYSTEM.value])
-    working_file.write(" " + self.project.firmware[Key.LAYOUT.value][Key.PARTITION.value])
-    working_file.write(" " + self.dft_root + "\n")
+#    working_file.write(" " + self.project.firmware[Key.LAYOUT.value][Key.PARTITION.value])
+    working_file.write(" ${ROOT} " + self.dft_root + "\n")
 
     # Iterates the stack items
     item_count = 0
@@ -559,7 +559,8 @@ class AssembleFirmware(CliCommand):
           working_file.write("-o " + item[Key.STACK_ITEM.value]["mount-options"] + " ")
 
         # Complete the mount command
-        working_file.write(item[Key.STACK_ITEM.value][Key.PARTITION.value] + " " + self.dft_root +
+#        working_file.write(item[Key.STACK_ITEM.value][Key.PARTITION.value] + " " + self.dft_root +
+        working_file.write(" ${ROOT} " + self.dft_root +
                            "/" + item[Key.STACK_ITEM.value][Key.NAME.value] + "\n")
 
 
@@ -571,7 +572,6 @@ class AssembleFirmware(CliCommand):
         if self.project.firmware[Key.LAYOUT.value][Key.METHOD.value] == Key.OVERLAYFS.value:
           working_file.write("mkdir -p " + self.dft_root + "/")
           working_file.write(item[Key.STACK_ITEM.value][Key.NAME.value] + "/workdir\n")
-
 
       # Increments item counter
       item_count += 1
