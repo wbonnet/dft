@@ -768,14 +768,14 @@ class Project(object):
     """
 
     # Retrieve the mode
-    if self.project.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.ROOTFS.value:
+    if self.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.ROOTFS.value:
       return Key.ROOTFS.value
-    elif self.project.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.FIRMWARE.value:
+    elif self.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.FIRMWARE.value:
       return Key.FIRMWARE.value
 
     # Still here ? thus type is unknown
-    logging.critical("Unknown image content : " + self.project.image[Key.CONTENT.value]\
-                       [Key.TYPE.value] + ". Aborting.")
+    logging.critical("Unknown image content : " + self.image[Key.CONTENT.value][Key.TYPE.value] + \
+                     ". Aborting.")
     exit(1)
 
   # -------------------------------------------------------------------------
@@ -788,14 +788,14 @@ class Project(object):
     """
 
     # Check mode validity
-    if not self.project.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.ROOTFS.value or \
-       not self.project.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.FIRMWARE.value:
-      logging.critical("Unknown image content : " + self.project.image[Key.CONTENT.value]\
-                       [Key.TYPE.value] + ". Aborting.")
+    if not self.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.ROOTFS.value or \
+       not self.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.FIRMWARE.value:
+      logging.critical("Unknown image content : " + self.image[Key.CONTENT.value][Key.TYPE.value] +\
+                       ". Aborting.")
       exit(1)
 
     # Retrieve the mode
-    if self.project.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.ROOTFS.value:
+    if self.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.ROOTFS.value:
       return True
     else:
       return False
