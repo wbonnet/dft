@@ -106,13 +106,19 @@ class BuildImage(CliCommand):
     self.label_filesystems()
 
     # Copy rootfs to the image
-    self.install_image_content()
+    if self.project.is_image_content_rootfs():
+      self.install_rootfs_content()
+    else:
+      self.install_firmware_content()
 
     # Install the boot (either grub or uboot)
     self.install_boot()
 
-    # Umount the image and release the loopback deice
-    self.umount_image()
+    # Check partition file systems (fsck)
+    self.check_partition_filesystems()
+
+    # Umount the image and release the loopback device
+    self.umount_loopback_image()
 
     # Compress the generated image
     self.compress_image()
@@ -170,7 +176,7 @@ class BuildImage(CliCommand):
     # self.install_boot()
 
     # # Umount the image and release the loopback deice
-    # self.umount_image()
+    # self.umount_loopback_image()
 
     # # Compress the generated partitions
     # self.compress_partitions()
@@ -566,12 +572,12 @@ class BuildImage(CliCommand):
 
   # -------------------------------------------------------------------------
   #
-  # install_image_content
+  # install_rootfs_content
   #
   # -------------------------------------------------------------------------
-  def install_image_content(self):
-    """This method installs the content from the generated rootfs or firmware
-    into the partition previously created and formwated.
+  def install_rootfs_content(self):
+    """This method installs the content from the generated rootfs into the
+    partition previously created and formwated.
 
     The method execute several iterations of the partitions lists from the
     device entry.
@@ -582,12 +588,12 @@ class BuildImage(CliCommand):
       one, creates, under a temporary directory, the path need to execute the
       mount command, then do the mount and push the path to the list of
       directories to umount
-    . Copy either the rootfs or the firmware to the mounted partitions
+    . Copy recursivly the rootfs to the mounted partitions
     . Iterate the umount list and cleanup things
     """
 
     # Output current task to logs
-    logging.info("Installating image content")
+    logging.info("Installating rootfs image content")
 
     # Defines a partition counter. Starts at zero and is incremented at each iteration
     # beginning. It means first partition is 1.
@@ -600,9 +606,582 @@ class BuildImage(CliCommand):
     # We need these list to sort path before mounting to prevent false order of declaration
     path_to_mount = []
     path_to_umount = []
+
+    # Now iterate the partition tables and create them
+    for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
+
+      # Increase partition index
+      part_index += 1
+
+      # Retrieve the partition format flag
+      if Key.FORMAT.value not in partition:
+        self.project.logging.debug("File system format flag is not defined. Defaulting to True")
+        part_format = True
+      else:
+        part_format = partition[Key.FORMAT.value]
+        self.project.logging.debug("File system format flag => '" + str(part_format) + "'")
+
+      # Process only if the partition has been formatted and mapping is defined
+      if part_format and Key.CONTENT_PARTITION_MAPPING.value in partition:
+
+        # Generate the mount point for the given partition
+        path = {}
+        path["device"] = self.loopback_device + "p" + str(part_index)
+        path["path"] = image_mount_root + partition[Key.CONTENT_PARTITION_MAPPING.value]
+        path_to_mount.append(path)
+
+    #
+    # All the partitions have been identified, now let's sot them in mount order and do mount
+    #
+
+    # Sort the list usingpath as the key, in reverse order sinc path will be popped
+    path_to_mount.sort(key=lambda p: p["path"], reverse=True)
+    while len(path_to_mount) > 0:
+      # Get the next item to mount
+      path = path_to_mount.pop()
+
+      # Create the local mount point if needed
+      command = 'mkdir -p "' + path["path"] + '"'
+      self.execute_command(command)
+
+      # Generate the ount command
+      command = 'mount "' + path["device"] + '" "' + path["path"] + '"'
+      self.execute_command(command)
+
+      # Mount was successful, thus push the path in the umount list
+      path_to_umount.append(path["path"])
+
+    #
+    # All the partitions have been mounted now let's copy the data
+    #
+    logging.debug("Starting to copy rootfs image content")
+
+    # Iterate the list of files in the rootfs and copy them to image
+    for copy_target in os.listdir(self.project.get_rootfs_mountpoint()):
+      copy_source_path = os.path.join(self.project.get_rootfs_mountpoint(), copy_target)
+      copy_target_path = os.path.join(image_mount_root, copy_target)
+      command = "cp -fra " + copy_source_path + " " + copy_target_path
+      self.execute_command(command)
+
+    # Check if we have to generate a bootscript in the image
+    if Key.GENERATE_BOOTSCR.value in self.project.image[Key.CONTENT.value] and \
+       not self.project.image[Key.CONTENT.value][Key.GENERATE_BOOTSCR.value]:
+      # Generation is deactivated, just log it
+      logging.debug("boot.scr generation was deactivated by configuration")
+    else:
+      # Defines the name of the script to copy the bootscript to target
+      script = self.project.get_bsp_base() + "/bootscripts/"
+      script += self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
+                                    [Key.BOARD.value]
+      script += ".boot.rootfs.txt"
+
+      # Create a temp file in with the script template is copied in text format. Then we do
+      # variables expansion, before generating the binary script into the target file system.
+      output_file = tempfile.mktemp()
+      file_util.copy_file(script, output_file)
+
+      # Replace the generation date, the dft version, the filesystem
+      filesys = self.project.image[Key.DEVICES.value][Key.PARTITIONS.value][0]\
+                                  [Key.FILESYSTEM.value].lower()
+      timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+      command = 'sed -i -e "s/__FILESYSTEM_TYPE__/' + filesys + '/g" '
+      command += ' -e "s/__DFT_VERSION__/' + release.__version__ + '/g" '
+      command += ' -e "s/__GENERATION_DATE__/' + timestamp + '/g" '
+
+      # Command has been generated, let's execute the replacement with sed
+      command += " " + output_file
+      self.execute_command(command)
+
+      # Generate the boot script on the fly with macro expension
+      arch = self.project.get_mkimage_arch()
+      command = "mkimage -A " + arch + " -C none -T script -d " + output_file
+      command += " " + image_mount_root + "/boot.scr"
+      self.execute_command(command)
+
+      # Remove temp file once binary boot.scr has been generated
+      os.remove(output_file)
+
+    #
+    # Data have been copied, lets unmount all the partitions before teardown the loopback
+    #
+
+    # First let's sort the list to umount in the same order as the fs have been mounted
+    # (never umout /var before /var/log). Sort is in normal order since we pop the list
+    path_to_umount.sort()
+    while len(path_to_umount) > 0:
+      # Generate the uount command
+      command = 'umount "' + path_to_umount.pop() + '"'
+      self.execute_command(command)
+
+    # Remove the temporary mount point before exiting
+    shutil.rmtree(image_mount_root)
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # install_boot
+  #
+  # -------------------------------------------------------------------------
+  def install_boot(self):
+    """This method installs in the generated rootfs the tools needed to update
+    (or generate) theinitramfs. The kernel is not installed, it is the job of
+    the install_bootchain target. The kernel to use is defined in the BSP
+    used by this target.
+
+    Operations executed by this method run in a chrooted environment in the
+    generated rootfs.
+    """
+
+    # Check if a BSP section is defined. It should be, or we certainly have failed before anyways
+    if Key.BSP.value in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]:
+
+      # And that it contains a uboot section. Otherwise it may be a grub section
+      if Key.UBOOT.value in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value]\
+                                              [0][Key.BSP.value]:
+
+        # Is there somepackages to install ?
+        target = self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
+                                     [Key.BSP.value][Key.UBOOT.value]
+
+        if Key.PACKAGES.value in target:
+          logging.info("Installing the boot support packages (uboot or grub)")
+
+          # Check if we are working with foreign arch, then ...
+          if self.use_qemu_static:
+            # QEMU is used, and we have to install it into the target
+            self.setup_qemu()
+
+          # Setup the packages sources
+          self.setup_kernel_apt_sources(target, self.project.project[Key.PROJECT_DEFINITION.value]\
+                                                                    [Key.TARGETS.value][0]\
+                                                                    [Key.VERSION.value])
+
+          # Install the kernel packages
+          self.install_kernel_apt_packages(target)
+
+          # Remove QEMU if it has been isntalled. It has to be done in the end
+          # since some cleanup tasks could need QEMU
+          if self.use_qemu_static:
+            self.cleanup_qemu()
+
+      else:
+        logging.debug("No u-boot entry in the BSP. Nothing to do...")
+    else:
+      logging.warning("The '" + Key.BSP.value + "' key is not defined for target '" +
+                      self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
+                                          [Key.BOARD.value] + "'")
+
+    # Output current task to logs
+    logging.info("Installing the boot (uboot or grub)")
+
+    # Check if a BSP section is defined. It should be, or we certainly have failed before anyways
+    if Key.BSP.value in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]:
+
+      # And that it contains a uboot section. Otherwise it may be a grub section
+      if Key.UBOOT.value in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value]\
+                                              [0][Key.BSP.value]:
+
+        if Key.INSTALLATION.value in self.project.project[Key.PROJECT_DEFINITION.value]\
+                                                         [Key.TARGETS.value][0]\
+                                                         [Key.BSP.value][Key.UBOOT.value]:
+          # Iterate the list of actions. An action is a dd call to copy binary data to the image
+          for action in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
+                                            [Key.BSP.value][Key.UBOOT.value]\
+                                            [Key.INSTALLATION.value]:
+
+            # Check that the source is defined. Otherwise it will not be able to call dd
+            if Key.SOURCE.value not in action:
+              logging.critical("No source defined in the uboot installation action. Aborting.")
+              exit(1)
+            else:
+              # Copy the source
+              source = self.project.get_rootfs_mountpoint() + "/" + action[Key.SOURCE.value]
+
+              # If the source is an absolute path, then use it "as is", otherwise prefix with
+              # the bsp root
+              if not os.path.isabs(source):
+                logging.critical("Source is not an absolute path. Meaning roootfs_base is not \
+                                 neither. Aborting.")
+                exit(1)
+
+            # Check if options is defined, if not default to an empty string, many "jut call dd
+            # without options"
+            if Key.OPTIONS.value not in action:
+              logging.debug("No options defined.")
+              options = ""
+            else:
+              options = action[Key.OPTIONS.value]
+
+            # Let's run dd to copy to the image
+            command = 'dd if="' + source + '" of="' + self.loopback_device + '" ' + options
+            self.execute_command(command)
+      else:
+        logging.debug("No UBOOT defined, skipping.")
+    else:
+      logging.warning("No BSP defined, skipping. The generated image will may not be able to boot")
+
+
+
+    # ][Key.KERNEL.value][Key.ORIGIN.value] not in \
+    #   "devuan" "debian" "armbian":
+    #   logging.error("Unknown kernel provider '" + target[Key.BSP.value][Key.ORIGIN.value] + "'")
+    #   exit(1)
+
+
+    # if Key.DEVICES.value not in self.project.image:
+    #   self.project.logging.critical("The image devices is not defined in configuration file")
+    #   exit(1)
+
+    # # Check that the filename is available from the devices section in the configuration file
+    # if Key.UBOOT.value in self.project.image[Key.DEVICES.value]:
+    #   self.project.logging.debug("Installing uboot")
+    #   exit(1)
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # check_partition_filesystems
+  #
+  # -------------------------------------------------------------------------
+  def check_partition_filesystems(self):
+    """This method is in charge of checking partition file systems once content
+    has been writtent. Basicaly it does a fsck.
+    """
+
+    # Output current task to logs
+    logging.info("Checking partitions filesystems")
+
+    # Defines a partition counter. Starts at zero and is incremented at each iteration
+    # beginning. It means first partition is 1.
+    part_index = 0
+
+    # Define the list of path to mount and umount which is are empty list at start
+    # We need these list to sort path before mounting to prevent false order of declaration
     device_to_fsck = []
 
+    # Now iterate the partition tables and create them
+    for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
+      # Increase partition index
+      part_index += 1
+
+      # Retrieve the partition format flag
+      if Key.FORMAT.value not in partition:
+        self.project.logging.debug("File system format flag is not defined. Defaulting to True")
+        part_format = True
+      else:
+        part_format = partition[Key.FORMAT.value]
+        self.project.logging.debug("File system format flag => '" + str(part_format) + "'")
+
+      # Process only if the partition has been formatted and mapping is defined
+      if part_format and Key.CONTENT_PARTITION_MAPPING.value in partition:
+        # Generate the command to check the device
+        command = 'fsck -f -y ' + self.loopback_device + "p" + str(part_index)
+        self.project.logging.debug("Checking partition : " + command)
+        self.execute_command(command)
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # umount_loopback_image
+  #
+  # -------------------------------------------------------------------------
+  def umount_loopback_image(self):
+    """This method is in charge of cleaning the environment once image content
+    is written.
+
+    The main steps are :
+    . umounting the image
+    . release the loopback device
+    """
+
+    # Check that the loopback device is defined
+    if self.loopback_device is not None:
+      # Copy the stacking script to /tmp in the rootfs
+      command = 'losetup -d ' + self.loopback_device
+      self.execute_command(command)
+
+      # Loopback has been released, set the member to None
+      self.loopback_device = None
+
+      # Image has been umounted, set the member flag to None
+      self.image_is_mounted = False
+    else:
+      logging.debug("Loopback device is not defined")
+
+    # Output current task to logs
+    logging.info("Umounting the image and releasing the loopback devices")
+
+  # -------------------------------------------------------------------------
+  #
+  # create_filesystes
+  #
+  # -------------------------------------------------------------------------
+  def create_filesystems(self):
+    """This method creates the file systems on the partition created by the
+    create_partitions_inside_image method. It uses the same configuration file.
+
+    File system creation is implemented in a different method since it has tp
+    be done after partition creation and commit. It can't be done on the fly.
+
+    This code has been separated to make it more easy to read and maintain.
+
+    Since it is executed in sequence after partition creation, configuration
+    file is not checked again for the same parameters. Only parameters
+    specific to filesystems are checked.
+    """
+
+    # Output current task to logs
+    logging.info("Creating the filesystems in the newly created partitions")
+
+    # Defines a partition counter. Starts at zerp and is incremented at each iteration
+    # beginning. It means first partition is 1.
+    part_index = 0
+
     # Nox iterate the partitiontables and create them
+    for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
+
+      # Increase partition index
+      part_index += 1
+
+      # Retrieve the partition format flag
+      if Key.FORMAT.value not in partition:
+        self.project.logging.debug("File system format flag is not defined. Defaulting to True")
+        part_format = True
+      else:
+        part_format = partition[Key.FORMAT.value]
+        self.project.logging.debug("File system format flag => '" + str(part_format) + "'")
+
+      # Check if the flag is true, if not there is nothing to do
+      if not part_format:
+        self.project.logging.debug("The format flag is deactivated for martition " + part_index)
+      else:
+        # Retrieve the partition file system type
+        if Key.FILESYSTEM.value not in partition:
+          self.project.logging.debug("File system to create on the partition is not defined.")
+          part_filesystem = None
+        else:
+          part_filesystem = partition[Key.FILESYSTEM.value].lower()
+
+        # Default is having no format nor tunefs tool. It will be checked after fs type
+        # control and tool command guessing
+        format_tool = None
+        tune_tool = None
+
+        # Check that the value is in the list of valid values
+        if part_filesystem == "ext2":
+          format_tool = "mkfs.ext2"
+          tune_tool = "tune2fs"
+        elif part_filesystem == "ext3":
+          format_tool = "mkfs.ext3"
+          tune_tool = "tune2fs"
+        elif part_filesystem == "ext4":
+          format_tool = "mkfs.ext4"
+          tune_tool = "tune2fs"
+        elif part_filesystem == "fat32":
+          format_tool = "mkfs.vfat"
+        elif part_filesystem == "linux-swap(v0)" or part_filesystem == "linux-swap(v1)":
+          format_tool = "mkswap"
+
+        # Creation du file fystem sur a prtition
+        command = format_tool + ' ' + self.loopback_device + 'p' + str(part_index)
+        self.execute_command(command)
+
+        # Check if some ext filesystems options should be applied (accord to man tune2fs)
+        if Key.EXT_FS_TUNE.value in partition and tune_tool is not None:
+          command = tune_tool + ' ' + partition[Key.EXT_FS_TUNE.value]
+          command += ' ' + self.loopback_device + 'p' + str(part_index)
+          self.execute_command(command)
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # label_filesystes
+  #
+  # -------------------------------------------------------------------------
+  def label_filesystems(self):
+    """This method set the file systems labels on the partition created by the
+    create_partitions_inside_image method. It uses the same configuration file.
+    """
+
+    # Output current task to logs
+    logging.info("Labeling the filesystems in the newly created partitions")
+
+    # Defines a partition counter. Starts at zero and is incremented at each iteration
+    # beginning. It means first partition is 1.
+    part_index = 0
+
+    # Now iterate once again the partition tables to set labels
+    for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
+
+      # Increase partition index
+      part_index += 1
+
+      # Retrieve the partition name, and process only if there is a name
+      if Key.NAME.value in partition:
+        part_name = partition[Key.NAME.value]
+
+        # Retrieve the partition file system type. It should be defined or we can't label it
+        if Key.FILESYSTEM.value not in partition:
+          self.project.logging.error("Partition label is defined but there is no filesystem set \
+                                     for partition " + part_index)
+        else:
+          part_filesystem = partition[Key.FILESYSTEM.value].lower()
+
+          # Retrieve the partition format flag. It should be formatted or we can't label it.
+          if Key.FORMAT.value in partition and not partition[Key.FORMAT.value]:
+            self.project.logging.error("Partition label is defined, but partition " + part_index + \
+                                       " is not formatted")
+          else:
+            # Go so far, thus all checks are ok we can label and select tool according to FS
+            label_tool = None
+
+            # Check that the value is in the list of valid values
+            if part_filesystem == "ext2" or part_filesystem == "ext3" or part_filesystem == "ext4":
+              label_tool = "e2label"
+            elif part_filesystem == "fat32":
+              label_tool = "fatlabel"
+
+            # If the label tool is defined let's call it
+            if label_tool:
+              command = label_tool + ' ' + self.loopback_device + 'p' + str(part_index)
+              command += ' ' + part_name
+              self.execute_command(command)
+            else:
+              self.project.logging.error("No labelling tool is defined for partition " + \
+                                         part_index + " with file system " + part_filesystem)
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # compress_image
+  #
+  # -------------------------------------------------------------------------
+  def compress_image(self):
+    """This method is in charge of checking compression configuration and
+    options, and if needed to run the compression tools on the iage.
+
+    The compression is done by running the selected compression tool as a
+    subpress. The python compression library is not (yet?) called since the
+    compressor usage is really basic.
+    """
+
+    # Output current task to logs
+    logging.info("Compressing the image")
+
+    # Check that the compression tool is defined
+    if Key.COMPRESSION.value not in self.project.image[Key.DEVICES.value]:
+      self.project.logging.info("No compression mode is defined. Skipping image copmpression")
+      return
+
+    # Retrieve the compression tool and check its vaidity
+    compression_tool = self.project.image[Key.DEVICES.value][Key.COMPRESSION.value].lower()
+    if compression_tool == "" or compression_tool == "none":
+      self.project.logging.info("Compression is deactivated. Skipping image copmpression")
+      return
+    # Check for lzma format
+    elif compression_tool == "lzma":
+      compression_tool = "/usr/bin/env xz -z --format=lzma"
+      compression_suffix = ".lzma"
+    # Check for xz format
+    elif compression_tool == "xz":
+      compression_tool = "/usr/bin/env xz -z"
+      compression_suffix = ".xz"
+    # Check for bzip2 format
+    elif compression_tool == "bzip2":
+      compression_tool = "/usr/bin/env bzip2"
+      compression_suffix = ".bz2"
+    # Check for gzip format
+    elif compression_tool == "gzip":
+      compression_tool = "/usr/bin/env gzip"
+      compression_suffix = ".gz"
+    else:
+      self.project.logging.error("Unknow compression method '" + compression_tool +
+                                 "'. Skipping image copmpression")
+      return
+
+    # Check that the filename is available from the devices section in the configuration file
+    if Key.COMPRESSION_OPTIONS.value not in self.project.image[Key.DEVICES.value]:
+      self.project.logging.debug("Compression options are not defined. Defaulting to empty string")
+      compression_options = ""
+    else:
+      compression_options = self.project.image[Key.DEVICES.value][Key.COMPRESSION_OPTIONS.value]
+
+    # Test for compressed image existence and remove it if needed
+    if os.path.isfile(self.image_path + compression_suffix):
+      self.project.logging.debug("Compressed image aldredy exist, removing it")
+      os.remove(self.image_path + compression_suffix)
+
+    # Let's run dd to copy to the image
+    command = compression_tool + ' ' + compression_options + '"' + self.image_path + '"'
+    self.execute_command(command)
+
+    # Update the image file name
+    self.image_path = self.image_path + compression_suffix
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # cleanup
+  #
+  # -------------------------------------------------------------------------
+  def cleanup(self):
+    """This method is in charge of cleaning the environment in cqse of errors
+    It is mainly umounting the image and removing the losetup mount.
+    The generated image is left for post mortem anaysis.
+    """
+    self.project.logging.info("starting to cleanup")
+
+    # Umount the image and remove the losetup mount
+    self.umount_loopback_image()
+
+    # Finally umount all the chrooted environment
+    self.teardown_chrooted_environment()
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # install_firmware_content
+  #
+  # -------------------------------------------------------------------------
+  def install_firmware_content(self):
+    """This method installs the content from the generated firmware into the
+    partition previously created and formwated.
+
+    The method execute several iterations of the partitions lists from the
+    device entry.
+
+    . Scan the firmware parameter to identify the list of banks to mount
+    . Mount each activated banks
+    . Copy either the firmware to bank_0 and 1 if activated
+    . Generate and copy the boot script to current bank for each bank
+    . Copy the rescue firmware if activated
+    """
+
+    # Output current task to logs
+    logging.info("Installating firmware image content")
+
+    # Get a temporary directory used as root for image mounting
+    image_mount_root = tempfile.mkdtemp(dir=self.project.get_image_directory())
+
+    # Check if Bank 0 is defined. It has to, that is the only mandatory partition
+      dual_banks: True
+
+    # Check if rescue image is activated
+      rescue_image: True
+
+    # Check if update partition is activated
+      update_partition: True
+
+
+    # Now iterate the partition tables and create them
     for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
 
       # Increase partition index
@@ -771,381 +1350,3 @@ class BuildImage(CliCommand):
 
 
 
-  # -------------------------------------------------------------------------
-  #
-  # install_boot
-  #
-  # -------------------------------------------------------------------------
-  def install_boot(self):
-    """This method installs in the generated rootfs the tools needed to update
-    (or generate) theinitramfs. The kernel is not installed, it is the job of
-    the install_bootchain target. The kernel to use is defined in the BSP
-    used by this target.
-
-    Operations executed by this method run in a chrooted environment in the
-    generated rootfs.
-    """
-
-    # Check if a BSP section is defined. It should be, or we certainly have failed before anyways
-    if Key.BSP.value in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]:
-
-      # And that it contains a uboot section. Otherwise it may be a grub section
-      if Key.UBOOT.value in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value]\
-                                              [0][Key.BSP.value]:
-
-        # Is there somepackages to install ?
-        target = self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
-                                     [Key.BSP.value][Key.UBOOT.value]
-
-        if Key.PACKAGES.value in target:
-          logging.info("Installing the boot support packages (uboot or grub)")
-
-          # Check if we are working with foreign arch, then ...
-          if self.use_qemu_static:
-            # QEMU is used, and we have to install it into the target
-            self.setup_qemu()
-
-          # Setup the packages sources
-          self.setup_kernel_apt_sources(target, self.project.project[Key.PROJECT_DEFINITION.value]\
-                                                                    [Key.TARGETS.value][0]\
-                                                                    [Key.VERSION.value])
-
-          # Install the kernel packages
-          self.install_kernel_apt_packages(target)
-
-          # Remove QEMU if it has been isntalled. It has to be done in the end
-          # since some cleanup tasks could need QEMU
-          if self.use_qemu_static:
-            self.cleanup_qemu()
-
-      else:
-        logging.debug("No u-boot entry in the BSP. Nothing to do...")
-    else:
-      logging.warning("The '" + Key.BSP.value + "' key is not defined for target '" +
-                      self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
-                                          [Key.BOARD.value] + "'")
-
-    # Output current task to logs
-    logging.info("Installing the boot (uboot or grub)")
-
-    # Check if a BSP section is defined. It should be, or we certainly have failed before anyways
-    if Key.BSP.value in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]:
-
-      # And that it contains a uboot section. Otherwise it may be a grub section
-      if Key.UBOOT.value in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value]\
-                                              [0][Key.BSP.value]:
-
-        if Key.INSTALLATION.value in self.project.project[Key.PROJECT_DEFINITION.value]\
-                                                         [Key.TARGETS.value][0]\
-                                                         [Key.BSP.value][Key.UBOOT.value]:
-          # Iterate the list of actions. An action is a dd call to copy binary data to the image
-          for action in self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
-                                            [Key.BSP.value][Key.UBOOT.value]\
-                                            [Key.INSTALLATION.value]:
-
-            # Check that the source is defined. Otherwise it will not be able to call dd
-            if Key.SOURCE.value not in action:
-              logging.critical("No source defined in the uboot installation action. Aborting.")
-              exit(1)
-            else:
-              # Copy the source
-              source = self.project.get_rootfs_mountpoint() + "/" + action[Key.SOURCE.value]
-
-              # If the source is an absolute path, then use it "as is", otherwise prefix with
-              # the bsp root
-              if not os.path.isabs(source):
-                logging.critical("Source is not an absolute path. Meaning roootfs_base is not \
-                                 neither. Aborting.")
-                exit(1)
-
-            # Check if options is defined, if not default to an empty string, many "jut call dd
-            # without options"
-            if Key.OPTIONS.value not in action:
-              logging.debug("No options defined.")
-              options = ""
-            else:
-              options = action[Key.OPTIONS.value]
-
-            # Let's run dd to copy to the image
-            command = 'dd if="' + source + '" of="' + self.loopback_device + '" ' + options
-            self.execute_command(command)
-      else:
-        logging.debug("No UBOOT defined, skipping.")
-    else:
-      logging.warning("No BSP defined, skipping. The generated image will may not be able to boot")
-
-
-
-    # ][Key.KERNEL.value][Key.ORIGIN.value] not in \
-    #   "devuan" "debian" "armbian":
-    #   logging.error("Unknown kernel provider '" + target[Key.BSP.value][Key.ORIGIN.value] + "'")
-    #   exit(1)
-
-
-    # if Key.DEVICES.value not in self.project.image:
-    #   self.project.logging.critical("The image devices is not defined in configuration file")
-    #   exit(1)
-
-    # # Check that the filename is available from the devices section in the configuration file
-    # if Key.UBOOT.value in self.project.image[Key.DEVICES.value]:
-    #   self.project.logging.debug("Installing uboot")
-    #   exit(1)
-
-
-  # -------------------------------------------------------------------------
-  #
-  # umount_image
-  #
-  # -------------------------------------------------------------------------
-  def umount_image(self):
-    """This method is in charge of cleaning the environment once image content
-    is written.
-
-    The main steps are :
-    . umounting the image
-    . release the loopback device
-    """
-
-    # Check that the loopback device is defined
-    if self.loopback_device is not None:
-      # Copy the stacking script to /tmp in the rootfs
-      command = 'losetup -d ' + self.loopback_device
-      self.execute_command(command)
-
-      # Loopback has been released, set the member to None
-      self.loopback_device = None
-
-      # Image has been umounted, set the member flag to None
-      self.image_is_mounted = False
-    else:
-      logging.debug("Loopback device is not defined")
-
-    # Output current task to logs
-    logging.info("Umounting the image and releasing the loopback devices")
-
-  # -------------------------------------------------------------------------
-  #
-  # create_filesystes
-  #
-  # -------------------------------------------------------------------------
-  def create_filesystems(self):
-    """This method creates the file systems on the partition created by the
-    create_partitions_inside_image method. It uses the same configuration file.
-
-    File system creation is implemented in a different method since it has tp
-    be done after partition creation and commit. It can't be done on the fly.
-
-    This code has been separated to make it more easy to read and maintain.
-
-    Since it is executed in sequence after partition creation, configuration
-    file is not checked again for the same parameters. Only parameters
-    specific to filesystems are checked.
-    """
-
-    # Output current task to logs
-    logging.info("Creating the filesystems in the newly created partitions")
-
-    # Defines a partition counter. Starts at zerp and is incremented at each iteration
-    # beginning. It means first partition is 1.
-    part_index = 0
-
-    # Nox iterate the partitiontables and create them
-    for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
-
-      # Increase partition index
-      part_index += 1
-
-      # Retrieve the partition format flag
-      if Key.FORMAT.value not in partition:
-        self.project.logging.debug("File system format flag is not defined. Defaulting to True")
-        part_format = True
-      else:
-        part_format = partition[Key.FORMAT.value]
-        self.project.logging.debug("File system format flag => '" + str(part_format) + "'")
-
-      # Check if the flag is true, if not there is nothing to do
-      if not part_format:
-        self.project.logging.debug("The format flag is deactivated for martition " + part_index)
-      else:
-        # Retrieve the partition file system type
-        if Key.FILESYSTEM.value not in partition:
-          self.project.logging.debug("File system to create on the partition is not defined.")
-          part_filesystem = None
-        else:
-          part_filesystem = partition[Key.FILESYSTEM.value].lower()
-
-        # Default is having no format nor tunefs tool. It will be checked after fs type
-        # control and tool command guessing
-        format_tool = None
-        tune_tool = None
-
-        # Check that the value is in the list of valid values
-        if part_filesystem == "ext2":
-          format_tool = "mkfs.ext2"
-          tune_tool = "tune2fs"
-        elif part_filesystem == "ext3":
-          format_tool = "mkfs.ext3"
-          tune_tool = "tune2fs"
-        elif part_filesystem == "ext4":
-          format_tool = "mkfs.ext4"
-          tune_tool = "tune2fs"
-        elif part_filesystem == "fat32":
-          format_tool = "mkfs.vfat"
-        elif part_filesystem == "linux-swap(v0)" or part_filesystem == "linux-swap(v1)":
-          format_tool = "mkswap"
-
-        # Creation du file fystem sur a prtition
-        command = format_tool + ' ' + self.loopback_device + 'p' + str(part_index)
-        self.execute_command(command)
-
-        # Check if some ext filesystems options should be applied (accord to man tune2fs)
-        if Key.EXT_FS_TUNE.value in partition and tune_tool is not None:
-          command = tune_tool + ' ' + partition[Key.EXT_FS_TUNE.value]
-          command += ' ' + self.loopback_device + 'p' + str(part_index)
-          self.execute_command(command)
-
-  # -------------------------------------------------------------------------
-  #
-  # label_filesystes
-  #
-  # -------------------------------------------------------------------------
-  def label_filesystems(self):
-    """This method set the file systems labels on the partition created by the
-    create_partitions_inside_image method. It uses the same configuration file.
-    """
-
-    # Output current task to logs
-    logging.info("Labeling the filesystems in the newly created partitions")
-
-    # Defines a partition counter. Starts at zero and is incremented at each iteration
-    # beginning. It means first partition is 1.
-    part_index = 0
-
-    # Now iterate once again the partition tables to set labels
-    for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
-
-      # Increase partition index
-      part_index += 1
-
-      # Retrieve the partition name, and process only if there is a name
-      if Key.NAME.value in partition:
-        part_name = partition[Key.NAME.value]
-
-        # Retrieve the partition file system type. It should be defined or we can't label it
-        if Key.FILESYSTEM.value not in partition:
-          self.project.logging.error("Partition label is defined but there is no filesystem set \
-                                     for partition " + part_index)
-        else:
-          part_filesystem = partition[Key.FILESYSTEM.value].lower()
-
-          # Retrieve the partition format flag. It should be formatted or we can't label it.
-          if Key.FORMAT.value in partition and not partition[Key.FORMAT.value]:
-            self.project.logging.error("Partition label is defined, but partition " + part_index + \
-                                       " is not formatted")
-          else:
-            # Go so far, thus all checks are ok we can label and select tool according to FS
-            label_tool = None
-
-            # Check that the value is in the list of valid values
-            if part_filesystem == "ext2" or part_filesystem == "ext3" or part_filesystem == "ext4":
-              label_tool = "e2label"
-            elif part_filesystem == "fat32":
-              label_tool = "fatlabel"
-
-            # If the label tool is defined let's call it
-            if label_tool:
-              command = label_tool + ' ' + self.loopback_device + 'p' + str(part_index)
-              command += ' ' + part_name
-              self.execute_command(command)
-            else:
-              self.project.logging.error("No labelling tool is defined for partition " + \
-                                         part_index + " with file system " + part_filesystem)
-
-
-
-  # -------------------------------------------------------------------------
-  #
-  # compress_image
-  #
-  # -------------------------------------------------------------------------
-  def compress_image(self):
-    """This method is in charge of checking compression configuration and
-    options, and if needed to run the compression tools on the iage.
-
-    The compression is done by running the selected compression tool as a
-    subpress. The python compression library is not (yet?) called since the
-    compressor usage is really basic.
-    """
-
-    # Output current task to logs
-    logging.info("Compressing the image")
-
-    # Check that the compression tool is defined
-    if Key.COMPRESSION.value not in self.project.image[Key.DEVICES.value]:
-      self.project.logging.info("No compression mode is defined. Skipping image copmpression")
-      return
-
-    # Retrieve the compression tool and check its vaidity
-    compression_tool = self.project.image[Key.DEVICES.value][Key.COMPRESSION.value].lower()
-    if compression_tool == "" or compression_tool == "none":
-      self.project.logging.info("Compression is deactivated. Skipping image copmpression")
-      return
-    # Check for lzma format
-    elif compression_tool == "lzma":
-      compression_tool = "/usr/bin/env xz -z --format=lzma"
-      compression_suffix = ".lzma"
-    # Check for xz format
-    elif compression_tool == "xz":
-      compression_tool = "/usr/bin/env xz -z"
-      compression_suffix = ".xz"
-    # Check for bzip2 format
-    elif compression_tool == "bzip2":
-      compression_tool = "/usr/bin/env bzip2"
-      compression_suffix = ".bz2"
-    # Check for gzip format
-    elif compression_tool == "gzip":
-      compression_tool = "/usr/bin/env gzip"
-      compression_suffix = ".gz"
-    else:
-      self.project.logging.error("Unknow compression method '" + compression_tool +
-                                 "'. Skipping image copmpression")
-      return
-
-    # Check that the filename is available from the devices section in the configuration file
-    if Key.COMPRESSION_OPTIONS.value not in self.project.image[Key.DEVICES.value]:
-      self.project.logging.debug("Compression options are not defined. Defaulting to empty string")
-      compression_options = ""
-    else:
-      compression_options = self.project.image[Key.DEVICES.value][Key.COMPRESSION_OPTIONS.value]
-
-    # Test for compressed image existence and remove it if needed
-    if os.path.isfile(self.image_path + compression_suffix):
-      self.project.logging.debug("Compressed image aldredy exist, removing it")
-      os.remove(self.image_path + compression_suffix)
-
-    # Let's run dd to copy to the image
-    command = compression_tool + ' ' + compression_options + '"' + self.image_path + '"'
-    self.execute_command(command)
-
-    # Update the image file name
-    self.image_path = self.image_path + compression_suffix
-
-
-
-  # -------------------------------------------------------------------------
-  #
-  # cleanup
-  #
-  # -------------------------------------------------------------------------
-  def cleanup(self):
-    """This method is in charge of cleaning the environment in cqse of errors
-    It is mainly umounting the image and removing the losetup mount.
-    The generated image is left for post mortem anaysis.
-    """
-    self.project.logging.info("starting to cleanup")
-
-    # Umount the image and remove the losetup mount
-    self.umount_image()
-
-    # Finally umount all the chrooted environment
-    self.teardown_chrooted_environment()

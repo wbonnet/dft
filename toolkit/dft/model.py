@@ -754,3 +754,71 @@ class Project(object):
 
     # Return arch in any case
     return arch
+
+  # -------------------------------------------------------------------------
+  #
+  # get_image_content_mode
+  #
+  # -------------------------------------------------------------------------
+  def get_image_content_mode(self):
+    """This method returns the image content mode, which values are :
+    . rootfs
+    . firmware
+    . unknown
+    """
+
+    # Retrieve the mode
+    if self.project.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.ROOTFS.value:
+      return Key.ROOTFS.value
+    elif self.project.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.FIRMWARE.value:
+      return Key.FIRMWARE.value
+
+    # Still here ? thus type is unknown
+    logging.critical("Unknown image content : " + self.project.image[Key.CONTENT.value]\
+                       [Key.TYPE.value] + ". Aborting.")
+    exit(1)
+
+  # -------------------------------------------------------------------------
+  #
+  # is_image_content_rootfs
+  #
+  # -------------------------------------------------------------------------
+  def is_image_content_rootfs(self):
+    """This method returns TRUE if the image content mode is rootfs
+    """
+
+    # Check mode validity
+    if not self.project.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.ROOTFS.value or
+       not self.project.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.FIRMWARE.value:
+      logging.critical("Unknown image content : " + self.project.image[Key.CONTENT.value]\
+                       [Key.TYPE.value] + ". Aborting.")
+      exit(1)
+
+    # Retrieve the mode
+    if self.project.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.ROOTFS.value
+      return True
+    else:
+      return False
+
+
+  # -------------------------------------------------------------------------
+  #
+  # is_image_content_firmware
+  #
+  # -------------------------------------------------------------------------
+  def is_image_content_firmware(self):
+    """This method returns TRUE if the image content mode is firmware
+    """
+
+    # Check mode validity
+    if not self.project.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.ROOTFS.value or
+       not self.project.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.FIRMWARE.value:
+      logging.critical("Unknown image content : " + self.project.image[Key.CONTENT.value]\
+                       [Key.TYPE.value] + ". Aborting.")
+      exit(1)
+
+    # Retrieve the mode
+    if self.project.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.ROOTFS.value
+      return False
+    else:
+      return True

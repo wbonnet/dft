@@ -284,6 +284,7 @@ class Key(Enum):
   TYPE = "type"
   UBOOT = "u-boot"
   UNIT = "unit"
+  UNKNOWN = "unknown"
   UPDATE = "update"
   UPDATE_DATABASE = "update_database"
   UPDATE_PARTITION = "update_partition"
