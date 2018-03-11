@@ -813,8 +813,8 @@ class Project(object):
     # Check mode validity
     if not self.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.ROOTFS.value or \
        not self.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.FIRMWARE.value:
-      logging.critical("Unknown image content : " + self.image[Key.CONTENT.value]\
-                       [Key.TYPE.value] + ". Aborting.")
+      logging.critical("Unknown image content : " + self.image[Key.CONTENT.value][Key.TYPE.value] +\
+                       ". Aborting.")
       exit(1)
 
     # Retrieve the mode
