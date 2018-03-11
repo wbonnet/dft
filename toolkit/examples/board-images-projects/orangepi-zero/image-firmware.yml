@@ -34,7 +34,7 @@
 # ----------------------------------------------------------------------------
 devices:
   # Defines the size of the device to create. The size value is numerical
-  size: "1050"
+  size: "1300"
 
   # Defines the unit used for size. Valid values are :
   # "s" (sectors), "B" (bytes),  "kB",  "MB",  "MiB", "GB",  "GiB",  "TB",  "TiB"
@@ -98,7 +98,7 @@ devices:
         type: "primary" ,
 
         # Defines the size of the partition to create. The size value is numerical
-        size: "256" ,
+        size: "300" ,
 
         # Defines the unit used for size. Valid values are :
         # "s" (sectors), "B" (bytes),  "kB",  "MB",  "MiB", "GB",  "GiB",  "TB",  "TiB",
@@ -147,9 +147,9 @@ devices:
     - {
         name: "system1" ,
         type: "primary" ,
-        size: "256" ,
+        size: "300" ,
         unit: "MB" ,
-        start_sector: "532480" ,
+        start_sector: "623000" ,
         format: True ,
         filesystem: "ext4" ,
         ext_fs_tune: "-m 0"
@@ -157,9 +157,9 @@ devices:
     - {
         name: "rescue" ,
         type: "primary" ,
-        size: "256" ,
+        size: "300" ,
         unit: "MB" ,
-        start_sector: "1056768" ,
+        start_sector: "1246000" ,
         format: True ,
         filesystem: "ext4" ,
         ext_fs_tune: "-m 0"
@@ -167,9 +167,9 @@ devices:
     - {
         name: "update" ,
         type: "primary" ,
-        size: "256" ,
+        size: "300" ,
         unit: "MB" ,
-        start_sector: "1581056" ,
+        start_sector: "1869000" ,
         format: True ,
         filesystem: "ext4" ,
         ext_fs_tune: "-m 0"
