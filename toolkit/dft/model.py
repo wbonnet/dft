@@ -811,7 +811,7 @@ class Project(object):
     """
 
     # Check mode validity
-    if not self.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.ROOTFS.value or \
+    if not self.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.ROOTFS.value and \
        not self.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.FIRMWARE.value:
       logging.critical("Unknown image content : " + self.image[Key.CONTENT.value][Key.TYPE.value] +\
                        ". Aborting.")
