@@ -1,0 +1,17 @@
+linux-kernel-nanopi-neo2 (4.15.8-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 10 Mar 2018 19:40:57 +0100
+
+linux-image-nanopi-neo2 (4.15.8-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 10 Mar 2018 19:40:57 +0100
+
+linux-headers-nanopi-neo2 (4.15.8-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 10 Mar 2018 19:40:57 +0100

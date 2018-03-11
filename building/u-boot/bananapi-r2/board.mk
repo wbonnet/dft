@@ -24,8 +24,8 @@ BOARD_NAME = bananapi-r2
 BOARD_ARCH = armv7l
 
 # Set config file to empty and define the name of the board to use a defconfig
-USE_CONFIG_FILE        =
-#USE_DEFCONFIG          = orangepi_zerio_defconfig
+USE_CONFIG_FILE =
+#USE_DEFCONFIG  = orangepi_zero_defconfig
 
 # Defines the list of files to copy (#path is relative to build dir)
-#UBOOT_BINARY_FILE      = u-boot-sunxi-with-spl.bin
+#UBOOT_BINARY_FILE = u-boot-sunxi-with-spl.bin
