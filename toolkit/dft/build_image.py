@@ -209,32 +209,13 @@ class BuildImage(CliCommand):
     # Output current task to logs
     logging.info("Creating the target image file")
 
-    # Check that there is an image configuration file first
-    if self.project.image is None:
-      self.project.logging.critical("The image configuration file is not defined in project file")
-      exit(1)
-
-    # Check that the devices is available from the configuration file
-    if Key.DEVICES.value not in self.project.image:
-      self.project.logging.critical("The image devices is not defined in configuration file")
-      exit(1)
-
-    # Check that the filename is available from the devices section in the configuration file
-    if Key.FILENAME.value not in self.project.image[Key.DEVICES.value]:
-      self.project.logging.critical("The filename is not defined in the configuration file")
-      exit(1)
-
     # Continue to check everything needed is defined
-    if Key.SIZE.value not in self.project.image[Key.DEVICES.value]:
-      self.project.logging.critical("Image size is not defined in the devices section. Aborting.")
+    try:
+      size = int(self.project.image[Key.DEVICES.value][Key.SIZE.value])
+    except ValueError:
+      self.project.logging.critical("Image size is not a number : " +
+                                    self.project.image[Key.DEVICES.value][Key.SIZE.value])
       exit(1)
-    else:
-      try:
-        size = int(self.project.image[Key.DEVICES.value][Key.SIZE.value])
-      except ValueError:
-        self.project.logging.critical("Image size is not a number : " +
-                                      self.project.image[Key.DEVICES.value][Key.SIZE.value])
-        exit(1)
 
     # Continue to check everything needed is defined
     if Key.UNIT.value not in self.project.image[Key.DEVICES.value]:
@@ -419,12 +400,6 @@ class BuildImage(CliCommand):
 
       # Create a new disk object
       disk = parted.freshDisk(device, label)
-
-      # Check that there is a partition table inthe configuration file. If not it will fail later,
-      # thus better fail now.
-      if Key.PARTITIONS.value not in self.project.image[Key.DEVICES.value]:
-        self.project.logging.error("Partition table is not defined, nothing to do. Aborting")
-        exit(1)
 
       # Now iterate the partition table and create them
       for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
@@ -1300,6 +1275,31 @@ class BuildImage(CliCommand):
 
     # Flag if an error has bee found
     missing_configuration_found = False
+
+    # Check that there is an image configuration file first
+    if self.project.image is None:
+      self.project.logging.critical("The image configuration file is not defined in project file")
+      missing_configuration_found = True
+
+    # Check that the devices is available from the configuration file
+    if Key.DEVICES.value not in self.project.image:
+      self.project.logging.critical("The image devices is not defined in configuration file")
+      missing_configuration_found = True
+
+    # Check that the filename is available from the devices section in the configuration file
+    if Key.FILENAME.value not in self.project.image[Key.DEVICES.value]:
+      self.project.logging.critical("The filename is not defined in the configuration file")
+      missing_configuration_found = True
+
+    # Continue to check everything needed is defined
+    if Key.SIZE.value not in self.project.image[Key.DEVICES.value]:
+      self.project.logging.critical("Image size is not defined in the devices section. Aborting.")
+      missing_configuration_found = True
+
+    # Partitions table must be defined
+    if Key.PARTITIONS.value not in self.project.image[Key.DEVICES.value]:
+      self.project.logging.error("Partition table is not defined, nothing to do. Aborting")
+      missing_configuration_found = True
 
     # Check for mandatory information in firmware mode
     if self.project.is_image_content_firmware():
