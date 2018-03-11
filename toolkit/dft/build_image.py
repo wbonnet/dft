@@ -1175,7 +1175,7 @@ class BuildImage(CliCommand):
       # Iterate the list of files in the rootfs and copy them to image
       for copy_target in os.listdir(self.project.get_firmware_content_directory()):
         copy_source_path = os.path.join(self.project.get_firmware_content_directory(), copy_target)
-        copy_target_path = os.path.join(bank_0_mountpoint, copy_target)
+        copy_target_path = os.path.join(bank_1_mountpoint, copy_target)
         command = "cp -fra " + copy_source_path + " " + copy_target_path
         self.execute_command(command)
 
