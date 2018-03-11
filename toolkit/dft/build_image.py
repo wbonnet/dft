@@ -1163,10 +1163,10 @@ class BuildImage(CliCommand):
       os.makedirs(bank_1_mountpoint, exist_ok=True)
 
       # Generate the device string based upon partitions informations (and no part index as in rootfs)
-      device = self.loopback_device + "p" + self.project.firmware[Key.RESILIENCE.value]\
-                                                                 [Key.PARTITIONS.value]\
-                                                                 [Key.BANK_1.value]\
-                                                                 [Key.PARTITION.value]
+      device = self.loopback_device + "p" + str(self.project.firmware[Key.RESILIENCE.value]\
+                                                                     [Key.PARTITIONS.value]\
+                                                                     [Key.BANK_1.value]\
+                                                                     [Key.PARTITION.value])
 
       # Mount the device
       command = 'mount "' + device + '" "' + bank_1_mountpoint + '"'
@@ -1202,10 +1202,10 @@ class BuildImage(CliCommand):
       os.makedirs(rescue_mountpoint, exist_ok=True)
 
       # Generate the device string based upon partitions informations (and no part index as in rootfs)
-      device = self.loopback_device + "p" + self.project.firmware[Key.RESILIENCE.value]\
-                                                                 [Key.PARTITIONS.value]\
-                                                                 [Key.RESCUE.value]\
-                                                                 [Key.PARTITION.value]
+      device = self.loopback_device + "p" + str(self.project.firmware[Key.RESILIENCE.value]\
+                                                                     [Key.PARTITIONS.value]\
+                                                                     [Key.RESCUE.value]\
+                                                                     [Key.PARTITION.value])
 
       # Mount the device
       command = 'mount "' + device + '" "' + rescue_mountpoint + '"'
@@ -1239,10 +1239,10 @@ class BuildImage(CliCommand):
       os.makedirs(update_mountpoint, exist_ok=True)
 
       # Generate the device string based upon partitions informations (and no part index as in rootfs)
-      device = self.loopback_device + "p" + self.project.firmware[Key.RESILIENCE.value]\
-                                                                 [Key.PARTITIONS.value]\
-                                                                 [Key.UPDATE.value]\
-                                                                 [Key.PARTITION.value]
+      device = self.loopback_device + "p" + str(self.project.firmware[Key.RESILIENCE.value]\
+                                                                     [Key.PARTITIONS.value]\
+                                                                     [Key.UPDATE.value]\
+                                                                     [Key.PARTITION.value])
 
       # Mount the device
       command = 'mount "' + device + '" "' + update_mountpoint + '"'
