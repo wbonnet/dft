@@ -1,6 +1,8 @@
 dft-buildsystem (0.6.7-1) unstable; urgency=low
 
   * Add a few boards (Odroid C0, Odroid C1+). Not yet working
+  * Build of several new u-boot
+  * Add support for Orange PI R1
 
  -- William Bonnet <wbonnet@theitmakers.com>  Wed, 07 Mar 2018 09:14:00 +0100
 

@@ -1,6 +1,9 @@
 dft (0.6.7-1) unstable; urgency=low
 
   * Bank switching is actiated in firmware
+  * Initscript takes in account $ROOT variable
+  * Firmware content is copied to both banks
+  * Active/failover script has to be debugged
   * Add a few boards (Odroid C0, Odroid C1+). Not yet working
 
  -- William Bonnet <wbonnet@theitmakers.com>  Wed, 07 Mar 2018 09:14:00 +0100
@@ -226,35 +229,35 @@ dft-bsp-test (0.5.3-1) unstable; urgency=low
 
 dft (0.5.2-1) unstable; urgency=low
 
-  * New feature : Add suport of an additional list of module to load when 
+  * New feature : Add suport of an additional list of module to load when
                   updating the initramfs.
 
  -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
 
 dft-ci (0.5.2-1) unstable; urgency=low
 
-  * New feature : Add suport of an additional list of module to load when 
+  * New feature : Add suport of an additional list of module to load when
                   updating the initramfs.
 
  -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
 
 dft-doc (0.5.2-1) unstable; urgency=low
 
-  * New feature : Add suport of an additional list of module to load when 
+  * New feature : Add suport of an additional list of module to load when
                   updating the initramfs.
 
  -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
 
 dft-examples (0.5.2-1) unstable; urgency=low
 
-  * New feature : Add suport of an additional list of module to load when 
+  * New feature : Add suport of an additional list of module to load when
                   updating the initramfs.
 
  -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
 
 dft-bsp-test (0.5.2-1) unstable; urgency=low
 
-  * New feature : Add suport of an additional list of module to load when 
+  * New feature : Add suport of an additional list of module to load when
                   updating the initramfs.
 
  -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
