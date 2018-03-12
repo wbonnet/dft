@@ -269,6 +269,30 @@ class BuildImage(CliCommand):
     # Generate the path
     self.image_path = self.project.get_image_directory() + "/"
     self.image_path += self.project.image[Key.DEVICES.value][Key.FILENAME.value]
+
+    # Check if timestamping is activated
+    if Key.FILENAME_TIMESTAMP.value in self.project.image[Key.DEVICES.value] and \
+      self.project.image[Key.DEVICES.value][Key.FILENAME_TIMESTAMP.value]:
+      # Timestamping is activated, retrieve format
+      if Key.FILENAME_TIMESTAMP_FORMAT.value in self.project.image[Key.DEVICES.value]:
+        timestamp_format = self.project.image[Key.DEVICES.value]\
+                                             [Key.FILENAME_TIMESTAMP_FORMAT.value]
+      else:
+        # Timestamp format is not defined, use default value
+        timestamp_format = "%Y%m%d"
+
+      # Add timestamp to filename
+      self.image_path += "." + datetime.now().strftime(timestamp_format)
+
+    # Check if suffix is activated
+    if Key.FILENAME_SUFFIX.value in self.project.image[Key.DEVICES.value]:
+      # Yes thus concatenante it, unless it is empty
+      if len(self.project.image[Key.DEVICES.value][Key.FILENAME_SUFFIX.value]) > 0:
+        self.image_path += "." + self.project.image[Key.DEVICES.value][Key.FILENAME_SUFFIX.value]
+    else:
+      # No suffix is defined, let's defqult to ".img"
+      self.image_path += ".img"
+
     self.project.logging.debug("The image file is : " + self.image_path)
 
     # Check if the image already exist and is a dir
@@ -798,10 +822,6 @@ class BuildImage(CliCommand):
     # beginning. It means first partition is 1.
     part_index = 0
 
-    # Define the list of path to mount and umount which is are empty list at start
-    # We need these list to sort path before mounting to prevent false order of declaration
-    device_to_fsck = []
-
     # Now iterate the partition tables and create them
     for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
       # Increase partition index
@@ -1123,7 +1143,8 @@ class BuildImage(CliCommand):
     # Create the local mount point if needed
     os.makedirs(bank_0_mountpoint, exist_ok=True)
 
-    # Generate the device string based upon partitions informations (and no part index as in rootfs)
+    # Generate the device string based upon partitions information
+    # And no part index as it is done for rootfs
     device = self.loopback_device + "p" + str(self.project.firmware[Key.RESILIENCE.value]\
                                                                    [Key.PARTITIONS.value]\
                                                                    [Key.BANK_0.value]\
@@ -1162,7 +1183,8 @@ class BuildImage(CliCommand):
       # Create the local mount point if needed
       os.makedirs(bank_1_mountpoint, exist_ok=True)
 
-      # Generate the device string based upon partitions informations (and no part index as in rootfs)
+      # Generate the device string based upon partitions information
+      # And no part index as it is done for rootfs
       device = self.loopback_device + "p" + str(self.project.firmware[Key.RESILIENCE.value]\
                                                                      [Key.PARTITIONS.value]\
                                                                      [Key.BANK_1.value]\
@@ -1201,7 +1223,8 @@ class BuildImage(CliCommand):
       # Create the local mount point if needed
       os.makedirs(rescue_mountpoint, exist_ok=True)
 
-      # Generate the device string based upon partitions informations (and no part index as in rootfs)
+      # Generate the device string based upon partitions information
+      # And no part index as it is done for rootfs
       device = self.loopback_device + "p" + str(self.project.firmware[Key.RESILIENCE.value]\
                                                                      [Key.PARTITIONS.value]\
                                                                      [Key.RESCUE.value]\
@@ -1238,7 +1261,8 @@ class BuildImage(CliCommand):
       # Create the local mount point if needed
       os.makedirs(update_mountpoint, exist_ok=True)
 
-      # Generate the device string based upon partitions informations (and no part index as in rootfs)
+      # Generate the device string based upon partitions information
+      # And no part index as it is done for rootfs
       device = self.loopback_device + "p" + str(self.project.firmware[Key.RESILIENCE.value]\
                                                                      [Key.PARTITIONS.value]\
                                                                      [Key.UPDATE.value]\
@@ -1343,7 +1367,8 @@ class BuildImage(CliCommand):
       if Key.DUAL_BANKS.value in self.project.firmware[Key.RESILIENCE.value] and \
                                  self.project.firmware[Key.RESILIENCE.value][Key.DUAL_BANKS.value]:
         # If dual bank is activated, then bank 1 must be defined
-        if not Key.BANK_1.value in self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]:
+        if not Key.BANK_1.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                        [Key.PARTITIONS.value]:
           self.project.logging.critical("Dual bank is activated, but bank 1 is not defined in the "
                                         "partitions section")
           missing_configuration_found = True
@@ -1364,8 +1389,9 @@ class BuildImage(CliCommand):
 
           # Device partition must be defined for bank 1
           if not Key.PARTITION.value in self.project.firmware[Key.RESILIENCE.value]\
-                                                             [Key.PARTITIONS.value][Key.BANK_1.value]:
-            self.project.logging.critical("Device partition for bank 1 is not defined in partitions")
+                                                             [Key.PARTITIONS.value]\
+                                                             [Key.BANK_1.value]:
+            self.project.logging.critical("Device partition for bank 1 is not defined")
             missing_configuration_found = True
 
       # Check if dual banks are activated, and bank_1 is defined
@@ -1373,29 +1399,31 @@ class BuildImage(CliCommand):
                                    self.project.firmware[Key.RESILIENCE.value]\
                                                         [Key.RESCUE_IMAGE.value]:
         # If dual bank is activated, then bank 1 must be defined
-        if not Key.RESCUE.value in self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]:
-          self.project.logging.critical("Rescue image is activated, but rescue is not defined in the "
-                                        "partitions section")
+        if not Key.RESCUE.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                        [Key.PARTITIONS.value]:
+          self.project.logging.critical("Rescue image is activated, but rescue is not"
+                                        " defined in the partitions section")
           missing_configuration_found = True
         else:
           # Device type must be defined for bank 1
           if not Key.DEVICE_TYPE.value in self.project.firmware[Key.RESILIENCE.value]\
                                                                [Key.PARTITIONS.value]\
                                                                [Key.RESCUE.value]:
-            self.project.logging.critical("Device type for rescue is not defined in partitions")
+            self.project.logging.critical("Device type for rescue is not defined")
             missing_configuration_found = True
 
           # Device number must be defined for bank 1
           if not Key.DEVICE_NUMBER.value in self.project.firmware[Key.RESILIENCE.value]\
                                                                  [Key.PARTITIONS.value]\
                                                                  [Key.RESCUE.value]:
-            self.project.logging.critical("Device number for rescue is not defined in partitions")
+            self.project.logging.critical("Device number for rescue is not defined")
             missing_configuration_found = True
 
           # Device partition must be defined for bank 1
           if not Key.PARTITION.value in self.project.firmware[Key.RESILIENCE.value]\
-                                                             [Key.PARTITIONS.value][Key.RESCUE.value]:
-            self.project.logging.critical("Device partition for rescue is not defined in partitions")
+                                                             [Key.PARTITIONS.value]\
+                                                             [Key.RESCUE.value]:
+            self.project.logging.critical("Device partition for rescue is not defined")
             missing_configuration_found = True
 
       # Check if dual banks are activated, and bank_1 is defined
@@ -1403,29 +1431,31 @@ class BuildImage(CliCommand):
                                        self.project.firmware[Key.RESILIENCE.value]\
                                                             [Key.UPDATE_PARTITION.value]:
         # If dual bank is activated, then bank 1 must be defined
-        if not Key.UPDATE.value in self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]:
-          self.project.logging.critical("Update partition is activated, but update is not defined in the "
-                                        "partitions section")
+        if not Key.UPDATE.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                        [Key.PARTITIONS.value]:
+          self.project.logging.critical("Update partition is activated, but update is not"
+                                        " defined in the partitions section")
           missing_configuration_found = True
         else:
           # Device type must be defined for bank 1
           if not Key.DEVICE_TYPE.value in self.project.firmware[Key.RESILIENCE.value]\
                                                                [Key.PARTITIONS.value]\
                                                                [Key.UPDATE.value]:
-            self.project.logging.critical("Device type for update is not defined in partitions")
+            self.project.logging.critical("Device type for update is not defined")
             missing_configuration_found = True
 
           # Device number must be defined for bank 1
           if not Key.DEVICE_NUMBER.value in self.project.firmware[Key.RESILIENCE.value]\
                                                                  [Key.PARTITIONS.value]\
                                                                  [Key.UPDATE.value]:
-            self.project.logging.critical("Device number for update is not defined in partitions")
+            self.project.logging.critical("Device number for update is not defined")
             missing_configuration_found = True
 
           # Device partition must be defined for bank 1
           if not Key.PARTITION.value in self.project.firmware[Key.RESILIENCE.value]\
-                                                             [Key.PARTITIONS.value][Key.UPDATE.value]:
-            self.project.logging.critical("Device partition for update is not defined in partitions")
+                                                             [Key.PARTITIONS.value]\
+                                                             [Key.UPDATE.value]:
+            self.project.logging.critical("Device partition for update is not defined")
             missing_configuration_found = True
 
     # Is there any missing information ?
