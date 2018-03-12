@@ -1,3 +1,13 @@
+dft (0.6.8-1) unstable; urgency=low
+
+  * Add image filename timestamping
+  * 
+  * 
+  * 
+  * 
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 12 Mar 2018 09:24:00 +0100
+
 dft (0.6.7-1) unstable; urgency=low
 
   * Bank switching is actiated in firmware
