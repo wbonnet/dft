@@ -53,7 +53,19 @@ devices:
 
   # Defines the filename used to store the device image. This file is created and allocated at
   # image creation.
-  filename: "cubieboard-3-netshell-firmware.img"
+  filename: "cubieboard-3-firmware"
+
+  # Defines the suffix appended to the filename. Default value is img. The dot should not be
+  # included in suffix, it zill be added automatically. If the string is emty, no suffix at all
+  # will be appended
+  # filename_suffix: "img"
+
+  # Should the filename include a timestamp ? Default is false
+  filename_timestamp: True
+
+  # Defines the timestamp format. Syntax is based upon python datetime strftime method 
+  # Default value is : %Y%m%d (ex: 20180312)
+  filename_timestamp_format: "%Y%m%d"
 
   # Defines the kind of compression to apply on the image once its created. Valid values are :
   # . bzip2
