@@ -1,0 +1,1 @@
+../../files/install.u-boot.odroid-c0.md
