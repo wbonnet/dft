@@ -540,8 +540,9 @@ class BuildImage(CliCommand):
         # Compute the geometry for this device
         geometry = parted.Geometry(start=part_start_sector, length=sector_count, device=device)
 
-        # Create the arted filesystem object
-        filesys = parted.FileSystem(type=part_filesystem, geometry=geometry)
+        # Create the parted filesystem object
+        if part_filesystem is not None:
+          filesys = parted.FileSystem(type=part_filesystem, geometry=geometry)
 
         # Create the partition object in the loopback device
         new_partition = parted.Partition(disk=disk, type=parted_type, geometry=geometry, fs=filesys)
@@ -597,8 +598,15 @@ class BuildImage(CliCommand):
     # Output current task to logs
     logging.info("Installating rootfs image content")
 
-    # Defines a partition counter. Starts at zero and is incremented at each iteration
+    # Defines a primary partition counter. Starts at zero and is incremented at each iteration
     # beginning. It means first partition is 1.
+    primary_part_index = 0
+
+    # Defines a cwlogical partition counter. Starts at four and is incremented at each iteration
+    # beginning. It means first partition is 5.
+    logical_part_index = 0
+
+    # Defines the current partition which can be either primary (or extended) or logical.
     part_index = 0
 
     # Get a temporary directory used as root for image mounting
@@ -612,8 +620,15 @@ class BuildImage(CliCommand):
     # Now iterate the partition tables and create them
     for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
 
-      # Increase partition index
-      part_index += 1
+      # Check if current partition is logical, then increase the counter and set
+      # current partition index
+      if partition[Key.TYPE.value] == Key.LOGICAL.value:
+        logical_part_index += 1
+        part_index = logical_part_index
+      else:
+        # If partition is not logicial, then increase the other index and use it
+        primary_part_index += 1
+        part_index = primary_part_index
 
       # Retrieve the partition format flag
       if Key.FORMAT.value not in partition:
@@ -818,14 +833,29 @@ class BuildImage(CliCommand):
     # Output current task to logs
     logging.info("Checking partitions filesystems")
 
-    # Defines a partition counter. Starts at zero and is incremented at each iteration
+    # Defines a primary partition counter. Starts at zero and is incremented at each iteration
     # beginning. It means first partition is 1.
+    primary_part_index = 0
+
+    # Defines a cwlogical partition counter. Starts at four and is incremented at each iteration
+    # beginning. It means first partition is 5.
+    logical_part_index = 0
+
+    # Defines the current partition which can be either primary (or extended) or logical.
     part_index = 0
 
     # Now iterate the partition tables and create them
     for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
-      # Increase partition index
-      part_index += 1
+
+      # Check if current partition is logical, then increase the counter and set
+      # current partition index
+      if partition[Key.TYPE.value] == Key.LOGICAL.value:
+        logical_part_index += 1
+        part_index = logical_part_index
+      else:
+        # If partition is not logicial, then increase the other index and use it
+        primary_part_index += 1
+        part_index = primary_part_index
 
       # Retrieve the partition format flag
       if Key.FORMAT.value not in partition:
@@ -897,15 +927,29 @@ class BuildImage(CliCommand):
     # Output current task to logs
     logging.info("Creating the filesystems in the newly created partitions")
 
-    # Defines a partition counter. Starts at zerp and is incremented at each iteration
+    # Defines a primary partition counter. Starts at zero and is incremented at each iteration
     # beginning. It means first partition is 1.
+    primary_part_index = 0
+
+    # Defines a cwlogical partition counter. Starts at four and is incremented at each iteration
+    # beginning. It means first partition is 5.
+    logical_part_index = 0
+
+    # Defines the current partition which can be either primary (or extended) or logical.
     part_index = 0
 
     # Nox iterate the partitiontables and create them
     for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
 
-      # Increase partition index
-      part_index += 1
+      # Check if current partition is logical, then increase the counter and set
+      # current partition index
+      if partition[Key.TYPE.value] == Key.LOGICAL.value:
+        logical_part_index += 1
+        part_index = logical_part_index
+      else:
+        # If partition is not logicial, then increase the other index and use it
+        primary_part_index += 1
+        part_index = primary_part_index
 
       # Retrieve the partition format flag
       if Key.FORMAT.value not in partition:
@@ -917,7 +961,8 @@ class BuildImage(CliCommand):
 
       # Check if the flag is true, if not there is nothing to do
       if not part_format:
-        self.project.logging.debug("The format flag is deactivated for martition " + part_index)
+        self.project.logging.debug("The format flag is deactivated for martition " \
+                                   + str(part_index))
       else:
         # Retrieve the partition file system type
         if Key.FILESYSTEM.value not in partition:
@@ -947,8 +992,9 @@ class BuildImage(CliCommand):
           format_tool = "mkswap"
 
         # Creation du file fystem sur a prtition
-        command = format_tool + ' ' + self.loopback_device + 'p' + str(part_index)
-        self.execute_command(command)
+        if part_filesystem is not None and format_tool is not None:
+          command = format_tool + ' ' + self.loopback_device + 'p' + str(part_index)
+          self.execute_command(command)
 
         # Check if some ext filesystems options should be applied (accord to man tune2fs)
         if Key.EXT_FS_TUNE.value in partition and tune_tool is not None:
@@ -971,15 +1017,29 @@ class BuildImage(CliCommand):
     # Output current task to logs
     logging.info("Labeling the filesystems in the newly created partitions")
 
-    # Defines a partition counter. Starts at zero and is incremented at each iteration
+    # Defines a primary partition counter. Starts at zero and is incremented at each iteration
     # beginning. It means first partition is 1.
+    primary_part_index = 0
+
+    # Defines a cwlogical partition counter. Starts at four and is incremented at each iteration
+    # beginning. It means first partition is 5.
+    logical_part_index = 0
+
+    # Defines the current partition which can be either primary (or extended) or logical.
     part_index = 0
 
     # Now iterate once again the partition tables to set labels
     for partition in self.project.image[Key.DEVICES.value][Key.PARTITIONS.value]:
 
-      # Increase partition index
-      part_index += 1
+      # Check if current partition is logical, then increase the counter and set
+      # current partition index
+      if partition[Key.TYPE.value] == Key.LOGICAL.value:
+        logical_part_index += 1
+        part_index = logical_part_index
+      else:
+        # If partition is not logicial, then increase the other index and use it
+        primary_part_index += 1
+        part_index = primary_part_index
 
       # Retrieve the partition name, and process only if there is a name
       if Key.NAME.value in partition:
@@ -988,14 +1048,14 @@ class BuildImage(CliCommand):
         # Retrieve the partition file system type. It should be defined or we can't label it
         if Key.FILESYSTEM.value not in partition:
           self.project.logging.error("Partition label is defined but there is no filesystem set \
-                                     for partition " + part_index)
+                                     for partition " + str(part_index))
         else:
           part_filesystem = partition[Key.FILESYSTEM.value].lower()
 
           # Retrieve the partition format flag. It should be formatted or we can't label it.
           if Key.FORMAT.value in partition and not partition[Key.FORMAT.value]:
-            self.project.logging.error("Partition label is defined, but partition " + part_index + \
-                                       " is not formatted")
+            self.project.logging.error("Partition label is defined, but partition " + \
+                                       str(part_index) + " is not formatted")
           else:
             # Go so far, thus all checks are ok we can label and select tool according to FS
             label_tool = None
@@ -1013,7 +1073,7 @@ class BuildImage(CliCommand):
               self.execute_command(command)
             else:
               self.project.logging.error("No labelling tool is defined for partition " + \
-                                         part_index + " with file system " + part_filesystem)
+                                         str(part_index) + " with file system " + part_filesystem)
 
 
 
