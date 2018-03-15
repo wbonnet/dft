@@ -131,6 +131,7 @@ class Key(Enum):
   EXPECTED_RESULT = "expected_result"
   EXT_FS_TUNE = "ext_fs_tune"
   EXTENDED = "extended"
+  FAILOVER = "failover"
   FILE = "file"
   FILENAME = "filename"
   FILENAME_SUFFIX = "filename_suffix"
