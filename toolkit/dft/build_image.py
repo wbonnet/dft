@@ -604,7 +604,7 @@ class BuildImage(CliCommand):
 
     # Defines a cwlogical partition counter. Starts at four and is incremented at each iteration
     # beginning. It means first partition is 5.
-    logical_part_index = 0
+    logical_part_index = 4
 
     # Defines the current partition which can be either primary (or extended) or logical.
     part_index = 0
@@ -839,7 +839,7 @@ class BuildImage(CliCommand):
 
     # Defines a cwlogical partition counter. Starts at four and is incremented at each iteration
     # beginning. It means first partition is 5.
-    logical_part_index = 0
+    logical_part_index = 4
 
     # Defines the current partition which can be either primary (or extended) or logical.
     part_index = 0
@@ -933,7 +933,7 @@ class BuildImage(CliCommand):
 
     # Defines a cwlogical partition counter. Starts at four and is incremented at each iteration
     # beginning. It means first partition is 5.
-    logical_part_index = 0
+    logical_part_index = 4
 
     # Defines the current partition which can be either primary (or extended) or logical.
     part_index = 0
@@ -953,8 +953,8 @@ class BuildImage(CliCommand):
 
       # Retrieve the partition format flag
       if Key.FORMAT.value not in partition:
-        self.project.logging.debug("File system format flag is not defined. Defaulting to True")
-        part_format = True
+        self.project.logging.debug("File system format flag is not defined. Defaulting to False")
+        part_format = False
       else:
         part_format = partition[Key.FORMAT.value]
         self.project.logging.debug("File system format flag => '" + str(part_format) + "'")
@@ -986,8 +986,12 @@ class BuildImage(CliCommand):
         elif part_filesystem == "ext4":
           format_tool = "mkfs.ext4"
           tune_tool = "tune2fs"
+        elif part_filesystem == "fat12":
+          format_tool = "mkfs.vfat -F 12"
+        elif part_filesystem == "fat16":
+          format_tool = "mkfs.vfat -F 16"
         elif part_filesystem == "fat32":
-          format_tool = "mkfs.vfat"
+          format_tool = "mkfs.vfat -F 32"
         elif part_filesystem == "linux-swap(v0)" or part_filesystem == "linux-swap(v1)":
           format_tool = "mkswap"
 
@@ -1023,7 +1027,7 @@ class BuildImage(CliCommand):
 
     # Defines a cwlogical partition counter. Starts at four and is incremented at each iteration
     # beginning. It means first partition is 5.
-    logical_part_index = 0
+    logical_part_index = 4
 
     # Defines the current partition which can be either primary (or extended) or logical.
     part_index = 0

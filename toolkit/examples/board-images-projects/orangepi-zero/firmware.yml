@@ -188,14 +188,23 @@ resilience:
     rescue:
       device_type:   mmc
       device_number: 0
-      partition:     3
+      partition:     5
 
     # Defines the partition used to receive updates before they are applied
     # This information are are needed only if update_partition is activated
     update:
       device_type:   mmc
       device_number: 0
-      partition:     4
+      partition:     6
+
+    # Defines the partition used to exchange failover partition between kernel
+    # and u-boot. This partition has to be FAT(16 prefered) formatted. This
+    # ensure compatibility with "most" of u-boot version. By default u-boot 
+    # does not write on ext4 filesystem (nor ext2).
+    failover:
+      device_type:   mmc
+      device_number: 0
+      partition:     7
 
 # ----------------------------------------------------------------------------
 #
