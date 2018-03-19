@@ -35,3 +35,4 @@
     - udev
     - kmod
     - whois
+    - initscripts
