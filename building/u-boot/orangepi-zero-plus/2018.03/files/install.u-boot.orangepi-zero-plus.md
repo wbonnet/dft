@@ -1,0 +1,1 @@
+../../files/install.u-boot.orangepi-zero-plus.md
