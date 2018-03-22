@@ -132,6 +132,9 @@ class AssembleFirmware(CliCommand):
     # to the init script ( needed to call the stacking script )
     self.update_initramfs()
 
+    # Copy the bootflag cleaning script to target
+    self.install_bootiflag_cleaning()
+
     # Remove QEMU if it has been isntalled. It has to be done in the end
     # since some cleanup tasks could need QEMU
     if self.use_qemu_static:
@@ -139,6 +142,31 @@ class AssembleFirmware(CliCommand):
 
     # Copy the new / updated bootchain from the rootfs to the output directory
     self.copy_bootchain_to_output()
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # install_bootflag_cleaning
+  #
+  # -------------------------------------------------------------------------
+  def install_bootflag_cleaning(self):
+    """This method installs in the generated rootfs the script in charge of
+    cleaning the "boot dirty" flag set by u-boot when dual_banks or rescue 
+    image (or both) are activated. 
+    
+    This flag has to be cleaned once booot is finished to let u-boot know at
+    next boot that things went well. Otherwise u-boot will swap banks or try
+    to use rescue image.
+    """
+
+    # Output current task to logs
+    logging.info("Installing bootflag cleaning script")
+
+    # Install script in the rootfs
+    src = self.project.get_dft_base() + "/scripts/dft_clean_bootflag"
+    dest = iself.project.get_rootfs_mountpoint() + "/usr/bin/"
+    shutil.copyfile(src,dest)
 
 
 
