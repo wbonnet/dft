@@ -6,6 +6,7 @@
 # Generation date : __GENERATION_DATE__
 # DFT version     : __DFT_VERSION__
 #
+# ----------------------------------------------------------------------------
 
 
 # ----------------------------------------------------------------------------
@@ -16,46 +17,171 @@
 # your really know what you are hacking.
 #
 # ----------------------------------------------------------------------------
-setenv initrd_file    initrd.img
-setenv fdtfile        'default.dtb'
-setenv image          zImage
-setenv dft_flag_file  dft_boot_was_dirty
+setenv initrd_file            initrd.img
+setenv fdtfile                'default.dtb'
+setenv image                  zImage
+setenv dft_bank0_bootflag     dft_bank0_boot_was_dirty
+setenv dft_bank1_bootflag     dft_bank1_boot_was_dirty
+setenv dft_rescue_bootflag    dft_rescue_boot_was_dirty
+
+# Defines bank0 storage parameters
+setenv dft_bank0_type         __DFT_BANK0_TYPE__
+setenv dft_bank0_device       __DFT_BANK0_DEVICE__
+setenv dft_bank0_partition    __DFT_BANK0_PARTITION__
+
+# Defines bank1 storage parameters
+setenv dft_bank1_type         __DFT_BANK1_TYPE__
+setenv dft_bank1_device       __DFT_BANK1_DEVICE__
+setenv dft_bank1_partition    __DFT_BANK1_PARTITION__
+
+Faire les replace qui suivent, le sed dans build image et les changer dans les macros en dessous
+
+# Defines rescue storage parameters
+setenv dft_rescue_type        __DFT_RESCUE_TYPE__
+setenv dft_rescue_device      __DFT_RESCUE_DEVICE__
+setenv dft_rescue_partition   __DFT_RESCUE_PARTITION__
+
+# Defines update storage parameters
+setenv dft_update_type        __DFT_UPDATE_TYPE__
+setenv dft_update_device      __DFT_UPDATE_DEVICE__
+setenv dft_update_partition   __DFT_UPDATE_PARTITION__
+
+# Defines failover storage parameters
+setenv dft_failover_type      __DFT_FAILOVER_TYPE__
+setenv dft_failover_device    __DFT_FAILOVER_DEVICE__
+setenv dft_failover_partition __DFT_FAILOVER_PARTITION__
 
 # Defines the address used to env script. It is loaded at scriptaddr since
 # the boot.scr has already bee loaded and imported into environnement.
-setenv uenv_addr_r    ${scriptaddr}
+setenv uenv_addr_r    ${scriptaddr} 
 
 # Defines if the rescue partition is used or not
-setenv dft_use_rescue 1
+setenv dft_use_rescue __DFT_USE_RESCUE__
 
 # Defines if the dual_banks mode is activated
-setenv dft_dual_banks 1
+setenv dft_dual_banks __DFT_DUAL_BANKS__
+
+
+# ----------------------------------------------------------------------------
+#
+# Macro definitions
+#
+# ----------------------------------------------------------------------------
+
+#
+# Defines the macro used to load the initrd into memory
+#
+setenv dft_load_initrd '\
+if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${ramdisk_addr_r} ${initrd_file} ; then \
+  setexpr initrd_size ${filesize} \
+  echo "InitRD successully loaded" \
+else \
+  echo "Failed to the InitRD into memory." \
+  echo "Bork ! Bork ! Bork !"\
+fi'
+
+#
+# Defines the macro used to load the DTB into memory
+#
+setenv dft_load_fdt '\
+if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${fdt_addr_r} ${fdtfile} ; then \
+  echo "DTB successully loaded" \
+else \
+  echo "Failed to the DTB into memory." \
+  echo "Bork ! Bork ! Bork !" \
+fi'
+
+#
+# Defines the macro used to load the kernel into memory
+#
+setenv dft_load_kernel '\
+if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${kernel_addr_r} ${image} ; then \
+  echo "Kernel successully loaded" \
+else \
+  echo "Failed to the kernel into memory." \
+  echo "Bork ! Bork ! Bork !" \
+fi'
+
+#
+# Defines the macro used to set the storage root
+#
+setenv set_storage_root '\
+if itest.s "${dft_curr_type}" == "mmc" ; then \
+  setenv storage_root  /dev/mmcblk${dft_curr_dev}p${dft_curr_part} rootwait ro \
+fi'
+
+#
+# Defines the macro used to set the bootargs root
+#
+setenv set_bootargs '\
+  setenv bootargs console=${console} root=${storage_root} rootfstype=${fstype} dft_failover=${dft_kernel_cmdline_failover_flag} \
+'
+
+#
+# Defines the macro used to setup environment and boot the kernel
+#
+setenv boot_firmware '\
+  run set_storage_root ; \
+  run set_bootflags ; \
+  run set_bootargs ; \
+  run save_bootflags ; \
+  run dft_load_fdt ; \
+  run dft_load_kernel ; \
+  run dft_load_inird ; \
+  bootz ${kernel_addr_r} ${ramdisk_addr_r} ${fdt_addr_r} \
+'
+
+#
+# Defines the macro used to save the bootflag on failover partition
+#
+setenv save_bootflags '\
+  save ${dft_failover_type} ${dft_failover_dev}:${dft_failover_part} ${script_addr} ${dft_curr_bootflag} 0 \
+'
+
+#
+# Defines the macro used to set the kernel command line failover arguments
+# 
+setenv set_bootflags '\
+  setenv dft_kernel_cmdline_failover_flag "${dft_failover_type}:${dft_failover_dev}:${dft_failover_part}:${dft_curr_bootflag}" \
+'
+
+# ----------------------------------------------------------------------------
+#
+# Control environment and set default values in case of first boot ever
+#
+# ----------------------------------------------------------------------------
 
 # Defines the current values for type device and partition only if not existing
 # These are used to load uEnv, kernel, dtb and initrd
 setenv flag_env_modified  0
 if itest.s "x${dft_curr_type}" == "x" ; then
-  setenv dft_curr_type      mmc
+  setenv dft_curr_type      __DFT_STORAGE_DEFAULT_TYPE__
   setenv flag_env_modified  1
   echo "Variable dft_curr_type not yet defined adding its default value => mmc"
 fi
 
 if itest.s "x${dft_curr_dev}" == "x" ; then
-  setenv dft_curr_dev       0
+  setenv dft_curr_dev       __DFT_STORAGE_DEFAULT_DEVICE__
   setenv flag_env_modified  1
   echo "Variable dft_curr_dev  not yet defined adding its default value => 0"
 fi
 
 if itest.s "x${dft_curr_part}" == "x" ; then
-  setenv dft_curr_part      1
+  setenv dft_curr_part      __DFT_STORAGE_DEFAULT_PARTITION__
   setenv flag_env_modified  1
   echo "Variable dft_curr_part not yet defined adding its default value => 1"
 fi
 
 if itest.s "x${dft_curr_bank}" == "x" ; then
-  setenv dft_curr_bank      0
+  setenv dft_curr_bank      __DFT_STORAGE_DEFAULT_BANK__
   setenv flag_env_modified  1
   echo "Variable dft_curr_bank not yet defined adding its default value => 1"
+fi
+
+if itest.s "x${dft_curr_bootflag}" == "x" ; then
+  setenv dft_curr_bootflag  ${dft_bank0_bootflag}
+  setenv flag_env_modified  1
+  echo "Variable dft_curr_bootflag not yet defined adding its default value => bank0"
 fi
 
 # Adding a x in variable test prevents errors in case setenv went wrong
@@ -73,9 +199,10 @@ fi
 # Try to load the flag file from current bank, if it fails then it means that
 # it is either the first boot (flag never created), or that it has been cleared
 # thus the boot was clean. In both case boot process can continue.
-# if test -e ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${dft_flag_file} ; then
-if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${uenv_addr_r} ${dft_flag_file} ; then
-  echo "Normal boot"
+# if test -e ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${dft_bank0_bootflag} ; then
+if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${uenv_addr_r} ${dft_bank0_bootflag} ; then
+  echo "Booting from bank0..."
+  run boot_firmware
 fi
 
 
@@ -91,24 +218,39 @@ fi
 # We have to switch bank, if multi bank is activated, and try again exactly the same code
 # once banks switch.
 
+# TODO handle case where bank 2 is activated ? => rescue
+
 # Test if multi bank is activated
 if itest.s "${dft_multi_banks}" == "1" ; then
   # Yes, thus switch banks. Failover becomes active
+  echo "Last boot from bank${dft_curr_bank} failed. Switching banks"
   if itest.s "${dft_curr_bank}" == "0" ; then
     setenv dft_curr_bank      1
-    setenv dft_curr_part      2
+    setenv dft_curr_type      ${dft_bank1_type}
+    setenv dft_curr_device    ${dft_bank1_dev}
+    setenv dft_curr_part      ${dft_bank1_part}
+    setenv dft_curr_bootflag  ${dft_bank1_bootflag}
   else
     setenv dft_curr_bank      0
-    setenv dft_curr_part      1
+    setenv dft_curr_type      ${dft_bank0_type}
+    setenv dft_curr_device    ${dft_bank0_dev}
+    setenv dft_curr_part      ${dft_bank0_part}
+    setenv dft_curr_bootflag  ${dft_bank0_bootflag}
   fi
 
   # Banks have been switched, need to save env
   saveenv
 
   # Try again
-  if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${uenv_addr_r} ${dft_flag_file} ; then
-    echo "Normal boot"
-    save ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${script_addr} ${dft_flag_file} 0
+  if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${uenv_addr_r} ${dft_bank1_bootflag} ; then
+    # Set this variables only now, because root and partition can be supereded in uEnv.txt
+    if itest.s "${dft_curr_type}" == "mmc" ; then
+      setenv storage_root  /dev/mmcblk${dft_curr_dev}p${dft_curr_part} rootwait ro
+    fi
+    setenv bootargs console=${console} root=${storage_root} rootfstype=${fstype} dft_failover=${dft_kernel_cmdline_failover_flag}
+
+    echo "Booting from bank1..."
+    run boot_firmware
   fi
 fi
 
@@ -123,13 +265,22 @@ fi
 # It means that both banks failed and now are flaged as dirty
 # Last thing to try is to boot from rescue, if rescue exist.
 
-# Switch to rescue bank
-
 # Test if multi bank is activated
 if itest.s "${dft_use_rescue}" == "1" ; then
+  # Switch to rescue bank
+  setenv dft_curr_bank      2
+  setenv dft_curr_type      ${dft_rescue_type}
+  setenv dft_curr_device    ${dft_rescue_dev}
+  setenv dft_curr_part      ${dft_rescue_part}
+  setenv dft_curr_bootflag  ${dft_rescue_bootflag}
+
+  # Do not make it persistent, it is the catch all thing
+  saveenv
+
   # And try to boot
-  if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${uenv_addr_r} ${dft_flag_file} ; then
-    echo "Normal boot"
+  if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${uenv_addr_r} ${dft_rescue_bootflag} ; then
+    echo "Booting from rescue system..."
+    run boot_firmware
   fi
 fi
 
@@ -142,6 +293,9 @@ fi
 
 echo "Failed to boot from rescue bank"
 echo "Bork ! Bork ! Bork !"
+
+reset
+
 
 #
 # First let's reset the flag meaning we have modified u-boot environment and need to save it
@@ -211,44 +365,5 @@ fi
 
 
 
-#
-# Set this variables only now, because root and partition can be supereded in uEnv.txt
-#
-setenv mmcroot  /dev/mmcblk${dft_curr_dev}p${dft_curr_part} rootwait ro
-setenv bootargs console=${console} root=${mmcroot} rootfstype=${fstype}
 
-#
-# Load the initrd into memory
-#
-if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${ramdisk_addr_r} ${initrd_file} ; then
-  setexpr initrd_size ${filesize}
-  echo "InitRD successully loaded"
-else
-  echo "Failed to the InitRD into memory."
-  echo "Bork ! Bork ! Bork !"
-fi
 
-#
-# Load the DTB into memory
-#
-if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${fdt_addr_r} ${fdtfile} ; then
-  echo "DTB successully loaded"
-else
-  echo "Failed to the DTB into memory."
-  echo "Bork ! Bork ! Bork !"
-fi
-
-#
-# Load the kernel into memory
-#
-if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${kernel_addr_r} ${image} ; then
-  echo "Kernel successully loaded"
-else
-  echo "Failed to the kernel into memory."
-  echo "Bork ! Bork ! Bork !"
-fi
-
-#
-# Thunderbirds are go !
-#
-bootz ${kernel_addr_r} ${ramdisk_addr_r}:${initrd_size} ${fdt_addr_r}
