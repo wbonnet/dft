@@ -223,7 +223,7 @@ fi
 # Test if dual banks is activated
 if itest.s "${dft_dual_banks}" == "1" ; then
   # Yes, thus switch banks. Failover becomes active
-  echo "Last boot from bank${dft_current_bank} failed. Switching banks"
+  echo "Last boot from bank ${dft_current_bank} failed. Switching banks"
   if itest.s "${dft_current_bank}" == "0" ; then
     setenv dft_current_bank        1
     setenv dft_current_type        ${dft_bank1_type}
