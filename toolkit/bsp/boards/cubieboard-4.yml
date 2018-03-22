@@ -49,33 +49,33 @@ kernel:
   # pubkey:
 
   # List of packages to install from the repository
-#  packages:
-#    - linux-image-kernel-cubieboard-4
-#    - linux-image-firmware-cubieboard-4
-#    - linux-image-dtb-cubieboard-4
+  packages:
+    - linux-image-cubieboard-3
 
-#TODO: add flag to define if a specific source list ha to be generated under sources.list.define
 
 # The uboot section defines the different parameters needed to select and install the uboot
-# used for this board. In some (rare) case, the uboot can include severa binaries, thus this
-# sections defines a list of binary files to copy to the target image, the copy method to use, and
-# its parameters.
-# uboot:
-#   - {
-#       # Identification the target image file. This has to be one of the filename defined in the
-#       # image.yml configuration file
-#       target_image: "xxx.image" ,
+# used to boot the board an run kernel.
+u-boot:
+  # Defines the upstream site used to provide kernel for this device
+  origin: armwizard
 
-#       # method used to copy the binary to the target image. Valid values are :
-#       #  . dd
-#       method: "dd" ,
+  # List of packages to install from the repository to add u-boot.
+  packages:
+    - u-boot-cubieboard-4
 
-#       # Binary to copy to the target image. Binaries are stored under...
-#       binary: "xxx" ,
+  # List of action needed to install the u-boot binary to the image
+  installation:
+  - {
+      # Defines the source of the data to be copied to the image
+      # The source can be either a file or a special device like /dev/zero or /dev/random
+      # If the path is absolute, it will be left unchanged, otherwise it is prefix by the
+      # BSP path
+      source: "/dev/zero" ,
 
-#       # Copy method parameters. The valid value depends on the method used. You should refer to the
-#       # man page of the tool used by the selected method. parameters will be passed to this tool.
-#       #
-#       # This variable is optional, default value is no arameters passed
-#       # parameters: ""
-#     }
+      # Defines the options to be passed to dd
+      options: "bs=1k count=1023 seek=1 status=noxfer"
+    }
+  - {
+      source: "/boot/u-boot/u-boot-cubieboard-4" ,
+      options: "bs=1024 seek=8 status=noxfer"
+    }
