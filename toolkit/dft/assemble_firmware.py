@@ -164,23 +164,34 @@ class AssembleFirmware(CliCommand):
     # Output current task to logs
     self.project.logging.info("Installing bootflag cleaning script")
 
-    # Install script in the rootfs
-    src = self.project.get_dft_base() + "/scripts/dft_clean_bootflag"
-    dest = self.project.get_rootfs_mountpoint() + "/usr/bin/dft_clean_bootflag"
+    # Test if we have a need for this script ? Only if at least one of dual_banks
+    # or rescue_image is activated
+    if (Key.DUAL_BANKS.value in self.project.firmware[Key.RESILIENCE.value] and \
+                                self.project.firmware[Key.RESILIENCE.value]\
+                                                     [Key.DUAL_BANKS.value]) or \
+       (Key.RESCUE_IMAGE.value in self.project.firmware[Key.RESILIENCE.value] and \
+                                  self.project.firmware[Key.RESILIENCE.value] \
+                                                       [Key.RESCUE_IMAGE.value]):
+      # Install script in the rootfs
+      src = self.project.get_dft_base() + "/scripts/dft_clean_bootflag"
+      dest = self.project.get_rootfs_mountpoint() + "/usr/bin/dft_clean_bootflag"
 
-    self.project.logging.debug("Copying " + src + " to " + dest)
+      self.project.logging.debug("Copying " + src + " to " + dest)
 
-    # Copy the file content itself
-    shutil.copyfile(src, dest)
+      # Copy the file content itself
+      shutil.copyfile(src, dest)
 
-    # Copy ppermission bits
-    shutil.copymode(src, dest)
+      # Copy ppermission bits
+      shutil.copymode(src, dest)
 
-    # Append the call to the script as last line of /etc/rc.local 
-    # (just before exit 0)
-    command = "sed -i -e '/exit 0/i /usr/bin/dft_clean_bootflag' "
-    command += self.project.get_rootfs_mountpoint() + "/etc/rc.local"
-    self.execute_command(command)
+      # Append the call to the script as last line of /etc/rc.local
+      # (just before exit 0)
+      command = "sed -i -e '/exit 0/i /usr/bin/dft_clean_bootflag' "
+      command += self.project.get_rootfs_mountpoint() + "/etc/rc.local"
+      self.execute_command(command)
+    else:
+      self.project.logging.info("Dual_banks and rescue_image are deactivated. "
+                                "No need to install this script")
 
 
 
