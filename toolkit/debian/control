@@ -20,6 +20,18 @@ Depends: ${misc:Depends},
          debootstrap,
          ansible,
          qemu-user-static,
+         dosfstools,
+         util-linux,
+         e2fsprogs,
+         btrfs-progs,
+         exfat-utils,
+         hfsprogs,
+         jfsprogs,
+         ntfs-3g,
+         reiser4progs,
+         reiserfsprogs,
+         udfprogs,
+         xdfprogs,
          squashfs-tools
 Description: Debian Framework Toolkit
 
