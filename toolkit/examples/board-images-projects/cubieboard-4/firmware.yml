@@ -36,16 +36,6 @@
 
 # ----------------------------------------------------------------------------
 #
-# Definition of the generic configuration parameters
-#
-# ----------------------------------------------------------------------------
-configuration:
-  # Define the filename used when generatig the squashfs file
-  # Currently only one file is hqndled
-  filename: cubieboard-4.fw
-
-# ----------------------------------------------------------------------------
-#
 # Definition of the firmware layout
 #
 # ----------------------------------------------------------------------------
@@ -83,7 +73,7 @@ layout:
         # Path to the squashfs file to mount
         # This information is ignored if type is ot squashfs
         # Default value is generated based upon the project information
-        squashfs_file: system.squashfs
+        squashfs_file: system.fw
 
         # Name of the partition device to mount when type is partition
         # This information is ignored if type is not partition
@@ -140,11 +130,11 @@ resilience:
 # Definition of the squashfs parameters
 #
 # ----------------------------------------------------------------------------
-squashfs_configuration:
+configuration:
 
   # Define the filename used when generatig the squashfs file
   # Currently only one file is hqndled
-  filename: system.squashfs
+  filename: system.fw
 
   # Defines the block size. Default is 131072 bytes
   block_size: "256K"
