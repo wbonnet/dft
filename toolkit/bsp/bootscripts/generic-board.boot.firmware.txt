@@ -35,8 +35,6 @@ setenv dft_bank1_type         __DFT_BANK1_TYPE__
 setenv dft_bank1_device       __DFT_BANK1_DEVICE__
 setenv dft_bank1_partition    __DFT_BANK1_PARTITION__
 
-Faire les replace qui suivent, le sed dans build image et les changer dans les macros en dessous
-
 # Defines rescue storage parameters
 setenv dft_rescue_type        __DFT_RESCUE_TYPE__
 setenv dft_rescue_device      __DFT_RESCUE_DEVICE__
@@ -217,13 +215,13 @@ fi
 # Still here ?
 # It means that either the dirty flag was still here, or that the boot failed
 # Which alse means that the flag now exist since it has been created before trying to boot
-# We have to switch bank, if multi bank is activated, and try again exactly the same code
+# We have to switch bank, if dual banks is activated, and try again exactly the same code
 # once banks switch.
 
 # TODO handle case where bank 2 is activated ? => rescue
 
-# Test if multi bank is activated
-if itest.s "${dft_multi_banks}" == "1" ; then
+# Test if dual banks is activated
+if itest.s "${dft_dual_banks}" == "1" ; then
   # Yes, thus switch banks. Failover becomes active
   echo "Last boot from bank${dft_curr_bank} failed. Switching banks"
   if itest.s "${dft_curr_bank}" == "0" ; then
@@ -263,7 +261,7 @@ fi
 # It means that both banks failed and now are flaged as dirty
 # Last thing to try is to boot from rescue, if rescue exist.
 
-# Test if multi bank is activated
+# Test if dual bank is activated
 if itest.s "${dft_use_rescue}" == "1" ; then
   # Switch to rescue bank
   setenv dft_curr_bank        2
