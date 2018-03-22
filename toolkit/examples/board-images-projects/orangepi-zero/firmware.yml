@@ -26,13 +26,24 @@
 # Initramfs customization
 #
 # ----------------------------------------------------------------------------
-# initramfs:
+initramfs:
   # Provides a list of modules added in /usr/share/initramfs-tools/modules.d/
   # before running update-initramfs. The modules listed below will be included
   # in the initrd archive.
   # additional_modules:
   #  - module1
   #  - module2
+
+  # Flag used to trigger the call to mkimage once initramfs has been updated
+  # Default value is false
+  mkimage: True
+
+  # Compression type used by mkimage. Default is gzip (if mkimage is activated)
+  # mkimage_compression: gzip
+  
+  # Architecture used by mkimage. Default is guessed based upon target 
+  # architecture. If this value is defined it overrides the guess.
+  # mkimage_arch: arm
 
 # ----------------------------------------------------------------------------
 #

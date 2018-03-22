@@ -1,10 +1,8 @@
 dft (0.6.8-1) unstable; urgency=low
 
   * Add image filename timestamping
-  * 
-  * 
-  * 
-  * 
+  * Add mkimage call after updating initrd
+  * Improved firmware booting script with failover 
 
  -- William Bonnet <wbonnet@theitmakers.com>  Mon, 12 Mar 2018 09:24:00 +0100
 

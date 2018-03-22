@@ -26,12 +26,9 @@ Depends: ${misc:Depends},
          btrfs-progs,
          exfat-utils,
          hfsprogs,
-         jfsprogs,
          ntfs-3g,
          reiser4progs,
          reiserfsprogs,
-         udfprogs,
-         xdfprogs,
          squashfs-tools
 Description: Debian Framework Toolkit
 

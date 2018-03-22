@@ -17,6 +17,7 @@
 # your really know what you are hacking.
 #
 # ----------------------------------------------------------------------------
+
 setenv initrd_file            initrd.img
 setenv fdtfile                'default.dtb'
 setenv image                  zImage
@@ -72,7 +73,7 @@ setenv dft_dual_banks __DFT_DUAL_BANKS__
 # Defines the macro used to load the initrd into memory
 #
 setenv dft_load_initrd '\
-if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${ramdisk_addr_r} ${initrd_file} ; then \
+if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_partition} ${ramdisk_addr_r} ${initrd_file} ; then \
   setexpr initrd_size ${filesize} \
   echo "InitRD successully loaded" \
 else \
@@ -84,7 +85,7 @@ fi'
 # Defines the macro used to load the DTB into memory
 #
 setenv dft_load_fdt '\
-if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${fdt_addr_r} ${fdtfile} ; then \
+if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_partition} ${fdt_addr_r} ${fdtfile} ; then \
   echo "DTB successully loaded" \
 else \
   echo "Failed to the DTB into memory." \
@@ -95,7 +96,7 @@ fi'
 # Defines the macro used to load the kernel into memory
 #
 setenv dft_load_kernel '\
-if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${kernel_addr_r} ${image} ; then \
+if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_partition} ${kernel_addr_r} ${image} ; then \
   echo "Kernel successully loaded" \
 else \
   echo "Failed to the kernel into memory." \
@@ -107,7 +108,7 @@ fi'
 #
 setenv set_storage_root '\
 if itest.s "${dft_curr_type}" == "mmc" ; then \
-  setenv storage_root  /dev/mmcblk${dft_curr_dev}p${dft_curr_part} rootwait ro \
+  setenv storage_root  /dev/mmcblk${dft_curr_dev}p${dft_curr_partition} rootwait ro \
 fi'
 
 #
@@ -127,7 +128,7 @@ setenv boot_firmware '\
   run save_bootflags ; \
   run dft_load_fdt ; \
   run dft_load_kernel ; \
-  run dft_load_inird ; \
+  run dft_load_initrd ; \
   bootz ${kernel_addr_r} ${ramdisk_addr_r} ${fdt_addr_r} \
 '
 
@@ -135,14 +136,14 @@ setenv boot_firmware '\
 # Defines the macro used to save the bootflag on failover partition
 #
 setenv save_bootflags '\
-  save ${dft_failover_type} ${dft_failover_dev}:${dft_failover_part} ${script_addr} ${dft_curr_bootflag} 0 \
+  save ${dft_failover_type} ${dft_failover_dev}:${dft_failover_partition} ${script_addr} ${dft_curr_bootflag} 0 \
 '
 
 #
 # Defines the macro used to set the kernel command line failover arguments
 # 
 setenv set_bootflags '\
-  setenv dft_kernel_cmdline_failover_flag "${dft_failover_type}:${dft_failover_dev}:${dft_failover_part}:${dft_curr_bootflag}" \
+  setenv dft_kernel_cmdline_failover_flag "${dft_failover_type}:${dft_failover_dev}:${dft_failover_partition}:${dft_curr_bootflag}" \
 '
 
 # ----------------------------------------------------------------------------
@@ -166,10 +167,10 @@ if itest.s "x${dft_curr_dev}" == "x" ; then
   echo "Variable dft_curr_dev  not yet defined adding its default value => 0"
 fi
 
-if itest.s "x${dft_curr_part}" == "x" ; then
-  setenv dft_curr_part      __DFT_STORAGE_DEFAULT_PARTITION__
+if itest.s "x${dft_curr_partition}" == "x" ; then
+  setenv dft_curr_partition __DFT_STORAGE_DEFAULT_PARTITION__
   setenv flag_env_modified  1
-  echo "Variable dft_curr_part not yet defined adding its default value => 1"
+  echo "Variable dft_curr_partition not yet defined adding its default value => 1"
 fi
 
 if itest.s "x${dft_curr_bank}" == "x" ; then
@@ -199,8 +200,10 @@ fi
 # Try to load the flag file from current bank, if it fails then it means that
 # it is either the first boot (flag never created), or that it has been cleared
 # thus the boot was clean. In both case boot process can continue.
-# if test -e ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${dft_bank0_bootflag} ; then
-if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${uenv_addr_r} ${dft_bank0_bootflag} ; then
+# if test -e ${dft_curr_type} ${dft_curr_dev}:${dft_curr_partition} ${dft_bank0_bootflag} ; then
+if load ${dft_failover_type} ${dft_failover_dev}:${dft_failover_partition} ${uenv_addr_r} ${dft_bank0_bootflag} ; then
+  echo "Last boot was not completed successfully, trying next bank..."
+else
   echo "Booting from bank0..."
   run boot_firmware
 fi
@@ -225,30 +228,26 @@ if itest.s "${dft_multi_banks}" == "1" ; then
   # Yes, thus switch banks. Failover becomes active
   echo "Last boot from bank${dft_curr_bank} failed. Switching banks"
   if itest.s "${dft_curr_bank}" == "0" ; then
-    setenv dft_curr_bank      1
-    setenv dft_curr_type      ${dft_bank1_type}
-    setenv dft_curr_device    ${dft_bank1_dev}
-    setenv dft_curr_part      ${dft_bank1_part}
-    setenv dft_curr_bootflag  ${dft_bank1_bootflag}
+    setenv dft_curr_bank        1
+    setenv dft_curr_type        ${dft_bank1_type}
+    setenv dft_curr_device      ${dft_bank1_dev}
+    setenv dft_curr_partition   ${dft_bank1_partition}
+    setenv dft_curr_bootflag    ${dft_bank1_bootflag}
   else
-    setenv dft_curr_bank      0
-    setenv dft_curr_type      ${dft_bank0_type}
-    setenv dft_curr_device    ${dft_bank0_dev}
-    setenv dft_curr_part      ${dft_bank0_part}
-    setenv dft_curr_bootflag  ${dft_bank0_bootflag}
+    setenv dft_curr_bank        0
+    setenv dft_curr_type        ${dft_bank0_type}
+    setenv dft_curr_device      ${dft_bank0_dev}
+    setenv dft_curr_partition   ${dft_bank0_partition}
+    setenv dft_curr_bootflag    ${dft_bank0_bootflag}
   fi
 
   # Banks have been switched, need to save env
   saveenv
 
   # Try again
-  if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${uenv_addr_r} ${dft_bank1_bootflag} ; then
-    # Set this variables only now, because root and partition can be supereded in uEnv.txt
-    if itest.s "${dft_curr_type}" == "mmc" ; then
-      setenv storage_root  /dev/mmcblk${dft_curr_dev}p${dft_curr_part} rootwait ro
-    fi
-    setenv bootargs console=${console} root=${storage_root} rootfstype=${fstype} dft_failover=${dft_kernel_cmdline_failover_flag}
-
+  if load ${dft_failover_type} ${dft_failover_dev}:${dft_failover_partition} ${uenv_addr_r} ${dft_bank1_bootflag} ; then
+    echo "Last boot was not completed successfully, trying rescue bank..."
+  else
     echo "Booting from bank1..."
     run boot_firmware
   fi
@@ -268,17 +267,19 @@ fi
 # Test if multi bank is activated
 if itest.s "${dft_use_rescue}" == "1" ; then
   # Switch to rescue bank
-  setenv dft_curr_bank      2
-  setenv dft_curr_type      ${dft_rescue_type}
-  setenv dft_curr_device    ${dft_rescue_dev}
-  setenv dft_curr_part      ${dft_rescue_part}
-  setenv dft_curr_bootflag  ${dft_rescue_bootflag}
+  setenv dft_curr_bank        2
+  setenv dft_curr_type        ${dft_rescue_type}
+  setenv dft_curr_device      ${dft_rescue_dev}
+  setenv dft_curr_partition   ${dft_rescue_partition}
+  setenv dft_curr_bootflag    ${dft_rescue_bootflag}
 
   # Do not make it persistent, it is the catch all thing
   saveenv
 
   # And try to boot
-  if load ${dft_curr_type} ${dft_curr_dev}:${dft_curr_part} ${uenv_addr_r} ${dft_rescue_bootflag} ; then
+  if load ${dft_failover_type} ${dft_failover_dev}:${dft_failover_partition} ${uenv_addr_r} ${dft_rescue_bootflag} ; then
+    echo "Last boot from rescue bank was not completed successfully. Trying to boot from network..."
+  else
     echo "Booting from rescue system..."
     run boot_firmware
   fi
@@ -308,9 +309,6 @@ if itest.s "x${dft_last_boot_clean}" == "x" ; then
   echo "Variable dft_last_boot_clean is not defined. This should not happen ! Something went wrong..."
   echo "This should not happen ! Something went wrong... and uEnv.txt has probably be lost"
   echo "Trying to regenerate it, but this boot is likely to fail :("
-
-  # Here generate env
-
 else
   # Current dft_last_boot_state is defined, let's compare it with what we expect
   # TODO : Nope it does not work we have to exchange a token between u-boot and u-env
@@ -346,14 +344,14 @@ else
   fi
 fi
 
-# Check if uEnv defines a current part
-if itest.s "x${dft_uenv_part}" == "x" ; then
+# Check if uEnv defines a current partition
+if itest.s "x${dft_uenv_partition}" == "x" ; then
   # Variable was not yet defined, there is nothing to do but continue with u-boot value
-  echo "Variable dft_uenv_part not defined. Continuing with current value"
+  echo "Variable dft_uenv_partition not defined. Continuing with current value"
 else
   # Current part is defined, let's compare it with what we expect
-  if itest.s "x${dft_curr_part}" != "x${dft_uenv_part}" ; then
-    echo "Variable dft_uenv_part is not what was expected. Needs to do something !"
+  if itest.s "x${dft_curr_partition}" != "x${dft_uenv_partition}" ; then
+    echo "Variable dft_uenv_partition is not what was expected. Needs to do something !"
   fi
 fi
 

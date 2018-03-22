@@ -30,6 +30,7 @@ import os
 import stat
 import tempfile
 import datetime
+import glob
 from dft.cli_command import CliCommand
 from dft.enumkey import Key
 
@@ -176,13 +177,62 @@ class AssembleFirmware(CliCommand):
     """
 
     # Output current task to logs
-    logging.info("Upadting initramfs")
+    self.project.logging.info("Updating initramfs")
 
     # Copy the stacking script to /tmp in the rootfs
     command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
     command += " update-initramfs -t -u -k all"
     self.execute_command(command)
 
+    # Check if we have to run mkimage to make it bootable on ARM or PowerPC
+    # boards
+    if Key.MKIMAGE.value in self.project.firmware[Key.INITRAMFS.value] and \
+       self.project.firmware[Key.INITRAMFS.value][Key.MKIMAGE.value]:
+      # Retrieve compression from configuration file
+      if Key.MKIMAGE_COMPRESSION.value in self.project.firmware[Key.INITRAMFS.value]:
+        if self.project.firmware[Key.INITRAMFS.value][Key.MKIMAGE_COMPRESSION.value] not in \
+                "gzip" "bzip2" "lz4" "lzma" "lzo" "none":
+          self.project.logging.error("Unknown mkimage compression method : " + \
+                   self.project.firmware[Key.INITRAMFS.value][Key.MKIMAGE_COMPRESSION.value])
+          self.project.logging.error("Using gzip instead")
+          mkimage_compression = Key.GZIP.value
+        else:
+          mkimage_compression = self.project.firmware[Key.INITRAMFS.value]\
+                                                     [Key.MKIMAGE_COMPRESSION.value]
+      else:
+        mkimage_compression = Key.GZIP.value
+
+      # Retrieve architecture from configuration file
+      if Key.MKIMAGE_ARCH.value in self.project.firmware[Key.INITRAMFS.value]:
+        if self.project.firmware[Key.INITRAMFS.value][Key.MKIMAGE_ARCH.value] not in \
+           "alpha" "arc" "arm" "arm64" "avr32" "blackfin" "ia64" "invalid" "m68k" "microblaze" \
+           "mips" "mips64" "nds32" "nios2" "or1k" "powerpc" "s390" "sandbox" "sh" "sparc" \
+           "sparc64" "x86" "x86_64" "xtensa":
+          self.project.logging.error("Unknown mkimage architecture : " + \
+                   self.project.firmware[Key.INITRAMFS.value][Key.MKIMAGE_ARCH.value])
+          self.project.logging.error("Using invalid instead")
+          mkimage_arch = Key.INVALID.value
+        else:
+          mkimage_arch = self.project.firmware[Key.INITRAMFS.value][Key.MKIMAGE_ARCH.value]
+      else:
+        mkimage_arch = self.project.get_mkimage_arch()
+
+      # Iterate all the initrd generated under /boot in the chroot directory
+      filepath = self.project.get_rootfs_mountpoint() + '/boot/initrd.img-*'
+      for initrdfile in glob.glob(filepath):
+        # Rename the file
+        os.rename(initrdfile, initrdfile + ".old")
+
+        # Generate the mkimage command
+        self.project.logging.debug("Running mkimage on initramfs")
+        command = "mkimage -A " + mkimage_arch + " -T ramdisk -C " + mkimage_compression
+        command += " -d " + initrdfile + ".old " + initrdfile
+        self.execute_command(command)
+
+        # Remove the old initrd file
+        os.remove(initrdfile + ".old")
+    else:
+      self.project.logging.debug("Running mkimage on initrd is deactivated in configuration file")
 
 
   # -------------------------------------------------------------------------
@@ -196,7 +246,7 @@ class AssembleFirmware(CliCommand):
     """
 
     # Output current task to logs
-    logging.info("Copying bootchain to firmware directory")
+    self.project.logging.info("Copying bootchain to firmware directory")
 
     # Copy the stacking script to /tmp in the rootfs
     source_dir = self.project.get_rootfs_mountpoint() + '/boot/'
@@ -221,7 +271,7 @@ class AssembleFirmware(CliCommand):
     """
 
     # Output current task to logs
-    logging.info("Customize modules list in target")
+    self.project.logging.info("Customize modules list in target")
 
     # Create a file in modules.d to ensure that squashfs and overlay modules are present
     # Also install any modules needed by the firmware to stack the file systems (overlay or aufs)

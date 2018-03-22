@@ -795,10 +795,8 @@ class Project(object):
       exit(1)
 
     # Retrieve the mode
-    if self.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.ROOTFS.value:
-      return True
-    else:
-      return False
+    return bool(self.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.ROOTFS.value)
+
 
 
   # -------------------------------------------------------------------------
@@ -818,7 +816,4 @@ class Project(object):
       exit(1)
 
     # Retrieve the mode
-    if self.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.ROOTFS.value:
-      return False
-    else:
-      return True
+    return bool(self.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.ROOTFS.value)
