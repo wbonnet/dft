@@ -197,7 +197,7 @@ devices:
     - {
         name: "failover" ,
         type: "logical" ,
-        size: "1" ,
+        size: "16" ,
         unit: "MB" ,
         start_sector: "2500000" ,
         format: True ,
