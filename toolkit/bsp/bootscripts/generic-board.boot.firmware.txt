@@ -199,7 +199,7 @@ fi
 # it is either the first boot (flag never created), or that it has been cleared
 # thus the boot was clean. In both case boot process can continue.
 if load ${dft_failover_type} ${dft_failover_device}:${dft_failover_partition} ${uenv_addr_r} ${dft_current_bootflag} ; then
-  echo "Last boot was not completed successfully, trying next bank..."
+  echo "Last boot from bank ${dft_current_bank} was not completed successfully."
 else
   echo "Booting from bank ${dft_current_bank}"
   run boot_firmware
@@ -223,7 +223,7 @@ fi
 # Test if dual banks is activated
 if itest.s "${dft_dual_banks}" == "1" ; then
   # Yes, thus switch banks. Failover becomes active
-  echo "Last boot from bank ${dft_current_bank} failed. Switching banks"
+  echo "Switching banks..."
   if itest.s "${dft_current_bank}" == "0" ; then
     setenv dft_current_bank        1
     setenv dft_current_type        ${dft_bank1_type}
@@ -243,7 +243,7 @@ if itest.s "${dft_dual_banks}" == "1" ; then
 
   # Try again
   if load ${dft_failover_type} ${dft_failover_device}:${dft_failover_partition} ${uenv_addr_r} ${dft_current_bootflag} ; then
-    echo "Last boot was not completed successfully, trying rescue bank..."
+    echo "Last boot from bank ${dft_current_bank} was not completed successfully, trying rescue bank..."
   else
     echo "Booting from bank ${dft_current_bank}"
     run boot_firmware
