@@ -88,3 +88,4 @@
   with_items:
     - aptitude
     - apt-transport-https
+    - dpkg-dev

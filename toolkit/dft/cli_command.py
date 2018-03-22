@@ -361,6 +361,30 @@ class CliCommand(object):
 
   # -------------------------------------------------------------------------
   #
+  # upgrade_packages
+  #
+  # -------------------------------------------------------------------------
+  def upgrade_packages(self, allow_downgrades=False):
+    """This method runs a full upgrade inside the local chroot.
+
+    This command is executed inside the chrooted environment and may need to
+    have qemu installed.
+    """
+
+    self.project.logging.debug("Upgrading packages")
+    command = "chroot " + self.project.get_rootfs_mountpoint()
+    command += " /usr/bin/apt full-upgrade --yes"
+
+    # Check if the allow downgrades flag is set
+    if allow_downgrades:
+      command += " --allow-downgrades "
+
+    self.execute_command(command)
+
+
+
+  # -------------------------------------------------------------------------
+  #
   # setup_chrooted_environment
   #
   # -------------------------------------------------------------------------
