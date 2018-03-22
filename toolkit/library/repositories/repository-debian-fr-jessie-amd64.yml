@@ -39,3 +39,18 @@ distributions:
         - url: 'http://ftp.fr.debian.org/debian/'
           suite: 'jessie-updates'
           sections: [ 'main', 'contrib', 'non-free' ]
+
+# ----------------------------------------------------------------------------
+#
+# Definition of the pinning to apply
+#
+
+# If the pinning section is defined, a file is generated under
+# /etc/apt/preferences.d that contains the element from the list defined under
+# pinning section
+# pinning:
+  # Each item from the list defines an entry in the pinning file
+  # Please see : https://wiki.debian.org/AptPreferences for reference
+  # - package:
+  #   Pin:
+  #   Pin-Priority:

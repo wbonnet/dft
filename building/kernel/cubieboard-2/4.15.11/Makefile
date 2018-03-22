@@ -1,3 +1,4 @@
+# vim: ft=make ts=4 sw=4 noet
 #
 # The contents of this file are subject to the Apache 2.0 license you may not
 # use this file except in compliance with the License.
@@ -11,28 +12,21 @@
 # Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
-# Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
-#
 #
 # Contributors list :
 #
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 #
+ 
+# Defines the kernel version
+KERNEL_VERSION=4.15.11
 
-#
-# Include the list of specific tasks. Tasks are separated into different
-# files, one file per functionnality.
-#
+# Include board specific definitions
+include ../board.mk
 
----
-- name : DFT - Install OS base packages
-  apt: name={{ item }}
-       state=latest
-       install_recommends=no
-  with_items:
-    - udev
-    - kmod
-    - whois
-    - initscripts
+# Defines the patches to apply on the sources
+# PATCHFILES += 0000_some_patch.diff
+
+# Include build system
+include buildsystem/dft.mk

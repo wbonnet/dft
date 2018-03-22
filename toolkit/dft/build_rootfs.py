@@ -118,6 +118,10 @@ class BuildRootFS(CliCommand):
     # Launch Ansible to install roles identified in configuration file
     self.install_packages()
 
+    # Finally run a full upgrade in case of source modification during install
+    # Allow downgrades is needed if pinning has been modified by Ansible roles
+    self.upgrade_packages(allow_downgrades=True)
+
     # Launch Ansible to install roles identified in configuration file
     self.generate_fstab()
 
@@ -368,6 +372,9 @@ class BuildRootFS(CliCommand):
     # Update the APT sources
     self.generate_apt_sources()
 
+    # Update the APT preferences
+    self.generate_apt_preferences()
+
     # Then update the list of packages
     self.update_package_catalog()
 
@@ -512,6 +519,74 @@ class BuildRootFS(CliCommand):
     working_file.close()
 
     # Finally move the temporary file under the rootfs tree
+    command = "mv -f " + working_file.name + " " + filepath
+    self.execute_command(command)
+
+
+
+  # -------------------------------------------------------------------------
+  #
+  # generate_apt_preferences
+  #
+  # -------------------------------------------------------------------------
+  def generate_apt_preferences(self):
+    """ This method generates the configuration files stored under
+    /etc/apt/preferences.d
+
+    Current implementation handles only pinning file. This file is generated
+    from the information contained in the repositories.yml file, defined
+    under the pinning: entry.
+
+    The pinning antry contains a list of pin items. Each list entry is a set
+    of three lines in the pinning file.
+
+    Please see https://wiki.debian.org/AptPreferences for more information
+    about defining preferences
+    """
+    logging.info("generating APT configuration")
+
+    # Test if the generate_validity_check is defined, if not set the default value
+    if Key.PINNING.value not in self.project.repositories:
+      logging.debug("Pinning is not defined in the repository file. Nothing to do.")
+      return
+
+    # The pinning entry is defined, let's iterate it and generate pinning file
+    with tempfile.NamedTemporaryFile(mode='w+', delete=False) as working_file:
+      # Iterate the list of distributions loaded from the file
+      for pin_entry in self.project.repositories[Key.PINNING.value]:
+        # Check that the three entries are defined otherwise output an error and skip
+        missing_entry = False
+        # Package entry must be defined
+        if Key.PACKAGE.value not in pin_entry:
+          logging.error("Package entry is missing, skipping : " + pin_entry)
+          missing_entry = True
+
+        # Pin entry must be defined
+        if Key.PIN.value not in pin_entry:
+          logging.error("Pin entry is missing, skipping : " + pin_entry)
+          missing_entry = True
+
+        # Pin-Priority entry must be defined
+        if Key.PIN_PRIORITY.value not in pin_entry:
+          logging.error("Pin-Priority entry is missing, skipping : " + pin_entry)
+          missing_entry = True
+
+        # Are we missing some information ?
+        if missing_entry:
+          # Yes, output was already sent, just skip
+          continue
+
+        # Entry is complete, let's output it to the working file
+        working_file.write("Package: " + str(pin_entry[Key.PACKAGE.value]) + "\n")
+        working_file.write("Pin: " + str(pin_entry[Key.PIN.value]) + "\n")
+        working_file.write("Pin-Priority: " + str(pin_entry[Key.PIN_PRIORITY.value]) + "\n")
+        working_file.write("\n")
+
+    # Its done, now close the temporary file
+    working_file.close()
+
+    # Finally move the temporary file under the rootfs tree
+    filepath = self.project.get_rootfs_mountpoint() + "/etc/apt/preferences.d/pinning"
     command = "mv -f " + working_file.name + " " + filepath
     self.execute_command(command)
 
