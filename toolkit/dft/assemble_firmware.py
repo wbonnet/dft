@@ -31,7 +31,6 @@ import stat
 import tempfile
 import datetime
 import glob
-import shutil
 from dft.cli_command import CliCommand
 from dft.enumkey import Key
 
@@ -133,9 +132,6 @@ class AssembleFirmware(CliCommand):
     # to the init script ( needed to call the stacking script )
     self.update_initramfs()
 
-    # Copy the bootflag cleaning script to target
-    self.install_bootflag_cleaning()
-
     # Remove QEMU if it has been isntalled. It has to be done in the end
     # since some cleanup tasks could need QEMU
     if self.use_qemu_static:
@@ -143,55 +139,6 @@ class AssembleFirmware(CliCommand):
 
     # Copy the new / updated bootchain from the rootfs to the output directory
     self.copy_bootchain_to_output()
-
-
-
-  # -------------------------------------------------------------------------
-  #
-  # install_bootflag_cleaning
-  #
-  # -------------------------------------------------------------------------
-  def install_bootflag_cleaning(self):
-    """This method installs in the generated rootfs the script in charge of
-    cleaning the "boot dirty" flag set by u-boot when dual_banks or rescue
-    image (or both) are activated.
-
-    This flag has to be cleaned once booot is finished to let u-boot know at
-    next boot that things went well. Otherwise u-boot will swap banks or try
-    to use rescue image.
-    """
-
-    # Output current task to logs
-    self.project.logging.info("Installing bootflag cleaning script")
-
-    # Test if we have a need for this script ? Only if at least one of dual_banks
-    # or rescue_image is activated
-    if (Key.DUAL_BANKS.value in self.project.firmware[Key.RESILIENCE.value] and \
-                                self.project.firmware[Key.RESILIENCE.value]\
-                                                     [Key.DUAL_BANKS.value]) or \
-       (Key.RESCUE_IMAGE.value in self.project.firmware[Key.RESILIENCE.value] and \
-                                  self.project.firmware[Key.RESILIENCE.value] \
-                                                       [Key.RESCUE_IMAGE.value]):
-      # Install script in the rootfs
-      src = self.project.get_dft_base() + "/scripts/dft_clean_bootflag"
-      dest = self.project.get_rootfs_mountpoint() + "/usr/bin/dft_clean_bootflag"
-
-      self.project.logging.debug("Copying " + src + " to " + dest)
-
-      # Copy the file content itself
-      shutil.copyfile(src, dest)
-
-      # Copy ppermission bits
-      shutil.copymode(src, dest)
-
-      # Append the call to the script as last line of /etc/rc.local
-      # (just before exit 0)
-      command = "sed -i -e '/exit 0/i /usr/bin/dft_clean_bootflag' "
-      command += self.project.get_rootfs_mountpoint() + "/etc/rc.local"
-      self.execute_command(command)
-    else:
-      self.project.logging.info("Dual_banks and rescue_image are deactivated. "
-                                "No need to install this script")
 
 
 
