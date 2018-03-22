@@ -1,0 +1,68 @@
+#!/bin/sh
+
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2018 DFT project (http://www.debianfirmwaretoolkit.org).  
+# All rights reserved. Use is subject to license terms.
+#
+#
+# Contributors list :
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#
+#
+
+
+#
+# This script is in charge of cleaning the bootflag set by u-boot when 
+# firmware mode is activated and use either rescue_image, dual_banks or both.
+#
+# The script retrieve the dft_failover argument from kernel cmdline. This 
+# parameter is set by u-boot and identify a file that must be removed from
+# the failover partition (FAT for maximum compatibility with different u-boot).
+#
+# This script is called at the end of the rc.local script. If the "flag" file
+# is not removed, then next time the machine enters boot process u-boot will
+# switch to a bank with flag set or boot to rescue image.
+#
+
+# Stop execution when an error is encountered
+set -e
+
+# Parse command line options to retrieve dft_failover
+for arg in $(cat /proc/cmdline); do
+  case ${arg} in
+  dft_failover=*)
+    value=${arg#dft_failover=}
+    device_type=$(echo ${value} | tr \: \  | cut -d \  -f1)
+    device_number=$(echo ${value} | tr \: \  | cut -d \  -f2)
+    device_partition=$(echo ${value} | tr \: \  | cut -d \  -f3)
+    flag_file=$(echo ${value} | tr \: \  | cut -d \  -f4)
+    ;;
+  esac
+done
+
+# Generate a temporary directory used to mount the failover partition
+mountpoint=$(mktemp -d)
+
+# Mount the failover partition
+if [ "x${device_type}" == "xmmc" ] ;
+then
+  mount /dev/mmcblk${device_number}p${device_partition} ${mountpoint}  
+fi
+
+# Remove the flag
+rm -f ${mountpoint}/${flag_file}
+
+# Sync and umount the partition
+sync
+umount ${mountpoint}
+rmdir ${mountpoint}
