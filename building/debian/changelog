@@ -1,3 +1,9 @@
+dft-buildsystem (0.6.9-1) unstable; urgency=low
+
+  *
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 23 Mar 2018 19:18:00 +0100
+
 dft-buildsystem (0.6.8-1) unstable; urgency=low
 
   * Bump kernel version to 4.15.12
