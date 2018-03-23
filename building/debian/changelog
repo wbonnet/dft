@@ -3,7 +3,7 @@ dft-buildsystem (0.6.8-1) unstable; urgency=low
   * Bump kernel version to 4.15.12
   * Bump u-boot version to 2018.03
 
- -- William Bonnet <wbonnet@theitmakers.com>  Mon, 12 Mar 2018 09:24:00 +0100
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 23 Mar 2018 19:18:00 +0100
 
 dft-buildsystem (0.6.7-1) unstable; urgency=low
 
