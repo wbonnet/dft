@@ -198,7 +198,8 @@ fi
 # Try to load the flag file from current bank, if it fails then it means that
 # it is either the first boot (flag never created), or that it has been cleared
 # thus the boot was clean. In both case boot process can continue.
-if load ${dft_failover_type} ${dft_failover_device}:${dft_failover_partition} ${uenv_addr_r} ${dft_current_bootflag} ; then
+# if load ${dft_failover_type} ${dft_failover_device}:${dft_failover_partition} ${uenv_addr_r} ${dft_current_bootflag} ; then
+if test -e ${dft_failover_type} ${dft_failover_device}:${dft_failover_partition} ${dft_current_bootflag} ; then
   echo "Last boot from bank ${dft_current_bank} was not completed successfully."
 else
   echo "Booting from bank ${dft_current_bank}"
@@ -242,7 +243,8 @@ if itest.s "${dft_dual_banks}" == "1" ; then
   saveenv
 
   # Try again
-  if load ${dft_failover_type} ${dft_failover_device}:${dft_failover_partition} ${uenv_addr_r} ${dft_current_bootflag} ; then
+  # if load ${dft_failover_type} ${dft_failover_device}:${dft_failover_partition} ${uenv_addr_r} ${dft_current_bootflag} ; then
+  if test -e ${dft_failover_type} ${dft_failover_device}:${dft_failover_partition} ${dft_current_bootflag} ; then
     echo "Last boot from bank ${dft_current_bank} was not completed successfully, trying rescue bank..."
   else
     echo "Booting from bank ${dft_current_bank}"
@@ -274,7 +276,8 @@ if itest.s "${dft_use_rescue}" == "1" ; then
   saveenv
 
   # And try to boot
-  if load ${dft_failover_type} ${dft_failover_device}:${dft_failover_partition} ${uenv_addr_r} ${dft_current_bootflag} ; then
+  # if load ${dft_failover_type} ${dft_failover_device}:${dft_failover_partition} ${uenv_addr_r} ${dft_current_bootflag} ; then
+  if test -e ${dft_failover_type} ${dft_failover_device}:${dft_failover_partition} ${dft_current_bootflag} ; then
     echo "Last boot from rescue bank was not completed successfully. Trying to boot from network..."
   else
     echo "Booting from rescue bank..."
@@ -293,72 +296,3 @@ echo "Failed to boot from rescue bank"
 echo "Bork ! Bork ! Bork !"
 
 reset
-
-
-#
-# First let's reset the flag meaning we have modified u-boot environment and need to save it
-#
-setenv flag_env_modified 0
-
-# Checking for the last_boot_clean variable
-if itest.s "x${dft_last_boot_clean}" == "x" ; then
-  # Variable was not yet defined, there is nothing to do but continue with u-boot value
-  echo "Variable dft_last_boot_clean is not defined. This should not happen ! Something went wrong..."
-  echo "This should not happen ! Something went wrong... and uEnv.txt has probably be lost"
-  echo "Trying to regenerate it, but this boot is likely to fail :("
-else
-  # Current dft_last_boot_state is defined, let's compare it with what we expect
-  # TODO : Nope it does not work we have to exchange a token between u-boot and u-env
-  # Should be something like i give you a token, you sent back this token in uEnv
-  #
-  # I should generate a token, set it in uboot, pass it to the kernel and check i retrieve it
-  #
-  if itest.s "x${dft_last_boot_clean}" != "x1" ; then
-    echo "Variable dft_last_boot_clean is not what was expected. Needs to do something !"
-    echo "It is time to switch to next system in sequence"
-  fi
-fi
-
-# Check if uEnv defines a current type
-if itest.s "x${dft_uenv_type}" == "x" ; then
-  # Variable was not yet defined, there is nothing to do but continue with u-boot value
-  echo "Variable dft_uenv_type not defined. Continuing with current value"
-else
-  # Current type is defined, let's compare it with what we expect
-  if itest.s "x${dft_current_type}" != "x${dft_uenv_type}" ; then
-    echo "Variable dft_uenv_type is not what was expected. Needs to do something !"
-  fi
-fi
-
-# Check if uEnv defines a current dev
-if itest.s "x${dft_uenv_device}" == "x" ; then
-  # Variable was not yet defined, there is nothing to do but continue with u-boot value
-  echo "Variable dft_uenv_dev not defined. Continuing with current value"
-else
-  # Current dev is defined, let's compare it with what we expect
-  if itest.s "x${dft_current_device}" != "x${dft_uenv_device}" ; then
-    echo "Variable dft_uenv_device is not what was expected. Needs to do something !"
-  fi
-fi
-
-# Check if uEnv defines a current partition
-if itest.s "x${dft_uenv_partition}" == "x" ; then
-  # Variable was not yet defined, there is nothing to do but continue with u-boot value
-  echo "Variable dft_uenv_partition not defined. Continuing with current value"
-else
-  # Current part is defined, let's compare it with what we expect
-  if itest.s "x${dft_current_partition}" != "x${dft_uenv_partition}" ; then
-    echo "Variable dft_uenv_partition is not what was expected. Needs to do something !"
-  fi
-fi
-
-# Adding a x in variable test prevents errors in case setenv went wrong
-if itest.s "x${flag_env_modified}" == "x1" ; then
-  echo "One or more uenv variables are different from expected values, environment is now saved"
-  saveenv
-fi
-
-
-
-
-
