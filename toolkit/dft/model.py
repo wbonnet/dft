@@ -816,4 +816,4 @@ class Project(object):
       exit(1)
 
     # Retrieve the mode
-    return bool(self.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.ROOTFS.value)
+    return bool(self.image[Key.CONTENT.value][Key.TYPE.value].lower() == Key.FIRMWARE.value)
