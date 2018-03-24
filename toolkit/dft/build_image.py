@@ -1573,160 +1573,163 @@ class BuildImage(CliCommand):
       command += ' -e "s/__DFT_VERSION__/' + release.__version__ + '/g" '
       command += ' -e "s/__GENERATION_DATE__/' + timestamp + '/g" '
 
-     # ----- Replace DUAL_BANKS FLAG -------------------------------------------------------------
-      command += ' -e "s/__DFT_DUAL_BANKS__/'
-      if Key.DUAL_BANKS.value in self.project.firmware[Key.RESILIENCE.value] and \
-                                 self.project.firmware[Key.RESILIENCE.value][Key.DUAL_BANKS.value]:
-        # Flag is activate
-        command += '1'
-      else:
-        # Flag is deactivated
-        command += '0'
 
-      # Complete the sed command generation
-      command += '/g" '
+      # ----- These keys have to be processed only in case of firmware -----------------------------
+      if self.project.is_image_content_firmware():
+        # ----- Replace DUAL_BANKS FLAG --------------------------------------------------------------
+        command += ' -e "s/__DFT_DUAL_BANKS__/'
+        if Key.DUAL_BANKS.value in self.project.firmware[Key.RESILIENCE.value] and \
+                                   self.project.firmware[Key.RESILIENCE.value][Key.DUAL_BANKS.value]:
+          # Flag is activate
+          command += '1'
+        else:
+          # Flag is deactivated
+          command += '0'
 
-      # ----- Replace DUAL_BANKS FLAG -------------------------------------------------------------
-      command += ' -e "s/__DFT_USE_RESCUE__/'
-      if Key.RESCUE_IMAGE.value in self.project.firmware[Key.RESILIENCE.value] and \
-                                   self.project.firmware[Key.RESILIENCE.value]\
-                                                        [Key.RESCUE_IMAGE.value]:
-        # Flag is activated
-        command += '1'
-      else:
-        # Flag is deactivated
-        command += '0'
-
-      # Complete the sed command generation
-      command += '/g" '
-
-      # ----- Replace STORAGE_DEFAULT_BANK  -------------------------------------------------------
-      # defqult bank at first boot is alzays bank_0
-      command += ' -e "s/__DFT_STORAGE_DEFAULT_BANK__/0/g" '
-
-      # ----- Replace STORAGE_DEFAULT_TYPE  -------------------------------------------------------
-      command += ' -e "s/__DFT_STORAGE_DEFAULT_TYPE__/'
-      command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                          [Key.BANK_0.value][Key.DEVICE_TYPE.value])
-      command += '/g" '
-
-      # ----- Replace STORAGE_DEFAULT_DEVICE  -----------------------------------------------------
-      command += ' -e "s/__DFT_STORAGE_DEFAULT_DEVICE__/'
-      command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                          [Key.BANK_0.value][Key.DEVICE_NUMBER.value])
-      command += '/g" '
-
-      # ----- Replace STORAGE_DEFAULT_PARTITION  --------------------------------------------------
-      command += ' -e "s/__DFT_STORAGE_DEFAULT_PARTITION__/'
-      command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                          [Key.BANK_0.value][Key.PARTITION.value])
-      command += '/g" '
-
-      # ----- Replace DFT_BANK0_TYPE  -------------------------------------------------------------
-      command += ' -e "s/__DFT_BANK0_TYPE__/'
-      command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                          [Key.BANK_0.value][Key.DEVICE_TYPE.value])
-      command += '/g" '
-
-      # ----- Replace DFT_BANK0_DEVICE  -----------------------------------------------------------
-      command += ' -e "s/__DFT_BANK0_DEVICE__/'
-      command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                          [Key.BANK_0.value][Key.DEVICE_NUMBER.value])
-      command += '/g" '
-
-      # ----- Replace DFT_BANK0_PARTITION  --------------------------------------------------------
-      command += ' -e "s/__DFT_BANK0_PARTITION__/'
-      command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                          [Key.BANK_0.value][Key.PARTITION.value])
-      command += '/g" '
-
-      # Generate sed commands only if option is activated
-      if Key.DUAL_BANKS.value in self.project.firmware[Key.RESILIENCE.value] and \
-                           self.project.firmware[Key.RESILIENCE.value][Key.DUAL_BANKS.value]:
-        # ----- Replace DFT_BANK1_TYPE  -----------------------------------------------------------
-        command += ' -e "s/__DFT_BANK1_TYPE__/'
-        command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                            [Key.BANK_1.value][Key.DEVICE_TYPE.value])
+        # Complete the sed command generation
         command += '/g" '
 
-        # ----- Replace DFT_BANK1_DEVICE  ---------------------------------------------------------
-        command += ' -e "s/__DFT_BANK1_DEVICE__/'
-        command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                            [Key.BANK_1.value][Key.DEVICE_NUMBER.value])
+        # ----- Replace DUAL_BANKS FLAG -------------------------------------------------------------
+        command += ' -e "s/__DFT_USE_RESCUE__/'
+        if Key.RESCUE_IMAGE.value in self.project.firmware[Key.RESILIENCE.value] and \
+                                     self.project.firmware[Key.RESILIENCE.value]\
+                                                          [Key.RESCUE_IMAGE.value]:
+          # Flag is activated
+          command += '1'
+        else:
+          # Flag is deactivated
+          command += '0'
+
+        # Complete the sed command generation
         command += '/g" '
 
-        # ----- Replace DFT_BANK1_PARTITION  ------------------------------------------------------
-        command += ' -e "s/__DFT_BANK1_PARTITION__/'
+        # ----- Replace STORAGE_DEFAULT_BANK  -------------------------------------------------------
+        # defqult bank at first boot is alzays bank_0
+        command += ' -e "s/__DFT_STORAGE_DEFAULT_BANK__/0/g" '
+
+        # ----- Replace STORAGE_DEFAULT_TYPE  -------------------------------------------------------
+        command += ' -e "s/__DFT_STORAGE_DEFAULT_TYPE__/'
         command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                            [Key.BANK_1.value][Key.PARTITION.value])
+                                            [Key.BANK_0.value][Key.DEVICE_TYPE.value])
         command += '/g" '
 
-      # Generate sed commands only if option is activated
-      if Key.RESCUE_IMAGE.value in self.project.firmware[Key.RESILIENCE.value] and \
-                           self.project.firmware[Key.RESILIENCE.value][Key.RESCUE_IMAGE.value]:
-        # ----- Replace DFT_RESCUE_TYPE  ----------------------------------------------------------
-        command += ' -e "s/__DFT_RESCUE_TYPE__/'
+        # ----- Replace STORAGE_DEFAULT_DEVICE  -----------------------------------------------------
+        command += ' -e "s/__DFT_STORAGE_DEFAULT_DEVICE__/'
         command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                            [Key.RESCUE.value][Key.DEVICE_TYPE.value])
+                                            [Key.BANK_0.value][Key.DEVICE_NUMBER.value])
         command += '/g" '
 
-        # ----- Replace DFT_RESCUE_DEVICE  --------------------------------------------------------
-        command += ' -e "s/__DFT_RESCUE_DEVICE__/'
+        # ----- Replace STORAGE_DEFAULT_PARTITION  --------------------------------------------------
+        command += ' -e "s/__DFT_STORAGE_DEFAULT_PARTITION__/'
         command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                            [Key.RESCUE.value][Key.DEVICE_NUMBER.value])
+                                            [Key.BANK_0.value][Key.PARTITION.value])
         command += '/g" '
 
-        # ----- Replace DFT_RESCUE_PARTITION  -----------------------------------------------------
-        command += ' -e "s/__DFT_RESCUE_PARTITION__/'
+        # ----- Replace DFT_BANK0_TYPE  -------------------------------------------------------------
+        command += ' -e "s/__DFT_BANK0_TYPE__/'
         command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                            [Key.RESCUE.value][Key.PARTITION.value])
+                                            [Key.BANK_0.value][Key.DEVICE_TYPE.value])
         command += '/g" '
 
-      # Generate sed commands only if option is activated
-      if Key.UPDATE_PARTITION.value in self.project.firmware[Key.RESILIENCE.value] and \
-                           self.project.firmware[Key.RESILIENCE.value][Key.UPDATE_PARTITION.value]:
-        # ----- Replace DFT_UPDATE_TYPE  ----------------------------------------------------------
-        command += ' -e "s/__DFT_UPDATE_TYPE__/'
+        # ----- Replace DFT_BANK0_DEVICE  -----------------------------------------------------------
+        command += ' -e "s/__DFT_BANK0_DEVICE__/'
         command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                            [Key.UPDATE.value][Key.DEVICE_TYPE.value])
+                                            [Key.BANK_0.value][Key.DEVICE_NUMBER.value])
         command += '/g" '
 
-        # ----- Replace DFT_UPDATE_DEVICE  --------------------------------------------------------
-        command += ' -e "s/__DFT_UPDATE_DEVICE__/'
+        # ----- Replace DFT_BANK0_PARTITION  --------------------------------------------------------
+        command += ' -e "s/__DFT_BANK0_PARTITION__/'
         command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                            [Key.UPDATE.value][Key.DEVICE_NUMBER.value])
+                                            [Key.BANK_0.value][Key.PARTITION.value])
         command += '/g" '
 
-        # ----- Replace DFT_UPDATE_PARTITION  -----------------------------------------------------
-        command += ' -e "s/__DFT_UPDATE_PARTITION__/'
-        command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                            [Key.UPDATE.value][Key.PARTITION.value])
-        command += '/g" '
+        # Generate sed commands only if option is activated
+        if Key.DUAL_BANKS.value in self.project.firmware[Key.RESILIENCE.value] and \
+                             self.project.firmware[Key.RESILIENCE.value][Key.DUAL_BANKS.value]:
+          # ----- Replace DFT_BANK1_TYPE  -----------------------------------------------------------
+          command += ' -e "s/__DFT_BANK1_TYPE__/'
+          command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
+                                              [Key.BANK_1.value][Key.DEVICE_TYPE.value])
+          command += '/g" '
 
-      # Generate sed commands only if option is activated. Failover is needed only for dual bank
-      # or rescue
-      if (Key.DUAL_BANKS.value in self.project.firmware[Key.RESILIENCE.value] and \
-                                  self.project.firmware[Key.RESILIENCE.value]\
-                                                       [Key.DUAL_BANKS.value]) or \
-         (Key.RESCUE_IMAGE.value in self.project.firmware[Key.RESILIENCE.value] and \
-                                    self.project.firmware[Key.RESILIENCE.value][Key.RESCUE_IMAGE]):
-        # ----- Replace DFT_FAILOVER_TYPE  --------------------------------------------------------
-        command += ' -e "s/__DFT_FAILOVER_TYPE__/'
-        command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                            [Key.FAILOVER.value][Key.DEVICE_TYPE.value])
-        command += '/g" '
+          # ----- Replace DFT_BANK1_DEVICE  ---------------------------------------------------------
+          command += ' -e "s/__DFT_BANK1_DEVICE__/'
+          command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
+                                              [Key.BANK_1.value][Key.DEVICE_NUMBER.value])
+          command += '/g" '
 
-        # ----- Replace DFT_FAILOVER_DEVICE  ------------------------------------------------------
-        command += ' -e "s/__DFT_FAILOVER_DEVICE__/'
-        command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                            [Key.FAILOVER.value][Key.DEVICE_NUMBER.value])
-        command += '/g" '
+          # ----- Replace DFT_BANK1_PARTITION  ------------------------------------------------------
+          command += ' -e "s/__DFT_BANK1_PARTITION__/'
+          command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
+                                              [Key.BANK_1.value][Key.PARTITION.value])
+          command += '/g" '
 
-        # ----- Replace DFT_FAILOVER_PARTITION  ---------------------------------------------------
-        command += ' -e "s/__DFT_FAILOVER_PARTITION__/'
-        command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                            [Key.FAILOVER.value][Key.PARTITION.value])
-        command += '/g" '
+        # Generate sed commands only if option is activated
+        if Key.RESCUE_IMAGE.value in self.project.firmware[Key.RESILIENCE.value] and \
+                             self.project.firmware[Key.RESILIENCE.value][Key.RESCUE_IMAGE.value]:
+          # ----- Replace DFT_RESCUE_TYPE  ----------------------------------------------------------
+          command += ' -e "s/__DFT_RESCUE_TYPE__/'
+          command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
+                                              [Key.RESCUE.value][Key.DEVICE_TYPE.value])
+          command += '/g" '
+
+          # ----- Replace DFT_RESCUE_DEVICE  --------------------------------------------------------
+          command += ' -e "s/__DFT_RESCUE_DEVICE__/'
+          command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
+                                              [Key.RESCUE.value][Key.DEVICE_NUMBER.value])
+          command += '/g" '
+
+          # ----- Replace DFT_RESCUE_PARTITION  -----------------------------------------------------
+          command += ' -e "s/__DFT_RESCUE_PARTITION__/'
+          command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
+                                              [Key.RESCUE.value][Key.PARTITION.value])
+          command += '/g" '
+
+        # Generate sed commands only if option is activated
+        if Key.UPDATE_PARTITION.value in self.project.firmware[Key.RESILIENCE.value] and \
+                             self.project.firmware[Key.RESILIENCE.value][Key.UPDATE_PARTITION.value]:
+          # ----- Replace DFT_UPDATE_TYPE  ----------------------------------------------------------
+          command += ' -e "s/__DFT_UPDATE_TYPE__/'
+          command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
+                                              [Key.UPDATE.value][Key.DEVICE_TYPE.value])
+          command += '/g" '
+
+          # ----- Replace DFT_UPDATE_DEVICE  --------------------------------------------------------
+          command += ' -e "s/__DFT_UPDATE_DEVICE__/'
+          command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
+                                              [Key.UPDATE.value][Key.DEVICE_NUMBER.value])
+          command += '/g" '
+
+          # ----- Replace DFT_UPDATE_PARTITION  -----------------------------------------------------
+          command += ' -e "s/__DFT_UPDATE_PARTITION__/'
+          command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
+                                              [Key.UPDATE.value][Key.PARTITION.value])
+          command += '/g" '
+
+        # Generate sed commands only if option is activated. Failover is needed only for dual bank
+        # or rescue
+        if (Key.DUAL_BANKS.value in self.project.firmware[Key.RESILIENCE.value] and \
+                                    self.project.firmware[Key.RESILIENCE.value]\
+                                                         [Key.DUAL_BANKS.value]) or \
+           (Key.RESCUE_IMAGE.value in self.project.firmware[Key.RESILIENCE.value] and \
+                                      self.project.firmware[Key.RESILIENCE.value][Key.RESCUE_IMAGE]):
+          # ----- Replace DFT_FAILOVER_TYPE  --------------------------------------------------------
+          command += ' -e "s/__DFT_FAILOVER_TYPE__/'
+          command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
+                                              [Key.FAILOVER.value][Key.DEVICE_TYPE.value])
+          command += '/g" '
+
+          # ----- Replace DFT_FAILOVER_DEVICE  ------------------------------------------------------
+          command += ' -e "s/__DFT_FAILOVER_DEVICE__/'
+          command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
+                                              [Key.FAILOVER.value][Key.DEVICE_NUMBER.value])
+          command += '/g" '
+
+          # ----- Replace DFT_FAILOVER_PARTITION  ---------------------------------------------------
+          command += ' -e "s/__DFT_FAILOVER_PARTITION__/'
+          command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
+                                              [Key.FAILOVER.value][Key.PARTITION.value])
+          command += '/g" '
 
      # Command has been generated, let's execute the replacement with sed
       command += " " + output_file
