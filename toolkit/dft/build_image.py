@@ -1743,3 +1743,15 @@ class BuildImage(CliCommand):
 
       # Remove temp file once binary boot.scr has been generated
       os.remove(output_file)
+
+      # Copy kernel_cmdline_extra_parameters templates to /boot
+      src = self.project.get_dft_base() + "/scripts/kernel_cmdline_extra_parameters.txt"
+      dest = self.project.get_rootfs_mountpoint() + "/boot/kernel_cmdline_extra_parameters.txt"
+      self.project.logging.debug("Copying " + src + " to " + dest)
+      shutil.copyfile(src, dest)
+
+      # Copy uEnv.txt templates to /boot
+      src = self.project.get_dft_base() + "/scripts/uEnv.txt"
+      dest = self.project.get_rootfs_mountpoint() + "/boot/uEnv.txt"
+      self.project.logging.debug("Copying " + src + " to " + dest)
+      shutil.copyfile(src, dest)

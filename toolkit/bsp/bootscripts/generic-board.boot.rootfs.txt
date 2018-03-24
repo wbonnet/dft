@@ -38,7 +38,7 @@ if test -e mmc ${mmcdev}:${mmcpart} ${cmdline_file}; then
 fi
 
 # Defines the mmcargs only once environment files have been loaded
-setenv mmcargs        'setenv bootargs console=${console} root=${mmcroot} rootfstype=${fstype} ${kernel_cmdline_extra_parameters}'
+setenv mmcargs 'setenv bootargs console=${console} root=${mmcroot} rootfstype=${fstype} ${kernel_cmdline_extra_parameters}'
 
 #
 # Definition of the macro needed to load DTB Kernel and initrd to ram

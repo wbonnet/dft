@@ -1,0 +1,9 @@
+#
+# This file is loaded by u-boot during boot sequence. Variables defined in this script
+# are merged to u-boot environment before loading kernel and booting it.
+#
+# You can define your own variables here, but myou must respect u-boot syntax or boot
+# process may fail.
+#
+# Kernel extra parameters should be defined in kernel_cmdline_extra_parameters.txt file
+#

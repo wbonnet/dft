@@ -1,0 +1,9 @@
+#
+# This file is loaded by u-boot during boot sequence. It expect to have a variable
+# name kernel_cmdline_extra_parameters. Its content will be merged to kernel cmdline
+# during boot. 
+#
+# You can use this file to pass your own extra or custom parameters to the kernel,
+# eg :  cgroup_enable=memory cgroup_memory=1
+#
+# kernel_cmdline_extra_parameters="cgroup_enable=memory cgroup_memory=1"
