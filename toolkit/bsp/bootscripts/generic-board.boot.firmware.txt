@@ -18,9 +18,9 @@
 #
 # ----------------------------------------------------------------------------
 
-setenv initrd_file            initrd.img
-setenv fdtfile                'default.dtb'
-setenv image                  zImage
+setenv initrd_file            boot/initrd.img
+setenv fdtfile                boot/default.dtb
+setenv image                  boot/zImage
 setenv dft_bank0_bootflag     dft_bank0_boot_was_dirty
 setenv dft_bank1_bootflag     dft_bank1_boot_was_dirty
 setenv dft_rescue_bootflag    dft_rescue_boot_was_dirty
