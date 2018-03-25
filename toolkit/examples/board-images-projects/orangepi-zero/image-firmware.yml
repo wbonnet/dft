@@ -167,7 +167,6 @@ devices:
         ext_fs_tune: "-m 0"
       }
     - {
-        name: "extension" ,
         type: "extended" ,
         size: "680" ,
         unit: "MB" ,
