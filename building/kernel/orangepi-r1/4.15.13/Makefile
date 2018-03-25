@@ -26,7 +26,7 @@ KERNEL_VERSION=4.15.13
 include ../board.mk
 
 # Defines the patches to apply on the sources
-# PATCHFILES += 0000_some_patch.diff
+PATCHFILES += 0000-Add-support-for-Orange-PI-R1-board-from-Kernel-4.16-rc4.patch
 
 # Include build system
 include buildsystem/dft.mk
