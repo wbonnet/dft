@@ -253,12 +253,15 @@ class AssembleFirmware(CliCommand):
 
     # Copy the stacking script to /tmp in the rootfs
     source_dir = self.project.get_rootfs_mountpoint() + '/boot/'
+    command = "cp -fra " + source_dir + " " + self.project.get_firmware_content_directory()
+    self.execute_command(command)
 
-    for copy_target in os.listdir(source_dir):
-      copy_source_path = os.path.join(source_dir, copy_target)
-      copy_target_path = os.path.join(self.project.get_firmware_content_directory(), copy_target)
-      command = "cp -fra " + copy_source_path + " " + copy_target_path
-      self.execute_command(command)
+    # for copy_target in os.listdir(source_dir):
+    #   copy_source_path = os.path.join(source_dir, copy_target)
+    #   copy_target_path = os.path.join(self.project.get_firmware_content_directory(), copy_target)
+    #   copy_target_path = self.project.get_firmware_content_directory() + "/"
+    #   command = "cp -fra " + copy_source_path + " " + copy_target_path
+    #   self.execute_command(command)
 
 
 
