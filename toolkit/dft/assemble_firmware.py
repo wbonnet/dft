@@ -248,6 +248,9 @@ class AssembleFirmware(CliCommand):
     # Output current task to logs
     self.project.logging.info("Copying bootchain to firmware directory")
 
+    # Create boot  under firmware directory
+    os.makedirs(self.project.get_firmware_content_directory(), exist_ok=True)
+
     # Copy the stacking script to /tmp in the rootfs
     source_dir = self.project.get_rootfs_mountpoint() + '/boot/'
 
