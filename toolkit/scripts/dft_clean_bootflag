@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #
 # The contents of this file are subject to the Apache 2.0 license you may not
@@ -10,7 +10,7 @@
 # License.
 #
 #
-# Copyright 2018 DFT project (http://www.debianfirmwaretoolkit.org).  
+# Copyright 2018 DFT project (http://www.debianfirmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
 #
@@ -22,10 +22,10 @@
 
 
 #
-# This script is in charge of cleaning the bootflag set by u-boot when 
+# This script is in charge of cleaning the bootflag set by u-boot when
 # firmware mode is activated and use either rescue_image, dual_banks or both.
 #
-# The script retrieve the dft_failover argument from kernel cmdline. This 
+# The script retrieve the dft_failover argument from kernel cmdline. This
 # parameter is set by u-boot and identify a file that must be removed from
 # the failover partition (FAT for maximum compatibility with different u-boot).
 #
@@ -56,7 +56,7 @@ mountpoint=$(mktemp -d)
 # Mount the failover partition
 if [ "x${device_type}" == "xmmc" ] ;
 then
-  mount /dev/mmcblk${device_number}p${device_partition} ${mountpoint}  
+  mount /dev/mmcblk${device_number}p${device_partition} ${mountpoint}
 fi
 
 # Remove the flag
