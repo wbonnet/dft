@@ -1051,8 +1051,8 @@ class BuildImage(CliCommand):
 
         # Retrieve the partition file system type. It should be defined or we can't label it
         if Key.FILESYSTEM.value not in partition:
-          self.project.logging.error("Partition label is defined but there is no filesystem set \
-                                     for partition " + str(part_index))
+          self.project.logging.error("Partition label is defined but there is no filesystem set" \
+                                     " for partition " + str(part_index))
         else:
           part_filesystem = partition[Key.FILESYSTEM.value].lower()
 
