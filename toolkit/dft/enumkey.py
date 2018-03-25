@@ -346,3 +346,4 @@ class Key(Enum):
   X86 = "x86"
   X86_64 = "x86_64"
   XTENSA = "xtensa"
+  XZ = "xz"
