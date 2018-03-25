@@ -1745,6 +1745,7 @@ class BuildImage(CliCommand):
       os.remove(output_file)
 
       # Copy kernel_cmdline_extra_parameters templates to /boot
+      os.makedirs(target + "/boot/", exist_ok=True)
       src = self.project.get_dft_base() + "/scripts/kernel_cmdline_extra_parameters.txt"
       dest = target + "/boot/kernel_cmdline_extra_parameters.txt"
       self.project.logging.debug("Copying " + src + " to " + dest)
