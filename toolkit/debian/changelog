@@ -1,8 +1,16 @@
+dft (0.6.9-2) unstable; urgency=low
+
+  * Fix version in CLI
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 26 Mar 2018 19:25:00 +0100
+
 dft (0.6.9-1) unstable; urgency=low
 
-  * 
+  * Fix several errors in rootfs bootscript generation
+  * Firmware bootchain is moved under a boot directory
+  * Add support for boot/uEnv.txt and boot/kernel_cmdline_extra_parameters.txt`
 
- -- William Bonnet <wbonnet@theitmakers.com>  Fri, 23 Mar 2018 19:18:00 +0100
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 26 Mar 2018 09:25:00 +0100
 
 dft (0.6.8-1) unstable; urgency=low
 

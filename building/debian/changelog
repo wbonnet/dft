@@ -1,8 +1,9 @@
 dft-buildsystem (0.6.9-1) unstable; urgency=low
 
-  *
+  * Bump kernel version do 4.15.13
+  * Fix patch for Orange Pi R1 (previous kernel was not booting because of a missing DTB)
 
- -- William Bonnet <wbonnet@theitmakers.com>  Fri, 23 Mar 2018 19:18:00 +0100
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 26 Mar 2018 09:25:00 +0100
 
 dft-buildsystem (0.6.8-1) unstable; urgency=low
 
