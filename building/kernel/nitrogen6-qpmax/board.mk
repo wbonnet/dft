@@ -26,7 +26,7 @@ BOARD_NAME  = nitrogen6-qpmax
 BOARD_ARCH  = armv7l
 
 # Defines the default dtb to use (symlink used by generic boot.scr)
-DEFAULT_DTB = unknown
+DEFAULT_DTB = imx6qp-nitrogen6_max.dtb 
 
 # Defines if all dtb should be included in the generated package (uncomment
 # and set value to 1) or if only default dtb is included (keep commented or

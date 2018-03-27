@@ -1,1 +1,1 @@
-generic-board.boot.rootfs.txt
+imx6-board.boot.rootfs.txt

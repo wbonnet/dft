@@ -1,1 +1,1 @@
-generic-board.boot.firmware.txt
+imx6-board.boot.firmware.txt
