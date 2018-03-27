@@ -344,7 +344,7 @@ class BuildRootFS(CliCommand):
       logging.info("running debootstrap")
 
     # Include gnupg package in the list of software installed in the deboostrap chroot
-    debootstrap_command += " --include=gnupg"
+    debootstrap_command += " --include=gnupg,dirmngr,apt-transport-https"
 
     # Add the target, mount point and repository url to the debootstrap command
     debootstrap_command += " " +  self.project.get_target_version() + " "
