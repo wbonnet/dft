@@ -108,14 +108,14 @@ dft_os_apt:
     # in the sources.list file
 
     # Defines the file basename. It will be stored under /etc/apt/sources.list.d/{{ file }}.list
-    - file: cisofy-lynis
+    #    - file: cisofy-lynis
       # Base URL of the repository. No default value
-      url: 'https://packages.cisofy.com/community/lynis/deb/'
+      #      url: 'https://packages.cisofy.com/community/lynis/deb/'
       # Suite version. No default value
-      suite: 'testing'
+      # suite: 'testing'
       # List of sections to use ( comma separated ). No default value
-      sections: 'main'
+      # sections: 'main'
       # Are packages URL generated (stating with deb). Default is True
-      deb: True
+      # deb: True
       # Are sources URL generated (stating with deb-src). Default is False
-      debsrc: False
+      # debsrc: False

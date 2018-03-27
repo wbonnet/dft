@@ -331,13 +331,28 @@ class CliCommand(object):
     """This method add a new signing key to the list of known keys.
     """
 
-    # Import the public key in the APT tools
 #TODO keyserver should be a configuration value
+    
+    # Import the key into GnuPG - It has to be done in three step because
+    # the apt-key recv does not work without a terminal and a stdout
     command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
-    command += " apt-key adv --recv-keys --keyserver keyserver.ubuntu.com " + key
+    command += " gpg --keyserver keyserver.ubuntu.com --recv " + key
     self.execute_command(command)
 
+    # Export the key to a temporary file
+    key_file = "/tmp/temp_keyserver.ubuntu.com_" + key
+    command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
+    command += " gpg --export --armor " + key + " > " + key_file
+    self.execute_command(command)
 
+    command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
+    command += " apt-key add  " + key_file
+    self.execute_command(command)
+
+    # Finally remove the temporary file
+    os.remove(self.project.get_rootfs_mountpoint() + key_file)
+
+# TODO remove the imported pubkey from gnupg
 
   # -------------------------------------------------------------------------
   #
