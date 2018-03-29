@@ -31,4 +31,4 @@ DEFAULT_DTB = imx6qp-nitrogen6_max.dtb
 # Defines if all dtb should be included in the generated package (uncomment
 # and set value to 1) or if only default dtb is included (keep commented or
 # set the value to 0) 
-# INCLUDE_ALL_DTB_IN_PACKAGE = 0
+INCLUDE_ALL_DTB_IN_PACKAGE = 0

@@ -36,9 +36,13 @@ KERNEL_GIT_URL    = https://github.com/boundarydevices
 KERNEL_GIT_REPO   = linux-imx6
 KERNEL_GIT_BRANCH = boundary-imx_4.1.15_2.0.0_ga
 
-# Uncomment to recreate the config file. Otherwise confif from fileS/is used
+# Uncomment to recreate the config file. Otherwise confif from files/is used
 # USE_DEFCONFIG     = boundary_defconfig
 # USE_CONFIG_FILE   =
+
+# Remove the git hash from kernel filenale
+post-install:
+	@cd $(INSTALL_DIR) && for file in $$(ls boot/*-g7118fd327e6) ; do newfile=$$(echo $$file | sed s/-g7118fd327e6//g) ; mv $$file $$newfile ; done
 
 # Include build system
 include buildsystem/dft.mk
