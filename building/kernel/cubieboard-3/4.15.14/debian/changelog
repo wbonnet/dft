@@ -1,0 +1,17 @@
+linux-kernel-cubieboard-3 (4.15.14-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 29 Mar 2018 11:43:55 +0200
+
+linux-image-cubieboard-3 (4.15.14-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 29 Mar 2018 11:43:55 +0200
+
+linux-headers-cubieboard-3 (4.15.14-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 29 Mar 2018 11:43:55 +0200
