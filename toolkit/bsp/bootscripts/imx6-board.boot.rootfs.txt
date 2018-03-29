@@ -1,16 +1,15 @@
-
 # ----------------------------------------------------------------------------
 #
 # DFT rootfs u-boot script for Generic Board
 #
-# Generation date : __GENERATION_DATE__
-# DFT version     : __DFT_VERSION__
+# Generation date : 2018-03-27 18:48:44
+# DFT version     : 0.6.10
 #
 
 #
 # Definition of environment variables
 #
-setenv fstype         __FILESYSTEM_TYPE__
+setenv fstype         ext4
 setenv fdtfile        'boot/default.dtb'
 setenv image          'boot/zImage'
 setenv mmcroot        '/dev/mmcblk0p1 rootwait rw'
@@ -18,6 +17,16 @@ setenv mmcdev         0
 setenv mmcpart        1
 setenv uenv_file      boot/uEnv.txt
 setenv cmdline_file   boot/kernel_cmdline_extra_parameters.txt
+
+# Check if console environment variable is set, otherwise set ttymxc1 by default 
+if itest.s "x${console}" == "x" ; then
+  setenv console   ttymxc1
+fi
+
+# Check if baudrate environment variable is set, otherwise set 115200 by default
+if itest.s "x${baudrate}" == "x" ; then
+  setenv baudrate  115200
+fi
 
 #
 # Test if a uEnv file exist in /boot, and try to merge it
@@ -37,16 +46,13 @@ if test -e mmc ${mmcdev}:${mmcpart} ${cmdline_file}; then
 fi
 
 # Defines the mmcargs only once environment files have been loaded
-setenv mmcargs 'setenv bootargs console=${console},115200 root=${mmcroot} rootfstype=${fstype} ${kernel_cmdline_extra_parameters}'
+setenv mmcargs 'setenv bootargs console=${console},${baudrate} root=${mmcroot} rootfstype=${fstype} ${kernel_cmdline_extra_parameters}'
 
 #
 # Definition of the macro needed to load DTB Kernel and initrd to ram
 #
 setenv loadfdt 'load mmc ${mmcdev}:${mmcpart} ${fdt_addr} ${fdtfile}'
 setenv loadimage 'load mmc ${mmcdev}:${mmcpart} ${loadaddr} ${image}'
-# ext4load mmc 0:1 ${fdt_addr} boot/dtb/imx6qp-nitrogen6_max.dtb
-# ext4load mmc 0:1 ${loadaddr} boot/vmlinuz-4.1.15-g7118fd327e6
-
 
 #
 # Definition of the macro needed to run the kernel using only dtb (no initrd in rootfs mode)
@@ -57,3 +63,4 @@ setenv mmcboot 'run mmcargs ; run loadimage ; run loadfdt ; bootz ${loadaddr} - 
 # Thunderbirds are go !
 #
 run mmcboot
+

@@ -61,9 +61,9 @@ pinning:
   # Each item from the list defines an entry in the pinning file
   # Please see : https://wiki.debian.org/AptPreferences for reference
   - package: "*"
-    Pin: "release c=main"
+    Pin: "release o=Debian"
     Pin-Priority: 500
  
   - package: "*"
-    Pin: "release c=boundarydevices"
+    Pin: "release o=linode.boundarydevices.com"
     Pin-Priority: 1001
