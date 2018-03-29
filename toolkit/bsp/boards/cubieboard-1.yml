@@ -50,7 +50,7 @@ kernel:
 
   # List of packages to install from the repository
   packages:
-    - linux-image-cubieboard-1
+    - linux-image-cubieboard-3
 
 
 # The uboot section defines the different parameters needed to select and install the uboot
