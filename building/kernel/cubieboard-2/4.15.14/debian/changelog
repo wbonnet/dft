@@ -1,3 +1,15 @@
+linux-kernel-cubieboard-2 (4.15.14-3) unstable; urgency=medium
+
+  * Add CONFIG_CRYPTO_SHA1_ARM_NEON=y and CONFIG_CRYPTO_CHACHA20_NEON=y
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 31 Mar 2018 16:25:00 +0200
+
+linux-kernel-cubieboard-2 (4.15.14-2) unstable; urgency=medium
+
+  * Add CONFIG_USER_NS and CONFIG_DEBUG_BLK_CGROUP.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 31 Mar 2018 10:35:00 +0200
+
 linux-kernel-cubieboard-2 (4.15.14-1) unstable; urgency=medium
 
   * Initial release.
