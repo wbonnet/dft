@@ -153,7 +153,7 @@ project_definition:
 #
 # ----------------------------------------------------------------------------
 building_sequences:
-  
+
 # Sequences are defined as a list. Each list entry is distinct sequence.
 # dft invocation will run one and only one sequence, according to the
 # arguments you provided.
