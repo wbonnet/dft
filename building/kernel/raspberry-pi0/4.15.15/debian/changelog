@@ -1,0 +1,17 @@
+linux-kernel-raspberry-pi0 (4.15.15-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 31 Mar 2018 22:24:29 +0200
+
+linux-image-raspberry-pi0 (4.15.15-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 31 Mar 2018 22:24:29 +0200
+
+linux-headers-raspberry-pi0 (4.15.15-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 31 Mar 2018 22:24:29 +0200
