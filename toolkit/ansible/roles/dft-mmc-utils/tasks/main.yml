@@ -22,4 +22,4 @@
 #
 
 ---
-- include: smartmontools.yml
+- include: packages.yml
