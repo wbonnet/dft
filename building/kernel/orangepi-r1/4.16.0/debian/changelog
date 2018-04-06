@@ -2,16 +2,16 @@ linux-kernel-orangepi-r1 (4.16.0-1) unstable; urgency=medium
 
   * Initial release.
 
- -- William Bonnet <wbonnet@theitmakers.com>  Tue, 03 Apr 2018 21:21:21 +0200
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 06 Apr 2018 08:19:59 +0200
 
 linux-image-orangepi-r1 (4.16.0-1) unstable; urgency=medium
 
   * Initial release.
 
- -- William Bonnet <wbonnet@theitmakers.com>  Tue, 03 Apr 2018 21:21:21 +0200
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 06 Apr 2018 08:19:59 +0200
 
 linux-headers-orangepi-r1 (4.16.0-1) unstable; urgency=medium
 
   * Initial release.
  
- -- William Bonnet <wbonnet@theitmakers.com>  Tue, 03 Apr 2018 21:21:21 +0200
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 06 Apr 2018 08:19:59 +0200

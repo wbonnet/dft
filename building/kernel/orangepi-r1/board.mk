@@ -23,7 +23,7 @@
 BOARD_NAME  = orangepi-r1
 
 # Defines boards architecture (armv7l, armv6l, aarch64, x86_64, i386, etc.)
-BOARD_ARCH  = armv7l 
+BOARD_ARCH  = armv7l
 
 # Defines the default dtb to use (symlink used by generic boot.scr)
 DEFAULT_DTB = sun8i-h2-plus-orangepi-r1.dtb 
