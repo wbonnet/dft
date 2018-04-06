@@ -16,5 +16,7 @@ Depends: ${misc:Depends},
          libssl-dev,
          swig,
          python3-cxx-dev,
+         flex,
+         bison,
          make
 Description: Debian Framework Toolkit build system

@@ -194,7 +194,6 @@ devices:
         ext_fs_tune: "-m 0"
       }
     - {
-        name: "failover" ,
         type: "logical" ,
         size: "16" ,
         unit: "MB" ,

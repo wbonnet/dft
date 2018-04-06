@@ -28,4 +28,4 @@ USE_CONFIG_FILE        =
 USE_DEFCONFIG          = Cubietruck_plus_defconfig
 
 # Defines the list of files to copy (path is relative to build dir)
-UBOOT_BINARY_FILE      = u-boot-sunxi-with-spl.bin
+UBOOT_BINARY_FILE      = u-boot-sunxi-with-spl.bin  
