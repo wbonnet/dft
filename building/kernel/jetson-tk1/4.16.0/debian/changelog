@@ -1,0 +1,17 @@
+linux-kernel-jetson-tk1 (4.16.0-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 06 Apr 2018 08:16:50 +0200
+
+linux-image-jetson-tk1 (4.16.0-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 06 Apr 2018 08:16:50 +0200
+
+linux-headers-jetson-tk1 (4.16.0-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 06 Apr 2018 08:16:50 +0200
