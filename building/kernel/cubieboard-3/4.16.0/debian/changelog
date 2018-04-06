@@ -1,17 +1,17 @@
-linux-kernel-cubieboard-3 (4.16-1) unstable; urgency=medium
+linux-kernel-cubieboard-3 (4.16.0-1) unstable; urgency=medium
 
   * Initial release.
 
- -- William Bonnet <wbonnet@theitmakers.com>  Tue, 03 Apr 2018 21:21:35 +0200
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 06 Apr 2018 08:22:22 +0200
 
-linux-image-cubieboard-3 (4.16-1) unstable; urgency=medium
+linux-image-cubieboard-3 (4.16.0-1) unstable; urgency=medium
 
   * Initial release.
 
- -- William Bonnet <wbonnet@theitmakers.com>  Tue, 03 Apr 2018 21:21:35 +0200
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 06 Apr 2018 08:22:22 +0200
 
-linux-headers-cubieboard-3 (4.16-1) unstable; urgency=medium
+linux-headers-cubieboard-3 (4.16.0-1) unstable; urgency=medium
 
   * Initial release.
  
- -- William Bonnet <wbonnet@theitmakers.com>  Tue, 03 Apr 2018 21:21:35 +0200
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 06 Apr 2018 08:22:22 +0200
