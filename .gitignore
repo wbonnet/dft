@@ -29,3 +29,8 @@ working_dir
 prototypes/casper
 prototypes/squashfs-stacking/overlayfs-test/
 prototypes/squashfs-stacking/*.fw
+building/debian/debhelper-build-stamp
+building/debian/dft-buildsystem.debhelper.log
+building/debian/dft-buildsystem.substvars
+building/debian/dft-buildsystem/
+building/debian/files
