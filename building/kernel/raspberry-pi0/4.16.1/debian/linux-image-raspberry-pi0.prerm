@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-version=4.15.15
+version=4.16.1
 image_path=/boot/vmlinuz-$version
 
 if [ "$1" != remove ]; then
