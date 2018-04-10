@@ -515,7 +515,7 @@ class BuildImage(CliCommand):
         else:
           part_filesystem = partition[Key.FILESYSTEM.value].lower()
           # Check that the value is in the list of valid values
-          if part_filesystem not in  parted.fileSystemType:
+          if part_filesystem not in parted.fileSystemType:
             self.project.logging.critical("Unknown filesystem type '" + part_filesystem +
                                           "' . Aborting")
             exit(1)
@@ -536,6 +536,7 @@ class BuildImage(CliCommand):
 
         # Compute the sector count based on size and unit. Need for parted
         sector_count = parted.sizeToSectors(part_size, part_unit, device.sectorSize)
+        self.project.logging.debug("Partition " + part_name + " sectors count is " + sector_count)
 
         # Compute the geometry for this device
         geometry = parted.Geometry(start=part_start_sector, length=sector_count, device=device)
