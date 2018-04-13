@@ -536,7 +536,7 @@ class BuildImage(CliCommand):
 
         # Compute the sector count based on size and unit. Need for parted
         sector_count = parted.sizeToSectors(part_size, part_unit, device.sectorSize)
-        self.project.logging.debug("Partition " + part_name + " sectors count is " + sector_count)
+        self.project.logging.debug("Partition " + part_name + " sectors count is " + str(sector_count))
 
         # Compute the geometry for this device
         geometry = parted.Geometry(start=part_start_sector, length=sector_count, device=device)
@@ -1415,14 +1415,21 @@ class BuildImage(CliCommand):
           self.project.logging.critical("Device type for bank 0 is not defined in partitions")
           missing_configuration_found = True
 
-        # Device number must be defined for bank 1
-        if not Key.DEVICE_NUMBER.value in self.project.firmware[Key.RESILIENCE.value]\
-                                                               [Key.PARTITIONS.value]\
-                                                               [Key.BANK_0.value]:
-          self.project.logging.critical("Device number for bank 0 is not defined in partitions")
+        # Device number must be defined for bank 0
+        if not Key.DEVICE_NUMBER_UBOOT.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                                     [Key.PARTITIONS.value]\
+                                                                     [Key.BANK_0.value]:
+          self.project.logging.critical("u-boot device number for bank 0 is not defined")
           missing_configuration_found = True
 
-        # Device partition must be defined for bank 1
+        # Device number must be defined for bank 0
+        if not Key.DEVICE_NUMBER_LINUX.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                                     [Key.PARTITIONS.value]\
+                                                                     [Key.BANK_0.value]:
+          self.project.logging.critical("Linux device number for bank 0 is not defined")
+          missing_configuration_found = True
+
+        # Device partition must be defined for bank 0
         if not Key.PARTITION.value in self.project.firmware[Key.RESILIENCE.value]\
                                                            [Key.PARTITIONS.value][Key.BANK_0.value]:
           self.project.logging.critical("Device partition for bank 0 is not defined in partitions")
@@ -1446,10 +1453,17 @@ class BuildImage(CliCommand):
             missing_configuration_found = True
 
           # Device number must be defined for bank 1
-          if not Key.DEVICE_NUMBER.value in self.project.firmware[Key.RESILIENCE.value]\
+          if not Key.DEVICE_NUMBER_UBOOT.value in self.project.firmware[Key.RESILIENCE.value]\
                                                                  [Key.PARTITIONS.value]\
                                                                  [Key.BANK_1.value]:
-            self.project.logging.critical("Device number for bank 1 is not defined in partitions")
+            self.project.logging.critical("u-boot device number for bank 1 is not defined")
+            missing_configuration_found = True
+
+          # Device number must be defined for bank 1
+          if not Key.DEVICE_NUMBER_LINUX.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                                       [Key.PARTITIONS.value]\
+                                                                       [Key.BANK_1.value]:
+            self.project.logging.critical("Linux device number for bank 1 is not defined")
             missing_configuration_found = True
 
           # Device partition must be defined for bank 1
@@ -1470,21 +1484,28 @@ class BuildImage(CliCommand):
                                         " defined in the partitions section")
           missing_configuration_found = True
         else:
-          # Device type must be defined for bank 1
+          # Device type must be defined for rescue bank
           if not Key.DEVICE_TYPE.value in self.project.firmware[Key.RESILIENCE.value]\
                                                                [Key.PARTITIONS.value]\
                                                                [Key.RESCUE.value]:
             self.project.logging.critical("Device type for rescue is not defined")
             missing_configuration_found = True
 
-          # Device number must be defined for bank 1
-          if not Key.DEVICE_NUMBER.value in self.project.firmware[Key.RESILIENCE.value]\
-                                                                 [Key.PARTITIONS.value]\
-                                                                 [Key.RESCUE.value]:
-            self.project.logging.critical("Device number for rescue is not defined")
+          # Device number must be defined for rescue bank
+          if not Key.DEVICE_NUMBER_UBOOT.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                                       [Key.PARTITIONS.value]\
+                                                                       [Key.RESCUE.value]:
+            self.project.logging.critical("u-boot device number for rescue is not defined")
             missing_configuration_found = True
 
-          # Device partition must be defined for bank 1
+          # Device number must be defined for rescue bank
+          if not Key.DEVICE_NUMBER_LINUX.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                                       [Key.PARTITIONS.value]\
+                                                                       [Key.RESCUE.value]:
+            self.project.logging.critical("Linux device number for rescue is not defined")
+            missing_configuration_found = True
+
+          # Device partition must be defined for rescue bank
           if not Key.PARTITION.value in self.project.firmware[Key.RESILIENCE.value]\
                                                              [Key.PARTITIONS.value]\
                                                              [Key.RESCUE.value]:
@@ -1502,21 +1523,28 @@ class BuildImage(CliCommand):
                                         " defined in the partitions section")
           missing_configuration_found = True
         else:
-          # Device type must be defined for bank 1
+          # Device type must be defined for update bank
           if not Key.DEVICE_TYPE.value in self.project.firmware[Key.RESILIENCE.value]\
                                                                [Key.PARTITIONS.value]\
                                                                [Key.UPDATE.value]:
             self.project.logging.critical("Device type for update is not defined")
             missing_configuration_found = True
 
-          # Device number must be defined for bank 1
-          if not Key.DEVICE_NUMBER.value in self.project.firmware[Key.RESILIENCE.value]\
-                                                                 [Key.PARTITIONS.value]\
-                                                                 [Key.UPDATE.value]:
-            self.project.logging.critical("Device number for update is not defined")
+          # Device number must be defined for update bank
+          if not Key.DEVICE_NUMBER_UBOOT.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                                       [Key.PARTITIONS.value]\
+                                                                       [Key.UPDATE.value]:
+            self.project.logging.critical("u-boot device number for update is not defined")
             missing_configuration_found = True
 
-          # Device partition must be defined for bank 1
+          # Device number must be defined for update bank
+          if not Key.DEVICE_NUMBER_LINUX.value in self.project.firmware[Key.RESILIENCE.value]\
+                                                                       [Key.PARTITIONS.value]\
+                                                                       [Key.UPDATE.value]:
+            self.project.logging.critical("Linux device number for update is not defined")
+            missing_configuration_found = True
+
+          # Device partition must be defined for update bank
           if not Key.PARTITION.value in self.project.firmware[Key.RESILIENCE.value]\
                                                              [Key.PARTITIONS.value]\
                                                              [Key.UPDATE.value]:
@@ -1525,7 +1553,7 @@ class BuildImage(CliCommand):
 
     # Is there any missing information ?
     if missing_configuration_found:
-      self.project.logging.critical("Some information aremissing please fix configuration files.")
+      self.project.logging.critical("Some information are missing please fix configuration files.")
       self.project.logging.critical("Aborting.")
       exit(1)
 
@@ -1626,8 +1654,7 @@ class BuildImage(CliCommand):
         # ----- Replace STORAGE_DEFAULT_DEVICE_LINUX  ----------------------------------------------
         command += ' -e "s/__DFT_STORAGE_DEFAULT_DEVICE_LINUX__/'
         command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                            [Key.__DFT_STORAGE_DEFAULT_DEVICE_LINUX__BANK_0.value]\
-                                            [Key.DEVICE_NUMBER_LINUX.value])
+                                            [Key.BANK_0.value][Key.DEVICE_NUMBER_LINUX.value])
         command += '/g" '
 
         # ----- Replace STORAGE_DEFAULT_PARTITION  -------------------------------------------------
@@ -1642,12 +1669,12 @@ class BuildImage(CliCommand):
                                             [Key.BANK_0.value][Key.DEVICE_TYPE.value])
         command += '/g" '
 
-        # ----- Replace DFT_BANK0_DEVICE_UBOOT  ----------------------------------------------------------
+        # ----- Replace DFT_BANK0_DEVICE_UBOOT  ----------------------------------------------------
         command += ' -e "s/__DFT_BANK0_DEVICE_UBOOT__/'
         command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
                                             [Key.BANK_0.value][Key.DEVICE_NUMBER_UBOOT.value])
         command += '/g" '
-        # ----- Replace DFT_BANK0_DEVICE_LINUX  ----------------------------------------------------------
+        # ----- Replace DFT_BANK0_DEVICE_LINUX  ----------------------------------------------------
         command += ' -e "s/__DFT_BANK0_DEVICE_LINUX__/'
         command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
                                             [Key.BANK_0.value][Key.DEVICE_NUMBER_LINUX.value])
@@ -1668,13 +1695,13 @@ class BuildImage(CliCommand):
                                               [Key.BANK_1.value][Key.DEVICE_TYPE.value])
           command += '/g" '
 
-          # ----- Replace DFT_BANK1_DEVICE_BOOT  --------------------------------------------------------
+          # ----- Replace DFT_BANK1_DEVICE_BOOT  ---------------------------------------------------
           command += ' -e "s/__DFT_BANK1_DEVICE_UBOOT__/'
           command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
                                               [Key.BANK_1.value][Key.DEVICE_NUMBER_UBOOT.value])
           command += '/g" '
 
-          # ----- Replace DFT_BANK1_DEVICE_LINNUX --------------------------------------------------------
+          # ----- Replace DFT_BANK1_DEVICE_LINNUX --------------------------------------------------
           command += ' -e "s/__DFT_BANK1_DEVICE_LINUX_/'
           command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
                                               [Key.BANK_1.value][Key.DEVICE_NUMBER_LINUX.value])
@@ -1695,13 +1722,13 @@ class BuildImage(CliCommand):
                                               [Key.RESCUE.value][Key.DEVICE_TYPE.value])
           command += '/g" '
 
-          # ----- Replace DFT_RESCUE_DEVICE_UBOOT  -------------------------------------------------------
+          # ----- Replace DFT_RESCUE_DEVICE_UBOOT  -------------------------------------------------
           command += ' -e "s/__DFT_RESCUE_DEVICE_UBOOT__/'
           command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
                                               [Key.RESCUE.value][Key.DEVICE_NUMBER_UBOOT.value])
           command += '/g" '
 
-          # ----- Replace DFT_RESCUE_DEVICE_LINUX  -------------------------------------------------------
+          # ----- Replace DFT_RESCUE_DEVICE_LINUX  -------------------------------------------------
           command += ' -e "s/__DFT_RESCUE_DEVICE_LINUX__/'
           command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
                                               [Key.RESCUE.value][Key.DEVICE_NUMBER_LINUX.value])
@@ -1729,7 +1756,7 @@ class BuildImage(CliCommand):
                                               [Key.UPDATE.value][Key.DEVICE_NUMBER_UBOOT.value])
           command += '/g" '
 
-          # ----- Replace DFT_UPDATE_DEVICE_LINUX  -------------------------------------------------------
+          # ----- Replace DFT_UPDATE_DEVICE_LINUX  -------------------------------------------------
           command += ' -e "s/__DFT_UPDATE_DEVICE_LINUX__/'
           command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
                                               [Key.UPDATE.value][Key.DEVICE_NUMBER_LINUX.value])
@@ -1755,10 +1782,16 @@ class BuildImage(CliCommand):
                                               [Key.FAILOVER.value][Key.DEVICE_TYPE.value])
           command += '/g" '
 
-          # ----- Replace DFT_FAILOVER_DEVICE  -----------------------------------------------------
-          command += ' -e "s/__DFT_FAILOVER_DEVICE__/'
+          # ----- Replace DFT_FAILOVER_DEVICE_LINUX  -----------------------------------------------
+          command += ' -e "s/__DFT_FAILOVER_DEVICE_LINUX__/'
           command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                              [Key.FAILOVER.value][Key.DEVICE_NUMBER.value])
+                                              [Key.FAILOVER.value][Key.DEVICE_NUMBER_LINUX.value])
+          command += '/g" '
+
+          # ----- Replace DFT_FAILOVER_DEVICE  -----------------------------------------------------
+          command += ' -e "s/__DFT_FAILOVER_DEVICE_UBOOT__/'
+          command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
+                                              [Key.FAILOVER.value][Key.DEVICE_NUMBER_UBOOT.value])
           command += '/g" '
 
           # ----- Replace DFT_FAILOVER_PARTITION  --------------------------------------------------

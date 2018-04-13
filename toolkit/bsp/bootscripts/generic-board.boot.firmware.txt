@@ -168,13 +168,13 @@ if itest.s "x${dft_current_type}" == "x" ; then
 fi
 
 if itest.s "x${dft_current_device_uboot}" == "x" ; then
-  setenv dft_current_device    __DFT_STORAGE_DEFAULT_DEVICE_UBOOT__
+  setenv dft_current_device_uboot  __DFT_STORAGE_DEFAULT_DEVICE_UBOOT__
   setenv flag_env_modified     1
-  echo "Variable dft_current_device_boot not yet defined adding its default value => 0"
+  echo "Variable dft_current_device_uboot not yet defined adding its default value => 0"
 fi
 
 if itest.s "x${dft_current_device_linux}" == "x" ; then
-  setenv dft_current_device    __DFT_STORAGE_DEFAULT_DEVICE_LINUX__
+  setenv dft_current_device_linux   __DFT_STORAGE_DEFAULT_DEVICE_LINUX__
   setenv flag_env_modified     1
   echo "Variable dft_current_device_linux not yet defined adding its default value => 0"
 fi
