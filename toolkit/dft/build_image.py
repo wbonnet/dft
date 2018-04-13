@@ -1615,10 +1615,19 @@ class BuildImage(CliCommand):
                                             [Key.BANK_0.value][Key.DEVICE_TYPE.value])
         command += '/g" '
 
-        # ----- Replace STORAGE_DEFAULT_DEVICE  ----------------------------------------------------
-        command += ' -e "s/__DFT_STORAGE_DEFAULT_DEVICE__/'
+        # ----- Replace STORAGE_DEFAULT_DEVICE_UBOOT  ----------------------------------------------
+        # Linux and uboot devices have separated values since the kernel can change numbering once
+        # booting. This happens on i.MX^
+        command += ' -e "s/__DFT_STORAGE_DEFAULT_DEVICE_UBOOT__/'
         command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                            [Key.BANK_0.value][Key.DEVICE_NUMBER.value])
+                                            [Key.BANK_0.value][Key.DEVICE_NUMBER_UBOOT.value])
+        command += '/g" '
+
+        # ----- Replace STORAGE_DEFAULT_DEVICE_LINUX  ----------------------------------------------
+        command += ' -e "s/__DFT_STORAGE_DEFAULT_DEVICE_LINUX__/'
+        command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
+                                            [Key.__DFT_STORAGE_DEFAULT_DEVICE_LINUX__BANK_0.value]\
+                                            [Key.DEVICE_NUMBER_LINUX.value])
         command += '/g" '
 
         # ----- Replace STORAGE_DEFAULT_PARTITION  -------------------------------------------------
@@ -1633,10 +1642,15 @@ class BuildImage(CliCommand):
                                             [Key.BANK_0.value][Key.DEVICE_TYPE.value])
         command += '/g" '
 
-        # ----- Replace DFT_BANK0_DEVICE  ----------------------------------------------------------
-        command += ' -e "s/__DFT_BANK0_DEVICE__/'
+        # ----- Replace DFT_BANK0_DEVICE_UBOOT  ----------------------------------------------------------
+        command += ' -e "s/__DFT_BANK0_DEVICE_UBOOT__/'
         command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                            [Key.BANK_0.value][Key.DEVICE_NUMBER.value])
+                                            [Key.BANK_0.value][Key.DEVICE_NUMBER_UBOOT.value])
+        command += '/g" '
+        # ----- Replace DFT_BANK0_DEVICE_LINUX  ----------------------------------------------------------
+        command += ' -e "s/__DFT_BANK0_DEVICE_LINUX__/'
+        command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
+                                            [Key.BANK_0.value][Key.DEVICE_NUMBER_LINUX.value])
         command += '/g" '
 
         # ----- Replace DFT_BANK0_PARTITION  -------------------------------------------------------
@@ -1654,10 +1668,16 @@ class BuildImage(CliCommand):
                                               [Key.BANK_1.value][Key.DEVICE_TYPE.value])
           command += '/g" '
 
-          # ----- Replace DFT_BANK1_DEVICE  --------------------------------------------------------
-          command += ' -e "s/__DFT_BANK1_DEVICE__/'
+          # ----- Replace DFT_BANK1_DEVICE_BOOT  --------------------------------------------------------
+          command += ' -e "s/__DFT_BANK1_DEVICE_UBOOT__/'
           command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                              [Key.BANK_1.value][Key.DEVICE_NUMBER.value])
+                                              [Key.BANK_1.value][Key.DEVICE_NUMBER_UBOOT.value])
+          command += '/g" '
+
+          # ----- Replace DFT_BANK1_DEVICE_LINNUX --------------------------------------------------------
+          command += ' -e "s/__DFT_BANK1_DEVICE_LINUX_/'
+          command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
+                                              [Key.BANK_1.value][Key.DEVICE_NUMBER_LINUX.value])
           command += '/g" '
 
           # ----- Replace DFT_BANK1_PARTITION  -----------------------------------------------------
@@ -1675,10 +1695,16 @@ class BuildImage(CliCommand):
                                               [Key.RESCUE.value][Key.DEVICE_TYPE.value])
           command += '/g" '
 
-          # ----- Replace DFT_RESCUE_DEVICE  -------------------------------------------------------
-          command += ' -e "s/__DFT_RESCUE_DEVICE__/'
+          # ----- Replace DFT_RESCUE_DEVICE_UBOOT  -------------------------------------------------------
+          command += ' -e "s/__DFT_RESCUE_DEVICE_UBOOT__/'
           command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                              [Key.RESCUE.value][Key.DEVICE_NUMBER.value])
+                                              [Key.RESCUE.value][Key.DEVICE_NUMBER_UBOOT.value])
+          command += '/g" '
+
+          # ----- Replace DFT_RESCUE_DEVICE_LINUX  -------------------------------------------------------
+          command += ' -e "s/__DFT_RESCUE_DEVICE_LINUX__/'
+          command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
+                                              [Key.RESCUE.value][Key.DEVICE_NUMBER_LINUX.value])
           command += '/g" '
 
           # ----- Replace DFT_RESCUE_PARTITION  ----------------------------------------------------
@@ -1697,10 +1723,16 @@ class BuildImage(CliCommand):
                                               [Key.UPDATE.value][Key.DEVICE_TYPE.value])
           command += '/g" '
 
-          # ----- Replace DFT_UPDATE_DEVICE  -------------------------------------------------------
+          # ----- Replace DFT_UPDATE_DEVICE_UBOOT --------------------------------------------------
           command += ' -e "s/__DFT_UPDATE_DEVICE__/'
           command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
-                                              [Key.UPDATE.value][Key.DEVICE_NUMBER.value])
+                                              [Key.UPDATE.value][Key.DEVICE_NUMBER_UBOOT.value])
+          command += '/g" '
+
+          # ----- Replace DFT_UPDATE_DEVICE_LINUX  -------------------------------------------------------
+          command += ' -e "s/__DFT_UPDATE_DEVICE_LINUX__/'
+          command += str(self.project.firmware[Key.RESILIENCE.value][Key.PARTITIONS.value]\
+                                              [Key.UPDATE.value][Key.DEVICE_NUMBER_LINUX.value])
           command += '/g" '
 
           # ----- Replace DFT_UPDATE_PARTITION  ----------------------------------------------------

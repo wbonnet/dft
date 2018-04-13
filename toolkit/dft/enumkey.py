@@ -117,6 +117,8 @@ class Key(Enum):
   DEFAULT_SEQUENCE_NAME = "__dft_default_sequence__"
   DESCRIPTION = "description"
   DEVICE_NUMBER = "device_number"
+  DEVICE_NUMBER_UBOOT = "device_number_uboot"
+  DEVICE_NUMBER_LINUX = "device_number_linux"
   DEVICE_PARTITION = "device_partition"
   DEVICE_TYPE = "device_type"
   DEVICES = "devices"
