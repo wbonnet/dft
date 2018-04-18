@@ -49,10 +49,8 @@ kernel:
   # pubkey:
 
   # List of packages to install from the repository
-#  packages:
-#    - linux-image-kernel-beagleboneblack
-#    - linux-image-firmware-beagleboneblack
-#    - linux-image-dtb-beagleboneblack
+  packages:
+    - linux-image-beagleboneblack
 
 #TODO: add flag to define if a specific source list ha to be generated under sources.list.define
 

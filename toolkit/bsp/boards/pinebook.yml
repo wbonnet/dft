@@ -49,11 +49,8 @@ kernel:
   # pubkey:
 
   # List of packages to install from the repository
-#  packages:
-#    - linux-dtb-pinebook
-#    - linux-image-pinebook
-#    - armbian-firmware
-#    - linux-jessie-root-pinebook
+  packages:
+    - linux-image-pinebook
 
 #TODO: add flag to define if a specific source list ha to be generated under sources.list.define
 

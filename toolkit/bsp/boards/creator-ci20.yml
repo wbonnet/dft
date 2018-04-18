@@ -49,14 +49,11 @@ kernel:
   # pubkey:
 
   # List of packages to install from the repository
-#  packages:
-#    - linux-image-kernel-creator-ci20
-#    - linux-image-firmware-creator-ci20
-#    - linux-image-dtb-creator-ci20
+  packages:
+    - linux-image-creator-ci20
 
 #TODO: add flag to define if a specific source list ha to be generated under sources.list.define
 
 # The uboot section defines the different parameters needed to select and install the uboot
 # used to boot the board an run kernel. It is defined by XXX
 # uboot:
-# linux-u-boot-sabreqsd+-next

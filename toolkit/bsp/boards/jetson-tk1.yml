@@ -49,10 +49,8 @@ kernel:
   # pubkey:
 
   # List of packages to install from the repository
-#  packages:
-#    - linux-image-kernel-jetson-tk1
-#    - linux-image-firmware-jetson-tk1
-#    - linux-image-dtb-jetson-tk1
+  packages:
+    - linux-image-jetson-tk1
 
 #TODO: add flag to define if a specific source list ha to be generated under sources.list.define
 

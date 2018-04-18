@@ -49,10 +49,8 @@ kernel:
   # pubkey:
 
   # List of packages to install from the repository
-#  packages:
-#    - linux-image-kernel-orangepi-zero-plus
-#    - linux-image-firmware-orangepi-zero-plus
-#    - linux-image-dtb-orangepi-zero-plus
+  packages:
+    - linux-image-orangepi-zero-plus
 
 #TODO: add flag to define if a specific source list ha to be generated under sources.list.define
 

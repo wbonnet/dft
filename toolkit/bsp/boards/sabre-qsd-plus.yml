@@ -50,7 +50,6 @@ kernel:
 
   # List of packages to install from the repository
   packages:
-    # Kernel and firmware are the same for both version of sabre qsd and qsd+
     - linux-image-sabre-qsd-plus
 
 # The uboot section defines the different parameters needed to select and install the uboot

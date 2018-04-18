@@ -49,10 +49,8 @@ kernel:
   # pubkey:
 
   # List of packages to install from the repository
-#  packages:
-#    - linux-image-kernel-marsboard-imx6
-#    - linux-image-dtb-marsboard-imx6
-#    - linux-image-image-marsboard-imx6
+  packages:
+    - linux-image-marsboard-imx6
 
 # On the i.MX6 marsboard the uboot is stored in SPI flash memory. Thus there is no need to
 # include it into this BSP definition since its update is a manual process, out of DFT toolchain.

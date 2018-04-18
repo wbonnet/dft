@@ -49,10 +49,8 @@ kernel:
   # pubkey:
 
   # List of packages to install from the repository
-#  packages:
-#    - linux-image-kernel-raspberry-pi0w
-#    - linux-image-firmware-raspberry-pi0w
-#    - linux-image-dtb-raspberry-pi0w
+  packages:
+    - linux-image-raspberry-pi0w
 
 #TODO: add flag to define if a specific source list ha to be generated under sources.list.define
 

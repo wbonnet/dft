@@ -49,10 +49,8 @@ kernel:
   # pubkey:
 
   # List of packages to install from the repository
-#  packages:
-#    - linux-image-kernel-rock64
-#    - linux-image-firmware-rock64
-#    - linux-image-dtb-rock64
+  packages:
+    - linux-image-rock64
 
 #TODO: add flag to define if a specific source list ha to be generated under sources.list.define
 
