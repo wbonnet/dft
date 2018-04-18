@@ -25,6 +25,9 @@ setenv dft_bank0_bootflag     dft_bank0_boot_was_dirty
 setenv dft_bank1_bootflag     dft_bank1_boot_was_dirty
 setenv dft_rescue_bootflag    dft_rescue_boot_was_dirty
 
+# Defines the filesystem ype used to store the firmwares.
+setenv fstype                 __FILESYSTEM_TYPE__
+
 # Defines bank0 storage parameters
 setenv dft_bank0_type         __DFT_BANK0_TYPE__
 setenv dft_bank0_device       __DFT_BANK0_DEVICE__
