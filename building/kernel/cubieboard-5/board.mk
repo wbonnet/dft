@@ -22,11 +22,11 @@
 # Defines board name
 BOARD_NAME  = cubieboard-5
 
-# Defines boards architecture (armv7l, armv6l, aarch64, x86_64, i386, etc.)
-BOARD_ARCH  = armv7l
+# Defines boards architecture (armhf, armel, aarch64, amd64, i368, etc.)
+BOARD_ARCH  = armhf
 
 # Defines the default dtb to use (symlink used by generic boot.scr)
-DEFAULT_DTB = unknown
+DEFAULT_DTB = sun8i-a83t-cubietruck-plus.dtb
 
 # Defines if all dtb should be included in the generated package (uncomment
 # and set value to 1) or if only default dtb is included (keep commented or

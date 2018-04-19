@@ -20,15 +20,8 @@
 #
  
 # Defines the kernel version
-KERNEL_VERSION=4.16.0
-KERNEL_FILE_VERSION=4.16
-
-# Move sources directory to the correct name since it does not include full
-# # version in its naming
-post-extract:
-	@mv $(EXTRACT_DIR)/$(SOFTWARE_UPSTREAM_NAME)-$(KERNEL_FILE_VERSION) $(WORK_SRC)
-	$(TARGET_DONE)
-
+KERNEL_VERSION=4.17.0-rc1
+KERNEL_FILE_VERSION=4.17-rc1
 
 # Include board specific definitions
 include ../board.mk
@@ -36,5 +29,15 @@ include ../board.mk
 # Defines the patches to apply on the sources
 # PATCHFILES += 0000_some_patch.diff
 
+# Move sources directory to the correct name since it does not include full
+# version in its naming
+post-extract:
+	@mv $(EXTRACT_DIR)/$(SOFTWARE_UPSTREAM_NAME)-$(KERNEL_FILE_VERSION) $(WORK_SRC)
+	$(TARGET_DONE)
+
+SOFTWARE_UPSTREAM_SITES = http://git.kernel.org/torvalds/t/
+SOFTWARE_DIST_FILES     = $(SOFTWARE_UPSTREAM_NAME)-$(KERNEL_FILE_VERSION).tar.gz
+
 # Include build system
 include buildsystem/dft.mk
+ 		
