@@ -51,7 +51,7 @@ do-install :
 			mkdir -p $(abspath $(INSTALL_DIR))/boot/dtb ; \
 			cd $(abspath $(OBJ_DIR)) ; \
 			$(BUILD_ENV) $(MAKE) INSTALL_PATH=$(abspath $(INSTALL_DIR))/boot $(INSTALL_ARGS) ; \
-			$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(abspath $(INSTALL_DIR))/ modules_install ; \
+			$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(abspath $(INSTALL_DIR))/ INSTALL_MOD_STRIP=1 modules_install ; \
 			cp -fr arch/arm/boot/dts/*.dtb $(abspath $(INSTALL_DIR))/boot/dtb ; \
 	 	    if [ ! "" = "$(DEFAULT_DTB)" ] ; then \
 			    cd $(abspath $(INSTALL_DIR)/boot) ; \
