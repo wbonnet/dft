@@ -75,7 +75,7 @@ devices:
   # . none
   #
   # Default value is none, which means no copression at all. The generated image is left unchanged
-  # compression: "none"
+  compression: "xz"
 
   # Defines the options to pass to the compressor. The options can be any options supported by the
   # tool used for compression (please check the dedicated man pages for a complete list of options)
@@ -139,7 +139,7 @@ devices:
         # can be set. Please check the man for more informatons
         #
         # Default value (commented out or not defined) means no options and no call to tune2fs
-        ext_fs_tune: "-m 0" ,
+        # ext_fs_tune: "-m 0" ,
 
         # Missing type from fdisk list
 
