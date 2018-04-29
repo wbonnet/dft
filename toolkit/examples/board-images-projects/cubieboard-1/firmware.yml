@@ -26,13 +26,34 @@
 # Initramfs customization
 #
 # ----------------------------------------------------------------------------
-# initramfs:
+initramfs:
   # Provides a list of modules added in /usr/share/initramfs-tools/modules.d/
   # before running update-initramfs. The modules listed below will be included
   # in the initrd archive.
   # additional_modules:
   #  - module1
   #  - module2
+
+  # Flag used to trigger the call to mkimage once initramfs has been updated
+  # Default value is false
+  mkimage: True
+
+  # Compression type used by mkimage. Default is gzip (if mkimage is activated)
+  # mkimage_compression: gzip
+  
+  # Architecture used by mkimage. Default is guessed based upon target 
+  # architecture. If this value is defined it overrides the guess.
+  # mkimage_arch: arm
+
+# ----------------------------------------------------------------------------
+#
+# Definition of the generic configuration parameters
+#
+# ----------------------------------------------------------------------------
+configuration:
+  # Define the filename used when generatig the squashfs file
+  # Currently only one file is hqndled
+  filename: cubieboard-1.fw
 
 # ----------------------------------------------------------------------------
 #
@@ -49,11 +70,8 @@ layout:
   # to mount squashfs files using loopback
   filesystem: ext4
 
-  # Identification of the physical partition containing the squashfs files
-  partition: /dev/mmcblk0p1
-
   # Defines the path under which the squashfs files are stored in the
-  # partition defined previously
+  # partitions storing either system or rescue
   path: /
 
   # Definition of the different things to stack to assemble the firmware
@@ -73,7 +91,7 @@ layout:
         # Path to the squashfs file to mount
         # This information is ignored if type is ot squashfs
         # Default value is generated based upon the project information
-        squashfs_file: system.fw
+        squashfs_file: system.squashfs
 
         # Name of the partition device to mount when type is partition
         # This information is ignored if type is not partition
@@ -112,29 +130,103 @@ security:
   # Defines security paramters such as the use of hash, digital ignature, etc.
   # TODO  not at start, but need to check for hashes or signatures
   # TODO  how to handle ciphering, keygen, secure storage
-  hash_method: md5
+  # hash_method: md5
+
+  # Activate firmware signature. Valid values are :
+  # . "empty" or not defined    Signature is deactivated
+  # . gpg2                      Firmware is signed using gpg2.
+  #                             gpg_key variable must be defined
+  # . openssl                   Firmware is signed with openssl using x509
+  #                             certificate. The variable openssl_certificate
+  #                             must be defined.
+  signature: gpg2
+
+  # Defines the GnuPG key to use
+  gpg_key: A907E9357B5C4CDF4207B2397596433946480261
+
+  # Use --armor when creating the signature, so it is exported as ASCII. Default is false
+  gpg_armor_signature: True
 
 # ----------------------------------------------------------------------------
 #
 # Definition of the firmware resilience and safety parameters
 #
-# Remember that Safety is not security
+# Remember that safety is not security
 #
 # ----------------------------------------------------------------------------
 resilience:
-  # Number of banks used ifor firmware installation
-  banks: 1
+  # Use dual banks for high availability
+  dual_banks: True
+
+  # Flag used to know if a rescue system is used or not. Default is false
+  rescue_image: True
+
+  # Flag used to know if an update partition is used or not. Default is false
+  update_partition: True
+
+  # Identification of the physical partitions containing the squashfs files
+  # This version of DFT support at most 4 partitions, dual banking, rescue and
+  # update. If a given partition is not used, just comment it out.
+  # Only bank_0 is mandatory.
+  #
+  # Partition are not defined as a standard /dev/sdX path (seen from linux)
+  # but as device type, device number and part number. Thus it can be easily
+  # used to reconstruct linux dev path, and provide information needed for
+  # u-boot.
+  partitions:
+    # Defines the first system bank. This information are mandatory
+    bank_0:
+      # Defines the type of device used for bank_0 storage. The type has to
+      # be a valid u-boot device type. Valid values are : mmc usb
+      device_type:   mmc
+
+      # Defines the device number as seen from both u-boot and linux
+      device_number: 0
+
+      # Defines the partition number on the device (reminder, it starts @ 1)
+      partition:     1
+
+    # Defines the second system bank. Used for failover, this information are
+    # are needed only if dual bank is activated
+    bank_1:
+      device_type:   mmc
+      device_number: 0
+      partition:     2
+
+    # Defines the rescue bank. Store the rescue system used when none of the
+    # system bank are in working order. This information are needed only if
+    # rescue_imge is activated.
+    rescue:
+      device_type:   mmc
+      device_number: 0
+      partition:     5
+
+    # Defines the partition used to receive updates before they are applied
+    # This information are are needed only if update_partition is activated
+    update:
+      device_type:   mmc
+      device_number: 0
+      partition:     6
+
+    # Defines the partition used to exchange failover partition between kernel
+    # and u-boot. This partition has to be FAT(16 prefered) formatted. This
+    # ensure compatibility with "most" of u-boot version. By default u-boot 
+    # does not write on ext4 filesystem (nor ext2).
+    failover:
+      device_type:   mmc
+      device_number: 0
+      partition:     7
 
 # ----------------------------------------------------------------------------
 #
 # Definition of the squashfs parameters
 #
 # ----------------------------------------------------------------------------
-configuration:
+squashfs_configuration:
 
   # Define the filename used when generatig the squashfs file
   # Currently only one file is hqndled
-  filename: system.fw
+  filename: system.squashfs
 
   # Defines the block size. Default is 131072 bytes
   block_size: "256K"
