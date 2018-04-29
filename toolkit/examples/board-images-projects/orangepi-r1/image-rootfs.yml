@@ -139,7 +139,7 @@ devices:
         # can be set. Please check the man for more informatons
         #
         # Default value (commented out or not defined) means no options and no call to tune2fs
-        ext_fs_tune: "-m 0" ,
+        # ext_fs_tune: "-m 0" ,
 
         # Missing type from fdisk list
 
