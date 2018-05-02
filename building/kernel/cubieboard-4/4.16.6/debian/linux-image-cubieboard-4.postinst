@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-version=4.16.3
+version=4.16.6
 image_path=/boot/vmlinuz-$version
 
 if [ "$1" != configure ]; then
@@ -24,8 +24,8 @@ fi
 
 # Create or update the link to zImage
 cd /boot
-ln -sf vmlinuz-4.16.3 zImage
-ln -sf initrd.img-4.16.3 initrd.img
+ln -sf vmlinuz-4.16.6 zImage
+ln -sf initrd.img-4.16.6 initrd.img
 
 exit 0
 

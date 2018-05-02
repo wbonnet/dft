@@ -20,7 +20,7 @@
 #
  
 # Defines the kernel version
-KERNEL_VERSION=4.16.5
+KERNEL_VERSION=4.16.6
 
 # Include board specific definitions
 include ../board.mk

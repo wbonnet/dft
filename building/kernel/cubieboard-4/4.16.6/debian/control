@@ -11,11 +11,11 @@ Depends: ${misc:Depends},
          kmod, 
          linux-base (>= 4.3~), 
          initramfs-tools (>= 0.120+deb8u2) | linux-initramfs-tool
-Description: Linux kernel, version 4.16.3 for cubieboard-4
- This packages contains the Linux kernel version 4.16.3 compiled for cubieboard-4 board.
+Description: Linux kernel, version 4.16.6 for cubieboard-4
+ This packages contains the Linux kernel version 4.16.6 compiled for cubieboard-4 board.
 
-# Package: linux-headers-cubieboard-4-4.16.3
+# Package: linux-headers-cubieboard-4-4.16.6
 # Architecture: any
 # Depends: ${misc:Depends}
-# Description: Linux kernel headers, version 4.16.3 for cubieboard-4
-#  This packages contains the Linux kernel headers version 4.16.3 for cubieboard-4 board.
+# Description: Linux kernel headers, version 4.16.6 for cubieboard-4
+#  This packages contains the Linux kernel headers version 4.16.6 for cubieboard-4 board.
