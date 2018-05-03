@@ -26,7 +26,7 @@ BOARD_NAME  = cubieboard-4
 BOARD_ARCH  = armv7l
 
 # Defines the default dtb to use (symlink used by generic boot.scr)
-DEFAULT_DTB = 
+DEFAULT_DTB = sun9i-a80-cubieboard4.dtb
 
 # Defines if all dtb should be included in the generated package (uncomment
 # and set value to 1) or if only default dtb is included (keep commented or
