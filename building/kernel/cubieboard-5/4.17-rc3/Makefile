@@ -20,8 +20,8 @@
 #
  
 # Defines the kernel version
-KERNEL_VERSION=4.17.0-rc1
-KERNEL_FILE_VERSION=4.17-rc1
+KERNEL_VERSION=4.17.0-rc3
+KERNEL_FILE_VERSION=4.17-rc3
 
 # Include board specific definitions
 include ../board.mk
@@ -40,4 +40,3 @@ SOFTWARE_DIST_FILES     = $(SOFTWARE_UPSTREAM_NAME)-$(KERNEL_FILE_VERSION).tar.g
 
 # Include build system
 include buildsystem/dft.mk
- 		

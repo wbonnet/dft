@@ -11,11 +11,11 @@ Depends: ${misc:Depends},
          kmod, 
          linux-base (>= 4.3~), 
          initramfs-tools (>= 0.120+deb8u2) | linux-initramfs-tool
-Description: Linux kernel, version 4.17-rc1 for cubieboard-5
- This packages contains the Linux kernel version 4.17-rc1 compiled for cubieboard-5 board.
+Description: Linux kernel, version 4.17-rc3 for cubieboard-5
+ This packages contains the Linux kernel version 4.17-rc3 compiled for cubieboard-5 board.
 
-# Package: linux-headers-cubieboard-5-4.17-rc1
+# Package: linux-headers-cubieboard-5-4.17-rc3
 # Architecture: any
 # Depends: ${misc:Depends}
-# Description: Linux kernel headers, version 4.17-rc1 for cubieboard-5
-#  This packages contains the Linux kernel headers version 4.17-rc1 for cubieboard-5 board.
+# Description: Linux kernel headers, version 4.17-rc3 for cubieboard-5
+#  This packages contains the Linux kernel headers version 4.17-rc3 for cubieboard-5 board.

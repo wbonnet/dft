@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-version=4.17-rc1
+version=4.17-rc3
 image_path=/boot/vmlinuz-$version
 
 rm -f /lib/modules/$version/.fresh-install
