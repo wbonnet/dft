@@ -1,1 +1,0 @@
-odroid-c1-plus.mk
