@@ -44,6 +44,7 @@ do-install :
 			cp files/* $(INSTALL_DIR)/doc ; \
 			cd $(abspath $(OBJ_DIR)) ; \
 			cp -fr $(UBOOT_BINARY_FILE) $(abspath $(INSTALL_DIR))/u-boot/u-boot-$(BOARD_NAME)-$(UBOOT_VERSION) ; \
+			cp -fr u-boot.dtb $(abspath $(INSTALL_DIR))/u-boot/u-boot-$(BOARD_NAME)-$(UBOOT_VERSION).dtb ; \
 			cd $(abspath $(INSTALL_DIR))/u-boot/ ; \
 			ln -sf u-boot-$(BOARD_NAME)-$(UBOOT_VERSION) u-boot-$(BOARD_NAME); \
 	 	else \
