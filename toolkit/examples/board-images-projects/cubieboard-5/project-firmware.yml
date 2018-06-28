@@ -92,7 +92,7 @@ configuration:
 project_definition:
 
   # Defines the project name. Mostly used for output and directories creation
-  project_name: "cubieboard-5"
+  project_name: "cubieboard-5-firmware"
 
   # Definition of the repositories used for bootstrapping
   # There can be only one repo, thus its url is defined here
@@ -153,7 +153,7 @@ project_definition:
 #
 # ----------------------------------------------------------------------------
 building_sequences:
-  
+
 # Sequences are defined as a list. Each list entry is distinct sequence.
 # dft invocation will run one and only one sequence, according to the
 # arguments you provided.
