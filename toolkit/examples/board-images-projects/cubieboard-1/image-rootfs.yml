@@ -178,7 +178,7 @@ filesystems:
       filesystem: "/dev/mmcblk0p1" ,
       mountpoint: "/" ,
       type: "ext4" ,
-      options: "discard,noatime,nodiratime,errors=remount-ro" ,
+      options: "noatime,nodiratime,errors=remount-ro" ,
       dump: "0" ,
       pass: "1"
     }
