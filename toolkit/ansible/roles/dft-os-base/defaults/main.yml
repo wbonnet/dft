@@ -25,9 +25,9 @@
 dft_hostname: "dft-default"
 
 
-# Default locales to configure if not ovrriden in project variables
+# Default locales to configure if not overiden in project variables
 dft_locales:
-  # Default behavior is to considr that ocl should be installed, thus no need to add state parameter
+  # Default behavior is to considr that local should be installed, thus no need to add state parameter
   - { name: "en_GB.UTF-8" }
   # Nonetheless it can be defined to present
   # - { name: "fr_FR.UTF-8" , state: "present" }
