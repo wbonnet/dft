@@ -1,0 +1,21 @@
+Source: linux-kernel-odroid-c0
+Section: kernel
+Priority: optional
+Maintainer: William Bonnet <wbonnet@theitmakers.com>
+Standards-Version: 3.9.8
+Build-Depends: debhelper (>= 9)
+
+Package: linux-image-odroid-c0
+Architecture: any
+Depends: ${misc:Depends},
+         kmod, 
+         linux-base (>= 4.3~), 
+         initramfs-tools (>= 0.120+deb8u2) | linux-initramfs-tool
+Description: Linux kernel, version 4.17.8 for odroid-c0
+ This packages contains the Linux kernel version 4.17.8 compiled for odroid-c0 board.
+
+# Package: linux-headers-odroid-c0-4.17.8
+# Architecture: any
+# Depends: ${misc:Depends}
+# Description: Linux kernel headers, version 4.17.8 for odroid-c0
+#  This packages contains the Linux kernel headers version 4.17.8 for odroid-c0 board.
