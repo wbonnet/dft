@@ -20,7 +20,7 @@
 #
  
 # Defines the kernel version
-KERNEL_VERSION=4.20.10
+KERNEL_VERSION=4.20.12
 
 # Include board specific definitions
 include ../board.mk

@@ -29,7 +29,7 @@
 #	Install all requirements using PIP
 #
 init:
-	pip install -r requirements.txt
+	pip3 install -r requirements.txt
 
 #
 # Target : test, tests
