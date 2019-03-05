@@ -29,9 +29,10 @@ include ../board.mk
 # Move sources directory to the correct name since it does not include full
 # version in its naming
 post-extract:
-	@mv $(EXTRACT_DIR)/$(SOFTWARE_UPSTREAM_NAME)-$(KERNEL_FILE_VERSION) $(WORK_SRC)
+	@if [ ! -d "./$(NEW_VERSION)" ] ; then \
+	mv $(EXTRACT_DIR)/$(SOFTWARE_UPSTREAM_NAME)-$(KERNEL_FILE_VERSION) $(WORK_SRC) ; \
+        fi ;
 	$(TARGET_DONE)
-
 
 # Include build system
 include buildsystem/dft.mk
