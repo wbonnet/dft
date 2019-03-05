@@ -20,8 +20,8 @@
 #
  
 # Defines the kernel version
-KERNEL_VERSION=5.0.0
-KERNEL_FILE_VERSION=5.0
+KERNEL_VERSION=5.0
+KERNEL_FILE_VERSION=5.0.0
 
 # Include board specific definitions
 include ../board.mk
