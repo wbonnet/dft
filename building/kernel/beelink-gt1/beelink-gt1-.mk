@@ -23,7 +23,7 @@
 BOARD_NAME  = beelink-gt1-
 
 # Defines boards architecture (armv7l, armel, aarch64, x86_64, i686, etc.)
-BOARD_ARCH  = unknown
+BOARD_ARCH  = aarch64
 
 # Defines the default dtb to use (symlink used by generic boot.scr)
 DEFAULT_DTB = unknown
