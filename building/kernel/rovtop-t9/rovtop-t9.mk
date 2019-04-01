@@ -20,7 +20,7 @@
 #
 
 # Defines board name
-BOARD_NAME  = rovtopt9
+BOARD_NAME  = rovtop-t9
 
 # Defines boards architecture (armv7l, armel, aarch64, x86_64, i686, etc.)
 BOARD_ARCH  = aarch64
