@@ -153,7 +153,7 @@ class StripRootFS(CliCommand):
             # Test if the binary exists
             if not os.path.isfile(filepath):
               # No thus install, and set the flag to mark it has to be removed in the end
-              self.project.logging.debug("apt packag is needed for tripping, installing it")
+              self.project.logging.debug("apt package is needed for tripping, installing it")
               self.install_package("apt")
               self.need_to_strip_apt = True
 
@@ -168,7 +168,7 @@ class StripRootFS(CliCommand):
     # It is now time to remove it. It has to do done before files and directories stripping
     # In case the next stripping stages breaks APT
     if self.need_to_strip_apt:
-      self.project.logging.debug("apt packag has been installed during stripping, now removing it")
+      self.project.logging.debug("apt package has been installed during stripping, now removing it")
       self.remove_package("apt")
 
   # -------------------------------------------------------------------------
