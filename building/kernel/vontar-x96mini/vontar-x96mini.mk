@@ -20,7 +20,7 @@
 #
 
 # Defines board name
-BOARD_NAME  = x96mini
+BOARD_NAME  = vontar-x96mini
 
 # Defines boards architecture (armv7l, armel, aarch64, x86_64, i686, etc.)
 BOARD_ARCH  = aarch64

@@ -1,1 +1,1 @@
-x96mini.mk
+vontar-x96mini.mk
