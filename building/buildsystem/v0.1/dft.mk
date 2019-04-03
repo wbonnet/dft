@@ -46,21 +46,34 @@ endif
 
 # ------------------------------------------------------------------------------
 #
-# Check if the board arch is defined, if not output an error before doing anything.
+# Check if the board architecture is defined, if not output an error before doing anything.
 # It means this bard has been newly created and arch has to be defined
 #
 ifeq ($(BOARD_ARCH), unknown)
 define error_msg
 
-
 BOARD_ARCH variable as not yet been defined in the $(BOARD_NAME).mk Makefile.
-Please replace "unknown" by the board architecture (armv7l, x86_64, ppc64, etc.).
-
+Please replace "unknown" by the board architecture (armhf, arm64, etc.). Please keep in mind that BOARD_ARCH are inluded into CPU_ARCH ( this means you should use arm64 or armhf not aarch64 nor armv7l, which are CPU architectures.
 
 endef
   $(error $(error_msg))
 endif
 
+# ------------------------------------------------------------------------------
+#
+# Check if the CPU architcture is defined, if not output an error before doing anything.
+# It means this bard has been newly created and arch has to be defined
+#
+ifeq ($(CPU_ARCH), unknown)
+define error_msg
+
+CPU_ARCH variable as not yet been defined in the $(BOARD_NAME).mk Makefile.
+Please replace "unknown" by the board architecture (aarch64, armv7l, etc.). Please keep in mind that BOARD_ARCH are inluded into CPU_ARCH ( this means you should use arm64 or armhf not aarch64 nor armv7l, which are BOARD architectures.
+
+
+endef
+  $(error $(error_msg))
+endif
 
 # ------------------------------------------------------------------------------
 #
