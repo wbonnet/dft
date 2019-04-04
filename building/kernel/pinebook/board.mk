@@ -24,6 +24,7 @@ BOARD_NAME  = pinebook
 
 # Defines boards architecture (armv7l, armv6l, aarch64, x86_64, i386, etc.)
 BOARD_ARCH  = aarch64
+CPU_ARCH = arm64
 
 # Defines the default dtb to use (symlink used by generic boot.scr)
 DEFAULT_DTB = sun50i-a64-pinebook.dtb 
