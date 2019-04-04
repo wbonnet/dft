@@ -1,3 +1,4 @@
+# vim: ft=make ts=4 sw=4 noet
 #
 # The contents of this file are subject to the Apache 2.0 license you may not
 # use this file except in compliance with the License.
@@ -11,9 +12,6 @@
 # Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
-# Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
-#
 #
 # Contributors list :
 #
@@ -21,14 +19,16 @@
 #
 #
 
-""" This module contains the definition of all global variables used to define
-the release information of DFT. It includes data such as, version, author, email
-etc.
+# Defines board name
+BOARD_NAME  = orangepi-plus-2e
 
-This information is intented to be used in the setup.py file, and cli.py (display
-program version), etc.
-"""
+# Defines boards architecture (armv7l, armel, aarch64, x86_64, i686, etc.)
+BOARD_ARCH  = unknown
 
-__version__ = '0.6.11'
-__author__ = 'William Bonnet'
-__author_email__ = 'wbonnet@theitmakers.com'
+# Defines the default dtb to use (symlink used by generic boot.scr)
+DEFAULT_DTB = unknown
+
+# Defines if all dtb should be included in the generated package (uncomment
+# and set value to 1) or if only default dtb is included (keep commented or
+# set the value to 0) 
+# INCLUDE_ALL_DTB_IN_PACKAGE = 0
