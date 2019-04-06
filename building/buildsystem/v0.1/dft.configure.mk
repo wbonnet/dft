@@ -33,18 +33,21 @@
 #
 # Execute the configure script
 #
-# TODO : DELTA DEFCONFIG
 configure-%/configure :
 	@if test -f $(COOKIE_DIR)/configure-$*/configure ; then \
 		true ; \
 	else \
 		if [ "$(USE_CONFIG_FILE)" != "" ] ; then \
-			echo "    copying $(USE_CONFIG_FILE) to .config" ; \
+			echo "     make olddefconfig => copying $(USE_CONFIG_FILE) to .config" ; \
 			cp -f $(FILE_DIR)/$(USE_CONFIG_FILE) $(OBJ_DIR)/.config ; \
+				cd "$(OBJ_DIR)" && make olddefconfig ; \
 		else \
 			if [ "$(USE_DEFCONFIG)" != "" ] ; then \
-				echo "    running make $(BUILD_FLAGS) $(USE_DEFCONFIG) in $(OBJ_DIR)" ; \
+				echo "USE_DEFCONFIG : $(USE_DEFCONFIG)" ; \
+				echo "USE_CONFIG_FILE : $(USE_CONFIG_FILE)" ; \
+				echo "    make make olddefconfig => running make $(BUILD_FLAGS) $(USE_DEFCONFIG) in $(OBJ_DIR)" ; \
 				cd "$(OBJ_DIR)" && make $(USE_DEFCONFIG) ; \
+				cd "$(OBJ_DIR)" && make olddefconfig ; \
 			else \
 				echo "    running configure in $(OBJ_DIR)" ; \
 				cd "$(OBJ_DIR)" && $(CONFIGURE_ENV) $(abspath $*)/configure $(CONFIGURE_ARGS) ; \
