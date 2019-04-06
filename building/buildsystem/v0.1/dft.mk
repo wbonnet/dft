@@ -318,8 +318,10 @@ show-config :
 	@echo
 	@echo "  CONFIGURE_SCRIPTS                 $(CONFIGURE_SCRIPTS)"
 	@echo "  BUILD_SCRIPTS                     $(BUILD_SCRIPTS)"
-	@echo
+	@echo 
 	@echo "  BOARD_NAME                        $(BOARD_NAME)"
+	@echo "  BOARD_ARCH                        $(BOARD_ARCH)"
+	@echo "  CPU_ARCH                          $(CPU_ARCH)"
 	@echo "  USE_CONFIG_FILE                   $(USE_CONFIG_FILE)"
 	@echo "  USE_DEFCONFIG                     $(USE_DEFCONFIG)"
 	@echo "  DEFCONFIG_OVERRIDES               $(DEFCONFIG_OVERRIDES)"
