@@ -1,0 +1,17 @@
+linux-kernel-odroid-n2 (5.0.7-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 06 Apr 2019 18:21:37 +0000
+
+linux-image-odroid-n2 (5.0.7-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 06 Apr 2019 18:21:37 +0000
+
+linux-headers-odroid-n2 (5.0.7-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 06 Apr 2019 18:21:37 +0000
