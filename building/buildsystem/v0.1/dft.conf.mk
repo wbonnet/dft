@@ -131,7 +131,7 @@ BUILD_PROCESS_COUNT ?= -j$(shell grep -c ^processor /proc/cpuinfo)
 # Defines default build arguments, depending on the board architectures
 ARCH_COMMON_BUILD_ARGS ?= modules
 ARCH_ARMV7L_BUILD_ARGS  ?= zImage dtbs
-ARCH_AARCH64_BUILD_ARGS  ?= zImage dtbs
+ARCH_AARCH64_BUILD_ARGS  ?=  dtbs Image.gz
 
 # Defines default build targets depending on the board architectures
 ARCH_COMMON_BUILD_FLAGS   ?=
