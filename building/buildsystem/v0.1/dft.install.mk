@@ -55,7 +55,7 @@ do-install :
 			cd $(abspath $(OBJ_DIR)) ; \
 			$(BUILD_ENV) $(MAKE) INSTALL_PATH=$(abspath $(INSTALL_DIR))/boot $(INSTALL_ARGS) ; \
 			$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(abspath $(INSTALL_DIR))/ INSTALL_MOD_STRIP=1 modules_install ; \
-			cp -fr arch/$(CPU_ARCH)/boot/dts/*.dtb $(abspath $(INSTALL_DIR))/boot/dtb ; \
+			cp -fr arch/$(CPU_ARCH)/boot/dts/*/*.dtb $(abspath $(INSTALL_DIR))/boot/dtb ; \
 	 	    if [ ! "" = "$(DEFAULT_DTB)" ] ; then \
 			    cd $(abspath $(INSTALL_DIR)/boot) ; \
 			    ln -sf dtb/$(DEFAULT_DTB) default.dtb ; \
