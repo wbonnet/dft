@@ -20,13 +20,16 @@
 #
 
 # Defines board name
-BOARD_NAME  = odroid-hc1
+BOARD_NAME = odroid-hc1
 
 # Defines boards architecture (armv7l, armv6l, aarch64, x86_64, i386, etc.)
-BOARD_ARCH  = armv7l
+CPU_ARCH = armv7l
+
+# Defines the architecture name  used by the linux kernel sources tree
+LINUX_ARCH = arm
 
 # Defines the default dtb to use (symlink used by generic boot.scr)
-DEFAULT_DTB = unknown
+BOARD_DTB = exynos5422-odroidhc1.dtb 
 
 # Defines if all dtb should be included in the generated package (uncomment
 # and set value to 1) or if only default dtb is included (keep commented or

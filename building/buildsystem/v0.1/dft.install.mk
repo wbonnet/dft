@@ -49,17 +49,17 @@ do-install :
 			ln -sf u-boot-$(BOARD_NAME)-$(UBOOT_VERSION) u-boot-$(BOARD_NAME); \
 	 	else \
 			echo "        running install in $(OBJ_DIR)"  ; \
-			echo "        BOARD ARCH is $(BOARD_ARCH)"  ; \
+			echo "        LINUX ARCH is $(LINUX_ARCH)"  ; \
 			echo "        CPU ARCH is $(CPU_ARCH)"  ; \
 			mkdir -p $(abspath $(INSTALL_DIR))/boot/dtb ; \
 			cd $(abspath $(OBJ_DIR)) ; \
 			$(BUILD_ENV) $(MAKE) INSTALL_PATH=$(abspath $(INSTALL_DIR))/boot $(INSTALL_ARGS) ; \
 			$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(abspath $(INSTALL_DIR))/ INSTALL_MOD_STRIP=1 modules_install ; \
-			cp -fr arch/$(CPU_ARCH)/boot/dts/*/*.dtb $(abspath $(INSTALL_DIR))/boot/dtb ; \
-	 	    if [ ! "" = "$(DEFAULT_DTB)" ] ; then \
-			    cd $(abspath $(INSTALL_DIR)/boot) ; \
-			    ln -sf dtb/$(DEFAULT_DTB) default.dtb ; \
-		    fi ; \
+		cp arch/$(LINUX_ARCH)/boot/dts/$(BOARD_DTB) $(abspath $(INSTALL_DIR))/boot/dtb ; \
+		if [ ! "" = "$(DEFAULT_DTB)" ]  ; then \
+			cd $(abspath $(INSTALL_DIR)/boot) ; \
+			ln -sf dtb/$(BOARD_DTB) default.dtb ; \
+		fi ; \
 		fi ; \
 	fi ;
 	@$(TARGET_DONE)
