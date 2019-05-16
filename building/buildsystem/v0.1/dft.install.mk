@@ -73,5 +73,6 @@ do-reinstall :
 
 
 
+#			ln -sf dtb/$(BOARD_DTB) default.dtb ; \
 
 
