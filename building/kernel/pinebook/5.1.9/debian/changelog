@@ -1,0 +1,17 @@
+linux-kernel-pinebook (5.1.9-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 12 Jun 2019 08:13:34 +0000
+
+linux-image-pinebook (5.1.9-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 12 Jun 2019 08:13:34 +0000
+
+linux-headers-pinebook (5.1.9-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 12 Jun 2019 08:13:34 +0000
