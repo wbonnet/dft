@@ -1,0 +1,29 @@
+# Set the hostname according to the project name
+dft_hostname: "netshell"
+
+# Create a group named localadmin
+dft_groups:
+  - { name: "localadmin" }
+
+# Create the default user add put it into localadmin group
+dft_users:
+  - { name: "localadmin" , password: "localadmin" , createhome: True , groups: 'localadmin' , group: 'localadmin' , shell: '/bin/bash'}
+
+  # Defines specific sudo options, and the list of additional files to add into
+# /etc/sudoers.d
+dft_sudoers:
+  # The main_sudoers_file variable control if the main /etc/sudoers file should be replaced ?
+  # Default value is nt defined which means "don't touch it"
+  #
+  # If the value is defined to "something", the file named "something" is copied to /etc/sudoers
+  # This file has to be placed under files in the dft-security-base. Best practice is to do no
+  # modification to the dft-security role from the DFT role, and use additional-roles from the
+  # project file. You only have to create the part of the tree containing your sudoers files.
+  # This additional role will be copied over DFT predefined role during bootstrap. This will add
+  # your file to the role in the target debootstrap
+  #
+  # main_sudoers_file: sudoers
+
+  # Define the list of additional configuration files
+  config_files:
+    - localadmin

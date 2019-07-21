@@ -1,0 +1,2 @@
+# Set the hostname according to the project name
+dft_hostname: "cubieboard-5"
