@@ -18,21 +18,15 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 #
+ 
+# Defines the kernel version
+KERNEL_VERSION=5.1.6
 
-# Defines board name
-BOARD_NAME  = orangepi-3
+# Include board specific definitions
+include ../board.mk
 
-# Defines boards architecture (armv7l, armel, aarch64, x86_64, i686, etc.)
-<<<<<<< HEAD
-BOARD_ARCH  = aarch64
-=======
-BOARD_ARCH  = unknown
->>>>>>> Add Orange pi 3
+# Defines the patches to apply on the sources
+# PATCHFILES += 0000_some_patch.diff
 
-# Defines the default dtb to use (symlink used by generic boot.scr)
-DEFAULT_DTB = unknown
-
-# Defines if all dtb should be included in the generated package (uncomment
-# and set value to 1) or if only default dtb is included (keep commented or
-# set the value to 0) 
-# INCLUDE_ALL_DTB_IN_PACKAGE = 0
+# Include build system
+include buildsystem/dft.mk
