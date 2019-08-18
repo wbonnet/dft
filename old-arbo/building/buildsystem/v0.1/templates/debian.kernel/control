@@ -1,0 +1,21 @@
+Source: linux-kernel-__BOARD_NAME__
+Section: kernel
+Priority: optional
+Maintainer: __MAINTAINER_NAME__ <__MAINTAINER_EMAIL__>
+Standards-Version: 3.9.8
+Build-Depends: debhelper (>= 9)
+
+Package: linux-image-__BOARD_NAME__
+Architecture: any
+Depends: ${misc:Depends},
+         kmod, 
+         linux-base (>= 4.3~), 
+         initramfs-tools (>= 0.120+deb8u2) | linux-initramfs-tool
+Description: Linux kernel, version __KERNEL_VERSION__ for __BOARD_NAME__
+ This packages contains the Linux kernel version __KERNEL_VERSION__ compiled for __BOARD_NAME__ board.
+
+# Package: linux-headers-__BOARD_NAME__-__KERNEL_VERSION__
+# Architecture: any
+# Depends: ${misc:Depends}
+# Description: Linux kernel headers, version __KERNEL_VERSION__ for __BOARD_NAME__
+#  This packages contains the Linux kernel headers version __KERNEL_VERSION__ for __BOARD_NAME__ board.

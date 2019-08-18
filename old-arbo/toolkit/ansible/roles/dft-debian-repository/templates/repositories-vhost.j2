@@ -1,0 +1,44 @@
+<VirtualHost *>
+    # If the path is not under /var/www or /usr/share, don't forget to activate it in
+    # /etc/apache2/apache2.conf
+    DocumentRoot {{ dft_debian_repository_directory }}
+    ServerName {{ dft_debian_repository_server_name }}
+    ErrorLog /var/log/apache2/{{ dft_debian_repository_server_name }}.error.log
+
+    LogLevel warn
+
+    CustomLog /var/log/apache2/{{ dft_debian_repository_server_name }}.access.log combined
+
+    # Set access control to /srv mountpoint
+    <Directory /srv/>
+        Options Indexes FollowSymLinks
+        AllowOverride None
+        Require all granted
+    </Directory>
+
+    # Allow directory listings so that people can browse the repository from their browser too
+    <Directory "{{ dft_debian_repository_directory }}">
+        Options Indexes FollowSymLinks MultiViews
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+    # The following directives prevents from browsing some internal repo structures
+    # The syntax allow multiple repositories (there is no need to generate a rule per repo).
+    # The * joker match any repo under the dft_debian_repository_directory base directory
+    <Directory "{{ dft_debian_repository_directory }}/*/conf">
+        Order allow,deny
+        Deny from all
+    </Directory>
+
+    <Directory "{{ dft_debian_repository_directory }}/*/db">
+        Order allow,deny
+        Deny from all
+    </Directory>
+
+    <Directory "{{ dft_debian_repository_directory }}/*/incoming">
+        Order allow,deny
+        Deny from all
+    </Directory>
+</VirtualHost>
+

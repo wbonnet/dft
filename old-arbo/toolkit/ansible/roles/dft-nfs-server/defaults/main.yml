@@ -1,0 +1,20 @@
+dft_nfs_server_exports:
+  - active: true
+    path: "/srv/nfs/example_single_host"
+    access_list:
+      - hostname: "192.168.1.0/24"
+        options: "rw,no_subtree_check,no_root_squash,async"    
+  - active: false
+    path: "/srv/nfs/example_single_host_deactivated"
+    access_list:
+      - hostname: "192.168.1.0/24"
+        options: "rw,no_subtree_check,no_root_squash,async"
+  - active: true
+    path: "/srv/nfs/example_multiple_host"
+    access_list:
+      - hostname: "192.168.1.0/24"
+        options: "rw,no_subtree_check,no_root_squash,async"
+      - hostname: "192.168.2.0/24"
+        options: "rw,no_subtree_check,no_root_squash"
+      - hostname: "192.168.3.4/24"
+        options: "rw,no_subtree_check,async"

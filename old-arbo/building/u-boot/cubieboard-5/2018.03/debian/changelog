@@ -1,0 +1,11 @@
+u-boot-cubieboard-5 (2018.03-2) unstable; urgency=medium
+
+  * Option tweaking since it does not really booot
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 1 Apr 2018 19:20:09 +0100
+
+u-boot-cubieboard-5 (2018.03-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 14 Mar 2018 18:03:09 +0100

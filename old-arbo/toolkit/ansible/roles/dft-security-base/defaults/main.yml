@@ -1,0 +1,125 @@
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).
+# All rights reserved. Use is subject to license terms.
+#
+# Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
+#
+#
+# Contributors list :
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#
+#
+
+
+# Defines the default values of the openssh server and client configuration
+dft_openssh:
+  # Defines the default values of the openssh server in order to provide some basic
+  # hardening (according to lynis output)
+  sshd:
+    allow_tcp_forwarding: "no"
+    client_alive_count_max: 2
+#   * Consider hardening SSH configuration [SSH-7408]
+#    - Details  : Compression (YES --> NO)
+#      https://cisofy.com/controls/SSH-7408/
+# TODO    - compression: False
+    log_level: VERBOSE
+    max_auth_tries: 2
+    max_sessions: 2
+    permit_root_login: "no"
+    port: 30463
+    tcp_keep_alive: "no"
+    x11_forwarding: "no"
+    allow_agent_forwarding: "no"
+    verify_reverse_mapping: "no"
+    compression: "no"
+
+  # Defines the default values of the openssh client in order to provide some basic
+  # hardening (according to lynis output)
+  ssh:
+    hosts:
+      - name: "*"
+        forward_x11_trusted: "no"
+
+# -------------------------------------------------------------------------------------------------
+
+# Defines specific sudo options, and the list of additional files to add into
+# /etc/sudoers.d
+dft_sudoers:
+  # The main_sudoers_file variable control if the main /etc/sudoers file should be replaced ?
+  # Default value is nt defined which means "don't touch it"
+  #
+  # If the value is defined to "something", the file named "something" is copied to /etc/sudoers
+  # This file has to be placed under files in the dft-security-base. Best practice is to do no
+  # modification to the dft-security role from the DFT role, and use additional-roles from the
+  # project file. You only have to create the part of the tree containing your sudoers files.
+  # This additional role will be copied over DFT predefined role during bootstrap. This will add
+  # your file to the role in the target debootstrap
+  #
+  # main_sudoers_file: sudoers
+
+  # Define the list of additional configuration files
+  # config_files:
+  #   - it is a list of all the files to copy. Files should be placed under files/
+
+# -------------------------------------------------------------------------------------------------
+
+# Defines the kernel parameter to set during rootfs building
+dft_kernel_hardening:
+  # The following list defines the default values of kernel parameters.
+  # Defaut config i empty in a Debian installation. It is generated from a template
+  # filled with values defied in the list below.
+  #
+  # Comments can be added to the generated sysctl.conf file by adding the optional "comment" key
+  # to one or several list item.
+  #
+  # The settings from the list below are applied first, then the settings defined in the
+  # sysctl_extra list will be applied, and will override values defined in both lists.
+  #
+  sysctl_default:
+    - { key: "fs.protected_hardlinks" ,                          value: 1 }
+    - { key: "fs.protected_symlinks" ,                           value: 1 }
+    - { key: "fs.suid_dumpable" ,                                value: 0 }
+    - { key: "kernel.core_uses_pid",                             value: 1 }
+    - { key: "kernel.ctrl-alt-del",                              value: 0 }
+    - { key: "kernel.kptr_restrict",                             value: 2 }
+    - { key: "kernel.dmesg_restrict",                            value: 1 }
+    - { key: "kernel.randomize_va_space",                        value: 2 }
+    - { key: "kernel.sysrq",                                     value: 0 }
+    - { key: "net.ipv4.conf.all.accept_redirects",               value: 0 }
+    - { key: "net.ipv4.conf.all.accept_source_route",            value: 0 }
+    - { key: "net.ipv4.conf.all.bootp_relay",                    value: 0 }
+    - { key: "net.ipv4.conf.all.forwarding",                     value: 0 }
+    - { key: "net.ipv4.conf.all.log_martians",                   value: 1 }
+    - { key: "net.ipv4.conf.all.mc_forwarding",                  value: 0 }
+    - { key: "net.ipv4.conf.all.proxy_arp",                      value: 0 }
+    - { key: "net.ipv4.conf.all.rp_filter",                      value: 1 }
+    - { key: "net.ipv4.conf.all.send_redirects",                 value: 0 }
+    - { key: "net.ipv4.conf.default.accept_redirects",           value: 0 }
+    - { key: "net.ipv4.conf.default.accept_source_route",        value: 0 }
+    - { key: "net.ipv4.conf.default.log_martians",               value: 1 }
+    - { key: "net.ipv4.icmp_echo_ignore_broadcasts",             value: 1 }
+    - { key: "net.ipv4.icmp_ignore_bogus_error_responses",       value: 1 }
+    - { key: "net.ipv4.tcp_syncookies",                          value: 1 }
+    - { key: "net.ipv4.tcp_timestamps",                          value: 0 }
+    - { key: "net.ipv6.conf.all.accept_redirects",               value: 0 }
+    - { key: "net.ipv6.conf.all.accept_source_route",            value: 0 }
+    - { key: "net.ipv6.conf.default.accept_redirects",           value: 0 }
+    - { key: "net.ipv6.conf.default.accept_source_route",        value: 0 }
+
+  # The following list defines the extra values to be added to kernel parameters.
+  # This list completes the previous list of values and should be used to define user values
+  # The values of both list can be overriden by user in its variable file. Nonetheless this list
+  # targets user need and is empty in the defaults file. The previous list will not be modified in
+  # most of the cae, thus it can be left unmodified.
+  sysctl_extra:

@@ -1,0 +1,35 @@
+linux-kernel-orangepi-zero (4.15.7-4) unstable; urgency=medium
+
+  * Activate CONFIG_BRIDGE=y
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 09 Mar 2018 12:43:20 +0100
+
+linux-kernel-orangepi-zero (4.15.7-3) unstable; urgency=medium
+
+  * Activate CONFIG_VLAN_8021Q_GVRP=m
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 08 Mar 2018 22:43:20 +0100
+
+linux-kernel-orangepi-zero (4.15.7-2) unstable; urgency=medium
+
+  * Activate CONFIG_VETH=m
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 08 Mar 2018 21:42:20 +0100
+
+linux-kernel-orangepi-zero (4.15.7-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 02 Mar 2018 22:42:20 +0100
+
+linux-image-orangepi-zero (4.15.7-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 02 Mar 2018 22:42:20 +0100
+
+linux-headers-orangepi-zero (4.15.7-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 02 Mar 2018 22:42:20 +0100

@@ -1,0 +1,323 @@
+dft (0.6.10-1) unstable; urgency=low
+
+  * Minor fixes
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 26 Mar 2018 19:25:00 +0100
+
+dft (0.6.9-2) unstable; urgency=low
+
+  * Fix version in CLI
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 26 Mar 2018 19:25:00 +0100
+
+dft (0.6.9-1) unstable; urgency=low
+
+  * Fix several errors in rootfs bootscript generation
+  * Firmware bootchain is moved under a boot directory
+  * Add support for boot/uEnv.txt and boot/kernel_cmdline_extra_parameters.txt`
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 26 Mar 2018 09:25:00 +0100
+
+dft (0.6.8-1) unstable; urgency=low
+
+  * Add image filename timestamping
+  * Add mkimage call after updating initrd
+  * Improved firmware booting script with failover
+  * Add bootflag cleaning script, called from /etc/rc.local
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 23 Mar 2018 19:18:00 +0100
+
+dft (0.6.7-1) unstable; urgency=low
+
+  * Bank switching is actiated in firmware
+  * Initscript takes in account $ROOT variable
+  * Firmware content is copied to both banks
+  * Active/failover script has to be debugged
+  * Add a few boards (Odroid C0, Odroid C1+). Not yet working
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 07 Mar 2018 09:14:00 +0100
+
+dft (0.6.6-1) unstable; urgency=low
+
+  * Add upgrade verification and deployment script
+  * Add bank switching in uboot scripts
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 22 Feb 2018 13:54:00 +0100
+
+dft (0.6.5-1) unstable; urgency=low
+
+  * Add support for nanopi neo and cubieboard-3
+  * Rename configuration to squashfs-configuratio in firmware.yml
+  * Add several board support
+  * Add Makefile for board support project (starting with orange pi 0)
+  * Add firmware update archive generation
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 11 Feb 2018 18:00:00 +0100
+
+dft (0.6.4-1) unstable; urgency=low
+
+  * Fix image name
+  * initrd size is generated in bootscript
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 04 Feb 2018 21:00:00 +0100
+
+dft (0.6.3-1) unstable; urgency=low
+
+  * Add support for sha224 sha384 and sha512 hash
+  * Add bootscript support
+  * Fix several problem during image generation
+  * Add firmware content copy to image
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 01 Feb 2018 21:00:00 +0100
+
+dft (0.6.2-1) unstable; urgency=low
+
+  * Add additional binaries list generation when creating initiramfs
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 28 Jan 2018 21:54:00 +0100
+
+dft (0.6.1-1) unstable; urgency=low
+
+  * Remove debug info from stacking script
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 27 Jan 2018 13:55:00 +0100
+
+dft (0.6.0-2) unstable; urgency=low
+
+  * Fix version number in CLI help
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 27 Jan 2018 13:09:00 +0100
+
+dft (0.6.0-1) unstable; urgency=low
+
+  * Build system is oved out of main dft package
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 23 Jan 2018 21:19:00 +0100
+
+dft (0.5.16-1) unstable; urgency=low
+
+  * Rename bind server role and improve configuration files generation
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 18 Jan 2018 08:36:00 +0100
+
+dft (0.5.15-1) unstable; urgency=low
+
+  * Add partition and fs type generation for partition containing squashfs
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 09 Jan 2018 19:47:00 +0100
+
+dft (0.5.14-1) unstable; urgency=low
+
+  * Seperate openjdk iand openjre installation (role dft-openjdk)
+  * Cleanup downloaded .deb files after rootfs generation
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 09 Jan 2018 09:27:00 +0100
+
+dft (0.5.13-1) unstable; urgency=low
+
+  * Fix copy of default configuration value to project (when these values are
+    not in project file and thus needed as default)
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 08 Jan 2018 19:38:00 +0100
+
+dft (0.5.12-1) unstable; urgency=low
+
+  * Fix path to variables file in board support projects
+  * Default user renamed localadmin in netshell rootfs
+  * Fix path generation when project is using current directory
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 03 Jan 2018 09:20:00 +0100
+
+dft (0.5.11-1) unstable; urgency=low
+
+  * Fix default value for working path
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 31 Dec 2017 18:10:00 +0100
+
+dft (0.5.10-1) unstable; urgency=low
+
+  * Fix project configuration issues when section was empty
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 27 Dec 2017 13:37:00 +0100
+
+dft (0.5.9-4) unstable; urgency=low
+
+  * Improve check_rootfs output
+  * Several minor fixes in roles
+  * Add OS Banner
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 23 Dec 2017 19:37:00 +0100
+
+dft (0.5.8-1) unstable; urgency=low
+
+dft (0.5.8-1) unstable; urgency=low
+
+  * Fix arm64 detection of qemu_static use
+  * Add qemu-user-static to Depends
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 01 Dec 2017 19:15:00 +0100
+
+dft (0.5.7-1) unstable; urgency=low
+
+  * Add kernel build from git support
+  * Update kernel used for Sabre boards
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 19 Nov 2017 15:08:00 +0100
+
+dft (0.5.6-1) unstable; urgency=low
+
+  * First version of kernel build chain
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 19 Nov 2017 15:08:00 +0100
+
+dft (0.5.5-1) unstable; urgency=low
+
+  * Fix : firmware building on ARMHF
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 23 Oct 2017 23:42:00 +0100
+
+dft (0.5.4-1) unstable; urgency=low
+
+  * Fix : firmware integration in initramfs (not yet completly done)
+  * Fix : several minor bugs
+  * Fix : symlinks in examples are now absolute
+  * New : native target in project. Arch is selected according to host arch
+  * New : arch and foreign can be controled separatly in debootstrap
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 23 Oct 2017 23:42:00 +0100
+
+dft-ci (0.5.4-1) unstable; urgency=low
+
+  * Fix : firmware integraion in initramfs (not yet completly done)
+  * Fix : several minor bugs
+  * Fix : symlinks in examples are now absolute
+  * New : native target in project. Arch is selecte according to host arch
+  * New : arch and foreign can be controled separatly in debootstrap
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 23 Oct 2017 23:42:00 +0100
+
+dft-doc (0.5.4-1) unstable; urgency=low
+
+  * Fix : firmware integraion in initramfs (not yet completly done)
+  * Fix : several minor bugs
+  * Fix : symlinks in examples are now absolute
+  * New : native target in project. Arch is selecte according to host arch
+  * New : arch and foreign can be controled separatly in debootstrap
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 23 Oct 2017 23:42:00 +0100
+
+dft-examples (0.5.4-1) unstable; urgency=low
+
+  * Fix : firmware integraion in initramfs (not yet completly done)
+  * Fix : several minor bugs
+  * Fix : symlinks in examples are now absolute
+  * New : native target in project. Arch is selecte according to host arch
+  * New : arch and foreign can be controled separatly in debootstrap
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 23 Oct 2017 23:11:00 +0100
+
+dft-bsp-test (0.5.4-1) unstable; urgency=low
+
+  * Fix : firmware integraion in initramfs (not yet completly done)
+  * Fix : several minor bugs
+  * Fix : symlinks in examples are now absolute
+  * New : native target in project. Arch is selecte according to host arch
+  * New : arch and foreign can be controled separatly in debootstrap
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 23 Oct 2017 23:42:00 +0100
+
+dft (0.5.3-1) unstable; urgency=low
+
+  * New feature : Add suport of build sequence in project files
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
+
+dft-ci (0.5.3-1) unstable; urgency=low
+
+  * New feature : Add suport of build sequence in project files
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
+
+dft-doc (0.5.3-1) unstable; urgency=low
+
+  * New feature : Add suport of build sequence in project files
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
+
+dft-examples (0.5.3-1) unstable; urgency=low
+
+  * New feature : Add suport of build sequence in project files
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
+
+dft-bsp-test (0.5.3-1) unstable; urgency=low
+
+  * New feature : Add suport of build sequence in project files
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
+
+dft (0.5.2-1) unstable; urgency=low
+
+  * New feature : Add suport of an additional list of module to load when
+                  updating the initramfs.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
+
+dft-ci (0.5.2-1) unstable; urgency=low
+
+  * New feature : Add suport of an additional list of module to load when
+                  updating the initramfs.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
+
+dft-doc (0.5.2-1) unstable; urgency=low
+
+  * New feature : Add suport of an additional list of module to load when
+                  updating the initramfs.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
+
+dft-examples (0.5.2-1) unstable; urgency=low
+
+  * New feature : Add suport of an additional list of module to load when
+                  updating the initramfs.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
+
+dft-bsp-test (0.5.2-1) unstable; urgency=low
+
+  * New feature : Add suport of an additional list of module to load when
+                  updating the initramfs.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 4 Oct 2017 09:11:00 +0100
+
+dft (0.5.1-1) unstable; urgency=low
+
+  * Initiial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 3 Oct 2017 22:57:00 +0100
+
+dft-ci (0.5.1-1) unstable; urgency=low
+
+  * Initiial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 3 Oct 2017 22:57:00 +0100
+
+dft-doc (0.5.1-1) unstable; urgency=low
+
+  * Initiial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 3 Oct 2017 22:57:00 +0100
+
+dft-examples (0.5.1-1) unstable; urgency=low
+
+  * Initiial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 3 Oct 2017 22:57:00 +0100
+
+dft-bsp-test (0.5.1-1) unstable; urgency=low
+
+  * Initiial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 3 Oct 2017 22:57:00 +0100
+

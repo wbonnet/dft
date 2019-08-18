@@ -1,0 +1,207 @@
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).
+# All rights reserved. Use is subject to license terms.
+#
+# Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
+#
+#
+# Contributors list :
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#
+#
+
+# ----------------------------------------------------------------------------
+#
+# Definition of the devices to create. Each device is an image of storage
+# block device. The following dictionnaries define a list a device, each
+# contains a list of partitions.
+#
+# Special devices and file systems (such as tmpfs) are not defined inside the
+# devices tree structure since they are associated to a physical devices.
+# Their definition can be found under the filesystems entry (see below)
+#
+# ----------------------------------------------------------------------------
+devices:
+  # Defines the size of the device to create. The size value is numerical
+  size: "800"
+
+  # Defines the unit used for size. Valid values are :
+  # "s" (sectors), "B" (bytes),  "kB",  "MB",  "MiB", "GB",  "GiB",  "TB",  "TiB"
+  #
+  # Default value is MB
+  unit: "MB"
+
+  # Defines the method used fill the empty image file after its creation.
+  # Valid values are :
+  # . zero    : image is filed with zeros
+  # . random  : image is filed with data read from /dev/random)
+  # . pattern : the image is filed with repetition of the given pattern (encoded in base64 ?)
+  #
+  # This attribute is optional, default value is zero
+  fill_method: "zero"
+
+  # Defines the filename used to store the device image. This file is created and allocated at
+  # image creation.
+  filename: "bananapi-r2-netshell-firmware.img"
+
+  # Defines the kind of compression to apply on the image once its created. Valid values are :
+  # . bzip2
+  # . gzip
+  # . xz
+  # . lzma  (euivalent to xz --format=lzma)
+  # . none
+  #
+  # Default value is none, which means no copression at all. The generated image is left unchanged
+  # compression: "none"
+
+  # Defines the options to pass to the compressor. The options can be any options supported by the
+  # tool used for compression (please check the dedicated man pages for a complete list of options)
+  #
+  # Default value is no options
+  # compression_options: ""
+
+  # Defines which kind of partition table label is used. Valid values are :
+  # "aix", "amiga", "bsd", "dvh", "gpt", "loop", "mac", "msdos", "pc98", or "sun"
+  #
+  # default value is msdos
+  label: "msdos"
+
+  # Defines which alignement ype is used for newly created partitions. Valid vaues ares :
+  #  . none       Use the minimum alignment allowed by the disk type.
+  #  . cylinder   Align partitions to cylinders.
+  #  . minimal    Use minimum alignment as given by the disk topology information.
+  #  . optimal    Use  optimum  alignment  as  given by the disk topology information.
+  #
+  # default value is none
+  alignment: "optimal"
+
+  # Defines the list of partitions to create inside the device
+  partitions:
+    - {
+        # Name or label of the partition. Supported only by dos, gpt and pc98 tables.
+        # Default value is empty name
+        name: "system_0" ,
+
+        # Defines the partition type. Valid values are "primary", "logical", or "extended"
+        # Default valueis primary
+        type: "primary" ,
+
+        # Defines the size of the partition to create. The size value is numerical
+        size: "256" ,
+
+        # Defines the unit used for size. Valid values are :
+        # "s" (sectors), "B" (bytes),  "kB",  "MB",  "MiB", "GB",  "GiB",  "TB",  "TiB",
+        # "%" (percentage of device size)
+        unit: "MB" ,
+
+        # Frst sector of the partition
+        start_sector: "8192" ,
+
+        # Toggle the given set of flags on the partition
+        # flag: "" ,
+
+        # Should the partition be formatted. Default value is False
+        format: True ,
+
+        # Type of the file system to create. This value is optional, if not defined no file
+        # system will be created, even if the format flag is true
+        # "hfsx" "fat32" "linux-swap(v0)" "affs5" "affs2" "ext4" "ext3" "ext2" "amufs" "amufs0"
+        # "amufs1" "amufs2" "amufs3" "amufs4" "amufs5" "btrfs" "linux-swap(v1)" "swsusp" "hfs+"
+        # "reiserfs" "freebsd-ufs" "xfs" "affs7" "ntfs" "zfs" "affs4" "hfs" "affs6" "affs1" "affs0"
+        # "affs3" "hp-ufs" "fat16" "sun-ufs" "asfs" "jfs" "apfs2" "apfs1"
+        filesystem: "ext4" ,
+
+        # This variable defines if tune2fs should be called on ext 2/3/4 filesystems, and the
+        # options to set. Typical use is setting reserved space to 0. Any options from "man tune2fs"
+        # can be set. Please check the man for more informatons
+        #
+        # Default value (commented out or not defined) means no options and no call to tune2fs
+        ext_fs_tune: "-m 0" ,
+
+        # Missing type from fdisk list
+
+        # This variable defines if some content from the rootfs / firmare should be installed on this
+        # partition during installation. It is used to know if the partition should be mounted
+        # fronth loopback, and where, during image content installation.
+        #
+        # The value is the mountpint of this partition. It means it must have been formatted. This
+        # parameter will wil ignored is the format flag is not set to True.
+        #
+        # Only "file" filesystems can have initial content. For instance, partition like swap are
+        # left empty (only formatted).
+        #
+        # Default value is undefined, which means no content to be copied
+        install_content_partition_mapping: "/"
+      }
+    - {
+        name: "system_1" ,
+        type: "primary" ,
+        size: "256" ,
+        unit: "MB" ,
+        start_sector: "532480" ,
+        format: True ,
+        filesystem: "ext4" ,
+        ext_fs_tune: "-m 0"
+      }
+    - {
+        name: "updates" ,
+        type: "primary" ,
+        size: "256" ,
+        unit: "MB" ,
+        start_sector: "1056768" ,
+        format: True ,
+        filesystem: "ext4" ,
+        ext_fs_tune: "-m 0"
+      }
+
+
+# ----------------------------------------------------------------------------
+#
+# Definition of the fileystems to be used in the rootfs. The filesystems
+# section defines information wider than the scope of the image itself and its
+# partitionning.
+#
+# File systems includes the definition of the special filesystems like tmpfs,
+# and may defines mount point from partition which are not included in the
+# image. For instance, the physical target can have a SSD disk attached to it.
+# The image itsef would only define the partitioning of the SD card used to
+# boot the target. Filesystems could also include infoormation about
+# partitions of the SSD disk.
+#
+# ----------------------------------------------------------------------------
+filesystems:
+  # Definition of the root file system
+  - {
+      filesystem: "/dev/mmcblk0p1" ,
+      mountpoint: "/" ,
+      type: "ext4" ,
+      options: "discard,noatime,nodiratime,errors=remount-ro" ,
+      dump: "0" ,
+      pass: "1"
+    }
+# ----------------------------------------------------------------------------
+#
+# Definition of the content ource to use. Source can be either firmware or
+# rootfs. The source is controled by a flag defining "rootfs" or firmware.
+#
+# Additionnal parameter such as (TODO) defines source specific options
+#
+# ----------------------------------------------------------------------------
+content:
+  # Defines the type to use. Valid values are :
+  # . firmware
+  # . rootfs
+  #
+  # Default value is rootfs (even if content section is not defined)
+  type: firmware

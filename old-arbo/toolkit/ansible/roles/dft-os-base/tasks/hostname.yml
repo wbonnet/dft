@@ -1,0 +1,53 @@
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).
+# All rights reserved. Use is subject to license terms.
+#
+# Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
+#
+#
+# Contributors list :
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#
+#
+
+#
+# Include the list of specific tasks. Tasks are separated into different
+# files, one file per functionnality.
+#
+
+---
+# Use the hostname module to change host name if it does not run on a local connection
+# Otherwise it would also change the name of the host
+# - name: DFT - Setup hostname (non local connection)
+#  hostname: name={{ dft_hostname }}
+#  when: ansible_connection != "local"
+
+# If it is run through a local connection, we assume it is working in a chrooted environment
+# thus only modify /etc/hostname file since we are creating a rootfs. No need to change the
+# real hostname
+- name: DFT - Setup hostname (local connection)
+  template:  src=hostname.j2
+             dest=/etc/hostname
+             owner=root
+             group=root
+             mode="0644"
+#  when: ansible_connection == "local"
+
+- name: DFT - Add hostname to /etc/hosts
+  lineinfile: dest=/etc/hosts
+              regexp='^127\.0\.0\.1'
+              line='127.0.0.1\tlocalhost {{ dft_hostname }}'
+              owner=root
+              group=root
+              mode=0644

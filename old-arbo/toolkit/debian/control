@@ -1,0 +1,58 @@
+Source: dft
+Maintainer: William Bonnet <wbonnet@theitmakers.com>
+Section: admin
+Priority: optional
+Build-Depends: debhelper (>= 9),
+               python3-all,
+               python3-yaml,
+               python3-setuptools,
+               python3-parted,
+               dh-python
+Standards-Version: 3.9.8
+Homepage: https://www.github.com/wbonnet/dft
+
+Package: dft
+Architecture: all
+Depends: ${misc:Depends},
+         ${python3:Depends},
+         python3-parted,
+         python3-yaml,
+         debootstrap,
+         ansible,
+         qemu-user-static,
+         dosfstools,
+         util-linux,
+         e2fsprogs,
+         btrfs-progs,
+         exfat-utils,
+         hfsprogs,
+         ntfs-3g,
+         reiser4progs,
+         reiserfsprogs,
+         squashfs-tools
+Description: Debian Framework Toolkit
+
+Package: dft-doc
+Architecture: all
+Depends: ${misc:Depends},
+         dft
+Description: Debian Framework Toolkit documentation
+
+Package: dft-ci
+Architecture: all
+Depends: ${misc:Depends},
+         dft
+Description: Debian Framework Toolkit continuous integration
+
+Package: dft-examples
+Architecture: all
+Depends: ${misc:Depends},
+         dft
+Description: Debian Framework Toolkit continuous examples
+
+Package: dft-test-bsp
+Architecture: all
+Depends: ${misc:Depends},
+         dft,
+         sbit
+Description: Debian Framework Toolkit scripts for BSP testing

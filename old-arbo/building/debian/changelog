@@ -1,0 +1,64 @@
+dft-buildsystem (0.6.10-1) unstable; urgency=low
+
+  * Bump kernel version to 4.16
+  * Bump u-boot version to 2018.05
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 26 Mar 2018 09:25:00 +0100
+
+dft-buildsystem (0.6.9-1) unstable; urgency=low
+
+  * Bump kernel version to 4.15.13
+  * Fix patch for Orange Pi R1 (previous kernel was not booting because of a missing DTB)
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 26 Mar 2018 09:25:00 +0100
+
+dft-buildsystem (0.6.8-1) unstable; urgency=low
+
+  * Bump kernel version to 4.15.12
+  * Bump u-boot version to 2018.03
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 23 Mar 2018 19:18:00 +0100
+
+dft-buildsystem (0.6.7-1) unstable; urgency=low
+
+  * Add a few boards (Odroid C0, Odroid C1+). Not yet working
+  * Build of several new u-boot
+  * Add support for Orange PI R1
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 07 Mar 2018 09:14:00 +0100
+
+dft-buildsystem (0.6.6-1) unstable; urgency=low
+
+  * Add a few boards (H64, orangepi one plus). Not yet working
+  * Cubieboard 3 image is validated
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 22 Feb 2018 13:54:00 +0100
+
+dft-buildsystem (0.6.5-1) unstable; urgency=low
+
+  * Add missing board entries for kernel and u-boot
+  * Add default dtb symlink
+  * Kernel packages now only ship by default the desgnated default dtb
+  * Add upload target to buildsystem (scp .deb files after generation to a
+    remote server)
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 05 Feb 2018 09:00:00 +0100
+
+dft-buildsystem (0.6.3-1) unstable; urgency=low
+
+  * Add u-boot compilation procedure
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 04 Feb 2018 19:26:00 +0100
+
+dft-buildsystem (0.6.1-1) unstable; urgency=low
+
+  * Add DFT_BUILDSYSTEM_WORKDIR env variable to move working dir out of git
+    tree or out of /usr directory in package mode
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 26 Jan 2018 09:26:00 +0100
+
+dft-buildsystem (0.6.0-1) unstable; urgency=low
+
+  * Release build system s a distinct package
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 22 Jan 2018 08:56:00 +0100

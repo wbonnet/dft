@@ -1,0 +1,103 @@
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2016 DFT project (http://www.debianfirmwaretoolkit.org).
+# All rights reserved. Use is subject to license terms.
+#
+# Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
+# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
+#
+#
+# Contributors list :
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#
+#
+
+#
+# Include the list of specific tasks. Tasks are separated into different
+# files, one file per functionnality.
+#
+
+---
+# ----- OpenJDK 8 rules ---------------------------------------------------------------------------
+- name : DFT - Install openjre8
+  apt: name={{ item }}
+       state=latest
+       install_recommends=no
+  with_items:
+    - openjdk-8-jre
+  when: (ansible_distribution == "Debian" and ansible_distribution_major_version == "9" and
+         dft_openjre_is_headless == False and dft_openjdk_install_jdk == True)
+
+- name : DFT - Install openjre8
+  apt: name={{ item }}
+       state=latest
+       install_recommends=no
+  with_items:
+    - openjdk-8-jre-headless
+  when: (ansible_distribution == "Debian" and ansible_distribution_major_version == "9" and
+         dft_openjre_is_headless == True and dft_openjdk_install_jdk == True)
+
+- name : DFT - Install openjdk8
+  apt: name={{ item }}
+       state=latest
+       install_recommends=no
+  with_items:
+    - openjdk-8-jdk
+  when: (ansible_distribution == "Debian" and ansible_distribution_major_version == "9" and
+         dft_openjdk_is_headless == False and dft_openjdk_install_jdk == True)
+
+- name : DFT - Install openjdk8
+  apt: name={{ item }}
+       state=latest
+       install_recommends=no
+  with_items:
+    - openjdk-8-jdk-headless
+  when: (ansible_distribution == "Debian" and ansible_distribution_major_version == "9" and
+         dft_openjdk_is_headless == True and dft_openjdk_install_jdk == True)
+
+# ----- OpenJDK 7 rules ---------------------------------------------------------------------------
+- name : DFT - Install openjre7
+  apt: name={{ item }}
+       state=latest
+       install_recommends=no
+  with_items:
+    - openjdk-7-jre
+  when: (ansible_distribution == "Debian" and ansible_distribution_major_version == "8" and
+         dft_openjre_is_headless == False and dft_openjdk_install_jdk == True)
+
+- name : DFT - Install openjre7
+  apt: name={{ item }}
+       state=latest
+       install_recommends=no
+  with_items:
+    - openjdk-7-jre
+  when: (ansible_distribution == "Debian" and ansible_distribution_major_version == "8" and
+         dft_openjre_is_headless == False and dft_openjdk_install_jdk == True)
+
+- name : DFT - Install openjdk7
+  apt: name={{ item }}
+       state=latest
+       install_recommends=no
+  with_items:
+    - openjdk-7-jdk
+  when: (ansible_distribution == "Debian" and ansible_distribution_major_version == "8" and
+         dft_openjdk_is_headless == False and dft_openjdk_install_jdk == True)
+
+- name : DFT - Install openjdk7
+  apt: name={{ item }}
+       state=latest
+       install_recommends=no
+  with_items:
+    - openjdk-7-jdk
+  when: (ansible_distribution == "Debian" and ansible_distribution_major_version == "8" and
+         dft_openjdk_is_headless == False and dft_openjdk_install_jdk == True)
+
