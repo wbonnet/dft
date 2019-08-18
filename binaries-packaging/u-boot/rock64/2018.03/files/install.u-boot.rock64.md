@@ -1,1 +1,0 @@
-../../files/install.u-boot.rock64.md

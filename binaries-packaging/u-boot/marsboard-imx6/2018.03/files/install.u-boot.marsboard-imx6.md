@@ -1,1 +1,0 @@
-../../files/install.u-boot.marsboard-imx6.md

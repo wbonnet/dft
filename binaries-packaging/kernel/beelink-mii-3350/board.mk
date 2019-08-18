@@ -1,1 +1,0 @@
-beelink-mii-3350.mk

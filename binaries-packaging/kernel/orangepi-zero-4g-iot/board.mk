@@ -1,1 +1,0 @@
-orangepi-zero-4g-iot.mk
