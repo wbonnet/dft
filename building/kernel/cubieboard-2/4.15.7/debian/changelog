@@ -1,0 +1,29 @@
+linux-kernel-cubieboard-2 (4.15.7-3) unstable; urgency=medium
+
+  * Activate CONFIG_VLAN_8021Q_GVRP as module
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 08 Mar 2018 22:42:52 +0100
+
+linux-kernel-cubieboard-2 (4.15.7-2) unstable; urgency=medium
+
+  * Activate CONFIG_VETH an CONFIG_TUN as module
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 08 Mar 2018 22:05:52 +0100
+
+linux-kernel-cubieboard-2 (4.15.7-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 05 Mar 2018 23:35:52 +0100
+
+linux-image-cubieboard-2 (4.15.7-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 05 Mar 2018 23:35:52 +0100
+
+linux-headers-cubieboard-2 (4.15.7-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 05 Mar 2018 23:35:52 +0100

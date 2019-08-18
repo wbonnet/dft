@@ -1,0 +1,1 @@
+generic-amd64.mk

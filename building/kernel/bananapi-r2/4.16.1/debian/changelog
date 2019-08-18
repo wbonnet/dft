@@ -1,0 +1,17 @@
+linux-kernel-bananapi-r2 (4.16.1-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 10 Apr 2018 09:47:01 +0200
+
+linux-image-bananapi-r2 (4.16.1-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 10 Apr 2018 09:47:01 +0200
+
+linux-headers-bananapi-r2 (4.16.1-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 10 Apr 2018 09:47:01 +0200

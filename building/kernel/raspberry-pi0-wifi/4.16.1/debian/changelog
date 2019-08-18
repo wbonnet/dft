@@ -1,0 +1,17 @@
+linux-kernel-raspberry-pi0-wifi (4.16.1-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 10 Apr 2018 09:46:59 +0200
+
+linux-image-raspberry-pi0-wifi (4.16.1-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 10 Apr 2018 09:46:59 +0200
+
+linux-headers-raspberry-pi0-wifi (4.16.1-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 10 Apr 2018 09:46:59 +0200

@@ -1,0 +1,17 @@
+linux-kernel-pinebook (5.0.3-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- unknown <unknown>  Fri, 22 Mar 2019 15:53:52 +0000
+
+linux-image-pinebook (5.0.3-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- unknown <unknown>  Fri, 22 Mar 2019 15:53:52 +0000
+
+linux-headers-pinebook (5.0.3-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- unknown <unknown>  Fri, 22 Mar 2019 15:53:52 +0000

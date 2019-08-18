@@ -1,0 +1,17 @@
+linux-kernel-orangepi-zero (4.14.14-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 20 Jan 2018 17:10:22 +0100
+
+linux-image-orangepi-zero (4.14.14-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 20 Jan 2018 17:10:22 +0100
+
+linux-headers-orangepi-zero (4.14.14-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 20 Jan 2018 17:10:22 +0100

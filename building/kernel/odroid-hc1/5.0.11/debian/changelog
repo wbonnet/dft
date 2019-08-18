@@ -1,0 +1,17 @@
+linux-kernel-odroid-hc1 (5.0.11-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 02 May 2019 10:13:44 +0000
+
+linux-image-odroid-hc1 (5.0.11-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 02 May 2019 10:13:44 +0000
+
+linux-headers-odroid-hc1 (5.0.11-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 02 May 2019 10:13:44 +0000

@@ -1,0 +1,23 @@
+linux-kernel-orangepi-r1 (4.15.8-2) unstable; urgency=medium
+
+  * Add many kernel options
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 10 Mar 2018 18:50:00 +0100
+
+linux-kernel-orangepi-r1 (4.15.8-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 09 Mar 2018 21:50:00 +0100
+
+linux-image-orangepi-r1 (4.15.8-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 09 Mar 2018 21:50:00 +0100
+
+linux-headers-orangepi-r1 (4.15.8-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 09 Mar 2018 21:50:00 +0100

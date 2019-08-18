@@ -1,0 +1,17 @@
+linux-kernel-cubieboard-2 (4.16.3-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 19 Apr 2018 22:29:56 +0200
+
+linux-image-cubieboard-2 (4.16.3-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 19 Apr 2018 22:29:56 +0200
+
+linux-headers-cubieboard-2 (4.16.3-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 19 Apr 2018 22:29:56 +0200
