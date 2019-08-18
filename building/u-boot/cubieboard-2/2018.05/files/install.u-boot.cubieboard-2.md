@@ -1,0 +1,1 @@
+../../files/install.u-boot.cubieboard-2.md

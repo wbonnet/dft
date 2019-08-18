@@ -1,0 +1,1 @@
+../../files/install.u-boot.nitrogen6-qpmax.md
