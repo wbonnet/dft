@@ -1,1 +1,1 @@
-../../buildsystem/current/templates/board-u-boot.makefile
+../../../buildsystem/v0.1/templates/board-u-boot.makefile
