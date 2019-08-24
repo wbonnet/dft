@@ -1,5 +1,0 @@
-u-boot-__BOARD_NAME__ (__UBOOT_VERSION__-1) unstable; urgency=medium
-
-  * Initial release.
-
- -- __MAINTAINER_NAME__ <__MAINTAINER_EMAIL__>  __DATE__
