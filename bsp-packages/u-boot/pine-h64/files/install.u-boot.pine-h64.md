@@ -1,4 +1,4 @@
-# u-boot installation for pineH64
+# u-boot installation for pine-h64
 
 ## Disclaimer
 
@@ -12,17 +12,17 @@ You have been warned :)
 ## u-boot installation
 
 The u-boot binary to install has been copied by this package to :
-/boot/u-boot/u-boot-pineH64
+/boot/u-boot/u-boot-pine-h64
 
 This is a symlink to the current u-boot file stored at the same location in a
-file named u-boot-pineH64.VERSION
+file named u-boot-pine-h64.VERSION
 
 u-boot binary has to be installed on the first sectors of the device used by 
 the board to boot. This can be done by the following commands, assuming that :
 
 . The commands are run as root or using sudo ( that's the example)
 
-. The commands are run on the target board (pineH64)
+. The commands are run on the target board (pine-h64)
 
 # XXX check this depending on board 
 # . Which means the /dev/mmcblk0 is the internal CF card used to boot
@@ -36,4 +36,4 @@ u-boot itself.
 # Given as example (copied from orangepi-zero) this comment has to be removed 
 # after validation of the following lines
 # sudo dd if=/dev/zero of=/dev/mmcblk0 bs=1k count=1023 seek=1 status=noxfer
-# sudo dd if=/boot/u-boot/u-boot-pineH64 of=/dev/mmcblk0 bs=1024 seek=8 status=noxfer
+# sudo dd if=/boot/u-boot/u-boot-pine-h64 of=/dev/mmcblk0 bs=1024 seek=8 status=noxfer

@@ -1,12 +1,12 @@
-Source: u-boot-pineH64
+Source: u-boot-pine-h64
 Section: misc
 Priority: optional
 Maintainer: William Bonnet <wbonnet@theitmakers.com>
 Standards-Version: 3.9.8
 Build-Depends: debhelper (>= 9)
 
-Package: u-boot-pineH64
+Package: u-boot-pine-h64
 Architecture: any
 Depends: ${misc:Depends}
-Description: u-boot, version 2018.07 for pineH64
- This packages contains u-boot version 2018.07 compiled for pineH64 board.
+Description: u-boot, version 2018.07 for pine-h64
+ This packages contains u-boot version 2018.07 compiled for pine-h64 board.
