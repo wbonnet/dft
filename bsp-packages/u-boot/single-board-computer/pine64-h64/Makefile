@@ -1,1 +1,0 @@
-../../../internals/templates/board-u-boot.makefile
