@@ -1,0 +1,1 @@
+../../../../internals/generic.board-u-boot.makefile
