@@ -28,6 +28,12 @@ PACKAGE_DATE = $(shell date )
 FILTER_DIRS  = files/
 HOST_ARCH    = $(shell uname -m)
 
+# ------------------------------------------------------------------------------
+#
+# Targets not associated with a file (aka PHONY)
+#
+.PHONY: help
+
 # Create a new board entry in the repository
 new-version:
 	@if [ "x${DFT_HOME}" = "x" ] ; \
@@ -93,7 +99,7 @@ new-version:
 #
 help :
 	@echo "Available targets are :"
-	@echo '   new-version-[VERSION]   Create a new version entry. ex: make new-version-4.15.3'
-	@echo '                           This target will create a subdirectory name VERSION, containing'
-	@echo '                           the Makefile and all the files needed to fetch and build given'
-	@echo '                           version. It also instanciate Debian package template'
+	@echo '   new-version VERSION=YYYY.MM Create a new version entry. ex: make new-version VERSION=2019.07'
+	@echo '                               This target will create a subdirectory named after the content of the VERSION variable.'
+	@echo '                               It will contain the Makefile and all the files needed to fetch and build the given'
+	@echo '                               version. It also instanciate Debian package template.'
