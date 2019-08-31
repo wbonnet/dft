@@ -1,1 +1,1 @@
-../../buildsystem/current/templates/board-kernel.makefile
+../../../../internals/generic.board-kernel.makefile
