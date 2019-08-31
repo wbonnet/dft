@@ -30,7 +30,7 @@ HOST_ARCH    = $(shell uname -m)
 
 # Create a new board entry in the repository
 new-version:
-	if [ "x${DFT_HOME}" = "x" ] ; \
+	@if [ "x${DFT_HOME}" = "x" ] ; \
 	then \
 	echo "DFT_HOME variable is not set in your shell environment. Please define it interactively or in your shell configuration file (reloading it). For instance with the following command or equivalent\n" ; \
 		echo "export DFT_HOME=/path/to/dft/makefiles" ; \
