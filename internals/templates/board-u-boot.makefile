@@ -32,7 +32,7 @@ HOST_ARCH    = $(shell uname -m)
 # Create a new boar entry in the repository
 new-version-%:
 	@if [ -d "./$(NEW_VERSION)" ] ; then \
-		echo ". Directory ./($(NEW_VERSION) already exist. Doing nothing..." ; \
+		echo "Version $(NEW_VERSION) already exist. Doing nothing..." ; \
 	else  \
 		echo ". Creating the directory structure (./$(NEW_VERSION))" ; \
 		mkdir -p $(NEW_VERSION) ; \
