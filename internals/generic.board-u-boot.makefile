@@ -29,7 +29,7 @@ FILTER_DIRS  = files/
 HOST_ARCH    = $(shell uname -m)
 
 # Defines relative path to root of the buildsystem tree
-DFT_HOME     = ../../../../..
+DFT_HOME     = ../../../..
 
 # ------------------------------------------------------------------------------
 #
@@ -40,9 +40,9 @@ DFT_HOME     = ../../../../..
 # Create a new board entry in the repository
 new-version:
 	@if [ -d "./$(VERSION)" ] ; then \
-		echo ". Directory ./($(VERSION) already exist. Doing nothing..." ; \
+		echo ". Version $(VERSION) already exist. Doing nothing..." ; \
 	else  \
-		echo ". Creating the directory structure (./$(VERSION))" ; \
+		echo ". Creating the directory structure for version $(VERSION)" ; \
 		mkdir -p $(VERSION) ; \
 		cp -f $(DFT_HOME)/internals/templates/u-boot-version.makefile $(VERSION)/Makefile ; \
 		ln -s $(DFT_HOME)/internals/ $(VERSION)/internals ; \
