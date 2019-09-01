@@ -29,7 +29,7 @@ FILTER_DIRS  = files/
 HOST_ARCH    = $(shell uname -m)
 
 # Defines relative path to root of the buildsystem tree
-DFT_HOME     = ../../../..
+DFT_HOME     = ../../../../..
 
 # ------------------------------------------------------------------------------
 #
@@ -44,17 +44,18 @@ new-version:
 	else  \
 		echo ". Creating the directory structure for version $(VERSION)" ; \
 		mkdir -p $(VERSION) ; \
-		cp -f $(DFT_HOME)/internals/templates/u-boot-version.makefile $(VERSION)/Makefile ; \
-		ln -s $(DFT_HOME)/internals/ $(VERSION)/internals ; \
-		mkdir -p $(VERSION)/files ; \
-		touch $(VERSION)/files/.gitkeep ; \
-		ln -s ../../files/install.u-boot.$(BOARD_NAME).md $(VERSION)/files/ ; \
-		mkdir -p $(VERSION)/patches ; \
-		touch $(VERSION)/patches/.gitkeep ; \
-		echo "work-$(BOARD_NAME)/" > $(VERSION)/.gitignore ; \
-		sed -i -e "s/__UBOOT_VERSION__/$(VERSION)/g" $(VERSION)/Makefile ; \
-		cp -fr $(DFT_HOME)/internals/templates/debian.u-boot $(VERSION)/debian ; \
-		cd $(VERSION)/debian ; \
+		cd $(VERSION) ; \
+		cp -f $(DFT_HOME)/buildsystem/templates/u-boot-version.makefile Makefile ; \
+		ln -s $(DFT_HOME)/buildsystem/ buildsystem ; \
+		mkdir -p files ; \
+		touch files/.gitkeep ; \
+		ln -s ../../files/install.u-boot.$(BOARD_NAME).md ./files/ ; \
+		mkdir -p patches ; \
+		touch patches/.gitkeep ; \
+		echo "work-$(BOARD_NAME)/" > gitignore ; \
+		sed -i -e "s/__UBOOT_VERSION__/$(VERSION)/g" Makefile ; \
+		cp -fr $(DFT_HOME)/buildsystem/templates/debian.u-boot debian ; \
+		cd debian ; \
 		mv u-boot.install u-boot-$(BOARD_NAME).install ; \
 		cd ../.. ; \
 		find $(VERSION)/debian -type f | xargs sed -i -e "s/__UBOOT_VERSION__/$(VERSION)/g" \
