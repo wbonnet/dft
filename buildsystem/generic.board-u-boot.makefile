@@ -52,7 +52,7 @@ new-version:
 		ln -s ../../files/install.u-boot.$(BOARD_NAME).md ./files/ ; \
 		mkdir -p patches ; \
 		touch patches/.gitkeep ; \
-		echo "work-$(BOARD_NAME)/" > gitignore ; \
+		echo "work-$(BOARD_NAME)/" > .gitignore ; \
 		sed -i -e "s/__UBOOT_VERSION__/$(VERSION)/g" Makefile ; \
 		cp -fr $(DFT_HOME)/buildsystem/templates/debian.u-boot debian ; \
 		cd debian ; \
