@@ -28,6 +28,9 @@ PACKAGE_DATE = $(shell date )
 FILTER_DIRS  = files/
 HOST_ARCH    = $(shell uname -m)
 
+# Defines relative path to root of the buildsystem tree
+DFT_HOME     = ../../../../..
+
 # ------------------------------------------------------------------------------
 #
 # Targets not associated with a file (aka PHONY)
@@ -36,24 +39,13 @@ HOST_ARCH    = $(shell uname -m)
 
 # Create a new board entry in the repository
 new-version:
-	@if [ "x${DFT_HOME}" = "x" ] ; \
-	then \
-	echo "DFT_HOME variable is not set in your shell environment. Please define it interactively or in your shell configuration file (reloading it). For instance with the following command or equivalent\n" ; \
-		echo "export DFT_HOME=/path/to/dft/makefiles" ; \
-		false ; \
-	else \
-#		for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \
-#			$(MAKE) -C $$i $* || exit 1 ; \
-#		done ; \
-		true ; \
-	fi ; 
 	@if [ -d "./$(VERSION)" ] ; then \
 		echo ". Directory ./($(VERSION) already exist. Doing nothing..." ; \
 	else  \
 		echo ". Creating the directory structure (./$(VERSION))" ; \
 		mkdir -p $(VERSION) ; \
-		cp -f ${DFT_HOME}/internals/templates/u-boot-version.makefile $(VERSION)/Makefile ; \
-		ln -s ${DFT_HOME}/internals/ $(VERSION)/internals ; \
+		cp -f $(DFT_HOME)/internals/templates/u-boot-version.makefile $(VERSION)/Makefile ; \
+		ln -s $(DFT_HOME)/internals/ $(VERSION)/internals ; \
 		mkdir -p $(VERSION)/files ; \
 		touch $(VERSION)/files/.gitkeep ; \
 		ln -s ../../files/install.u-boot.$(BOARD_NAME).md $(VERSION)/files/ ; \
@@ -61,7 +53,7 @@ new-version:
 		touch $(VERSION)/patches/.gitkeep ; \
 		echo "work-$(BOARD_NAME)/" > $(VERSION)/.gitignore ; \
 		sed -i -e "s/__UBOOT_VERSION__/$(VERSION)/g" $(VERSION)/Makefile ; \
-		cp -fr ${DFT_HOME}/internals/templates/debian.u-boot $(VERSION)/debian ; \
+		cp -fr $(DFT_HOME)/internals/templates/debian.u-boot $(VERSION)/debian ; \
 		cd $(VERSION)/debian ; \
 		mv u-boot.install u-boot-$(BOARD_NAME).install ; \
 		cd ../.. ; \
