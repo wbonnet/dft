@@ -18,9 +18,10 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 #
- 
+
 # Defines the kernel version
-KERNEL_VERSION=5.2.11
+UBOOT_VERSION     = 2018.03
+KERNEL_GIT_BRANCH = v$(UBOOT_VERSION)
 
 # Include board specific definitions
 include ../board.mk
@@ -29,4 +30,4 @@ include ../board.mk
 # PATCHFILES += 0000_some_patch.diff
 
 # Include build system
-include buildsystem/dft.mk
+include buildsystem/dft.u-boot.mk

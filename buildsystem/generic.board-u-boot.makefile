@@ -76,6 +76,7 @@ new-version:
 
 # Call clean and dist clean targets in subfolders
 clean:
+fetch:
 distclean:
 	@for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \
 	$(MAKE) -C $$i $* || exit 1 ; \
