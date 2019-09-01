@@ -74,11 +74,18 @@ new-version:
 		git add $(VERSION) ; \
 	fi ;
 
+# Call clean and dist clean targets in subfolders
+clean:
+distclean:
+	@for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \
+	$(MAKE) -C $$i $* || exit 1 ; \
+	done 
+
 # Catch all target. Call the same targets in each subfolder
 %:
 	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
 	then \
-	    echo "Board is $(BOARD_ARCH) and i run on $(HOST_ARCH). Skipping recursive target call..." ; \
+	    echo "board is $(BOARD_ARCH) and i run on $(HOST_ARCH). Skipping recursive target call..." ; \
 	    true ; \
 	else \
 		for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \

@@ -44,15 +44,15 @@ new-version:
 	else  \
 		echo ". Creating the directory structure (./$(VERSION))" ; \
 		mkdir -p $(VERSION) ; \
-		cp -f ${DFT_HOME}/internals/templates/kernel-version.makefile $(VERSION)/Makefile ; \
-		ln -s ${DFT_HOME}/internals $(VERSION)/internals ; \
+		cp -f ${DFT_HOME}/buildsystem/kernel-version.makefile $(VERSION)/Makefile ; \
+		ln -s ${DFT_HOME}/buildsystem/ $(VERSION)/buildsystem ; \
 		mkdir -p $(VERSION)/files ; \
 		ln -s ../../config_files/default.$(BOARD_NAME).config $(VERSION)/files/$(BOARD_NAME).config ; \
 		mkdir -p $(VERSION)/patches ; \
 		touch $(VERSION)/patches/.gitkeep ; \
 		echo "work-$(BOARD_NAME)/" > $(VERSION)/.gitignore ; \
 		sed -i -e "s/__KERNEL_VERSION__/$(VERSION)/g" $(VERSION)/Makefile ; \
-		cp -fr ${DFT_HOME}/internals/templates/debian.kernel $(VERSION)/debian; \
+		cp -fr ${DFT_HOME}/buildsystem/templates/debian.kernel $(VERSION)/debian; \
 		cd $(VERSION)/debian ; \
 		mv linux-image.postinst  linux-image-$(BOARD_NAME).postinst ; \
 		mv linux-image.postrm    linux-image-$(BOARD_NAME).postrm ; \

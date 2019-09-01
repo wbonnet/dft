@@ -36,8 +36,8 @@ new-version-%:
 	else  \
 		echo ". Creating the directory structure (./$(NEW_VERSION))" ; \
 		mkdir -p $(NEW_VERSION) ; \
-		cp -f ../../internals/current/templates/u-boot-version.makefile $(NEW_VERSION)/Makefile ; \
-		ln -s ../../../internals/current $(NEW_VERSION)/internals ; \
+		cp -f ../../buildsystem/current/templates/u-boot-version.makefile $(NEW_VERSION)/Makefile ; \
+		ln -s ../../../buildsystem $(NEW_VERSION)/buildsystem ; \
 		mkdir -p $(NEW_VERSION)/files ; \
 		touch $(NEW_VERSION)/files/.gitkeep ; \
 		ln -s ../../files/install.u-boot.$(BOARD_NAME).md $(NEW_VERSION)/files/ ; \
@@ -45,7 +45,7 @@ new-version-%:
 		touch $(NEW_VERSION)/patches/.gitkeep ; \
 		echo "work-$(BOARD_NAME)/" > $(NEW_VERSION)/.gitignore ; \
 		sed -i -e "s/__UBOOT_VERSION__/$(NEW_VERSION)/g" $(NEW_VERSION)/Makefile ; \
-		cp -fr ../../internals/current/templates/debian.u-boot $(NEW_VERSION)/debian ; \
+		cp -fr ../../buildsystem/templates/debian.u-boot $(NEW_VERSION)/debian ; \
 		cd $(NEW_VERSION)/debian ; \
 		mv u-boot.install u-boot-$(BOARD_NAME).install ; \
 		cd ../.. ; \
