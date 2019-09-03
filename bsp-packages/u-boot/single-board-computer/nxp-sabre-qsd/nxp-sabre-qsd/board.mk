@@ -19,15 +19,13 @@
 #
 #
 
-# Defines the kernel version
-UBOOT_VERSION     = 2018.07
-KERNEL_GIT_BRANCH = v$(UBOOT_VERSION)
+# Defines board name
+BOARD_NAME = nxp-sabre-qsd-plus
+BOARD_ARCH = armv7l
 
-# Include board specific definitions
-include ../board.mk
+# Set config file to empty and define the name of the board to use a defconfig
+USE_CONFIG_FILE        =
+USE_DEFCONFIG          = mx6sabresd_defconfig
 
-# Defines the patches to apply on the sources
-# PATCHFILES += 0000_some_patch.diff
-
-# Include build system
-include buildsystem/dft.u-boot.mk
+# Defines the list of files to copy (#path is relative to build dir)
+UBOOT_BINARY_FILE      = u-boot.bin
