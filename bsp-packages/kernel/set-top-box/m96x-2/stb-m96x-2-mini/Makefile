@@ -1,1 +1,0 @@
-../../buildsystem/current/templates/board-kernel.makefile
