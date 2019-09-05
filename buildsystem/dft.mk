@@ -141,7 +141,7 @@ UPSTREAM_DOWNLOAD_TOOL ?= wget
 # Includes the build system top level variables definitions
 #
 # ------------------------------------------------------------------------------
-include $(BUILD_SYSTEM_ROOT)/dft.conf.mk
+include $(BUILD_SYSTEM_ROOT)/dft.internals-conf.mk
 
 
 # ------------------------------------------------------------------------------
@@ -149,7 +149,7 @@ include $(BUILD_SYSTEM_ROOT)/dft.conf.mk
 # Includes the build system top level macros definitions
 #
 # ------------------------------------------------------------------------------
-include $(BUILD_SYSTEM_ROOT)/dft.lib.mk
+include $(BUILD_SYSTEM_ROOT)/dft.internals-lib.mk
 
 
 # ------------------------------------------------------------------------------
@@ -157,7 +157,7 @@ include $(BUILD_SYSTEM_ROOT)/dft.lib.mk
 # Includes the build system configure definitions
 #
 # ------------------------------------------------------------------------------
-include $(BUILD_SYSTEM_ROOT)/dft.configure.mk
+include $(BUILD_SYSTEM_ROOT)/dft.target-configure.mk
 
 
 # ------------------------------------------------------------------------------
@@ -165,7 +165,7 @@ include $(BUILD_SYSTEM_ROOT)/dft.configure.mk
 # Includes the build system build definitions
 #
 # ------------------------------------------------------------------------------
-include $(BUILD_SYSTEM_ROOT)/dft.build.mk
+include $(BUILD_SYSTEM_ROOT)/dft.target-build.mk
 
 
 # ------------------------------------------------------------------------------
@@ -173,7 +173,7 @@ include $(BUILD_SYSTEM_ROOT)/dft.build.mk
 # Includes the build system install definitions
 #
 # ------------------------------------------------------------------------------
-include $(BUILD_SYSTEM_ROOT)/dft.install.mk
+include $(BUILD_SYSTEM_ROOT)/dft.target-install.mk
 
 
 # ------------------------------------------------------------------------------
@@ -181,7 +181,7 @@ include $(BUILD_SYSTEM_ROOT)/dft.install.mk
 # Includes the build system package definitions
 #
 # ------------------------------------------------------------------------------
-include $(BUILD_SYSTEM_ROOT)/dft.package.mk
+include $(BUILD_SYSTEM_ROOT)/dft.target-package.mk
 
 
 # ------------------------------------------------------------------------------
@@ -189,7 +189,7 @@ include $(BUILD_SYSTEM_ROOT)/dft.package.mk
 # Includes the build system upload definitions
 #
 # ------------------------------------------------------------------------------
-include $(BUILD_SYSTEM_ROOT)/dft.upload.mk
+include $(BUILD_SYSTEM_ROOT)/dft.target-upload.mk
 
 
 # ------------------------------------------------------------------------------
