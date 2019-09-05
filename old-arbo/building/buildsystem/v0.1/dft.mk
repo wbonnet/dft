@@ -194,7 +194,7 @@ include $(BUILD_SYSTEM_ROOT)/dft.install.mk
 # Includes the build system package definitions
 #
 # ------------------------------------------------------------------------------
-include $(BUILD_SYSTEM_ROOT)/dft.package.mk
+include $(BUILD_SYSTEM_ROOT)/dft.deb.mk
 
 
 # ------------------------------------------------------------------------------
