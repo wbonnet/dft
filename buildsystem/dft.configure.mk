@@ -39,8 +39,11 @@ configure-%/configure :
 		true ; \
 	else \
 		if [ "$(USE_CONFIG_FILE)" != "" ] ; then \
-			echo "    copying $(USE_CONFIG_FILE) to .config" ; \
+			echo "   W copying $(USE_CONFIG_FILE) to .config" ; \
 			cp -f $(FILE_DIR)/$(USE_CONFIG_FILE) $(OBJ_DIR)/.config ; \
+			cp -f $(FILE_DIR)/$(USE_CONFIG_FILE) $(OBJ_DIR)/original_config ; \
+			cd "$(OBJ_DIR)" && make olddefconfig ; \
+			cp .config after_olddefconfig-$(KERNEL_VERSION) ; \
 		else \
 			if [ "$(USE_DEFCONFIG)" != "" ] ; then \
 				echo "    running make $(BUILD_FLAGS) $(USE_DEFCONFIG) in $(OBJ_DIR)" ; \
