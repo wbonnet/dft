@@ -1,0 +1,1 @@
+../../../../buildsystem/generic-makefiles/board-kernel.makefile
