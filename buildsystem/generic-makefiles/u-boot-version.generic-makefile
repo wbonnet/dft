@@ -37,12 +37,12 @@ DFT_HOME     = ../../../../..
 #
 .PHONY: help
 
-# Create a new board entry in the repository
+# Create a new u-boot version entry in the current board repository
 new-version:
 	@if [ -d "./$(VERSION)" ] ; then \
 		echo ". Version $(VERSION) already exist. Doing nothing..." ; \
 	else  \
-		echo ". Creating the directory structure for version $(VERSION)" ; \
+	echo ". Creating the directory for u-boot version $(VERSION)" ; \
 		mkdir -p $(VERSION) ; \
 		cd $(VERSION) ; \
 		cp -f $(DFT_HOME)/buildsystem/templates/u-boot-version.makefile Makefile ; \

@@ -24,7 +24,7 @@ include board.mk
 
 # Defines the software version
 PACKAGE_DATE = $(shell LC_ALL=C date +"%a, %d %b %Y %T %z")
-PACKAGE_DATE = $(shell date )
+PACKAGE_DATE = $(shell date)
 FILTER_DIRS  = files/
 HOST_ARCH    = $(shell uname -m)
 
@@ -34,9 +34,9 @@ HOST_ARCH    = $(shell uname -m)
 #
 .PHONY: help
 
-# Create a new board entry in the repository
+# Create a new kernel version entry in the current board repository
 new-version:
-		@echo ". Creating the directory structure (./$(VERSION))" ; \
+		@echo ". Creating the directory structure for kernel version (./$(VERSION))" ; \
 		mkdir -p $(VERSION) ; \
 		cp -f ../../../../buildsystem/templates/kernel-version.makefile $(VERSION)/Makefile ; \
 		ln -s ../../../../../buildsystem/ $(VERSION)/buildsystem ; \

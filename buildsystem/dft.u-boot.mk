@@ -34,14 +34,14 @@
 #
 
 # Defines the git repository to use
-KERNEL_GIT_URL         ?= https://github.com/u-boot
-KERNEL_GIT_REPO        ?= u-boot
+UPSTREAM_GIT_URL         ?= https://github.com/u-boot
+UPSTREAM_GIT_REPO        ?= u-boot
 
-UPSTREAM_DOWNLOAD_TOOL  = git
-SOFTWARE_DIST_GIT       = u-boot
-SOFTWARE_UPSTREAM_NAME  = u-boot
-KERNEL_VERSION          = $(UBOOT_VERSION)
-BUILD_ARGS              =
-UBOOT_TARGETS          ?= u-boot.bin
+UPSTREAM_DOWNLOAD_TOOL    = git
+SOFTWARE_DIST_GIT         = u-boot
+SOFTWARE_UPSTREAM_NAME    = u-boot
+UPSTREAM_VERSION          = $(UBOOT_VERSION)
+BUILD_ARGS                =
+UBOOT_TARGETS            ?= u-boot.bin
 
 include buildsystem/dft.mk
