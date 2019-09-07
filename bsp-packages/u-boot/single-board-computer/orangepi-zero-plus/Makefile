@@ -1,1 +1,0 @@
-../../../../buildsystem/generic.board-u-boot.makefile

@@ -214,36 +214,45 @@ post-%:
 #
 help :
 	@echo "Available targets are :"
-	@echo '   clean                   Delete the work directory and its contents'
-	@echo '   distclean               Delete the root work directory and contents'
-	@echo '   show-config(uration)    Echo the main configuration variable'
-	@echo '   fetch                   Download software sources from upstream site'
-	@echo '   fetch-list              Show list of files that would be retrieved by fetch'
-	@echo '   checksum                Verify the checksums'
-	@echo '   makesum(s)              Compute the checksums and create the checksum file'
-	@echo '   extract                 Extract the contents of the files download by fetch target'
-	@echo '   patch                   Apply the patchs listed in PATCHFILES'
-	@echo '   configure               Execute the configure script'
-	@echo '   build                   Build the software'
-	@echo '   install                 Install the software to the target directory'
-	@echo '   package                 Build the Debian package containing kernel or u-boot and all the related files'
+	@echo "   clean                   Call the clean target inside the  work directory"
+	@echo "                           then into all its subfolders (sub makefiles have"
+	@echo "                           to support the clean target or an arror will occur)"
+	@echo "   mrproper                Destroy the work directory content and remove all"
+	@echo "                           cookies. Thus every styps will be done once again "
+	@echo "                           since there will be nothing left in work directory."
+        @echo "                           Sources will be downloaded once again then extracted"
+        @echo "                           compiled, etc. This may take a lot of time."
+        @echo "                           Warning !!! You will loose all the local "
+	@echo "                           modifications you may have done !!!"
+        @echo "                           You have been warned :)"
+	@echo "   show-config(uration)    Echo the main configuration variable"
+	@echo "   fetch                   Download software sources from upstream site"
+	@echo "   fetch-list              Show list of files that would be retrieved by fetch"
+	@echo "   checksum                Verify the checksums"
+	@echo "   makesum(s)              Compute the checksums and create the checksum file"
+	@echo "   extract                 Extract the contents of the files download by fetch target"
+	@echo "   patch                   Apply the patchs listed in PATCHFILES"
+	@echo "   configure               Execute the configure script"
+	@echo "   build                   Build the software"
+	@echo "   install                 Install the software to the target directory"
+	@echo "   package                 Build the Debian package containing kernel or u-boot and all the related files"
 	@echo
-	@echo '   re[target]              Force execution of [target] even if already done (without execution of its depends)'
+	@echo "   re[target]              Force execution of [target] even if already done (without execution of its depends)"
 
 # ------------------------------------------------------------------------------
 #
-# Delete the work directory and its contents
+# Run the clean target only inside the work directory
 #
 clean:
-	@rm -rf $(PARTIAL_DIR) $(WORK_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(COOKIE_DIR)
+	@make -C $(WORK_DIR) clean
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 
 
 # ------------------------------------------------------------------------------
 #
-# Delete the root work directory and its contents
+# Delete everthing from the work, cookies and download directories
 #
-distclean:
+mrproper:
 	@rm -rf $(WORK_ROOT_DIR) $(COOKIE_DIR) $(DOWNLOAD_DIR)
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 
