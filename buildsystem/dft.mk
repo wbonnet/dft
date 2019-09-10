@@ -28,6 +28,15 @@
 #
 #
 
+# ------------------------------------------------------------------------------
+# 
+# Protection against multiple includes
+#
+ifndef DFT_BUILDSYSTEM_ENTRY_POINT
+$(error DFT_BUILDSYSTEM is already defined which means that dft.mk has already been included)
+else
+define DFT_BUILDSYSTEM_ENTRY_POINT
+# the matching endif teminates this file
 
 # ------------------------------------------------------------------------------
 #
@@ -634,3 +643,9 @@ reupload : package pre-reupload do-reupload upload post-repupload
 	$(TARGET_DONE)
 
 
+# ------------------------------------------------------------------------------
+# 
+# Protection against multiple includes
+#
+# Match initial ifndef DFT_BUILDSYSTEM_ENTRY_POINT
+endif
