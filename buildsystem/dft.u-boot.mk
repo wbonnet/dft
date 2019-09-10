@@ -39,7 +39,7 @@ UPSTREAM_GIT_REPO        ?= u-boot
 
 UPSTREAM_DOWNLOAD_TOOL    = git
 SOFTWARE_DIST_GIT         = u-boot
-SOFTWARE_UPSTREAM_NAME    = u-boot
+SOFTWARE_NAME             = u-boot
 UPSTREAM_VERSION          = $(UBOOT_VERSION)
 BUILD_ARGS                =
 UBOOT_TARGETS            ?= u-boot.bin

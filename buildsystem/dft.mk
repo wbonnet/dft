@@ -126,15 +126,20 @@ BUILD_SYSTEM_ROOT := $(dir $(lastword $(MAKEFILE_LIST)))
 #
 # If not set, generate the distribution name based upon name and version
 #
-SOFTWARE_FULLNAME ?= $(SOFTWARE_UPSTREAM_NAME)-$(KERNEL_VERSION)
+#SOFTWARE_FULLNAME ?= $(SOFTWARE_NAME)-$(KERNEL_VERSION)
+ifndef SOFTWARE_NAME
+$(error SOFTWARE_NAME is not set)
+endif
 
 
 # ------------------------------------------------------------------------------
 #
 # Source retrieving tools and settings
 #
-UPSTREAM_DOWNLOAD_TOOL ?= wget
-
+#UPSTREAM_DOWNLOAD_TOOL ?= wget
+ifndef UPSTREAM_DOWNLOAD_TOOL
+$(error UPSTREAM_DOWNLOAD_TOOL is not set)
+endif
 
 # ------------------------------------------------------------------------------
 #
@@ -220,11 +225,11 @@ help :
 	@echo "   mrproper                Destroy the work directory content and remove all"
 	@echo "                           cookies. Thus every styps will be done once again "
 	@echo "                           since there will be nothing left in work directory."
-        @echo "                           Sources will be downloaded once again then extracted"
-        @echo "                           compiled, etc. This may take a lot of time."
-        @echo "                           Warning !!! You will loose all the local "
+	@echo "                           Sources will be downloaded once again then extracted"
+	@echo "                           compiled, etc. This may take a lot of time."
+	@echo "                           Warning !!! You will loose all the local "
 	@echo "                           modifications you may have done !!!"
-        @echo "                           You have been warned :)"
+	@echo "                           You have been warned :)"
 	@echo "   show-config(uration)    Echo the main configuration variable"
 	@echo "   fetch                   Download software sources from upstream site"
 	@echo "   fetch-list              Show list of files that would be retrieved by fetch"
@@ -264,8 +269,8 @@ mrproper:
 show-configuration : show-config
 show-config :
 	@echo "Software configuration"
-	@echo "  UPSTREAM_DOWNLOAD_TOOL            $(UPSTREAM_DOWNLOAD_TOOL)"
-	@echo "  SOFTWARE_UPSTREAM_NAME            $(SOFTWARE_UPSTREAM_NAME)"
+	@echo "  DOWNLOAD_TOOL                     $(DOWNLOAD_TOOL)"
+	@echo "  SOFTWARE_NAME                     $(SOFTWARE_NAME)"
 	@echo "  KERNEL_VERSION                    $(KERNEL_VERSION)"
 	@echo "  KERNEL_FILE_VERSION               $(KERNEL_FILE_VERSION)"
 	@echo "  KERNEL_BRANCH                     $(KERNEL_BRANCH)"
