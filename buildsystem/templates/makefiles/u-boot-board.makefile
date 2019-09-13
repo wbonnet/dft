@@ -44,12 +44,12 @@ new-version-%:
 		mkdir -p $(NEW_VERSION)/patches ; \
 		touch $(NEW_VERSION)/patches/.gitkeep ; \
 		echo "work-$(BOARD_NAME)/" > $(NEW_VERSION)/.gitignore ; \
-		sed -i -e "s/__UBOOT_VERSION__/$(NEW_VERSION)/g" $(NEW_VERSION)/Makefile ; \
+		sed -i -e "s/__SRC_VERSION__/$(NEW_VERSION)/g" $(NEW_VERSION)/Makefile ; \
 		cp -fr ../../buildsystem/templates/debian.u-boot $(NEW_VERSION)/debian ; \
 		cd $(NEW_VERSION)/debian ; \
 		mv u-boot.install u-boot-$(BOARD_NAME).install ; \
 		cd ../.. ; \
-		find $(NEW_VERSION)/debian -type f | xargs sed -i -e "s/__UBOOT_VERSION__/$(NEW_VERSION)/g" \
+		find $(NEW_VERSION)/debian -type f | xargs sed -i -e "s/__SRC_VERSION__/$(NEW_VERSION)/g" \
 	                                         -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" \
 	                                         -e "s/__DATE__/$(shell LC_ALL=C date +"%a, %d %b %Y %T %z")/g" ; \
         if [ "${DEBEMAIL}" = "" ] ; then \

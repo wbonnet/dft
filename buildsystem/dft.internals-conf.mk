@@ -60,25 +60,24 @@ BUILDER_OPERATING_SYSTEM_VERSION := $(word 2, $(shell lsb_release -c | tr '[:low
 #
 # ------------------------------------------------------------------------------
 
-KERNEL_GIT_URL         ?= git://git.kernel.org/pub/scm/linux/kernel/git/stable
-KERNEL_GIT_BRANCH      ?= stable
-KERNEL_GIT_REPO        ?= linux-$(KERNEL_GIT_BRANCH)
-KERNEL_GIT_REPO_EXT    ?= .git
-KERNEL_SITE            ?= https://cdn.kernel.org/pub/linux/kernel
-KERNEL_FILE_VERSION    ?= $(KERNEL_VERSION)
-KERNEL_SRC_URL         ?= $(KERNEL_SITE)/$(KERNEL_BRANCH)/linux-$(KERNEL_FILE_VERSION).tar.xz
-KERNEL_BRANCH          ?= v$(shell echo $(KERNEL_FILE_VERSION) | head -c 1).x
+SRC_GIT_URL      ?= git://git.kernel.org/pub/scm/linux/kernel/git/stable
+SRC_GIT_BRANCH   ?= stable
+SRC_GIT_REPO     ?= linux-$(SRC_GIT_BRANCH)
+SRC_GIT_REPO_EXT ?= .git
+SRC_SITE         ?= https://cdn.kernel.org/pub/linux/kernel
+SRC_FILE_VERSION ?= $(SRC_VERSION)
+SRC_SRC_URL      ?= $(SRC_SITE)/$(SRC_BRANCH)/linux-$(SRC_FILE_VERSION).tar.xz
+SRC_BRANCH       ?= v$(shell echo $(SRC_FILE_VERSION) | head -c 1).x
 
 # Defines the software name if not set
-SOFTWARE_NAME          ?= linux
+SRC_NAME            ?= linux
 
 # Defines the files to retrieve
-SOFTWARE_DIST_FILES     ?= $(SOFTWARE_NAME)-$(KERNEL_FILE_VERSION).tar.xz
-SOFTWARE_SIGN_FILES     ?= $(SOFTWARE_NAME)-$(KERNEL_FILE_VERSION).tar.xz.sign
-SOFTWARE_DIST_GIT       ?= $(SOFTWARE_NAME)
+SRC_DIST_FILES      ?= $(SRC_NAME)-$(SRC_FILE_VERSION).tar.xz
+SRC_SIGN_FILES      ?= $(SRC_NAME)-$(SRC_FILE_VERSION).tar.xz.sign
 
 # Defines the source repository
-SOFTWARE_UPSTREAM_SITES ?= $(KERNEL_SITE)/$(KERNEL_BRANCH)
+SRC_UPSTREAM_SITES  ?= $(SRC_SITE)/$(SRC_BRANCH)
 
 
 # ------------------------------------------------------------------------------
@@ -101,7 +100,7 @@ GIT_EXTRACT_DIR     ?= $(WORK_ROOT_DIR)/git
 PARTIAL_DIR         ?= $(DOWNLOAD_DIR)/partial
 COOKIE_DIR          ?= $(WORK_ROOT_DIR)/cookies-$(BOARD_NAME)
 EXTRACT_DIR         ?= $(WORK_DIR)
-WORK_SRC            ?= $(WORK_DIR)/$(SOFTWARE_FULLNAME)
+WORK_SRC            ?= $(WORK_DIR)/$(SRC_FULLNAME)
 OBJ_DIR             ?= $(WORK_SRC)
 INSTALL_DIR         ?= $(WORK_ROOT_DIR)/install-$(BOARD_NAME)
 PACKAGE_DIR         ?= $(WORK_ROOT_DIR)/package-$(BOARD_NAME)

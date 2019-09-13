@@ -54,7 +54,7 @@ configure-%/configure :
 			cp -f $(FILE_DIR)/$(USE_CONFIG_FILE) $(OBJ_DIR)/.config ; \
 			cp -f $(FILE_DIR)/$(USE_CONFIG_FILE) $(OBJ_DIR)/original_config ; \
 			cd "$(OBJ_DIR)" && make olddefconfig ; \
-			cp .config after_olddefconfig-$(KERNEL_VERSION) ; \
+			cp .config after_olddefconfig-$(SRC_VERSION) ; \
 		else \
 			if [ "$(USE_DEFCONFIG)" != "" ] ; then \
 				echo "    running make $(BUILD_FLAGS) $(USE_DEFCONFIG) in $(OBJ_DIR)" ; \

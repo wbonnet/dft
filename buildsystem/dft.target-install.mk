@@ -50,15 +50,15 @@ do-install :
 		true ; \
 	else \
 		echo "        running install in $(OBJ_DIR)"  ; \
-	 	if [ ! "" = "$(UBOOT_VERSION)" ] ; then \
+	 	if [ ! "" = "$(SRC_VERSION)" ] ; then \
 			mkdir -p $(abspath $(INSTALL_DIR))/u-boot/ ; \
 			mkdir -p $(INSTALL_DIR)/doc ; \
 			cp files/* $(INSTALL_DIR)/doc ; \
 			cd $(abspath $(OBJ_DIR)) ; \
-			cp -fr $(UBOOT_BINARY_FILE) $(abspath $(INSTALL_DIR))/u-boot/u-boot-$(BOARD_NAME)-$(UBOOT_VERSION) ; \
-			cp -fr u-boot.dtb $(abspath $(INSTALL_DIR))/u-boot/u-boot-$(BOARD_NAME)-$(UBOOT_VERSION).dtb ; \
+			cp -fr $(UBOOT_BINARY_FILE) $(abspath $(INSTALL_DIR))/u-boot/u-boot-$(BOARD_NAME)-$(SRC_VERSION) ; \
+			cp -fr u-boot.dtb $(abspath $(INSTALL_DIR))/u-boot/u-boot-$(BOARD_NAME)-$(SRC_VERSION).dtb ; \
 			cd $(abspath $(INSTALL_DIR))/u-boot/ ; \
-			ln -sf u-boot-$(BOARD_NAME)-$(UBOOT_VERSION) u-boot-$(BOARD_NAME); \
+			ln -sf u-boot-$(BOARD_NAME)-$(SRC_VERSION) u-boot-$(BOARD_NAME); \
 	 	else \
 			echo "        running install in $(OBJ_DIR)"  ; \
 			mkdir -p $(abspath $(INSTALL_DIR))/boot/dtb ; \

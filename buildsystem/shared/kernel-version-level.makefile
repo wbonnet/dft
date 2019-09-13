@@ -20,8 +20,8 @@
 #
 
 # Defines the kernel version
-UBOOT_VERSION     = $(notdir $(patsubst %/,%,$(shell pwd)))
-GIT_BRANCH        = v$(UBOOT_VERSION)
+SRC_VERSION     = $(notdir $(patsubst %/,%,$(shell pwd)))
+GIT_BRANCH      = $(SRC_VERSION)
 
 # Include board specific definitions
 include ../board.mk

@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-version=__KERNEL_VERSION__
+version=__SRC_VERSION__
 image_path=/boot/vmlinuz-$version
 
 if [ "$1" = abort-upgrade ]; then

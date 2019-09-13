@@ -132,21 +132,14 @@ TARGET_DONE = @mkdir -p $(dir $(COOKIE_DIR)/$@) && touch $(COOKIE_DIR)/$@
 #
 BUILD_SYSTEM_ROOT := $(dir $(lastword $(MAKEFILE_LIST)))
 
-
 # ------------------------------------------------------------------------------
 #
-# If not set, generate the distribution name based upon name and version
+# Mandatory defines that have to be defined at least in the main Makefile
 #
-#SOFTWARE_FULLNAME ?= $(SOFTWARE_NAME)-$(KERNEL_VERSION)
-ifndef SOFTWARE_NAME
-$(error SOFTWARE_NAME is not set)
+ifndef SRC_NAME
+$(error SRC_NAME is not set)
 endif
 
-
-# ------------------------------------------------------------------------------
-#
-# Source retrieving tools and settings
-#
 #UPSTREAM_DOWNLOAD_TOOL ?= wget
 ifndef UPSTREAM_DOWNLOAD_TOOL
 $(error UPSTREAM_DOWNLOAD_TOOL is not set)
@@ -281,26 +274,22 @@ show-configuration : show-config
 show-config :
 	@echo "Software configuration"
 	@echo "  DOWNLOAD_TOOL                     $(DOWNLOAD_TOOL)"
-	@echo "  SOFTWARE_NAME                     $(SOFTWARE_NAME)"
-	@echo "  KERNEL_VERSION                    $(KERNEL_VERSION)"
-	@echo "  KERNEL_FILE_VERSION               $(KERNEL_FILE_VERSION)"
-	@echo "  KERNEL_BRANCH                     $(KERNEL_BRANCH)"
-	@echo "  UBOOT_VERSION                     $(UBOOT_VERSION)"
+	@echo "  SRC_NAME                          $(SRC_NAME)"
+	@echo "  SRC_VERSION                       $(SRC_VERSION)"
 	@echo "  UBOOT_TARGETS                     $(UBOOT_TARGETS)"
 	@echo
 	@echo "wget download parameters"
-	@echo "  SOFTWARE_FULLNAME                 $(SOFTWARE_FULLNAME)"
-	@echo "  SOFTWARE_DIST_FILES               $(SOFTWARE_DIST_FILES)"
-	@echo "  SOFTWARE_SIGN_FILES               $(SOFTWARE_SIGN_FILES)"
-	@echo "  KERNEL_SITE                       $(KERNEL_SITE)"
-	@echo "  SOFTWARE_UPSTREAM_SITES           $(SOFTWARE_UPSTREAM_SITES)"
+	@echo "  SRC_FULLNAME                 $(SRC_FULLNAME)"
+	@echo "  SRC_DIST_FILES               $(SRC_DIST_FILES)"
+	@echo "  SRC_SIGN_FILES               $(SRC_SIGN_FILES)"
+	@echo "  SRC_SITE                     $(SRC_SITE)"
+	@echo "  SRC_UPSTREAM_SITES           $(SRC_UPSTREAM_SITES)"
 	@echo
 	@echo "git download parameters"
-	@echo "  KERNEL_GIT_URL                    $(KERNEL_GIT_URL)"
-	@echo "  KERNEL_GIT_REPO                   $(KERNEL_GIT_REPO)"
-	@echo "  KERNEL_GIT_REPO_EXT               $(KERNEL_GIT_REPO_EXT)"
-	@echo "  KERNEL_GIT_BRANCH                 $(KERNEL_GIT_BRANCH)"
-	@echo "  SOFTWARE_DIST_GIT                 $(SOFTWARE_DIST_GIT)"
+	@echo "  GIT_URL                           $(GIT_URL)"
+	@echo "  GIT_REPO                          $(GIT_REPO)"
+	@echo "  GIT_REPO_EXT                      $(GIT_REPO_EXT)"
+	@echo "  GIT_BRANCH                        $(GIT_BRANCH)"
 	@echo
 	@echo "Directories configuration"
 	@echo "  BUILD_SYSTEM_ROOT                 $(BUILD_SYSTEM_ROOT)"
@@ -372,10 +361,10 @@ prerequisite : $(COOKIE_DIR) pre-everything
 # Construct the list of files path under downloaddir which will be processed by
 # the $(DOWNLOAD_DIR)/% target
 ifeq ($(UPSTREAM_DOWNLOAD_TOOL), wget)
-FETCH_TARGETS ?=  $(addprefix $(DOWNLOAD_DIR)/,$(SOFTWARE_CHECKSUM_FILES)) $(addprefix $(DOWNLOAD_DIR)/,$(SOFTWARE_DIST_FILES))
+FETCH_TARGETS ?=  $(addprefix $(DOWNLOAD_DIR)/,$(SRC_CHECKSUM_FILES)) $(addprefix $(DOWNLOAD_DIR)/,$(SRC_DIST_FILES))
 else
 ifeq ($(UPSTREAM_DOWNLOAD_TOOL), git)
-FETCH_TARGETS ?=  $(addprefix $(GIT_EXTRACT_DIR)/,$(SOFTWARE_DIST_GIT))
+FETCH_TARGETS ?=  $(addprefix $(GIT_EXTRACT_DIR)/,$(SRC_NAME))
 else
 define error_msg
 Unknown UPSTREAM_DOWNLOAD_TOOL : $(UPSTREAM_DOWNLOAD_TOOL)
@@ -395,7 +384,7 @@ $(DOWNLOAD_DIR)/% : $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 	@if test -f $(COOKIE_DIR)/$(DOWNLOAD_DIR)/$* ; then \
 		true ; \
 	else \
-		wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SOFTWARE_UPSTREAM_SITES)/$* ; \
+		wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_UPSTREAM_SITES)/$* ; \
 		mv $(PARTIAL_DIR)/$* $@ ; \
 		if test -r $@ ; then \
 			true ; \
@@ -403,17 +392,17 @@ $(DOWNLOAD_DIR)/% : $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 			echo 'ERROR : Failed to download $@!' 1>&2; \
 			false; \
 		fi; \
-		if [ ! "" = "$(SOFTWARE_CHECKSUM_FILES)" ] ; then \
-			if [ ! "$*" = "$(SOFTWARE_CHECKSUM_FILES)" ] ; then \
-				if grep -- '$*' $(DOWNLOAD_DIR)/$(SOFTWARE_CHECKSUM_FILES) > /dev/null; then  \
-					if cat $(DOWNLOAD_DIR)/$(SOFTWARE_CHECKSUM_FILES) | (cd $(DOWNLOAD_DIR); LC_ALL="C" LANG="C" md5sum -c 2>&1) | grep -- '$*' | grep -v ':[ ]\+OK' > /dev/null; then \
+		if [ ! "" = "$(SRC_CHECKSUM_FILES)" ] ; then \
+			if [ ! "$*" = "$(SRC_CHECKSUM_FILES)" ] ; then \
+				if grep -- '$*' $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES) > /dev/null; then  \
+					if cat $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES) | (cd $(DOWNLOAD_DIR); LC_ALL="C" LANG="C" md5sum -c 2>&1) | grep -- '$*' | grep -v ':[ ]\+OK' > /dev/null; then \
 						echo "        \033[1m[Failed] : checksum of file $* is invalid\033[0m" ; \
 						false; \
 					else \
 						echo "        [  OK   ] : $* checksum is valid	  " ; \
 					fi ;\
 				else  \
-					echo "        \033[1m[Missing] : $* is not in the checksum file\033[0m $(DOWNLOAD_DIR)/$(SOFTWARE_CHECKSUM_FILES)" ; \
+					echo "        \033[1m[Missing] : $* is not in the checksum file\033[0m $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES)" ; \
 					false; \
 				fi ; \
 			fi ; \
@@ -422,12 +411,12 @@ $(DOWNLOAD_DIR)/% : $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 	$(TARGET_DONE)
 
 $(GIT_EXTRACT_DIR)/% : $(GIT_EXTRACT_DIR)
-	@if test -f $(COOKIE_DIR)/$(GIT_EXTRACT_DIR)/$* ; then \
+	if test -f $(COOKIE_DIR)/$(GIT_EXTRACT_DIR)/$* ; then \
 		true ; \
 	else \
 		echo "        cloning into $(GIT_EXTRACT_DIR)/$*" ; \
 		cd $(GIT_EXTRACT_DIR) ; \
-        git clone --single-branch $(GIT_OPTS) -b $(KERNEL_GIT_BRANCH) $(KERNEL_GIT_URL)/$(KERNEL_GIT_REPO)$(KERNEL_GIT_REPO_EXT) ; \
+        git clone --single-branch $(GIT_OPTS) -b $(GIT_BRANCH) $(GIT_URL)/$(GIT_REPO)$(GIT_REPO_EXT) ; \
 	fi ;
 	$(TARGET_DONE)
 
@@ -437,7 +426,7 @@ $(GIT_EXTRACT_DIR)/% : $(GIT_EXTRACT_DIR)
 # Compare checksum file contents and current md5
 #
 
-CHECKSUM_TARGETS ?= $(addprefix checksum-,$(filter-out $(_NOCHECKSUM) $(NOCHECKSUM),$(SOFTWARE_DIST_FILES)))
+CHECKSUM_TARGETS ?= $(addprefix checksum-,$(filter-out $(_NOCHECKSUM) $(NOCHECKSUM),$(SRC_DIST_FILES)))
 
 checksum : fetch pre-checksum checksum_banner $(CHECKSUM_TARGETS) post-checksum
 	$(DISPLAY_COMPLETED_TARGET_NAME)
@@ -482,7 +471,7 @@ $(CHECKSUM_FILE):
 # Remove the files identified in the NOCHECKSUM targets
 #
 
-MAKESUM_TARGETS ?=  $(filter-out $(_NOCHECKSUM) $(NOCHECKSUM),$(SOFTWARE_DIST_FILES))
+MAKESUM_TARGETS ?=  $(filter-out $(_NOCHECKSUM) $(NOCHECKSUM),$(SRC_DIST_FILES))
 
 # Check that the files really exist, even if they should be downloaded by
 # fetch  target. Then call md5sum to generate checksum file
@@ -510,10 +499,10 @@ makesums : makesum
 # Construct the list of files path under downloaddir which will be processed by
 # the $(DOWNLOAD_DIR)/% target
 ifeq ($(UPSTREAM_DOWNLOAD_TOOL), wget)
-EXTRACT_TARGETS ?=  $(addprefix extract-archive-,$(SOFTWARE_DIST_FILES))
+EXTRACT_TARGETS ?=  $(addprefix extract-archive-,$(SRC_DIST_FILES))
 else
 ifeq ($(UPSTREAM_DOWNLOAD_TOOL), git)
-EXTRACT_TARGETS ?=  $(addprefix extract-git-,$(SOFTWARE_DIST_GIT))
+EXTRACT_TARGETS ?=  $(addprefix extract-git-,$(SRC_NAME))
 else
 define error_msg
 Unknown UPSTREAM_DOWNLOAD_TOOL : $(UPSTREAM_DOWNLOAD_TOOL)

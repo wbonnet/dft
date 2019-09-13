@@ -8,5 +8,5 @@ Build-Depends: debhelper (>= 9)
 Package: u-boot-__BOARD_NAME__
 Architecture: any
 Depends: ${misc:Depends}
-Description: u-boot, version __UBOOT_VERSION__ for __BOARD_NAME__
- This packages contains u-boot version __UBOOT_VERSION__ compiled for __BOARD_NAME__ board.
+Description: u-boot, version __SRC_VERSION__ for __BOARD_NAME__
+ This packages contains u-boot version __SRC_VERSION__ compiled for __BOARD_NAME__ board.

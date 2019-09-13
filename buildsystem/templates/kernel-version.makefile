@@ -20,7 +20,7 @@
 #
  
 # Defines the kernel version
-KERNEL_VERSION=__KERNEL_VERSION__
+SRC_VERSION=__SRC_VERSION__
 
 # Include board specific definitions
 include ../board.mk

@@ -34,11 +34,11 @@
 #
 $(info included dft.u-boot.mk)
 ifdef DFT_BUILDSYSTEM_UBOOT
+# the matching endif teminates this file
 $(error dft.u-boot.mk has already been included)
 else
 define DFT_BUILDSYSTEM_UBOOT
 endef
-# the matching endif teminates this file
 
 # ------------------------------------------------------------------------------
 #
@@ -50,9 +50,8 @@ UPSTREAM_GIT_URL         ?= https://github.com/u-boot
 UPSTREAM_GIT_REPO        ?= u-boot
 
 UPSTREAM_DOWNLOAD_TOOL    = git
-SOFTWARE_DIST_GIT         = u-boot
-SOFTWARE_NAME             = u-boot
-UPSTREAM_VERSION          = $(UBOOT_VERSION)
+SRC_NAME                  = u-boot
+UPSTREAM_VERSION          = $(SRC_VERSION)
 BUILD_ARGS                =
 UBOOT_TARGETS            ?= u-boot.bin
 
