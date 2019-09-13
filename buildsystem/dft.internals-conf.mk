@@ -28,6 +28,18 @@
 #
 #
 
+# ------------------------------------------------------------------------------
+# 
+# Protection against multiple includes
+#
+$(info included dft.internals-conf.mk)
+ifdef DFT_INTERNALS_CONF
+$(error dft.internals-conf.mk has already been included)
+else
+define DFT_INTERNALS_CONF
+endef
+# the matching endif teminates this file
+#
 
 # ------------------------------------------------------------------------------
 #
@@ -156,3 +168,8 @@ INSTALL_ARGS    ?= $(ARCH_COMMON_INSTALL_ARGS) $(ARCH_$(shell echo $(BOARD_ARCH)
 DEBUILD        = debuild
 DEBUILD_ARGS   = -us -uc
 DEBUILD_ENV    = DEBUILD_TGZ_CHECK=no
+
+# ------------------------------------------------------------------------------
+# Match initial ifdef
+endif
+

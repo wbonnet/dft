@@ -27,6 +27,17 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 #
+# ------------------------------------------------------------------------------
+# 
+# Protection against multiple includes
+#
+$(info included dft.target-build.mk)
+ifdef DFT_BUILDSYSTEM_TARGET_BUILD
+$(error dft.target-build.mk has already been included)
+else
+define DFT_BUILDSYSTEM_TARGET_BUILD
+endef
+# the matching endif teminates this file
 
 # ------------------------------------------------------------------------------
 #
@@ -59,3 +70,7 @@ rebuild-%/Makefile :
 PREREQUISITE_BASE_PKGS ?= make
 PREREQUISITE_BASE_PKGS_UBUNTU ?= build-essential
 PREREQUISITE_BASE_PKGS_DEBIAN ?= build-essential
+
+# ------------------------------------------------------------------------------
+# Match initial ifdef
+endif

@@ -29,6 +29,18 @@
 #
 
 # ------------------------------------------------------------------------------
+# 
+# Protection against multiple includes
+#
+$(info included dft.target-package.mk)
+ifdef DFT_BUILDSYSTEM_TARGET_PACKAGE
+$(error dft.target-package.mk has already been included)
+else
+define DFT_BUILDSYSTEM_TARGET_PACKAGE
+endef
+# the matching endif teminates this file
+
+# ------------------------------------------------------------------------------
 #
 # Execute the package target script
 #
@@ -59,4 +71,8 @@ do-repackage :
 		rm -fr $(abspath $(PACAKGE_DIR)) ; \
 	fi ;
 	$(TARGET_DONE)
+
+# ------------------------------------------------------------------------------
+# Match initial ifdef
+endif
 

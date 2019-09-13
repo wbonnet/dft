@@ -29,6 +29,19 @@
 #
 
 # ------------------------------------------------------------------------------
+# 
+# Protection against multiple includes
+#
+$(info included dft.internals-lib.mk)
+ifdef DFT_INTERNALS_LIB
+$(error dft.internals-lib.mk has already been included)
+else
+define DFT_INTERNALS_LIB
+endef
+# the matching endif teminates this file
+
+
+# ------------------------------------------------------------------------------
 #
 # archive extraction utilities
 #
@@ -124,4 +137,8 @@ $(COOKIE_DIR)/%:
 	@if test -d $@; then : ; else \
 		install -d $@; \
 	fi
+
+# Match initial ifndef DFT_INTERNALS_LIB
+endif
+
 

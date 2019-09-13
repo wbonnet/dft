@@ -32,10 +32,12 @@
 # 
 # Protection against multiple includes
 #
-ifndef DFT_BUILDSYSTEM_ENTRY_POINT
-$(error DFT_BUILDSYSTEM is already defined which means that dft.mk has already been included)
+$(info included dft.mk)
+ifdef DFT_BUILDSYSTEM_ENTRY_POINT
+$(error dft.mk has already been included)
 else
 define DFT_BUILDSYSTEM_ENTRY_POINT
+endef
 # the matching endif teminates this file
 
 # ------------------------------------------------------------------------------
@@ -258,7 +260,7 @@ help :
 # Run the clean target only inside the work directory
 #
 clean:
-	@make -C $(WORK_DIR) clean
+	@if [ -d $(WORK_DIR) ] ; then make -C $(WORK_DIR) clean ; fi
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 
 
@@ -644,8 +646,5 @@ reupload : package pre-reupload do-reupload upload post-repupload
 
 
 # ------------------------------------------------------------------------------
-# 
-# Protection against multiple includes
-#
-# Match initial ifndef DFT_BUILDSYSTEM_ENTRY_POINT
+# Match initial ifdef
 endif

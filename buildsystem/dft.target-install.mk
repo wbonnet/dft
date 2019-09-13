@@ -29,6 +29,18 @@
 #
 
 # ------------------------------------------------------------------------------
+# 
+# Protection against multiple includes
+#
+$(info included dft.target-install.mk)
+ifdef DFT_BUILDSYSTEM_TARGET_INSTALL
+$(error dft.target-install.mk has already been included)
+else
+define DFT_BUILDSYSTEM_TARGET_INSTALL
+endef
+# the matching endif teminates this file
+
+# ------------------------------------------------------------------------------
 #
 # Execute the install target script
 #
@@ -68,4 +80,8 @@ do-reinstall :
 		rm -fr $(abspath $(INSTALL_DIR)) ; \
 	fi ;
 	$(TARGET_DONE)
+
+# ------------------------------------------------------------------------------
+# Match initial ifdef
+endif
 

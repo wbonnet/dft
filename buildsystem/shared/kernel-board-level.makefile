@@ -24,8 +24,8 @@ include board.mk
 
 # Defines the software version
 NEW_VERSION  = $*
-PACAKGE_DATE = $(shell LC_ALL=C date +"%a, %d %b %Y %T %z")
-PACAKGE_DATE = $(shell date )
+PACKAGE_DATE = $(shell LC_ALL=C date +"%a, %d %b %Y %T %z")
+PACKAGE_DATE = $(shell date )
 FILTER_DIRS  = config_files/
 HOST_ARCH    = $(shell uname -m)
 

@@ -28,6 +28,17 @@
 #
 #
 
+# ------------------------------------------------------------------------------
+# 
+# Protection against multiple includes
+#
+$(info included dft.target-configure.mk)
+ifdef DFT_BUILDSYSTEM_TARGET_CONFIGURE
+$(error dft.target-configure.mk has already been included)
+else
+define DFT_BUILDSYSTEM_TARGET_CONFIGURE
+endef
+# the matching endif teminates this file
 
 # ------------------------------------------------------------------------------
 #
@@ -61,4 +72,8 @@ reconfigure-%/configure :
 		rm -f $(COOKIE_DIR)/configure-$*/configure ; \
 	fi ;
 	$(TARGET_DONE)
+
+# ------------------------------------------------------------------------------
+# Match initial ifdef
+endif
 

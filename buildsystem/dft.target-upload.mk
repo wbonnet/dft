@@ -30,6 +30,18 @@
 
 # ------------------------------------------------------------------------------
 #
+# Protection against multiple includes
+#
+$(info included dft.target-upload.mk)
+ifdef DFT_BUILDSYSTEM_TARGET_UPLOAD
+$(error dft.target-upload.mk has already been included)
+else
+define DFT_BUILDSYSTEM_TARGET_UPLOAD
+endef
+# the matching endif teminates this file
+
+# ------------------------------------------------------------------------------
+#
 # Execute the upload target script
 #
 
@@ -62,4 +74,8 @@ do-reupload :
 		rm -fr $(abspath $(INSTALL_DIR)) ; \
 	fi ;
 	$(TARGET_DONE)
+
+# ------------------------------------------------------------------------------
+# Match initial ifdef
+endif
 

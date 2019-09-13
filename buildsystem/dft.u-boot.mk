@@ -30,6 +30,18 @@
 
 # ------------------------------------------------------------------------------
 #
+# Protection against multiple includes
+#
+$(info included dft.u-boot.mk)
+ifdef DFT_BUILDSYSTEM_UBOOT
+$(error dft.u-boot.mk has already been included)
+else
+define DFT_BUILDSYSTEM_UBOOT
+endef
+# the matching endif teminates this file
+
+# ------------------------------------------------------------------------------
+#
 # Overrides some definition to compile uboot using the same makefiles
 #
 
@@ -45,3 +57,8 @@ BUILD_ARGS                =
 UBOOT_TARGETS            ?= u-boot.bin
 
 include buildsystem/dft.mk
+
+# ------------------------------------------------------------------------------
+# Match initial ifdef
+endif
+
