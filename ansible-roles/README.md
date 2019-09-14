@@ -1,7 +1,7 @@
 Ansible roles naming convention
 ===============================
 
-This folder contains the Ansible roles provided by the DFT project. Roles are names accordin the following rules :
+This folder contains the Ansible roles provided by the DFT project. Roles are named according the following rules :
 
 . A role name is made of three components:
   . The name of the project it belongs to. DFT roles will, of course, always use 'dft' as first component value.
@@ -11,5 +11,7 @@ This folder contains the Ansible roles provided by the DFT project. Roles are na
     . bsp
     . network
     . security
+    . desktop
+
   . The role software functionality
 
