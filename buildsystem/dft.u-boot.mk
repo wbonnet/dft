@@ -53,7 +53,6 @@ UPSTREAM_DOWNLOAD_TOOL    = git
 SRC_NAME                  = u-boot
 UPSTREAM_VERSION          = $(SRC_VERSION)
 BUILD_ARGS                =
-UBOOT_TARGETS            ?= u-boot.bin
 
 include buildsystem/dft.mk
 

@@ -35,5 +35,5 @@ include ../board.mk
 # of all existing boards.
 
 # Include build system
-include buildsystem/dft.u-boot.mk
+include buildsystem/dft.kernel.mk
 include buildsystem/dft.mk
