@@ -1,5 +1,5 @@
-#Ansible roles naming convention
-
+<h1>Ansible roles naming convention
+</h1>
 This folder contains the Ansible roles provided by the DFT project. Roles are named according the following rules :
 
 A role name is made of three components or fields (fields are dashed separated) :
@@ -14,5 +14,5 @@ A role name is made of three components or fields (fields are dashed separated) 
   </ul>
 
   <ul>The role software functionality
-  </ul>ul>
+  </ul>
 
