@@ -104,7 +104,7 @@ WORK_SRC            ?= $(WORK_DIR)/$(SRC_FULLNAME)
 OBJ_DIR             ?= $(WORK_SRC)
 INSTALL_DIR         ?= $(WORK_ROOT_DIR)/install-$(BOARD_NAME)
 PACKAGE_DIR         ?= $(WORK_ROOT_DIR)/package-$(BOARD_NAME)
-TEMP_DIR            ?= $(WORK_DIR)/tmp
+TEMP_DIR            ?= /tmp
 CHECKSUM_FILE       ?= checksums
 LOG_DIR             ?= log
 
@@ -145,7 +145,7 @@ ARCH_ARMV7L_BUILD_ARGS  ?= zImage dtbs
 
 # Defines default build targets depending on the board architectures
 ARCH_COMMON_BUILD_FLAGS   ?=
-ARCH_ARMV7L_BUILD_FLAGS    ?=
+ARCH_ARMV7L_BUILD_FLAGS   ?=
 
 # Defines default build arguments, depending on the board architectures
 # ARCH_COMMON_INSTALL_ARGS ?=
