@@ -1,1 +1,1 @@
-../../../../buildsystem/generic-makefiles/board-kernel.makefile
+../../../../buildsystem/shared/kernel-board-level.makefile
