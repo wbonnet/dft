@@ -26,7 +26,7 @@ include board.mk
 NEW_VERSION  = $*
 PACKAGE_DATE = $(shell LC_ALL=C date +"%a, %d %b %Y %T %z")
 PACKAGE_DATE = $(shell date )
-FILTER_DIRS  = config_files/
+FILTER_DIRS  = defconfig/
 HOST_ARCH    = $(shell uname -m)
 
 # ------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ new-version-%:
 		cp -f ../../buildsystem/current/templates/kernel-version.makefile $(NEW_VERSION)/Makefile ; \
 		ln -s ../../../buildsystem/current $(NEW_VERSION)/buildsystem ; \
 		mkdir -p $(NEW_VERSION)/files ; \
-		ln -s ../../config_files/default.$(BOARD_NAME).config $(NEW_VERSION)/files/$(BOARD_NAME).config ; \
+		ln -s ../../defconfig/$(BOARD_NAME).config $(NEW_VERSION)/files/$(BOARD_NAME).config ; \
 		mkdir -p $(NEW_VERSION)/patches ; \
 		touch $(NEW_VERSION)/patches/.gitkeep ; \
 		echo "work-$(BOARD_NAME)/" > $(NEW_VERSION)/.gitignore ; \
