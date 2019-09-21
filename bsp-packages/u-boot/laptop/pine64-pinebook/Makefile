@@ -1,1 +1,1 @@
-../../../../buildsystem/templates/board-u-boot.makefile
+../../../../buildsystem/shared/u-boot-board-level.makefile
