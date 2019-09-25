@@ -85,7 +85,7 @@ define error_msg
 DEBFULLNAME environment variable should be defined. You have to set it before
 continuing. This can be done by adding the following line to ~/.bash_aliases
 
-export DEBFULLNAME "John Doe"
+export DEBFULLNAME "Jane Doe"
 
 endef
   $(error $(error_msg))
@@ -104,7 +104,7 @@ define error_msg
 DEBEMAIL environment variable shoould be defined. You have to set it before
 continuing. This can be done by adding the following line to ~/.bash_aliases
 
-export DEBEMAIL "john@doe.org"
+export DEBEMAIL "jane@doe.org"
 
 endef
   $(error $(error_msg))
