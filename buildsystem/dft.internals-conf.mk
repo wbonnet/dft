@@ -65,16 +65,16 @@ SRC_GIT_BRANCH   ?= stable
 SRC_GIT_REPO     ?= linux-$(SRC_GIT_BRANCH)
 SRC_GIT_REPO_EXT ?= .git
 SRC_SITE         ?= https://cdn.kernel.org/pub/linux/kernel
-SRC_FILE_VERSION ?= $(SRC_VERSION)
-SRC_SRC_URL      ?= $(SRC_SITE)/$(SRC_BRANCH)/linux-$(SRC_FILE_VERSION).tar.xz
+SRC_FILE_VERSION ?= $(SW_VERSION)
+SRC_SRC_URL      ?= $(SRC_SITE)/$(SRC_BRANCH)/linux-$(SW_VERSION).tar.xz
 SRC_BRANCH       ?= v$(shell echo $(SRC_FILE_VERSION) | head -c 1).x
 
 # Defines the software name if not set
 SRC_NAME            ?= linux
 
 # Defines the files to retrieve
-SRC_DIST_FILES      ?= $(SRC_NAME)-$(SRC_FILE_VERSION).tar.xz
-SRC_SIGN_FILES      ?= $(SRC_NAME)-$(SRC_FILE_VERSION).tar.xz.sign
+SRC_DIST_FILES      ?= $(SRC_NAME)-$(SW_VERSION).tar.xz
+SRC_SIGN_FILES      ?= $(SRC_NAME)-$(SW_VERSION).tar.xz.sign
 
 # Defines the source repository
 SRC_UPSTREAM_SITES  ?= $(SRC_SITE)/$(SRC_BRANCH)

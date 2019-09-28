@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-version=__SRC_VERSION__
+version=__SW_VERSION__
 image_path=/boot/vmlinuz-$version
 
 if [ "$1" != configure ]; then
@@ -24,8 +24,8 @@ fi
 
 # Create or update the link to zImage
 cd /boot
-ln -sf vmlinuz-__SRC_VERSION__ zImage
-ln -sf initrd.img-__SRC_VERSION__ initrd.img
+ln -sf vmlinuz-__SW_VERSION__ zImage
+ln -sf initrd.img-__SW_VERSION__ initrd.img
 
 exit 0
 

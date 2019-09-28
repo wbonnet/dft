@@ -56,10 +56,10 @@ do-package :
 		rm -f debian ; \
 		cp -fr $(BASE_DIR)/debian debian ; \
 		cp -fr $(abspath $(INSTALL_DIR))/* . ; \
-	 	if [ ! "" = "$(SRC_VERSION)" ] ; then \
-			tar cvfz ../u-boot-$(BOARD_NAME)_$(SRC_VERSION).orig.tar.gz * ; \
+	 	if [ ! "" = "$(SW_VERSION)" ] ; then \
+			tar cvfz ../u-boot-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
 		else \
-			tar cvfz ../linux-kernel-$(BOARD_NAME)_$(SRC_VERSION).orig.tar.gz * ; \
+			tar cvfz ../linux-kernel-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
 	 	fi ; \
 		$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ; \
 	fi ;

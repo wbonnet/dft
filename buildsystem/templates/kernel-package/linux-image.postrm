@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-version=__SRC_VERSION__
+version=__SW_VERSION__
 image_path=/boot/vmlinuz-$version
 
 rm -f /lib/modules/$version/.fresh-install

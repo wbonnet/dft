@@ -20,8 +20,8 @@
 #
 
 # Defines the kernel version
-SRC_VERSION  = __SRC_VERSION__
-SRC_GIT_BRANCH = v$(SRC_VERSION)
+SW_VERSION  = __SW_VERSION__
+SRC_GIT_BRANCH = v$(SW_VERSION)
 
 # Include board specific definitions
 include ../board.mk

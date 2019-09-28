@@ -275,7 +275,7 @@ show-config :
 	@echo "Software configuration"
 	@echo "  DOWNLOAD_TOOL                     $(DOWNLOAD_TOOL)"
 	@echo "  SRC_NAME                          $(SRC_NAME)"
-	@echo "  SRC_VERSION                       $(SRC_VERSION)"
+	@echo "  SW_VERSION                        $(SW_VERSION)"
 	@echo
 	@echo "wget download parameters"
 	@echo "  SRC_FULLNAME                      $(SRC_FULLNAME)"

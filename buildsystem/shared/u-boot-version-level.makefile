@@ -31,8 +31,8 @@ include ../board.mk
 # for all unmodified makefiles of all existing boards.
 
 # Defines the version of the u-boot software
-SRC_VERSION   = $(notdir $(patsubst %/,%,$(shell pwd)))
-GIT_BRANCH    = v$(SRC_VERSION)
+SW_VERSION   = $(notdir $(patsubst %/,%,$(shell pwd)))
+GIT_BRANCH    = v$(SW_VERSION)
 
 # Defines patches to apply to the upstream sources :
 # PATCHFILES += 0000_some_patch.diff
@@ -45,7 +45,7 @@ GIT_BRANCH    = v$(SRC_VERSION)
 
 
 test:
-	@echo $(SRC_VERSION)
+	@echo $(SW_VERSION)
 
 # Include build system
 include buildsystem/dft.u-boot.mk

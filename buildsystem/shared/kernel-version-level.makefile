@@ -20,8 +20,8 @@
 #
 
 # Defines the kernel version
-SRC_VERSION     = $(notdir $(patsubst %/,%,$(shell pwd)))
-GIT_BRANCH      = $(SRC_VERSION)
+SW_VERSION      = $(notdir $(patsubst %/,%,$(shell pwd)))
+GIT_BRANCH      = $(SW_VERSION)
 
 # Include board specific definitions
 include ../board.mk
