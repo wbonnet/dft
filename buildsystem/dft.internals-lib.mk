@@ -106,7 +106,7 @@ extract-git-% :
 		true ; \
 	else \
 	  echo "        moving git data to $(EXTRACT)/$*" ; \
-		mv $(GIT_EXTRACT_DIR)/$(SRC_GIT_REPO) $(EXTRACT_DIR)/$(SRC_FULLNAME) ; \
+		mv $(GIT_EXTRACT_DIR)/$(SRC_GIT_REPO) $(EXTRACT_DIR)/$(SRC_NAME) ; \
 	fi ;
 	$(TARGET_DONE)
 
@@ -127,7 +127,7 @@ apply-patch-% :
 #
 # Directory maker used by the base rules
 #
-$(sort $(BUILD_SYSTEM_ROOT) $(FILE_DIR) $(GIT_EXTRACT_DIR) $(WORK_ROOT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(EXTRACT_DIR) $(WORK_SRC) $(OBJ_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR)):
+$(sort $(BUILD_SYSTEM_ROOT) $(FILE_DIR) $(GIT_EXTRACT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(EXTRACT_DIR) $(WORK_SRC) $(OBJ_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR)):
 	@if test -d $@; then : ; else \
 		echo making $@; \
 		install -d $@; \

@@ -86,27 +86,22 @@ SRC_UPSTREAM_SITES  ?= $(SRC_SITE)/$(SRC_BRANCH)
 #
 # ------------------------------------------------------------------------------
 
-BASE_DIR            ?= $(CURDIR)
-FILE_DIR            ?= files
-PATCH_DIR           ?= patches
-ifeq ($(DFT_BUILDSYSTEM_WORKDIR),)
-  WORK_ROOT_DIR     ?= work-$(BOARD_NAME)
-else
-  WORK_ROOT_DIR     ?= $(DFT_BUILDSYSTEM_WORKDIR)/work-$(BOARD_NAME)
-endif
-WORK_DIR            ?= $(WORK_ROOT_DIR)/build-$(BOARD_NAME)
-DOWNLOAD_DIR        ?= $(WORK_ROOT_DIR)/download
-GIT_EXTRACT_DIR     ?= $(WORK_ROOT_DIR)/git
+WORK_DIR            ?= $(CURDIR)/build-$(BOARD_NAME)
+FILE_DIR            ?= $(WORK_DIR)/files
+PATCH_DIR           ?= $(WORK_DIR)/patches
+DOWNLOAD_DIR        ?= $(WORK_DIR)/download
+GIT_EXTRACT_DIR     ?= $(WORK_DIR)/git
 PARTIAL_DIR         ?= $(DOWNLOAD_DIR)/partial
-COOKIE_DIR          ?= $(WORK_ROOT_DIR)/cookies-$(BOARD_NAME)
+COOKIE_DIR          ?= $(WORK_DIR)/cookies-$(BOARD_NAME)
 EXTRACT_DIR         ?= $(WORK_DIR)
-WORK_SRC            ?= $(WORK_DIR)/$(SRC_FULLNAME)
+#WORK_SRC            ?= $(WORK_DIR)/$(SRC_FULLNAME)
 OBJ_DIR             ?= $(WORK_SRC)
-INSTALL_DIR         ?= $(WORK_ROOT_DIR)/install-$(BOARD_NAME)
-PACKAGE_DIR         ?= $(WORK_ROOT_DIR)/package-$(BOARD_NAME)
+INSTALL_DIR         ?= $(WORK_DIR)/install-$(BOARD_NAME)
+PACKAGE_DIR         ?= $(WORK_DIR)/package-$(BOARD_NAME)
+CHECKSUM_FILE       ?= $(WORK_DIR)/checksums
+LOG_DIR             ?= $(WORK_DIR)/logs
+# if not overriden the temporary files will go to /tmp
 TEMP_DIR            ?= /tmp
-CHECKSUM_FILE       ?= checksums
-LOG_DIR             ?= log
 
 # Defines the default targets used for building
 CONFIGURE_SCRIPTS   ?= $(WORK_SRC)/configure

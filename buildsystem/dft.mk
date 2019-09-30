@@ -262,7 +262,7 @@ clean:
 # Delete everthing from the work, cookies and download directories
 #
 mrproper:
-	@rm -rf $(WORK_ROOT_DIR) $(COOKIE_DIR) $(DOWNLOAD_DIR)
+	@rm -rf $(COOKIE_DIR) $(DOWNLOAD_DIR)
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 
 
@@ -278,7 +278,6 @@ show-config :
 	@echo "  SW_VERSION                        $(SW_VERSION)"
 	@echo
 	@echo "wget download parameters"
-	@echo "  SRC_FULLNAME                      $(SRC_FULLNAME)"
 	@echo "  SRC_DIST_FILES                    $(SRC_DIST_FILES)"
 	@echo "  SRC_SIGN_FILES                    $(SRC_SIGN_FILES)"
 	@echo "  SRC_SITE                          $(SRC_SITE)"
@@ -292,8 +291,6 @@ show-config :
 	@echo
 	@echo "Directories configuration"
 	@echo "  BUILD_SYSTEM_ROOT                 $(BUILD_SYSTEM_ROOT)"
-	@echo "  BASE_DIR                          $(BASE_DIR)"
-	@echo "  WORK_ROOT_DIR                     $(WORK_ROOT_DIR)"
 	@echo "  WORK_DIR                          $(WORK_DIR)"
 	@echo "  FILE_DIR                          $(FILE_DIR)"
 	@echo "  PATCH_DIR                         $(PATCH_DIR)"
