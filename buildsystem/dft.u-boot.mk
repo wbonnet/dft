@@ -46,13 +46,12 @@ endef
 #
 
 # Defines the git repository to use
-UPSTREAM_GIT_URL         ?= https://github.com/u-boot
-UPSTREAM_GIT_REPO        ?= u-boot
+GIT_URL         ?= https://github.com/u-boot
+GIT_REPO        ?= u-boot
 
-UPSTREAM_DOWNLOAD_TOOL    = git
-SRC_NAME                  = u-boot
-UPSTREAM_VERSION          = $(SW_VERSION)
-BUILD_ARGS                =
+DOWNLOAD_TOOL    = git
+SRC_NAME         = u-boot
+BUILD_ARGS       =
 
 include buildsystem/dft.mk
 

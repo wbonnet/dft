@@ -79,14 +79,13 @@ SRC_SIGN_FILES      ?= $(SRC_NAME)-$(SW_VERSION).tar.xz.sign
 # Defines the source repository
 SRC_UPSTREAM_SITES  ?= $(SRC_SITE)/$(SRC_BRANCH)
 
-
 # ------------------------------------------------------------------------------
 #
 # Defines the default values for directories
 #
 # ------------------------------------------------------------------------------
 
-WORK_DIR            ?= $(CURDIR)/build-$(BOARD_NAME)
+WORK_DIR            ?= $(CURDIR)/workdir
 FILE_DIR            ?= $(WORK_DIR)/files
 PATCH_DIR           ?= $(WORK_DIR)/patches
 DOWNLOAD_DIR        ?= $(WORK_DIR)/download
@@ -94,8 +93,7 @@ GIT_EXTRACT_DIR     ?= $(WORK_DIR)/git
 PARTIAL_DIR         ?= $(DOWNLOAD_DIR)/partial
 COOKIE_DIR          ?= $(WORK_DIR)/cookies-$(BOARD_NAME)
 EXTRACT_DIR         ?= $(WORK_DIR)
-#WORK_SRC            ?= $(WORK_DIR)/$(SRC_FULLNAME)
-OBJ_DIR             ?= $(WORK_SRC)
+OBJ_DIR             ?= $(WORK_DIR)
 INSTALL_DIR         ?= $(WORK_DIR)/install-$(BOARD_NAME)
 PACKAGE_DIR         ?= $(WORK_DIR)/package-$(BOARD_NAME)
 CHECKSUM_FILE       ?= $(WORK_DIR)/checksums
@@ -104,8 +102,8 @@ LOG_DIR             ?= $(WORK_DIR)/logs
 TEMP_DIR            ?= /tmp
 
 # Defines the default targets used for building
-CONFIGURE_SCRIPTS   ?= $(WORK_SRC)/configure
-BUILD_SCRIPTS       ?= $(WORK_SRC)/Makefile
+CONFIGURE_SCRIPTS   ?= $(WORK_DIR)/configure
+BUILD_SCRIPTS       ?= $(WORK_DIR)/Makefile
 
 # ------------------------------------------------------------------------------
 #

@@ -116,7 +116,7 @@ extract-git-% :
 #
 PATCH_DIR_LEVEL ?= 1
 PATCH_DIR_FUZZ  ?= 2
-PATCH_ARGS       = --directory=$(WORK_SRC) --strip=$(PATCH_DIR_LEVEL) --fuzz=$(PATCH_DIR_FUZZ)
+PATCH_ARGS       = --directory=$(WORK_DIR) --strip=$(PATCH_DIR_LEVEL) --fuzz=$(PATCH_DIR_FUZZ)
 
 apply-patch-% :
 	@echo " ==> Applying $(PATCH_DIR)/$*"
@@ -127,7 +127,7 @@ apply-patch-% :
 #
 # Directory maker used by the base rules
 #
-$(sort $(BUILD_SYSTEM_ROOT) $(FILE_DIR) $(GIT_EXTRACT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(EXTRACT_DIR) $(WORK_SRC) $(OBJ_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR)):
+$(sort $(BUILD_SYSTEM_ROOT) $(FILE_DIR) $(GIT_EXTRACT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(EXTRACT_DIR) $(OBJ_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR)):
 	@if test -d $@; then : ; else \
 		echo making $@; \
 		install -d $@; \

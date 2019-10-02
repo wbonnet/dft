@@ -140,9 +140,9 @@ ifndef SRC_NAME
 $(error SRC_NAME is not set)
 endif
 
-#UPSTREAM_DOWNLOAD_TOOL ?= wget
-ifndef UPSTREAM_DOWNLOAD_TOOL
-$(error UPSTREAM_DOWNLOAD_TOOL is not set)
+#DOWNLOAD_TOOL ?= wget
+ifndef DOWNLOAD_TOOL
+$(error DOWNLOAD_TOOL is not set)
 endif
 
 # ------------------------------------------------------------------------------
@@ -298,7 +298,6 @@ show-config :
 	@echo "  PARTIAL_DIR                       $(PARTIAL_DIR)"
 	@echo "  COOKIE_DIR                        $(COOKIE_DIR)"
 	@echo "  EXTRACT_DIR                       $(EXTRACT_DIR)"
-	@echo "  WORK_SRC                          $(WORK_SRC)"
 	@echo "  OBJ_DIR                           $(OBJ_DIR)"
 	@echo "  INSTALL_DIR                       $(INSTALL_DIR)"
 	@echo "  PACKAGE_DIR                       $(PACKAGE_DIR)"
@@ -356,14 +355,14 @@ prerequisite : $(COOKIE_DIR) pre-everything
 
 # Construct the list of files path under downloaddir which will be processed by
 # the $(DOWNLOAD_DIR)/% target
-ifeq ($(UPSTREAM_DOWNLOAD_TOOL), wget)
+ifeq ($(DOWNLOAD_TOOL), wget)
 FETCH_TARGETS ?=  $(addprefix $(DOWNLOAD_DIR)/,$(SRC_CHECKSUM_FILES)) $(addprefix $(DOWNLOAD_DIR)/,$(SRC_DIST_FILES))
 else
-ifeq ($(UPSTREAM_DOWNLOAD_TOOL), git)
+ifeq ($(DOWNLOAD_TOOL), git)
 FETCH_TARGETS ?=  $(addprefix $(GIT_EXTRACT_DIR)/,$(SRC_NAME))
 else
 define error_msg
-Unknown UPSTREAM_DOWNLOAD_TOOL : $(UPSTREAM_DOWNLOAD_TOOL)
+Unknown DOWNLOAD_TOOL : $(DOWNLOAD_TOOL)
 endef
 $(error $(error_msg))
 endif
@@ -494,14 +493,14 @@ makesums : makesum
 
 # Construct the list of files path under downloaddir which will be processed by
 # the $(DOWNLOAD_DIR)/% target
-ifeq ($(UPSTREAM_DOWNLOAD_TOOL), wget)
+ifeq ($(DOWNLOAD_TOOL), wget)
 EXTRACT_TARGETS ?=  $(addprefix extract-archive-,$(SRC_DIST_FILES))
 else
-ifeq ($(UPSTREAM_DOWNLOAD_TOOL), git)
+ifeq ($(DOWNLOAD_TOOL), git)
 EXTRACT_TARGETS ?=  $(addprefix extract-git-,$(SRC_NAME))
 else
 define error_msg
-Unknown UPSTREAM_DOWNLOAD_TOOL : $(UPSTREAM_DOWNLOAD_TOOL)
+Unknown DOWNLOAD_TOOL : $(DOWNLOAD_TOOL)
 endef
 $(error $(error_msg))
 endif
