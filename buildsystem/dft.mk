@@ -272,22 +272,22 @@ mrproper:
 #
 show-configuration : show-config
 show-config :
-	@echo "Software configuration"
-	@echo "  DOWNLOAD_TOOL                     $(DOWNLOAD_TOOL)"
-	@echo "  SRC_NAME                          $(SRC_NAME)"
-	@echo "  SW_VERSION                        $(SW_VERSION)"
-	@echo
-	@echo "wget download parameters"
-	@echo "  SRC_DIST_FILES                    $(SRC_DIST_FILES)"
-	@echo "  SRC_SIGN_FILES                    $(SRC_SIGN_FILES)"
-	@echo "  SRC_SITE                          $(SRC_SITE)"
-	@echo "  SRC_UPSTREAM_SITES                $(SRC_UPSTREAM_SITES)"
-	@echo
-	@echo "git download parameters"
-	@echo "  GIT_URL                           $(GIT_URL)"
-	@echo "  GIT_REPO                          $(GIT_REPO)"
-	@echo "  GIT_REPO_EXT                      $(GIT_REPO_EXT)"
-	@echo "  GIT_BRANCH                        $(GIT_BRANCH)"
+	@echo "Sources download with $(DOWNLOAD_TOOL) and parameters" ; \
+	echo "  SRC_NAME                          $(SRC_NAME)" ; \
+	echo "  SW_VERSION                        $(SW_VERSION)" ; \
+# la c bon	@if [ "$(DOWNLOAD_TOOL)" = "wget" ]; then echo "ya wget" ; else echo "ya pas wget mais $(DOWNLOAD_TOOL)" ; fi
+	@if [ "$(DOWNLOAD_TOOL)" = "wget" ]; then \
+	echo "  SRC_DIST_FILES                    $(SRC_DIST_FILES)" ; \
+	echo "  SRC_SIGN_FILES                    $(SRC_SIGN_FILES)" ; \
+	echo "  SRC_SITE                          $(SRC_SITE)" ; \
+	echo "  SRC_UPSTREAM_SITES                $(SRC_UPSTREAM_SITES)" ; \
+       	fi
+	@if [ "$(DOWNLOAD_TOOL)" = "git" ]; then \
+	echo "  GIT_URL                           $(GIT_URL)" ; \
+	echo "  GIT_REPO                          $(GIT_REPO)" ; \
+	echo "  GIT_REPO_EXT                      $(GIT_REPO_EXT)" ; \
+	echo "  GIT_BRANCH                        $(GIT_BRANCH)" ; \
+       	fi
 	@echo
 	@echo "Directories configuration"
 	@echo "  BUILD_SYSTEM_ROOT                 $(BUILD_SYSTEM_ROOT)"
