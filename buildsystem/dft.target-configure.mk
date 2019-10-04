@@ -46,7 +46,7 @@ endef
 #
 # TODO : DELTA DEFCONFIG
 configure-%/configure :
-	@if test -f $(COOKIE_DIR)/configure-$*/configure ; then \
+	if test -f $(COOKIE_DIR)/configure-$*/configure ; then \
 		true ; \
 	else \
 		if [ "$(USE_CONFIG_FILE)" != "" ] ; then \

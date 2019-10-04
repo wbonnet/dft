@@ -91,11 +91,13 @@ PATCH_DIR           ?= $(WORK_DIR)/patches
 DOWNLOAD_DIR        ?= $(WORK_DIR)/download
 GIT_EXTRACT_DIR     ?= $(WORK_DIR)/git
 PARTIAL_DIR         ?= $(DOWNLOAD_DIR)/partial
-COOKIE_DIR          ?= $(WORK_DIR)/cookies-$(BOARD_NAME)
+# TODO: should I keep BOARdname SOMEWHERE IN THE PATH
+# COOKIE_DIR          ?= $(WORK_DIR)/cookies-$(BOARD_NAME)
+COOKIE_DIR          ?= $(WORK_DIR)/cookies
 EXTRACT_DIR         ?= $(WORK_DIR)
 OBJ_DIR             ?= $(WORK_DIR)
-INSTALL_DIR         ?= $(WORK_DIR)/install-$(BOARD_NAME)
-PACKAGE_DIR         ?= $(WORK_DIR)/package-$(BOARD_NAME)
+INSTALL_DIR         ?= $(WORK_DIR)/install
+PACKAGE_DIR         ?= $(WORK_DIR)/package
 CHECKSUM_FILE       ?= $(WORK_DIR)/checksums
 LOG_DIR             ?= $(WORK_DIR)/logs
 # if not overriden the temporary files will go to /tmp

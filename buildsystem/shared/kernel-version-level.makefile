@@ -21,7 +21,6 @@
 
 # Defines the kernel version
 SW_VERSION      = $(notdir $(patsubst %/,%,$(shell pwd)))
-GIT_BRANCH      = $(SW_VERSION)
 
 # Include board specific definitions
 include ../board.mk

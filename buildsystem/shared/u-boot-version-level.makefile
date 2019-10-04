@@ -32,7 +32,6 @@ include ../board.mk
 
 # Defines the version of the u-boot software
 SW_VERSION   = $(notdir $(patsubst %/,%,$(shell pwd)))
-GIT_BRANCH    = v$(SW_VERSION)
 
 # Defines patches to apply to the upstream sources :
 # PATCHFILES += 0000_some_patch.diff
