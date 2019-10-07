@@ -40,6 +40,76 @@ define DFT_BUILDSYSTEM_TARGET_FETCH
 endef
 # the matching endif teminates this file
 
+# ------------------------------------------------------------------------------
+#
+#   Fetch target is in charge of getting sources from a remote server or local
+#   file system. Files are copied into a local directory named files
+#
+#   This target only download files. Computing checksums and extracting files
+#   are done by other targets.
+#
+
+# Construct the list of files path under downloaddir which will be processed by
+# the $(DOWNLOAD_DIR)/% target
+ifeq ($(DOWNLOAD_TOOL), wget)
+FETCH_TARGETS ?=  $(addprefix $(DOWNLOAD_DIR)/,$(SRC_CHECKSUM_FILES)) $(addprefix $(DOWNLOAD_DIR)/,$(SRC_DIST_FILES))
+else
+ifeq ($(DOWNLOAD_TOOL), git)
+FETCH_TARGETS ?=  $(addprefix $(GIT_EXTRACT_DIR)/,$(SRC_NAME))
+else
+define error_msg
+Unknown DOWNLOAD_TOOL : $(DOWNLOAD_TOOL)
+endef
+$(error $(error_msg))
+endif
+endif
+
+fetch-list:
+	@echo $(FETCH_TARGETS)
+
+fetch : prerequisite $(COOKIE_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
+
+$(DOWNLOAD_DIR)/% : $(DOWNLOAD_DIR) $(PARTIAL_DIR)
+	@if test -f $(COOKIE_DIR)/$(DOWNLOAD_DIR)/$* ; then \
+		true ; \
+	else \
+		wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_UPSTREAM_SITES)/$* ; \
+		mv $(PARTIAL_DIR)/$* $@ ; \
+		if test -r $@ ; then \
+			true ; \
+		else \
+			echo 'ERROR : Failed to download $@!' 1>&2; \
+			false; \
+		fi; \
+		if [ ! "" = "$(SRC_CHECKSUM_FILES)" ] ; then \
+			if [ ! "$*" = "$(SRC_CHECKSUM_FILES)" ] ; then \
+				if grep -- '$*' $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES) > /dev/null; then  \
+					if cat $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES) | (cd $(DOWNLOAD_DIR); LC_ALL="C" LANG="C" md5sum -c 2>&1) | grep -- '$*' | grep -v ':[ ]\+OK' > /dev/null; then \
+						echo "        \033[1m[Failed] : checksum of file $* is invalid\033[0m" ; \
+						false; \
+					else \
+						echo "        [  OK   ] : $* checksum is valid	  " ; \
+					fi ;\
+				else  \
+					echo "        \033[1m[Missing] : $* is not in the checksum file\033[0m $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES)" ; \
+					false; \
+				fi ; \
+			fi ; \
+		fi ; \
+	fi ;
+	$(TARGET_DONE)
+
+$(GIT_EXTRACT_DIR)/% : $(GIT_EXTRACT_DIR)
+	if test -f $(COOKIE_DIR)/$(GIT_EXTRACT_DIR)/$* ; then \
+		true ; \
+	else \
+		echo "        cloning into $(GIT_EXTRACT_DIR)/$*" ; \
+		cd $(GIT_EXTRACT_DIR) ; \
+        git clone --single-branch $(GIT_OPTS) -b $(GIT_BRANCH) $(GIT_URL)/$(GIT_REPO)$(GIT_REPO_EXT) ; \
+	fi ;
+	$(TARGET_DONE)
 
 # ------------------------------------------------------------------------------
 # Match initial ifdef

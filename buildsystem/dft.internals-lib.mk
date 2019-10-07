@@ -29,7 +29,7 @@
 #
 
 # ------------------------------------------------------------------------------
-# 
+#
 # Protection against multiple includes
 #
 $(info included dft.internals-lib.mk)
@@ -39,89 +39,6 @@ else
 define DFT_INTERNALS_LIB
 endef
 # the matching endif teminates this file
-
-
-# ------------------------------------------------------------------------------
-#
-# archive extraction utilities
-#
-TAR_ARGS = --no-same-owner
-
-extract-archive-%.tar :
-	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar ; then \
-		true ; \
-	else \
-		echo "        extracting $(DOWNLOAD_DIR)/$*.tar" ; \
-		tar $(TAR_ARGS) -xf $(DOWNLOAD_DIR)/$*.tar -C $(EXTRACT_DIR) ; \
-	fi ;
-	$(TARGET_DONE)
-
-extract-archive-%.tar.gz :
-	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar.gz ; then \
-		true ; \
-	else \
-		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz" ; \
-		tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tar.gz -C $(EXTRACT_DIR) ; \
-	fi ;
-	$(TARGET_DONE)
-
-extract-archive-%.tgz :
-	@if test -f $(COOKIE_DIR)/extract-archive-$*.tgz ; then \
-		true ; \
-	else \
-		echo "        extracting $(DOWNLOAD_DIR)/$*.tgz" ; \
-		tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tgz -C $(EXTRACT_DIR) ; \
-	fi ;
-	$(TARGET_DONE)
-
-extract-archive-%.tar.bz2 :
-	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar.bz2 ; then \
-		true ; \
-	else \
-		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.bz2" ; \
-		tar $(TAR_ARGS) -xjf $(DOWNLOAD_DIR)/$*.tar.bz2 -C $(EXTRACT_DIR) ; \
-	fi ;
-	$(TARGET_DONE)
-
-extract-archive-%.tar.xz :
-	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar.xz ; then \
-		true ; \
-	else \
-		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.xz" ; \
-		tar $(TAR_ARGS) -xJf $(DOWNLOAD_DIR)/$*.tar.xz -C $(EXTRACT_DIR) ; \
-	fi ;
-	$(TARGET_DONE)
-
-extract-archive-%.zip :
-	@if test -f $(COOKIE_DIR)/extract-archive-$*.zip ; then \
-		true ; \
-	else \
-		echo "        extracting $(DOWNLOAD_DIR)/$*.zip" ; \
-		unzip $(DOWNLOAD_DIR)/$*.zip -d $(EXTRACT_DIR) ; \
-	fi ;
-	$(TARGET_DONE)
-
-extract-git-% :
-	@if test -f $(COOKIE_DIR)/extract-git-$* ; then \
-		true ; \
-	else \
-	  echo "        moving git data to $(EXTRACT)/$*" ; \
-		mv $(GIT_EXTRACT_DIR)/$(SRC_GIT_REPO) $(EXTRACT_DIR)/$(SRC_NAME) ; \
-	fi ;
-	$(TARGET_DONE)
-
-# ------------------------------------------------------------------------------
-#
-# patch utilities
-#
-PATCH_DIR_LEVEL ?= 1
-PATCH_DIR_FUZZ  ?= 2
-PATCH_ARGS       = --directory=$(WORK_DIR) --strip=$(PATCH_DIR_LEVEL) --fuzz=$(PATCH_DIR_FUZZ)
-
-apply-patch-% :
-	@echo " ==> Applying $(PATCH_DIR)/$*"
-	patch $(PATCH_ARGS) < $(PATCH_DIR)/$*
-	$(TARGET_DONE)
 
 # ------------------------------------------------------------------------------
 #
@@ -140,5 +57,3 @@ $(COOKIE_DIR)/%:
 
 # Match initial ifndef DFT_INTERNALS_LIB
 endif
-
-

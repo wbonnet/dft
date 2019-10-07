@@ -29,7 +29,7 @@
 #
 
 # ------------------------------------------------------------------------------
-# 
+#
 # Protection against multiple includes
 #
 $(info included dft.target-package.mk)
@@ -70,6 +70,25 @@ do-repackage :
 		rm -f $(COOKIE_DIR)/do-package ; \
 		rm -fr $(abspath $(PACAKGE_DIR)) ; \
 	fi ;
+	$(TARGET_DONE)
+
+# ------------------------------------------------------------------------------
+#
+# Create the Debian package
+#
+
+package : install $(PACKAGE_DIR) pre-package do-package post-package
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
+
+
+# ------------------------------------------------------------------------------
+#
+# Execute once again the package target
+#
+
+repackage : install pre-repackage do-repackage package post-repackage
+	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
 # ------------------------------------------------------------------------------

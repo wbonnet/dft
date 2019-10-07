@@ -42,6 +42,24 @@ endef
 
 # ------------------------------------------------------------------------------
 #
+# Upload the Debian package
+#
+
+upload : package pre-upload do-upload post-upload
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
+
+# ------------------------------------------------------------------------------
+#
+# Execute once again the upload target
+#
+
+reupload : package pre-reupload do-reupload upload post-repupload
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
+
+# ------------------------------------------------------------------------------
+#
 # Execute the upload target script
 #
 

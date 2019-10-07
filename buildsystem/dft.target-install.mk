@@ -29,7 +29,7 @@
 #
 
 # ------------------------------------------------------------------------------
-# 
+#
 # Protection against multiple includes
 #
 $(info included dft.target-install.mk)
@@ -39,6 +39,24 @@ else
 define DFT_BUILDSYSTEM_TARGET_INSTALL
 endef
 # the matching endif teminates this file
+
+# ------------------------------------------------------------------------------
+#
+# Install software to the target directory
+#
+
+install : build $(INSTALL_DIR) pre-install do-install post-install
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
+
+# ------------------------------------------------------------------------------
+#
+# Execute once again the install target
+#
+
+reinstall : build pre-reinstall do-reinstall install post-reinstall
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
 
 # ------------------------------------------------------------------------------
 #

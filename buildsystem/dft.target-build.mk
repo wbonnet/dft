@@ -27,8 +27,9 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 #
+
 # ------------------------------------------------------------------------------
-# 
+#
 # Protection against multiple includes
 #
 $(info included dft.target-build.mk)
@@ -38,6 +39,29 @@ else
 define DFT_BUILDSYSTEM_TARGET_BUILD
 endef
 # the matching endif teminates this file
+
+# ------------------------------------------------------------------------------
+#
+# Build the target binaries
+#
+
+BUILD_TARGETS ?= $(addprefix build-,$(BUILD_CHECK_SCRIPTS)) $(addprefix build-,$(BUILD_SCRIPTS))
+
+build : configure $(OBJ_DIR) pre-build $(BUILD_TARGETS) post-build
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
+
+
+# ------------------------------------------------------------------------------
+#
+# Rebuild the target binaries
+#
+
+REBUILD_TARGETS ?= $(addprefix rebuild-,$(BUILD_CHECK_SCRIPTS)) $(addprefix rebuild-,$(BUILD_SCRIPTS))
+
+rebuild : configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
 
 # ------------------------------------------------------------------------------
 #

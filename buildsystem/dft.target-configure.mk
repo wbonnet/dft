@@ -29,7 +29,7 @@
 #
 
 # ------------------------------------------------------------------------------
-# 
+#
 # Protection against multiple includes
 #
 $(info included dft.target-configure.mk)
@@ -39,6 +39,29 @@ else
 define DFT_BUILDSYSTEM_TARGET_CONFIGURE
 endef
 # the matching endif teminates this file
+
+# ------------------------------------------------------------------------------
+#
+# Run the configure script
+#
+
+CONFIGURE_TARGETS ?= $(addprefix configure-,$(CONFIGURE_SCRIPTS))
+
+configure : patch $(OBJ_DIR) pre-configure $(CONFIGURE_TARGETS) post-configure
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
+
+
+# ------------------------------------------------------------------------------
+#
+# Force running again the configure script
+#
+
+RECONFIGURE_TARGETS ?= $(addprefix reconfigure-,$(CONFIGURE_SCRIPTS))
+
+reconfigure : patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconfigure
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
 
 # ------------------------------------------------------------------------------
 #
