@@ -434,7 +434,7 @@ checksum_banner :
 
 # ------------------------------------------------------------------------------
 #
-# checksum utilities
+# Checksum utilities
 #
 
 # Check a given file's checksum against $(CHECKSUM_FILE) and error out if it
