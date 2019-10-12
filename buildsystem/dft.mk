@@ -53,8 +53,6 @@ endef
   $(error $(error_msg))
 endif
 
-
-
 # ------------------------------------------------------------------------------
 #
 # Check if the board arch is defined, if not output an error before doing anything.
@@ -132,74 +130,21 @@ TARGET_DONE = @mkdir -p $(dir $(COOKIE_DIR)/$@) && touch $(COOKIE_DIR)/$@
 #
 BUILD_SYSTEM_ROOT := $(dir $(lastword $(MAKEFILE_LIST)))
 
-# ------------------------------------------------------------------------------
-#
-# Mandatory defines that have to be defined at least in the main Makefile
-#
-ifndef SRC_NAME
-$(error SRC_NAME is not set)
-endif
-
-#DOWNLOAD_TOOL ?= wget
-ifndef DOWNLOAD_TOOL
-$(error DOWNLOAD_TOOL is not set)
-endif
 
 # ------------------------------------------------------------------------------
 #
-# Includes the build system top level variables definitions
+# Includes the build system top level and target definitions
 #
 # ------------------------------------------------------------------------------
 include $(BUILD_SYSTEM_ROOT)/dft.internals-conf.mk
-
-
-# ------------------------------------------------------------------------------
-#
-# Includes the build system top level macros definitions
-#
-# ------------------------------------------------------------------------------
 include $(BUILD_SYSTEM_ROOT)/dft.internals-lib.mk
-
-
-# ------------------------------------------------------------------------------
-#
-# Includes the build system configure definitions
-#
-# ------------------------------------------------------------------------------
-include $(BUILD_SYSTEM_ROOT)/dft.target-configure.mk
-
-
-# ------------------------------------------------------------------------------
-#
-# Includes the build system build definitions
-#
-# ------------------------------------------------------------------------------
 include $(BUILD_SYSTEM_ROOT)/dft.target-build.mk
-
-
-# ------------------------------------------------------------------------------
-#
-# Includes the build system install definitions
-#
-# ------------------------------------------------------------------------------
+include $(BUILD_SYSTEM_ROOT)/dft.target-configure.mk
+include $(BUILD_SYSTEM_ROOT)/dft.target-extract.mk
+include $(BUILD_SYSTEM_ROOT)/dft.target-fetch.mk
 include $(BUILD_SYSTEM_ROOT)/dft.target-install.mk
-
-
-# ------------------------------------------------------------------------------
-#
-# Includes the build system package definitions
-#
-# ------------------------------------------------------------------------------
 include $(BUILD_SYSTEM_ROOT)/dft.target-package.mk
-
-
-# ------------------------------------------------------------------------------
-#
-# Includes the build system upload definitions
-#
-# ------------------------------------------------------------------------------
 include $(BUILD_SYSTEM_ROOT)/dft.target-upload.mk
-
 
 # ------------------------------------------------------------------------------
 #
@@ -227,7 +172,7 @@ help :
 	@echo "                           then into all its subfolders (sub makefiles have"
 	@echo "                           to support the clean target or an arror will occur)"
 	@echo "   mrproper                Destroy the work directory content and remove all"
-	@echo "                           cookies. Thus every styps will be done once again "
+	@echo "                           cookies. Thus every steps will be done once again "
 	@echo "                           since there will be nothing left in work directory."
 	@echo "                           Sources will be downloaded once again then extracted"
 	@echo "                           compiled, etc. This may take a lot of time."
@@ -262,7 +207,7 @@ clean:
 # Delete everthing from the work, cookies and download directories
 #
 mrproper:
-	@rm -rf $(COOKIE_DIR) $(DOWNLOAD_DIR)
+	@rm -rf $(WORK_DIR)/*
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 
 
@@ -279,8 +224,7 @@ show-config :
 	@if [ "$(DOWNLOAD_TOOL)" = "wget" ]; then \
 	echo "  SRC_DIST_FILES                    $(SRC_DIST_FILES)" ; \
 	echo "  SRC_SIGN_FILES                    $(SRC_SIGN_FILES)" ; \
-	echo "  SRC_SITE                          $(SRC_SITE)" ; \
-	echo "  SRC_UPSTREAM_SITES                $(SRC_UPSTREAM_SITES)" ; \
+	echo "  SRC_DIST_URL                      $(SRC_DIST_URL)" ; \
        	fi
 	@if [ "$(DOWNLOAD_TOOL)" = "git" ]; then \
 	echo "  GIT_URL                           $(GIT_URL)" ; \
@@ -342,6 +286,21 @@ show-config :
 prerequisite : $(COOKIE_DIR) pre-everything
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
+
+
+# ------------------------------------------------------------------------------
+#
+# Mandatory defines that have to be defined at least in the main Makefile
+#
+
+ifndef SRC_NAME
+$(error bsroot $(BUILD_SYSTEM_ROOT))
+$(error SRC_NAME is not set)
+endif
+
+ifndef DOWNLOAD_TOOL
+$(error DOWNLOAD_TOOL is not set)
+endif
 
 # ------------------------------------------------------------------------------
 # Match initial ifdef
