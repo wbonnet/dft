@@ -46,7 +46,7 @@ endef
 #
 
 do-package :
-	@if test -f $(COOKIE_DIR)/do-package ; then \
+	@if test -r $(COOKIE_DIR)/do-package ; then \
 		true ; \
 	else \
 		echo "        running package in $(PACKAGE_DIR)"  ; \
@@ -66,7 +66,7 @@ do-package :
 	@$(TARGET_DONE)
 
 do-repackage :
-	@if test -f $(COOKIE_DIR)/do-package ; then \
+	@if test -r $(COOKIE_DIR)/do-package ; then \
 		rm -f $(COOKIE_DIR)/do-package ; \
 		rm -fr $(abspath $(PACAKGE_DIR)) ; \
 	fi ;

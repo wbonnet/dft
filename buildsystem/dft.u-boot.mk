@@ -42,14 +42,31 @@ endef
 
 # ------------------------------------------------------------------------------
 #
+# Defines the set of variables used for the u-boot.org project
+#
+# ------------------------------------------------------------------------------
+
+#La faut mettre u mesage not used pask uboot
+SRC_GIT_URL         ?= "SRC_GIT_URL Not used -- git://git.kernel.org/pub/scm/linux/kernel/git/stable"
+SRC_GIT_BRANCH      ?= "SRC_GIT_BRANCH Not Used -- stable"
+SRC_GIT_REPO        ?= "SRC_GIT_REPO Not Used -- linux-$(SRC_GIT_BRANCH)"
+SRC_GIT_REPO_EXT    ?= "SRC_GIT_REPO_EXT Not Used -- .git"
+SRC_FILE_VERSION    ?= $(shell echo $(SW_VERSION) | head -c 1)
+SRC_SITE             = SRC_SITE_nolonger-used-for-uboot
+SRC_DIST_URL         = https://github.com/$(SRC_NAME)/$(SRC_NAME)/archive/
+
+# Defines the files to retrieve
+SRC_DIST_FILES      ?= v$(SW_VERSION).tar.gz
+SRC_SIGN_FILES      ?= $(SRC_NAME)-$(SW_VERSION).sign
+
+# ------------------------------------------------------------------------------
+#
 # Overrides some definition to compile uboot using the same makefiles
 #
+# ------------------------------------------------------------------------------
 
 # Defines the git repository to use
-GIT_URL         ?= https://github.com/u-boot
-GIT_REPO        ?= u-boot
-
-DOWNLOAD_TOOL    = git
+DOWNLOAD_TOOL    = wget
 SRC_NAME         = u-boot
 BUILD_ARGS       =
 

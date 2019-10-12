@@ -64,7 +64,7 @@ reupload : package pre-reupload do-reupload upload post-repupload
 #
 
 do-upload :
-	@if test -f $(COOKIE_DIR)/do-upload ; then \
+	@if test -r $(COOKIE_DIR)/do-upload ; then \
 		true ; \
 	else \
 		echo "        running upload"  ; \
@@ -87,7 +87,7 @@ do-upload :
 	@$(TARGET_DONE)
 
 do-reupload :
-	@if test -f $(COOKIE_DIR)/do-upload ; then \
+	@if test -r $(COOKIE_DIR)/do-upload ; then \
 		rm -f $(COOKIE_DIR)/do-upload ; \
 		rm -fr $(abspath $(INSTALL_DIR)) ; \
 	fi ;

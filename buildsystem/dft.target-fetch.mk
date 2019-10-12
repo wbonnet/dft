@@ -72,10 +72,11 @@ fetch : prerequisite $(COOKIE_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
 	$(TARGET_DONE)
 
 $(DOWNLOAD_DIR)/% : $(DOWNLOAD_DIR) $(PARTIAL_DIR)
-	@if test -f $(COOKIE_DIR)/$(DOWNLOAD_DIR)/$* ; then \
+	if test -r $(COOKIE_DIR)/$* ; then \
+		wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$* ; \
 		true ; \
 	else \
-		wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_UPSTREAM_SITES)/$* ; \
+		wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$* ; \
 		mv $(PARTIAL_DIR)/$* $@ ; \
 		if test -r $@ ; then \
 			true ; \
@@ -85,7 +86,7 @@ $(DOWNLOAD_DIR)/% : $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 		fi; \
 		if [ ! "" = "$(SRC_CHECKSUM_FILES)" ] ; then \
 			if [ ! "$*" = "$(SRC_CHECKSUM_FILES)" ] ; then \
-				if grep -- '$*' $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES) > /dev/null; then  \
+				if grep -- '$*' $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES) > /dev/null ; then  \
 					if cat $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES) | (cd $(DOWNLOAD_DIR); LC_ALL="C" LANG="C" md5sum -c 2>&1) | grep -- '$*' | grep -v ':[ ]\+OK' > /dev/null; then \
 						echo "        \033[1m[Failed] : checksum of file $* is invalid\033[0m" ; \
 						false; \
@@ -102,7 +103,7 @@ $(DOWNLOAD_DIR)/% : $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 	$(TARGET_DONE)
 
 $(GIT_EXTRACT_DIR)/% : $(GIT_EXTRACT_DIR)
-	if test -f $(COOKIE_DIR)/$(GIT_EXTRACT_DIR)/$* ; then \
+	if test -r $(COOKIE_DIR)/$(GIT_EXTRACT_DIR)/$* ; then \
 		true ; \
 	else \
 		echo "        cloning into $(GIT_EXTRACT_DIR)/$*" ; \

@@ -44,9 +44,8 @@ endef
 #
 # Directory maker used by the base rules
 #
-$(sort $(BUILD_SYSTEM_ROOT) $(FILE_DIR) $(GIT_EXTRACT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(EXTRACT_DIR) $(OBJ_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR)):
-	@if test -d $@; then : ; else \
-		echo making $@; \
+$(sort $(BUILD_SYSTEM_ROOT) $(FILE_DIR) $(GIT_EXTRACT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(EXTRACT_DIR) $(OBJ_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR) $(SRC_DIR)):
+	@if test -d $@ ; then : ; else \
 		install -d $@; \
 	fi
 
@@ -57,3 +56,4 @@ $(COOKIE_DIR)/%:
 
 # Match initial ifndef DFT_INTERNALS_LIB
 endif
+

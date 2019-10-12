@@ -53,49 +53,58 @@ BUILDER_OPERATING_SYSTEM         := $(shell uname -s | tr '[:upper:]' '[:lower:]
 BUILDER_OPERATING_SYSTEM_FLAVOR  := $(word 3, $(shell lsb_release -i | tr '[:lower:]' '[:upper:]'))
 BUILDER_OPERATING_SYSTEM_VERSION := $(word 2, $(shell lsb_release -c | tr '[:lower:]' '[:upper:]'))
 
-
 # ------------------------------------------------------------------------------
 #
-# Defines the set of variables used for the Kernel.org project
+# Defines the set of variables used for the u-boot.org project
 #
 # ------------------------------------------------------------------------------
 
-SRC_GIT_URL      ?= git://git.kernel.org/pub/scm/linux/kernel/git/stable
-SRC_GIT_BRANCH   ?= stable
-SRC_GIT_REPO     ?= linux-$(SRC_GIT_BRANCH)
-SRC_GIT_REPO_EXT ?= .git
-SRC_SITE         ?= https://cdn.kernel.org/pub/linux/kernel
-SRC_FILE_VERSION ?= $(SW_VERSION)
-SRC_SRC_URL      ?= $(SRC_SITE)/$(SRC_BRANCH)/linux-$(SW_VERSION).tar.xz
-SRC_BRANCH       ?= v$(shell echo $(SRC_FILE_VERSION) | head -c 1).x
-
-# Defines the software name if not set
-SRC_NAME            ?= linux
-
-# Defines the files to retrieve
-SRC_DIST_FILES      ?= $(SRC_NAME)-$(SW_VERSION).tar.xz
-SRC_SIGN_FILES      ?= $(SRC_NAME)-$(SW_VERSION).tar.xz.sign
-
-# Defines the source repository
-SRC_UPSTREAM_SITES  ?= $(SRC_SITE)/$(SRC_BRANCH)
 
 # ------------------------------------------------------------------------------
 #
 # Defines the default values for directories
 #
-# ------------------------------------------------------------------------------
+# WORK_DIR is the root of the workspace used to build the target software
+# including all steps such as downloading, configuring, compiling, packaging, 
+# etc.
+#
+# This folder contains either temporary, or volatile, subfolders (such as 
+# package, extract) that can be rebuild from upstream sources even if it can 
+# take some extra long long time, or version/board specific files under git 
+# source control.
+#
+# The following items are under source control :
+#  . Makefile (by default it is a symlink to a generic shared makefile)
+#  . patches folder which contains local patches to apply on sources after 
+#    extract stage. Patches file have to be listed in the Makefile (it 
+#    can be a nice feature to add).
+#  . files folder contains files needed to compile and produce package which
+#    are not provided with upstream sources
+#
+# The following items are not under source control (and should not be) thus 
+# they will be removed and destroyed by make mrproper :
+#  . 'sources' folder and its subfolders (since sources are downloaded from
+#    upstream and not kept in DFT git repository).
+#  . 'workdir' and its subfolders
+#
+# -----------------------------------------------------------------------------
 
-WORK_DIR            ?= $(CURDIR)/workdir
-FILE_DIR            ?= $(WORK_DIR)/files
-PATCH_DIR           ?= $(WORK_DIR)/patches
+# Defines the work root (subfolders are persistent but workdir is destroyed)
+BASE_DIR            ?= $(CURDIR)
+WORK_DIR            ?= $(BASE_DIR)/workdir
+FILE_DIR            ?= $(BASE_DIR)/files
+PATCH_DIR           ?= $(BASE_DIR)/patches
+
+# Defines the working dir subfolders (all are volatile)
+SRC_DIR             ?= $(WORK_DIR)/sources
 DOWNLOAD_DIR        ?= $(WORK_DIR)/download
 GIT_EXTRACT_DIR     ?= $(WORK_DIR)/git
 PARTIAL_DIR         ?= $(DOWNLOAD_DIR)/partial
-# TODO: should I keep BOARdname SOMEWHERE IN THE PATH
+# TODO: should I keep BOARDNAME somewhere in the path
 # COOKIE_DIR          ?= $(WORK_DIR)/cookies-$(BOARD_NAME)
 COOKIE_DIR          ?= $(WORK_DIR)/cookies
-EXTRACT_DIR         ?= $(WORK_DIR)
-OBJ_DIR             ?= $(WORK_DIR)
+EXTRACT_DIR         ?= $(WORK_DIR)/extract
+OBJ_DIR             ?= $(WORK_DIR)/obj
 INSTALL_DIR         ?= $(WORK_DIR)/install
 PACKAGE_DIR         ?= $(WORK_DIR)/package
 CHECKSUM_FILE       ?= $(WORK_DIR)/checksums

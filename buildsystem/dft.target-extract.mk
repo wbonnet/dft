@@ -71,7 +71,7 @@ extract : fetch $(EXTRACT_DIR) pre-extract $(EXTRACT_TARGETS) post-extract
 TAR_ARGS = --no-same-owner
 
 extract-archive-%.tar :
-	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar ; then \
+	@if test -r $(COOKIE_DIR)/extract-archive-$*.tar ; then \
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar" ; \
@@ -80,7 +80,7 @@ extract-archive-%.tar :
 	$(TARGET_DONE)
 
 extract-archive-%.tar.gz :
-	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar.gz ; then \
+	@if test -r $(COOKIE_DIR)/extract-archive-$*.tar.gz ; then \
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz" ; \
@@ -89,7 +89,7 @@ extract-archive-%.tar.gz :
 	$(TARGET_DONE)
 
 extract-archive-%.tgz :
-	@if test -f $(COOKIE_DIR)/extract-archive-$*.tgz ; then \
+	@if test -r $(COOKIE_DIR)/extract-archive-$*.tgz ; then \
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tgz" ; \
@@ -98,7 +98,7 @@ extract-archive-%.tgz :
 	$(TARGET_DONE)
 
 extract-archive-%.tar.bz2 :
-	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar.bz2 ; then \
+	@if test -r $(COOKIE_DIR)/extract-archive-$*.tar.bz2 ; then \
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.bz2" ; \
@@ -107,7 +107,7 @@ extract-archive-%.tar.bz2 :
 	$(TARGET_DONE)
 
 extract-archive-%.tar.xz :
-	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar.xz ; then \
+	@if test -r $(COOKIE_DIR)/extract-archive-$*.tar.xz ; then \
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.xz" ; \
@@ -116,7 +116,7 @@ extract-archive-%.tar.xz :
 	$(TARGET_DONE)
 
 extract-archive-%.zip :
-	@if test -f $(COOKIE_DIR)/extract-archive-$*.zip ; then \
+	@if test -r $(COOKIE_DIR)/extract-archive-$*.zip ; then \
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.zip" ; \
@@ -125,7 +125,7 @@ extract-archive-%.zip :
 	$(TARGET_DONE)
 
 extract-git-% :
-	@if test -f $(COOKIE_DIR)/extract-git-$* ; then \
+	@if test -r $(COOKIE_DIR)/extract-git-$* ; then \
 		true ; \
 	else \
 	  echo "        moving git data to $(EXTRACT)/$*" ; \
