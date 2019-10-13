@@ -72,13 +72,12 @@ fetch : prerequisite $(COOKIE_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
 	$(TARGET_DONE)
 
 $(DOWNLOAD_DIR)/% : $(DOWNLOAD_DIR) $(PARTIAL_DIR)
-	if test -r $(COOKIE_DIR)/$* ; then \
-		wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$* ; \
+	if test -f $(COOKIE_DIR)/$* ; then \
 		true ; \
 	else \
 		wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$* ; \
 		mv $(PARTIAL_DIR)/$* $@ ; \
-		if test -r $@ ; then \
+		if test -f $@ ; then \
 			true ; \
 		else \
 			echo 'ERROR : Failed to download $@!' 1>&2; \
@@ -103,7 +102,7 @@ $(DOWNLOAD_DIR)/% : $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 	$(TARGET_DONE)
 
 $(GIT_EXTRACT_DIR)/% : $(GIT_EXTRACT_DIR)
-	if test -r $(COOKIE_DIR)/$(GIT_EXTRACT_DIR)/$* ; then \
+	if test -f $(COOKIE_DIR)/$(GIT_EXTRACT_DIR)/$* ; then \
 		true ; \
 	else \
 		echo "        cloning into $(GIT_EXTRACT_DIR)/$*" ; \

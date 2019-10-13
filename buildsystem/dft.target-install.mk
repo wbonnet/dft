@@ -64,7 +64,7 @@ reinstall : build pre-reinstall do-reinstall install post-reinstall
 #
 
 do-install :
-	@if test -r $(COOKIE_DIR)/do-install ; then \
+	@if test -f $(COOKIE_DIR)/do-install ; then \
 		true ; \
 	else \
 		echo "        running install in $(OBJ_DIR)"  ; \
@@ -93,7 +93,7 @@ do-install :
 	@$(TARGET_DONE)
 
 do-reinstall :
-	@if test -r $(COOKIE_DIR)/do-install ; then \
+	@if test -f $(COOKIE_DIR)/do-install ; then \
 		rm -f $(COOKIE_DIR)/do-install ; \
 		rm -fr $(abspath $(INSTALL_DIR)) ; \
 	fi ;

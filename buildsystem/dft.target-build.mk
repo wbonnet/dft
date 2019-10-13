@@ -69,7 +69,7 @@ rebuild : configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 #
 
 build-%/Makefile :
-	@if test -r $(COOKIE_DIR)/build-$*/Makefile ; then \
+	@if test -f $(COOKIE_DIR)/build-$*/Makefile ; then \
 		true ; \
 	else \
 		echo "        running make in $*"  ; \
@@ -79,7 +79,7 @@ build-%/Makefile :
 	@$(TARGET_DONE)
 
 rebuild-%/Makefile :
-	@if test -r $(COOKIE_DIR)/build-$*/Makefile ; then \
+	@if test -f $(COOKIE_DIR)/build-$*/Makefile ; then \
 		rm -f $(COOKIE_DIR)/build-$*/Makefile ; \
 	fi ;
 	$(TARGET_DONE)

@@ -69,7 +69,7 @@ reconfigure : patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconf
 #
 # TODO : DELTA DEFCONFIG
 configure-%/configure :
-	if test -r $(COOKIE_DIR)/configure-$*/configure ; then \
+	if test -f $(COOKIE_DIR)/configure-$*/configure ; then \
 		true ; \
 	else \
 		if [ "$(USE_CONFIG_FILE)" != "" ] ; then \
@@ -91,7 +91,7 @@ configure-%/configure :
 	$(TARGET_DONE)
 
 reconfigure-%/configure :
-	@if test -r $(COOKIE_DIR)/configure-$*/configure ; then \
+	@if test -f $(COOKIE_DIR)/configure-$*/configure ; then \
 		rm -f $(COOKIE_DIR)/configure-$*/configure ; \
 	fi ;
 	$(TARGET_DONE)
