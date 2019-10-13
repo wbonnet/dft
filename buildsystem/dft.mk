@@ -129,7 +129,6 @@ TARGET_DONE = mkdir -p $(COOKIE_DIR) && touch $(COOKIE_DIR)/$(notdir $@) && touc
 #
 BUILD_SYSTEM_ROOT := $(dir $(lastword $(MAKEFILE_LIST)))
 
-
 # ------------------------------------------------------------------------------
 #
 # Includes the build system top level and target definitions
