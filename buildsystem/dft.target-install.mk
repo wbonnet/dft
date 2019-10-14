@@ -67,20 +67,20 @@ do-install :
 	@if test -f $(COOKIE_DIR)/do-install ; then \
 		true ; \
 	else \
-		echo "        running install in $(OBJ_DIR)"  ; \
+		echo "        running install in $(SRC_DIR)"  ; \
 	 	if [ ! "" = "$(SW_VERSION)" ] ; then \
 			mkdir -p $(abspath $(INSTALL_DIR))/u-boot/ ; \
 			mkdir -p $(INSTALL_DIR)/doc ; \
 			cp files/* $(INSTALL_DIR)/doc ; \
-			cd $(abspath $(OBJ_DIR)) ; \
+			cd $(abspath $(SRC_DIR)) ; \
 			cp -fr $(UBOOT_BINARY_FILE) $(abspath $(INSTALL_DIR))/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION) ; \
 			cp -fr u-boot.dtb $(abspath $(INSTALL_DIR))/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb ; \
 			cd $(abspath $(INSTALL_DIR))/u-boot/ ; \
 			ln -sf u-boot-$(BOARD_NAME)-$(SW_VERSION) u-boot-$(BOARD_NAME); \
 	 	else \
-			echo "        running install in $(OBJ_DIR)"  ; \
+			echo "        running install in $(SRC_DIR)"  ; \
 			mkdir -p $(abspath $(INSTALL_DIR))/boot/dtb ; \
-			cd $(abspath $(OBJ_DIR)) ; \
+			cd $(abspath $(SRC_DIR)) ; \
 			$(BUILD_ENV) $(MAKE) INSTALL_PATH=$(abspath $(INSTALL_DIR))/boot $(INSTALL_ARGS) ; \
 			$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(abspath $(INSTALL_DIR))/ INSTALL_MOD_STRIP=1 modules_install ; \
 			cp -fr arch/arm/boot/dts/*.dtb $(abspath $(INSTALL_DIR))/boot/dtb ; \

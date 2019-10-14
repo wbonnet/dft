@@ -103,7 +103,6 @@ PARTIAL_DIR         ?= $(DOWNLOAD_DIR)/partial
 # TODO: should I keep BOARDNAME somewhere in the path
 # COOKIE_DIR          ?= $(WORK_DIR)/cookies-$(BOARD_NAME)
 COOKIE_DIR          ?= $(WORK_DIR)/cookies
-OBJ_DIR             ?= $(WORK_DIR)/obj
 INSTALL_DIR         ?= $(WORK_DIR)/install
 PACKAGE_DIR         ?= $(WORK_DIR)/package
 CHECKSUM_FILE       ?= $(WORK_DIR)/checksums

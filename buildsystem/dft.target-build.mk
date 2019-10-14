@@ -47,7 +47,7 @@ endef
 
 BUILD_TARGETS ?= $(addprefix build-,$(BUILD_CHECK_SCRIPTS)) $(addprefix build-,$(BUILD_SCRIPTS))
 
-build : configure $(OBJ_DIR) pre-build $(BUILD_TARGETS) post-build
+build : configure $(SRC_DIR) pre-build $(BUILD_TARGETS) post-build
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -73,7 +73,7 @@ build-%/Makefile :
 		true ; \
 	else \
 		echo "        running make in $*"  ; \
-		$(BUILD_ENV) $(MAKE) -C $(abspath $(OBJ_DIR)) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) \
+		$(BUILD_ENV) $(MAKE) -C $(abspath $(SRC_DIR)) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) \
 		                                  $(BUILD_ARGS) ; \
 	fi ;
 	@$(TARGET_DONE)

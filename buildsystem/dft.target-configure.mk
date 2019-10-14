@@ -47,7 +47,7 @@ endef
 
 CONFIGURE_TARGETS ?= $(addprefix configure-,$(CONFIGURE_SCRIPTS))
 
-configure : patch $(OBJ_DIR) pre-configure $(CONFIGURE_TARGETS) post-configure
+configure : patch $(SRC_DIR) pre-configure $(CONFIGURE_TARGETS) post-configure
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -74,17 +74,17 @@ configure-%/configure :
 	else \
 		if [ "$(USE_CONFIG_FILE)" != "" ] ; then \
 			echo "   W copying $(USE_CONFIG_FILE) to .config" ; \
-			cp -f $(FILE_DIR)/$(USE_CONFIG_FILE) $(OBJ_DIR)/.config ; \
-			cp -f $(FILE_DIR)/$(USE_CONFIG_FILE) $(OBJ_DIR)/original_config ; \
-			cd "$(OBJ_DIR)" && make olddefconfig ; \
+			cp -f $(FILE_DIR)/$(USE_CONFIG_FILE) $(SRC_DIR)/.config ; \
+			cp -f $(FILE_DIR)/$(USE_CONFIG_FILE) $(SRC_DIR)/original_config ; \
+			cd "$(SRC_DIR)" && make olddefconfig ; \
 			cp .config after_olddefconfig-$(SW_VERSION) ; \
 		else \
 			if [ "$(USE_DEFCONFIG)" != "" ] ; then \
-				echo "    running make $(BUILD_FLAGS) $(USE_DEFCONFIG) in $(OBJ_DIR)" ; \
-				cd "$(OBJ_DIR)" && make $(USE_DEFCONFIG) ; \
+				echo "    running make $(BUILD_FLAGS) $(USE_DEFCONFIG) in $(SRC_DIR)" ; \
+				cd "$(SRC_DIR)" && make $(USE_DEFCONFIG) ; \
 			else \
-				echo "    running configure in $(OBJ_DIR)" ; \
-				cd "$(OBJ_DIR)" && $(CONFIGURE_ENV) $(abspath $*)/configure $(CONFIGURE_ARGS) ; \
+				echo "    running configure in $(SRC_DIR)" ; \
+				cd "$(SRC_DIR)" && $(CONFIGURE_ENV) $(abspath $*)/configure $(CONFIGURE_ARGS) ; \
 			fi ; \
 		fi ; \
 	fi ;
