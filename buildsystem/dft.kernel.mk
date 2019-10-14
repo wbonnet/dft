@@ -52,7 +52,7 @@ SRC_GIT_REPO        ?= linux-$(SRC_GIT_BRANCH)
 SRC_GIT_REPO_EXT    ?= .git
 SRC_SITE            = https://cdn.kernel.org/pub/linux/kernel
 SRC_FILE_VERSION    ?= $(SW_VERSION)
-SRC_URL             ?= $(SRC_SITE)/$(SRC_BRANCH)/linux-$(SW_VERSION).tar.xz
+SRC_DIST_URL        ?= $(SRC_SITE)/$(SRC_BRANCH)
 SRC_BRANCH          ?= v$(shell echo $(SRC_FILE_VERSION) | head -c 1).x
 
 # Defines the files to retrieve

@@ -55,7 +55,7 @@ ifeq ($(DOWNLOAD_TOOL), wget)
 FETCH_TARGETS ?=  $(addprefix $(DOWNLOAD_DIR)/,$(SRC_CHECKSUM_FILES)) $(addprefix $(DOWNLOAD_DIR)/,$(SRC_DIST_FILES))
 else
 ifeq ($(DOWNLOAD_TOOL), git)
-FETCH_TARGETS ?=  $(addprefix $(GIT_EXTRACT_DIR)/,$(SRC_NAME))
+FETCH_TARGETS ?=  $(addprefix $(GIT_DIR)/,$(SRC_NAME))
 else
 define error_msg
 Unknown DOWNLOAD_TOOL : $(DOWNLOAD_TOOL)
@@ -101,12 +101,12 @@ $(DOWNLOAD_DIR)/% : $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 	fi ;
 	$(TARGET_DONE)
 
-$(GIT_EXTRACT_DIR)/% : $(GIT_EXTRACT_DIR)
-	if test -f $(COOKIE_DIR)/$(GIT_EXTRACT_DIR)/$* ; then \
+$(GIT_DIR)/% : $(GIT_DIR)
+	if test -f $(COOKIE_DIR)/$(GIT_DIR)/$* ; then \
 		true ; \
 	else \
-		echo "        cloning into $(GIT_EXTRACT_DIR)/$*" ; \
-		cd $(GIT_EXTRACT_DIR) ; \
+		echo "        cloning into $(GIT_DIR)/$*" ; \
+		cd $(GIT_DIR) ; \
         git clone --single-branch $(GIT_OPTS) -b $(GIT_BRANCH) $(GIT_URL)/$(GIT_REPO)$(GIT_REPO_EXT) ; \
 	fi ;
 	$(TARGET_DONE)

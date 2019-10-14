@@ -98,12 +98,11 @@ PATCH_DIR           ?= $(BASE_DIR)/patches
 # Defines the working dir subfolders (all are volatile)
 SRC_DIR             ?= $(WORK_DIR)/sources
 DOWNLOAD_DIR        ?= $(WORK_DIR)/download
-GIT_EXTRACT_DIR     ?= $(WORK_DIR)/git
+GIT_DIR             ?= $(WORK_DIR)/git
 PARTIAL_DIR         ?= $(DOWNLOAD_DIR)/partial
 # TODO: should I keep BOARDNAME somewhere in the path
 # COOKIE_DIR          ?= $(WORK_DIR)/cookies-$(BOARD_NAME)
 COOKIE_DIR          ?= $(WORK_DIR)/cookies
-EXTRACT_DIR         ?= $(WORK_DIR)/extract
 OBJ_DIR             ?= $(WORK_DIR)/obj
 INSTALL_DIR         ?= $(WORK_DIR)/install
 PACKAGE_DIR         ?= $(WORK_DIR)/package
