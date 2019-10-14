@@ -60,7 +60,7 @@ $(error $(error_msg))
 endif
 endif
 
-extract : fetch $(EXTRACT_DIR) pre-extract $(EXTRACT_TARGETS) post-extract
+extract : fetch $(SRC_DIR) pre-extract $(EXTRACT_TARGETS) post-extract
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -75,7 +75,7 @@ extract-archive-%.tar :
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar" ; \
-		tar $(TAR_ARGS) -xf $(DOWNLOAD_DIR)/$*.tar -C $(EXTRACT_DIR) ; \
+		tar $(TAR_ARGS) -xf $(DOWNLOAD_DIR)/$*.tar -C $(SRC_DIR) ; \
 	fi ;
 	$(TARGET_DONE)
 
@@ -84,7 +84,7 @@ extract-archive-%.tar.gz :
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz" ; \
-		tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tar.gz -C $(EXTRACT_DIR) ; \
+		tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tar.gz -C $(SRC_DIR) ; \
 	fi ;
 	$(TARGET_DONE)
 
@@ -93,7 +93,7 @@ extract-archive-%.tgz :
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tgz" ; \
-		tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tgz -C $(EXTRACT_DIR) ; \
+		tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tgz -C $(SRC_DIR) ; \
 	fi ;
 	$(TARGET_DONE)
 
@@ -102,7 +102,7 @@ extract-archive-%.tar.bz2 :
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.bz2" ; \
-		tar $(TAR_ARGS) -xjf $(DOWNLOAD_DIR)/$*.tar.bz2 -C $(EXTRACT_DIR) ; \
+		tar $(TAR_ARGS) -xjf $(DOWNLOAD_DIR)/$*.tar.bz2 -C $(SRC_DIR) ; \
 	fi ;
 	$(TARGET_DONE)
 
@@ -111,7 +111,7 @@ extract-archive-%.tar.xz :
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.xz" ; \
-		tar $(TAR_ARGS) -xJf $(DOWNLOAD_DIR)/$*.tar.xz -C $(EXTRACT_DIR) ; \
+		tar $(TAR_ARGS) -xJf $(DOWNLOAD_DIR)/$*.tar.xz -C $(SRC_DIR) ; \
 	fi ;
 	$(TARGET_DONE)
 
@@ -120,7 +120,7 @@ extract-archive-%.zip :
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.zip" ; \
-		unzip $(DOWNLOAD_DIR)/$*.zip -d $(EXTRACT_DIR) ; \
+		unzip $(DOWNLOAD_DIR)/$*.zip -d $(SRC_DIR) ; \
 	fi ;
 	$(TARGET_DONE)
 
@@ -129,7 +129,7 @@ extract-git-% :
 		true ; \
 	else \
 	  echo "        moving git data to $(EXTRACT)/$*" ; \
-		mv $(GIT_EXTRACT_DIR)/$(SRC_GIT_REPO) $(EXTRACT_DIR)/$(SRC_NAME) ; \
+		mv $(GIT_SRC_DIR)/$(SRC_GIT_REPO) $(SRC_DIR)/$(SRC_NAME) ; \
 	fi ;
 	$(TARGET_DONE)
 
