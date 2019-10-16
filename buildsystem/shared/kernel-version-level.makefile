@@ -35,4 +35,3 @@ include ../board.mk
 
 # Include build system
 include buildsystem/dft.kernel.mk
-#include buildsystem/dft.mk

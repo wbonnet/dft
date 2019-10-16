@@ -72,19 +72,20 @@ configure-%/configure :
 	if test -f $(COOKIE_DIR)/configure-$*/configure ; then \
 		true ; \
 	else \
-		if [ "$(USE_CONFIG_FILE)" != "" ] ; then \
-			echo "   W copying $(USE_CONFIG_FILE) to .config" ; \
-			cp -f $(FILE_DIR)/$(USE_CONFIG_FILE) $(SRC_DIR)/.config ; \
-			cp -f $(FILE_DIR)/$(USE_CONFIG_FILE) $(SRC_DIR)/original_config ; \
-			cd "$(SRC_DIR)" && make olddefconfig ; \
-			cp .config after_olddefconfig-$(SW_VERSION) ; \
+		if [ "$(SRC_NAME)" = "u-boot" ] ; then \
+			if [ "$(UBOOT_DEFCONFIG)" != "" ] ; then \
+				echo "   DEBUG W no dotconfig to copy for u-boot it is generated" ; \
+				echo "    running make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) in $(SRC_DIR)" ; \
+				cd "$(SRC_DIR)" && make $(UBOOT_DEFCONFIG); \
+			fi ; \
 		else \
-			if [ "$(USE_DEFCONFIG)" != "" ] ; then \
-				echo "    running make $(BUILD_FLAGS) $(USE_DEFCONFIG) in $(SRC_DIR)" ; \
-				cd "$(SRC_DIR)" && make $(USE_DEFCONFIG) ; \
-			else \
+			if [ "$(SRC_NAME)" = "linux" ] ; then \
+				echo "   DEBUG W kernel -> copying $(FILE_DIR)/configs/$(KERNEL_DEFCONFIG) to .config" ; \
+				cd "$(SRC_DIR)" && make olddefconfig ; \
+				cp .config after_olddefconfig-$(SW_VERSION) ; \
 				echo "    running configure in $(SRC_DIR)" ; \
 				cd "$(SRC_DIR)" && $(CONFIGURE_ENV) $(abspath $*)/configure $(CONFIGURE_ARGS) ; \
+				echo "    DEBUG W plop configure in $(SRC_DIR)" ; \
 			fi ; \
 		fi ; \
 	fi ;

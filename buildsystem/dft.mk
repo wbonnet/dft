@@ -257,9 +257,8 @@ show-config :
 	@echo "  BUILD_SCRIPTS                     $(BUILD_SCRIPTS)"
 	@echo
 	@echo "  BOARD_NAME                        $(BOARD_NAME)"
-	@echo "  USE_CONFIG_FILE                   $(USE_CONFIG_FILE)"
-	@echo "  USE_DEFCONFIG                     $(USE_DEFCONFIG)"
-	@echo "  DEFCONFIG_OVERRIDES               $(DEFCONFIG_OVERRIDES)"
+	@echo "  KERNEL_DEFCONFIG                  $(KERNEL_DEFCONFIG)"
+	@echo "  UBOOT_DEFCONFIG                   $(UBOOT_DEFCONFIG)"
 	@echo
 	@echo "  BUILD_FLAGS                       $(BUILD_FLAGS)"
 	@echo "  BUILD_ARGS                        $(BUILD_ARGS)"

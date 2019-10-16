@@ -96,7 +96,7 @@ FILE_DIR            ?= $(BASE_DIR)/files
 PATCH_DIR           ?= $(BASE_DIR)/patches
 
 # Defines the working dir subfolders (all are volatile)
-SRC_DIR             ?= $(WORK_DIR)/sources
+SRC_DIR             ?= $(WORK_DIR)/sources/$(SRC_NAME)-$(SW_VERSION)
 DOWNLOAD_DIR        ?= $(WORK_DIR)/download
 GIT_DIR             ?= $(WORK_DIR)/git
 PARTIAL_DIR         ?= $(DOWNLOAD_DIR)/partial
@@ -123,14 +123,14 @@ BUILD_SCRIPTS       ?= $(WORK_DIR)/Makefile
 # Defines board name
 BOARD_NAME          ?= default-board
 
-# If the USE_CONFIG_FILE variale is set, then the given file will be copied to
-# .config in the uild dirctory. Default is to define nothing.
-USE_CONFIG_FILE     ?= $(BOARD_NAME).config
+# If the KERNEL_DEFCONFIG variale is set, the given file will be copied to
+# .config in the source dirctory. Default value is set to board name.
+KERNEL_DEFCONFIG     ?= $(BOARD_NAME).config
 
-# If this variable is set, and USE_CONFIG_FILE is undefined, a config file will
+# XXXX TODO If this variable is set, and USE_CONFIG_FILE is undefined, a config file will
 # be generated using the given target. Default is to define nothing and let the
 # user set one of the two choice, or run make by himself.
-USE_DEFCONFIG       ?=
+UBOOT_DEFCONFIG       ?=
 
 # The config file can be modified once set in the build dir (either using a build
 # defconfig or by copying our own config file) by applying modifications defined
