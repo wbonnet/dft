@@ -45,7 +45,7 @@ endef
 # Build the target binaries
 #
 
-BUILD_TARGETS ?= $(addprefix build-,$(BUILD_CHECK_SCRIPTS)) $(addprefix build-,$(BUILD_SCRIPTS))
+BUILD_TARGETS ?= $(addprefix build-,$(basedir $(BUILD_CHECK_SCRIPTS))) $(addprefix build-,$(basedir $(BUILD_SCRIPTS)))
 
 build : configure $(SRC_DIR) pre-build $(BUILD_TARGETS) post-build
 	$(DISPLAY_COMPLETED_TARGET_NAME)
@@ -57,7 +57,7 @@ build : configure $(SRC_DIR) pre-build $(BUILD_TARGETS) post-build
 # Rebuild the target binaries
 #
 
-REBUILD_TARGETS ?= $(addprefix rebuild-,$(BUILD_CHECK_SCRIPTS)) $(addprefix rebuild-,$(BUILD_SCRIPTS))
+REBUILD_TARGETS ?= $(addprefix rebuild-,$(basedir $(BUILD_CHECK_SCRIPTS))) $(addprefix rebuild-,$(basedir $(BUILD_SCRIPTS)))
 
 rebuild : configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 	$(DISPLAY_COMPLETED_TARGET_NAME)

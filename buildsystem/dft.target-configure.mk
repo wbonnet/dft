@@ -57,7 +57,7 @@ configure : patch $(SRC_DIR) pre-configure $(CONFIGURE_TARGETS) post-configure
 # Force running again the configure script
 #
 
-RECONFIGURE_TARGETS ?= $(addprefix reconfigure-,$(CONFIGURE_SCRIPTS))
+RECONFIGURE_TARGETS ?= $(addprefix reconfigure-,$(basedir $(CONFIGURE_SCRIPTS)))
 
 reconfigure : patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconfigure
 	$(DISPLAY_COMPLETED_TARGET_NAME)
