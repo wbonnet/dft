@@ -69,11 +69,11 @@ rebuild : configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 #
 
 build-%/Makefile :
-	@if test -f $(COOKIE_DIR)/build-$*/Makefile ; then \
+	if test -f $(COOKIE_DIR)/build-$*/Makefile ; then \
 		true ; \
 	else \
 		echo "        running make in $*"  ; \
-		$(BUILD_ENV) $(MAKE) -C $(abspath $(SRC_DIR)) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) \
+		$(BUILD_ENV) $(MAKE) -C $(abspath $(SRC_DIR)/$(SRC_NAME)-$(SW_VERSION)) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) \
 		                                  $(BUILD_ARGS) ; \
 	fi ;
 	@$(TARGET_DONE)
