@@ -45,7 +45,7 @@ endef
 # Run the configure script
 #
 
-CONFIGURE_TARGETS ?= $(addprefix configure-,$(CONFIGURE_SCRIPTS))
+CONFIGURE_TARGETS ?= $(addprefix configure-,$(basedir $(CONFIGURE_SCRIPTS)))
 
 configure : patch $(SRC_DIR) pre-configure $(CONFIGURE_TARGETS) post-configure
 	$(DISPLAY_COMPLETED_TARGET_NAME)
@@ -68,24 +68,24 @@ reconfigure : patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconf
 # Execute the configure script
 #
 # TODO : DELTA DEFCONFIG
+# i ya pas de configure t as deja lz .config			$(CONFIGURE_ENV) $(abspath $*)/configure $(CONFIGURE_ARGS) ; \
 configure-%/configure :
 	if test -f $(COOKIE_DIR)/configure-$*/configure ; then \
+			echo "   DEBUG W plop doing $*" ; \
 		true ; \
 	else \
 		if [ "$(SRC_NAME)" = "u-boot" ] ; then \
-			if [ "$(UBOOT_DEFCONFIG)" != "" ] ; then \
-				echo "   DEBUG W no dotconfig to copy for u-boot it is generated" ; \
-				echo "    running make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) in $(SRC_DIR)" ; \
-				cd "$(SRC_DIR)" && make $(UBOOT_DEFCONFIG); \
-			fi ; \
+			echo "   DEBUG W no dotconfig to copy for u-boot it is generated" ; \
+			echo "    running make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) in $(SRC_DIR)" ; \
+			cd "$(SRC_DIR)/$(SRC_NAME)-$(SW_VERSION)" && make $(UBOOT_DEFCONFIG) ; \
 		else \
 			if [ "$(SRC_NAME)" = "linux" ] ; then \
 				echo "   DEBUG W kernel -> copying $(FILE_DIR)/configs/$(KERNEL_DEFCONFIG) to .config" ; \
-				cd "$(SRC_DIR)" && make olddefconfig ; \
+				cd "$(SRC_DIR)/$(SRC_NAME)-$(SW_VERSION)" ; \
+				make olddefconfig ; \
 				cp .config after_olddefconfig-$(SW_VERSION) ; \
-				echo "    running configure in $(SRC_DIR)" ; \
-				cd "$(SRC_DIR)" && $(CONFIGURE_ENV) $(abspath $*)/configure $(CONFIGURE_ARGS) ; \
-				echo "    DEBUG W plop configure in $(SRC_DIR)" ; \
+			else \
+				echo "  UNKNOWN SRC_NAME $(SRC_NAME)" ; \
 			fi ; \
 		fi ; \
 	fi ;

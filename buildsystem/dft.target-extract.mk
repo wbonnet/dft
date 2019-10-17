@@ -80,10 +80,11 @@ extract-archive-%.tar :
 	$(TARGET_DONE)
 
 extract-archive-%.tar.gz :
-	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar.gz ; then \
+	if test -f $(COOKIE_DIR)/extract-archive-$*.tar.gz ; then \
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz" ; \
+		echo "DEBUG WWW je fais un tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tar.gz -C $(SRC_DIR)" ; \
 		tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tar.gz -C $(SRC_DIR) ; \
 	fi ;
 	$(TARGET_DONE)

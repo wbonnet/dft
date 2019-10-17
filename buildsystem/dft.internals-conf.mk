@@ -96,7 +96,8 @@ FILE_DIR            ?= $(BASE_DIR)/files
 PATCH_DIR           ?= $(BASE_DIR)/patches
 
 # Defines the working dir subfolders (all are volatile)
-SRC_DIR             ?= $(WORK_DIR)/sources/$(SRC_NAME)-$(SW_VERSION)
+SRC_DIR             ?= $(WORK_DIR)/sources
+# CT ca mais ca empile les subdirSRC_DIR             ?= $(WORK_DIR)/sources/$(SRC_NAME)-$(SW_VERSION)
 DOWNLOAD_DIR        ?= $(WORK_DIR)/download
 GIT_DIR             ?= $(WORK_DIR)/git
 PARTIAL_DIR         ?= $(DOWNLOAD_DIR)/partial
