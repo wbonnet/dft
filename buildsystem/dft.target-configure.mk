@@ -80,10 +80,10 @@ configure-%/configure :
 			cd "$(SRC_DIR)/$(SRC_NAME)-$(SW_VERSION)" && make $(UBOOT_DEFCONFIG) ; \
 		else \
 			if [ "$(SRC_NAME)" = "linux" ] ; then \
-				echo "   DEBUG W kernel -> copying $(FILE_DIR)/configs/$(KERNEL_DEFCONFIG) to .config" ; \
 				cd "$(SRC_DIR)/$(SRC_NAME)-$(SW_VERSION)" ; \
+				cp "$(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config" .config ; \
 				make olddefconfig ; \
-				cp .config after_olddefconfig-$(SW_VERSION) ; \
+				cp .config "$(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ; \
 			else \
 				echo "  UNKNOWN SRC_NAME $(SRC_NAME)" ; \
 			fi ; \
