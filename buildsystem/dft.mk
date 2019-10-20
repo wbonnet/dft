@@ -121,7 +121,8 @@ DISPLAY_COMPLETED_TARGET_NAME  = @echo "    completed [$@] "
 #
 # Cookie maker
 #
-TARGET_DONE = mkdir -p $(COOKIE_DIR) && touch $(COOKIE_DIR)/$(notdir $@) && touch $(COOKIE_DIR)/$*
+#TARGET_DONE = mkdir -p $(COOKIE_DIR) && touch $(COOKIE_DIR)/$(notdir $@) && touch $(COOKIE_DIR)/$*
+TARGET_DONE = @mkdir -p $(COOKIE_DIR) && touch $(COOKIE_DIR)/$(notdir $@)
 
 # ------------------------------------------------------------------------------
 #
@@ -235,6 +236,7 @@ show-config :
 	@echo "  BUILD_SYSTEM_ROOT                 $(BUILD_SYSTEM_ROOT)"
 	@echo "  WORK_DIR                          $(WORK_DIR)"
 	@echo "  FILE_DIR                          $(FILE_DIR)"
+	@echo "  DEFCONFIG_DIR                     $(DEFCONFIG_DIR)"
 	@echo "  PATCH_DIR                         $(PATCH_DIR)"
 	@echo "  DOWNLOAD_DIR                      $(DOWNLOAD_DIR)"
 	@echo "  PARTIAL_DIR                       $(PARTIAL_DIR)"
