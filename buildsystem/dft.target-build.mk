@@ -71,10 +71,7 @@ rebuild : configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 #
 
 %/Makefile :
-	echo "plop2 BUILD_SCRIPTS === $(BUILD_SCRIPTS) ---===="
-	echo "plop2 BUILD_CHECK_SCRIPTS === $(BUILD_CHECK_SCRIPTS) ---===="
-	echo "plop2 BUILD_TARGETS === $(BUILD_TARGETS) ---===="
-	if test -f $(COOKIE_DIR)/build-$*/Makefile ; then \
+	@if test -f $(COOKIE_DIR)/build-$*/Makefile ; then \
 		true ; \
 	else \
 		$(BUILD_ENV) $(MAKE) -C $(abspath $(SRC_DIR)/$(SRC_NAME)-$(SW_VERSION)) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) \
