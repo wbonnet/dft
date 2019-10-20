@@ -45,9 +45,11 @@ endef
 # Build the target binaries
 #
 
-BUILD_TARGETS ?= $(addprefix build-,$(basedir $(BUILD_CHECK_SCRIPTS))) $(addprefix build-,$(basedir $(BUILD_SCRIPTS)))
-
-build : configure $(SRC_DIR) pre-build $(BUILD_TARGETS) post-build
+BUILD_TARGETS = $(addprefix build-,$(BUILD_CHECK_SCRIPTS)) $(addprefix build-,$(BUILD_SCRIPTS))
+build : configure $(SRC_DIR) pre-build $(BUILD_SCRIPTS) post-build
+	echo "plop BUILD_SCRIPTS === $(BUILD_SCRIPTS) ---===="
+	echo "plop BUILD_CHECK_SCRIPTS === $(BUILD_CHECK_SCRIPTS) ---===="
+	echo "plop BUILD_TARGETS === $(BUILD_TARGETS) ---===="
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -57,7 +59,7 @@ build : configure $(SRC_DIR) pre-build $(BUILD_TARGETS) post-build
 # Rebuild the target binaries
 #
 
-REBUILD_TARGETS ?= $(addprefix rebuild-,$(basedir $(BUILD_CHECK_SCRIPTS))) $(addprefix rebuild-,$(basedir $(BUILD_SCRIPTS)))
+REBUILD_TARGETS ?= $(addprefix rebuild-,$(BUILD_CHECK_SCRIPTS)) $(addprefix rebuild-,$(BUILD_SCRIPTS))
 
 rebuild : configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 	$(DISPLAY_COMPLETED_TARGET_NAME)
@@ -68,15 +70,17 @@ rebuild : configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 # Execute the building script
 #
 
-build-%/Makefile :
+%/Makefile :
+	echo "plop2 BUILD_SCRIPTS === $(BUILD_SCRIPTS) ---===="
+	echo "plop2 BUILD_CHECK_SCRIPTS === $(BUILD_CHECK_SCRIPTS) ---===="
+	echo "plop2 BUILD_TARGETS === $(BUILD_TARGETS) ---===="
 	if test -f $(COOKIE_DIR)/build-$*/Makefile ; then \
 		true ; \
 	else \
-		echo "        running make in $*"  ; \
 		$(BUILD_ENV) $(MAKE) -C $(abspath $(SRC_DIR)/$(SRC_NAME)-$(SW_VERSION)) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) \
 		                                  $(BUILD_ARGS) ; \
 	fi ;
-	@$(TARGET_DONE)
+	$(TARGET_DONE)
 
 rebuild-%/Makefile :
 	@if test -f $(COOKIE_DIR)/build-$*/Makefile ; then \
