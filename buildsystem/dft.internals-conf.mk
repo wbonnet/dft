@@ -93,6 +93,7 @@ BUILDER_OPERATING_SYSTEM_VERSION := $(word 2, $(shell lsb_release -c | tr '[:low
 BASE_DIR            ?= $(CURDIR)
 WORK_DIR            ?= $(BASE_DIR)/workdir
 FILE_DIR            ?= $(BASE_DIR)/files
+DEFCONFIG_DIR       ?= $(BASE_DIR)/../defconfig
 PATCH_DIR           ?= $(BASE_DIR)/patches
 
 # Defines the working dir subfolders (all are volatile)
