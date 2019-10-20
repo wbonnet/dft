@@ -72,7 +72,7 @@ fetch : prerequisite $(COOKIE_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
 	$(TARGET_DONE)
 
 $(DOWNLOAD_DIR)/% : $(DOWNLOAD_DIR) $(PARTIAL_DIR)
-	if test -f $(COOKIE_DIR)/$* ; then \
+	@if test -f $(COOKIE_DIR)/$* ; then \
 		true ; \
 	else \
 		wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$* ; \
