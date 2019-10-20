@@ -48,4 +48,3 @@ test:
 
 # Include build system
 include buildsystem/dft.u-boot.mk
-include buildsystem/dft.mk
