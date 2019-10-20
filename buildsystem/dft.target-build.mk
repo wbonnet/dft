@@ -47,9 +47,6 @@ endef
 
 BUILD_TARGETS = $(addprefix build-,$(BUILD_CHECK_SCRIPTS)) $(addprefix build-,$(BUILD_SCRIPTS))
 build : configure $(SRC_DIR) pre-build $(BUILD_SCRIPTS) post-build
-	echo "plop BUILD_SCRIPTS === $(BUILD_SCRIPTS) ---===="
-	echo "plop BUILD_CHECK_SCRIPTS === $(BUILD_CHECK_SCRIPTS) ---===="
-	echo "plop BUILD_TARGETS === $(BUILD_TARGETS) ---===="
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
