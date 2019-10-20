@@ -64,7 +64,7 @@ reinstall : build pre-reinstall do-reinstall install post-reinstall
 #
 
 do-install :
-	@if test -f $(COOKIE_DIR)/do-install ; then \
+	if test -f $(COOKIE_DIR)/do-install ; then \
 		true ; \
 	else \
 		echo "        running install in $(SRC_DIR)"  ; \
