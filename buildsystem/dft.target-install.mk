@@ -68,18 +68,19 @@ do-install :
 		true ; \
 	else \
 		echo "DEBUG install" ; \
-		echo "DEBUG now let's do a cd $(abspath $(SRC_DIR))/$(SRC_NAME)-$(SW_VERSION)" ; \
+		echo "DEBUG now let's do a cd $(SRC_DIR)/$(SRC_NAME)-$(SW_VERSION)" ; \
 		cd $(SRC_DIR)/$(SRC_NAME)-$(SW_VERSION) ; \
+		echo "DEBUGGG  : $(SRC_NAME)" ; \
 		echo "DEBUG INSTALL_DIR : $(INSTALL_DIR)" ; \
 		echo "DEBUG abspath INSTALL_DIR : $(INSTALL_DIR)" ; \
 		if [ "$(SRC_NAME)" = "u-boot" ] ; then \
-			mkdir -p $(abspath $(INSTALL_DIR))/u-boot/dtb ; \
+			mkdir -p $(INSTALL_DIR)/u-boot/dtb ; \
 			mkdir -p $(INSTALL_DIR)/doc ; \
-			cp files/* $(INSTALL_DIR)/doc ; \
+			cp -frH $(FILE_DIR)/* $(INSTALL_DIR)/doc ; \
 			pwd ; \
 			cp -fr $(UBOOT_BINARY_FILE) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION) ; \
 			cp -fr u-boot.dtb $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb ; \
-			cd $(abspath $(INSTALL_DIR))/u-boot/ ; \
+			cd $(INSTALL_DIR)/u-boot/ ; \
 			ln -sf u-boot-$(BOARD_NAME)-$(SW_VERSION) u-boot-$(BOARD_NAME); \
 		else \
 			if [ "$(SRC_NAME)" = "linux" ] ; then \
