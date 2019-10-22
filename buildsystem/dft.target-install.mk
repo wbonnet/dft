@@ -67,32 +67,32 @@ do-install :
 	if test -f $(COOKIE_DIR)/do-install ; then \
 		true ; \
 	else \
+		echo "DEBUG install" ; \
+		echo "DEBUG now let's do a cd $(abspath $(SRC_DIR))/$(SRC_NAME)-$(SW_VERSION)" ; \
+		cd $(SRC_DIR)/$(SRC_NAME)-$(SW_VERSION) ; \
+		echo "DEBUG INSTALL_DIR : $(INSTALL_DIR)" ; \
+		echo "DEBUG abspath INSTALL_DIR : $(INSTALL_DIR)" ; \
 		if [ "$(SRC_NAME)" = "u-boot" ] ; then \
-			mkdir -p $(abspath $(INSTALL_DIR))/u-boot/ ; \
+			mkdir -p $(abspath $(INSTALL_DIR))/u-boot/dtb ; \
 			mkdir -p $(INSTALL_DIR)/doc ; \
 			cp files/* $(INSTALL_DIR)/doc ; \
-			cd $(abspath $(SRC_DIR))/$(SRC_NAME)-$(SW_VERSION) ; \
-			echo "debug install" ; \
 			pwd ; \
-			echo "debug install "; \
-			cp -fr $(UBOOT_BINARY_FILE) $(abspath $(INSTALL_DIR))/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION) ; \
-			cp -fr u-boot.dtb $(abspath $(INSTALL_DIR))/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb ; \
+			cp -fr $(UBOOT_BINARY_FILE) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION) ; \
+			cp -fr u-boot.dtb $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb ; \
 			cd $(abspath $(INSTALL_DIR))/u-boot/ ; \
 			ln -sf u-boot-$(BOARD_NAME)-$(SW_VERSION) u-boot-$(BOARD_NAME); \
 		else \
 			if [ "$(SRC_NAME)" = "linux" ] ; then \
-				echo "        running install in $(SRC_DIR)"  ; \
-				mkdir -p $(abspath $(INSTALL_DIR))/boot/dtb ; \
-				cd $(abspath $(SRC_DIR)) ; \
-				$(BUILD_ENV) $(MAKE) INSTALL_PATH=$(abspath $(INSTALL_DIR))/boot $(INSTALL_ARGS) ; \
-				$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(abspath $(INSTALL_DIR))/ INSTALL_MOD_STRIP=1 modules_install ; \
-				echo "debug install ; \
-				pwd ; \
-				echo "debug install ; \
-				cp -fr arch/arm/boot/dts/*.dtb $(abspath $(INSTALL_DIR))/boot/dtb ; \
+				mkdir -p $(INSTALL_DIR)/boot/dtb ; \
+				$(BUILD_ENV) $(MAKE) INSTALL_PATH=$(INSTALL_DIR)/boot $(INSTALL_ARGS) ; \
+				$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(INSTALL_DIR)/ INSTALL_MOD_STRIP=1 modules_install ; \
+				cp -fr arch/arm/boot/dts/*.dtb $(INSTALL_DIR)/boot/dtb ; \
 	 	 		if [ ! "" = "$(DEFAULT_DTB)" ] ; then \
-				    cd $(abspath $(INSTALL_DIR)/boot) ; \
-				    ln -sf dtb/$(DEFAULT_DTB) default.dtb ; \
+					echo "DEBUG Je suis dans le if a la con" ; \
+					cd $(INSTALL_DIR)/boot ; \
+					ln -sf dtb/$(DEFAULT_DTB) default.dtb ; \
+				else \
+					echo "DEBUG Je suis dans le else a la con" ; \
 				fi ; \
 			fi ; \
 		fi ; \
@@ -102,7 +102,7 @@ do-install :
 do-reinstall :
 	@if test -f $(COOKIE_DIR)/do-install ; then \
 		rm -f $(COOKIE_DIR)/do-install ; \
-		rm -fr $(abspath $(INSTALL_DIR)) ; \
+		rm -fr $(INSTALL_DIR) ; \
 	fi ;
 	$(TARGET_DONE)
 
