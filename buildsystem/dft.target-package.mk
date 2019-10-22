@@ -53,9 +53,9 @@ do-package :
 		cd $(PACKAGE_DIR) ; \
 		mkdir -p linux-kernel-$(BOARD_NAME) ; \
 		cd linux-kernel-$(BOARD_NAME) ; \
-		rm -f debian ; \
-		cp -frv  ../debian debian ; \
-		cp -fr $(abspath $(INSTALL_DIR))/* . ; \
+		[ -f debian ] && rm -f debian ; \
+		cp -fr $(BASE_DIR)/debian debian ; \
+		cp -fr $(INSTALL_DIR)/* . ; \
 	 	if [ ! "" = "$(SW_VERSION)" ] ; then \
 			tar cvfz ../u-boot-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
 		else \
