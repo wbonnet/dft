@@ -123,7 +123,7 @@ DISPLAY_COMPLETED_TARGET_NAME  = @echo "    completed [$@] "
 # Cookie maker
 #
 #TARGET_DONE = mkdir -p $(COOKIE_DIR) && touch $(COOKIE_DIR)/$(notdir $@) && touch $(COOKIE_DIR)/$*
-TARGET_DONE = @mkdir -p $(COOKIE_DIR) && touch $(COOKIE_DIR)/$(notdir $@)
+TARGET_DONE = mkdir -p $(COOKIE_DIR) && touch $(COOKIE_DIR)/$(notdir $@)
 
 # ------------------------------------------------------------------------------
 #
