@@ -87,6 +87,7 @@ export DEBFULLNAME "Jane Doe"
 
 endef
   $(error $(error_msg))
+  $(error $(DEBFULLNAME))
 endif
 
 
@@ -234,6 +235,7 @@ show-config :
 	@echo
 	@echo "Directories configuration"
 	@echo "  BUILD_SYSTEM_ROOT                 $(BUILD_SYSTEM_ROOT)"
+	@echo "  BASE_DIR                          $(BASE_DIR)"
 	@echo "  WORK_DIR                          $(WORK_DIR)"
 	@echo "  FILE_DIR                          $(FILE_DIR)"
 	@echo "  DEFCONFIG_DIR                     $(DEFCONFIG_DIR)"
