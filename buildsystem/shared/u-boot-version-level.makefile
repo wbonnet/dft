@@ -42,9 +42,16 @@ SW_VERSION   = $(notdir $(patsubst %/,%,$(shell pwd)))
 # uncomment the line. Files will be searched for in the files/ directory at
 # the same level as this Makefile.  
 
-
-test:
-	@echo $(SW_VERSION)
-
 # Include build system
 include buildsystem/dft.u-boot.mk
+
+# ------------------------------------------------------------------------------
+#
+# Target that prints the help
+#
+help :
+	@echo "Available targets are :"
+	@echo '   new-version VERSION=yyyy.mm Create a new version entry. ex: make new-version VERSION=2019.10'
+	@echo '                               This target will create a subdirectory named after the content of the VERSION variable.'
+	@echo '                               It will contain the Makefile and all the files needed to fetch and build the given'
+	@echo '                               version. It also instanciate Debian package template.'

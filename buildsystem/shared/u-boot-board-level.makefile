@@ -52,11 +52,11 @@ new-version-%:
 		sed -i -e "s/__SW_VERSION__/$(NEW_VERSION)/g" $(NEW_VERSION)/Makefile ; \
 		cp -fr ../../buildsystem/current/templates/debian.kernel $(NEW_VERSION)/debian; \
 		cd $(NEW_VERSION)/debian ; \
-		mv linux-image.postinst  linux-image-$(BOARD_NAME).postinst ; \
-		mv linux-image.postrm    linux-image-$(BOARD_NAME).postrm ; \
-		mv linux-image.preinst   linux-image-$(BOARD_NAME).preinst ; \
-		mv linux-image.prerm     linux-image-$(BOARD_NAME).prerm ; \
-		mv linux-image.install   linux-image-$(BOARD_NAME).install ; \
+		mv linux-kernel.postinst  linux-kernel-$(BOARD_NAME).postinst ; \
+		mv linux-kernel.postrm    linux-kernel-$(BOARD_NAME).postrm ; \
+		mv linux-kernel.preinst   linux-kernel-$(BOARD_NAME).preinst ; \
+		mv linux-kernel.prerm     linux-kernel-$(BOARD_NAME).prerm ; \
+		mv linux-kernel.install   linux-kernel-$(BOARD_NAME).install ; \
 		mv linux-headers.install linux-headers-$(BOARD_NAME).install ; \
 		cd ../.. ; \
 		find $(NEW_VERSION)/debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(NEW_VERSION)/g" \

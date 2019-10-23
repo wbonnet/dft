@@ -35,3 +35,15 @@ include ../board.mk
 
 # Include build system
 include buildsystem/dft.kernel.mk
+
+# ------------------------------------------------------------------------------
+#
+# Target that prints the help
+#
+help :
+	@echo "Available targets are :"
+	@echo '   new-version VERSION=a.b.c Create a new version entry. ex: make new-version VERSION=4.16.8'
+	@echo '                             This target will create a subdirectory named after the content of the VERSION variable.'
+	@echo '                             It will contain the Makefile and all the files needed to fetch and build the given'
+	@echo '                             version. It also instanciate Debian package template.'
+
