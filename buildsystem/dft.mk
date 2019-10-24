@@ -155,6 +155,15 @@ include $(BUILD_SYSTEM_ROOT)/dft.target-upload.mk
 # In addition a pre-everything target can be define and is run before the actual
 # target
 #
+
+# ------------------------------------------------------------------------------
+#
+# Remove existing task cookie when entering the generic pre-redo task target
+#
+pre-re%:
+	@rm -rf $(COOKIE_DIR)/$*
+	@true
+
 pre-%:
 	@true
 
@@ -279,11 +288,11 @@ show-config :
 
 # ------------------------------------------------------------------------------
 #
-# Prerequisite target. Currently does nothing, should check for basic building
-# packages to be avaiable. Should add a check based onthe flavor.
+# Setup target. Currently does nothing, should check for basic building
+# packages to be avaiable. Should add a check based on the flavor.
 #
 
-prerequisite : $(COOKIE_DIR) pre-everything
+setup : $(COOKIE_DIR)
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 

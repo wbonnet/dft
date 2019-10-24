@@ -45,12 +45,13 @@ endef
 # Run the configure script
 #
 
-CONFIGURE_TARGETS = $(addprefix configure-,$(basedir $(CONFIGURE_SCRIPTS)))
+#yavait caCONFIGURE_TARGETS = $(addprefix configure-,$(basedir $(CONFIGURE_SCRIPTS)))
+CONFIGURE_TARGETS = $(addprefix configure-, $(CONFIGURE_SCRIPTS))
 
-configure : patch $(SRC_DIR) pre-configure $(CONFIGURE_TARGETS) $(CONFIGURE_SCRIPTS) post-configure
+#configure : patch $(SRC_DIR) pre-configure $(CONFIGURE_TARGETS) $(CONFIGURE_SCRIPTS) do-configure post-configure
+configure : patch pre-configure do-configure post-configure
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
-
 
 # ------------------------------------------------------------------------------
 #
@@ -71,15 +72,15 @@ reconfigure : patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconf
 # TODO : DELTA DEFCONFIG
 # ya pas de configure t as deja lz .config			$(CONFIGURE_ENV) $(abspath $*)/configure $(CONFIGURE_ARGS) ; 
 
-#configure : do-configure
-
-%/configure :
-	if test -f $(COOKIE_DIR)/$* ; then \
+%/configure : do-configure 
+configure : do-configure 
+do-configure :
+	@if test -f $(COOKIE_DIR)/$* ; then \
 		true ; \
 	else \
 		if [ "$(SRC_NAME)" = "u-boot" ] ; then \
 			echo "    running make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) in $(SRC_DIR)" ; \
-			cd "$(SRC_DIR)/$(SRC_NAME)-$(SW_VERSION)" && make $(UBOOT_DEFCONFIG) ; \
+			cd "$(SRC_DIR)/$(SRC_NAME)-$(SW_VERSION)" && make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) ; \
 		else \
 			if [ "$(SRC_NAME)" = "linux" ] ; then \
 				cd "$(SRC_DIR)/$(SRC_NAME)-$(SW_VERSION)" ; \

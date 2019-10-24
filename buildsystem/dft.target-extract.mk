@@ -80,7 +80,7 @@ extract-archive-%.tar :
 	$(TARGET_DONE)
 
 extract-archive-%.tar.gz :
-	if test -f $(COOKIE_DIR)/extract-archive-$*.tar.gz ; then \
+	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar.gz ; then \
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz" ; \
@@ -144,7 +144,7 @@ PATCH_ARGS       = --directory=$(WORK_DIR) --strip=$(PATCH_DIR_LEVEL) --fuzz=$(P
 
 apply-patch-% :
 	@echo " ==> Applying $(PATCH_DIR)/$*"
-	patch $(PATCH_ARGS) < $(PATCH_DIR)/$*
+	@patch $(PATCH_ARGS) < $(PATCH_DIR)/$*
 	$(TARGET_DONE)
 
 # ------------------------------------------------------------------------------

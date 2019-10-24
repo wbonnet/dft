@@ -67,7 +67,7 @@ endif
 fetch-list:
 	@echo $(FETCH_TARGETS)
 
-fetch : prerequisite $(COOKIE_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
+fetch : setup $(COOKIE_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
