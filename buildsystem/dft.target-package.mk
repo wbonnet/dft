@@ -51,8 +51,13 @@ do-package :
 	else \
 		echo "        running package in $(PACKAGE_DIR)"  ; \
 		cd $(PACKAGE_DIR) ; \
-		mkdir -p linux-kernel-$(BOARD_NAME) ; \
-		cd linux-kernel-$(BOARD_NAME) ; \
+		if [ "$(SRC_NAME)" = "linux" ] ; then \
+			mkdir -p $(SRC_NAME)-kernel-$(BOARD_NAME) ; \
+			cd $(SRC_NAME)-kernel-$(BOARD_NAME) ; \
+		else \
+			mkdir -p $(SRC_NAME)-$(BOARD_NAME) ; \
+			cd $(SRC_NAME)-$(BOARD_NAME) ; \
+		fi ; \
 		[ -f debian ] && rm -f debian ; \
 		echo " DEBUG PLOP 1 avant le cp -fr basedir/debian vers debian SUIS LA VIRE MOI        running package in $(PACKAGE_DIR)"  ; \
 		cp -fr $(BASE_DIR)/debian debian ; \
