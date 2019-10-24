@@ -48,8 +48,6 @@ endef
 CONFIGURE_TARGETS = $(addprefix configure-,$(basedir $(CONFIGURE_SCRIPTS)))
 
 configure : patch $(SRC_DIR) pre-configure $(CONFIGURE_TARGETS) $(CONFIGURE_SCRIPTS) post-configure
-	echo "  DEBUG W 2 CONFIGURE_SCRIPTS $(CONFIGURE_SCRIPTS) doing $*" ; 
-	echo "  DEBUG W 2 CONFIGURE_TARGETS $(CONFIGURE_TARGETS) doing $*" ; 
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -71,7 +69,7 @@ reconfigure : patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconf
 #
 # TODO : DELTA DEFCONFIG
 # ya pas de configure t as deja lz .config			$(CONFIGURE_ENV) $(abspath $*)/configure $(CONFIGURE_ARGS) ; 
-%/workdir/configure :
+%/workdir/configure:
 	if test -f $(COOKIE_DIR)/configure ; then \
 		true ; \
 	else \
@@ -91,10 +89,8 @@ reconfigure : patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconf
 	fi ;
 	$(TARGET_DONE)
 
-reconfigure-%/configure :
-	@if test -f $(COOKIE_DIR)/configure-$*/configure ; then \
-		rm -f $(COOKIE_DIR)/configure-$*/configure ; \
-	fi ;
+reconfigure:
+	@rm -f $(COOKIE_DIR)/configure
 	$(TARGET_DONE)
 
 # ------------------------------------------------------------------------------
