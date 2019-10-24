@@ -60,6 +60,7 @@ configure : patch $(SRC_DIR) pre-configure $(CONFIGURE_TARGETS) $(CONFIGURE_SCRI
 RECONFIGURE_TARGETS ?= $(addprefix reconfigure-,$(basedir $(CONFIGURE_SCRIPTS)))
 
 reconfigure : patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconfigure
+	@rm -f $(COOKIE_DIR)/configure
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -69,8 +70,11 @@ reconfigure : patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconf
 #
 # TODO : DELTA DEFCONFIG
 # ya pas de configure t as deja lz .config			$(CONFIGURE_ENV) $(abspath $*)/configure $(CONFIGURE_ARGS) ; 
-%/workdir/configure:
-	if test -f $(COOKIE_DIR)/configure ; then \
+
+#configure : do-configure
+
+%/configure :
+	if test -f $(COOKIE_DIR)/$* ; then \
 		true ; \
 	else \
 		if [ "$(SRC_NAME)" = "u-boot" ] ; then \
@@ -87,10 +91,6 @@ reconfigure : patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconf
 			fi ; \
 		fi ; \
 	fi ;
-	$(TARGET_DONE)
-
-reconfigure:
-	@rm -f $(COOKIE_DIR)/configure
 	$(TARGET_DONE)
 
 # ------------------------------------------------------------------------------
