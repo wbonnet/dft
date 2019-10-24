@@ -45,9 +45,11 @@ endef
 # Run the configure script
 #
 
-CONFIGURE_TARGETS ?= $(addprefix configure-,$(basedir $(CONFIGURE_SCRIPTS)))
+CONFIGURE_TARGETS = $(addprefix configure-,$(basedir $(CONFIGURE_SCRIPTS)))
 
-configure : patch $(SRC_DIR) pre-configure $(CONFIGURE_TARGETS) post-configure
+configure : patch $(SRC_DIR) pre-configure $(CONFIGURE_TARGETS) $(CONFIGURE_SCRIPTS) post-configure
+	echo "  DEBUG W 2 CONFIGURE_SCRIPTS $(CONFIGURE_SCRIPTS) doing $*" ; 
+	echo "  DEBUG W 2 CONFIGURE_TARGETS $(CONFIGURE_TARGETS) doing $*" ; 
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -68,14 +70,12 @@ reconfigure : patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconf
 # Execute the configure script
 #
 # TODO : DELTA DEFCONFIG
-# i ya pas de configure t as deja lz .config			$(CONFIGURE_ENV) $(abspath $*)/configure $(CONFIGURE_ARGS) ; \
-configure-%/configure :
-	if test -f $(COOKIE_DIR)/configure-$*/configure ; then \
-			echo "   DEBUG W plop doing $*" ; \
+# ya pas de configure t as deja lz .config			$(CONFIGURE_ENV) $(abspath $*)/configure $(CONFIGURE_ARGS) ; 
+%/workdir/configure :
+	if test -f $(COOKIE_DIR)/configure ; then \
 		true ; \
 	else \
 		if [ "$(SRC_NAME)" = "u-boot" ] ; then \
-			echo "   DEBUG W no dotconfig to copy for u-boot it is generated" ; \
 			echo "    running make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) in $(SRC_DIR)" ; \
 			cd "$(SRC_DIR)/$(SRC_NAME)-$(SW_VERSION)" && make $(UBOOT_DEFCONFIG) ; \
 		else \
