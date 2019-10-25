@@ -59,26 +59,14 @@ do-package :
 			cd $(SRC_NAME)-$(BOARD_NAME) ; \
 		fi ; \
 		[ -f debian ] && rm -f debian ; \
-		echo " DEBUG PLOP 1 avant le cp -fr basedir/debian vers debian SUIS LA VIRE MOI        running package in $(PACKAGE_DIR)"  ; \
 		cp -fr $(BASE_DIR)/debian debian ; \
-		echo " DEBUG PLOP 2 avant le cp -fr install_dir etoile SUIS LA VIRE MOI        running package in $(PACKAGE_DIR)"  ; \
 		cp -fr $(INSTALL_DIR)/* . ; \
-		echo " DEBUG PLOP 3 avant le tar SUIS LA VIRE MOI"  ; \
-		echo "tar cvfz ../$(SRC_NAME)-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * " ; \
 		if [ "$(SRC_NAME)" = "linux" ] ; then \
 			tar cvfz ../$(SRC_NAME)-kernel-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
 		else \
 			tar cvfz ../$(SRC_NAME)-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
 		fi ; \
-		echo " DEBUG PLOP 4 avant le debuild SUIS LA VIRE MOI"  ; \
-		echo " DEBUG PLOP 5 le pwd"  ; \
-		pwd ; \
-		echo " DEBUG PLOP 6 les fichiers par ls -lh"  ; \
-		ls -lh ; \
-		echo " DEBUG PLOP 7 les fichiers par ls -lh .."  ; \
-		ls -lh .. ; \
 		$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ; \
-		echo " DEBUG PLOP 8 apres le debuild SUIS LA VIRE MOI"  ; \
 	fi ; \
 	$(TARGET_DONE)
 
