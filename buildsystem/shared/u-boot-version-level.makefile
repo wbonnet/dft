@@ -51,7 +51,4 @@ include buildsystem/dft.u-boot.mk
 #
 help :
 	@echo "Available targets are :"
-	@echo '   new-version VERSION=yyyy.mm Create a new version entry. ex: make new-version VERSION=2019.10'
-	@echo '                               This target will create a subdirectory named after the content of the VERSION variable.'
-	@echo '                               It will contain the Makefile and all the files needed to fetch and build the given'
-	@echo '                               version. It also instanciate Debian package template.'
+	@echo '   Not the good help'

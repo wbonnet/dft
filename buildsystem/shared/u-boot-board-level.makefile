@@ -35,7 +35,10 @@ HOST_ARCH    = $(shell uname -m)
 #
 .PHONY: help
 
-# Create a new board entry in the repository
+# ------------------------------------------------------------------------------
+#
+# Create a new u-boot version entry for the given board in the repository
+#
 new-version-%:
 	@if [ -d "./$(NEW_VERSION)" ] ; then \
 		echo ". Directory ./($(NEW_VERSION) already exist. Doing nothing..." ; \
@@ -99,8 +102,8 @@ new-version-%:
 # Target that prints the help
 #
 help :
-	@echo "Available targets are :"
-	@echo '   new-version-[VERSION]   Create a new version entry. ex: make new-version-4.15.3'
-	@echo '                           This target will create a subdirectory name VERSION, containing'
-	@echo '                           the Makefile and all the files needed to fetch and build given'
-	@echo '                           version. It also instanciate Debian package template'
+	@echo "Available targets are :" ; \
+	echo "   new-version name=VERSION   Create a new version entry. ex: make new-version name=2019.10" ; \
+	echo "                              This target will create a subdirectory named 2019.10 containing" ; \
+	echo "                              the Makefile and all the files needed to fetch and build given" ; \
+	echo "                              version. It also instanciate package template."

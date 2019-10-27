@@ -36,14 +36,23 @@ include ../board.mk
 # Include build system
 include buildsystem/dft.kernel.mk
 
+# Catch all target. Call the same targets in each subfolder
+%:
+	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
+	then \
+	    echo "Board is $(BOARD_ARCH) and i run on $(HOST_ARCH). Skipping recursive target call..." ; \
+	    echo "Cross compilation is not yet supported by DFT. Please don't hesitate to contact the team if it is really blocking." ; \
+	    true ; \
+	else \
+		for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \
+			$(MAKE) -C $$i $* || exit 1 ; \
+		done \
+	fi
+
 # ------------------------------------------------------------------------------
 #
 # Target that prints the help
 #
 help :
-	@echo "Available targets are :"
-	@echo '   new-version VERSION=a.b.c Create a new version entry. ex: make new-version VERSION=4.16.8'
-	@echo '                             This target will create a subdirectory named after the content of the VERSION variable.'
-	@echo '                             It will contain the Makefile and all the files needed to fetch and build the given'
-	@echo '                             version. It also instanciate Debian package template.'
-
+	@echo "Available targets are :" ; \
+	echo '   not the good help' ;
