@@ -65,6 +65,7 @@ new-version:
 		echo ". Creating the new kernel version directory (./$(NEW_VERSION))" ; \
 		mkdir -p $(NEW_VERSION) ; \
 		ln -s $(DFT_HOME)/../buildsystem/shared/kernel-version-level.makefile $(NEW_VERSION)/Makefile ; \
+		ln -s $(DFT_HOME)/../buildsystem $(NEW_VERSION)/buildsystem ; \
 		mkdir -p files ; \
 		mkdir -p $(NEW_VERSION)/patches ; \
 		touch $(NEW_VERSION)/patches/.gitkeep ; \
