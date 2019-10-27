@@ -55,6 +55,7 @@ new-version:
 		echo "DFT_HOME is currently set in your shell to : $(DFT_HOME)";\
                 echo "You should check the DFT_HOME definition in your environment config file or set it on the make commande line" ;\
                 echo "ie: DFT_HOME=/path/to/somewhere make name=$(NEW_VERSION)" ; \
+                echo "in most os cases you just have to run : export DFT_HOME=../../../.. " ; \
         fi ;\
         if [ -d "./$(NEW_VERSION)" ] ; then \
                 echo "Version directory ./($(NEW_VERSION) already exist. Nothing to do... Now returning false to stop execution with an error." ; \
