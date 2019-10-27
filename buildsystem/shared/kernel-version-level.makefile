@@ -22,6 +22,9 @@
 # Defines the kernel version
 SW_VERSION      = $(notdir $(patsubst %/,%,$(shell pwd)))
 
+# Retrieve th builder hot architecure if not defined yet
+HOST_ARCH      ?= $(shell uname -m)
+
 # Include board specific definitions
 include ../board.mk
 
