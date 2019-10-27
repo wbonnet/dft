@@ -53,6 +53,8 @@ BUILDER_OPERATING_SYSTEM         := $(shell uname -s | tr '[:upper:]' '[:lower:]
 BUILDER_OPERATING_SYSTEM_FLAVOR  := $(word 3, $(shell lsb_release -i | tr '[:lower:]' '[:upper:]'))
 BUILDER_OPERATING_SYSTEM_VERSION := $(word 2, $(shell lsb_release -c | tr '[:lower:]' '[:upper:]'))
 
+HOST_ARCH    ?= $(shell uname -m)
+
 # ------------------------------------------------------------------------------
 #
 # Defines the set of variables used for the u-boot.org project
