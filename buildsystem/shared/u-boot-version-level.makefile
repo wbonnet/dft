@@ -45,10 +45,14 @@ SW_VERSION   = $(notdir $(patsubst %/,%,$(shell pwd)))
 # Include build system
 include buildsystem/dft.u-boot.mk
 
-# ------------------------------------------------------------------------------
-#
-# Target that prints the help
-#
+# No need to recurse check target at version level
+check :
+	@echo "Checking folder containing u-boot version $(SW_VERSION) for '$(BOARD_NAME)' packaging procedure" ; \
+	if [ ! -d "./files" ] ; then \
+		echo "files directory is missing in $(shell pwd). It should contains the markdown file install.$(SRC_NAME).$(BOARD_NAME).md describing the installation procedure. This file is needed by target package." ; \
+	fi ; \
+	false ;
+	
 help :
-	@echo "Available targets are :"
-	@echo '   Not the good help'
+	@echo "Available targets"
+	@echo 'check : Check folder content consistency. Report missing mandatory items (file, symlink or direcories)'
