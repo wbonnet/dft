@@ -47,7 +47,7 @@ include buildsystem/dft.u-boot.mk
 
 # No need to recurse check target at version level
 check :
-	@echo "Checking folder containing '$(BOARD_NAME)' u-boot packaging procedure for version $(SW_VERSION)" 
+	@echo "Checking folder containing u-boot version $(SW_VERSION) package for $(BOARD_NAME)" 
 	@if [ ! -f "../board.mk" ] ; then \
 		echo "file board.mk is missing in directory $(shell pwd)/.." ; \
 		false ; \
@@ -75,4 +75,4 @@ check :
 	
 help :
 	@echo "Available targets"
-	@echo 'check : Check folder content consistency. Report missing mandatory items (files, symlinks or direcories)'
+	@echo 'check : Verify the availability of required items (files, symlinks, directories) and report missing.'
