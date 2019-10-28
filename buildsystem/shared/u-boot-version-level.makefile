@@ -47,20 +47,28 @@ include buildsystem/dft.u-boot.mk
 
 # No need to recurse check target at version level
 check :
-	@echo "Checking folder containing '$(BOARD_NAME)' u-boot packaging procedure for version $(SW_VERSION)" ; \
-	if [ ! -d "./files" ] ; then \
-		echo "files directory is missing in $(shell pwd). It should contains the markdown file install.$(SRC_NAME).$(BOARD_NAME).md describing the installation procedure. This file is needed by target package." ; \
+	@echo "Checking folder containing '$(BOARD_NAME)' u-boot packaging procedure for version $(SW_VERSION)" 
+	@if [ ! -f "../board.mk" ] ; then \
+		echo "file board.mk is missing in directory $(shell pwd)/.." ; \
 		false ; \
-	fi ; \
-	if [ ! -L "./Makefile" ] ; then \
+	fi ;
+	@if [ ! -d "./files" ] ; then \
+		echo "files directory is missing in $(shell pwd). It should contains the markdown file install.$(SRC_NAME).$(BOARD_NAME).md needed by target package." ; \
+		false ; \
+	fi ;
+	@if [ ! -f "./files/install.$(SRC_NAME).$(BOARD_NAME).md" ] ; then \
+		echo "markdown file install.$(SRC_NAME).$(BOARD_NAME).md describing the installation procedure is missing in directory $(shell pwd)/files. This file is needed by target package." ; \
+		false ; \
+	fi ;
+	@if [ ! -L "./Makefile" ] ; then \
 		echo "Makefile symlink to ../../../../../buildsystem/shared/u-boot-version-level.makefile is missing in $(shell pwd). You are using your own custom Makefile." ; \
 		false ; \
-	fi ; \
-	if [ ! -L "./buildsystem" ] ; then \
+	fi ; 
+	@if [ ! -L "./buildsystem" ] ; then \
 		echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd). You are using your own custom buildsystem." ; \
 		false ; \
 	fi ;
 	
 help :
 	@echo "Available targets"
-	@echo 'check : Check folder content consistency. Report missing mandatory items (file, symlink or direcories)'
+	@echo 'check : Check folder content consistency. Report missing mandatory items (files, symlinks or direcories)'
