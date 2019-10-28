@@ -47,7 +47,7 @@ include buildsystem/dft.u-boot.mk
 
 # No need to recurse check target at version level
 check :
-	@echo "Checking folder containing u-boot version $(SW_VERSION) for '$(BOARD_NAME)' packaging procedure" ; \
+	@echo "Checking folder containing '$(BOARD_NAME)' u-boot packaging procedure for version $(SW_VERSION)" ; \
 	if [ ! -d "./files" ] ; then \
 		echo "files directory is missing in $(shell pwd). It should contains the markdown file install.$(SRC_NAME).$(BOARD_NAME).md describing the installation procedure. This file is needed by target package." ; \
 		false ; \
