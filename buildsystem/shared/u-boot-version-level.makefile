@@ -50,8 +50,16 @@ check :
 	@echo "Checking folder containing u-boot version $(SW_VERSION) for '$(BOARD_NAME)' packaging procedure" ; \
 	if [ ! -d "./files" ] ; then \
 		echo "files directory is missing in $(shell pwd). It should contains the markdown file install.$(SRC_NAME).$(BOARD_NAME).md describing the installation procedure. This file is needed by target package." ; \
+		false ; \
 	fi ; \
-	false ;
+	if [ ! -L "./Makefile" ] ; then \
+		echo "Makefile symlink to ../../../../../buildsystem/shared/u-boot-version-level.makefile is missing in $(shell pwd). You are using your own custom Makefile." ; \
+		false ; \
+	fi ; \
+	if [ ! -L "./buildsystem" ] ; then \
+		echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd). You are using your own custom buildsystem." ; \
+		false ; \
+	fi ;
 	
 help :
 	@echo "Available targets"
