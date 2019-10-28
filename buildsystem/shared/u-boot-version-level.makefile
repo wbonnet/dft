@@ -56,6 +56,10 @@ check :
 		echo "files directory is missing in $(shell pwd). It should contains the markdown file install.$(SRC_NAME).$(BOARD_NAME).md needed by target package." ; \
 		false ; \
 	fi ;
+	@if [ ! -d "./debian" ] ; then \
+		echo "debian directory is missing in $(shell pwd). It should contains the files needed to create the debian package for $(BOARD_NAME) u-boot." ; \
+		false ; \
+	fi ;
 	@if [ ! -f "./files/install.$(SRC_NAME).$(BOARD_NAME).md" ] ; then \
 		echo "markdown file install.$(SRC_NAME).$(BOARD_NAME).md describing the installation procedure is missing in directory $(shell pwd)/files. This file is needed by target package." ; \
 		false ; \
