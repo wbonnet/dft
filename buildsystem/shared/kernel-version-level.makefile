@@ -39,23 +39,31 @@ include ../board.mk
 # Include build system
 include buildsystem/dft.kernel.mk
 
-# Catch all target. Call the same targets in each subfolder
-%:
-	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
-	then \
-	    echo "Board is $(BOARD_ARCH) and i run on $(HOST_ARCH). Skipping recursive target call..." ; \
-	    echo "Cross compilation is not yet supported by DFT. Please don't hesitate to contact the team if it is really blocking." ; \
-	    true ; \
-	else \
-		for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \
-			$(MAKE) -C $$i $* || exit 1 ; \
-		done \
-	fi
+# No need to recurse check target at version level
+check :
+	@echo "Checking folder containing package definition of kernel version $(SW_VERSION) for $(BOARD_NAME)"
+	@if [ ! -f "../board.mk" ] ; then \
+		echo "file board.mk is missing in directory $(shell pwd)/.." ; \
+		false ; \
+	fi ;
+	@if [ ! -d "../defconfig" ] ; then \
+		echo "kernel config files directory is missing $(shell pwd)/../defconfig" ; \
+		false ; \
+	fi ;
+	@if [ ! -d "./debian" ] ; then \
+		echo "debian directory is missing in $(shell pwd). It should contains the files needed to create the debian package for $(BOARD_NAME) u-boot." ; \
+		false ; \
+	fi ;
+	@if [ ! -L "./Makefile" ] ; then \
+		echo "Makefile symlink to ../../../../../buildsystem/shared/kernel-version-level.makefile is missing in $(shell pwd). You are using your own custom Makefile." ; \
+		false ; \
+	fi ;
+	@if [ ! -L "./buildsystem" ] ; then \
+		echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd). You are using your own custom buildsystem." ; \
+		false ; \
+	fi ;
 
-# ------------------------------------------------------------------------------
-#
-# Target that prints the help
-#
 help :
-	@echo "Available targets are :" ; \
-	echo '   not the good help' ;
+	@echo "Available targets"
+	@echo 'check : Verify the availability of required items (files, symlinks, directories) and report missing.'
+
