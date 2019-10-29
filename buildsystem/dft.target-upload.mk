@@ -79,7 +79,7 @@ do-upload :
 	 	    if [ "" = "$(DFT_DEB_UPLOAD_PATH)" ] ; then \
 			    echo "        Variable DFT_DEB_UPLOAD_PATH is not set, please define it your shell environment."  ; \
 			else \
-			    echo "        DFT_DEB_UPLOAD_PATH = $(DFT_DEB_UPLOAD_PATH)."  ; \
+			    echo "        DFT_DEB_UPLOAD_PATH = $(DFT_DEB_UPLOAD_PATH)"  ; \
 			fi ; \
 			false ; \
 		fi ; \

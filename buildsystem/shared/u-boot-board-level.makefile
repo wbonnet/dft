@@ -95,7 +95,7 @@ new-version:
 
 # Catch all target. Call the same targets in each subfolder
 %:
-	@for i in $(filter-out $(FILTER_DIRS),$(shell find . -type d -maxdepth 1)) ; do \
+	@for i in $(filter-out $(FILTER_DIRS),$(shell find . -maxdepth 1 -type d )) ; do \
 		$(MAKE) -C $$i $* || exit 1 ; \
 done
 
@@ -106,12 +106,12 @@ check:
 		exit 1 ; \
 	fi ;
 	@if [ ! -L "./buildsystem" ] ; then \
-		echo "buildsystem symlink to ../../../../buildsystem is missing in $(shell pwd). You are using your own custom buildsystem." ; \
+		echo "buildsystem symlink to ../../../../buildsystem is missing in $(shell pwd) You are using your own custom buildsystem." ; \
 		echo "exit 602" ; \
 		exit 1 ; \
 	fi ;
 	@if [ ! "$(shell readlink ./buildsystem)" = "../../../../buildsystem" ] ; then \
-		echo "target of symlink buildsystem should be ../../../../buildsystem in directory $(shell pwd). You are using your own custom buildsystem." ; \
+		echo "target of symlink buildsystem should be ../../../../buildsystem in directory $(shell pwd) You are using your own custom buildsystem." ; \
 		echo "exit 603" ; \
 		exit 1 ; \
 	fi ;
@@ -121,19 +121,19 @@ check:
 		exit  1 ; \
 	fi ; 
 	@if [ ! "$(shell readlink ./Makefile)" = "../../../../buildsystem/shared/u-boot-board-level.makefile" ] ; then \
-		echo "target of symlink Makefile should be ../../../../buildsystem/shared/u-boot-board-level.makefile in directory $(shell pwd). You are using your own custom buildsystem." ; \
+		echo "target of symlink Makefile should be ../../../../buildsystem/shared/u-boot-board-level.makefile in directory $(shell pwd) You are using your own custom buildsystem." ; \
 		echo "exit 605" ; \
 		exit 1 ; \
 	fi ;
-	for i in $(filter-out $(FILTER_DIRS),$(shell find . -type d -maxdepth 1)) ; do \
+	for i in $(filter-out $(FILTER_DIRS),$(shell find . -maxdepth 1 -type d )) ; do \
 		echo "checking subdir $$i" ; \
 		if [ ! -L "$$i/buildsystem" ] ; then \
-			echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd)/$$i. You are using your own custom buildsystem." ; \
+			echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd)/$$i You are using your own custom buildsystem." ; \
 		echo "exit 606" ; \
 			exit 1 ; \
 		fi ; \
 		if [ ! -L "$$i/Makefile" ] ; then \
-			echo "Makefile symlink to ../../../../../buildsystem/shared/u-boot-board-level.makefile is missing in $(shell pwd)/$$i. You are using your own custom Makefile." ; \
+			echo "Makefile symlink to ../../../../../buildsystem/shared/u-boot-board-level.makefile is missing in $(shell pwd)/$$i You are using your own custom Makefile." ; \
 		echo "exit 601" ; \
 			exit 1 ; \
 		fi ; \
