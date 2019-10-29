@@ -34,10 +34,8 @@ DFT_HOME    ?= $(shell pwd)
 #
 .PHONY: help
 
-ifdef name
+ifneq ($(name), "")
 NEW_VERSION = $(name)
-else
-$(error Parameter name is missing. Please provide the kervel version to add using make new-version name=x.y.z)
 endif
 $(info Using DFT installed in $(DFT_HOME))
 
@@ -49,15 +47,19 @@ new-version:
 	@if [ "$(DFT_HOME)" = "" ] ; then \
 		echo "DFT_HOME environment variable is empty. Please define it in the shell environment used to run the make command. It can be done by setting DFT_HOME path in your shell config file or before the make command" ; \
 		echo "ie: DFT_HOME=/path/to/somewhere make name=$(NEW_VERSION)" ; \
-	fi ; \
-	if [ ! -d "$(DFT_HOME)/buildsystem" ] ; then \
+	fi ; 
+	@if [ ! -d "$(DFT_HOME)/buildsystem" ] ; then \
 		echo "Error : builsystem directory was not found. The buildsystem has to be available under the path defined by the DFT_HOME environment variable."; \
 		echo "DFT_HOME is currently set in your shell to : $(DFT_HOME)";\
                 echo "You should check the DFT_HOME definition in your environment config file or set it on the make commande line" ;\
                 echo "ie: DFT_HOME=/path/to/somewhere make name=$(NEW_VERSION)" ; \
                 echo "in most os cases you just have to run : export DFT_HOME=../../../.. " ; \
-        fi ;\
-        if [ -d "./$(NEW_VERSION)" ] ; then \
+        fi ;
+	@if [ "$(NEW_VERSION)" = "" ] ; then \
+		echo "new version name is not defined. Please use name=NEW_VERSION_TO_ADD" ; \
+                false ; \
+        fi ; 
+	@if [ -d "./$(NEW_VERSION)" ] ; then \
                 echo "Version directory ./($(NEW_VERSION) already exist. Nothing to do... Now returning false to stop execution with an error." ; \
                 false ; \
         else \
@@ -92,6 +94,16 @@ new-version:
 	@for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \
 		$(MAKE) -C $$i $* || exit 1 ; \
 	done
+
+check:
+	@if [ ! -L "./Makefile" ] ; then \
+		echo "Makefile symlink to ../../../../../buildsystem/shared/u-boot-board-level.makefile is missing in $(shell pwd). You are using your own custom Makefile." ; \
+		false ; \
+	fi ; 
+	@if [ ! "$(shell readlink ./Makefile)" = "../../../../buildsystem/shared/u-boot-board-level.makefile" ] ; then \
+		echo "target of symlink Makefile should be ../../../../buildsystem/shared/u-boot-board-level.makefile in directory $(shell pwd). You are using your own custom buildsystem." ; \
+		false ; \
+	fi ;
 
 # ------------------------------------------------------------------------------
 #
