@@ -72,10 +72,6 @@ check :
 		echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd). You are using your own custom buildsystem." ; \
 		false ; \
 	fi ;
-	@if [ ! -L "./buildsystem" ] ; then \
-		echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd). You are using your own custom buildsystem." ; \
-		false ; \
-	fi ;
 	@if [ ! "$(shell readlink ./buildsystem)" = "../../../../../buildsystem" ] ; then \
 		echo "target of symlink buildsystem should be ../../../../../buildsystem in directory $(shell pwd). You are using your own custom buildsystem." ; \
 		false ; \
