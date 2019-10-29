@@ -104,6 +104,9 @@ check:
 		echo "target of symlink Makefile should be ../../../../buildsystem/shared/u-boot-board-level.makefile in directory $(shell pwd). You are using your own custom buildsystem." ; \
 		false ; \
 	fi ;
+	@for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \
+		$(MAKE) -C $$i $* || exit 1 ; \
+	done
 
 # ------------------------------------------------------------------------------
 #
