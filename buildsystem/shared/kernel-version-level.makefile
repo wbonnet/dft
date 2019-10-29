@@ -41,7 +41,7 @@ include buildsystem/dft.kernel.mk
 
 # No need to recurse check target at version level
 check :
-	@echo "Checking folder containing package definition of kernel version $(SW_VERSION) for $(BOARD_NAME)"
+	@echo "Checking $(SRC_NAME) kernel package definition version $(SW_VERSION) for $(BOARD_NAME)"
 	@if [ ! -f "../board.mk" ] ; then \
 		echo "file board.mk is missing in directory $(shell pwd)/.." ; \
 		false ; \
@@ -62,8 +62,16 @@ check :
 		echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd). You are using your own custom buildsystem." ; \
 		false ; \
 	fi ;
+	@if [ ! "$(shell readlink ./Makefile)" = "../../../../../buildsystem/shared/kernel-version-level.makefile" ] ; then \
+		echo "target of symlink Makefile should be ../../../../../buildsystem/shared/kernel-version-level.makefile in directory $(shell pwd). You are using your own custom buildsystem." ; \
+		false ; \
+	fi ;
+	@if [ ! "$(shell readlink ./buildsystem)" = "../../../../../buildsystem" ] ; then \
+		echo "target of symlink buildsystem should be ../../../../../buildsystem in directory $(shell pwd). You are using your own custom buildsystem." ; \
+		false ; \
+	fi ;
 
 help :
-	@echo "Available targets"
+	@echo "Supported targets are"
 	@echo 'check : Verify the availability of required items (files, symlinks, directories) and report missing.'
 
