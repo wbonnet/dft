@@ -94,10 +94,10 @@ new-version:
 	fi ;
 
 # Catch all target. Call the same targets in each subfolder
-#%:
-#	@for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \
-#		$(MAKE) -C $$i $* || exit 1 ; \
-#done
+%:
+	@for i in $(filter-out $(FILTER_DIRS),$(shell find . -type d -maxdepth 1)) ; do \
+		$(MAKE) -C $$i $* || exit 1 ; \
+done
 
 check:
 	@if [ ! -f "./board.mk" ] ; then \
