@@ -27,5 +27,5 @@ BOARD_ARCH = armv7l
 USE_CONFIG_FILE        =
 UBOOT_DEFCONFIG        = Cubieboard_defconfig
 
-# Defines the list of files to copy (#path is relative to build dir)
+# Defines the list of files to copy (path is relative to build dir)
 UBOOT_BINARY_FILE      = u-boot-sunxi-with-spl.bin
