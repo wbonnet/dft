@@ -72,6 +72,18 @@ check :
 		echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd). You are using your own custom buildsystem." ; \
 		false ; \
 	fi ;
+	@if [ ! -L "./buildsystem" ] ; then \
+		echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd). You are using your own custom buildsystem." ; \
+		false ; \
+	fi ;
+	@if [ ! "$(shell readlink ./buildsystem)" = "../../../../../buildsystem" ] ; then \
+		echo "target of symlink buildsystem should be ../../../../../buildsystem in directory $(shell pwd). You are using your own custom buildsystem." ; \
+		false ; \
+	fi ;
+	@if [ ! "$(shell readlink ./Makefile)" = "../../../../../buildsystem/shared/u-boot-version-level.makefile" ] ; then \
+		echo "target of symlink Makefile should be ../../../../../buildsystem/shared/u-boot-version-level.makefile in directory $(shell pwd). You are using your own custom buildsystem." ; \
+		false ; \
+	fi ;
 	
 help :
 	@echo "Available targets"
