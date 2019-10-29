@@ -85,7 +85,7 @@ do-configure :
 			if [ "$(SRC_NAME)" = "linux" ] ; then \
 				cd "$(SRC_DIR)/$(SRC_NAME)-$(SW_VERSION)" ; \
 				cp "$(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config" .config ; \
-				make olddefconfig ; \
+				make silentoldconfig ; \
 				cp .config "$(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ; \
 			else \
 				echo "  UNKNOWN SRC_NAME $(SRC_NAME)" ; \
