@@ -22,11 +22,13 @@
 # Include the board definition
 include board.mk
 
-# Defines the software version
 PACKAGE_DATE = $(shell LC_ALL=C date +"%a, %d %b %Y %T %z")
 PACKAGE_DATE = $(shell date)
 HOST_ARCH    = $(shell uname -m)
 DFT_HOME    ?= $(shell pwd)
+
+# Do not recurse the following subdirs
+FILTER_DIRS  = ./defconfig . ./files buildsystem
 
 # ------------------------------------------------------------------------------
 #
@@ -90,10 +92,10 @@ new-version:
 	fi ;
 
 # Catch all target. Call the same targets in each subfolder
-%:
-	@for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \
-		$(MAKE) -C $$i $* || exit 1 ; \
-	done
+#%:
+#	@for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \
+#		$(MAKE) -C $$i $* || exit 1 ; \
+#done
 
 check:
 	@if [ ! -f "./board.mk" ] ; then \
@@ -116,7 +118,16 @@ check:
 		echo "target of symlink Makefile should be ../../../../buildsystem/shared/u-boot-board-level.makefile in directory $(shell pwd). You are using your own custom buildsystem." ; \
 		false ; \
 	fi ;
-	@for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \
+	for i in $(filter-out $(FILTER_DIRS),$(shell find . -type d -maxdepth 1)) ; do \
+		echo "checking subdir $$i" ; \
+		if [ ! -L "$$i/buildsystem" ] ; then \
+			echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd)/$$i. You are using your own custom buildsystem." ; \
+			false ; \
+		fi ; \
+		if [ ! -L "$$i/Makefile" ] ; then \
+			echo "Makefile symlink to ../../../../../buildsystem/shared/u-boot-board-level.makefile is missing in $(shell pwd)/$$i. You are using your own custom Makefile." ; \
+			false ; \
+		fi ; \
 		$(MAKE) -C $$i $* || exit 1 ; \
 	done
 
