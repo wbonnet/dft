@@ -28,7 +28,7 @@ HOST_ARCH    = $(shell uname -m)
 DFT_HOME    ?= $(shell pwd)
 
 # Do not recurse the following subdirs
-FILTER_DIRS  = ./defconfig . ./files buildsystem
+FILTER_DIRS  = ./defconfig . ./files buildsystem 
 
 # ------------------------------------------------------------------------------
 #
@@ -100,6 +100,13 @@ new-version:
 done
 
 check:
+	@if [ -f "$(BOARD_NAME).mk" ] ; then \
+		echo "file $(BOARD_NAME).mk should no longer exist in the repo it is now replaced by board.mk" ; \
+		echo "please check that information in board.mk are up to date and remove the obsolete file with the following command :" ; \
+		echo "git rm -f $(shell pwd)/$(BOARD_NAME)" ; \
+		echo "exit 609" ; \
+		exit 1 ; \
+	fi ;
 	@if [ ! -f "./board.mk" ] ; then \
 		echo "file board.mk is missing in directory $(shell pwd)" ; \
 		echo "exit 601" ; \
@@ -135,6 +142,10 @@ check:
 		if [ ! -L "$$i/Makefile" ] ; then \
 			echo "Makefile symlink to ../../../../../buildsystem/shared/u-boot-board-level.makefile is missing in $(shell pwd)/$$i You are using your own custom Makefile." ; \
 		echo "exit 601" ; \
+			echo "You can fix with the following commands : " ; \
+			echo "git rm -f $$i/Makefile  " ; \
+			echo "ln -s ../../../../../buildsystem/shared/u-boot-board-level.makefile $$i/Makefile " ; \
+			echo "git add $$i/Makefile  " ; \
 			exit 1 ; \
 		fi ; \
 		$(MAKE) -C $$i $* || exit 1 ; \
