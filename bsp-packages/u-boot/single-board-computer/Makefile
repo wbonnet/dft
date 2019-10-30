@@ -17,7 +17,9 @@
 #
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
-#
+
+# Do not recurse the following subdirs
+FILTER_DIRS  = . 
 
 # ------------------------------------------------------------------------------
 #
@@ -27,9 +29,25 @@
 
 # Catch all target. Call the same targets in each subfolder
 %:
-	for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \
+	@for i in $(filter-out $(FILTER_DIRS),$(shell find . -maxdepth 1 -type d )) ; do \
 		$(MAKE) -C $$i $* || exit 1 ; \
-	done \
+done
+
+check:
+	for i in $(filter-out $(FILTER_DIRS),$(shell find . -maxdepth 1 -type d )) ; do \
+		echo "checking subdir $$i" ; \
+		if [ ! -L "$$i/buildsystem" ] ; then \
+			echo "buildsystem symlink to ../../../../buildsystem is missing in $(shell pwd)/$$i You are using your own custom buildsystem." ; \
+		echo "exit 706" ; \
+			exit 1 ; \
+		fi ; \
+		if [ ! -L "$$i/Makefile" ] ; then \
+			echo "Makefile symlink to ../../../../buildsystem/shared/u-boot-board-level.makefile is missing in $(shell pwd)/$$i You are using your own custom Makefile." ; \
+		echo "exit 701" ; \
+			exit 1 ; \
+		fi ; \
+		$(MAKE) -C $$i $* || exit 1 ; \
+	done
 
 # ------------------------------------------------------------------------------
 #
