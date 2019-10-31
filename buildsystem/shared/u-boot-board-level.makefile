@@ -144,6 +144,9 @@ check:
 		if [ ! -L "$$i/buildsystem" ] ; then \
 			echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd)/$$i You are using your own custom buildsystem" ; \
 		echo "exit 606" ; \
+			echo "You can fix with the following commands : " ; \
+			echo "ln -s ../../../../../buildsystem $$i" ; \
+			echo "git add $$i/buildsystem" ; \
 			exit 1 ; \
 		fi ; \
 		if [ ! -L "$$i/Makefile" ] ; then \
