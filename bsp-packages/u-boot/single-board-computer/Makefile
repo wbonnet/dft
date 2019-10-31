@@ -34,11 +34,14 @@ FILTER_DIRS  = .
 done
 
 check:
-	for i in $(filter-out $(FILTER_DIRS),$(shell find . -maxdepth 1 -type d )) ; do \
+	@for i in $(filter-out $(FILTER_DIRS),$(shell find . -maxdepth 1 -type d )) ; do \
 		echo "checking subdir $$i" ; \
 		if [ ! -L "$$i/buildsystem" ] ; then \
 			echo "buildsystem symlink to ../../../../buildsystem is missing in $(shell pwd)/$$i You are using your own custom buildsystem." ; \
-		echo "exit 706" ; \
+			echo "You can fix with the following commands : " ; \
+			echo "ln -s ../../../../buildsystem $(shell pwd)/$$i " ; \
+			echo "git add $$i/buildsystem " ; \
+			echo "exit 706" ; \
 			exit 1 ; \
 		fi ; \
 		if [ ! -L "$$i/Makefile" ] ; then \
