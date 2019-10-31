@@ -25,7 +25,7 @@ BOARD_ARCH = armv7l
 
 # Set config file to empty and define the name of the board to use a defconfig
 USE_CONFIG_FILE        =
-USE_DEFCONFIG          = marsboard_defconfig
+UBOOT_DEFCONFIG        = marsboard_defconfig
 
 # Defines the list of files to copy (#path is relative to build dir)
 #UBOOT_BINARY_FILE      = u-boot-sunxi-with-spl.bin
