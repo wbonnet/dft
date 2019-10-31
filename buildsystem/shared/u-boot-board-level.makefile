@@ -46,17 +46,6 @@ $(info Using DFT installed in $(DFT_HOME))
 # Create a new u-boot version entry for the given board
 #
 new-version:
-	@if [ "$(DFT_HOME)" = "" ] ; then \
-		echo "DFT_HOME environment variable is empty. Please define it in the shell environment used to run the make command. It can be done by setting DFT_HOME path in your shell config file or before the make command" ; \
-		echo "ie: DFT_HOME=/path/to/somewhere make name=$(NEW_VERSION)" ; \
-	fi ; 
-	@if [ ! -d "$(DFT_HOME)/buildsystem" ] ; then \
-		echo "Error : builsystem directory was not found. The buildsystem has to be available under the path defined by the DFT_HOME environment variable."; \
-		echo "DFT_HOME is currently set in your shell to : $(DFT_HOME)";\
-                echo "You should check the DFT_HOME definition in your environment config file or set it on the make commande line" ;\
-                echo "ie: DFT_HOME=/path/to/somewhere make name=$(NEW_VERSION)" ; \
-                echo "in most os cases you just have to run : export DFT_HOME=../../../.. " ; \
-        fi ;
 	@if [ "$(NEW_VERSION)" = "" ] ; then \
 		echo "new version name is not defined. Please use name=NEW_VERSION_TO_ADD" ; \
 		echo "exit 608" ; \
@@ -69,11 +58,12 @@ new-version:
         else \
                 echo ". Creating the new u-boot version directory (./$(NEW_VERSION))" ; \
                 mkdir -p $(NEW_VERSION) ; \
-                ln -s $(DFT_HOME)/../buildsystem/shared/u-boot-version-level.makefile $(NEW_VERSION)/Makefile ; \
+                ln -s ../../../../../buildsystem/shared/u-boot-version-level.makefile $(NEW_VERSION)/Makefile ; \
+                ln -s ../../../../../buildsystem $(NEW_VERSION)/ ; \
                 mkdir -p files ; \
                 mkdir -p $(NEW_VERSION)/patches ; \
                 touch $(NEW_VERSION)/patches/.gitkeep ; \
-                cp -fr $(DFT_HOME)/buildsystem/templates/u-boot-package $(NEW_VERSION)/debian ; \
+                cp -fr ../../../../buildsystem/templates/u-boot-package $(NEW_VERSION)/debian ; \
                 cd $(NEW_VERSION)/debian ; \
                 mv u-boot.install   u-boot-$(BOARD_NAME).install ; \
                 cd ../.. ; \
