@@ -103,7 +103,7 @@ check:
 	@if [ -f "$(BOARD_NAME).mk" ] ; then \
 		echo "file $(BOARD_NAME).mk should no longer exist in the repo it is now replaced by board.mk" ; \
 		echo "please check that information in board.mk are up to date and remove the obsolete file with the following command :" ; \
-		echo "git rm -f $(shell pwd)/$(BOARD_NAME)" ; \
+		echo "git rm -f $(shell pwd)/$(BOARD_NAME).mk" ; \
 		echo "exit 609" ; \
 		exit 1 ; \
 	fi ;
@@ -113,13 +113,20 @@ check:
 		exit 1 ; \
 	fi ;
 	@if [ ! -L "./buildsystem" ] ; then \
-		echo "buildsystem symlink to ../../../../buildsystem is missing in $(shell pwd) You are using your own custom buildsystem." ; \
+		echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd) You are using your own custom buildsystem." ; \
 		echo "exit 602" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "ln -s ../../../../buildsystem" ; \
+		echo "git add buildsystem " ; \
 		exit 1 ; \
 	fi ;
 	@if [ ! "$(shell readlink ./buildsystem)" = "../../../../buildsystem" ] ; then \
 		echo "target of symlink buildsystem should be ../../../../buildsystem in directory $(shell pwd) You are using your own custom buildsystem." ; \
 		echo "exit 603" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "git rm -f buildsystem " ; \
+		echo "ln -s ../../../../../buildsystem" ; \
+		echo "git add buildsystem " ; \
 		exit 1 ; \
 	fi ;
 	@if [ ! -L "./Makefile" ] ; then \
@@ -135,16 +142,16 @@ check:
 	for i in $(filter-out $(FILTER_DIRS),$(shell find . -maxdepth 1 -type d )) ; do \
 		echo "checking subdir $$i" ; \
 		if [ ! -L "$$i/buildsystem" ] ; then \
-			echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd)/$$i You are using your own custom buildsystem." ; \
+			echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd)/$$i You are using your own custom buildsystem" ; \
 		echo "exit 606" ; \
 			exit 1 ; \
 		fi ; \
 		if [ ! -L "$$i/Makefile" ] ; then \
-			echo "Makefile symlink to ../../../../../buildsystem/shared/u-boot-board-level.makefile is missing in $(shell pwd)/$$i You are using your own custom Makefile." ; \
+			echo "Makefile symlink to ../../../../../buildsystem/shared/u-boot-version-level.makefile is missing in $(shell pwd)/$$i You are using your own custom Makefile" ; \
 		echo "exit 601" ; \
 			echo "You can fix with the following commands : " ; \
 			echo "git rm -f $$i/Makefile  " ; \
-			echo "ln -s ../../../../../buildsystem/shared/u-boot-board-level.makefile $$i/Makefile " ; \
+			echo "ln -s ../../../../../buildsystem/shared/u-boot-version-level.makefile $$i/Makefile " ; \
 			echo "git add $$i/Makefile  " ; \
 			exit 1 ; \
 		fi ; \
