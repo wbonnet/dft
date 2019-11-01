@@ -54,15 +54,21 @@ check :
 	fi ;
 	@if [ ! -d "./files" ] ; then \
 		echo "files directory is missing in $(shell pwd). It should contains the markdown file install.$(SRC_NAME).$(BOARD_NAME).md needed by target package." ; \
+		echo "You can fix with the following commands : " ; \
+		echo "mkdir files" ; \
 		false ; \
 	fi ;
 	@if [ ! -d "./debian" ] ; then \
 		echo "debian directory is missing in $(shell pwd). It should contains the files needed to create the debian package for $(BOARD_NAME) u-boot." ; \
 		false ; \
 	fi ;
-	@if [ ! -f "./files/install.$(SRC_NAME).$(BOARD_NAME).md" ] ; then \
-		echo "markdown file install.$(SRC_NAME).$(BOARD_NAME).md describing the installation procedure is missing in directory $(shell pwd)/files. This file is needed by target package." ; \
-		false ; \
+	@if [ ! -L "files/install.$(SRC_NAME).$(BOARD_NAME).md" ] ; then \
+		echo "Installation procedure symlink is missing under $(shell pwd)/files" ; \
+		echo "This folder should contain a symlink to the markdown file describing u-boot installation produre for $(BOARD_NAME)" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "ln -s ../../files/install.u-boot.$(BOARD_NAME).md files/install.u-boot.$(BOARD_NAME).md " ; \
+		echo "git add files/install.u-boot.$(BOARD_NAME).md" ; \
+		exit 1 ; \
 	fi ;
 	@if [ ! -L "./Makefile" ] ; then \
 		echo "Makefile symlink to ../../../../../buildsystem/shared/u-boot-version-level.makefile is missing in $(shell pwd). You are using your own custom Makefile." ; \
