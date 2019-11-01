@@ -153,7 +153,15 @@ check:
 			echo "It should contain a symlink to the markdown file describing u-boot installation produre for $(BOARD_NAME)" ; \
 			echo "You can fix with the following commands : " ; \
 			echo "mkdir $$i/files  " ; \
-			echo "ln -s ../../files/install.u-boot.orangepi-r1.md $$i/install.u-boot.$(BOARD_NAME).md " ; \
+			echo "ln -s ../../files/install.i$(BOARD-NAME).orangepi-r1.md $$i/install.u-boot.$(BOARD_NAME).md " ; \
+			echo "git add $$i/install.u-boot.$(BOARD_NAME).md " ; \
+			exit 1 ; \
+		fi ; \
+		if [ ! -L "$$i/install.u-boot.$(BOARD_NAME).md" ] ; then \
+			echo "Instalation procedure symlink is missing under $(shell pwd)/$$i" ; \
+			echo "This folder should contain a symlink to the markdown file describing u-boot installation produre for $(BOARD_NAME)" ; \
+			echo "You can fix with the following commands : " ; \
+			echo "ln -s ../../files/install.u-boot.$(BOARD_NAME).md $$i/install.u-boot.$(BOARD_NAME).md " ; \
 			echo "git add $$i/install.u-boot.$(BOARD_NAME).md " ; \
 			exit 1 ; \
 		fi ; \
