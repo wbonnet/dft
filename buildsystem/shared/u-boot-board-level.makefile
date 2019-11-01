@@ -148,6 +148,15 @@ check:
 			echo "git add $$i/Makefile  " ; \
 			exit 1 ; \
 		fi ; \
+		if [ ! -d "$$i/files" ] ; then \
+			echo "Directory files is missing under $(shell pwd)/$$i" ; \
+			echo "It should contain a symlink to the markdown file describing u-boot installation produre for $(BOARD_NAME)" ; \
+			echo "You can fix with the following commands : " ; \
+			echo "mkdir $$i/files  " ; \
+			echo "ln -s ../../files/install.u-boot.orangepi-r1.md $$i/install.u-boot.$(BOARD_NAME).md " ; \
+			echo "git add $$i/install.u-boot.$(BOARD_NAME).md " ; \
+			exit 1 ; \
+		fi ; \
 		$(MAKE) -C $$i $* || exit 1 ; \
 	done
 
