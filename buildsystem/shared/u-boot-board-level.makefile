@@ -28,7 +28,7 @@ HOST_ARCH    = $(shell uname -m)
 DFT_HOME    ?= $(shell pwd)
 
 # Do not recurse the following subdirs
-FILTER_DIRS  = ./defconfig . ./files buildsystem 
+FILTER_DIRS  = ./patches ./defconfig . ./files  
 
 # ------------------------------------------------------------------------------
 #
@@ -86,8 +86,12 @@ new-version:
 # Catch all target. Call the same targets in each subfolder
 %:
 	@for i in $(filter-out $(FILTER_DIRS),$(shell find . -maxdepth 1 -type d )) ; do \
-		$(MAKE) -C $$i $* || exit 1 ; \
-done
+		echo "dans le premier for to make $@ avec la variable du for $$i" ; \
+		if [ -d $$i ] ; then \
+			echo "cest un repertoir $$i alors => $(MAKE) -C $$i $* || exit 1" ; \
+			$(MAKE) -C $$i $@ || exit 1 ; \
+		fi ; \
+	done
 
 check:
 	@if [ -f "$(BOARD_NAME).mk" ] ; then \
@@ -130,7 +134,7 @@ check:
 		exit 1 ; \
 	fi ;
 	for i in $(filter-out $(FILTER_DIRS),$(shell find . -maxdepth 1 -type d )) ; do \
-		echo "checking subdir $$i" ; \
+		echo "dans le second for to make $@ avec la variable du for $$i" ; \
 		if [ ! -L "$$i/buildsystem" ] ; then \
 			echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd)/$$i You are using your own custom buildsystem" ; \
 		echo "exit 606" ; \
@@ -165,7 +169,7 @@ check:
 			echo "git add $$i/files/install.u-boot.$(BOARD_NAME).md " ; \
 			exit 1 ; \
 		fi ; \
-		$(MAKE) -C $$i $* || exit 1 ; \
+		$(MAKE) -C $$i $@ || exit 1 ; \
 	done
 
 # ------------------------------------------------------------------------------
