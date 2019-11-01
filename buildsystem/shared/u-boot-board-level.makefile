@@ -162,7 +162,7 @@ check:
 			echo "This folder should contain a symlink to the markdown file describing u-boot installation produre for $(BOARD_NAME)" ; \
 			echo "You can fix with the following commands : " ; \
 			echo "ln -s ../../files/install.u-boot.$(BOARD_NAME).md $$i/files/install.u-boot.$(BOARD_NAME).md " ; \
-			echo "git add $$i/filesinstall.u-boot.$(BOARD_NAME).md " ; \
+			echo "git add $$i/files/install.u-boot.$(BOARD_NAME).md " ; \
 			exit 1 ; \
 		fi ; \
 		$(MAKE) -C $$i $* || exit 1 ; \
