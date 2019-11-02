@@ -25,7 +25,7 @@ include board.mk
 # Defines the software version
 PACKAGE_DATE = $(shell LC_ALL=C date +"%a, %d %b %Y %T %z")
 PACKAGE_DATE = $(shell date)
-FILTER_DIRS  = defconfig/
+MAKE_FILTERS = defconfig/
 HOST_ARCH    = $(shell uname -m)
 DFT_HOME    ?= $(shell pwd)
 
@@ -107,7 +107,7 @@ help :
 
 # Catch all target. Call the same targets in each subfolder
 %:
-	@for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \
+	@for i in $(filter-out $(MAKE_FILTERS),$(wildcard */)) ; do \
 		$(MAKE) -C $$i $* || exit 1 ; \
 	done
 

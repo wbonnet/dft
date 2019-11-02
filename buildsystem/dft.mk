@@ -282,7 +282,7 @@ show-config :
 	@echo "  DEBUILD_ENV                       $(DEBUILD_ENV)"
 	@echo
 	@echo "Internal variables"
-	@echo "  FILTER_DIRS                       $(FILTER_DIRS)"
+	@echo "  MAKE_FILTERS                      $(MAKE_FILTERS)"
 
 # ------------------------------------------------------------------------------
 #

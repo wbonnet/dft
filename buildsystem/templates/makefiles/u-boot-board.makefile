@@ -26,7 +26,7 @@ include board.mk
 NEW_VERSION  = $*
 PACAKGE_DATE = $(shell LC_ALL=C date +"%a, %d %b %Y %T %z")
 PACAKGE_DATE = $(shell date )
-FILTER_DIRS  = files/
+MAKE_FILTERS = files/
 HOST_ARCH    = $(shell uname -m)
 
 # Create a new boar entry in the repository
@@ -72,7 +72,7 @@ new-version-%:
 	    echo "Board is $(BOARD_ARCH) and i run on $(HOST_ARCH). Skipping recursive target call..." ; \
 	    true ; \
 	else \
-		for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \
+		for i in $(filter-out $(MAKE_FILTERS),$(wildcard */)) ; do \
 			$(MAKE) -C $$i $* || exit 1 ; \
 		done \
 	fi

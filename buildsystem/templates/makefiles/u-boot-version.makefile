@@ -25,7 +25,7 @@ include board.mk
 # Defines the software version
 PACKAGE_DATE = $(shell LC_ALL=C date +"%a, %d %b %Y %T %z")
 PACKAGE_DATE = $(shell date )
-FILTER_DIRS  = files/
+MAKE_FILTERS = files/
 HOST_ARCH    = $(shell uname -m)
 
 # Defines relative path to root of the buildsystem tree
@@ -78,7 +78,7 @@ new-version:
 clean:
 fetch:
 distclean:
-	@for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \
+	@for i in $(filter-out $(MAKE_FILTERS),$(wildcard */)) ; do \
 	$(MAKE) -C $$i $* || exit 1 ; \
 	done 
 
@@ -89,7 +89,7 @@ distclean:
 	    echo "board is $(BOARD_ARCH) and i run on $(HOST_ARCH). Skipping recursive target call..." ; \
 	    true ; \
 	else \
-		for i in $(filter-out $(FILTER_DIRS),$(wildcard */)) ; do \
+		for i in $(filter-out $(MAKE_FILTERS),$(wildcard */)) ; do \
 			$(MAKE) -C $$i $* || exit 1 ; \
 		done \
 	fi

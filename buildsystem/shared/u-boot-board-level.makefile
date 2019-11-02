@@ -25,10 +25,10 @@ include board.mk
 PACKAGE_DATE = $(shell LC_ALL=C date +"%a, %d %b %Y %T %z")
 PACKAGE_DATE = $(shell date)
 HOST_ARCH    = $(shell uname -m)
-DFT_HOME    ?= $(shell pwd)
+DFT_HOME     = ../../../../..
 
 # Do not recurse the following subdirs
-FILTER_DIRS  = ./patches ./defconfig . ./files  
+MAKE_FILTERS  = ./patches ./defconfig . ./files board.mk
 
 # ------------------------------------------------------------------------------
 #
@@ -83,17 +83,8 @@ new-version:
 		echo "git add $(NEW_VERSION)" ; \
 	fi ;
 
-# Catch all target. Call the same targets in each subfolder
-%:
-	@for i in $(filter-out $(FILTER_DIRS),$(shell find . -maxdepth 1 -type d )) ; do \
-		echo "dans le premier for to make $@ avec la variable du for $$i" ; \
-		if [ -d $$i ] ; then \
-			echo "cest un repertoir $$i alors => $(MAKE) -C $$i $* || exit 1" ; \
-			$(MAKE) -C $$i $@ || exit 1 ; \
-		fi ; \
-	done
-
 check:
+	@echo "Checking u-boot for board $(BOARD_NAME) version $(SW_VERSION) package definition" ;
 	@if [ -f "$(BOARD_NAME).mk" ] ; then \
 		echo "file $(BOARD_NAME).mk should no longer exist in the repo it is now replaced by board.mk" ; \
 		echo "please check that information in board.mk are up to date and remove the obsolete file with the following command :" ; \
@@ -133,17 +124,20 @@ check:
 		echo "exit 605" ; \
 		exit 1 ; \
 	fi ;
-	for i in $(filter-out $(FILTER_DIRS),$(shell find . -maxdepth 1 -type d )) ; do \
-		echo "dans le second for to make $@ avec la variable du for $$i" ; \
-		if [ ! -L "$$i/buildsystem" ] ; then \
-			echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd)/$$i You are using your own custom buildsystem" ; \
+	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
+		cd $$i ; \
+		echo "dans le for de la target explicite check to make expanded target $@ iteration courante la variable compteur de boucle du for est sur $$i" ; \
+		pwd ; \
+		ls -l "buildsystem" ; \
+		if [ ! -L "buildsystem" ] ; then \
+			echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd) You are using your own custom buildsystem" ; \
 		echo "exit 606" ; \
 			echo "You can fix with the following commands : " ; \
 			echo "ln -s ../../../../../buildsystem $$i" ; \
 			echo "git add $$i/buildsystem" ; \
 			exit 1 ; \
 		fi ; \
-		if [ ! -L "$$i/Makefile" ] ; then \
+		if [ ! -L "Makefile" ] ; then \
 			echo "Makefile symlink to ../../../../../buildsystem/shared/u-boot-version-level.makefile is missing in $(shell pwd)/$$i You are using your own custom Makefile" ; \
 		echo "exit 601" ; \
 			echo "You can fix with the following commands : " ; \
@@ -152,7 +146,7 @@ check:
 			echo "git add $$i/Makefile  " ; \
 			exit 1 ; \
 		fi ; \
-		if [ ! -d "$$i/files" ] ; then \
+		if [ ! -d "files" ] ; then \
 			echo "Directory files is missing under $(shell pwd)/$$i" ; \
 			echo "It should contain a symlink to the markdown file describing u-boot installation produre for $(BOARD_NAME)" ; \
 			echo "You can fix with the following commands : " ; \
@@ -161,7 +155,7 @@ check:
 			echo "git add $$i/install.u-boot.$(BOARD_NAME).md " ; \
 			exit 1 ; \
 		fi ; \
-		if [ ! -L "$$i/files/install.u-boot.$(BOARD_NAME).md" ] ; then \
+		if [ ! -L "files/install.u-boot.$(BOARD_NAME).md" ] ; then \
 			echo "Instalation procedure symlink is missing under $(shell pwd)/$$i/files" ; \
 			echo "This folder should contain a symlink to the markdown file describing u-boot installation produre for $(BOARD_NAME)" ; \
 			echo "You can fix with the following commands : " ; \
@@ -169,11 +163,29 @@ check:
 			echo "git add $$i/files/install.u-boot.$(BOARD_NAME).md " ; \
 			exit 1 ; \
 		fi ; \
-		$(MAKE) -C $$i $@ || exit 1 ; \
+		$(MAKE) $@ || exit 12 ; \
+		cd .. ; \
+	done ; \
+
+# Catch all target. Call the same targets in each subfolder
+%:
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
+		echo "dans le for de la target % making target $@ iteration courante la variable compteur de boucle du for est sur  $$i" ; \
+		if [ -d $$i ] ; then \
+			echo "cest un repertoire $$i alors => $(MAKE) -C $$i $* || exit 1" ; \
+			cd $$i ; \
+			pwd ; \
+			echo "$(MAKE) $@ || exit 13" ; \
+			$(MAKE) $@ || exit 13 ; \
+			cd .. ; \
+			else \
+			echo "$$i  nest pas un repertoire  j'en fais quoi ?" ; \
+		fi ; \
 	done
 
 # ------------------------------------------------------------------------------
 #
+# $(MAKE) -C $$i $@ || exit 12 ; \
 # Target that prints the help
 #
 help :
