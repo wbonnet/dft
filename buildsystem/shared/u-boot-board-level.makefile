@@ -84,7 +84,7 @@ new-version:
 	fi ;
 
 check:
-	@echo "Checking u-boot for board $(BOARD_NAME) version $(SW_VERSION) package definition" ;
+	@echo "Checking u-boot packages definition for board $(BOARD_NAME)" ;
 	@if [ -f "$(BOARD_NAME).mk" ] ; then \
 		echo "file $(BOARD_NAME).mk should no longer exist in the repo it is now replaced by board.mk" ; \
 		echo "please check that information in board.mk are up to date and remove the obsolete file with the following command :" ; \
