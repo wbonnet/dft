@@ -58,7 +58,7 @@ new-version:
         else \
                 echo ". Creating the new u-boot version directory (./$(NEW_VERSION))" ; \
                 mkdir -p $(NEW_VERSION) ; \
-                ln -s ../../../../../buildsystem/shared/u-boot-version-level.makefile $(NEW_VERSION)/Makefile ; \
+                ln -s ../../../../../buildsystem/shared/u-boot-version.makefile $(NEW_VERSION)/Makefile ; \
                 ln -s ../../../../../buildsystem $(NEW_VERSION)/ ; \
                 mkdir -p files ; \
                 mkdir -p $(NEW_VERSION)/patches ; \
@@ -115,12 +115,12 @@ check:
 		exit 1 ; \
 	fi ;
 	@if [ ! -L "./Makefile" ] ; then \
-		echo "Makefile symlink to ../../../../../buildsystem/shared/u-boot-board-level.makefile is missing in $(shell pwd). You are using your own custom Makefile." ; \
+		echo "Makefile symlink to ../../../../../buildsystem/shared/u-boot-board.makefile is missing in $(shell pwd). You are using your own custom Makefile." ; \
 		echo "exit 604"\
 		exit  1 ; \
 	fi ; 
-	@if [ ! "$(shell readlink ./Makefile)" = "../../../../buildsystem/shared/u-boot-board-level.makefile" ] ; then \
-		echo "target of symlink Makefile should be ../../../../buildsystem/shared/u-boot-board-level.makefile in directory $(shell pwd) You are using your own custom buildsystem." ; \
+	@if [ ! "$(shell readlink ./Makefile)" = "../../../../buildsystem/shared/u-boot-board.makefile" ] ; then \
+		echo "target of symlink Makefile should be ../../../../buildsystem/shared/u-boot-board.makefile in directory $(shell pwd) You are using your own custom buildsystem." ; \
 		echo "exit 605" ; \
 		exit 1 ; \
 	fi ;
@@ -138,11 +138,11 @@ check:
 			exit 1 ; \
 		fi ; \
 		if [ ! -L "Makefile" ] ; then \
-			echo "Makefile symlink to ../../../../../buildsystem/shared/u-boot-version-level.makefile is missing in $(shell pwd)/$$i You are using your own custom Makefile" ; \
+			echo "Makefile symlink to ../../../../../buildsystem/shared/u-boot-version.makefile is missing in $(shell pwd)/$$i You are using your own custom Makefile" ; \
 		echo "exit 601" ; \
 			echo "You can fix with the following commands : " ; \
 			echo "git rm -f $$i/Makefile  " ; \
-			echo "ln -s ../../../../../buildsystem/shared/u-boot-version-level.makefile $$i/Makefile " ; \
+			echo "ln -s ../../../../../buildsystem/shared/u-boot-version.makefile $$i/Makefile " ; \
 			echo "git add $$i/Makefile  " ; \
 			exit 1 ; \
 		fi ; \

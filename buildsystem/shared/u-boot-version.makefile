@@ -71,7 +71,7 @@ check :
 		exit 1 ; \
 	fi ;
 	@if [ ! -L "./Makefile" ] ; then \
-		echo "Makefile symlink to ../../../../../buildsystem/shared/u-boot-version-level.makefile is missing in $(shell pwd). You are using your own custom Makefile." ; \
+		echo "Makefile symlink to ../../../../../buildsystem/shared/u-boot-version.makefile is missing in $(shell pwd). You are using your own custom Makefile." ; \
 		false ; \
 	fi ; 
 	@if [ ! -L "./buildsystem" ] ; then \
@@ -82,8 +82,8 @@ check :
 		echo "target of symlink buildsystem should be ../../../../../buildsystem in directory $(shell pwd). You are using your own custom buildsystem." ; \
 		false ; \
 	fi ;
-	@if [ ! "$(shell readlink ./Makefile)" = "../../../../../buildsystem/shared/u-boot-version-level.makefile" ] ; then \
-		echo "target of symlink Makefile should be ../../../../../buildsystem/shared/u-boot-version-level.makefile in directory $(shell pwd). You are using your own custom buildsystem." ; \
+	@if [ ! "$(shell readlink ./Makefile)" = "../../../../../buildsystem/shared/u-boot-version.makefile" ] ; then \
+		echo "target of symlink Makefile should be ../../../../../buildsystem/shared/u-boot-version.makefile in directory $(shell pwd). You are using your own custom buildsystem." ; \
 		false ; \
 	fi ;
 	
