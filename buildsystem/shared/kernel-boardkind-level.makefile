@@ -34,22 +34,20 @@ MAKE_FILTERS  = Makefile README.md .
 	done
 
 check:
-	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
+	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
 		cd $$i ; \
-		if [ ! -L "Makefile" ] ; then \
-			echo "uboot level 3333 Makefile symlink to ../../../buildsystem/shared/u-boot-kind-level.makefile is missing in $(shell pwd)/$$i" ; \
+		if [ ! -L "$$i/Makefile" ] ; then \
+			echo "Makefile symlink to ../../../buildsystem/shared/kernel-boardkind-level.makefile is missing in $(shell pwd)/$$i" ; \
 			echo "You can fix with the following commands : " ; \
-			echo "ln -s ../../../buildsystem/shared/u-boot-kind-level.makefile $$i/Makefile " ; \
-			echo "git add $$i/Makefile" \
+			echo "ln -s ../../../buildsystem/shared/kernel-boardkind-level.makefile $$i/Makefile " ; \
+			echo "git add $$i/Makefile" ; \
 			echo "exit 783" ; \
 			exit 1 ; \
 		fi ; \
-		if [ ! "$(shell readlink Makefile)" = "../../../buildsystem/shared/u-boot-kind-level.makefile" ] ; then \
-			readlink $$i/Makefile ; \
-			pwd ; \
-			echo "uboot level222 target of symlink Makefile should be ../../../buildsystem/shared/u-boot-kind-level.makefile in directory $(shell pwd)/$$i You are using your own custom buildsystem." ; \
+		if [ ! "$(shell readlink $$i/Makefile)" = "../../../buildsystem/shared/kernel-boardkind-level.makefile" ] ; then \
+			echo "target of symlink Makefile should be ../../../buildsystem/shared/kernel-boardkind-level.makefile in directory $(shell pwd) You are using your own custom buildsystem." ; \
 			echo "You can fix with the following commands : " ; \
-			echo "ln -s ../../../buildsystem/shared/u-boot-kind-level.makefile $$i/Makefile " ; \
+			echo "ln -s ../../../buildsystem/shared/kernel-boardkind-level.makefile $$i/Makefile " ; \
 			echo "git add $$i/Makefile " ; \
 			echo "exit 789" ; \
 			exit 1 ; \
