@@ -1,1 +1,1 @@
-../../../buildsystem/shared/u-boot-boardkind-level.makefile
+../../../buildsystem/shared/u-boot-boardkind.makefile
