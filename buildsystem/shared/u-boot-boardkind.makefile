@@ -35,7 +35,7 @@ MAKE_FILTERS  = Makefile README.md .
 
 # TODO: FIXME: ugly solution until i know how to write a correct readlink comparison in if embeded bash" \
 check:
-	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
 		pwd ; \
 		echo "now checking $$i"; \
 		cd $$i ; \
