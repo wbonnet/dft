@@ -49,12 +49,12 @@ new-version:
 	@if [ "$(NEW_VERSION)" = "" ] ; then \
 		echo "new version name is not defined. Please use name=NEW_VERSION_TO_ADD" ; \
 		echo "exit 608" ; \
-                exit 1 ; \
+        exit 1 ; \
         fi ; 
 	@if [ -d "./$(NEW_VERSION)" ] ; then \
-                echo "Version directory ./($(NEW_VERSION) already exist. Nothing to do... Now returning false to stop execution with an error." ; \
-		echo "exit 608" ; \
-                exit 1 ; \
+            echo "Version directory ./($(NEW_VERSION) already exist. Nothing to do... Now returning false to stop execution with an error." ; \
+			echo "exit 665" ; \
+            exit 1 ; \
         else \
                 echo ". Creating the new u-boot version directory (./$(NEW_VERSION))" ; \
                 mkdir -p $(NEW_VERSION) ; \
@@ -94,7 +94,7 @@ check:
 	fi ;
 	@if [ ! -f "./board.mk" ] ; then \
 		echo "file board.mk is missing in directory $(shell pwd)" ; \
-		echo "exit 601" ; \
+		echo "exit 654" ; \
 		exit 1 ; \
 	fi ;
 	@if [ ! -L "./buildsystem" ] ; then \
@@ -129,38 +129,40 @@ check:
 		echo "dans le for de la target explicite check to make expanded target $@ iteration courante la variable compteur de boucle du for est sur $$i" ; \
 		pwd ; \
 		ls -l "buildsystem" ; \
-		if [ ! -L "buildsystem" ] ; then \
+		if [ ! -e "buildsystem" ] ; then \
 			echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd) You are using your own custom buildsystem" ; \
-		echo "exit 606" ; \
 			echo "You can fix with the following commands : " ; \
 			echo "ln -s ../../../../../buildsystem $$i" ; \
 			echo "git add $$i/buildsystem" ; \
+			echo "exit 661" ; \
 			exit 1 ; \
 		fi ; \
-		if [ ! -L "Makefile" ] ; then \
-			echo "Makefile symlink to ../../../../../buildsystem/shared/u-boot-version.makefile is missing in $(shell pwd)/$$i You are using your own custom Makefile" ; \
-		echo "exit 601" ; \
+		if [ ! -e "Makefile" ] ; then \
+			echo "Makefile symlink to ../../../../../buildsystem/shared/u-boot-version.makefile is missing in $(shell pwd)/$$i" ; \
+			echo "exit 653" ; \
 			echo "You can fix with the following commands : " ; \
-			echo "git rm -f $$i/Makefile  " ; \
-			echo "ln -s ../../../../../buildsystem/shared/u-boot-version.makefile $$i/Makefile " ; \
-			echo "git add $$i/Makefile  " ; \
+			echo "git rm -f $(shell pwd)/$$i/Makefile  " ; \
+			echo "ln -s ../../../../../buildsystem/shared/u-boot-version.makefile $(shell pwd)/$$i/Makefile " ; \
+			echo "git add $(shell pwd)/$$i/Makefile  " ; \
 			exit 1 ; \
 		fi ; \
 		if [ ! -d "files" ] ; then \
 			echo "Directory files is missing under $(shell pwd)/$$i" ; \
 			echo "It should contain a symlink to the markdown file describing u-boot installation produre for $(BOARD_NAME)" ; \
 			echo "You can fix with the following commands : " ; \
-			echo "mkdir $$i/files  " ; \
-			echo "ln -s ../../files/install.i$(BOARD-NAME).orangepi-r1.md $$i/install.u-boot.$(BOARD_NAME).md " ; \
-			echo "git add $$i/install.u-boot.$(BOARD_NAME).md " ; \
+			echo "mkdir $(shell pwd)/$$i/files  " ; \
+			echo "ln -s ../../files/install.$(BOARD-NAME).orangepi-r1.md $(shell pwd)/$$i/files/install.u-boot.$(BOARD_NAME).md " ; \
+			echo "git add $(shell pwd)/$$i/files/install.u-boot.$(BOARD_NAME).md " ; \
+			echo "exit 663" ; \
 			exit 1 ; \
 		fi ; \
-		if [ ! -L "files/install.u-boot.$(BOARD_NAME).md" ] ; then \
+		if [ ! -e "files/install.u-boot.$(BOARD_NAME).md" ] ; then \
 			echo "Instalation procedure symlink is missing under $(shell pwd)/$$i/files" ; \
 			echo "This folder should contain a symlink to the markdown file describing u-boot installation produre for $(BOARD_NAME)" ; \
 			echo "You can fix with the following commands : " ; \
-			echo "ln -s ../../files/install.u-boot.$(BOARD_NAME).md $$i/files/install.u-boot.$(BOARD_NAME).md " ; \
-			echo "git add $$i/files/install.u-boot.$(BOARD_NAME).md " ; \
+			echo "ln -s ../../files/install.u-boot.$(BOARD_NAME).md $(shell pwd)/$$i/files/install.u-boot.$(BOARD_NAME).md " ; \
+			echo "git add $(shell pwd)/$$i/files/install.u-boot.$(BOARD_NAME).md " ; \
+			echo "exit 664" ; \
 			exit 1 ; \
 		fi ; \
 		$(MAKE) $@ || exit 12 ; \

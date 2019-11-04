@@ -33,27 +33,37 @@ MAKE_FILTERS  = Makefile README.md .
 		$(MAKE) -C $$i $* || exit 1 ; \
 	done
 
+# TODO: FIXME: ugly solution until i know how to write a correct readlink comparison in if embeded bash" \
 check:
 	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
+		pwd ; \
+		echo "now checking $$i"; \
 		cd $$i ; \
-		if [ ! -L "$$i/Makefile" ] ; then \
-			echo "Makefile symlink to ../../../../buildsystem/shared/u-boot-boardkind-level.makefile is missing in $(shell pwd)/$$i" ; \
+		echo "cd done" ; \
+		pwd ; \
+		ls -l ; \
+		if [ ! -L "Makefile" ] ; then \
+			echo "Makefile symlink to ../../../buildsystem/shared/u-boot-board.makefile is missing in $(shell pwd)/$$i" ; \
 			echo "You can fix with the following commands : " ; \
-			echo "ln -s ../../../buildsystem/shared/u-boot-boardkind-level.makefile $$i/Makefile " ; \
+			echo "ln -s ../../../buildsystem/shared/u-boot-board.makefile $$i/Makefile " ; \
 			echo "git add $$i/Makefile" ; \
 			echo "exit 783" ; \
 			exit 1 ; \
 		fi ; \
-		if [ ! "$(shell readlink $$i/Makefile)" = "../../../buildsystem/shared/u-boot-boardkind-level.makefile" ] ; then \
-			echo "Target of symlink Makefile should be ../../../buildsystem/shared/u-boot-boardkind-level.makefile in directory $(shell pwd) You are using your own custom buildsystem." ; \
+	 	diff ./Makefile "../../../../buildsystem/shared/u-boot-board.makefile" || echo "premier diffexit 789" ; \
+	 	diff ./Makefile "../../../../buildsystem/shared/u-boot-board.makefile" || exit 1 ; \
+		if [  "${Makefile_symlink}" = "../../../buildsystem/shared/u-boot-board.makefile" ] ; then \
+			echo "Target of symlink Makefile should be ../../../buildsystem/shared/u-boot-board.makefile in directory $(shell pwd)/$$i" ; \
+			echo "Error since it is " ; readlink ./Makefile ; \
 			echo "You can fix with the following commands : " ; \
-			echo "ln -s ../../../buildsystem/shared/u-boot-boardkind-level.makefile $$i/Makefile " ; \
+			echo "ln -s ../../../buildsystem/shared/u-boot-boardkind-level.makefile $$i/Makefile" ; \
 			echo "git add $$i/Makefile " ; \
-			echo "exit 789" ; \
+			echo "exit second 789" ; \
 			exit 1 ; \
 		fi ; \
-		$(MAKE) -C $$i $* || exit 1 ; \
 		cd .. ; \
+		echo "after cd .. now in $(shell pwd)" ; \
+		$(MAKE) -C $$i $* || exit 1 ; \
 	done
 
 # ------------------------------------------------------------------------------
