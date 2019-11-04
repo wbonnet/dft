@@ -143,8 +143,8 @@ check:
 			echo "git add $(shell pwd)/$$i/Makefile  " ; \
 			exit 1 ; \
 		fi ; \
-		if [ ! -d "files" ] ; then \
-			echo "Directory files is missing under $(shell pwd)/$$i" ; \
+		if [ ! -d "$(shell pwd)/files" ] ; then \
+			echo "Directory files is missing under $(shell pwd)/" ; \
 			echo "It should contain a symlink to the markdown file describing u-boot installation produre for $(BOARD_NAME)" ; \
 			echo "You can fix with the following commands : " ; \
 			echo "mkdir $(shell pwd)/$$i/files  " ; \
@@ -153,8 +153,8 @@ check:
 			echo "exit 663" ; \
 			exit 1 ; \
 		fi ; \
-		if [ ! -e "files/install.u-boot.$(BOARD_NAME).md" ] ; then \
-			echo "Instalation procedure symlink is missing under $(shell pwd)/$$i/files" ; \
+		if [ ! -e "$(shell pwd)/files/install.u-boot.$(BOARD_NAME).md" ] ; then \
+			echo "Instalation procedure symlink is missing under $(shell pwd)//files" ; \
 			echo "This folder should contain a symlink to the markdown file describing u-boot installation produre for $(BOARD_NAME)" ; \
 			echo "You can fix with the following commands : " ; \
 			echo "ln -s ../../files/install.u-boot.$(BOARD_NAME).md $(shell pwd)/$$i/files/install.u-boot.$(BOARD_NAME).md " ; \

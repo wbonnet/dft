@@ -52,10 +52,11 @@ check :
 		echo "file board.mk is missing in directory $(shell pwd)/.." ; \
 		false ; \
 	fi ;
-	@if [ ! -d "./files" ] ; then \
+	@if [ ! -d "$(shell pwd)/files" ] ; then \
 		echo "files directory is missing in $(shell pwd). It should contains the markdown file install.$(SRC_NAME).$(BOARD_NAME).md needed by target package." ; \
 		echo "You can fix with the following commands : " ; \
-		echo "mkdir files" ; \
+		echo "mkdir $(shell pwd)/files" ; \
+		echo "ln -s ../../files/install.$(SRC_NAME).$(BOARD_NAME).md $(shell pwd)/files/" ; \
 		false ; \
 	fi ;
 	@if [ ! -d "./debian" ] ; then \
@@ -66,8 +67,8 @@ check :
 		echo "Installation procedure symlink is missing under $(shell pwd)/files" ; \
 		echo "This folder should contain a symlink to the markdown file describing u-boot installation produre for $(BOARD_NAME)" ; \
 		echo "You can fix with the following commands : " ; \
-		echo "ln -s ../../files/install.u-boot.$(BOARD_NAME).md files/install.u-boot.$(BOARD_NAME).md " ; \
-		echo "git add files/install.u-boot.$(BOARD_NAME).md" ; \
+		echo "ln -s ../../files/install.u-boot.$(BOARD_NAME).md $(shell pwd)/files/install.u-boot.$(BOARD_NAME).md" ; \
+		echo "git add $(shell pwd)/files/install.u-boot.$(BOARD_NAME).md" ; \
 		exit 1 ; \
 	fi ;
 	@if [ ! -L "./Makefile" ] ; then \
@@ -75,15 +76,15 @@ check :
 		false ; \
 	fi ; 
 	@if [ ! -L "./buildsystem" ] ; then \
-		echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd). You are using your own custom buildsystem." ; \
+		echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd). You are using your own custom buildsystem" ; \
 		false ; \
 	fi ;
 	@if [ ! "$(shell readlink ./buildsystem)" = "../../../../../buildsystem" ] ; then \
-		echo "target of symlink buildsystem should be ../../../../../buildsystem in directory $(shell pwd). You are using your own custom buildsystem." ; \
+		echo "target of symlink buildsystem should be ../../../../buildsystem in directory $(shell pwd). You are using your own custom buildsystem" ; \
 		false ; \
 	fi ;
 	@if [ ! "$(shell readlink ./Makefile)" = "../../../../../buildsystem/shared/u-boot-version.makefile" ] ; then \
-		echo "target of symlink Makefile should be ../../../../../buildsystem/shared/u-boot-version.makefile in directory $(shell pwd). You are using your own custom buildsystem." ; \
+		echo "target of symlink Makefile should be ../../../../../buildsystem/shared/u-boot-version.makefile in directory $(shell pwd). You are using your own custom buildsystem" ; \
 		false ; \
 	fi ;
 	
