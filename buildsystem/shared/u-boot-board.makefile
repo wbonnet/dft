@@ -101,8 +101,8 @@ check:
 		echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd) You are using your own custom buildsystem." ; \
 		echo "exit 602" ; \
 		echo "You can fix with the following commands : " ; \
-		echo "ln -s ../../../../buildsystem" ; \
-		echo "git add buildsystem " ; \
+		echo "ln -s ../../../../buildsystem $(shell pwd)" ; \
+		echo "git add $(shell pwd)/buildsystem " ; \
 		exit 1 ; \
 	fi ;
 	@if [ ! "$(shell readlink ./buildsystem)" = "../../../../buildsystem" ] ; then \
@@ -110,8 +110,8 @@ check:
 		echo "exit 603" ; \
 		echo "You can fix with the following commands : " ; \
 		echo "git rm -f buildsystem " ; \
-		echo "ln -s ../../../../../buildsystem" ; \
-		echo "git add buildsystem " ; \
+		echo "ln -s ../../../../../buildsystem $(shell pwd)" ; \
+		echo "git add $(shell pwd)/buildsystem " ; \
 		exit 1 ; \
 	fi ;
 	@if [ ! -L "./Makefile" ] ; then \
@@ -124,16 +124,13 @@ check:
 		echo "exit 605" ; \
 		exit 1 ; \
 	fi ;
-	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
 		cd $$i ; \
-		echo "dans le for de la target explicite check to make expanded target $@ iteration courante la variable compteur de boucle du for est sur $$i" ; \
-		pwd ; \
-		ls -l "buildsystem" ; \
 		if [ ! -e "buildsystem" ] ; then \
 			echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd) You are using your own custom buildsystem" ; \
 			echo "You can fix with the following commands : " ; \
-			echo "ln -s ../../../../../buildsystem $$i" ; \
-			echo "git add $$i/buildsystem" ; \
+			echo "ln -s ../../../../../buildsystem $(shell pwd)/$$i" ; \
+			echo "git add $(shell pwd)/$$i/buildsystem $(shell pwd)/buildsystem" ; \
 			echo "exit 661" ; \
 			exit 1 ; \
 		fi ; \
