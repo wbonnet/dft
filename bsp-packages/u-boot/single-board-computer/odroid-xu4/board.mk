@@ -21,7 +21,7 @@
 
 # Defines board name
 BOARD_NAME = odroid-xu4
-BOARD_ARCH = armhf
+BOARD_ARCH = armv7l
 
 # Set config file to empty and define the name of the board to use a defconfig
 USE_CONFIG_FILE        =
