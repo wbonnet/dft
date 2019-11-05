@@ -23,11 +23,7 @@
 BOARD_NAME  = orangepi-3
 
 # Defines boards architecture (armv7l, armel, aarch64, x86_64, i686, etc.)
-<<<<<<< HEAD
 BOARD_ARCH  = aarch64
-=======
-BOARD_ARCH  = unknown
->>>>>>> Add Orange pi 3
 
 # Defines the default dtb to use (symlink used by generic boot.scr)
 DEFAULT_DTB = unknown

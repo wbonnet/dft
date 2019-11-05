@@ -23,7 +23,7 @@
 BOARD_NAME  = beelink-mii-3350
 
 # Defines boards architecture (armv7l, armel, aarch64, x86_64, i686, etc.)
-BOARD_ARCH  = unknown
+BOARD_ARCH  = x86_64
 
 # Defines the default dtb to use (symlink used by generic boot.scr)
 DEFAULT_DTB = unknown

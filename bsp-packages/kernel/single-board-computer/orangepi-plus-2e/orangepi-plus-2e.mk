@@ -23,7 +23,7 @@
 BOARD_NAME  = orangepi-plus-2e
 
 # Defines boards architecture (armv7l, armel, aarch64, x86_64, i686, etc.)
-BOARD_ARCH  = unknown
+BOARD_ARCH  = armv7l 
 
 # Defines the default dtb to use (symlink used by generic boot.scr)
 DEFAULT_DTB = unknown
