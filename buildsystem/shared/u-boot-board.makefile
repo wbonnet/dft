@@ -169,11 +169,8 @@ check:
 # Catch all target. Call the same targets in each subfolder
 %:
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
-		echo "dans le for de la target % making target $@ iteration courante la variable compteur de boucle du for est sur  $$i" ; \
 		if [ -d $$i ] ; then \
-			echo "cest un repertoire $$i alors => $(MAKE) -C $$i $* || exit 1" ; \
 			cd $$i ; \
-			pwd ; \
 			echo "$(MAKE) $@ || exit 13" ; \
 			$(MAKE) $@ || exit 13 ; \
 			cd .. ; \
