@@ -20,7 +20,7 @@
 #
 
 # Defines board name
-BOARD_NAME = odroid-hc1
+BOARD_NAME = odroid-xu4
 BOARD_ARCH = armhf
 
 # Set config file to empty and define the name of the board to use a defconfig
