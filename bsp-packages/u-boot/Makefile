@@ -33,36 +33,6 @@ MAKE_FILTERS  = Makefile README.md .
 		$(MAKE) -C $$i $* || exit 1 ; \
 	done
 
-check:
-	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
-		cd $$i ; \
-		if [ ! -L "Makefile" ] ; then \
-			echo "Makefile symlink to ../../../buildsystem/shared/u-boot-boardkind.makefile is missing in $(shell pwd)/$$i" ; \
-			echo "You can fix with the following commands : " ; \
-			echo "ln -s ../../../buildsystem/shared/u-boot-boardkind.makefile $$i/Makefile " ; \
-			echo "git add $$i/Makefile" \
-			echo "exit 783" ; \
-			exit 1 ; \
-		fi ; \
-		if [ ! "$(shell readlink Makefile)" = "../../../buildsystem/shared/u-boot-boardkind.makefile" ] ; then \
-		        echo "ze symlink " ; readlink Makefile ; \
-		        echo "voila le ls -l " ; ls -l Makefile ; \
-		        echo "in " ; pwd ; \
-		        echo "after le readlink" ; \
-			echo checking $$i/Makefile ; \
-			readlink $$i/Makefile ; \
-			pwd ; \
-			echo "Target of symlink Makefile should be ../../../buildsystem/shared/u-boot-boardkind.makefile in directory $(shell pwd)/$$i" ; \
-			echo "You can fix with the following commands : " ; \
-			echo "ln -s ../../../buildsystem/shared/u-boot-boardkind.makefile $$i/Makefile " ; \
-			echo "git add $$i/Makefile " ; \
-			echo "exit 789" ; \
-			exit 1 ; \
-		fi ; \
-		$(MAKE) -C $$i $* || exit 1 ; \
-		cd .. ; \
-	done
-
 # ------------------------------------------------------------------------------
 #
 # Target that prints the help
