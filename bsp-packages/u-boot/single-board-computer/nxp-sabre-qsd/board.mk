@@ -20,7 +20,7 @@
 #
 
 # Defines board name
-BOARD_NAME = sabre-qsd
+BOARD_NAME = nxp-sabre-qsd
 BOARD_ARCH = armv7l
 
 # Set config file to empty and define the name of the board to use a defconfig
