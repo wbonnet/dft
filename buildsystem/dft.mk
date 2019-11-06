@@ -258,7 +258,7 @@ show-config :
 	@echo "  CHECKSUM_FILE                     $(CHECKSUM_FILE)"
 	@echo
 	@echo "Build environnement"
-	@echo "  BUILDER_ARCHITECTURE              $(BUILDER_ARCHITECTURE)"
+	@echo "  BUILDER_ARCH                      $(BUILDER_ARCH)"
 	@echo "  BUILDER_HOSTNAME                  $(BUILDER_HOSTNAME)"
 	@echo "  BUILDER_OPERATING_SYSTEM          $(BUILDER_OPERATING_SYSTEM)"
 	@echo "  BUILDER_OPERATING_SYSTEM_FLAVOR   $(BUILDER_OPERATING_SYSTEM_FLAVOR)"
@@ -268,6 +268,7 @@ show-config :
 	@echo "  BUILD_SCRIPTS                     $(BUILD_SCRIPTS)"
 	@echo
 	@echo "  BOARD_NAME                        $(BOARD_NAME)"
+	@echo "  BOARD_ARCH                        $(BOARD_ARCH)"
 	@echo "  KERNEL_DEFCONFIG                  $(KERNEL_DEFCONFIG)"
 	@echo "  UBOOT_DEFCONFIG                   $(UBOOT_DEFCONFIG)"
 	@echo

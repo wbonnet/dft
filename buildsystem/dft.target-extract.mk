@@ -84,7 +84,6 @@ extract-archive-%.tar.gz :
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz" ; \
-		echo "DEBUG WWW je fais un tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tar.gz -C $(SRC_DIR)" ; \
 		tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tar.gz -C $(SRC_DIR) ; \
 	fi ;
 	$(TARGET_DONE)
