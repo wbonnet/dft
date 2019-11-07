@@ -1,1 +1,0 @@
-../../../buildsystem/shared/u-boot-boardkind.makefile
