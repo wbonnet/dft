@@ -46,42 +46,40 @@ $(info Using DFT installed in $(DFT_HOME))
 # Create a new u-boot version entry for the given board
 #
 new-version:
-	@if [ "$(NEW_VERSION)" = "" ] ; then \
-		echo "new version name is not defined. Please use name=NEW_VERSION_TO_ADD" ; \
-		echo "exit 608" ; \
+	if [ "$(NEW_VERSION)" = "" ] ; then \
+        echo "version to add is not defined. Please use make new-version name=VersionToAdd" ; \
+        echo "exit 608" ; \
         exit 1 ; \
-        fi ; 
-	@if [ -d "./$(NEW_VERSION)" ] ; then \
-            echo "Version directory ./($(NEW_VERSION) already exist. Nothing to do... Now returning false to stop execution with an error." ; \
-			echo "exit 665" ; \
-            exit 1 ; \
-        else \
-                echo ". Creating the new u-boot version directory (./$(NEW_VERSION))" ; \
-                mkdir -p $(NEW_VERSION) ; \
-                ln -s ../../../../../buildsystem/shared/u-boot-version.makefile $(NEW_VERSION)/Makefile ; \
-                ln -s ../../../../../buildsystem $(NEW_VERSION)/ ; \
-                mkdir -p files ; \
-                mkdir -p $(NEW_VERSION)/patches ; \
-                touch $(NEW_VERSION)/patches/.gitkeep ; \
-                cp -fr ../../../../buildsystem/templates/u-boot-package $(NEW_VERSION)/debian ; \
-                cd $(NEW_VERSION)/debian ; \
-                mv u-boot.install   u-boot-$(BOARD_NAME).install ; \
-                cd ../.. ; \
-                find $(NEW_VERSION)/debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(NEW_VERSION)/g" \
+    fi ; \
+	if [ -d "./$(NEW_VERSION)" ] ; then \
+        echo "Version $(NEW_VERSION) already exist in repository, there is nothing to do at this level. Execution will continue without error to keep recursion going and process other targets" ; \
+	 else \
+         echo ". Creating the new u-boot version directory (./$(NEW_VERSION))" ; \
+         mkdir -p $(NEW_VERSION) ; \
+         ln -s $(DFT_HOME)/buildsystem/shared/u-boot-version.makefile $(NEW_VERSION)/Makefile ; \
+          ln -s $(DFT_HOME)/buildsystem $(NEW_VERSION)/ ; \
+          mkdir -p files ; \
+          mkdir -p $(NEW_VERSION)/patches ; \
+          touch $(NEW_VERSION)/patches/.gitkeep ; \
+          cp -fr ../../../../buildsystem/templates/u-boot-package $(NEW_VERSION)/debian ; \
+          cd $(NEW_VERSION)/debian ; \
+          mv u-boot.install   u-boot-$(BOARD_NAME).install ; \
+          cd ../.. ; \
+          find $(NEW_VERSION)/debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(NEW_VERSION)/g" \
                                                  -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" \
                                                  -e "s/__DATE__/$(shell LC_ALL=C date +"%a, %d %b %Y %T %z")/g" ; \
-        	if [ "${DEBEMAIL}" = "" ] ; then \
-                        find $(NEW_VERSION)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/unknown/g" ; \
-                else \
-                        find $(NEW_VERSION)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/${DEBEMAIL}/g" ; \
-		fi ; \
-		if [ "${DEBFULLNAME}" = "" ] ; then \
-			find $(NEW_VERSION)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/unknown/g" ; \
-		else \
-			find $(NEW_VERSION)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/${DEBFULLNAME}/g" ; \
-		fi ; \
-		echo "git add $(NEW_VERSION)" ; \
-	fi ;
+          if [ "${DEBEMAIL}" = "" ] ; then \
+              find $(NEW_VERSION)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/unknown/g" ; \
+          else \
+              find $(NEW_VERSION)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/${DEBEMAIL}/g" ; \
+		  fi ; \
+		  if [ "${DEBFULLNAME}" = "" ] ; then \
+		      find $(NEW_VERSION)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/unknown/g" ; \
+          else \
+              find $(NEW_VERSION)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/${DEBFULLNAME}/g" ; \
+		  fi ; \
+          echo "git add $(NEW_VERSION)" ; \
+        fi ;
 
 check:
 	@echo "Checking u-boot packages definition for board $(BOARD_NAME)" ;

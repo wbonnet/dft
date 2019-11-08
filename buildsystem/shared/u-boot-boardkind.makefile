@@ -27,21 +27,57 @@ MAKE_FILTERS  = Makefile README.md .
 #
 .PHONY: help
 
+
 # Catch all target. Call the same targets in each subfolder
 %:
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
 		$(MAKE) -C $$i $* || exit 1 ; \
 	done
 
-# TODO: FIXME: ugly solution until i know how to write a correct readlink comparison in if embeded bash" \
+# TODO: FIXME: ugly solution until i know how to write a correct readlink comparison in if embeded bash" 
 check:
-	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
+	echo "plop dans le catch check"; \
+	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
+		echo "now checking Makefile symlinks in $$i subdir"; \
+		if [ ! -e $$i/Makefile ] ; then \
+			echo "Makefile symlink in $(shell pwd)/$$i is missing, it should link to ../../buildsystem/shared/u-boot-board.makefile" ; \
+			echo "You can fix with the following commands : " ; \
+			echo "ln -s ../../../buildsystem/shared/u-boot-board.makefile $$i/Makefile " ; \
+			echo "git add $$i/Makefile" ; \
+			echo "exit 826" ; \
+			exit 1 ; \
+		fi ; \
+		if [ ! $(shell readlink $$i/Makefile) = "../../buildsystem/shared/u-boot-board.makefile" ] ; then \
+			echo "Makefile symlink in $(shell pwd)/$$i must link to ../../buildsystem/shared/u-boot-board.makefile" ; \
+			echo "It targets to $(shell readlink $i/Makefile)" ; \
+			echo "exit 825" ; \
+			exit 1 ; \
+		fi ; \
+	done ; \
+	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
 		pwd ; \
 		echo "now checking $$i"; \
+		if [ ! "$(shell readlink $$i/Makefile)" = "../../buildsystem/shared/u-boot-board.makefile" ] ; then \
+			echo "Makefile symlink in $(shell pwd)/$$i must link to ../../buildsystem/shared/u-boot-board.makefile" ; \
+			echo "exit 821" ; \
+			exit 1 ; \
+		fi ; \
 		cd $$i ; \
-		echo "cd done" ; \
-		pwd ; \
-		ls -l ; \
+		if [ ! "$(shell readlink ./Makefile)" = "../../buildsystem/shared/u-boot-board.makefile" ] ; then \
+			echo "Makefile symlink in $(shell pwd)/$$i must link to ../../buildsystem/shared/u-boot-board.makefile" ; \
+			echo "exit 822" ; \
+			exit 1 ; \
+		fi ; \
+		if [ ! -d "u-boot" ] ; then \
+			echo "u-boot directory is missing in $(shell pwd)/$$i" ; \
+			echo "exit 823" ; \
+			exit 1 ; \
+		fi ; \
+		if [ ! -d "kernel" ] ; then \
+			echo "kernel directory is missing in $(shell pwd)/$$i" ; \
+			echo "exit 824" ; \
+			exit 1 ; \
+		fi ; \
 		if [ ! -L "Makefile" ] ; then \
 			echo "Makefile symlink to ../../../buildsystem/shared/u-boot-board.makefile is missing in $(shell pwd)/$$i" ; \
 			echo "You can fix with the following commands : " ; \
@@ -62,7 +98,6 @@ check:
 			exit 1 ; \
 		fi ; \
 		cd .. ; \
-		echo "after cd .. now in $(shell pwd)" ; \
 		$(MAKE) -C $$i $* || exit 1 ; \
 	done
 
@@ -70,5 +105,5 @@ check:
 #
 # Target that prints the help
 #
-help :
+help:
 	@echo "The target given to make will be called recursively on each board folder."
