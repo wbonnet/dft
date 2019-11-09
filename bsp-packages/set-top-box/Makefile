@@ -1,1 +1,1 @@
-../../buildsystem/shared/u-boot-boardkind.makefile
+../../buildsystem/shared/board-category.makefile

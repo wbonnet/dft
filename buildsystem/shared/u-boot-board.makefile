@@ -34,12 +34,21 @@ MAKE_FILTERS  = ./patches ./defconfig . ./files board.mk
 #
 # Targets not associated with a file (aka PHONY)
 #
-.PHONY: help
+.PHONY: help check
 
 ifneq ($(name), "")
 NEW_VERSION = $(name)
 endif
+# set path to where DFT should be installed
+DFT_HOME = ../../../buildsystem
+
 $(info Using DFT installed in $(DFT_HOME))
+
+# Catch all target. Call the same targets in each subfolder
+%:
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
+		$(MAKE) -C $$i $* || exit 1 ; \
+	done
 
 # ------------------------------------------------------------------------------
 #
@@ -56,8 +65,8 @@ new-version:
 	 else \
          echo ". Creating the new u-boot version directory (./$(NEW_VERSION))" ; \
          mkdir -p $(NEW_VERSION) ; \
-         ln -s $(DFT_HOME)/buildsystem/shared/u-boot-version.makefile $(NEW_VERSION)/Makefile ; \
-          ln -s $(DFT_HOME)/buildsystem $(NEW_VERSION)/ ; \
+         ln -s $(DFT_HOME)/shared/u-boot-version.makefile $(NEW_VERSION)/Makefile ; \
+          ln -s $(DFT_HOME)/ $(NEW_VERSION)/buildsystem ; \
           mkdir -p files ; \
           mkdir -p $(NEW_VERSION)/patches ; \
           touch $(NEW_VERSION)/patches/.gitkeep ; \
@@ -81,8 +90,10 @@ new-version:
           echo "git add $(NEW_VERSION)" ; \
         fi ;
 
+# This target checks that all mandatorry items are prent and symlinks are valid, then recurse check
 check:
-	@echo "Checking u-boot packages definition for board $(BOARD_NAME)" ;
+	@echo "Checking u-boot bard folder content at board $(BOARD_NAME) level" ;
+	@echo "ploping from u-boot-board.makefile" ;
 	@if [ -f "$(BOARD_NAME).mk" ] ; then \
 		echo "file $(BOARD_NAME).mk should no longer exist in the repo it is now replaced by board.mk" ; \
 		echo "please check that information in board.mk are up to date and remove the obsolete file with the following command :" ; \
@@ -101,6 +112,7 @@ check:
 		echo "You can fix with the following commands : " ; \
 		echo "ln -s ../../../../buildsystem $(shell pwd)" ; \
 		echo "git add $(shell pwd)/buildsystem " ; \
+		echo "exit 674"\
 		exit 1 ; \
 	fi ;
 	@if [ ! "$(shell readlink ./buildsystem)" = "../../../../buildsystem" ] ; then \
@@ -110,6 +122,7 @@ check:
 		echo "git rm -f buildsystem " ; \
 		echo "ln -s ../../../../../buildsystem $(shell pwd)" ; \
 		echo "git add $(shell pwd)/buildsystem " ; \
+		echo "exit 672"\
 		exit 1 ; \
 	fi ;
 	@if [ ! -L "./Makefile" ] ; then \
@@ -139,6 +152,7 @@ check:
 			echo "git rm -f $(shell pwd)/$$i/Makefile  " ; \
 			echo "ln -s ../../../../../buildsystem/shared/u-boot-version.makefile $(shell pwd)/$$i/Makefile " ; \
 			echo "git add $(shell pwd)/$$i/Makefile  " ; \
+			echo "exit 675"\
 			exit 1 ; \
 		fi ; \
 		if [ ! -d "$(shell pwd)/files" ] ; then \
@@ -173,7 +187,7 @@ check:
 			$(MAKE) $@ || exit 13 ; \
 			cd .. ; \
 			else \
-			echo "$$i  nest pas un repertoire  j'en fais quoi ?" ; \
+			echo "hu hu hu $$i nest pas un repertoire  j'en fais quoi ?" ; \
 		fi ; \
 	done
 

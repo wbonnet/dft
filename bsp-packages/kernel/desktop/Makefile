@@ -1,1 +1,0 @@
-../../../buildsystem/shared/kernel-boardkind-level.makefile

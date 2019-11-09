@@ -27,5 +27,6 @@ BOARD_ARCH = aarch64
 USE_CONFIG_FILE        =
 #USE_DEFCONFIG          = orangepi_zerio_defconfig
 
+DEFAULT_DTB = sun50i-a64-pinebook.dtb 
 # Defines the list of files to copy (#path is relative to build dir)
 #UBOOT_BINARY_FILE      = u-boot-sunxi-with-spl.bin
