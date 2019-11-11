@@ -19,7 +19,7 @@
 #
 #
 
-$(info "D3BUG linux-kernel.makefile")
+$(info "D3BUG u-boot.makefile")
 
 # 
 # Board level birectory generic Linux kernel makefile

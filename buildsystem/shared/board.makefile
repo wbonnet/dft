@@ -19,34 +19,19 @@
 #
 #
 
-# Include board specific definitions
-include ../../board.mk
-
 # 
-# u-boot version generic Makefile
+# Board level generic Makefile
 #
-# WARNING if you need to make any version specific modification or definition,
-# Please take in consideration that you must not modify the content of this file.
-# Otherwise it would modify the symlink target and become the new default value
-# for all unmodified makefiles of all existing boards.
-
-# Defines the version of the u-boot software
-SW_VERSION   = $(notdir $(patsubst %/,%,$(shell pwd)))
-
-# Defines patches to apply to the upstream sources :
-# PATCHFILES += 0000_some_patch.diff
-
-# If you use the patch feature, please make a copy of this file to store
-# the definition of the PATCHFILES variable. The previous line in comment is
-# provided as an example of how to do it. Please duplicate, modify and 
-# uncomment the line. Files will be searched for in the files/ directory at
-# the same level as this Makefile.  
-
-# Include build system
-include buildsystem/dft.u-boot.mk
 
 # No need to recurse check target at version level
 check :
+	# Board level directory must contain board.mk file, kernel folder and u-boot folder
+	# Mandatory folders content check (otherwise recusive targets may not work)
+
+	# kernel folder must contain a Makefile symlink to  ../../../../buildsystem/shared/board-kernel.makefile
+	# Board level directory must contain board.mk file, kernel folder and u-boot folder
+	#
+	#
 	@echo "Checking u-boot version $(SW_VERSION) package definition for $(BOARD_NAME)" 
 	@if [ ! -f "../board.mk" ] ; then \
 		echo "file board.mk is missing in directory $(shell pwd)/.." ; \
