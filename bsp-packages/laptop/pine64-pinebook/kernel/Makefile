@@ -1,1 +1,1 @@
-../../../../buildsystem/shared/kernel-board.makefile
+../../../../buildsystem/shared/kernel.makefile

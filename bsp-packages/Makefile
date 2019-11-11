@@ -31,9 +31,6 @@ CATEGORIES    = laptop desktop set-top-box single-board-computer
 #check que tes subdirs de category ont la et ont un lien makefile valide ensuite ca recurse
 check :
 	@echo "te faut l include de la liste des error codes et la fonction dft-error" ;
-	@echo "te faut recuprer le bout de code qui fait le readlink dans une var" ;
-	# Board level directory must contain board.mk file, kernel folder and u-boot folder
-	# Mandatory folders content check (otherwise recusive targets may not work)
 	@for i in $(CATEGORIES) ; do \
 		if [ ! -d $$i ] ; then \
 		echo "Warning : $$i category folder is missing, recursive targets may fail or produce incomplete set of binaries." ; \
@@ -52,7 +49,9 @@ check :
 			echo "exit 825" ; \
 			exit 1 ; \
 		fi ; \
-	done ; \
+		# Makfiles in subdir have been checked, now call the same target in subdirs \
+		$(MAKE) -C $$i $* || exit 1 ; \
+	done ; 
 
 
 # Catch all target. Call the same targets in each subfolder
