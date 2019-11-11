@@ -18,8 +18,12 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 
+$(info "D3BUG bsp-packages.makefile")
+
 # Do not recurse the following subdirs
 MAKE_FILTERS  = Makefile README.md .
+
+# definition of the liste of boards category 
 CATEGORIES    = laptop desktop set-top-box single-board-computer
 
 # ------------------------------------------------------------------------------
@@ -40,13 +44,13 @@ check :
 			echo "You can fix with the following shell commands :" ; \
 			echo "ln -s ../../buildsystem/shared/category.makefile $$i/Makefile" ; \
 			echo "git add $$i/Makefile" ; \
-			echo "exit 101101" ; \
+			echo "exit 101102" ; \
 			exit 1 ; \
 		fi ; \
 		if [ ! $(shell readlink $$i/Makefile) = "../../buildsystem/shared/u-boot-board.makefile" ] ; then \
-			echo "iTODOMakefile symlink in $(shell pwd)/$$i must link to ../../buildsystem/shared/u-boot-board.makefile" ; \
+			echo "Makefile symlink in $(shell pwd)/$$i must link to ../../buildsystem/shared/u-boot-board.makefile" ; \
 			echo "It targets to $(shell readlink $i/Makefile)" ; \
-			echo "exit 825" ; \
+			echo "exit 11103" ; \
 			exit 1 ; \
 		fi ; \
 		# Makfiles in subdir have been checked, now call the same target in subdirs \
