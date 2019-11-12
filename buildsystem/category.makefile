@@ -18,13 +18,12 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 
-$(info "D3BUG bsp-packages.makefile")
-$(warning "te faut l include de la liste des error codes et la fonction dft-error")
+$(info "D3BUG category.makefile")
+buildsystem := ../../buildsystem
+$(warning "review in progress category.makefile")
 
 # Do not recurse the following subdirs
 MAKE_FILTERS  = Makefile README.md .
-
-# definition of the liste of boards category 
 CATEGORIES    = laptop desktop set-top-box single-board-computer
 
 # ------------------------------------------------------------------------------
@@ -35,27 +34,33 @@ CATEGORIES    = laptop desktop set-top-box single-board-computer
 
 #check que tes subdirs de category ont la et ont un lien makefile valide ensuite ca recurse
 check :
-	@for i in $(CATEGORIES) ; do \
-		if [ ! -d $$i ] ; then \
-		echo "Warning : $$i category folder is missing, recursive targets may fail or produce incomplete set of binaries." ; \
-		fi ; \
+	@echo "WARNING CATEGORY MAKEFILE PLACEHOLDER" ;
+	# Board category directory must contain XXXboard.mk file, kernel folder and u-boot folder
+	# Mandatory folders content check (otherwise recusive targets may not work)
+	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
 		if [ ! -e "$$i/Makefile" ] ; then \
-			echo "Makefile in $(shell pwd)/$$i is Missing. It should be a symlink to  ../../buildsystem/shared/u-boot-board.makefile" ; \
+			echo "Makefile in $(shell pwd)/$$i is Missing. It should be a symlink to  ../../../buildsystem/shared/board.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
-			echo "ln -s ../../buildsystem/shared/category.makefile $$i/Makefile" ; \
+			echo "ln -s ../../../buildsystem/shared/u-boot.makefile $$i/Makefile" ; \
 			echo "git add $$i/Makefile" ; \
-			echo "exit 101102" ; \
+			echo "exit 101101" ; \
 			exit 1 ; \
 		fi ; \
-		if [ ! $(shell readlink $$i/Makefile) = "../../buildsystem/shared/u-boot-board.makefile" ] ; then \
-			echo "Makefile symlink in $(shell pwd)/$$i must link to ../../buildsystem/shared/u-boot-board.makefile" ; \
-			echo "It targets to $(shell readlink $i/Makefile)" ; \
-			echo "exit 11103" ; \
+		cd $$i ; \
+		pwd ; \
+		zelink=$(readlink Makefile) ; \
+		echo "zelink : $$zelink" ; \
+		if [ !  "readlink Makefile" = "../../../buildsystem/shared/board.makefile" ] ; then \
+			echo "Makefile symlink in $$i must link to ../../../buildsystem/shared/board.makefile" ; \
+			echo "ls -l $$i ../../../buildsystem/shared/board.makefile" ; \
+			echo "It targets to `readlink $$i/Makefile`" ; \
+			echo "exit 825" ; \
 			exit 1 ; \
+		else  \
+			echo "le symlink est bon suis dans le else du if shell readlink donc = est vrai" ; \
 		fi ; \
-		# Makfiles in subdir have been checked, now call the same target in subdirs \
-		$(MAKE) -C $$i $* || exit 1 ; \
-	done ; 
+		cd .. ; \
+	done ; \
 
 
 # Catch all target. Call the same targets in each subfolder
