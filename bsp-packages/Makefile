@@ -37,26 +37,25 @@ CATEGORIES    = laptop desktop set-top-box single-board-computer
 check :
 	@for i in $(CATEGORIES) ; do \
 		if [ ! -d $$i ] ; then \
-		echo "Warning : $$i category folder is missing, recursive targets may fail or produce incomplete set of binaries." ; \
+			echo "Warning : $$i category folder is missing, recursive targets may fail or produce incomplete set of binaries." ; \
 		fi ; \
 		if [ ! -e "$$i/Makefile" ] ; then \
-			echo "Makefile in $(shell pwd)/$$i is Missing. It should be a symlink to  ../../buildsystem/shared/u-boot-board.makefile" ; \
+			echo "Makefile symlink in $(shell pwd)/$$i is missing or target does not exist. It should be a symlink to ../buildsystem/category.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
-			echo "ln -s ../../buildsystem/shared/category.makefile $$i/Makefile" ; \
+			echo "ln -s ../../buildsystem/category.makefile $$i/Makefile" ; \
 			echo "git add $$i/Makefile" ; \
 			echo "exit 101102" ; \
 			exit 1 ; \
 		fi ; \
-		if [ ! $(shell readlink $$i/Makefile) = "../../buildsystem/shared/u-boot-board.makefile" ] ; then \
-			echo "Makefile symlink in $(shell pwd)/$$i must link to ../../buildsystem/shared/u-boot-board.makefile" ; \
+		if [ ! $(shell readlink $$i/Makefile) = "../../buildsystem/category.makefile" ] ; then \
+			echo "Makefile symlink in $(shell pwd)/$$i must link to ../../buildsystem/category.makefile" ; \
 			echo "It targets to $(shell readlink $i/Makefile)" ; \
 			echo "exit 11103" ; \
 			exit 1 ; \
 		fi ; \
-		# Makfiles in subdir have been checked, now call the same target in subdirs \
+		\
 		$(MAKE) -C $$i $* || exit 1 ; \
 	done ; 
-
 
 # Catch all target. Call the same targets in each subfolder
 %:

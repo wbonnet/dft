@@ -32,28 +32,27 @@ CATEGORIES    = laptop desktop set-top-box single-board-computer
 #
 .PHONY: help
 
-#check que tes subdirs de category ont la et ont un lien makefile valide ensuite ca recurse
 check :
-	@echo "WARNING CATEGORY MAKEFILE PLACEHOLDER" ;
-	# Board category directory must contain XXXboard.mk file, kernel folder and u-boot folder
-	# Mandatory folders content check (otherwise recusive targets may not work)
-	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
-		if [ ! -e "$$i/Makefile" ] ; then \
-			echo "Makefile in $(shell pwd)/$$i is Missing. It should be a symlink to  ../../../buildsystem/shared/board.makefile" ; \
+# Board category directory contains several folders, on per board in this category
+# Each board folder must contain a board.mk file with board specific information, 
+# a mandatory kernel folder, optional folders like u-boot for boot loader and files 
+# to store needed additionnal files
+	for board in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
+		if [ ! -e "$$board/Makefile" ] ; then \
+			echo "Makefile in $(shell pwd)/$$board is Missing. It should be a symlink to  $(buildsystem)/board.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
-			echo "ln -s ../../../buildsystem/shared/u-boot.makefile $$i/Makefile" ; \
-			echo "git add $$i/Makefile" ; \
+			echo "ln -s $(buildsystem)/board.makefile $$board/Makefile" ; \
+			echo "git add $$board/Makefile" ; \
 			echo "exit 101101" ; \
 			exit 1 ; \
 		fi ; \
-		cd $$i ; \
-		pwd ; \
-		zelink=$(readlink Makefile) ; \
-		echo "zelink : $$zelink" ; \
-		if [ !  "readlink Makefile" = "../../../buildsystem/shared/board.makefile" ] ; then \
-			echo "Makefile symlink in $$i must link to ../../../buildsystem/shared/board.makefile" ; \
-			echo "ls -l $$i ../../../buildsystem/shared/board.makefile" ; \
-			echo "It targets to `readlink $$i/Makefile`" ; \
+		echo "avant il y avait cd $$board" ; \
+		symlink=$(readlink Makefile) ; \
+		echo "symlink : $(symlink)" ; \
+		if [ !  "$(symlink)" = "$(buildsystem)/board.makefile" ] ; then \
+			echo "Makefile symlink in $$board must link to $(buildsystem)/board.makefile" ; \
+			echo "ls -l $$i $(buildsystem)/board.makefile" ; \
+			echo "It targets to $(shell readlink $$board/Makefile)" ; \
 			echo "exit 825" ; \
 			exit 1 ; \
 		else  \
@@ -61,7 +60,10 @@ check :
 		fi ; \
 		cd .. ; \
 	done ; \
-
+	for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
+		$(MAKE) -C $(folder) check || exit 1 ; \
+		echo "make check in folder $(folder)" ; \
+	done ;
 
 # Catch all target. Call the same targets in each subfolder
 %:

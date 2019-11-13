@@ -35,9 +35,6 @@ check :
 # kernel folder must contain a Makefile symlink to  ../../../../buildsystem/shared/board-kernel.makefile
 # Board level directory must contain board.mk file, kernel folder and u-boot folder
 	@echo "Checking u-boot version $(SW_VERSION) package definition for $(BOARD_NAME)" ;
-	for folder in $(shell find . -maxdepth 1 -type d ) ; do \
-		echo "folder : $$folder" ; \
-	done ;
 	@if [ ! -f "board.mk" ] ; then \
 		pwd ; \
 		echo "file board.mk is missing in directory $(shell pwd)" ; \
@@ -87,6 +84,10 @@ check :
 		echo "error 191112-07" ; \
 		exit 1 ; \
 	fi ;
+	@for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
+		$(MAKE) -C $$i $* || exit 1 ; \
+		echo "folder : $$folder" ; \
+	done ;
 
 help :
 	@echo "Supported targets are"
