@@ -75,6 +75,7 @@ check :
 		echo "files directory is missing in $(shell pwd). It should contains the markdown file install.$(SRC_NAME).$(BOARD_NAME).md needed by target package." ; \
 		echo "You can fix with the following commands : " ; \
 		echo "mkdir $(shell pwd)/files" ; \
+		echo "touch $(shell pwd)/files/.gitkeep" ; \
 		echo "ln -s ../../files/install.$(SRC_NAME).$(BOARD_NAME).md $(shell pwd)/files/" ; \
 		echo "git add $(shell pwd)/files" ; \
 		echo "error 191112-02" ; \

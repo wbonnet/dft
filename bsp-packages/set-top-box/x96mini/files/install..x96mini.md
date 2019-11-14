@@ -1,0 +1,1 @@
+../../files/install..x96mini.md

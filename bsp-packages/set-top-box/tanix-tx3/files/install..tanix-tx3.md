@@ -1,0 +1,1 @@
+../../files/install..tanix-tx3.md

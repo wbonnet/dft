@@ -1,0 +1,1 @@
+../../files/install..s8-mini.md

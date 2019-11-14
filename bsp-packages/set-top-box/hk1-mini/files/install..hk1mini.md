@@ -1,0 +1,1 @@
+../../files/install..hk1mini.md
