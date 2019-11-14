@@ -19,7 +19,7 @@
 #
 
 $(info "D3BUG category.makefile")
-buildsystem := ../../buildsystem
+buildsystem := ../../../buildsystem
 $(warning "review in progress category.makefile")
 
 # Do not recurse the following subdirs
@@ -41,24 +41,20 @@ check :
 		if [ ! -e "$$board/Makefile" ] ; then \
 			echo "Makefile in $(shell pwd)/$$board is Missing. It should be a symlink to  $(buildsystem)/board.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
+			echo "git rm -f $$board/Makefile" ; \
 			echo "ln -s $(buildsystem)/board.makefile $$board/Makefile" ; \
 			echo "git add $$board/Makefile" ; \
 			echo "exit 101101" ; \
 			exit 1 ; \
 		fi ; \
-		echo "avant il y avait cd $$board" ; \
-		symlink=$(readlink Makefile) ; \
-		echo "symlink : $(symlink)" ; \
-		if [ !  "$(symlink)" = "$(buildsystem)/board.makefile" ] ; then \
+		s=`readlink $$board/Makefile` ; \
+		if [ !  "$$s" = "$(buildsystem)/board.makefile" ] ; then \
 			echo "Makefile symlink in $$board must link to $(buildsystem)/board.makefile" ; \
 			echo "ls -l $$i $(buildsystem)/board.makefile" ; \
-			echo "It targets to $(shell readlink $$board/Makefile)" ; \
+			echo "It targets to $$s" ; \
 			echo "exit 825" ; \
 			exit 1 ; \
-		else  \
-			echo "le symlink est bon suis dans le else du if shell readlink donc = est vrai" ; \
 		fi ; \
-		cd .. ; \
 	done ; \
 	for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
 		$(MAKE) -C $(folder) check || exit 1 ; \
