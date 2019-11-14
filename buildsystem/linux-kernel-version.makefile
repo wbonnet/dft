@@ -29,6 +29,9 @@ SW_VERSION      = $(notdir $(patsubst %/,%,$(shell pwd)))
 # Retrieve th builder hot architecure if not defined yet
 HOST_ARCH      ?= $(shell uname -m)
 
+# Do not recurse the following subdirs
+MAKE_FILTERS  = Makefile README.md .
+
 # Include board specific definitions
 include ../board.mk
 

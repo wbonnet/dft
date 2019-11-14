@@ -23,6 +23,9 @@ $(info "D3BUG u-boot.makefile")
 buildsystem := ../../../../buildsystem
 $(warning "ireview in progress u-boot.makefile")
 
+# Do not recurse the following subdirs
+MAKE_FILTERS  = Makefile README.md .
+
 # 
 # Board level birectory generic Linux kernel makefile
 #

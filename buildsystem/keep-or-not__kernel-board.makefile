@@ -22,6 +22,9 @@
 # Include the board definition
 include board.mk
 
+# Do not recurse the following subdirs
+MAKE_FILTERS  = Makefile README.md .
+
 # Defines the software version
 PACKAGE_DATE = $(shell LC_ALL=C date +"%a, %d %b %Y %T %z")
 PACKAGE_DATE = $(shell date)

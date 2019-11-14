@@ -24,6 +24,9 @@ buildsystem := ../../../buildsystem
 include board.mk
 $(warning "review in progress board.makefile")
 
+# Do not recurse the following subdirs
+MAKE_FILTERS  = Makefile README.md .
+
 # 
 # Board level generic Makefile
 #

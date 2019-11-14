@@ -23,6 +23,9 @@ $(info "D3BUG linux-kernel.makefile")
 buildsystem := ../../../../buildsystem
 $(warning "review in progress linux-kernel.makefile")
 
+# Do not recurse the following subdirs
+MAKE_FILTERS  = Makefile README.md .
+
 # 
 # Board level birectory generic Linux kernel makefile
 #
