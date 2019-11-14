@@ -1,1 +1,1 @@
-../../../buildsystem/shared/board.makefile
+../../../buildsystem/board.makefile
