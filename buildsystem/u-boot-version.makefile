@@ -23,19 +23,15 @@ $(info "D3BUG u-boot-version.makefile")
 buildsystem := ../../../../../buildsystem
 $(warning "review in progress u-boot-version.makefile")
 
-# Include board specific definitions
+# Include board specific definitions  from board level
 include ../../board.mk
 
-# 
 # u-boot version generic Makefile
 #
 # WARNING if you need to make any version specific modification or definition,
 # Please take in consideration that you must not modify the content of this file.
 # Otherwise it would modify the symlink target and become the new default value
 # for all unmodified makefiles of all existing boards.
-
-# Defines the version of the u-boot software
-SW_VERSION   = $(notdir $(patsubst %/,%,$(shell pwd)))
 
 # Defines patches to apply to the upstream sources :
 # PATCHFILES += 0000_some_patch.diff
@@ -46,11 +42,68 @@ SW_VERSION   = $(notdir $(patsubst %/,%,$(shell pwd)))
 # uncomment the line. Files will be searched for in the files/ directory at
 # the same level as this Makefile.  
 
-# Include build system
-include buildsystem/dft.u-boot.mk
-
-# No need to recurse check target at version level
+# u-boot version folder must contain a symlink to the buildsystem and a debiani
+# folder storing debian package definition
+ 
 check :
+
+# board level directory must contain the board.mk file
+	@echo "Checking board definition for $(BOARD_NAME)" ;
+	@if [ ! -f "board.mk" ] ; then \
+		pwd ; \
+		echo "file board.mk is missing in directory $(shell pwd)" ; \
+		echo "error 191112-01" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! -d "$(shell pwd)/kernel" ] ; then \
+		echo "kernel directory is missing in $(shell pwd). It should contains a symlink to the generic makefile for Linux kernel" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "mkdir $(shell pwd)/kernel" ; \
+		echo "ln -s $(buildsystem)/linux-kernel.makefile $(shell pwd)/kernel/Makefile" ; \
+		echo "git add $(shell pwd)/kernel" ; \
+		echo "error 191114-01" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! -d "$(shell pwd)/kernel/defconfig" ] ; then \
+		echo "defconfig directory is missing in $(shell pwd). It is used to store kernel configuration files. It should at leasty contains a hidden empty file .gitkeep until first kernel version is added" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "mkdir $(shell pwd)/kernel/defconfig" ; \
+		echo "touch $(shell pwd)/kernel/defconfig/.gitkeep" ; \
+		echo "git add $(shell pwd)/kernel/defconfig" ; \
+		echo "error 191114-01" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! -d "$(shell pwd)/u-boot" ] ; then \
+		echo "u-boot directory is missing in $(shell pwd). It should contains a symlink to the generic makefile for u-boot" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "mkdir $(shell pwd)/u-boot" ; \
+		echo "ln -s $(buildsystem)/u-boot.makefile $(shell pwd)/u-boot/Makefile" ; \
+		echo "git add $(shell pwd)/u-boot" ; \
+		echo "error 191114-02" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! -d "$(shell pwd)/files" ] ; then \
+		echo "files directory is missing in $(shell pwd). It should contains the markdown file install.$(SRC_NAME).$(BOARD_NAME).md needed by target package." ; \
+		echo "You can fix with the following commands : " ; \
+		echo "mkdir $(shell pwd)/files" ; \
+		echo "ln -s ../../files/install.$(SRC_NAME).$(BOARD_NAME).md $(shell pwd)/files/" ; \
+		echo "git add $(shell pwd)/files" ; \
+		echo "error 191112-02" ; \
+		exit 1 ; \
+	fi ;
+
+# Catch all target. Call the same targets in each subfolder
+%:
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
+                $(MAKE) -C $$i $* || exit 1 ; \
+        done
+
+
+help :
+	@echo "Supported targets are"
+	@echo 'check : Verify the availability of required items (files, symlinks, directories) and report missing.'
+
+
 	@echo "Checking u-boot version $(SW_VERSION) package definition for $(BOARD_NAME)" 
 	@if [ ! -f "../board.mk" ] ; then \
 		echo "file board.mk is missing in directory $(shell pwd)/.." ; \

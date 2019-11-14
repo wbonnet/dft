@@ -21,24 +21,51 @@
 
 $(info "D3BUG board.makefile")
 buildsystem := ../../../buildsystem
+include board.mk
 $(warning "review in progress board.makefile")
 
 # 
 # Board level generic Makefile
 #
 
-# No need to recurse check target at version level
+# board level directory must contain board.mk file, kernel folder and u-boot folder
 check :
-# Board level directory must contain board.mk file, kernel folder and u-boot folder
 # Mandatory folders content check (otherwise recusive targets may not work)
 
 # kernel folder must contain a Makefile symlink to  ../../../../buildsystem/shared/board-kernel.makefile
 # Board level directory must contain board.mk file, kernel folder and u-boot folder
-	@echo "Checking u-boot version $(SW_VERSION) package definition for $(BOARD_NAME)" ;
+	@echo "Checking board definition for $(BOARD_NAME)" ;
 	@if [ ! -f "board.mk" ] ; then \
 		pwd ; \
 		echo "file board.mk is missing in directory $(shell pwd)" ; \
 		echo "error 191112-01" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! -d "$(shell pwd)/kernel" ] ; then \
+		echo "kernel directory is missing in $(shell pwd). It should contains a symlink to the generic makefile for Linux kernel" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "mkdir $(shell pwd)/kernel" ; \
+		echo "ln -s $(buildsystem)/linux-kernel.makefile $(shell pwd)/kernel/Makefile" ; \
+		echo "git add $(shell pwd)/kernel" ; \
+		echo "error 191114-01" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! -d "$(shell pwd)/kernel/defconfig" ] ; then \
+		echo "defconfig directory is missing in $(shell pwd). It is used to store kernel configuration files. It should at leasty contains a hidden empty file .gitkeep until first kernel version is added" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "mkdir $(shell pwd)/kernel/defconfig" ; \
+		echo "touch $(shell pwd)/kernel/defconfig/.gitkeep" ; \
+		echo "git add $(shell pwd)/kernel/defconfig" ; \
+		echo "error 191114-01" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! -d "$(shell pwd)/u-boot" ] ; then \
+		echo "u-boot directory is missing in $(shell pwd). It should contains a symlink to the generic makefile for u-boot" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "mkdir $(shell pwd)/u-boot" ; \
+		echo "ln -s $(buildsystem)/u-boot.makefile $(shell pwd)/u-boot/Makefile" ; \
+		echo "git add $(shell pwd)/u-boot" ; \
+		echo "error 191114-02" ; \
 		exit 1 ; \
 	fi ;
 	@if [ ! -d "$(shell pwd)/files" ] ; then \
@@ -50,44 +77,13 @@ check :
 		echo "error 191112-02" ; \
 		exit 1 ; \
 	fi ;
-	@if [ ! -d "./debian" ] ; then \
-		echo "debian directory is missing in $(shell pwd). It should contains the files needed to create the debian package for $(BOARD_NAME) u-boot." ; \
-		echo "error 191112-03" ; \
-		exit 1 ; \
-	fi ;
-	@if [ ! -L "files/install.$(SRC_NAME).$(BOARD_NAME).md" ] ; then \
-		echo "Installation procedure symlink is missing under $(shell pwd)/files" ; \
-		echo "This folder should contain a symlink to the markdown file describing u-boot installation produre for $(BOARD_NAME)" ; \
-		echo "You can fix with the following commands : " ; \
-		echo "ln -s ../../files/install.u-boot.$(BOARD_NAME).md $(shell pwd)/files/install.u-boot.$(BOARD_NAME).md" ; \
-		echo "git add $(shell pwd)/files/install.u-boot.$(BOARD_NAME).md" ; \
-		echo "error 191112-04" ; \
-		exit 1 ; \
-	fi ;
-	@if [ ! -L "./Makefile" ] ; then \
-		echo "Makefile symlink to $(buildsystem)/u-boot-version.makefile is missing in $(shell pwd)" ; \
-		echo "error 191112-09" ; \
-		exit 1 ; \
-	fi ; 
-	@if [ ! -L "./buildsystem" ] ; then \
-		echo "buildsystem symlink to $(buildsystem)is missing in $(shell pwd). You are using your own custom buildsystem" ; \
-		echo "error 191112-05" ; \
-		exit 1 ; \
-	fi ;
-	@if [ ! "$(shell readlink ./buildsystem)" = "$(buildsystem)" ] ; then \
-		echo "target of symlink buildsystem should be $(buildsystem) in directory $(shell pwd)" ; \
-		echo "error 191112-06" ; \
-		exit 1 ; \
-	fi ;
-	@if [ ! "$(shell readlink ./Makefile)" = "$(buildsystem)/u-boot-version.makefile" ] ; then \
-		echo "target of symlink Makefile should be $(buildsystem)/u-boot-version.makefile in directory $(shell pwd)" ; \
-		echo "error 191112-07" ; \
-		exit 1 ; \
-	fi ;
-	@for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
-		$(MAKE) -C $$i $* || exit 1 ; \
-		echo "folder : $$folder" ; \
-	done ;
+
+# Catch all target. Call the same targets in each subfolder
+%:
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
+                $(MAKE) -C $$i $* || exit 1 ; \
+        done
+
 
 help :
 	@echo "Supported targets are"

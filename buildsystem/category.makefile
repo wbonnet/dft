@@ -57,14 +57,16 @@ check :
 		fi ; \
 	done ; \
 	for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
-		$(MAKE) -C $(folder) check || exit 1 ; \
-		echo "make check in folder $(folder)" ; \
+		echo "tring folder $$folder" ; \
+		$(MAKE) -C $$folder check || exit 1 ; \
+		echo "make check in folder $$folder" ; \
 	done ;
 
 # Catch all target. Call the same targets in each subfolder
 %:
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
-		$(MAKE) -C $$i $* || exit 1 ; \
+		echo "avant le make du catch all" ; \
+		$(MAKE) -C $(i) $* || exit 1 ; \
 	done
 
 # ------------------------------------------------------------------------------
