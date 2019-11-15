@@ -58,7 +58,7 @@ check :
 		echo "mkdir -p $(shell pwd)/kernel/defconfig" ; \
 		echo "touch $(shell pwd)/kernel/defconfig/.gitkeep" ; \
 		echo "git add $(shell pwd)/kernel/defconfig" ; \
-		echo "error 191114-01" ; \
+		echo "error 191114-03" ; \
 		exit 1 ; \
 	fi ;
 	@if [ ! -d "$(shell pwd)/u-boot" ] ; then \
@@ -87,7 +87,7 @@ check :
 		echo "mkdir -p $(shell pwd)/u-boot" ; \
 		echo "ln -s $(buildsystem)/u-boot.makefile $(shell pwd)/u-boot/Makefile" ; \
 		echo "git add $(shell pwd)/u-boot/Makefile" ; \
-		echo "error 191i114-01" ; \
+		echo "error 191114-01" ; \
 		exit 1 ; \
 	fi ;
 	@if [ ! "$(shell readlink kernel/Makefile)" = "$(buildsystem)/linux-kernel.makefile" ] ; then \
@@ -97,7 +97,7 @@ check :
 		echo "mkdir -p $(shell pwd)/kernel" ; \
 		echo "ln -s $(buildsystem)/linux-kernel.makefile $(shell pwd)/kernel/Makefile" ; \
 		echo "git add $(shell pwd)/kernel/Makefile" ; \
-		echo "error 1911141-02" ; \
+		echo "error 191114-02" ; \
 		exit 1 ; \
 	fi ;
 
