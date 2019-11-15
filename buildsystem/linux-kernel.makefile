@@ -30,22 +30,51 @@ MAKE_FILTERS  = Makefile README.md .
 # Board level birectory generic Linux kernel makefile
 #
 
-# No need to recurse check target at version level
 check :
-	# Board level directory must contain defconfig folder storing config files for the different kernel versions
 	@echo "Checking Linux kernel folder for board $(BOARD_NAME)" 
 	@if [ ! -d "$(shell pwd)/defconfig" ] ; then \
 		echo "defconfig directory is missing in $(shell pwd). It contains the configuration files of the different Linux kernel versions." ; \
 		echo "You can fix with the following commands : " ; \
 		echo "mkdir -p $(shell pwd)/defconfig" ; \
-		echo "touch $(shell pwd)/defconfig.gitkeep" ; \
-		echo "git add $(shell pwd)/defconfig.gitkeep" ; \
+		echo "touch $(shell pwd)/defconfig/.gitkeep" ; \
+		echo "git add $(shell pwd)/defconfig/.gitkeep" ; \
 		false ; \
 	fi ;
-	@if [ ! -L "./Makefile" ] ; then \
-		echo "Makefile symlink to ../../../../../buildsystem/shared/linux-kernel.makefile is missing in $(shell pwd). You are using a custom Makefile" ; \
-		false ; \
-	fi ; 
+	@if [ ! -L "Makefile"  ] ; then \
+		echo "Makefile symlink $(buildsystem)/linux-kernel.makefile is missing in directory $(shell pwd)" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "git rm -f $(shell pwd)/Makefile" ; \
+		echo "ln -s $(buildsystem)/linux-kernel.makefile $(shell pwd)/Makefile" ; \
+		echo "git add $(shell pwd)/Makefile" ; \
+		echo "error 1911116-01" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! "$(shell readlink Makefile)" = "$(buildsystem)/linux-kernel.makefile" ] ; then \
+		echo "target of symlink Makefile should be $(buildsystem)/linux-kernel.makefile in directory $(shell pwd)" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "git rm -f $(shell pwd)/Makefile" ; \
+		echo "ln -s $(buildsystem)/linux-kernel.makefile $(shell pwd)/Makefile" ; \
+		echo "git add $(shell pwd)/Makefile" ; \
+		echo "error 1911116-02" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! -L "board.mk" ] ; then \
+		echo "board.mk symlink to ../board.mk is missing in directory $(shell pwd)" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "ln -s ../board.mk $(shell pwd)/board.mk" ; \
+		echo "git add $(shell pwd)/board.mk" ; \
+		echo "error 1911116-04" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! "$(shell readlink board.mk)" = "../board.mk" ] ; then \
+		echo "target of symlink board.mk should be ../board.mk in directory $(shell pwd)" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "git rm -f $(shell pwd)/board.mk" ; \
+		echo "ln -s ../board.mk $(shell pwd)/board.mk" ; \
+		echo "git add $(shell pwd)/board.mk" ; \
+		echo "error 1911116-05" ; \
+		exit 1 ; \
+	fi ;
 
 help :
 	@echo "Supported targets are"
