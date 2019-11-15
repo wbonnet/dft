@@ -27,12 +27,18 @@ include board.mk
 # Do not recurse the following subdirs
 MAKE_FILTERS  = Makefile README.md .
 
+# ------------------------------------------------------------------------------
+#
+# Targets not associated with a file (aka PHONY)
+#
+.PHONY: help check
+
 # 
 # Board level u-boot makefile
 #
 
-check :
-	@echo "Checking u-boot folder for board $(BOARD_NAME)" 
+check:
+	@echo "Checking u-boot folder for board $(BOARD_NAME)" ;
 	@if [ ! -L "Makefile"  ] ; then \
 		echo "Makefile symlink $(buildsystem)/u-boot.makefile is missing in directory $(shell pwd)" ; \
 		echo "You can fix with the following commands : " ; \
@@ -77,7 +83,7 @@ check :
 		echo "error 1911115-05" ; \
 		exit 1 ; \
 	fi ;
-	for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '201*' ) ; do \
+	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '201*' ) ; do \
 		if [ ! -L "$$version/Makefile" ] ; then \
 			echo "Makefile in $(shell pwd)/$$version is missing. It should be a symlink to $(buildsystem)/u-boot-version.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
@@ -96,7 +102,11 @@ check :
 			echo "exit 191115-09" ; \
 			exit 1 ; \
 		fi ; \
-	done ; \
+	done ; 
+	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '201*' ) ; do \
+		$(MAKE) -C $$version check || exit 1 ; \
+		echo "make check in u-boot version $$version" ; \
+	done ;
 
 help :
 	@echo "Supported targets are"

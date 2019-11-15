@@ -27,6 +27,12 @@ $(warning "review in progress board.makefile")
 # Do not recurse the following subdirs
 MAKE_FILTERS  = Makefile README.md .
 
+# ------------------------------------------------------------------------------
+#
+# Targets not associated with a file (aka PHONY)
+#
+.PHONY: help check
+
 # 
 # Board level generic Makefile
 #

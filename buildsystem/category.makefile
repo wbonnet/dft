@@ -30,7 +30,7 @@ CATEGORIES    = laptop desktop set-top-box single-board-computer
 #
 # Targets not associated with a file (aka PHONY)
 #
-.PHONY: help
+.PHONY: help check
 
 check :
 # Board category directory contains several folders, on per board in this category
