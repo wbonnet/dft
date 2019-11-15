@@ -37,7 +37,7 @@ check :
 	@if [ ! -d "$(shell pwd)/defconfig" ] ; then \
 		echo "defconfig directory is missing in $(shell pwd). It contains the configuration files of the different Linux kernel versions." ; \
 		echo "You can fix with the following commands : " ; \
-		echo "mkdir $(shell pwd)/defconfig" ; \
+		echo "mkdir -p $(shell pwd)/defconfig" ; \
 		echo "touch $(shell pwd)/defconfig.gitkeep" ; \
 		echo "git add $(shell pwd)/defconfig.gitkeep" ; \
 		false ; \

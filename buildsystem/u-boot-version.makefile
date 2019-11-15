@@ -61,7 +61,7 @@ check :
 	@if [ ! -d "$(shell pwd)/kernel" ] ; then \
 		echo "kernel directory is missing in $(shell pwd). It should contains a symlink to the generic makefile for Linux kernel" ; \
 		echo "You can fix with the following commands : " ; \
-		echo "mkdir $(shell pwd)/kernel" ; \
+		echo "mkdir -p $(shell pwd)/kernel" ; \
 		echo "ln -s $(buildsystem)/linux-kernel.makefile $(shell pwd)/kernel/Makefile" ; \
 		echo "git add $(shell pwd)/kernel" ; \
 		echo "error 191114-01" ; \
@@ -70,7 +70,7 @@ check :
 	@if [ ! -d "$(shell pwd)/kernel/defconfig" ] ; then \
 		echo "defconfig directory is missing in $(shell pwd). It is used to store kernel configuration files. It should at leasty contains a hidden empty file .gitkeep until first kernel version is added" ; \
 		echo "You can fix with the following commands : " ; \
-		echo "mkdir $(shell pwd)/kernel/defconfig" ; \
+		echo "mkdir -p $(shell pwd)/kernel/defconfig" ; \
 		echo "touch $(shell pwd)/kernel/defconfig/.gitkeep" ; \
 		echo "git add $(shell pwd)/kernel/defconfig" ; \
 		echo "error 191114-01" ; \
@@ -79,7 +79,7 @@ check :
 	@if [ ! -d "$(shell pwd)/u-boot" ] ; then \
 		echo "u-boot directory is missing in $(shell pwd). It should contains a symlink to the generic makefile for u-boot" ; \
 		echo "You can fix with the following commands : " ; \
-		echo "mkdir $(shell pwd)/u-boot" ; \
+		echo "mkdir -p $(shell pwd)/u-boot" ; \
 		echo "ln -s $(buildsystem)/u-boot.makefile $(shell pwd)/u-boot/Makefile" ; \
 		echo "git add $(shell pwd)/u-boot" ; \
 		echo "error 191114-02" ; \
@@ -88,7 +88,7 @@ check :
 	@if [ ! -d "$(shell pwd)/files" ] ; then \
 		echo "files directory is missing in $(shell pwd). It should contains the markdown file install.$(SRC_NAME).$(BOARD_NAME).md needed by target package." ; \
 		echo "You can fix with the following commands : " ; \
-		echo "mkdir $(shell pwd)/files" ; \
+		echo "mkdir -p $(shell pwd)/files" ; \
 		echo "ln -s ../../files/install.$(SRC_NAME).$(BOARD_NAME).md $(shell pwd)/files/" ; \
 		echo "git add $(shell pwd)/files" ; \
 		echo "error 191112-02" ; \
@@ -115,7 +115,7 @@ help :
 	@if [ ! -d "$(shell pwd)/files" ] ; then \
 		echo "files directory is missing in $(shell pwd). It should contains the markdown file install.$(SRC_NAME).$(BOARD_NAME).md needed by target package." ; \
 		echo "You can fix with the following commands : " ; \
-		echo "mkdir $(shell pwd)/files" ; \
+		echo "mkdir -p $(shell pwd)/files" ; \
 		echo "ln -s ../../files/install.$(SRC_NAME).$(BOARD_NAME).md $(shell pwd)/files/" ; \
 		false ; \
 	fi ;
