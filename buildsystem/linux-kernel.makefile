@@ -21,7 +21,7 @@
 
 # Defines variables specific to Linux kernel
 SRC_NAME   = linux
-SW_VERSION = not_defined_at_kernel_level_must_go_into_version_subdir
+SW_VERSION = SW_VERSION_is_not_defined_at_kernel_level_but_into_version_subdir
 
 
 $(info "D3BUG linux-kernel.makefile")

@@ -21,7 +21,7 @@
 
 # Defines variables specific to u-boot
 SRC_NAME      = u-boot
-SW_VERSION    = not_defind_at_u-boot_level_must_go_into_a_version_subdir
+SW_VERSION    = SW_VERSION_is_not_defind_at_u-boot_level_but_into_a_version_subdir
 
 $(info "D3BUG u-boot.makefile")
 buildsystem := ../../../../buildsystem

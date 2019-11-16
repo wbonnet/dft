@@ -21,17 +21,14 @@
 
 # Defines variables specific to u-boot
 SRC_NAME   = u-boot
-SW_VERSION = $(notdir $(patsubst %/,%,$(shell pwd)))
 
 $(info "D3BUG u-boot-version.makefile")
 buildsystem := ../../../../../buildsystem
-include board.mk
 include $(buildsystem)/lib/dft.u-boot.mk
-include $(buildsystem)/lib/dft.mk
-$(warning "review in progress u-boot-version.makefile")
+include $(buildsystem)/dft.mk
 
 # Include board specific definitions  from board level
-include ../../board.mk
+include ../board.mk
 
 # u-boot version generic Makefile
 #
@@ -56,7 +53,11 @@ MAKE_FILTERS  = debian files patches
 #
 # Targets not associated with a file (aka PHONY)
 #
-.PHONY: help check
+.PHONY:
+
+help:
+	@echo "Supported targets are"
+	@echo 'check : Verify the availability of required items (files, symlinks, directories) and report missing.'
 
 check:
 	@echo "Checking u-boot version $(SW_VERSION) package definition for $(BOARD_NAME)" 
@@ -80,8 +81,9 @@ check:
 	fi ;
 
 # Catch all target. Call the same targets in each subfolder
-%:
-	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
+muf:
+	exit 1 ; 
+	for version in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
 		if [ "$$version" = "./patches"  ] ; then \
 			continue ; \
 		fi ; \
@@ -93,7 +95,3 @@ check:
 		fi ; \
 		$(MAKE) -C $$version $* || exit 1 ; \
 	done
-
-help :
-	@echo "Supported targets are"
-	@echo 'check : Verify the availability of required items (files, symlinks, directories) and report missing.'

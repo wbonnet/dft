@@ -127,22 +127,22 @@ TARGET_DONE = @mkdir -p $(COOKIE_DIR) && touch $(COOKIE_DIR)/$(notdir $@)
 #
 # Determine this Makefile directory which is the root of the build system
 #
-BUILD_SYSTEM_ROOT := $(dir $(lastword $(MAKEFILE_LIST)))
+BUILD_SYSTEM := $(dir $(lastword $(MAKEFILE_LIST)))
 
 # ------------------------------------------------------------------------------
 #
 # Includes the build system top level and target definitions
 #
 # ------------------------------------------------------------------------------
-include $(BUILD_SYSTEM_ROOT)/lib/dft.internals-conf.mk
-include $(BUILD_SYSTEM_ROOT)/lib/dft.internals-lib.mk
-include $(BUILD_SYSTEM_ROOT)/lib/dft.target-build.mk
-include $(BUILD_SYSTEM_ROOT)/lib/dft.target-configure.mk
-include $(BUILD_SYSTEM_ROOT)/lib/dft.target-extract.mk
-include $(BUILD_SYSTEM_ROOT)/lib/dft.target-fetch.mk
-include $(BUILD_SYSTEM_ROOT)/lib/dft.target-install.mk
-include $(BUILD_SYSTEM_ROOT)/lib/dft.target-package.mk
-include $(BUILD_SYSTEM_ROOT)/lib/dft.target-upload.mk
+include $(BUILD_SYSTEM)/inc/conf.mk
+include $(BUILD_SYSTEM)/inc/lib.mk
+include $(BUILD_SYSTEM)/inc/target-build.mk
+include $(BUILD_SYSTEM)/inc/target-configure.mk
+include $(BUILD_SYSTEM)/inc/target-extract.mk
+include $(BUILD_SYSTEM)/inc/target-fetch.mk
+include $(BUILD_SYSTEM)/inc/target-install.mk
+include $(BUILD_SYSTEM)/inc/target-package.mk
+include $(BUILD_SYSTEM)/inc/target-upload.mk
 
 # ------------------------------------------------------------------------------
 #
@@ -241,7 +241,7 @@ show-config :
        	fi
 	@echo
 	@echo "Directories configuration"
-	@echo "  BUILD_SYSTEM_ROOT                 $(BUILD_SYSTEM_ROOT)"
+	@echo "  BUILD_SYSTEM                      $(BUILD_SYSTEM)"
 	@echo "  BASE_DIR                          $(BASE_DIR)"
 	@echo "  WORK_DIR                          $(WORK_DIR)"
 	@echo "  FILE_DIR                          $(FILE_DIR)"

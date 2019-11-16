@@ -27,7 +27,7 @@ $(warning "review in progress board.makefile")
 
 # Do not recurse the following subdirs
 MAKE_FILTERS  = Makefile README.md
-SRC_NAME      = not_defined_at_kernel_level_must_go_into_version_subdir
+SRC_NAME      = SRC_NAME_is_not_defined_at_board_level
 
 # ------------------------------------------------------------------------------
 #
@@ -98,7 +98,7 @@ check :
 		echo "error 191116-01" ; \
 		exit 1 ; \
 	fi ;
-	@if [ ! "$(shell readlink u-boot/Makefile)" = "$(buildsystem)/u-boot.makefile" ] ; then \
+	if [ ! "$(shell readlink u-boot/Makefile)" = "$(buildsystem)/u-boot.makefile" ] ; then \
 		echo "target of symlink Makefile should be $(buildsystem)/u-boot.makefile in directory $(shell pwd)/u-boot" ; \
 		echo "You can fix with the following commands : " ; \
 		echo "git rm -f $(shell pwd)/u-boot/Makefile" ; \

@@ -32,11 +32,11 @@
 #
 # Protection against multiple includes
 #
-$(info included dft.internals-lib.mk)
-ifdef DFT_INTERNALS_LIB
-$(error dft.internals-lib.mk has already been included)
+$(info included dft.lib.mk)
+ifdef DFT_LIB
+$(error dft.lib.mk has already been included)
 else
-define DFT_INTERNALS_LIB
+define DFT__LIB
 endef
 # the matching endif teminates this file
 
@@ -44,7 +44,7 @@ endef
 #
 # Directory maker used by the base rules
 #
-$(sort $(BUILD_SYSTEM_ROOT) $(FILE_DIR) $(GIT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(DEFCONFIG_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR) $(SRC_DIR)):
+$(sort $(BUILD_SYSTEM) $(FILE_DIR) $(GIT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(DEFCONFIG_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR) $(SRC_DIR)):
 	@if test -d $@ ; then : ; else \
 		mkdir -p $@; \
 		echo making $@; \
@@ -55,6 +55,6 @@ $(COOKIE_DIR)/%:
 		touch $@; \
 	fi
 
-# Match initial ifndef DFT_INTERNALS_LIB
+# Match initial ifndef DFT_LIB
 endif
 
