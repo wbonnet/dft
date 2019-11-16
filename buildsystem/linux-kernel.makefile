@@ -75,6 +75,37 @@ check :
 		echo "error 1911116-05" ; \
 		exit 1 ; \
 	fi ;
+	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*' ) ; do \
+		if [ "$$version" = "./defconfig" ] ; then \
+			continue ; \
+		fi ; \
+		if [ ! -L "$$version/Makefile" ] ; then \
+			echo "version folder $$version" ; \
+			echo "Makefile in $(shell pwd)/$$version is missing. It should be a symlink to $(buildsystem)/linux-kernel-version.makefile" ; \
+			echo "You can fix with the following shell commands :" ; \
+			if [ -f "$$version/Makefile" ] ; then \
+				echo "git rm $$version/Makefile" ; \
+			fi ; \
+			echo "ln -s ../$(buildsystem)/linux-kernel-version.makefile $$version/Makefile" ; \
+			echo "git add $$version/Makefile" ; \
+			echo "exit 191116-07" ; \
+			exit 1 ; \
+		fi ; \
+		s=`readlink $$version/Makefile` ; \
+		if [ !  "$$s" = "../$(buildsystem)/linux-kernel-version.makefile" ] ; then \
+			echo "Makefile symlink in $$version must link to $(buildsystem)/linux-kernel-version.makefile" ; \
+			echo "You can fix with the following shell commands :" ; \
+			echo "git rm -f $$version/Makefile || rm -f $$version/Makefile" ; \
+			echo "ln -s ../$(buildsystem)/linu-kernel-version.makefile $$version/Makefile" ; \
+			echo "git add $$version/Makefile" ; \
+			echo "exit 191115-09" ; \
+			exit 1 ; \
+		fi ; \
+	done ; 
+	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '201*' ) ; do \
+		$(MAKE) -C $$version check || exit 1 ; \
+		echo "make check in u-boot version $$version" ; \
+	done ;
 
 help :
 	@echo "Supported targets are"
