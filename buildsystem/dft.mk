@@ -134,15 +134,15 @@ BUILD_SYSTEM_ROOT := $(dir $(lastword $(MAKEFILE_LIST)))
 # Includes the build system top level and target definitions
 #
 # ------------------------------------------------------------------------------
-include $(BUILD_SYSTEM_ROOT)/dft.internals-conf.mk
-include $(BUILD_SYSTEM_ROOT)/dft.internals-lib.mk
-include $(BUILD_SYSTEM_ROOT)/dft.target-build.mk
-include $(BUILD_SYSTEM_ROOT)/dft.target-configure.mk
-include $(BUILD_SYSTEM_ROOT)/dft.target-extract.mk
-include $(BUILD_SYSTEM_ROOT)/dft.target-fetch.mk
-include $(BUILD_SYSTEM_ROOT)/dft.target-install.mk
-include $(BUILD_SYSTEM_ROOT)/dft.target-package.mk
-include $(BUILD_SYSTEM_ROOT)/dft.target-upload.mk
+include $(BUILD_SYSTEM_ROOT)/lib/dft.internals-conf.mk
+include $(BUILD_SYSTEM_ROOT)/lib/dft.internals-lib.mk
+include $(BUILD_SYSTEM_ROOT)/lib/dft.target-build.mk
+include $(BUILD_SYSTEM_ROOT)/lib/dft.target-configure.mk
+include $(BUILD_SYSTEM_ROOT)/lib/dft.target-extract.mk
+include $(BUILD_SYSTEM_ROOT)/lib/dft.target-fetch.mk
+include $(BUILD_SYSTEM_ROOT)/lib/dft.target-install.mk
+include $(BUILD_SYSTEM_ROOT)/lib/dft.target-package.mk
+include $(BUILD_SYSTEM_ROOT)/lib/dft.target-upload.mk
 
 # ------------------------------------------------------------------------------
 #
@@ -302,7 +302,6 @@ setup : $(COOKIE_DIR)
 #
 
 ifndef SRC_NAME
-$(error bsroot $(BUILD_SYSTEM_ROOT))
 $(error SRC_NAME is not set)
 endif
 

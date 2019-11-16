@@ -21,6 +21,7 @@
 
 $(info "D3BUG board.makefile")
 buildsystem := ../../../../buildsystem
+include $(buildsystem)/dft.mk
 include board.mk
 $(warning "review in progress board.makefile")
 
@@ -84,6 +85,16 @@ check :
 		echo "ln -s ../../files/install.$(SRC_NAME).$(BOARD_NAME).md $(shell pwd)/files/" ; \
 		echo "git add $(shell pwd)/files" ; \
 		echo "error 191112-02" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! -e "$(shell readlink files/install.$(SRC_NAME).$(BOARD_NAME).md)" ] ; then \
+		echo "the target of installation procedure in files is missing.  It should link to the markdown file install.$(SRC_NAME).$(BOARD_NAME).md needed by target package." ; \
+		echo "You can fix with the following commands : " ; \
+		echo "git rm -f $(shell pwd)/files/install.$(SRC_NAME).$(BOARD_NAME).md" ; \
+		echo "ln -s ../../files/install.$(SRC_NAME).$(BOARD_NAME).md $(shell pwd)/files/" ; \
+		echo "mkdir -p $(shell pwd)/files" ; \
+		echo "git add $(shell pwd)/files/$(SRC_NAME).$(BOARD_NAME).md" ; \
+		echo "error 191116-01" ; \
 		exit 1 ; \
 	fi ;
 	@if [ ! "$(shell readlink u-boot/Makefile)" = "$(buildsystem)/u-boot.makefile" ] ; then \

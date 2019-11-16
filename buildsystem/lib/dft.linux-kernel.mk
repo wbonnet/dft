@@ -69,8 +69,6 @@ DOWNLOAD_TOOL    = wget
 SRC_NAME         = linux
 BUILD_ARGS       =
 
-include buildsystem/dft.mk
-
 # ------------------------------------------------------------------------------
 # Match initial ifdef
 endif

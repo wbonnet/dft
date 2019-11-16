@@ -19,8 +19,12 @@
 #
 #
 
+# Defines variables specific to u-boot
+SRC_NAME = u-boot
+
 $(info "D3BUG u-boot.makefile")
 buildsystem := ../../../../buildsystem
+include $(buildsystem)/lib/dft.u-boot.mk
 $(warning "review in progress u-boot.makefile")
 include board.mk
 

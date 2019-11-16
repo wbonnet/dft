@@ -19,8 +19,13 @@
 #
 #
 
+# Defines variables specific to Linux kernel
+SRC_NAME = linux
+
 $(info "D3BUG linux-kernel.makefile")
 buildsystem := ../../../../buildsystem
+include $(buildsystem)/lib/dft.linux-kernel.mk
+include $(buildsystem)/dft.mk
 $(warning "review in progress linux-kernel.makefile")
 
 # Do not recurse the following subdirs

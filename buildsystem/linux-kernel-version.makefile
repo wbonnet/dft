@@ -19,8 +19,13 @@
 #
 #
 
+# Defines variables specific to Linux kernel
+SRC_NAME = linux
+
 $(info "D3BUG linux-kernel-version.makefile")
 buildsystem := ../../../../../buildsystem
+include $(buildsystem)/lib/dft.linux-kernel.mk
+include $(buildsystem)/lib/dft.mk
 $(warning "review in progress linux-kernel-version.makefile")
 
 # Defines the kernel version
