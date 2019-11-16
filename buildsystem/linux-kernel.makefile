@@ -20,10 +20,13 @@
 #
 
 # Defines variables specific to Linux kernel
-SRC_NAME = linux
+SRC_NAME   = linux
+SW_VERSION = not_defined_at_kernel_level_must_go_into_version_subdir
+
 
 $(info "D3BUG linux-kernel.makefile")
 buildsystem := ../../../../buildsystem
+include board.mk
 include $(buildsystem)/lib/dft.linux-kernel.mk
 include $(buildsystem)/dft.mk
 $(warning "review in progress linux-kernel.makefile")
@@ -81,6 +84,7 @@ check :
 		exit 1 ; \
 	fi ;
 	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*' ) ; do \
+		echo "checking subfolder for version $$version" ; \
 		if [ "$$version" = "./defconfig" ] ; then \
 			continue ; \
 		fi ; \

@@ -20,16 +20,17 @@
 #
 
 # Defines variables specific to u-boot
-SRC_NAME = u-boot
+SRC_NAME      = u-boot
+SW_VERSION    = not_defind_at_u-boot_level_must_go_into_a_version_subdir
 
 $(info "D3BUG u-boot.makefile")
 buildsystem := ../../../../buildsystem
+include board.mk
 include $(buildsystem)/lib/dft.u-boot.mk
 $(warning "review in progress u-boot.makefile")
-include board.mk
 
 # Do not recurse the following subdirs
-MAKE_FILTERS  = Makefile README.md .
+MAKE_FILTERS  = Makefile README.md patches .
 
 # ------------------------------------------------------------------------------
 #

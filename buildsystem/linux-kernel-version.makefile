@@ -20,12 +20,15 @@
 #
 
 # Defines variables specific to Linux kernel
-SRC_NAME = linux
+SRC_NAME    = linux
+SW_VERSION  = $(notdir $(patsubst %/,%,$(shell pwd)))
+
 
 $(info "D3BUG linux-kernel-version.makefile")
 buildsystem := ../../../../../buildsystem
+include ../board.mk
 include $(buildsystem)/lib/dft.linux-kernel.mk
-include $(buildsystem)/lib/dft.mk
+include $(buildsystem)/dft.mk
 $(warning "review in progress linux-kernel-version.makefile")
 
 # Defines the kernel version
@@ -49,7 +52,7 @@ include ../board.mk
 # of all existing boards.
 
 # Include build system
-include buildsystem/dft.kernel.mk
+include buildsystem/lib/dft.linux-kernel.mk
 
 # No need to recurse check target at version level
 check :
@@ -67,15 +70,15 @@ check :
 		false ; \
 	fi ;
 	@if [ ! -L "./Makefile" ] ; then \
-		echo "Makefile symlink to ../../../../../buildsystem/shared/kernel-version-level.makefile is missing in $(shell pwd). You are using your own custom Makefile." ; \
+		echo "Makefile symlink to ../../../../../buildsystem/linux-kernel-version.makefile is missing in $(shell pwd). You are using your own custom Makefile." ; \
 		false ; \
 	fi ;
 	@if [ ! -L "./buildsystem" ] ; then \
 		echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd). You are using your own custom buildsystem." ; \
 		false ; \
 	fi ;
-	@if [ ! "$(shell readlink ./Makefile)" = "../../../../../buildsystem/shared/kernel-version-level.makefile" ] ; then \
-		echo "target of symlink Makefile should be ../../../../../buildsystem/shared/kernel-version-level.makefile in directory $(shell pwd). You are using your own custom buildsystem." ; \
+	@if [ ! "$(shell readlink ./Makefile)" = "../../../../../buildsystem/linux-kernel-version.makefile" ] ; then \
+		echo "target of symlink Makefile should be ../../../../../buildsystem/linux-kernel-version.makefile in directory $(shell pwd). You are using your own custom buildsystem." ; \
 		false ; \
 	fi ;
 	@if [ ! "$(shell readlink ./buildsystem)" = "../../../../../buildsystem" ] ; then \

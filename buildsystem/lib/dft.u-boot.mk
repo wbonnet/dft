@@ -70,8 +70,6 @@ DOWNLOAD_TOOL    = wget
 SRC_NAME         = u-boot
 BUILD_ARGS       =
 
-include buildsystem/dft.mk
-
 # ------------------------------------------------------------------------------
 # Match initial ifdef
 endif

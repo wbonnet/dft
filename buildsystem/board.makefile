@@ -26,7 +26,8 @@ include board.mk
 $(warning "review in progress board.makefile")
 
 # Do not recurse the following subdirs
-MAKE_FILTERS  = Makefile README.md .
+MAKE_FILTERS  = Makefile README.md
+SRC_NAME      = not_defined_at_kernel_level_must_go_into_version_subdir
 
 # ------------------------------------------------------------------------------
 #
@@ -120,7 +121,7 @@ check :
 
 # Catch all target. Call the same targets in each subfolder
 %:
-	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
                 $(MAKE) -C $$i $* || exit 1 ; \
         done
 

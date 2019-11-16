@@ -20,16 +20,15 @@
 #
 
 # Defines variables specific to u-boot
-SRC_NAME = u-boot
+SRC_NAME   = u-boot
+SW_VERSION = $(notdir $(patsubst %/,%,$(shell pwd)))
 
 $(info "D3BUG u-boot-version.makefile")
 buildsystem := ../../../../../buildsystem
+include board.mk
 include $(buildsystem)/lib/dft.u-boot.mk
 include $(buildsystem)/lib/dft.mk
 $(warning "review in progress u-boot-version.makefile")
-
-# Do not recurse the following subdirs
-MAKE_FILTERS  = Makefile README.md .
 
 # Include board specific definitions  from board level
 include ../../board.mk
@@ -49,6 +48,9 @@ include ../../board.mk
 # provided as an example of how to do it. Please duplicate, modify and 
 # uncomment the line. Files will be searched for in the files/ directory at
 # the same level as this Makefile.  
+
+# Do not recurse the following subdirs
+MAKE_FILTERS  = debian files patches
 
 # ------------------------------------------------------------------------------
 #
@@ -79,9 +81,18 @@ check:
 
 # Catch all target. Call the same targets in each subfolder
 %:
-	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
-                $(MAKE) -C $$i $* || exit 1 ; \
-        done
+	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
+		if [ "$$version" = "./patches"  ] ; then \
+			continue ; \
+		fi ; \
+		if [ "$$version" = "./files" ] ; then \
+			continue ; \
+		fi ; \
+		if [ "$$version" = "./debian" ] ; then \
+			continue ; \
+		fi ; \
+		$(MAKE) -C $$version $* || exit 1 ; \
+	done
 
 help :
 	@echo "Supported targets are"
