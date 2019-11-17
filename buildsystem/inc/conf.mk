@@ -123,6 +123,10 @@ BUILD_SCRIPTS       ?= $(WORK_DIR)/Makefile
 #
 # ------------------------------------------------------------------------------
 
+# Defaultdownload tool is wget since it is used to retrieve most of source. git is available
+# DOWNLOAD_TOOL should beset to git in custom makefiles if needed
+DOWNLOAD_TOOL       ?= wget
+
 # Defines board name
 BOARD_NAME          ?= default-board
 

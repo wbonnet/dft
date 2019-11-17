@@ -24,11 +24,8 @@ SW_NAME   = u-boot
 
 $(info "D3BUG u-boot-version.makefile")
 buildsystem := ../../../../../buildsystem
-include $(buildsystem)/inc/dft.u-boot.mk
-$(info "D3BUG avant include dft.mk")
-$(info $(buildsystem)/dft.mk)
+include $(buildsystem)/inc/u-boot.mk
 include $(buildsystem)/dft.mk
-$(info "D3BUG apres include dft.mk")
 
 # Include board specific definitions  from board level
 include ../board.mk
