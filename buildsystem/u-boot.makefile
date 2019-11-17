@@ -27,7 +27,6 @@ $(info "D3BUG u-boot.makefile")
 buildsystem := ../../../../buildsystem
 include board.mk
 include $(buildsystem)/inc/u-boot.mk
-$(warning "review in progress u-boot.makefile")
 
 # Do not recurse the following subdirs
 MAKE_FILTERS  = Makefile README.md patches .
