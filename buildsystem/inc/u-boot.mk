@@ -32,10 +32,10 @@
 #
 # Protection against multiple includes
 #
-$(info included dft.u-boot.mk)
+$(info included u-boot.mk)
 ifdef DFT_BUILDSYSTEM_UBOOT
 # the matching endif teminates this file
-$(error dft.u-boot.mk has already been included)
+$(error u-boot.mk has already been included)
 else
 define DFT_BUILDSYSTEM_UBOOT
 endef
@@ -66,9 +66,9 @@ SRC_SIGN_FILES      ?= $(SW_NAME)-$(SW_VERSION).sign
 # ------------------------------------------------------------------------------
 
 # Defines the git repository to use
-DOWNLOAD_TOOL    = wget
-SW_NAME         = u-boot
-BUILD_ARGS       =
+DOWNLOAD_TOOL       := wget
+SW_NAME             := u-boot
+BUILD_ARGS          =
 
 # ------------------------------------------------------------------------------
 # Match initial ifdef

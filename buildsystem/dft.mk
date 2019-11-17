@@ -134,6 +134,7 @@ BUILD_SYSTEM := $(dir $(lastword $(MAKEFILE_LIST)))
 # Includes the build system top level and target definitions
 #
 # ------------------------------------------------------------------------------
+$(error BUILDSYSTEM : $(BUILD_SYSTEM))
 include $(BUILD_SYSTEM)/inc/conf.mk
 include $(BUILD_SYSTEM)/inc/lib.mk
 include $(BUILD_SYSTEM)/inc/target-build.mk
