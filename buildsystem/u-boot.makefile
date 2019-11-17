@@ -21,7 +21,7 @@
 
 # Defines variables specific to u-boot
 SW_NAME       = u-boot
-SW_VERSION    = SW_VERSION_is_not_defind_at_u-boot_level_but_into_a_version_subdir
+SW_VERSION    = SW_VERSION_is_only_defind_in_version_subdir
 
 $(info "D3BUG u-boot.makefile")
 buildsystem := ../../../../buildsystem
@@ -53,7 +53,7 @@ check:
 		echo "error 1911115-02" ; \
 		exit 1 ; \
 	fi ;
-	@if [ ! "$(shell readlink Makefile)" = "$(buildsystem)/u-boot.makefile" ] ; then \
+	@if [ ! "$(shell readlink ./Makefile)" = "$(buildsystem)/u-boot.makefile" ] ; then \
 		echo "target of symlink Makefile should be $(buildsystem)/u-boot.makefile in directory $(shell pwd)" ; \
 		echo "You can fix with the following commands : " ; \
 		echo "git rm -f $(shell pwd)/Makefile" ; \
@@ -62,13 +62,28 @@ check:
 		echo "error 1911115-01" ; \
 		exit 1 ; \
 	fi ;
-	@if [ ! -d "files" ] ; then \
-		echo "directory files is missing in u-boot version directory $(shell pwd)" ; \
+	@if [ ! -d "$(shell pwd)/files" ] ; then \
+		echo "files directory is missing in $(shell pwd). It should contains the markdown file install.u-boot-$(BOARD_NAME).md needed by target package." ; \
 		echo "You can fix with the following commands : " ; \
-		echo "mkdir -p files" ; \
-		echo "touch files/.gitkeep" ; \
-		echo "git add files/.gitkeep" ; \
+		echo "mkdir -p $(shell pwd)/files" ; \
+		echo "touch $(shell pwd)/files/.gitkeep" ; \
+		echo "ln -s ../../files/install.$(SW_NAME)-$(BOARD_NAME).md $(shell pwd)/files/" ; \
+		echo "git add $(shell pwd)/files" ; \
 		echo "error 1911115-03" ; \
+		exit 1 ; \
+	fi ;  
+	@if [ ! -d "$(shell pwd)/files" ] ; then \
+		echo "You can fix with the following commands : " ; \
+		echo "mkdir -p $(shell pwd)/files" ; \
+		echo "touch $(shell pwd)/files/.gitkeep" ; \
+		echo "git add $(shell pwd)/files" ; \
+		echo "error 191112-02" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! -f "$(shell pwd)/files/install.$(SW_NAME)-$(BOARD_NAME).md" ] ; then \
+		ls -lh "$(shell pwd)/files/install.$(SW_NAME)-$(BOARD_NAME).md" ;  \
+		echo "the $(SW_NAME) installation procedure is missing in the files/ folder. This folder should contain a file named install.$(SW_NAME)-$(BOARD_NAME).md describing. This file is needed by target package." ; \
+		echo "error 191116-01" ; \
 		exit 1 ; \
 	fi ;
 	@if [ ! -L "board.mk" ] ; then \
@@ -89,24 +104,25 @@ check:
 		exit 1 ; \
 	fi ;
 	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '201*' ) ; do \
-		if [ ! -L "$$version/Makefile" ] ; then \
-			echo "Makefile in $(shell pwd)/$$version is missing. It should be a symlink to $(buildsystem)/u-boot-version.makefile" ; \
-			echo "You can fix with the following shell commands :" ; \
-			echo "ln -s ../$(buildsystem)/u-boot-version.makefile $$version/Makefile" ; \
-			echo "git add $$version/Makefile" ; \
-			echo "exit 191115-07" ; \
-			exit 1 ; \
-		fi ; \
-		s=`readlink $$version/Makefile` ; \
-		if [ !  "$$s" = "../$(buildsystem)/u-boot-version.makefile" ] ; then \
-			echo "Makefile symlink in $$version must link to $(buildsystem)/u-boot-version.makefile" ; \
-			echo "You can fix with the following shell commands :" ; \
-			echo "git rm -f $$version/Makefile || rm -f $$version/Makefile" ; \
-			echo "ln -s ../$(buildsystem)/u-boot-version.makefile $$version/Makefile" ; \
-			echo "git add $$version/Makefile" ; \
-			echo "exit 191115-09" ; \
-			exit 1 ; \
-		fi ; \
+         echo "checking version $$version subfolder" ; \
+         if [ ! -L "$$version/Makefile" ] ; then \
+            echo "Makefile in $(shell pwd)/$$version is missing. It should be a symlink to $(buildsystem)/u-boot-version.makefile" ; \
+            echo "You can fix with the following shell commands :" ; \
+            echo "ln -s ../$(buildsystem)/u-boot-version.makefile $$version/Makefile" ; \
+            echo "git add $$version/Makefile" ; \
+            echo "exit 191115-07" ; \
+            exit 1 ; \
+           fi ; \
+           s=`readlink $$version/Makefile` ; \
+           if [ !  "$$s" = "../$(buildsystem)/u-boot-version.makefile" ] ; then \
+               echo "Makefile symlink in $$version must link to $(buildsystem)/u-boot-version.makefile" ; \
+               echo "You can fix with the following shell commands :" ; \
+               echo "git rm -f $$version/Makefile || rm -f $$version/Makefile" ; \
+               echo "ln -s ../$(buildsystem)/u-boot-version.makefile $$version/Makefile" ; \
+               echo "git add $$version/Makefile" ; \
+               echo "exit 191115-09" ; \
+               exit 1 ; \
+            fi ; \
 	done ; 
 	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '201*' ) ; do \
 		$(MAKE) -C $$version check || exit 1 ; \

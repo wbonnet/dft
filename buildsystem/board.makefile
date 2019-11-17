@@ -61,12 +61,21 @@ check :
 		exit 1 ; \
 	fi ;
 	@if [ ! -d "$(shell pwd)/kernel/defconfig" ] ; then \
-		echo "defconfig directory is missing in $(shell pwd). It is used to store kernel configuration files. It should at leasty contains a hidden empty file .gitkeep until first kernel version is added" ; \
+		echo "defconfig directory is missing in $(shell pwd)/kernel. It is used to store kernel configuration files. It should at least contain a hidden empty file .gitkeep until first kernel version is added for $(BOARD_NAME)" ; \
 		echo "You can fix with the following commands : " ; \
 		echo "mkdir -p $(shell pwd)/kernel/defconfig" ; \
 		echo "touch $(shell pwd)/kernel/defconfig/.gitkeep" ; \
 		echo "git add $(shell pwd)/kernel/defconfig" ; \
 		echo "error 191114-03" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! -d "$(shell pwd)/u-boot/files" ] ; then \
+		echo "files directory is missing in $(shell pwd)/u-boot. It is used to store u-boot installation procedures. It should at least contain a hidden empty file .gitkeep until first uboot version is added for $(BOARD_NAME)" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "mkdir -p $(shell pwd)/u-boot/files" ; \
+		echo "touch $(shell pwd)/u-boot/files/.gitkeep" ; \
+		echo "git add $(shell pwd)/u-boot/files" ; \
+		echo "error 191117-01" ; \
 		exit 1 ; \
 	fi ;
 	@if [ ! -d "$(shell pwd)/u-boot" ] ; then \
@@ -78,27 +87,7 @@ check :
 		echo "error 191114-02" ; \
 		exit 1 ; \
 	fi ;
-	@if [ ! -d "$(shell pwd)/files" ] ; then \
-		echo "files directory is missing in $(shell pwd). It should contains the markdown file install.$(SW_NAME).$(BOARD_NAME).md needed by target package." ; \
-		echo "You can fix with the following commands : " ; \
-		echo "mkdir -p $(shell pwd)/files" ; \
-		echo "touch $(shell pwd)/files/.gitkeep" ; \
-		echo "ln -s ../../files/install.$(SW_NAME).$(BOARD_NAME).md $(shell pwd)/files/" ; \
-		echo "git add $(shell pwd)/files" ; \
-		echo "error 191112-02" ; \
-		exit 1 ; \
-	fi ;
-	@if [ ! -e "$(shell readlink files/install.$(SW_NAME).$(BOARD_NAME).md)" ] ; then \
-		echo "the target of installation procedure in files is missing.  It should link to the markdown file install.$(SW_NAME).$(BOARD_NAME).md needed by target package." ; \
-		echo "You can fix with the following commands : " ; \
-		echo "git rm -f $(shell pwd)/files/install.$(SW_NAME).$(BOARD_NAME).md" ; \
-		echo "ln -s ../../files/install.$(SW_NAME).$(BOARD_NAME).md $(shell pwd)/files/" ; \
-		echo "mkdir -p $(shell pwd)/files" ; \
-		echo "git add $(shell pwd)/files/$(SW_NAME).$(BOARD_NAME).md" ; \
-		echo "error 191116-01" ; \
-		exit 1 ; \
-	fi ;
-	if [ ! "$(shell readlink u-boot/Makefile)" = "$(buildsystem)/u-boot.makefile" ] ; then \
+	@if [ ! "$(shell readlink u-boot/Makefile)" = "$(buildsystem)/u-boot.makefile" ] ; then \
 		echo "target of symlink Makefile should be $(buildsystem)/u-boot.makefile in directory $(shell pwd)/u-boot" ; \
 		echo "You can fix with the following commands : " ; \
 		echo "git rm -f $(shell pwd)/u-boot/Makefile" ; \

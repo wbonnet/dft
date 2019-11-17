@@ -29,7 +29,6 @@ buildsystem := ../../../../../buildsystem
 include ../board.mk
 include $(buildsystem)/inc/linux-kernel.mk
 include $(buildsystem)/dft.mk
-$(warning "review in progress linux-kernel-version.makefile")
 
 # Defines the kernel version
 SW_VERSION      = $(notdir $(patsubst %/,%,$(shell pwd)))
@@ -57,7 +56,7 @@ include buildsystem/inc/linux-kernel.mk
 
 # No need to recurse check target at version level
 check :
-	@echo "Checking $(SW_NAME) kernel package definition version $(SW_VERSION) for $(BOARD_NAME)"
+	@echo "Checking definition of $(SW_NAME) kernel package version $(SW_VERSION) for $(BOARD_NAME)"
 	@if [ ! -f "../board.mk" ] ; then \
 		echo "file board.mk is missing in directory $(shell pwd)/.." ; \
 		false ; \

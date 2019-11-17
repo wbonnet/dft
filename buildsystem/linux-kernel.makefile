@@ -84,7 +84,7 @@ check :
 		exit 1 ; \
 	fi ;
 	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*' ) ; do \
-		echo "checking subfolder for version $$version" ; \
+		echo "checking version $$version subfolder" ; \
 		if [ "$$version" = "./defconfig" ] ; then \
 			continue ; \
 		fi ; \

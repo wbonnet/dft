@@ -60,7 +60,7 @@ help:
 	@echo 'check : Verify the availability of required items (files, symlinks, directories) and report missing.'
 
 check:
-	@echo "Checking u-boot version $(SW_VERSION) package definition for $(BOARD_NAME)" 
+	@echo "Checking definition of u-boot version $(SW_VERSION) package for $(BOARD_NAME)" 
 	@if [ ! -f "../board.mk" ] ; then \
 		echo "file board.mk is missing in directory $(shell pwd)/.." ; \
 		echo "error 191115-12" ; \
