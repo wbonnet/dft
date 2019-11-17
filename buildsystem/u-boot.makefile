@@ -21,7 +21,7 @@
 
 # Defines variables specific to u-boot
 SW_NAME       = u-boot
-SW_VERSION    = SW_VERSION_is_only_defind_in_version_subdir
+SW_VERSION    = SW_VERSION_undefind_at_uboot_level
 
 $(info "D3BUG u-boot.makefile")
 buildsystem := ../../../../buildsystem

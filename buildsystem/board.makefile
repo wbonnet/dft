@@ -23,11 +23,10 @@ $(info "D3BUG board.makefile")
 buildsystem := ../../../../buildsystem
 include $(buildsystem)/dft.mk
 include board.mk
-$(warning "review in progress board.makefile")
 
 # Do not recurse the following subdirs
-MAKE_FILTERS  = Makefile README.md
-SW_NAME      = SW_NAME_is_not_defined_at_board_level
+MAKE_FILTERS = Makefile README.md
+SW_NAME      = SW_NAME_undefined_at_board_level
 
 # ------------------------------------------------------------------------------
 #
@@ -105,6 +104,40 @@ check :
 		echo "ln -s $(buildsystem)/linux-kernel.makefile $(shell pwd)/kernel/Makefile" ; \
 		echo "git add $(shell pwd)/kernel/Makefile" ; \
 		echo "error 191114-02" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! -L "kernel/board.mk" ] ; then \
+		echo "board.mk symlink to ../board.mk is missing in directory $(shell pwd)/kernel" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "ln -s ../board.mk kernel/board.mk" ; \
+		echo "git add kernel/board.mk" ; \
+		echo "error 1911118-01" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! "$(shell readlink kernel/board.mk)" = "../board.mk" ] ; then \
+		echo "target of symlink board.mk should be ../board.mk in directory $(shell pwd)/kernel" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "git rm -f $(shell pwd)/kernel/board.mk" ; \
+		echo "ln -s ../board.mk $(shell pwd)/kernel/board.mk" ; \
+		echo "git add $(shell pwd)/kernel/board.mk" ; \
+		echo "error 1911118-02" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! -L "u-boot/board.mk" ] ; then \
+		echo "board.mk symlink to ../board.mk is missing in directory $(shell pwd)/u-boot" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "ln -s ../board.mk u-boot/board.mk" ; \
+		echo "git add u-boot/board.mk" ; \
+		echo "error 1911118-03" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! "$(shell readlink u-boot/board.mk)" = "../board.mk" ] ; then \
+		echo "target of symlink board.mk should be ../board.mk in directory $(shell pwd)/u-boot" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "git rm -f $(shell pwd)/u-boot/board.mk" ; \
+		echo "ln -s ../board.mk $(shell pwd)/u-boot/board.mk" ; \
+		echo "git add $(shell pwd)/u-boot/board.mk" ; \
+		echo "error 1911118-04" ; \
 		exit 1 ; \
 	fi ;
 

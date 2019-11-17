@@ -25,6 +25,7 @@ $(warning "review in progress category.makefile")
 # Do not recurse the following subdirs
 MAKE_FILTERS  = Makefile README.md .
 CATEGORIES    = laptop desktop set-top-box single-board-computer
+SW_NAME       = SW_NAME_undefined_at_category_level
 
 # ------------------------------------------------------------------------------
 #

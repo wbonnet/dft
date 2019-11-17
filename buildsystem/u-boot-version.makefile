@@ -20,7 +20,8 @@
 #
 
 # Defines variables specific to u-boot
-SW_NAME   = u-boot
+SW_NAME     = u-boot
+SW_VERSION  = $(notdir $(patsubst %/,%,$(shell pwd)))
 
 $(info "D3BUG u-boot-version.makefile")
 buildsystem := ../../../../../buildsystem
