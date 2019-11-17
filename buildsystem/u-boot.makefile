@@ -26,7 +26,7 @@ SW_VERSION    = SW_VERSION_is_not_defind_at_u-boot_level_but_into_a_version_subd
 $(info "D3BUG u-boot.makefile")
 buildsystem := ../../../../buildsystem
 include board.mk
-include $(buildsystem)/lib/dft.u-boot.mk
+include $(buildsystem)/inc/u-boot.mk
 $(warning "review in progress u-boot.makefile")
 
 # Do not recurse the following subdirs

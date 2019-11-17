@@ -27,7 +27,7 @@ SW_VERSION = SW_VERSION_is_not_defined_at_kernel_level_but_into_version_subdir
 $(info "D3BUG linux-kernel.makefile")
 buildsystem := ../../../../buildsystem
 include board.mk
-include $(buildsystem)/lib/dft.linux-kernel.mk
+include $(buildsystem)/inc/linux-kernel.mk
 include $(buildsystem)/dft.mk
 $(warning "review in progress linux-kernel.makefile")
 

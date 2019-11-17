@@ -24,7 +24,7 @@ SW_NAME   = u-boot
 
 $(info "D3BUG u-boot-version.makefile")
 buildsystem := ../../../../../buildsystem
-include $(buildsystem)/lib/dft.u-boot.mk
+include $(buildsystem)/inc/dft.u-boot.mk
 include $(buildsystem)/dft.mk
 
 # Include board specific definitions  from board level

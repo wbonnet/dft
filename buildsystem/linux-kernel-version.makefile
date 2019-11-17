@@ -27,7 +27,7 @@ SW_VERSION  = $(notdir $(patsubst %/,%,$(shell pwd)))
 $(info "D3BUG linux-kernel-version.makefile")
 buildsystem := ../../../../../buildsystem
 include ../board.mk
-include $(buildsystem)/lib/dft.linux-kernel.mk
+include $(buildsystem)/inc/linux-kernel.mk
 include $(buildsystem)/dft.mk
 $(warning "review in progress linux-kernel-version.makefile")
 
@@ -52,7 +52,8 @@ include ../board.mk
 # of all existing boards.
 
 # Include build system
-include buildsystem/lib/dft.linux-kernel.mk
+$(warning " FIXME hardi coded path")
+include buildsystem/inc/linux-kernel.mk
 
 # No need to recurse check target at version level
 check :
