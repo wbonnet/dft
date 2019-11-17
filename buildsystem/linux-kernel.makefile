@@ -20,7 +20,7 @@
 #
 
 # Defines variables specific to Linux kernel
-SRC_NAME   = linux
+SW_NAME    = linux
 SW_VERSION = SW_VERSION_is_not_defined_at_kernel_level_but_into_version_subdir
 
 

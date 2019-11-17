@@ -36,7 +36,7 @@ $(info included dft.lib.mk)
 ifdef DFT_LIB
 $(error dft.lib.mk has already been included)
 else
-define DFT__LIB
+define DFT_LIB
 endef
 # the matching endif teminates this file
 

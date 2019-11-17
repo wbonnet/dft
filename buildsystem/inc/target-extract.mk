@@ -32,9 +32,9 @@
 #
 # Protection against multiple includes
 #
-$(info included dft.target-extract.mk)
+$(info included target-extract.mk)
 ifdef DFT_BUILDSYSTEM_TARGET_EXTRACT
-$(error dft.target-extract.mk has already been included)
+$(error target-extract.mk has already been included)
 else
 define DFT_BUILDSYSTEM_TARGET_EXTRACT
 endef
@@ -51,7 +51,7 @@ ifeq ($(DOWNLOAD_TOOL), wget)
 EXTRACT_TARGETS ?=  $(addprefix extract-archive-,$(SRC_DIST_FILES))
 else
 ifeq ($(DOWNLOAD_TOOL), git)
-EXTRACT_TARGETS ?=  $(addprefix extract-git-,$(SRC_NAME))
+EXTRACT_TARGETS ?=  $(addprefix extract-git-,$(SW_NAME))
 else
 define error_msg
 Unknown DOWNLOAD_TOOL : $(DOWNLOAD_TOOL)
@@ -129,7 +129,7 @@ extract-git-% :
 		true ; \
 	else \
 	  echo "        moving git data to $(EXTRACT)/$*" ; \
-		mv $(GIT_SRC_DIR)/$(SRC_GIT_REPO) $(SRC_DIR)/$(SRC_NAME) ; \
+		mv $(GIT_SRC_DIR)/$(SRC_GIT_REPO) $(SRC_DIR)/$(SW_NAME) ; \
 	fi ;
 	$(TARGET_DONE)
 

@@ -53,11 +53,11 @@ SRC_GIT_REPO        ?= "SRC_GIT_REPO Not Used -- linux-$(SRC_GIT_BRANCH)"
 SRC_GIT_REPO_EXT    ?= "SRC_GIT_REPO_EXT Not Used -- .git"
 SRC_FILE_VERSION    ?= $(shell echo $(SW_VERSION) | head -c 1)
 SRC_SITE             = SRC_SITE_nolonger-used-for-uboot
-SRC_DIST_URL         = https://github.com/$(SRC_NAME)/$(SRC_NAME)/archive
+SRC_DIST_URL         = https://github.com/$(SW_NAME)/$(SW_NAME)/archive
 
 # Defines the files to retrieve
 SRC_DIST_FILES      ?= v$(SW_VERSION).tar.gz
-SRC_SIGN_FILES      ?= $(SRC_NAME)-$(SW_VERSION).sign
+SRC_SIGN_FILES      ?= $(SW_NAME)-$(SW_VERSION).sign
 
 # ------------------------------------------------------------------------------
 #
@@ -67,7 +67,7 @@ SRC_SIGN_FILES      ?= $(SRC_NAME)-$(SW_VERSION).sign
 
 # Defines the git repository to use
 DOWNLOAD_TOOL    = wget
-SRC_NAME         = u-boot
+SW_NAME         = u-boot
 BUILD_ARGS       =
 
 # ------------------------------------------------------------------------------

@@ -56,8 +56,8 @@ SRC_DIST_URL        ?= $(SRC_SITE)/$(SRC_BRANCH)
 SRC_BRANCH          ?= v$(shell echo $(SRC_FILE_VERSION) | head -c 1).x
 
 # Defines the files to retrieve
-SRC_DIST_FILES      ?= $(SRC_NAME)-$(SW_VERSION).tar.xz
-SRC_SIGN_FILES      ?= $(SRC_NAME)-$(SW_VERSION).tar.xz.sign
+SRC_DIST_FILES      ?= $(SW_NAME)-$(SW_VERSION).tar.xz
+SRC_SIGN_FILES      ?= $(SW_NAME)-$(SW_VERSION).tar.xz.sign
 
 # ------------------------------------------------------------------------------
 #
@@ -66,7 +66,7 @@ SRC_SIGN_FILES      ?= $(SRC_NAME)-$(SW_VERSION).tar.xz.sign
 
 # Defines the git repository to use
 DOWNLOAD_TOOL    = wget
-SRC_NAME         = linux
+SW_NAME         = linux
 BUILD_ARGS       =
 
 # ------------------------------------------------------------------------------

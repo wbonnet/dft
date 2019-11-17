@@ -20,7 +20,7 @@
 #
 
 # Defines variables specific to u-boot
-SRC_NAME   = u-boot
+SW_NAME   = u-boot
 
 $(info "D3BUG u-boot-version.makefile")
 buildsystem := ../../../../../buildsystem
@@ -67,10 +67,10 @@ check:
 		exit 1 ; \
 	fi ;
 	@if [ ! -d "$(shell pwd)/files" ] ; then \
-		echo "files directory is missing in $(shell pwd). It should contains the markdown file install.$(SRC_NAME).$(BOARD_NAME).md needed by target package." ; \
+		echo "files directory is missing in $(shell pwd). It should contains the markdown file install.$(SW_NAME).$(BOARD_NAME).md needed by target package." ; \
 		echo "You can fix with the following commands : " ; \
 		echo "mkdir -p $(shell pwd)/files" ; \
-		echo "ln -s ../../files/install.$(SRC_NAME).$(BOARD_NAME).md $(shell pwd)/files/" ; \
+		echo "ln -s ../../files/install.$(SW_NAME).$(BOARD_NAME).md $(shell pwd)/files/" ; \
 		echo "error 191115-11" ; \
 		exit 1 ; \
 	fi ;

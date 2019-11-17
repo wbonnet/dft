@@ -32,9 +32,9 @@
 #
 # Protection against multiple includes
 #
-$(info included dft.target-fetch.mk)
+$(info included target-fetch.mk)
 ifdef DFT_BUILDSYSTEM_TARGET_FETCH
-$(error dft.target-fetch.mk has already been included)
+$(error target-fetch.mk has already been included)
 else
 define DFT_BUILDSYSTEM_TARGET_FETCH
 endef
@@ -55,7 +55,7 @@ ifeq ($(DOWNLOAD_TOOL), wget)
 FETCH_TARGETS ?=  $(addprefix $(DOWNLOAD_DIR)/,$(SRC_CHECKSUM_FILES)) $(addprefix $(DOWNLOAD_DIR)/,$(SRC_DIST_FILES))
 else
 ifeq ($(DOWNLOAD_TOOL), git)
-FETCH_TARGETS ?=  $(addprefix $(GIT_DIR)/,$(SRC_NAME))
+FETCH_TARGETS ?=  $(addprefix $(GIT_DIR)/,$(SW_NAME))
 else
 define error_msg
 Unknown DOWNLOAD_TOOL : $(DOWNLOAD_TOOL)

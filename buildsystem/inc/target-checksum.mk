@@ -32,9 +32,9 @@
 #
 # Protection against multiple includes
 #
-$(info included dft.target-checksum.mk)
+$(info included target-checksum.mk)
 ifdef DFT_BUILDSYSTEM_TARGET_CHECKSUM
-$(error dft.target-checksum.mk has already been included)
+$(error target-checksum.mk has already been included)
 else
 define DFT_BUILDSYSTEM_TARGET_CHECKSUM
 endef

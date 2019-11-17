@@ -32,9 +32,9 @@
 #
 # Protection against multiple includes
 #
-$(info included dft.target-build.mk)
+$(info included target-build.mk)
 ifdef DFT_BUILDSYSTEM_TARGET_BUILD
-$(error dft.target-build.mk has already been included)
+$(error target-build.mk has already been included)
 else
 define DFT_BUILDSYSTEM_TARGET_BUILD
 endef
@@ -80,7 +80,7 @@ rebuild : configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 	@if test -f $(COOKIE_DIR)/build-$*/Makefile ; then \
 		true ; \
 	else \
-		$(BUILD_ENV) $(MAKE) -C $(abspath $(SRC_DIR)/$(SRC_NAME)-$(SW_VERSION)) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) \
+		$(BUILD_ENV) $(MAKE) -C $(abspath $(SRC_DIR)/$(SW_NAME)-$(SW_VERSION)) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) \
 		                                  $(BUILD_ARGS) ; \
 	fi ;
 	$(TARGET_DONE)

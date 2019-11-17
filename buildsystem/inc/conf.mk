@@ -32,9 +32,9 @@
 # 
 # Protection against multiple includes
 #
-$(info included dft.internals-conf.mk)
+$(info included conf.mk)
 ifdef DFT_INTERNALS_CONF
-$(error dft.internals-conf.mk has already been included)
+$(error conf.mk has already been included)
 else
 define DFT_INTERNALS_CONF
 endef
@@ -49,12 +49,11 @@ endef
 
 BUILDER_HOSTNAME                 := $(shell uname -n)
 BUILDER_ARCH                     := $(shell uname -m | tr '[:upper:]' '[:lower:]')
-#BUILDER_ARCH                     := $(shell uname -s | tr '[:upper:]' '[:lower:]')-$(shell uname -m | tr '[:upper:]' '[:lower:]')
 BUILDER_OPERATING_SYSTEM         := $(shell uname -s | tr '[:upper:]' '[:lower:]')
 BUILDER_OPERATING_SYSTEM_FLAVOR  := $(word 3, $(shell lsb_release -i | tr '[:lower:]' '[:upper:]'))
 BUILDER_OPERATING_SYSTEM_VERSION := $(word 2, $(shell lsb_release -c | tr '[:lower:]' '[:upper:]'))
 
-HOST_ARCH    ?= $(shell uname -m)
+HOST_ARCH ?= $(shell uname -m)
 
 # ------------------------------------------------------------------------------
 #
@@ -101,7 +100,6 @@ PATCH_DIR           ?= $(BASE_DIR)/patches
 
 # Defines the working dir subfolders (all are volatile)
 SRC_DIR             ?= $(WORK_DIR)/sources
-# CT ca mais ca empile les subdirSRC_DIR             ?= $(WORK_DIR)/sources/$(SRC_NAME)-$(SW_VERSION)
 DOWNLOAD_DIR        ?= $(WORK_DIR)/download
 GIT_DIR             ?= $(WORK_DIR)/git
 PARTIAL_DIR         ?= $(DOWNLOAD_DIR)/partial
@@ -164,9 +162,9 @@ BUILD_ARGS    ?= $(ARCH_COMMON_BUILD_ARGS) $(ARCH_$(shell echo $(BOARD_ARCH) | t
 
 # Defines default installation arguments, depending on the board architectures
 ARCH_COMMON_INSTALL_ARGS ?=
-ARCH_ARMV7L_INSTALL_ARGS  ?= zinstall
-ARCH_X86_64_INSTALL_ARGS  ?= zinstall
-ARCH_I386_INSTALL_ARGS  ?= zinstall
+ARCH_ARMV7L_INSTALL_ARGS ?= zinstall
+ARCH_X86_64_INSTALL_ARGS ?= zinstall
+ARCH_I386_INSTALL_ARGS   ?= zinstall
 
 INSTALL_ARGS    ?= $(ARCH_COMMON_INSTALL_ARGS) $(ARCH_$(shell echo $(BOARD_ARCH) | tr a-z A-Z)_INSTALL_ARGS)
 

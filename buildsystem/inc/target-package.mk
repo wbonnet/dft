@@ -32,9 +32,9 @@
 #
 # Protection against multiple includes
 #
-$(info included dft.target-package.mk)
+$(info included target-package.mk)
 ifdef DFT_BUILDSYSTEM_TARGET_PACKAGE
-$(error dft.target-package.mk has already been included)
+$(error target-package.mk has already been included)
 else
 define DFT_BUILDSYSTEM_TARGET_PACKAGE
 endef
@@ -60,20 +60,20 @@ do-package :
 	else \
 		echo "        running package in $(PACKAGE_DIR)"  ; \
 		cd $(PACKAGE_DIR) ; \
-		if [ "$(SRC_NAME)" = "linux" ] ; then \
-			mkdir -p $(SRC_NAME)-kernel-$(BOARD_NAME) ; \
-			cd $(SRC_NAME)-kernel-$(BOARD_NAME) ; \
+		if [ "$(SW_NAME)" = "linux" ] ; then \
+			mkdir -p $(SW_NAME)-kernel-$(BOARD_NAME) ; \
+			cd $(SW_NAME)-kernel-$(BOARD_NAME) ; \
 		else \
-			mkdir -p $(SRC_NAME)-$(BOARD_NAME) ; \
-			cd $(SRC_NAME)-$(BOARD_NAME) ; \
+			mkdir -p $(SW_NAME)-$(BOARD_NAME) ; \
+			cd $(SW_NAME)-$(BOARD_NAME) ; \
 		fi ; \
 		[ -f debian ] && rm -f debian ; \
 		cp -fr $(BASE_DIR)/debian debian ; \
 		cp -fr $(INSTALL_DIR)/* . ; \
-		if [ "$(SRC_NAME)" = "linux" ] ; then \
-			tar cvfz ../$(SRC_NAME)-kernel-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
+		if [ "$(SW_NAME)" = "linux" ] ; then \
+			tar cvfz ../$(SW_NAME)-kernel-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
 		else \
-			tar cvfz ../$(SRC_NAME)-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
+			tar cvfz ../$(SW_NAME)-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
 		fi ; \
 		$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ; \
 	fi ; \

@@ -20,7 +20,7 @@
 #
 
 # Defines variables specific to Linux kernel
-SRC_NAME    = linux
+SW_NAME     = linux
 SW_VERSION  = $(notdir $(patsubst %/,%,$(shell pwd)))
 
 
@@ -56,7 +56,7 @@ include buildsystem/lib/dft.linux-kernel.mk
 
 # No need to recurse check target at version level
 check :
-	@echo "Checking $(SRC_NAME) kernel package definition version $(SW_VERSION) for $(BOARD_NAME)"
+	@echo "Checking $(SW_NAME) kernel package definition version $(SW_VERSION) for $(BOARD_NAME)"
 	@if [ ! -f "../board.mk" ] ; then \
 		echo "file board.mk is missing in directory $(shell pwd)/.." ; \
 		false ; \

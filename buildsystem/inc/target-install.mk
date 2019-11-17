@@ -32,9 +32,9 @@
 #
 # Protection against multiple includes
 #
-$(info included dft.target-install.mk)
+$(info included target-install.mk)
 ifdef DFT_BUILDSYSTEM_TARGET_INSTALL
-$(error dft.target-install.mk has already been included)
+$(error target-install.mk has already been included)
 else
 define DFT_BUILDSYSTEM_TARGET_INSTALL
 endef
@@ -76,8 +76,8 @@ do-install :
 	@if test -f $(COOKIE_DIR)/do-install ; then \
 		true ; \
 	else \
-		cd $(SRC_DIR)/$(SRC_NAME)-$(SW_VERSION) ; \
-		if [ "$(SRC_NAME)" = "u-boot" ] ; then \
+		cd $(SRC_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
+		if [ "$(SW_NAME)" = "u-boot" ] ; then \
 			mkdir -p $(INSTALL_DIR)/u-boot/dtb ; \
 			mkdir -p $(INSTALL_DIR)/doc ; \
 			cp -frH $(FILE_DIR)/* $(INSTALL_DIR)/doc ; \
@@ -87,7 +87,7 @@ do-install :
 			cd $(INSTALL_DIR)/u-boot/ ; \
 			ln -sf u-boot-$(BOARD_NAME)-$(SW_VERSION) u-boot-$(BOARD_NAME); \
 		else \
-			if [ "$(SRC_NAME)" = "linux" ] ; then \
+			if [ "$(SW_NAME)" = "linux" ] ; then \
 				mkdir -p $(INSTALL_DIR)/boot/dtb ; \
 				$(BUILD_ENV) $(MAKE) INSTALL_PATH=$(INSTALL_DIR)/boot $(INSTALL_ARGS) ; \
 				$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(INSTALL_DIR)/ INSTALL_MOD_STRIP=1 modules_install ; \

@@ -27,7 +27,7 @@ $(warning "review in progress board.makefile")
 
 # Do not recurse the following subdirs
 MAKE_FILTERS  = Makefile README.md
-SRC_NAME      = SRC_NAME_is_not_defined_at_board_level
+SW_NAME      = SW_NAME_is_not_defined_at_board_level
 
 # ------------------------------------------------------------------------------
 #
@@ -79,22 +79,22 @@ check :
 		exit 1 ; \
 	fi ;
 	@if [ ! -d "$(shell pwd)/files" ] ; then \
-		echo "files directory is missing in $(shell pwd). It should contains the markdown file install.$(SRC_NAME).$(BOARD_NAME).md needed by target package." ; \
+		echo "files directory is missing in $(shell pwd). It should contains the markdown file install.$(SW_NAME).$(BOARD_NAME).md needed by target package." ; \
 		echo "You can fix with the following commands : " ; \
 		echo "mkdir -p $(shell pwd)/files" ; \
 		echo "touch $(shell pwd)/files/.gitkeep" ; \
-		echo "ln -s ../../files/install.$(SRC_NAME).$(BOARD_NAME).md $(shell pwd)/files/" ; \
+		echo "ln -s ../../files/install.$(SW_NAME).$(BOARD_NAME).md $(shell pwd)/files/" ; \
 		echo "git add $(shell pwd)/files" ; \
 		echo "error 191112-02" ; \
 		exit 1 ; \
 	fi ;
-	@if [ ! -e "$(shell readlink files/install.$(SRC_NAME).$(BOARD_NAME).md)" ] ; then \
-		echo "the target of installation procedure in files is missing.  It should link to the markdown file install.$(SRC_NAME).$(BOARD_NAME).md needed by target package." ; \
+	@if [ ! -e "$(shell readlink files/install.$(SW_NAME).$(BOARD_NAME).md)" ] ; then \
+		echo "the target of installation procedure in files is missing.  It should link to the markdown file install.$(SW_NAME).$(BOARD_NAME).md needed by target package." ; \
 		echo "You can fix with the following commands : " ; \
-		echo "git rm -f $(shell pwd)/files/install.$(SRC_NAME).$(BOARD_NAME).md" ; \
-		echo "ln -s ../../files/install.$(SRC_NAME).$(BOARD_NAME).md $(shell pwd)/files/" ; \
+		echo "git rm -f $(shell pwd)/files/install.$(SW_NAME).$(BOARD_NAME).md" ; \
+		echo "ln -s ../../files/install.$(SW_NAME).$(BOARD_NAME).md $(shell pwd)/files/" ; \
 		echo "mkdir -p $(shell pwd)/files" ; \
-		echo "git add $(shell pwd)/files/$(SRC_NAME).$(BOARD_NAME).md" ; \
+		echo "git add $(shell pwd)/files/$(SW_NAME).$(BOARD_NAME).md" ; \
 		echo "error 191116-01" ; \
 		exit 1 ; \
 	fi ;

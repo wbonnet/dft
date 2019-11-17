@@ -225,9 +225,8 @@ mrproper:
 show-configuration : show-config
 show-config :
 	@echo "Sources download with $(DOWNLOAD_TOOL) and parameters" ; \
-	echo "  SRC_NAME                          $(SRC_NAME)" ; \
+	echo "  SW_NAME                           $(SW_NAME)" ; \
 	echo "  SW_VERSION                        $(SW_VERSION)" ; \
-# la c bon	@if [ "$(DOWNLOAD_TOOL)" = "wget" ]; then echo "ya wget" ; else echo "ya pas wget mais $(DOWNLOAD_TOOL)" ; fi
 	@if [ "$(DOWNLOAD_TOOL)" = "wget" ]; then \
 	echo "  SRC_DIST_FILES                    $(SRC_DIST_FILES)" ; \
 	echo "  SRC_SIGN_FILES                    $(SRC_SIGN_FILES)" ; \
@@ -301,8 +300,8 @@ setup : $(COOKIE_DIR)
 # Mandatory defines that have to be defined at least in the main Makefile
 #
 
-ifndef SRC_NAME
-$(error SRC_NAME is not set)
+ifndef SW_NAME
+$(error SW_NAME is not set)
 endif
 
 ifndef DOWNLOAD_TOOL

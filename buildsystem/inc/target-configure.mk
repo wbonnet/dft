@@ -32,9 +32,9 @@
 #
 # Protection against multiple includes
 #
-$(info included dft.target-configure.mk)
+$(info included target-configure.mk)
 ifdef DFT_BUILDSYSTEM_TARGET_CONFIGURE
-$(error dft.target-configure.mk has already been included)
+$(error target-configure.mk has already been included)
 else
 define DFT_BUILDSYSTEM_TARGET_CONFIGURE
 endef
@@ -87,17 +87,17 @@ do-configure :
 	@if test -f $(COOKIE_DIR)/$* ; then \
 		true ; \
 	else \
-		if [ "$(SRC_NAME)" = "u-boot" ] ; then \
+		if [ "$(SW_NAME)" = "u-boot" ] ; then \
 			echo "    running make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) in $(SRC_DIR)" ; \
-			cd "$(SRC_DIR)/$(SRC_NAME)-$(SW_VERSION)" && make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) ; \
+			cd "$(SRC_DIR)/$(SW_NAME)-$(SW_VERSION)" && make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) ; \
 		else \
-			if [ "$(SRC_NAME)" = "linux" ] ; then \
-				cd "$(SRC_DIR)/$(SRC_NAME)-$(SW_VERSION)" ; \
+			if [ "$(SW_NAME)" = "linux" ] ; then \
+				cd "$(SRC_DIR)/$(SW_NAME)-$(SW_VERSION)" ; \
 				cp "$(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config" .config ; \
 				make silentoldconfig ; \
 				cp .config "$(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ; \
 			else \
-				echo "  UNKNOWN SRC_NAME $(SRC_NAME)" ; \
+				echo "  UNKNOWN SW_NAME $(SW_NAME)" ; \
 			fi ; \
 		fi ; \
 	fi ;
