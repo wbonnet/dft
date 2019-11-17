@@ -55,6 +55,16 @@ check :
 			echo "exit 825" ; \
 			exit 1 ; \
 		fi ; \
+		if [ ! -e "$$board/board.mk" ] ; then \
+			echo "Board description file board.mk is missing in directory $(shell pwd)/$$board" ; \
+			echo "You can fix with the following shell commands :" ; \
+			echo "git rm -f $$board/Makefile" ; \
+			echo "cp  $(buildsystem)/board.imk.template $$board/board.mk" ; \
+			echo "git add $$board/board.mk" ; \
+			echo "Warning !!! : Don't forget to edit this file and replace 'unkown' values with board specific values" ; \
+			echo "exit 191117-01" ; \
+			exit 1 ; \
+		fi ; \
 	done ; \
 	for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
 		echo "tring folder $$folder" ; \
