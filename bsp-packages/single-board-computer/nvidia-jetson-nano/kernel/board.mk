@@ -1,1 +1,1 @@
-jetson-nano.mk
+../board.mk
