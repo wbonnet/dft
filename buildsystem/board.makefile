@@ -21,8 +21,8 @@
 
 $(info "D3BUG board.makefile")
 buildsystem := ../../../../buildsystem
-include $(buildsystem)/dft.mk
-include board.mk
+#include $(buildsystem)/dft.mk
+include ./board.mk
 
 # Do not recurse the following subdirs
 MAKE_FILTERS = Makefile README.md
@@ -34,15 +34,7 @@ SW_NAME      = SW_NAME_undefined_at_board_level
 #
 .PHONY: help check
 
-# 
-# Board level generic Makefile
-#
-
-# board level directory must contain board.mk file, kernel folder and u-boot folder
-check :
-# Mandatory folders content check (otherwise recusive targets may not work)
-
-# Board level directory must contain board.mk file, kernel folder and u-boot folder
+check:
 	@echo "Checking board definition for $(BOARD_NAME)" ;
 	@if [ ! -f "board.mk" ] ; then \
 		pwd ; \
@@ -109,6 +101,9 @@ check :
 	@if [ ! -L "kernel/board.mk" ] ; then \
 		echo "board.mk symlink to ../board.mk is missing in directory $(shell pwd)/kernel" ; \
 		echo "You can fix with the following commands : " ; \
+		if [  -f "kernel/board.mk" ] ; then \
+			echo "git rm kernel/board.mk" ; \
+		fi ; \
 		echo "ln -s ../board.mk kernel/board.mk" ; \
 		echo "git add kernel/board.mk" ; \
 		echo "error 1911118-01" ; \
@@ -125,6 +120,9 @@ check :
 	fi ;
 	@if [ ! -L "u-boot/board.mk" ] ; then \
 		echo "board.mk symlink to ../board.mk is missing in directory $(shell pwd)/u-boot" ; \
+		if [  -f "u-boot/board.mk" ] ; then \
+			echo "git rm kernel/board.mk" ; \
+		fi ; \
 		echo "You can fix with the following commands : " ; \
 		echo "ln -s ../board.mk u-boot/board.mk" ; \
 		echo "git add u-boot/board.mk" ; \
@@ -143,11 +141,11 @@ check :
 
 # Catch all target. Call the same targets in each subfolder
 %:
-	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
                 $(MAKE) -C $$i $* || exit 1 ; \
         done
 
 
-help :
+help:
 	@echo "Supported targets are"
 	@echo 'check : Verify the availability of required items (files, symlinks, directories) and report missing.'
