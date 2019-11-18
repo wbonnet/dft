@@ -56,11 +56,13 @@ check :
 			echo "exit 825" ; \
 			exit 1 ; \
 		fi ; \
-		if [ ! -e "$$board/board.mk" ] ; then \
+		echo "ze board dans le for : $$board" ; \
+		ls -l $$board/board.mk ; \
+		if [ ! -f $$board/board.mk ] ; then \
 			echo "Board description file board.mk is missing in directory $(shell pwd)/$$board" ; \
 			echo "You can fix with the following shell commands :" ; \
 			echo "git rm -f $$board/Makefile" ; \
-			echo "cp  $(buildsystem)/board.imk.template $(shell pwd)/$$board/board.mk" ; \
+			echo "cp  $(buildsystem)/board.mk.template $(shell pwd)/$$board/board.mk" ; \
 			echo "git add $(shell pwd)/$$board/board.mk" ; \
 			echo "Warning !!! : Don't forget to edit this file and replace 'unkown' values with board specific values" ; \
 			echo "exit 191117-01" ; \
