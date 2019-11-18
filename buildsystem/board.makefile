@@ -120,10 +120,10 @@ check:
 	fi ;
 	@if [ ! -L "u-boot/board.mk" ] ; then \
 		echo "board.mk symlink to ../board.mk is missing in directory $(shell pwd)/u-boot" ; \
-		if [  -f "u-boot/board.mk" ] ; then \
-			echo "git rm kernel/board.mk" ; \
-		fi ; \
 		echo "You can fix with the following commands : " ; \
+		if [  -f "u-boot/board.mk" ] ; then \
+			echo "git rm $(shell pwd)/u-boot/board.mk" ; \
+		fi ; \
 		echo "ln -s ../board.mk $(shell pwd)/u-boot/board.mk" ; \
 		echo "git add $(shell pwd)/u-boot/board.mk" ; \
 		echo "error 1911118-03" ; \

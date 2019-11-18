@@ -27,5 +27,8 @@ BOARD_ARCH = aarch64
 USE_CONFIG_FILE        =
 UBOOT_DEFCONFIG        =unknon_defconfig
 
+# Defines the default dtb to use (symlink used by generic boot.scr)
+DEFAULT_DTB = sun50i-h5-nanopi-neo2.dtb 
+
 # Defines the list of files to copy (path is relative to build dir)
 UBOOT_BINARY_FILE      = u-boot.bin

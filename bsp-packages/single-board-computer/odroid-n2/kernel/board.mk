@@ -1,1 +1,1 @@
-odroid-n2.mk
+../board.mk
