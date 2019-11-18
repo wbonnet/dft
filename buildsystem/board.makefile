@@ -102,10 +102,10 @@ check:
 		echo "board.mk symlink to ../board.mk is missing in directory $(shell pwd)/kernel" ; \
 		echo "You can fix with the following commands : " ; \
 		if [  -f "kernel/board.mk" ] ; then \
-			echo "git rm kernel/board.mk" ; \
+			echo "git rm $(shell pwd)/kernel/board.mk" ; \
 		fi ; \
-		echo "ln -s ../board.mk kernel/board.mk" ; \
-		echo "git add kernel/board.mk" ; \
+		echo "ln -s ../board.mk $(shell pwd)/kernel/board.mk" ; \
+		echo "git add $(shell pwd)/kernel/board.mk" ; \
 		echo "error 1911118-01" ; \
 		exit 1 ; \
 	fi ;
@@ -124,8 +124,8 @@ check:
 			echo "git rm kernel/board.mk" ; \
 		fi ; \
 		echo "You can fix with the following commands : " ; \
-		echo "ln -s ../board.mk u-boot/board.mk" ; \
-		echo "git add u-boot/board.mk" ; \
+		echo "ln -s ../board.mk $(shell pwd)/u-boot/board.mk" ; \
+		echo "git add $(shell pwd)/u-boot/board.mk" ; \
 		echo "error 1911118-03" ; \
 		exit 1 ; \
 	fi ;

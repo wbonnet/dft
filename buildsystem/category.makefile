@@ -43,7 +43,7 @@ check :
 			echo "Makefile in $(shell pwd)/$$board is Missing. It should be a symlink to  $(buildsystem)/board.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
 			echo "git rm -f $$board/Makefile" ; \
-			echo "ln -s $(buildsystem)/board.makefile $$board/Makefile" ; \
+			echo "ln -s $(buildsystem)/board.makefile $(shell pwd)/$$board/Makefile" ; \
 			echo "git add $$board/Makefile" ; \
 			echo "exit 101101" ; \
 			exit 1 ; \
@@ -60,8 +60,8 @@ check :
 			echo "Board description file board.mk is missing in directory $(shell pwd)/$$board" ; \
 			echo "You can fix with the following shell commands :" ; \
 			echo "git rm -f $$board/Makefile" ; \
-			echo "cp  $(buildsystem)/board.imk.template $$board/board.mk" ; \
-			echo "git add $$board/board.mk" ; \
+			echo "cp  $(buildsystem)/board.imk.template $(shell pwd)/$$board/board.mk" ; \
+			echo "git add $(shell pwd)/$$board/board.mk" ; \
 			echo "Warning !!! : Don't forget to edit this file and replace 'unkown' values with board specific values" ; \
 			echo "exit 191117-01" ; \
 			exit 1 ; \
