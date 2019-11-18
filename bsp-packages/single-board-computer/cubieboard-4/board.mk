@@ -27,5 +27,8 @@ BOARD_ARCH = armv7l
 USE_CONFIG_FILE =
 UBOOT_DEFCONFIG = Cubieboard4_defconfig
 
+# Defines the default dtb to use (symlink used by generic boot.scr)
+DEFAULT_DTB = sun9i-a80-cubieboard4.dtb
+
 # Defines the list of files to copy (#path is relative to build dir)
 UBOOT_BINARY_FILE = u-boot-sunxi-with-spl.bin
