@@ -1,1 +1,1 @@
-nitrogen8m.mk
+../board.mk

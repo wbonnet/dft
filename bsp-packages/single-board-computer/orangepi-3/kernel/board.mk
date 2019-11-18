@@ -1,1 +1,1 @@
-orangepi-3.mk
+../board.mk
