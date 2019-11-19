@@ -31,7 +31,7 @@ include $(buildsystem)/inc/linux-kernel.mk
 include $(buildsystem)/dft.mk
 
 # Do not recurse the following subdirs
-MAKE_FILTERS  = Makefile README.md .
+MAKE_FILTERS  = defconfig Makefile README.md .
 
 # 
 # Board level birectory generic Linux kernel makefile
@@ -114,6 +114,12 @@ check :
 		$(MAKE) -C $$version check || exit 1 ; \
 		echo "make check in u-boot version $$version" ; \
 	done ;
+
+# Catch all target. Call the same targets in each subfolder
+%:
+	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+                $(MAKE) -C $$i $* || exit 1 ; \
+        done
 
 help :
 	@echo "Supported targets are"
