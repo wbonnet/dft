@@ -56,10 +56,6 @@ MAKE_FILTERS  = debian files patches
 #
 .PHONY:
 
-help:
-	@echo "Supported targets are"
-	@echo 'check : Verify the availability of required items (files, symlinks, directories) and report missing.'
-
 check:
 	@echo "Checking u-boot $(SW_VERSION) package definition for $(BOARD_NAME)" 
 	@if [ ! -f "../board.mk" ] ; then \
@@ -85,12 +81,13 @@ check:
 		echo "git add $(shell pwd)/patches" ; \
 		echo "error 191119-01" ; \
 		exit 1 ; \
+	fi ;
 	@if [ ! -d "$(shell pwd)/debian" ] ; then \
 		echo "debian directory is missing in $(shell pwd). It should contains the files needed to create the debian package for $(BOARD_NAME) u-boot." ; \
 		echo "error 191115-10" ; \
 		exit 1 ; \
 	fi ;
-	s=`readlink Makefile` ; \
+	@s=`readlink Makefile`; \
 	if [ !  "$$s" = "$(buildsystem)/u-boot-version.makefile" ] ; then \
 		echo "Makefile symlink must link to $(buildsystem)/u-boot-version.makefile" ; \
 		echo "You can fix this with the following shell commands :" ; \
@@ -100,3 +97,8 @@ check:
 		echo "exit 191119-02" ; \
 		exit 1 ; \
 	fi ; \
+
+help:
+	@echo "Supported targets are"
+	@echo 'check : Verify the availability of required items (files, symlinks, directories) and report missing.'
+
