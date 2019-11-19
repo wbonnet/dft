@@ -50,6 +50,7 @@ check:
 		echo "ln -s $(buildsystem)/u-boot.makefile $(shell pwd)/Makefile" ; \
 		echo "git add $(shell pwd)/Makefile" ; \
 		echo "error 1911115-02" ; \
+		echo "error 1911115-02" ; \
 		exit 1 ; \
 	fi ;
 	@if [ ! "$(shell readlink ./Makefile)" = "$(buildsystem)/u-boot.makefile" ] ; then \
