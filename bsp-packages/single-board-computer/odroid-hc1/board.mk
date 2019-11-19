@@ -27,5 +27,8 @@ BOARD_ARCH = armv7l
 USE_CONFIG_FILE        =
 UBOOT_DEFCONFIG        = odroid-xu3_defconfig
 
+# Defines the default dtb to use (symlink used by generic boot.scr)
+BOARD_DTB = exynos5422-odroidhc1.dtb
+
 # Defines the list of files to copy (#path is relative to build dir)
 UBOOT_BINARY_FILE = u-boot-dtb.bin
