@@ -139,6 +139,15 @@ check:
 		exit 1 ; \
 	fi ;
 
+# Build only u-boot  package target
+u-boot-package:
+	$(MAKE) -C u-boot package || exit 1 ;
+
+# Build only linux kernel an package target
+kernel-package:
+linux-kernel-package:
+	$(MAKE) -C kernel package || exit 1 ;
+
 # Catch all target. Call the same targets in each subfolder
 %:
 	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
@@ -148,4 +157,6 @@ check:
 
 help:
 	@echo "Supported targets are"
-	@echo 'check : Verify the availability of required items (files, symlinks, directories) and report missing.'
+	@echo 'check          : Verify the availability of required items (files, symlinks, directories) and report missing ones.'
+	@echo 'u-boot-package : Recursivly build u-boot packages of all available versions for board $(BOARD_NAME).'
+	@echo 'kernel-package : Recursivly build linux kernel packages of all available versions for board $(BOARD_NAME).'
