@@ -38,7 +38,7 @@ MAKE_FILTERS  = defconfig Makefile README.md .
 #
 
 check :
-	@echo "Checking Linux kernel folder for board $(BOARD_NAME)" 
+	@echo "Checking Linux kernel $(SW_VERSION) folder for board $(BOARD_NAME)" 
 	@if [ ! -d "$(shell pwd)/defconfig" ] ; then \
 		echo "defconfig directory is missing in $(shell pwd). It contains the configuration files of the different Linux kernel versions." ; \
 		echo "You can fix with the following commands : " ; \
