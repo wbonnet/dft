@@ -19,17 +19,14 @@
 #
 #
 
+# Include board specific definitions from board level
+include ../board.mk
+
 # Defines variables specific to Linux kernel
-SW_NAME     = linux
-SW_VERSION  = $(notdir $(patsubst %/,%,$(shell pwd)))
-
-$(info "D3BUG linux-kernel-version.makefile")
+SW_NAME     := linux
+SW_VERSION  := $(notdir $(patsubst %/,%,$(shell pwd)))
 buildsystem := ../../../../../buildsystem 
-include ../board.mk
-include $(buildsystem)/inc/linux-kernel.mk
-
-# Include board specific definitions  from board level
-include ../board.mk
+#include $(buildsystem)/inc/linux-kernel.mk
 
 # Retrieve th builder hot architecure if not defined yet
 HOST_ARCH      ?= $(shell uname -m)
@@ -46,7 +43,7 @@ MAKE_FILTERS  = Makefile README.md .
 # of all existing boards.
 
 check :
-	@echo "Checking package definition of $(SW_NAME) kernel  version $(SW_VERSION) for $(BOARD_NAME)"
+	@echo "Checking package definition of $(SW_NAME) kernel version $(SW_VERSION) for $(BOARD_NAME)"
 	@if [ ! -f "../board.mk" ] ; then \
 		echo "file board.mk is missing in directory $(shell pwd)/.." ; \
 		echo "error 191121-02" ; \
@@ -86,4 +83,3 @@ check :
 help :
 	@echo "Supported targets are"
 	@echo 'check : Verify the availability of required items (files, symlinks, directories) and report missing.'
-

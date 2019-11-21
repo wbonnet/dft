@@ -124,7 +124,7 @@ check:
                exit 1 ; \
             fi ; \
 	done ; 
-	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '201*' ) ; do \
+	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*\.*' ) ; do \
 		$(MAKE) -C $$version check || exit 1 ; \
 		echo "make check in u-boot version $$version" ; \
 	done ;

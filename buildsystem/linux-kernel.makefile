@@ -82,11 +82,8 @@ check :
 		echo "error 1911116-05" ; \
 		exit 1 ; \
 	fi ;
-	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  ) ; do \
+	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*\.*' ) ; do \
 		echo "checking version $$version subfolder" ; \
-		if [ "$$version" = "./defconfig" ] ; then \
-			continue ; \
-		fi ; \
 		if [ ! -L "$$version/Makefile" ] ; then \
 			echo "version folder $$version" ; \
 			echo "Makefile symlink in $(shell pwd)/$$version is missing. It should be a symlink to $(buildsystem)/linux-kernel-version.makefile" ; \
@@ -110,9 +107,9 @@ check :
 			exit 1 ; \
 		fi ; \
 	done ; 
-	@for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
-		echo "dexieme for" ; \
-		$(MAKE) -C $$foldern check || exit 1 ; \
+	@for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*') ; do \
+		echo "dexieme for folder : $$folder" ; \
+		$(MAKE) -C $$folder check || exit 1 ; \
 		echo "make check in u-boot version $$folder" ; \
 	done ;
 
