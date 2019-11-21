@@ -23,7 +23,6 @@
 SW_NAME    = linux
 SW_VERSION = SW_VERSION_undefined_at_kernel_level
 
-
 $(info "D3BUG linux-kernel.makefile")
 buildsystem := ../../../../buildsystem
 include board.mk
@@ -31,7 +30,7 @@ include $(buildsystem)/inc/linux-kernel.mk
 include $(buildsystem)/dft.mk
 
 # Do not recurse the following subdirs
-MAKE_FILTERS  = defconfig Makefile README.md .
+MAKE_FILTERS  = files defconfig Makefile README.md .
 
 # 
 # Board level birectory generic Linux kernel makefile
@@ -82,8 +81,8 @@ check :
 		echo "error 1911116-05" ; \
 		exit 1 ; \
 	fi ;
-	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*' ) ; do \
-		echo "checking version $$version subfolder" ; \
+	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  ) ; do \
+		echo "premier for checking version $$version subfolder" ; \
 		if [ "$$version" = "./defconfig" ] ; then \
 			continue ; \
 		fi ; \
@@ -110,15 +109,16 @@ check :
 			exit 1 ; \
 		fi ; \
 	done ; 
-	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '201*' ) ; do \
-		$(MAKE) -C $$version check || exit 1 ; \
-		echo "make check in u-boot version $$version" ; \
+	@for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
+		echo "dexieme for" ; \
+		$(MAKE) -C $$foldern check || exit 1 ; \
+		echo "make check in u-boot version $$folder" ; \
 	done ;
 
 # Catch all target. Call the same targets in each subfolder
 %:
-	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
-                $(MAKE) -C $$i $* || exit 1 ; \
+	for f in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+                $(MAKE) -C $$f $* || exit 1 ; \
         done
 
 help :

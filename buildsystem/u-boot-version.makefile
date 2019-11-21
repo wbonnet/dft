@@ -71,7 +71,9 @@ check:
 		echo "files directory is missing in $(shell pwd). It should contains the markdown file install.$(SW_NAME).$(BOARD_NAME).md needed by target package." ; \
 		echo "You can fix with the following commands : " ; \
 		echo "mkdir -p $(shell pwd)/files" ; \
-		echo "ln -s ../../files/install.$(SW_NAME).$(BOARD_NAME).md $(shell pwd)/files/" ; \
+		echo "touch $(shell pwd)/files/.gitkeep" ; \
+		echo "ln -s ../../files/install.$(SW_NAME)-$(BOARD_NAME).md $(shell pwd)/files/" ; \
+		echo "git add $(shell pwd)/files" ; \
 		echo "error 191115-11" ; \
 		exit 1 ; \
 	fi ;
@@ -80,19 +82,3 @@ check:
 		echo "error 191115-10" ; \
 		exit 1 ; \
 	fi ;
-
-# Catch all target. Call the same targets in each subfolder
-muf:
-	exit 1 ; 
-	for version in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
-		if [ "$$version" = "./patches"  ] ; then \
-			continue ; \
-		fi ; \
-		if [ "$$version" = "./files" ] ; then \
-			continue ; \
-		fi ; \
-		if [ "$$version" = "./debian" ] ; then \
-			continue ; \
-		fi ; \
-		$(MAKE) -C $$version $* || exit 1 ; \
-	done

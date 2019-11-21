@@ -25,7 +25,7 @@ buildsystem := ../../../../buildsystem
 include ./board.mk
 
 # Do not recurse the following subdirs
-MAKE_FILTERS = Makefile README.md
+MAKE_FILTERS = files Makefile README.md
 SW_NAME      = SW_NAME_undefined_at_board_level
 
 # ------------------------------------------------------------------------------
