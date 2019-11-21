@@ -23,24 +23,19 @@
 SW_NAME     = linux
 SW_VERSION  = $(notdir $(patsubst %/,%,$(shell pwd)))
 
-
 $(info "D3BUG linux-kernel-version.makefile")
-buildsystem := ../../../../../buildsystem
+buildsystem := ../../../../../buildsystem 
 include ../board.mk
 include $(buildsystem)/inc/linux-kernel.mk
-include $(buildsystem)/dft.mk
 
-# Defines the kernel version
-SW_VERSION      = $(notdir $(patsubst %/,%,$(shell pwd)))
+# Include board specific definitions  from board level
+include ../board.mk
 
 # Retrieve th builder hot architecure if not defined yet
 HOST_ARCH      ?= $(shell uname -m)
 
 # Do not recurse the following subdirs
 MAKE_FILTERS  = Makefile README.md .
-
-# Include board specific definitions
-include ../board.mk
 
 # Defines patches to apply to the upstream sources :
 # PATCHFILES += 0000_some_patch.diff
@@ -50,40 +45,42 @@ include ../board.mk
 # otherwise it would then behave as new default value for all unmodified versions 
 # of all existing boards.
 
-# Include build system
-$(warning " FIXME hardi coded path")
-include buildsystem/inc/linux-kernel.mk
-
-# No need to recurse check target at version level
 check :
-	@echo "Checking definition of $(SW_NAME) kernel package version $(SW_VERSION) for $(BOARD_NAME)"
+	@echo "Checking package definition of $(SW_NAME) kernel  version $(SW_VERSION) for $(BOARD_NAME)"
 	@if [ ! -f "../board.mk" ] ; then \
 		echo "file board.mk is missing in directory $(shell pwd)/.." ; \
-		false ; \
-	fi ;
-	@if [ ! -d "../defconfig" ] ; then \
-		echo "kernel config files directory is missing $(shell pwd)/../defconfig" ; \
-		false ; \
-	fi ;
-	@if [ ! -d "./debian" ] ; then \
-		echo "debian directory is missing in $(shell pwd). It should contains the files needed to create the debian package for $(BOARD_NAME) u-boot." ; \
-		false ; \
+		echo "error 191121-02" ; \
+		exit 1 ; \
 	fi ;
 	@if [ ! -L "./Makefile" ] ; then \
-		echo "Makefile symlink to ../../../../../buildsystem/linux-kernel-version.makefile is missing in $(shell pwd). You are using your own custom Makefile." ; \
-		false ; \
-	fi ;
-	@if [ ! -L "./buildsystem" ] ; then \
-		echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd). You are using your own custom buildsystem." ; \
-		false ; \
+		echo "Makefile symlink to ../../../../../buildsystem/linux-kernel-version.makefile is missing in $(shell pwd)" ; \
+		echo "error 191121-05" ; \
+		exit 1 ; \
 	fi ;
 	@if [ ! "$(shell readlink ./Makefile)" = "../../../../../buildsystem/linux-kernel-version.makefile" ] ; then \
-		echo "target of symlink Makefile should be ../../../../../buildsystem/linux-kernel-version.makefile in directory $(shell pwd). You are using your own custom buildsystem." ; \
-		false ; \
+		echo "target of symlink Makefile should be ../../../../../buildsystem/linux-kernel-version.makefile in directory $(shell pwd)" ; \
+		echo "error 191121-03" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! -d "../defconfig" ] ; then \
+		echo "kernel config files directory is missing $(shell pwd)/.." ; \
+		echo "error 191121-01" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! -d "./debian" ] ; then \
+		echo "debian directory is missing in $(shell pwd). It should contain the files needed to create the debian package for $(BOARD_NAME) $(SW_NAME) kernel" ; \
+		echo "error 191121-04" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! -L "./buildsystem" ] ; then \
+		echo "buildsystem symlink to ../../../../../buildsystem is missing in $(shell pwd). You are using your own custom buildsystem" ; \
+		echo "error 191121-06" ; \
+		exit 1 ; \
 	fi ;
 	@if [ ! "$(shell readlink ./buildsystem)" = "../../../../../buildsystem" ] ; then \
-		echo "target of symlink buildsystem should be ../../../../../buildsystem in directory $(shell pwd). You are using your own custom buildsystem." ; \
-		false ; \
+		echo "target of symlink buildsystem should be ../../../../../buildsystem in directory $(shell pwd)" ; \
+		echo "error 191121-08" ; \
+		exit 1 ; \
 	fi ;
 
 help :

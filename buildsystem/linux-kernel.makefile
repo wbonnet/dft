@@ -15,12 +15,12 @@
 #
 # Contributors list :
 #
-#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#	William Bonnet	 wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 #
 
 # Defines variables specific to Linux kernel
-SW_NAME    = linux
+SW_NAME	= linux
 SW_VERSION = SW_VERSION_undefined_at_kernel_level
 
 $(info "D3BUG linux-kernel.makefile")
@@ -38,31 +38,32 @@ MAKE_FILTERS  = files defconfig Makefile README.md .
 
 check :
 	@echo "Checking Linux kernel folder for board $(BOARD_NAME)" 
+	@if [ ! -L "Makefile"  ] ; then \
+		echo "Makefile symlink $(buildsystem)/$(SW_NAME)-kernel.makefile is missing in directory $(shell pwd)" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "git rm -f $(shell pwd)/Makefile" ; \
+		echo "ln -s $(buildsystem)/$(SW_NAME)-kernel.makefile $(shell pwd)/Makefile" ; \
+		echo "git add $(shell pwd)/Makefile" ; \
+		echo "error 191121-010" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! "$(shell readlink ./Makefile)" = "$(buildsystem)/$(SW_NAME)-kernel.makefile" ] ; then \
+		echo "target of symlink Makefile should be $(buildsystem)/$(SW_NAME)-kernel.makefile in directory $(shell pwd)" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "git rm -f $(shell pwd)/Makefile" ; \
+		echo "ln -s $(buildsystem)/$(SW_NAME)-kernel.makefile $(shell pwd)/Makefile" ; \
+		echo "git add $(shell pwd)/Makefile" ; \
+		echo "error 1911120-011" ; \
+		exit 1 ; \
+	fi ;
 	@if [ ! -d "$(shell pwd)/defconfig" ] ; then \
 		echo "defconfig directory is missing in $(shell pwd). It contains the configuration files of the different Linux kernel versions." ; \
 		echo "You can fix with the following commands : " ; \
 		echo "mkdir -p $(shell pwd)/defconfig" ; \
 		echo "touch $(shell pwd)/defconfig/.gitkeep" ; \
 		echo "git add $(shell pwd)/defconfig/.gitkeep" ; \
-		false ; \
-	fi ;
-	@if [ ! -L "Makefile"  ] ; then \
-		echo "Makefile symlink $(buildsystem)/linux-kernel.makefile is missing in directory $(shell pwd)" ; \
-		echo "You can fix with the following commands : " ; \
-		echo "git rm -f $(shell pwd)/Makefile" ; \
-		echo "ln -s $(buildsystem)/linux-kernel.makefile $(shell pwd)/Makefile" ; \
-		echo "git add $(shell pwd)/Makefile" ; \
-		echo "error 1911116-01" ; \
-		exit 1 ; \
-	fi ;
-	@if [ ! "$(shell readlink Makefile)" = "$(buildsystem)/linux-kernel.makefile" ] ; then \
-		echo "target of symlink Makefile should be $(buildsystem)/linux-kernel.makefile in directory $(shell pwd)" ; \
-		echo "You can fix with the following commands : " ; \
-		echo "git rm -f $(shell pwd)/Makefile" ; \
-		echo "ln -s $(buildsystem)/linux-kernel.makefile $(shell pwd)/Makefile" ; \
-		echo "git add $(shell pwd)/Makefile" ; \
-		echo "error 1911116-02" ; \
-		exit 1 ; \
+		echo "error 191120-013" ; \
+ 		exit 1 ; \
 	fi ;
 	@if [ ! -L "board.mk" ] ; then \
 		echo "board.mk symlink to ../board.mk is missing in directory $(shell pwd)" ; \
@@ -82,13 +83,13 @@ check :
 		exit 1 ; \
 	fi ;
 	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  ) ; do \
-		echo "premier for checking version $$version subfolder" ; \
+		echo "checking version $$version subfolder" ; \
 		if [ "$$version" = "./defconfig" ] ; then \
 			continue ; \
 		fi ; \
 		if [ ! -L "$$version/Makefile" ] ; then \
 			echo "version folder $$version" ; \
-			echo "Makefile in $(shell pwd)/$$version is missing. It should be a symlink to $(buildsystem)/linux-kernel-version.makefile" ; \
+			echo "Makefile symlink in $(shell pwd)/$$version is missing. It should be a symlink to $(buildsystem)/linux-kernel-version.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
 			if [ -f "$$version/Makefile" ] ; then \
 				echo "git rm $$version/Makefile" ; \
@@ -118,8 +119,8 @@ check :
 # Catch all target. Call the same targets in each subfolder
 %:
 	for f in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
-                $(MAKE) -C $$f $* || exit 1 ; \
-        done
+		$(MAKE) -C $$f $* || exit 1 ; \
+	done
 
 help :
 	@echo "Supported targets are"
