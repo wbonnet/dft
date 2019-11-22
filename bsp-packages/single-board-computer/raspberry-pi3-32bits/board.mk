@@ -20,7 +20,7 @@
 #
 
 # Defines board name
-BOARD_NAME = raspberry-pi3-32bits 
+BOARD_NAME = raspberry-pi3-32bits
 BOARD_ARCH = armv7l
 
 # Set config file to empty and define the name of the board to use a defconfig
