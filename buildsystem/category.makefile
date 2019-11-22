@@ -53,7 +53,6 @@ sanity-check :
 			echo "exit 825" ; \
 			exit 1 ; \
 		fi ; \
-		ls -l $$board/board.mk ; \
 		if [ ! -f $$board/board.mk ] ; then \
 			echo "Board description file board.mk is missing in directory $(shell pwd)/$$board" ; \
 			echo "You can fix with the following shell commands :" ; \
