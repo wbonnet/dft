@@ -23,7 +23,6 @@
 SW_NAME	= linux
 SW_VERSION = SW_VERSION_undefined_at_kernel_level
 
-$(info "D3BUG linux-kernel.makefile")
 buildsystem := ../../../../buildsystem
 include board.mk
 include $(buildsystem)/inc/linux-kernel.mk
@@ -94,30 +93,30 @@ sanity-check :
 		echo "checking version $$version subfolder" ; \
 		if [ ! -L "$$version/Makefile" ] ; then \
 			echo "version folder $$version" ; \
-			echo "Makefile symlink in $(shell pwd)/$$version is missing. It should be a symlink to $(buildsystem)/linux-kernel-version.makefile" ; \
+			echo "Makefile symlink in $(shell pwd)/$$version is missing. It should be a symlink to $(buildsystem)/$(SW_NAME)-kernel-version.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
 			if [ -f "$$version/Makefile" ] ; then \
-				echo "git rm $$version/Makefile" ; \
+				echo "git rm $(shell pwd)/$$version/Makefile" ; \
 			fi ; \
-			echo "ln -s ../$(buildsystem)/linux-kernel-version.makefile $$version/Makefile" ; \
-			echo "git add $$version/Makefile" ; \
+			echo "ln -s ../$(buildsystem)/$(SW_NAME)-kernel-version.makefile $(shell pwd)/$$version/Makefile" ; \
+			echo "git add $(shell pwd)/$$version/Makefile" ; \
 			echo "exit 191116-07" ; \
 			exit 1 ; \
 		fi ; \
 		s=`readlink $$version/Makefile` ; \
-		if [ !  "$$s" = "../$(buildsystem)/linux-kernel-version.makefile" ] ; then \
-			echo "Makefile symlink in $$version must link to $(buildsystem)/linux-kernel-version.makefile" ; \
+		if [ !  "$$s" = "../$(buildsystem)/$(SW_NAME)-kernel-version.makefile" ] ; then \
+			echo "Makefile symlink in $$version must link to $(buildsystem)/$(SW_NAME)-kernel-version.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
-			echo "git rm -f $$version/Makefile || rm -f $$version/Makefile" ; \
-			echo "ln -s ../$(buildsystem)/linu-kernel-version.makefile $$version/Makefile" ; \
-			echo "git add $$version/Makefile" ; \
-			echo "exit 191115-09" ; \
+			echo "git rm -f $(shell pwd)/$$version/Makefile || rm -f $(shell pwd)/$$version/Makefile" ; \
+			echo "ln -s ../$(buildsystem)/$(SW_NAME)-kernel-version.makefile $(shell pwd)/$$version/Makefile" ; \
+			echo "git add $(shell pwd)/$$version/Makefile" ; \
+			echo "exit 191122-20" ; \
 			exit 1 ; \
 		fi ; \
 	done ; 
 	@for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*') ; do \
 		$(MAKE) -C $$folder sanity-check || exit 1 ; \
-		echo "make sanity-check in u-boot version $$folder" ; \
+		echo "make sanity-check in u-boot version i$(shell pwd)/$$folder" ; \
 	done ;
 
 # Catch all target. Call the same targets in each subfolder

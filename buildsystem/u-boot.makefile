@@ -115,15 +115,15 @@ sanity-check:
            if [ !  "$$s" = "../$(buildsystem)/u-boot-version.makefile" ] ; then \
                echo "Makefile symlink in $$version must link to $(buildsystem)/u-boot-version.makefile" ; \
                echo "You can fix with the following shell commands :" ; \
-               echo "git rm -f $$version/Makefile || rm -f $$version/Makefile" ; \
-               echo "ln -s ../$(buildsystem)/u-boot-version.makefile $$version/Makefile" ; \
-               echo "git add $$version/Makefile" ; \
-               echo "exit 191115-09" ; \
+               echo "git rm -f $(shell pwd)/$$version/Makefile || rm -f $(shell pwd)/$$version/Makefile" ; \
+               echo "ln -s ../$(buildsystem)/u-boot-version.makefile $(shell pwd)/$$version/Makefile" ; \
+               echo "git add $(shell pwd)/$$version/Makefile" ; \
+               echo "exit 191122-21" ; \
                exit 1 ; \
             fi ; \
 	done ; 
 	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*\.*' ) ; do \
-		$(MAKE) -C $$version sanity-check || exit 1 ; \
+		$(MAKE) -C $(shell pwd)/$$version sanity-check || exit 1 ; \
 	done ;
 
 # Catch all target. Call the same targets in each subfolder
