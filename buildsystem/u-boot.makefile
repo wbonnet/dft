@@ -111,6 +111,7 @@ sanity-check:
             exit 1 ; \
            fi ; \
            s=`readlink $$version/Makefile` ; \
+           echo "readlink retourne $$s" ; \
            if [ !  "$$s" = "../$(buildsystem)/u-boot-version.makefile" ] ; then \
                echo "Makefile symlink in $$version must link to $(buildsystem)/u-boot-version.makefile" ; \
                echo "You can fix with the following shell commands :" ; \
