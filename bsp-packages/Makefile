@@ -22,7 +22,7 @@ $(info "D3BUG bsp-packages.makefile")
 $(warning "te faut l include de la liste des error codes et la fonction dft-error")
 
 # Do not recurse the following subdirs
-MAKE_FILTERS  = Makefile README.md .
+MAKE_FILTERS  = Makefile README.md . kernel-defconfig-fragments
 
 # definition of the liste of boards category 
 CATEGORIES    = laptop desktop set-top-box single-board-computer

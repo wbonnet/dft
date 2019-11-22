@@ -18,9 +18,7 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 
-$(info "D3BUG category.makefile")
 buildsystem := ../../../buildsystem
-$(warning "review in progress category.makefile")
 
 # Do not recurse the following subdirs
 MAKE_FILTERS  = Makefile README.md .
@@ -38,7 +36,7 @@ sanity-check :
 # Each board folder must contain a board.mk file with board specific information, 
 # a mandatory kernel folder, optional folders like u-boot for boot loader and files 
 # to store needed additionnal files
-	for board in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
+	@for board in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
 		if [ ! -e "$$board/Makefile" ] ; then \
 			echo "Makefile in $(shell pwd)/$$board is Missing. It should be a symlink to  $(buildsystem)/board.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
@@ -51,12 +49,10 @@ sanity-check :
 		s=`readlink $$board/Makefile` ; \
 		if [ !  "$$s" = "$(buildsystem)/board.makefile" ] ; then \
 			echo "Makefile symlink in $$board must link to $(buildsystem)/board.makefile" ; \
-			echo "ls -l $$i $(buildsystem)/board.makefile" ; \
 			echo "It targets to $$s" ; \
 			echo "exit 825" ; \
 			exit 1 ; \
 		fi ; \
-		echo "ze board dans le for : $$board" ; \
 		ls -l $$board/board.mk ; \
 		if [ ! -f $$board/board.mk ] ; then \
 			echo "Board description file board.mk is missing in directory $(shell pwd)/$$board" ; \

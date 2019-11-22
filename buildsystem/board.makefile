@@ -137,6 +137,8 @@ sanity-check:
 		echo "error 1911118-04" ; \
 		exit 1 ; \
 	fi ;
+	@make -C u-boot sanity-check
+	@make -C kernel sanity-check
 
 # Build only u-boot  package target
 u-boot-package:

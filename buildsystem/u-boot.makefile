@@ -22,8 +22,6 @@
 # Defines variables specific to u-boot
 SW_NAME       = u-boot
 SW_VERSION    = SW_VERSION_undefind_at_uboot_level
-
-$(info "D3BUG u-boot.makefile")
 buildsystem := ../../../../buildsystem
 include board.mk
 include $(buildsystem)/inc/u-boot.mk
@@ -103,7 +101,7 @@ sanity-check:
 		echo "error 1911115-05" ; \
 		exit 1 ; \
 	fi ;
-	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '201*' ) ; do \
+	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*\.*' ) ; do \
          echo "checking version $$version subfolder sanity" ; \
          if [ ! -L "$$version/Makefile" ] ; then \
             echo "Makefile in $(shell pwd)/$$version is missing. It should be a symlink to $(buildsystem)/u-boot-version.makefile" ; \
