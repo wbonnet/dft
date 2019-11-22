@@ -49,7 +49,7 @@ new-version:
 		ln -s $(DFT_HOME)/buildsystem/ buildsystem ; \
 		mkdir -p files ; \
 		touch files/.gitkeep ; \
-		ln -s ../../files/install.u-boot.$(BOARD_NAME).md ./files/ ; \
+		ln -s ../../files/install.u-boot-$(BOARD_NAME).md ./files/ ; \
 		mkdir -p patches ; \
 		touch patches/.gitkeep ; \
 		echo "work-$(BOARD_NAME)/" > .gitignore ; \

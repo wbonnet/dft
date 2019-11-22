@@ -38,7 +38,6 @@ MAKE_FILTERS  = files defconfig Makefile README.md patches .
 # 
 # Board level u-boot makefile
 #
-
 sanity-check:
 	@echo "Checking u-boot folder sanity for board $(BOARD_NAME)" ;
 	@if [ ! -L "Makefile"  ] ; then \
