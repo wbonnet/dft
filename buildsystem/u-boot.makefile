@@ -115,11 +115,10 @@ sanity-check:
            if [ !  "$$s" = "../$(buildsystem)/u-boot-version.makefile" ] ; then \
                echo "Makefile symlink in $$version must link to $(buildsystem)/u-boot-version.makefile" ; \
                echo "You can fix with the following shell commands :" ; \
-               echo "git rm -f $(shell pwd)/$$version/Makefile || rm -f $(shell pwd)/$$version/Makefile" ; \
-               echo "ln -s ../$(buildsystem)/u-boot-version.makefile $(shell pwd)/$$version/Makefile" ; \
-               echo "git add $(shell pwd)/$$version/Makefile" ; \
+               git rm -f $(shell pwd)/$$version/Makefile || rm -f $(shell pwd)/$$version/Makefile ; \
+               ln -s ../$(buildsystem)/u-boot-version.makefile $(shell pwd)/$$version/Makefile ; \
+               git add $(shell pwd)/$$version/Makefile ; \
                echo "exit 191122-21" ; \
-               exit 1 ; \
             fi ; \
 	done ; 
 	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*\.*' ) ; do \
