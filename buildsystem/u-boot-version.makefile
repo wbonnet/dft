@@ -86,9 +86,9 @@ sanity-check:
 		echo "exit 191120-01" ; \
 		exit 1 ; \
 	fi ; \
-	s=`readlink files/install.$(SW_NAME)-$(SW_NAME).md` ; \
-	if [ !  "$$s" = "../files/install.$(SW_NAME)-$(BOARD_NAME).md" ] ; then \
-		echo "The link to the markdown file in $(shell pwd)/files must target to ../files/install.$(SW_NAME)-$(BOARD_NAME).md" ; \
+	s=`readlink files/install.$(SW_NAME)-$(BOARD_NAME).md` ; \
+	if [ !  "$$s" = "../../files/install.$(SW_NAME)-$(BOARD_NAME).md" ] ; then \
+		echo "The link to the markdown file in $(shell pwd)/files must target to ../../files/install.$(SW_NAME)-$(BOARD_NAME).md" ; \
 		echo "You can fix this with the following shell commands :" ; \
 		echo "git rm -f files/install.$(SW_NAME)-$(BOARD_NAME).md || rm -f files/install.$(SW_NAME)-$(BOARD_NAME).md" ; \
 		echo "ln -s ../../files/install.$(SW_NAME)-$(BOARD_NAME).md $(shell pwd)/files/" ; \
