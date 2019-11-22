@@ -96,22 +96,20 @@ sanity-check :
 			echo "Makefile symlink in $(shell pwd)/$$version is missing. It should be a symlink to $(buildsystem)/$(SW_NAME)-kernel-version.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
 			if [ -f "$$version/Makefile" ] ; then \
-				echo "git rm $(shell pwd)/$$version/Makefile" ; \
+				git rm $(shell pwd)/$$version/Makefile ; \
 			fi ; \
-			echo "ln -s ../$(buildsystem)/$(SW_NAME)-kernel-version.makefile $(shell pwd)/$$version/Makefile" ; \
-			echo "git add $(shell pwd)/$$version/Makefile" ; \
+			ln -s ../$(buildsystem)/$(SW_NAME)-kernel-version.makefile $(shell pwd)/$$version/Makefile ; \
+			git add $(shell pwd)/$$version/Makefile ; \
 			echo "exit 191116-07" ; \
-			exit 1 ; \
 		fi ; \
 		s=`readlink $$version/Makefile` ; \
 		if [ !  "$$s" = "../$(buildsystem)/$(SW_NAME)-kernel-version.makefile" ] ; then \
 			echo "Makefile symlink in $$version must link to $(buildsystem)/$(SW_NAME)-kernel-version.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
-			echo "git rm -f $(shell pwd)/$$version/Makefile || rm -f $(shell pwd)/$$version/Makefile" ; \
-			echo "ln -s ../$(buildsystem)/$(SW_NAME)-kernel-version.makefile $(shell pwd)/$$version/Makefile" ; \
-			echo "git add $(shell pwd)/$$version/Makefile" ; \
+			git rm -f $(shell pwd)/$$version/Makefile || rm -f $(shell pwd)/$$version/Makefile ; \
+			ln -s ../$(buildsystem)/$(SW_NAME)-kernel-version.makefile $(shell pwd)/$$version/Makefile ; \
+			git add $(shell pwd)/$$version/Makefile ; \
 			echo "exit 191122-20" ; \
-			exit 1 ; \
 		fi ; \
 	done ; 
 	@for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*') ; do \

@@ -79,12 +79,11 @@ sanity-check:
 	@if [ ! -L "files/install.$(SW_NAME)-$(BOARD_NAME).md" ] ; then \
 		echo "The link to the markdown file install.$(SW_NAME)-$(BOARD_NAME).md is missing in the $(shell pwd)/files directory." ; \
 		echo "You can fix this with the following commands : " ; \
-		echo "mkdir -p $(shell pwd)/files" ; \
-		echo "touch $(shell pwd)/files/.gitkeep" ; \
-		echo "ln -s ../../files/install.$(SW_NAME)-$(BOARD_NAME).md $(shell pwd)/files/" ; \
-		echo "git add $(shell pwd)/files" ; \
+		mkdir -p $(shell pwd)/files ; \
+		touch $(shell pwd)/files/.gitkeep ; \
+		ln -s ../../files/install.$(SW_NAME)-$(BOARD_NAME).md $(shell pwd)/files/ ; \
+		echo git add $(shell pwd)/files ; \
 		echo "exit 191120-01" ; \
-		exit 1 ; \
 	fi ; \
 	s=`readlink files/install.$(SW_NAME)-$(BOARD_NAME).md` ; \
 	if [ !  "$$s" = "../../files/install.$(SW_NAME)-$(BOARD_NAME).md" ] ; then \
@@ -99,7 +98,7 @@ sanity-check:
 	@if [ ! -d "$(shell pwd)/patches" ] ; then \
 		echo "patches directory is missing in $(shell pwd). It is used to store patches to be applied on sources after extract and before build targets. By default it is an empty folder." ; \
 		echo "You can fix this with the following commands : " ; \
-		echo "mkdir -p $(shell pwd)/patchess" ; \
+		echo "mkdir -p $(shell pwd)/patches" ; \
 		echo "touch $(shell pwd)/patches/.gitkeep" ; \
 		echo "git add $(shell pwd)/patches" ; \
 		echo "error 191119-01" ; \

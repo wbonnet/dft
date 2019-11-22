@@ -1,1 +1,1 @@
-../../../../../buildsystem/shared/kernel-board-level.makefile
+../../../../../buildsystem/linux-kernel-version.makefile
