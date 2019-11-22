@@ -1,1 +1,1 @@
-../../../../../buildsystem/shared/u-boot-version.makefile
+../../../../../buildsystem/u-boot-version.makefile
