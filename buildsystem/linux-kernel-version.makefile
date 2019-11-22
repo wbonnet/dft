@@ -42,7 +42,7 @@ MAKE_FILTERS  = Makefile README.md .
 # otherwise it would then behave as new default value for all unmodified versions 
 # of all existing boards.
 
-check :
+sanity-check :
 	@echo "Checking package definition of $(SW_NAME) kernel version $(SW_VERSION) for $(BOARD_NAME)"
 	@if [ ! -f "../board.mk" ] ; then \
 		echo "file board.mk is missing in directory $(shell pwd)/.." ; \
@@ -97,4 +97,4 @@ check :
 
 help :
 	@echo "Supported targets are"
-	@echo 'check : Verify the availability of required items (files, symlinks, directories) and report missing.'
+	@echo 'sanity-check : Verify the availability of required items (files, symlinks, directories) and report missing.'

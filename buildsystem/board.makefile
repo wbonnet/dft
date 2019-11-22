@@ -19,7 +19,6 @@
 #
 #
 
-$(info "D3BUG board.makefile")
 buildsystem := ../../../../buildsystem
 #include $(buildsystem)/dft.mk
 include ./board.mk
@@ -32,10 +31,10 @@ SW_NAME      = SW_NAME_undefined_at_board_level
 #
 # Targets not associated with a file (aka PHONY)
 #
-.PHONY: help check
+.PHONY: help sanity-check
 
-check:
-	@echo "Checking board definition for $(BOARD_NAME)" ;
+sanity-check:
+	@echo "Checking board definition sanity for $(BOARD_NAME)" ;
 	@if [ ! -f "board.mk" ] ; then \
 		pwd ; \
 		echo "file board.mk is missing in directory $(shell pwd)" ; \
@@ -157,6 +156,6 @@ linux-kernel-package:
 
 help:
 	@echo "Supported targets are"
-	@echo 'check          : Verify the availability of required items (files, symlinks, directories) and report missing ones.'
+	@echo 'sanity-check   : Verify the availability of required items (files, symlinks, directories) and report missing ones.'
 	@echo 'u-boot-package : Recursivly build u-boot packages of all available versions for board $(BOARD_NAME).'
 	@echo 'kernel-package : Recursivly build linux kernel packages of all available versions for board $(BOARD_NAME).'

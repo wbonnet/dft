@@ -41,8 +41,8 @@ MAKE_FILTERS  = files defconfig Makefile README.md patches .
 # Board level u-boot makefile
 #
 
-check:
-	@echo "Checking u-boot folder for board $(BOARD_NAME)" ;
+sanity-check:
+	@echo "Checking u-boot folder sanity for board $(BOARD_NAME)" ;
 	@if [ ! -L "Makefile"  ] ; then \
 		echo "Makefile symlink $(buildsystem)/u-boot.makefile is missing in directory $(shell pwd)" ; \
 		echo "You can fix with the following commands : " ; \
@@ -104,7 +104,7 @@ check:
 		exit 1 ; \
 	fi ;
 	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '201*' ) ; do \
-         echo "checking version $$version subfolder" ; \
+         echo "checking version $$version subfolder sanity" ; \
          if [ ! -L "$$version/Makefile" ] ; then \
             echo "Makefile in $(shell pwd)/$$version is missing. It should be a symlink to $(buildsystem)/u-boot-version.makefile" ; \
             echo "You can fix with the following shell commands :" ; \
@@ -125,8 +125,7 @@ check:
             fi ; \
 	done ; 
 	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*\.*' ) ; do \
-		$(MAKE) -C $$version check || exit 1 ; \
-		echo "make check in u-boot version $$version" ; \
+		$(MAKE) -C $$version sanity-check || exit 1 ; \
 	done ;
 
 # Catch all target. Call the same targets in each subfolder
@@ -137,4 +136,4 @@ check:
 
 help :
 	@echo "Supported targets are"
-	@echo 'check : Verify the availability of required items (files, symlinks, directories) and report missing.'
+	@echo 'sanity-check : Verify the availability of required items (files, symlinks, directories) and report missing.'

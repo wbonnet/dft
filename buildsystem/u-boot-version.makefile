@@ -23,7 +23,6 @@
 SW_NAME     = u-boot
 SW_VERSION  = $(notdir $(patsubst %/,%,$(shell pwd)))
 
-$(info "D3BUG u-boot-version.makefile")
 buildsystem := ../../../../../buildsystem
 include $(buildsystem)/inc/u-boot.mk
 include $(buildsystem)/dft.mk
@@ -58,7 +57,7 @@ MAKE_FILTERS  = debian files patches
 
 help:
 	@echo "Supported targets are"
-	@echo 'check : Verify the availability of required items (files, symlinks, directories) and report missing.'
+	@echo 'sanity-check : Verify the availability of required items (files, symlinks, directories) and report missing.'
 
 check:
 	@echo "Checking definition of u-boot version $(SW_VERSION) package for $(BOARD_NAME)" 

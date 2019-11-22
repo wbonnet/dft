@@ -31,9 +31,9 @@ SW_NAME       = SW_NAME_undefined_at_category_level
 #
 # Targets not associated with a file (aka PHONY)
 #
-.PHONY: help check
+.PHONY: help sanity-check
 
-check :
+sanity-check :
 # Board category directory contains several folders, on per board in this category
 # Each board folder must contain a board.mk file with board specific information, 
 # a mandatory kernel folder, optional folders like u-boot for boot loader and files 
@@ -71,8 +71,8 @@ check :
 	done ; \
 	for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
 		echo "tring folder $$folder" ; \
-		$(MAKE) -C $$folder check || exit 1 ; \
-		echo "make check in folder $$folder" ; \
+		$(MAKE) -C $$folder sanity-check || exit 1 ; \
+		echo "make sanity-check in folder $$folder" ; \
 	done ;
 
 # Catch all target. Call the same targets in each subfolder

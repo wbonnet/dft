@@ -34,7 +34,7 @@ CATEGORIES    = laptop desktop set-top-box single-board-computer
 .PHONY: help
 
 #check que tes subdirs de category ont la et ont un lien makefile valide ensuite ca recurse
-check :
+sanity-check :
 	@for i in $(CATEGORIES) ; do \
 		if [ ! -d $$i ] ; then \
 			echo "Warning : $$i category folder is missing, recursive targets may fail or produce incomplete set of binaries." ; \

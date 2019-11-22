@@ -36,8 +36,8 @@ MAKE_FILTERS  = files defconfig Makefile README.md .
 # Board level birectory generic Linux kernel makefile
 #
 
-check :
-	@echo "Checking Linux kernel folder for board $(BOARD_NAME)" 
+sanity-check :
+	@echo "Checking Linux kernel folder sanity for board $(BOARD_NAME)" 
 	@if [ ! -L "Makefile"  ] ; then \
 		echo "Makefile symlink $(buildsystem)/$(SW_NAME)-kernel.makefile is missing in directory $(shell pwd)" ; \
 		echo "You can fix with the following commands : " ; \
@@ -108,9 +108,8 @@ check :
 		fi ; \
 	done ; 
 	@for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*') ; do \
-		echo "dexieme for folder : $$folder" ; \
-		$(MAKE) -C $$folder check || exit 1 ; \
-		echo "make check in u-boot version $$folder" ; \
+		$(MAKE) -C $$folder sanity-check || exit 1 ; \
+		echo "make sanity-check in u-boot version $$folder" ; \
 	done ;
 
 # Catch all target. Call the same targets in each subfolder
@@ -121,4 +120,4 @@ check :
 
 help :
 	@echo "Supported targets are"
-	@echo 'check : Verify the availability of required items (files, symlinks, directories) and report missing.'
+	@echo 'sanity-check : Verify the availability of required items (files, symlinks, directories) and report missing.'
