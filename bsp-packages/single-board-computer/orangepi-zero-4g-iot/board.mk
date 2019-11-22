@@ -20,7 +20,7 @@
 #
 
 # Defines board name
-BOARD_NAME = orangepi-zero-4g-iot 
+BOARD_NAME = orangepi-zero-4g-iot
 BOARD_ARCH = aarch64
 
 # Set config file to empty and define the name of the board to use a defconfig
