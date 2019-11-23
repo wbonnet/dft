@@ -20,7 +20,7 @@
 #
 
 # Defines board name
-BOARD_NAME  = m96-xii
+BOARD_NAME  = m96-x2
 
 # Defines boards architecture (armv7l, armel, aarch64, x86_64, i686, etc.)
 BOARD_ARCH  = aarch64

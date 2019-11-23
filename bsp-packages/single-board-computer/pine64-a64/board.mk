@@ -20,7 +20,7 @@
 #
 
 # Defines board name
-BOARD_NAME = pine64
+BOARD_NAME = pine64-a64
 BOARD_ARCH = aarch64
 
 # Set config file to empty and define the name of the board to use a defconfig
