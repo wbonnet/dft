@@ -224,21 +224,21 @@ mrproper:
 #
 show-configuration : show-config
 show-config :
-	@echo "Sources download with $(DOWNLOAD_TOOL) and parameters" ; \
-	echo "  SW_NAME                           $(SW_NAME)" ; \
-	echo "  SW_VERSION                        $(SW_VERSION)" ; \
+	@echo "Sources download with $(DOWNLOAD_TOOL) and parameters" ; 
+	@echo "  SW_NAME                           $(SW_NAME)" ; 
+	@echo "  SW_VERSION                        $(SW_VERSION)" ; 
 	@if [ "$(DOWNLOAD_TOOL)" = "wget" ]; then \
-	echo "  SRC_DIST_FILES                    $(SRC_DIST_FILES)" ; \
-	echo "  SRC_SIGN_FILES                    $(SRC_SIGN_FILES)" ; \
-	echo "  SRC_DIST_URL                      $(SRC_DIST_URL)" ; \
-       	fi
+		echo "  SRC_DIST_FILES                    $(SRC_DIST_FILES)" ; \
+		echo "  SRC_SIGN_FILES                    $(SRC_SIGN_FILES)" ; \
+		echo "  SRC_DIST_URL                      $(SRC_DIST_URL)" ; \
+	fi ;
 	@if [ "$(DOWNLOAD_TOOL)" = "git" ]; then \
-	echo "  GIT_URL                           $(GIT_URL)" ; \
-	echo "  GIT_REPO                          $(GIT_REPO)" ; \
-	echo "  GIT_REPO_EXT                      $(GIT_REPO_EXT)" ; \
-	echo "  GIT_BRANCH                        $(GIT_BRANCH)" ; \
-       	fi
-	@echo
+		echo "  GIT_URL                           $(GIT_URL)" ; \
+		echo "  GIT_REPO                          $(GIT_REPO)" ; \
+		echo "  GIT_REPO_EXT                      $(GIT_REPO_EXT)" ; \
+		echo "  GIT_BRANCH                        $(GIT_BRANCH)" ; \
+	fi ;
+	@echo 
 	@echo "Directories configuration"
 	@echo "  BUILD_SYSTEM                      $(BUILD_SYSTEM)"
 	@echo "  BASE_DIR                          $(BASE_DIR)"
