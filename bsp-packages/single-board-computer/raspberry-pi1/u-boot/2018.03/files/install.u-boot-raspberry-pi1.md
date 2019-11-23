@@ -1,0 +1,1 @@
+../../files/install.u-boot-raspberry-pi1.md
