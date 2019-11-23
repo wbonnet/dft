@@ -139,6 +139,9 @@ sanity-check:
 	fi ;
 	@make -C u-boot sanity-check
 	@make -C kernel sanity-check
+	for version in $(find . -mindepth 1 -maxdepth 1 -type d ) ; do \
+                $(MAKE) -C $$version $* || exit 1 ; \
+        done
 
 # Build only u-boot  package target
 u-boot-package:
@@ -154,7 +157,6 @@ linux-kernel-package:
 	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
                 $(MAKE) -C $$i $* || exit 1 ; \
         done
-
 
 help:
 	@echo "Supported targets are"
