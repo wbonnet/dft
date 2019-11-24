@@ -100,7 +100,7 @@ sanity-check:
 		echo "error 1911115-05" ; \
 		exit 1 ; \
 	fi ;
-	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*\.*' ) ; do \
+	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  ) ; do \
          echo "checking version $$version subfolder sanity" ; \
          if [ ! -L "$$version/Makefile" ] ; then \
             echo "Makefile in $(shell pwd)/$$version is missing. It should be a symlink to $(buildsystem)/u-boot-version.makefile" ; \
@@ -122,13 +122,18 @@ sanity-check:
             fi ; \
 	done ; 
 	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*\.*' ) ; do \
-		$(MAKE) -C $(shell pwd)/$$version sanity-check || exit 1 ; \
+		if [ -f $$version/Makefile ] ; then \
+			$(MAKE) -C $(shell pwd)/$$version sanity-check || exit 1 ; \
+		fi ; \
 	done ;
 
 # Catch all target. Call the same targets in each subfolder
 %:
+	echo "sans catch all avant le for i in filter-out " ; \
 	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+		if [ -f $$i/Makefile ] ; then \
                 $(MAKE) -C $$i $* || exit 1 ; \
+		fi ; \
         done
 
 help :
