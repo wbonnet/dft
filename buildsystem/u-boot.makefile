@@ -130,7 +130,6 @@ sanity-check:
 
 # Catch all target. Call the same targets in each subfolder
 %:
-	echo "sans catch all avant le for i in filter-out " ; \
 	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
                 $(MAKE) -C $$i $* || exit 1 ; \
