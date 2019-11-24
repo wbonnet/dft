@@ -123,6 +123,7 @@ sanity-check:
 	done ; 
 	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*\.*' ) ; do \
 		if [ -f $$version/Makefile ] ; then \
+			echo "make sanity-check in $(SW_NAME) version $(shell pwd)/$$folder" ; \
 			$(MAKE) -C $(shell pwd)/$$version sanity-check || exit 1 ; \
 		fi ; \
 	done ;

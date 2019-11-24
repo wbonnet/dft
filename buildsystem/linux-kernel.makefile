@@ -113,14 +113,18 @@ sanity-check :
 		fi ; \
 	done ; 
 	@for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*') ; do \
-		$(MAKE) -C $$folder sanity-check || exit 1 ; \
-		echo "make sanity-check in u-boot version i$(shell pwd)/$$folder" ; \
+		if [ -f $$folder/Makefile ] ; then \
+			$(MAKE) -C $$folder sanity-check || exit 1 ; \
+			echo "make sanity-check in $(SW_NAME) version $(shell pwd)/$$folder" ; \
+		fi ; \
 	done ;
 
 # Catch all target. Call the same targets in each subfolder
 %:
 	for f in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
-		$(MAKE) -C $$f $* || exit 1 ; \
+		if [ -f $$f/Makefile ] ; then \
+			$(MAKE) -C $$f $* || exit 1 ; \
+		fi ; \
 	done
 
 help :
