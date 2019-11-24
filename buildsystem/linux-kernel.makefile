@@ -121,7 +121,7 @@ sanity-check :
 
 # Catch all target. Call the same targets in each subfolder
 %:
-	for f in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+	@for f in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$f/Makefile ] ; then \
 			$(MAKE) -C $$f $* || exit 1 ; \
 		fi ; \

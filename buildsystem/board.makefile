@@ -139,7 +139,7 @@ sanity-check:
 	fi ;
 	@make -C u-boot sanity-check
 	@make -C kernel sanity-check
-	for version in $(find . -mindepth 1 -maxdepth 1 -type d ) ; do \
+	@for version in $(find . -mindepth 1 -maxdepth 1 -type d ) ; do \
 		if [ -f $$version/Makefile ] ; then \
                 $(MAKE) -C $$version $* || exit 1 ; \
 		fi ; \
@@ -156,7 +156,7 @@ linux-kernel-package:
 
 # Catch all target. Call the same targets in each subfolder
 %:
-	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
                 $(MAKE) -C $$i $* || exit 1 ; \
 		fi ; \
