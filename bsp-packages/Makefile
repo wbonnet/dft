@@ -57,6 +57,24 @@ sanity-check :
 		$(MAKE) -C $$i $* || exit 1 ; \
 	done ; 
 
+# Build only u-boot  package target
+u-boot-package:
+	@for i in $(CATEGORIES) ; do \
+		if [ -f $$i/Makefile ] ; then \
+                $(MAKE) -C $$i u-boot-package || exit 1 ; \
+		fi ; \
+        done
+
+# Build only linux kernel an package target
+kernel-package:
+linux-kernel-package:
+	@for i in $(CATEGORIES) ; do \
+		if [ -f $$i/Makefile ] ; then \
+                $(MAKE) -C $$i kernel-package || exit 1 ; \
+		fi ; \
+        done
+
+
 # Catch all target. Call the same targets in each subfolder
 %:
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \

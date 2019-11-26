@@ -22,7 +22,6 @@ buildsystem := ../../../buildsystem
 
 # Do not recurse the following subdirs
 MAKE_FILTERS  = Makefile README.md .
-CATEGORIES    = laptop desktop set-top-box single-board-computer
 SW_NAME       = SW_NAME_undefined_at_category_level
 
 # ------------------------------------------------------------------------------
@@ -70,12 +69,36 @@ sanity-check :
 		echo "make sanity-check in folder $$folder" ; \
 	done ;
 
+# Build only u-boot  package target
+u-boot-package:
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+		if [ -f $$i/Makefile ] ; then \
+                $(MAKE) -C $$i u-boot-package || exit 1 ; \
+		fi ; \
+        done
+
+# Build only linux kernel an package target
+kernel-package:
+linux-kernel-package:
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+		if [ -f $$i/Makefile ] ; then \
+                $(MAKE) -C $$i kernel-package || exit 1 ; \
+		fi ; \
+        done
+
 # Catch all target. Call the same targets in each subfolder
 %:
-	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
-		echo "avant le make du catch all" ; \
-		$(MAKE) -C $(i) $* || exit 1 ; \
-	done
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+		if [ -f $$i/Makefile ] ; then \
+                $(MAKE) -C $$i $* || exit 1 ; \
+		fi ; \
+        done
+
+help:
+	@echo "Supported targets are"
+	@echo 'sanity-check   : Verify the availability of required items (files, symlinks, directories) and report missing ones.'
+	@echo 'u-boot-package : Recursivly build u-boot packages of all available versions for board $(BOARD_NAME).'
+	@echo 'kernel-package : Recursivly build linux kernel packages of all available versions for board $(BOARD_NAME).'
 
 # ------------------------------------------------------------------------------
 #
