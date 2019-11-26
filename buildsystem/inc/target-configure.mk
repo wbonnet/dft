@@ -75,7 +75,7 @@ reconfigure : patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconf
 %/configure : do-configure 
 configure : do-configure 
 do-configure :
-		@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
+	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
 	then \
 		echo "Makefile processing has to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 		echo "The generated binaries might be invalid or scripts could fail before reaching the end of target. Cross compilation is not yet supported." ; \
