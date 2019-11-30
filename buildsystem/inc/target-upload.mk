@@ -45,7 +45,7 @@ endef
 # Upload the Debian package
 #
 
-upload : package pre-upload do-upload post-upload
+upload: package pre-upload do-upload post-upload
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -54,7 +54,7 @@ upload : package pre-upload do-upload post-upload
 # Execute once again the upload target
 #
 
-reupload : package pre-reupload do-reupload upload post-repupload
+reupload: package pre-reupload do-reupload upload post-repupload
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -63,7 +63,7 @@ reupload : package pre-reupload do-reupload upload post-repupload
 # Execute the upload target script
 #
 
-do-upload :
+do-upload:
 	@if test -f $(COOKIE_DIR)/do-upload ; then \
 		true ; \
 	else \
@@ -86,7 +86,7 @@ do-upload :
 	fi ;
 	@$(TARGET_DONE)
 
-do-reupload :
+do-reupload:
 	@if test -f $(COOKIE_DIR)/do-upload ; then \
 		rm -f $(COOKIE_DIR)/do-upload ; \
 		rm -fr $(abspath $(INSTALL_DIR)) ; \

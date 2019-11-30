@@ -45,7 +45,7 @@ endef
 # Install software to the target directory
 #
 
-install : build $(INSTALL_DIR) pre-install do-install post-install
+install: build $(INSTALL_DIR) pre-install do-install post-install
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -54,7 +54,7 @@ install : build $(INSTALL_DIR) pre-install do-install post-install
 # Execute once again the install target
 #
 
-reinstall : build pre-reinstall do-reinstall install post-reinstall
+reinstall: build pre-reinstall do-reinstall install post-reinstall
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -63,7 +63,7 @@ reinstall : build pre-reinstall do-reinstall install post-reinstall
 # Execute the install target script
 #
 
-do-install :
+do-install:
 		@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
 	then \
 	    echo "Makefile processing has to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make srunning on a $(HOST_ARCH) board." ; \
@@ -104,7 +104,7 @@ do-install :
 	fi ;
 	@$(TARGET_DONE)
 
-do-reinstall :
+do-reinstall:
 	@if test -f $(COOKIE_DIR)/do-install ; then \
 		rm -f $(COOKIE_DIR)/do-install ; \
 		rm -fr $(INSTALL_DIR) ; \

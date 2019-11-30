@@ -20,14 +20,14 @@
 #
 
 # Defines variables specific to u-boot
-SW_NAME       = u-boot
-SW_VERSION    = SW_VERSION_undefind_at_uboot_level
+SW_NAME     := u-boot
 buildsystem := ../../../../buildsystem
-include board.mk
 include $(buildsystem)/inc/u-boot.mk
+include $(buildsystem)/dft.mk
+include board.mk
 
 # Do not recurse the following subdirs
-MAKE_FILTERS  = files defconfig Makefile README.md patches .
+MAKE_FILTERS  := files defconfig Makefile README.md patches .
 
 # ------------------------------------------------------------------------------
 #
@@ -52,7 +52,7 @@ endif
 # Board level u-boot makefile
 #
 sanity-check:
-	@echo "isanity-checkfrom u-boot.makefile"
+	@echo "sanity-checkfrom u-boot.makefile"
 	@echo "Checking u-boot folder sanity for board $(BOARD_NAME)" ;
 	@if [ ! -L "Makefile"  ] ; then \
 		echo "Makefile symlink $(buildsystem)/u-boot.makefile is missing in directory $(shell pwd)" ; \
@@ -137,15 +137,12 @@ sanity-check:
 	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*\.*' ) ; do \
 		if [ -f $$version/Makefile ] ; then \
 			echo "make sanity-check in $(SW_NAME) version $(shell pwd)/$$folder" ; \
-			$(MAKE) -C $(shell pwd)/$$version sanity-check || exit 1 ; \
+			cd $$version && $(MAKE) sanity-check ; \
 		fi ; \
 	done ;
 
 # Catch all target. Call the same targets in each subfolder
 %:
-	@echo "percent from u-boot.makefile"
 	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
-		if [ -f $$i/Makefile ] ; then \
-                $(MAKE) -C $$i $* || exit 1 ; \
-		fi ; \
+		cd $$i && $(MAKE) $* ; \
         done

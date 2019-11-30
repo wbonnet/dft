@@ -32,12 +32,12 @@
 #
 # Protection against multiple includes
 #
-$(info included dft.kernel.mk)
-ifdef DFT_BUILDSYSTEM_KERNEL
+$(info included linux-kernel.mk)
+ifdef DFT_BUILDSYSTEM_LINUX_KERNEL
 # the matching endif teminates this file
-$(error dft.kernel.mk has already been included)
+$(error linux-kernel.mk has already been included)
 else
-define DFT_BUILDSYSTEM_KERNEL
+define DFT_BUILDSYSTEM_LINUX_KERNEL
 endef
 
 # ------------------------------------------------------------------------------
@@ -66,7 +66,7 @@ SRC_SIGN_FILES      ?= $(SW_NAME)-$(SW_VERSION).tar.xz.sign
 
 # Defines the git repository to use
 DOWNLOAD_TOOL    = wget
-SW_NAME         = linux
+SW_NAME          = linux
 BUILD_ARGS       =
 
 # ------------------------------------------------------------------------------

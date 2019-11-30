@@ -45,7 +45,7 @@ endef
 # Execute the package target script
 #
 
-do-package :
+do-package:
 	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
 	then \
 	    echo "Makefile processing has to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make ris running on a $(HOST_ARCH) board." ; \
@@ -80,7 +80,7 @@ do-package :
 	fi ; \
 	$(TARGET_DONE)
 
-do-repackage :
+do-repackage:
 	@if test -f $(COOKIE_DIR)/do-package ; then \
 		rm -f $(COOKIE_DIR)/do-package ; \
 		rm -fr $(abspath $(PACAKGE_DIR)) ; \
@@ -92,7 +92,7 @@ do-repackage :
 # Create the Debian package
 #
 
-package : install $(PACKAGE_DIR) pre-package do-package post-package
+package: install $(PACKAGE_DIR) pre-package do-package post-package
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -102,7 +102,7 @@ package : install $(PACKAGE_DIR) pre-package do-package post-package
 # Execute once again the package target
 #
 
-repackage : install pre-repackage do-repackage package post-repackage
+repackage: install pre-repackage do-repackage package post-repackage
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 

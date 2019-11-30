@@ -60,7 +60,7 @@ $(error $(error_msg))
 endif
 endif
 
-extract : fetch $(SRC_DIR) pre-extract $(EXTRACT_TARGETS) post-extract
+extract: fetch $(SRC_DIR) pre-extract $(EXTRACT_TARGETS) post-extract
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -70,7 +70,7 @@ extract : fetch $(SRC_DIR) pre-extract $(EXTRACT_TARGETS) post-extract
 #
 TAR_ARGS = --no-same-owner
 
-extract-archive-%.tar :
+extract-archive-%.tar:
 	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar ; then \
 		true ; \
 	else \
@@ -79,7 +79,7 @@ extract-archive-%.tar :
 	fi ;
 	$(TARGET_DONE)
 
-extract-archive-%.tar.gz :
+extract-archive-%.tar.gz:
 	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar.gz ; then \
 		true ; \
 	else \
@@ -88,7 +88,7 @@ extract-archive-%.tar.gz :
 	fi ;
 	$(TARGET_DONE)
 
-extract-archive-%.tgz :
+extract-archive-%.tgz:
 	@if test -f $(COOKIE_DIR)/extract-archive-$*.tgz ; then \
 		true ; \
 	else \
@@ -97,7 +97,7 @@ extract-archive-%.tgz :
 	fi ;
 	$(TARGET_DONE)
 
-extract-archive-%.tar.bz2 :
+extract-archive-%.tar.bz2:
 	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar.bz2 ; then \
 		true ; \
 	else \
@@ -106,7 +106,7 @@ extract-archive-%.tar.bz2 :
 	fi ;
 	$(TARGET_DONE)
 
-extract-archive-%.tar.xz :
+extract-archive-%.tar.xz:
 	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar.xz ; then \
 		true ; \
 	else \
@@ -115,7 +115,7 @@ extract-archive-%.tar.xz :
 	fi ;
 	$(TARGET_DONE)
 
-extract-archive-%.zip :
+extract-archive-%.zip:
 	@if test -f $(COOKIE_DIR)/extract-archive-$*.zip ; then \
 		true ; \
 	else \
@@ -124,7 +124,7 @@ extract-archive-%.zip :
 	fi ;
 	$(TARGET_DONE)
 
-extract-git-% :
+extract-git-%:
 	@if test -f $(COOKIE_DIR)/extract-git-$* ; then \
 		true ; \
 	else \
@@ -141,7 +141,7 @@ PATCH_DIR_LEVEL ?= 1
 PATCH_DIR_FUZZ  ?= 2
 PATCH_ARGS       = --directory=$(WORK_DIR) --strip=$(PATCH_DIR_LEVEL) --fuzz=$(PATCH_DIR_FUZZ)
 
-apply-patch-% :
+apply-patch-%:
 	@echo " ==> Applying $(PATCH_DIR)/$*"
 	@patch $(PATCH_ARGS) < $(PATCH_DIR)/$*
 	$(TARGET_DONE)
@@ -153,7 +153,7 @@ apply-patch-% :
 
 PATCH_TARGETS ?=  $(addprefix apply-patch-,$(PATCHFILES))
 
-patch : extract pre-patch $(PATCH_TARGETS) post-patch
+patch: extract pre-patch $(PATCH_TARGETS) post-patch
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 

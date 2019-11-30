@@ -67,11 +67,11 @@ endif
 fetch-list:
 	@echo $(FETCH_TARGETS)
 
-fetch : setup $(COOKIE_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
+fetch: setup $(COOKIE_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
-$(DOWNLOAD_DIR)/% : $(DOWNLOAD_DIR) $(PARTIAL_DIR)
+$(DOWNLOAD_DIR)/%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 	@if test -f $(COOKIE_DIR)/$* ; then \
 		true ; \
 	else \
@@ -101,7 +101,7 @@ $(DOWNLOAD_DIR)/% : $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 	fi ;
 	$(TARGET_DONE)
 
-$(GIT_DIR)/% : $(GIT_DIR)
+$(GIT_DIR)/%: $(GIT_DIR)
 	if test -f $(COOKIE_DIR)/$(GIT_DIR)/$* ; then \
 		true ; \
 	else \

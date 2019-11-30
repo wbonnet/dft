@@ -47,12 +47,12 @@ endef
 
 CHECKSUM_TARGETS ?= $(addprefix checksum-,$(filter-out $(_NOCHECKSUM) $(NOCHECKSUM),$(SRC_DIST_FILES)))
 
-checksum : fetch pre-checksum checksum_banner $(CHECKSUM_TARGETS) post-checksum
+checksum: fetch pre-checksum checksum_banner $(CHECKSUM_TARGETS) post-checksum
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
 # Pretty output :)
-checksum_banner :
+checksum_banner:
 	@echo "    running checksums"
 
 
@@ -63,7 +63,7 @@ checksum_banner :
 
 # Check a given file's checksum against $(CHECKSUM_FILE) and error out if it
 # mentions the file without an "OK".
-checksum-% : $(CHECKSUM_FILE)
+checksum-%: $(CHECKSUM_FILE)
 	@if grep -- '$*' $(CHECKSUM_FILE) > /dev/null; then  \
 		if cat $(CHECKSUM_FILE) | (cd $(DOWNLOAD_DIR); LC_ALL="C" LANG="C" md5sum -c 2>&1) | grep -- '$*' | grep -v ':[ ]\+OK' > /dev/null; then \
 			echo "        \033[1m[Failed] : checksum of file $* is invalid\033[0m" ; \
@@ -94,7 +94,7 @@ MAKESUM_TARGETS ?=  $(filter-out $(_NOCHECKSUM) $(NOCHECKSUM),$(SRC_DIST_FILES))
 
 # Check that the files really exist, even if they should be downloaded by
 # fetch  target. Then call md5sum to generate checksum file
-makesum  : pre-makesum fetch post-makesum
+makesum: pre-makesum fetch post-makesum
 	@if test "x$(MAKESUM_TARGETS)" != "x"; then \
 		(cd $(DOWNLOAD_DIR) && md5sum $(MAKESUM_TARGETS)) > $(CHECKSUM_FILE) ; \
 		echo "    checksums made for $(MAKESUM_TARGETS)" ; \
@@ -107,7 +107,7 @@ makesum  : pre-makesum fetch post-makesum
 	$(TARGET_DONE)
 
 # Provided for convenience
-makesums : makesum
+makesums: makesum
 
 # ------------------------------------------------------------------------------
 # Match initial ifdef

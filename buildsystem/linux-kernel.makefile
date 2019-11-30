@@ -21,7 +21,6 @@
 
 # Defines variables specific to Linux kernel
 SW_NAME	= linux
-SW_VERSION = SW_VERSION_undefined_at_kernel_level
 
 buildsystem := ../../../../buildsystem
 include board.mk
@@ -55,7 +54,7 @@ endif
 # Board level birectory generic Linux kernel makefile
 #
 
-sanity-check :
+sanity-check:
 	@echo "sanity-check from linux-kernel.makefile"
 	@echo "Checking Linux kernel $(SW_VERSION) folder sanity for board $(BOARD_NAME)" 
 	@if [ ! -d "$(shell pwd)/defconfig" ] ; then \
@@ -135,8 +134,10 @@ sanity-check :
 	done ; 
 	@for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*') ; do \
 		if [ -f $$folder/Makefile ] ; then \
-			$(MAKE) -C $$folder sanity-check || exit 1 ; \
 			echo "make sanity-check in $(SW_NAME) version $(shell pwd)/$$folder" ; \
+			cd $$folder; \
+			$(MAKE) sanity-check || exit 1 ; \
+			cd ..; \
 		fi ; \
 	done ;
 
@@ -145,6 +146,8 @@ sanity-check :
 	@echo "percent from linux-kernel.makefile"
 	@for f in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$f/Makefile ] ; then \
-			$(MAKE) -C $$f $* || exit 1 ; \
+			cd $$f ; \
+			$(MAKE) $* || exit 1 ; \
+			cd .. ; \
 		fi ; \
 	done

@@ -46,7 +46,6 @@ endef
 #
 # ------------------------------------------------------------------------------
 
-#La faut mettre u mesage not used pask uboot
 SRC_GIT_URL         ?= "SRC_GIT_URL Not used -- git://git.kernel.org/pub/scm/linux/kernel/git/stable"
 SRC_GIT_BRANCH      ?= "SRC_GIT_BRANCH Not Used -- stable"
 SRC_GIT_REPO        ?= "SRC_GIT_REPO Not Used -- linux-$(SRC_GIT_BRANCH)"

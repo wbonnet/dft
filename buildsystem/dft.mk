@@ -28,6 +28,8 @@
 #
 #
 
+.PHONY: help
+
 # ------------------------------------------------------------------------------
 #
 # Protection against multiple includes
@@ -173,7 +175,7 @@ post-%:
 #
 # Target that prints the help
 #
-help :
+help:
 	@echo "Available targets are :"
 	@echo "   clean                   Call the clean target inside the work directory"
 	@echo "                           then into all its subfolders (sub makefiles have"
@@ -205,7 +207,7 @@ help :
 	@echo "   sanity-check            Verify the availability of required items (files, symlinks, directories)"
 	@echo "   re[target]              Force execution of [target] even if already done (without re-executing dependencies)"
 	@echo "                           "
-	@echo "                           The targets are recursive. It means that make will walk down through the whole tree."
+	@echo "                           All targets are recursive. It means that make will walk down through the whole tree."
 	@echo "                           Iterating categories, then boards, softwares, every versions and finally call the"
 	@echo "                           given target in current location. Recursive target execution is handy but it can"
 	@echo "                           use a lot of time, cpu and network bandwidth."
@@ -240,7 +242,7 @@ mrproper:
 # Dump the values of the internal variables
 #
 show-configuration : show-config
-show-config :
+show-config:
 	@echo "Sources download with $(DOWNLOAD_TOOL) and parameters" ; 
 	@echo "  SW_NAME                           $(SW_NAME)" ; 
 	@echo "  SW_VERSION                        $(SW_VERSION)" ; 
@@ -307,23 +309,9 @@ show-config :
 # packages to be avaiable. Should add a check based on the flavor.
 #
 
-setup : $(COOKIE_DIR)
+setup: $(COOKIE_DIR)
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
-
-
-# ------------------------------------------------------------------------------
-#
-# Mandatory defines that have to be defined at least in the main Makefile
-#
-
-ifndef SW_NAME
-$(error SW_NAME is not set)
-endif
-
-ifndef DOWNLOAD_TOOL
-$(error DOWNLOAD_TOOL is not set)
-endif
 
 # ------------------------------------------------------------------------------
 # Match initial ifdef

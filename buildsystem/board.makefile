@@ -19,9 +19,12 @@
 #
 #
 
-buildsystem := ../../../../buildsystem
+# Defines variables specific to u-boot
+SW_NAME     = u-boot
+
+buildsystem := ../../../buildsystem
+include board.mk
 include $(buildsystem)/dft.mk
-include ./board.mk
 
 # Do not recurse the following subdirs
 MAKE_FILTERS = files Makefile README.md
@@ -31,16 +34,7 @@ SW_NAME      = SW_NAME_undefined_at_board_level
 #
 # Targets not associated with a file (aka PHONY)
 #
-.PHONY: help sanity-check
-
-# Catch all target. Call the same targets in each subfolder
-%:
-	@echo "percent from board.makefile"
-	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
-		if [ -f $$i/Makefile ] ; then \
-                $(MAKE) -C $$i $* || exit 1 ; \
-		fi ; \
-        done
+.PHONY: help clean mrproper
 
 sanity-check:
 	@echo "sanity-check from board.makefile" ;
@@ -153,17 +147,26 @@ sanity-check:
 	@make -C u-boot sanity-check
 	@make -C kernel sanity-check
 	@for version in $(find . -mindepth 1 -maxdepth 1 -type d ) ; do \
-		if [ -f $$version/Makefile ] ; then \
-                $(MAKE) -C $$version $* || exit 1 ; \
-		fi ; \
+		cd $$version && $(MAKE) $* ; \
         done
 
 # Build only u-boot  package target
 u-boot-package:
 	@echo "u-boot-package from board.makefile" ;
-	$(MAKE) -C u-boot package || exit 1 ;
+	pwd ; \
+	cd u-boot && $(MAKE) package ;
 
 # Build only linux kernel an package target
 kernel-package:
 	@echo "kernel-package from board.makefile" ;
-	$(MAKE) -C kernel package || exit 1 ;
+	cd kernel && $(MAKE) package ;
+
+# Catch all target. Call the same targets in each subfolder
+%:
+	@echo "target $@ is called in board.makefile"
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+		echo "examen de $$i" ; \
+		if [ -f $$i/Makefile ] ; then \
+			cd $$i && $(MAKE) $* ; \
+		fi ; \
+        done

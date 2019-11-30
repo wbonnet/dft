@@ -46,7 +46,7 @@ endef
 #
 
 BUILD_TARGETS = $(addprefix build-,$(BUILD_CHECK_SCRIPTS)) $(addprefix build-,$(BUILD_SCRIPTS))
-build : configure $(SRC_DIR) pre-build $(BUILD_SCRIPTS) post-build
+build: configure $(SRC_DIR) pre-build $(BUILD_SCRIPTS) post-build
 	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
 		then \
 		echo "Makefile processing has to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
@@ -67,7 +67,7 @@ build : configure $(SRC_DIR) pre-build $(BUILD_SCRIPTS) post-build
 
 REBUILD_TARGETS ?= $(addprefix rebuild-,$(BUILD_CHECK_SCRIPTS)) $(addprefix rebuild-,$(BUILD_SCRIPTS))
 
-rebuild : configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
+rebuild: configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -76,16 +76,18 @@ rebuild : configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 # Execute the building script
 #
 
-%/Makefile :
+%/Makefile:
 	@if test -f $(COOKIE_DIR)/build-$*/Makefile ; then \
 		true ; \
 	else \
-		$(BUILD_ENV) $(MAKE) -C $(abspath $(SRC_DIR)/$(SW_NAME)-$(SW_VERSION)) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) \
-		                                  $(BUILD_ARGS) ; \
+		MY_OLD_PWD=`pwd` ; \
+		cd $(abspath $(SRC_DIR)/$(SW_NAME)-$(SW_VERSION)) \
+		$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
+		cd $(MY_OLD_PWD) ; \
 	fi ;
 	$(TARGET_DONE)
 
-rebuild-%/Makefile :
+rebuild-%/Makefile:
 	@if test -f $(COOKIE_DIR)/build-$*/Makefile ; then \
 		rm -f $(COOKIE_DIR)/build-$*/Makefile ; \
 	fi ;

@@ -19,13 +19,13 @@
 #
 #
 
-# Include board specific definitions from board level
-include ../board.mk
-
 # Defines variables specific to Linux kernel
-SW_NAME     := linux
-SW_VERSION  := $(notdir $(patsubst %/,%,$(shell pwd)))
-buildsystem := ../../../../../buildsystem 
+SW_NAME     = linux
+SW_VERSION  = $(notdir $(patsubst %/,%,$(shell pwd)))
+
+buildsystem := ../../../../../buildsystem
+include $(buildsystem)/inc/u-boot.mk
+include $(buildsystem)/dft.mk
 
 # Retrieve th builder hot architecure if not defined yet
 HOST_ARCH      ?= $(shell uname -m)
@@ -54,7 +54,7 @@ endif
 # otherwise it would then behave as new default value for all unmodified versions 
 # of all existing boards.
 
-sanity-check :
+sanity-check:
 	@echo "sanity-check from kernel-version.makefile"
 	@echo "Checking $(SW_NAME) kernel $(SW_VERSION) package sanity for $(BOARD_NAME)"
 	@if [ ! -f "../board.mk" ] ; then \

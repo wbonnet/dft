@@ -45,11 +45,9 @@ endef
 # Run the configure script
 #
 
-#yavait caCONFIGURE_TARGETS = $(addprefix configure-,$(basedir $(CONFIGURE_SCRIPTS)))
 CONFIGURE_TARGETS = $(addprefix configure-, $(CONFIGURE_SCRIPTS))
 
-#configure : patch $(SRC_DIR) pre-configure $(CONFIGURE_TARGETS) $(CONFIGURE_SCRIPTS) do-configure post-configure
-configure : patch pre-configure do-configure post-configure
+configure: patch pre-configure do-configure post-configure
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -60,7 +58,7 @@ configure : patch pre-configure do-configure post-configure
 
 RECONFIGURE_TARGETS ?= $(addprefix reconfigure-,$(basedir $(CONFIGURE_SCRIPTS)))
 
-reconfigure : patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconfigure
+reconfigure: patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconfigure
 	@rm -f $(COOKIE_DIR)/configure
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
@@ -72,10 +70,10 @@ reconfigure : patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconf
 # TODO : DELTA DEFCONFIG
 # ya pas de configure t as deja lz .config			$(CONFIGURE_ENV) $(abspath $*)/configure $(CONFIGURE_ARGS) ; 
 
-%/configure : do-configure 
-configure : do-configure 
-do-configure :
-	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
+%/configure: do-configure 
+configure: do-configure 
+do-configure:
+	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
 	then \
 		echo "Makefile processing has to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 		echo "The generated binaries might be invalid or scripts could fail before reaching the end of target. Cross compilation is not yet supported." ; \

@@ -79,7 +79,9 @@ clean:
 fetch:
 distclean:
 	@for i in $(filter-out $(MAKE_FILTERS),$(wildcard */)) ; do \
-	$(MAKE) -C $$i $* || exit 1 ; \
+		cd $$i ; \
+		$(MAKE) $* || exit 1 ; \
+		cd .. ; \
 	done 
 
 # Catch all target. Call the same targets in each subfolder
@@ -90,7 +92,9 @@ distclean:
 	    true ; \
 	else \
 		for i in $(filter-out $(MAKE_FILTERS),$(wildcard */)) ; do \
-			$(MAKE) -C $$i $* || exit 1 ; \
+			cd $$i ; \
+			$(MAKE) $* || exit 1 ; \
+			cd .. ; \
 		done \
 	fi
 
@@ -98,7 +102,7 @@ distclean:
 #
 # Target that prints the help
 #
-help :
+help:
 	@echo "Available targets are :"
 	@echo '   new-version VERSION=YYYY.MM Create a new version entry. ex: make new-version VERSION=2019.07'
 	@echo '                               This target will create a subdirectory named after the content of the VERSION variable.'
