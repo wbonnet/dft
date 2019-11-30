@@ -19,6 +19,7 @@
 #
 
 buildsystem := ../../../buildsystem
+include $(buildsystem)/dft.mk
 
 # Do not recurse the following subdirs
 MAKE_FILTERS  = Makefile README.md .
@@ -31,6 +32,7 @@ SW_NAME       = SW_NAME_undefined_at_category_level
 .PHONY: help sanity-check
 
 sanity-check :
+	@echo "sanity-check from category.makefile"
 # Board category directory contains several folders, on per board in this category
 # Each board folder must contain a board.mk file with board specific information, 
 # a mandatory kernel folder, optional folders like u-boot for boot loader and files 
@@ -71,6 +73,7 @@ sanity-check :
 
 # Build only u-boot  package target
 u-boot-package:
+	@echo "u-boot-package from category.makefile"
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
                 $(MAKE) -C $$i u-boot-package || exit 1 ; \
@@ -79,7 +82,7 @@ u-boot-package:
 
 # Build only linux kernel an package target
 kernel-package:
-linux-kernel-package:
+	@echo "kernel-package from category.makefile"
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
                 $(MAKE) -C $$i kernel-package || exit 1 ; \
@@ -88,21 +91,9 @@ linux-kernel-package:
 
 # Catch all target. Call the same targets in each subfolder
 %:
+	@echo "percent from category.makefile"
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
                 $(MAKE) -C $$i $* || exit 1 ; \
 		fi ; \
         done
-
-help:
-	@echo "Supported targets are"
-	@echo 'sanity-check   : Verify the availability of required items (files, symlinks, directories) and report missing ones.'
-	@echo 'u-boot-package : Recursivly build u-boot packages of all available versions for board $(BOARD_NAME).'
-	@echo 'kernel-package : Recursivly build linux kernel packages of all available versions for board $(BOARD_NAME).'
-
-# ------------------------------------------------------------------------------
-#
-# Target that prints the help
-#
-help :
-	@echo "The target given to make will be called recursively on each board folder."

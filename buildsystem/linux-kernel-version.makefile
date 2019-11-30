@@ -26,13 +26,25 @@ include ../board.mk
 SW_NAME     := linux
 SW_VERSION  := $(notdir $(patsubst %/,%,$(shell pwd)))
 buildsystem := ../../../../../buildsystem 
-#include $(buildsystem)/inc/linux-kernel.mk
 
 # Retrieve th builder hot architecure if not defined yet
 HOST_ARCH      ?= $(shell uname -m)
 
 # Do not recurse the following subdirs
 MAKE_FILTERS  = Makefile README.md .
+
+# ------------------------------------------------------------------------------
+#
+# Mandatory defines that have to be defined at least in the main Makefile
+#
+
+ifndef SW_NAME
+$(error SW_NAME is not set)
+endif
+
+ifndef DOWNLOAD_TOOL
+$(error DOWNLOAD_TOOL is not set)
+endif
 
 # Defines patches to apply to the upstream sources :
 # PATCHFILES += 0000_some_patch.diff
@@ -43,6 +55,7 @@ MAKE_FILTERS  = Makefile README.md .
 # of all existing boards.
 
 sanity-check :
+	@echo "sanity-check from kernel-version.makefile"
 	@echo "Checking $(SW_NAME) kernel $(SW_VERSION) package sanity for $(BOARD_NAME)"
 	@if [ ! -f "../board.mk" ] ; then \
 		echo "file board.mk is missing in directory $(shell pwd)/.." ; \
@@ -94,7 +107,3 @@ sanity-check :
 		echo "error 191121-08" ; \
 		exit 1 ; \
 	fi ;
-
-help :
-	@echo "Supported targets are"
-	@echo 'sanity-check : Verify the availability of required items (files, symlinks, directories) and report missing.'

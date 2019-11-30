@@ -31,11 +31,32 @@ include $(buildsystem)/dft.mk
 # Do not recurse the following subdirs
 MAKE_FILTERS  = files defconfig Makefile README.md .
 
+
+# ------------------------------------------------------------------------------
+#
+# Mandatory defines that have to be defined at least in the main Makefile
+#
+
+ifndef SW_NAME
+$(error SW_NAME is not set)
+endif
+
+ifndef DOWNLOAD_TOOL
+$(error DOWNLOAD_TOOL is not set)
+endif
+
+# ------------------------------------------------------------------------------
+#
+# Targets not associated with a file (aka PHONY)
+#
+.PHONY: help clean mrproper
+
 # 
 # Board level birectory generic Linux kernel makefile
 #
 
 sanity-check :
+	@echo "sanity-check from linux-kernel.makefile"
 	@echo "Checking Linux kernel $(SW_VERSION) folder sanity for board $(BOARD_NAME)" 
 	@if [ ! -d "$(shell pwd)/defconfig" ] ; then \
 		echo "defconfig directory is missing in $(shell pwd). It contains the configuration files of the different Linux kernel versions." ; \
@@ -121,12 +142,9 @@ sanity-check :
 
 # Catch all target. Call the same targets in each subfolder
 %:
+	@echo "percent from linux-kernel.makefile"
 	@for f in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$f/Makefile ] ; then \
 			$(MAKE) -C $$f $* || exit 1 ; \
 		fi ; \
 	done
-
-help :
-	@echo "Supported targets are"
-	@echo 'sanity-check : Verify the availability of required items (files, symlinks, directories) and report missing.'

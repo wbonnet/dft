@@ -30,6 +30,20 @@ include $(buildsystem)/dft.mk
 # Include board specific definitions  from board level
 include ../board.mk
 
+
+# ------------------------------------------------------------------------------
+#
+# Mandatory defines that have to be defined at least in the main Makefile
+#
+
+ifndef SW_NAME
+$(error SW_NAME is not set)
+endif
+
+ifndef DOWNLOAD_TOOL
+$(error DOWNLOAD_TOOL is not set)
+endif
+
 # u-boot version generic Makefile
 #
 # WARNING if you need to make any version specific modification or definition,
@@ -55,11 +69,8 @@ MAKE_FILTERS  = debian files patches
 #
 .PHONY:
 
-help:
-	@echo "Supported targets are"
-	@echo 'sanity-check : Verify the availability of required items (files, symlinks, directories) and report missing.'
-
 sanity-check:
+	@echo "sanity-check from u-boot-version.makefile"
 	@echo "Checking u-boot $(SW_VERSION) package sanity for $(BOARD_NAME)" ; 
 	@if [ ! -f "../board.mk" ] ; then \
 		echo "file board.mk is missing in directory $(shell pwd)/.." ; \
@@ -110,7 +121,3 @@ sanity-check:
 		ln -s $(buildsystem)/u-boot-version.makefile Makefile ; \
 		git add Makefile ; \
 	fi ; \
-
-help:
-	@echo "Supported targets are"
-	@echo 'check : Verify the availability of required items (files, symlinks, directories) and report missing.'

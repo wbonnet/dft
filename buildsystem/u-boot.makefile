@@ -31,6 +31,19 @@ MAKE_FILTERS  = files defconfig Makefile README.md patches .
 
 # ------------------------------------------------------------------------------
 #
+# Mandatory defines that have to be defined at least in the main Makefile
+#
+
+ifndef SW_NAME
+$(error SW_NAME is not set)
+endif
+
+ifndef DOWNLOAD_TOOL
+$(error DOWNLOAD_TOOL is not set)
+endif
+
+# ------------------------------------------------------------------------------
+#
 # Targets not associated with a file (aka PHONY)
 #
 .PHONY: help check
@@ -39,6 +52,7 @@ MAKE_FILTERS  = files defconfig Makefile README.md patches .
 # Board level u-boot makefile
 #
 sanity-check:
+	@echo "isanity-checkfrom u-boot.makefile"
 	@echo "Checking u-boot folder sanity for board $(BOARD_NAME)" ;
 	@if [ ! -L "Makefile"  ] ; then \
 		echo "Makefile symlink $(buildsystem)/u-boot.makefile is missing in directory $(shell pwd)" ; \
@@ -111,7 +125,6 @@ sanity-check:
             exit 1 ; \
            fi ; \
            s=`readlink $$version/Makefile` ; \
-           echo "readlink retourne $$s" ; \
            if [ !  "$$s" = "../$(buildsystem)/u-boot-version.makefile" ] ; then \
                echo "Makefile symlink in $$version must link to $(buildsystem)/u-boot-version.makefile" ; \
                echo "You can fix with the following shell commands :" ; \
@@ -130,12 +143,9 @@ sanity-check:
 
 # Catch all target. Call the same targets in each subfolder
 %:
+	@echo "percent from u-boot.makefile"
 	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
                 $(MAKE) -C $$i $* || exit 1 ; \
 		fi ; \
         done
-
-help :
-	@echo "Supported targets are"
-	@echo 'sanity-check : Verify the availability of required items (files, symlinks, directories) and report missing.'

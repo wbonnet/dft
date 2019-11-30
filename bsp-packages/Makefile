@@ -18,8 +18,9 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 
-$(info "D3BUG bsp-packages.makefile")
-$(warning "te faut l include de la liste des error codes et la fonction dft-error")
+
+buildsystem := ../buildsystem
+include $(buildsystem)/dft.mk
 
 # Do not recurse the following subdirs
 MAKE_FILTERS  = Makefile README.md . kernel-defconfig-fragments
@@ -80,10 +81,3 @@ linux-kernel-package:
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
 		$(MAKE) -C $$i $* || exit 1 ; \
 	done
-
-# ------------------------------------------------------------------------------
-#
-# Target that prints the help
-#
-help :
-	@echo "The target given to make will be called recursively on each board folder."

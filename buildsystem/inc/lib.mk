@@ -32,9 +32,9 @@
 #
 # Protection against multiple includes
 #
-$(info included dft.lib.mk)
+$(info included lib.mk)
 ifdef DFT_LIB
-$(error dft.lib.mk has already been included)
+$(error lib.mk has already been included)
 else
 define DFT_LIB
 endef
@@ -54,6 +54,24 @@ $(COOKIE_DIR)/%:
 	@if test -d $@; then : ; else \
 		touch $@; \
 	fi
+
+# ------------------------------------------------------------------------------
+#
+# definition of function dft_error : display an error message and stop
+# execution returning with provided error codeor 1 as defaault value
+#
+define dft_error = 
+	echo "DFT ERROR" ;
+endef
+
+# ------------------------------------------------------------------------------
+#
+# definition of function dft_warning : display a message and continue execution
+#
+define dft_warning = 
+	echo "DFT Warning : $(1)" ;
+	echo "$(1)" ;
+endef
 
 # Match initial ifndef DFT_LIB
 endif

@@ -20,7 +20,7 @@
 #
 
 buildsystem := ../../../../buildsystem
-#include $(buildsystem)/dft.mk
+include $(buildsystem)/dft.mk
 include ./board.mk
 
 # Do not recurse the following subdirs
@@ -33,8 +33,20 @@ SW_NAME      = SW_NAME_undefined_at_board_level
 #
 .PHONY: help sanity-check
 
+# Catch all target. Call the same targets in each subfolder
+%:
+	@echo "percent from board.makefile"
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+		if [ -f $$i/Makefile ] ; then \
+                $(MAKE) -C $$i $* || exit 1 ; \
+		fi ; \
+        done
+
 sanity-check:
-	@echo "Checking board definition sanity for $(BOARD_NAME)" ;
+	@echo "sanity-check from board.makefile" ;
+	echo "Checking board definition sanity for $(BOARD_NAME)" ;
+	$(call dft_error) 
+	echo "plop after call dft_error from board.makefile for $(BOARD_NAME)" ;
 	@if [ ! -f "board.mk" ] ; then \
 		pwd ; \
 		echo "file board.mk is missing in directory $(shell pwd)" ; \
@@ -95,6 +107,7 @@ sanity-check:
 		echo "ln -s $(buildsystem)/linux-kernel.makefile $(shell pwd)/kernel/Makefile" ; \
 		echo "git add $(shell pwd)/kernel/Makefile" ; \
 		echo "error 191114-02" ; \
+		$(call dft_error "error 191114-02") \
 		exit 1 ; \
 	fi ;
 	@if [ ! -L "kernel/board.mk" ] ; then \
@@ -147,23 +160,10 @@ sanity-check:
 
 # Build only u-boot  package target
 u-boot-package:
+	@echo "u-boot-package from board.makefile" ;
 	$(MAKE) -C u-boot package || exit 1 ;
 
 # Build only linux kernel an package target
 kernel-package:
-linux-kernel-package:
+	@echo "kernel-package from board.makefile" ;
 	$(MAKE) -C kernel package || exit 1 ;
-
-# Catch all target. Call the same targets in each subfolder
-%:
-	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
-		if [ -f $$i/Makefile ] ; then \
-                $(MAKE) -C $$i $* || exit 1 ; \
-		fi ; \
-        done
-
-help:
-	@echo "Supported targets are"
-	@echo 'sanity-check   : Verify the availability of required items (files, symlinks, directories) and report missing ones.'
-	@echo 'u-boot-package : Recursivly build u-boot packages of all available versions for board $(BOARD_NAME).'
-	@echo 'kernel-package : Recursivly build linux kernel packages of all available versions for board $(BOARD_NAME).'
