@@ -40,7 +40,7 @@ sanity-check:
 	@echo "sanity-check from board.makefile" ;
 	echo "Checking board definition sanity for $(BOARD_NAME)" ;
 	$(call dft_error) 
-	echo "plop after call dft_error from board.makefile for $(BOARD_NAME)" ;
+	echo "test de la fonction dft_error ici a finir de coder c est unec erreur volontaire plop after call dft_error from board.makefile for $(BOARD_NAME)" ;
 	@if [ ! -f "board.mk" ] ; then \
 		pwd ; \
 		echo "file board.mk is missing in directory $(shell pwd)" ; \

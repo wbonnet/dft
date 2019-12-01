@@ -45,7 +45,7 @@ sanity-check:
 			exit 1 ; \
 		fi ; \
 		s=`readlink $$board/Makefile` ; \
-		if [ !  "$$s" = "$(buildsystem)/board.makefile" ] ; then \
+		if [ !  "$$s" = "../$(buildsystem)/board.makefile" ] ; then \
 			echo "Makefile symlink in $$board must link to $(buildsystem)/board.makefile" ; \
 			echo "It targets to $$s" ; \
 			echo "exit 825" ; \
