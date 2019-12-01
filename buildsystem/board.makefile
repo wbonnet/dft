@@ -37,9 +37,8 @@ SW_NAME      = SW_NAME_undefined_at_board_level
 .PHONY: help clean mrproper
 
 sanity-check:
-	@echo "sanity-check from board.makefile" ;
-	echo "Checking board definition sanity for $(BOARD_NAME)" ;
-	if [ ! -f "board.mk" ] ; then \
+	@echo "Checking board definition sanity for $(BOARD_NAME)" ;
+	@if [ ! -f "board.mk" ] ; then \
 		pwd ; \
 		echo "file board.mk is missing in directory ${CURDIR}" ; \
 	        $(call dft_error ,191112-01) ; \

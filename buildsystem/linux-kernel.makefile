@@ -109,7 +109,7 @@ sanity-check:
 		exit 1 ; \
 	fi ;
 	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*\.*' ) ; do \
-		echo "Checking folder sanity for $(BOARD_NAME) kernel $$version package definition" ; \
+		echo "Checking $(BOARD_NAME) kernel $$version package definition" ; \
 		if [ ! -L "$$version/Makefile" ] ; then \
 			echo "version folder $$version" ; \
 			echo "Makefile symlink in ${CURDIR}/$$version is missing. It should be a symlink to $(buildsystem)/$(SW_NAME)-kernel-version.makefile" ; \
