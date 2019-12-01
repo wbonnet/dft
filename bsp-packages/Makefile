@@ -37,8 +37,6 @@ CATEGORIES    = laptop desktop set-top-box single-board-computer
 #check que tes subdirs de category ont la et ont un lien makefile valide ensuite ca recurse
 sanity-check:
 	for category in $(CATEGORIES) ; do \
-		echo "premier pwd le for traite : $$category" ; \
-		pwd ; \
 		if [ ! -d ${CURDIR}/$$category ] ; then \
 			echo "Warning : $$c category folder is missing, recursive targets may fail or produce incomplete set of binaries." ; \
 		fi ; \

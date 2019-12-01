@@ -32,7 +32,6 @@
 #
 # Protection against multiple includes
 #
-$(info included target-configure.mk)
 ifdef DFT_BUILDSYSTEM_TARGET_CONFIGURE
 $(error target-configure.mk has already been included)
 else
@@ -68,7 +67,6 @@ reconfigure: patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconfi
 # Execute the configure script
 #
 # TODO : DELTA DEFCONFIG
-# ya pas de configure t as deja lz .config			$(CONFIGURE_ENV) $(abspath $*)/configure $(CONFIGURE_ARGS) ; 
 
 %/configure: do-configure 
 configure: do-configure 

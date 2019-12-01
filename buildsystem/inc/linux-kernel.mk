@@ -32,7 +32,6 @@
 #
 # Protection against multiple includes
 #
-$(info included linux-kernel.mk)
 ifdef DFT_BUILDSYSTEM_LINUX_KERNEL
 # the matching endif teminates this file
 $(error linux-kernel.mk has already been included)

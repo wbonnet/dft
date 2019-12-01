@@ -33,7 +33,6 @@ SW_NAME       = SW_NAME_undefined_at_category_level
 # a mandatory kernel folder, optional folders like u-boot for boot loader and files 
 # to store needed additionnal files
 sanity-check:
-	@echo "sanity-check from category.makefile"
 	@for board in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
 		if [ ! -e "$$board/Makefile" ] ; then \
 			echo "Makefile in ${CURDIR}/$$board is Missing. It should be a symlink to  $(buildsystem)/board.makefile" ; \

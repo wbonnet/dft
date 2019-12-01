@@ -32,7 +32,6 @@
 #
 # Protection against multiple includes
 #
-$(info included u-boot.mk)
 ifdef DFT_BUILDSYSTEM_UBOOT
 # the matching endif teminates this file
 $(error u-boot.mk has already been included)

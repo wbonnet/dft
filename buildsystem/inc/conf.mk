@@ -32,7 +32,6 @@
 # 
 # Protection against multiple includes
 #
-$(info included conf.mk)
 ifdef DFT_INTERNALS_CONF
 $(error conf.mk has already been included)
 else

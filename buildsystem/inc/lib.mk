@@ -32,7 +32,6 @@
 #
 # Protection against multiple includes
 #
-$(info included lib.mk)
 ifdef DFT_LIB
 $(error lib.mk has already been included)
 else

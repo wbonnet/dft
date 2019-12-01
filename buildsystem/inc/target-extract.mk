@@ -32,7 +32,6 @@
 #
 # Protection against multiple includes
 #
-$(info included target-extract.mk)
 ifdef DFT_BUILDSYSTEM_TARGET_EXTRACT
 $(error target-extract.mk has already been included)
 else

@@ -32,7 +32,6 @@
 #
 # Protection against multiple includes
 #
-$(info included target-build.mk)
 ifdef DFT_BUILDSYSTEM_TARGET_BUILD
 $(error target-build.mk has already been included)
 else

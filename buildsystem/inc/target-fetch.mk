@@ -32,7 +32,6 @@
 #
 # Protection against multiple includes
 #
-$(info included target-fetch.mk)
 ifdef DFT_BUILDSYSTEM_TARGET_FETCH
 $(error target-fetch.mk has already been included)
 else

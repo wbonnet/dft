@@ -52,8 +52,7 @@ endif
 # Board level u-boot makefile
 #
 sanity-check:
-	@echo "sanity-checkfrom u-boot.makefile"
-	@echo "Checking u-boot folder sanity for board $(BOARD_NAME)" ;
+	@echo "Checking folder sanity for $(BOARD_NAME) u-boot packages definition " ;
 	@if [ ! -L "Makefile"  ] ; then \
 		echo "Makefile symlink $(buildsystem)/u-boot.makefile is missing in directory ${CURDIR}" ; \
 		echo "You can fix with the following commands : " ; \
@@ -115,7 +114,7 @@ sanity-check:
 		exit 1 ; \
 	fi ;
 	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*' ) ; do \
-         echo "checking version $$version subfolder sanity" ; \
+	 echo "Checking folder sanity for $(BOARD_NAME) u-boot $$version package definition" ; \
          if [ ! -L "$$version/Makefile" ] ; then \
             echo "Makefile in ${CURDIR}/$$version is missing. It should be a symlink to $(buildsystem)/u-boot-version.makefile" ; \
             echo "You can fix with the following shell commands :" ; \
@@ -136,7 +135,6 @@ sanity-check:
 	done ; 
 	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*\.*' ) ; do \
 		if [ -f $$version/Makefile ] ; then \
-			echo "make sanity-check in $(SW_NAME) version ${CURDIR}/$$folder" ; \
 			cd $$version && $(MAKE) sanity-check ; \
 		fi ; \
 	done ;

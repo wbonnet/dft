@@ -55,8 +55,7 @@ endif
 #
 
 sanity-check:
-	@echo "sanity-check from linux-kernel.makefile"
-	@echo "Checking Linux kernel $(SW_VERSION) folder sanity for board $(BOARD_NAME)" 
+	@echo "Checking folder sanity for $(BOARD_NAME) kernel packages definition" 
 	@if [ ! -d "${CURDIR}/defconfig" ] ; then \
 		echo "defconfig directory is missing in ${CURDIR}. It contains the configuration files of the different Linux kernel versions." ; \
 		echo "You can fix with the following commands : " ; \
@@ -110,7 +109,7 @@ sanity-check:
 		exit 1 ; \
 	fi ;
 	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*\.*' ) ; do \
-		echo "checking version $$version subfolder" ; \
+		echo "Checking folder sanity for $(BOARD_NAME) kernel $$version package definition" ; \
 		if [ ! -L "$$version/Makefile" ] ; then \
 			echo "version folder $$version" ; \
 			echo "Makefile symlink in ${CURDIR}/$$version is missing. It should be a symlink to $(buildsystem)/$(SW_NAME)-kernel-version.makefile" ; \
@@ -134,16 +133,14 @@ sanity-check:
 	done ; 
 	@for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*') ; do \
 		if [ -f $$folder/Makefile ] ; then \
-			echo "make sanity-check in $(SW_NAME) version ${CURDIR}/$$folder" ; \
 			cd $$folder; \
 			$(MAKE) sanity-check || exit 1 ; \
-			cd ..; \
+			cd .. ; \
 		fi ; \
 	done ;
 
 # Catch all target. Call the same targets in each subfolder
 %:
-	@echo "percent from linux-kernel.makefile"
 	@for f in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$f/Makefile ] ; then \
 			cd $$f ; \

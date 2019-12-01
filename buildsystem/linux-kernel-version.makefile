@@ -56,8 +56,7 @@ endif
 # of all existing boards.
 
 sanity-check:
-	@echo "sanity-check from kernel-version.makefile"
-	@echo "Checking $(SW_NAME) kernel $(SW_VERSION) package sanity for $(BOARD_NAME)"
+	@echo "Checking $(BOARD_NAME) kernel $(SW_VERSION) package definition sanity"
 	@if [ ! -f "../board.mk" ] ; then \
 		echo "file board.mk is missing in directory ${CURDIR}//.." ; \
 		echo "error 191121-02" ; \

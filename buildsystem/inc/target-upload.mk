@@ -32,7 +32,6 @@
 #
 # Protection against multiple includes
 #
-$(info included target-upload.mk)
 ifdef DFT_BUILDSYSTEM_TARGET_UPLOAD
 $(error target-upload.mk has already been included)
 else

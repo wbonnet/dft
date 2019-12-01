@@ -34,7 +34,6 @@
 #
 # Protection against multiple includes
 #
-$(info included dft.mk)
 ifdef DFT_BUILDSYSTEM_ENTRY_POINT
 $(error dft.mk has already been included)
 else
