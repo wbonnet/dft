@@ -80,8 +80,8 @@ sanity-check:
 		echo "error 191114-02" ; \
 		exit 1 ; \
 	fi ;
-	@if [ ! "$(shell readlink ${CURDIR}/u-boot/Makefile)" = "$(buildsystem)/u-boot.makefile" ] ; then \
-		echo "target of symlink Makefile should be $(buildsystem)/u-boot.makefile in directory ${CURDIR}/u-boot" ; \
+	@if [ ! "$(shell readlink ${CURDIR}/u-boot/Makefile)" = "../$(buildsystem)/u-boot.makefile" ] ; then \
+		echo "target of symlink Makefile should be ../$(buildsystem)/u-boot.makefile in directory ${CURDIR}/u-boot" ; \
 		echo "You can fix with the following commands : " ; \
 		echo "git rm -f ${CURDIR}/u-boot/Makefile" ; \
 		echo "mkdir -p ${CURDIR}/u-boot" ; \
@@ -90,12 +90,12 @@ sanity-check:
 		echo "error 191114-01" ; \
 		exit 1 ; \
 	fi ;
-	@if [ ! "$(shell readlink ${CURDIR}/kernel/Makefile)" = "$(buildsystem)/linux-kernel.makefile" ] ; then \
-		echo "target of symlink Makefile should be $(buildsystem)/linux-kernel.makefile in directory ${CURDIR}/kernel" ; \
+	@if [ ! "$(shell readlink ${CURDIR}/kernel/Makefile)" = "../$(buildsystem)/linux-kernel.makefile" ] ; then \
+		echo "target of symlink Makefile should be ../$(buildsystem)/linux-kernel.makefile in directory ${CURDIR}/kernel" ; \
 		echo "You can fix with the following commands : " ; \
 		echo "git rm -f ${CURDIR}/kernel/Makefile" ; \
 		echo "mkdir -p ${CURDIR}/kernel" ; \
-		echo "ln -s $(buildsystem)/linux-kernel.makefile ${CURDIR}/kernel/Makefile" ; \
+		echo "ln -s ../$(buildsystem)/linux-kernel.makefile ${CURDIR}/kernel/Makefile" ; \
 		echo "git add ${CURDIR}/kernel/Makefile" ; \
 		echo "error 191114-02" ; \
 		$(call dft_error "error 191114-02") \
@@ -132,7 +132,7 @@ sanity-check:
 		echo "error 1911118-03" ; \
 		exit 1 ; \
 	fi ;
-	@if [ ! "$(shell readlink ${CURDIR}u-boot/board.mk)" = "../board.mk" ] ; then \
+	@if [ ! "$(shell readlink ${CURDIR}/u-boot/board.mk)" = "../board.mk" ] ; then \
 		echo "target of symlink board.mk should be ../board.mk in directory ${CURDIR}/u-boot" ; \
 		echo "You can fix with the following commands : " ; \
 		echo "git rm -f ${CURDIR}/u-boot/board.mk" ; \
