@@ -21,7 +21,7 @@
 
 # Defines variables specific to u-boot
 SW_NAME     = u-boot
-SW_VERSION  = $(notdir $(patsubst %/,%,$(shell pwd)))
+SW_VERSION  = $(notdir $(patsubst %/,%,${CURDIR}/))
 
 include ../board.mk
 buildsystem := ../../../../../buildsystem
@@ -70,43 +70,43 @@ sanity-check:
 	@echo "sanity-check from u-boot-version.makefile"
 	@echo "Checking u-boot $(SW_VERSION) package sanity for $(BOARD_NAME)" ; 
 	@if [ ! -f "../board.mk" ] ; then \
-		echo "file board.mk is missing in directory $(shell pwd)/.." ; \
+		echo "file board.mk is missing in directory ${CURDIR}/.." ; \
 		echo "error 191115-12" ; \
 		exit 1 ; \
 	fi ;
-	@if [ ! -d "$(shell pwd)/files" ] ; then \
-		echo "files directory is missing in $(shell pwd). It should contains a link to the markdown file install.$(SW_NAME)-$(BOARD_NAME).md needed by target package." ; \
+	@if [ ! -d "${CURDIR}/files" ] ; then \
+		echo "files directory is missing in ${CURDIR}. It should contains a link to the markdown file install.$(SW_NAME)-$(BOARD_NAME).md needed by target package." ; \
 		echo "You can fix this with the following commands : " ; \
-		mkdir -p $(shell pwd)/files ; \
-		touch $(shell pwd)/files/.gitkeep ; \
-		ln -s ../files/install.$(SW_NAME)-$(BOARD_NAME).md $(shell pwd)/files/ ; \
-		git add $(shell pwd)/files ; \
+		mkdir -p ${CURDIR}/files ; \
+		touch ${CURDIR}/files/.gitkeep ; \
+		ln -s ../files/install.$(SW_NAME)-$(BOARD_NAME).md ${CURDIR}/files/ ; \
+		git add ${CURDIR}/files ; \
 	fi ;
 	@if [ ! -L "files/install.$(SW_NAME)-$(BOARD_NAME).md" ] ; then \
-		echo "The link to the markdown file install.$(SW_NAME)-$(BOARD_NAME).md is missing in the $(shell pwd)/files directory." ; \
+		echo "The link to the markdown file install.$(SW_NAME)-$(BOARD_NAME).md is missing in the ${CURDIR}/files directory." ; \
 		echo "You can fix this with the following commands : " ; \
-		mkdir -p $(shell pwd)/files ; \
-		touch $(shell pwd)/files/.gitkeep ; \
-		ln -s ../../files/install.$(SW_NAME)-$(BOARD_NAME).md $(shell pwd)/files/ ; \
-		echo git add $(shell pwd)/files ; \
+		mkdir -p ${CURDIR}/files ; \
+		touch ${CURDIR}/files/.gitkeep ; \
+		ln -s ../../files/install.$(SW_NAME)-$(BOARD_NAME).md ${CURDIR}/files/ ; \
+		echo git add ${CURDIR}/files ; \
 	fi ; \
 	s=`readlink files/install.$(SW_NAME)-$(BOARD_NAME).md` ; \
 	if [ !  "$$s" = "../../files/install.$(SW_NAME)-$(BOARD_NAME).md" ] ; then \
-		echo "The link to the markdown file in $(shell pwd)/files must target to ../../files/install.$(SW_NAME)-$(BOARD_NAME).md" ; \
+		echo "The link to the markdown file in ${CURDIR}/files must target to ../../files/install.$(SW_NAME)-$(BOARD_NAME).md" ; \
 		echo "You can fix this with the following shell commands :" ; \
 		git rm -f files/install.$(SW_NAME)-$(BOARD_NAME).md || rm -f files/install.$(SW_NAME)-$(BOARD_NAME).md ; \
-		ln -s ../../files/install.$(SW_NAME)-$(BOARD_NAME).md $(shell pwd)/files/ ; \
-		git add $(shell pwd)/files ; \
+		ln -s ../../files/install.$(SW_NAME)-$(BOARD_NAME).md ${CURDIR}/files/ ; \
+		git add ${CURDIR}/files ; \
 	fi ; 
-	@if [ ! -d "$(shell pwd)/patches" ] ; then \
-		echo "patches directory is missing in $(shell pwd). It is used to store patches to be applied on sources after extract and before build targets. By default it is an empty folder." ; \
+	@if [ ! -d "${CURDIR}/patches" ] ; then \
+		echo "patches directory is missing in ${CURDIR}. It is used to store patches to be applied on sources after extract and before build targets. By default it is an empty folder." ; \
 		echo "You can fix this with the following commands : " ; \
-		mkdir -p $(shell pwd)/patches ; \
-		touch $(shell pwd)/patches/.gitkeep ; \
-		git add $(shell pwd)/patches ; \
+		mkdir -p ${CURDIR}/patches ; \
+		touch ${CURDIR}/patches/.gitkeep ; \
+		git add ${CURDIR}/patches ; \
 	fi ;
-	@if [ ! -d "$(shell pwd)/debian" ] ; then \
-		echo "debian directory is missing in $(shell pwd). It should contains the files needed to create the debian package for $(BOARD_NAME) u-boot." ; \
+	@if [ ! -d "${CURDIR}/debian" ] ; then \
+		echo "debian directory is missing in ${CURDIR}. It should contains the files needed to create the debian package for $(BOARD_NAME) u-boot." ; \
 		echo "error 191115-10" ; \
 		exit 1 ; \
 	fi ;

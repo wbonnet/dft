@@ -35,34 +35,36 @@ CATEGORIES    = laptop desktop set-top-box single-board-computer
 .PHONY: help
 
 #check que tes subdirs de category ont la et ont un lien makefile valide ensuite ca recurse
-sanity-check :
-	@for i in $(CATEGORIES) ; do \
-		if [ ! -d $$i ] ; then \
-			echo "Warning : $$i category folder is missing, recursive targets may fail or produce incomplete set of binaries." ; \
+sanity-check:
+	for category in $(CATEGORIES) ; do \
+		echo "premier pwd le for traite : $$category" ; \
+		pwd ; \
+		if [ ! -d ${CURDIR}/$$category ] ; then \
+			echo "Warning : $$c category folder is missing, recursive targets may fail or produce incomplete set of binaries." ; \
 		fi ; \
-		if [ ! -e "$$i/Makefile" ] ; then \
-			echo "Makefile symlink in $(shell pwd)/$$i is missing or target does not exist. It should be a symlink to ../buildsystem/category.makefile" ; \
+		if [ ! -e "${CURDIR}/$$category/Makefile" ] ; then \
+			echo "Makefile symlink in ${CURDIR}/$$category is missing or target does not exist. It should be a symlink to ../buildsystem/category.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
-			echo "ln -s ../../buildsystem/category.makefile $$i/Makefile" ; \
-			echo "git add $$i/Makefile" ; \
-			echo "exit 101102" ; \
+			echo "ln -s ../$(buildsystem)/category.makefile $$category/Makefile" ; \
+			echo "git add ${CURDIR}/$$category/Makefile" ; \
+			$(call dft_error ,1091102-01) ; \
+		fi ; \
+		if [ ! $(shell readlink ${CURDIR}/$$category/Makefile) = "../$(buildsystem)/category.makefile" ] ; then \
+			echo "Makefile symlink in ${CURDIR}/$$category must link to ../$(buildsystem)/category.makefile" ; \
+			echo "It targets to $(shell readlink ${CURDIR}/$$category/Makefile)" ; \
+			echo "exit 191103-01" ; \
+			$(call dft_error ,191103-01) ; \
 			exit 1 ; \
 		fi ; \
-		if [ ! $(shell readlink $$i/Makefile) = "../../buildsystem/category.makefile" ] ; then \
-			echo "Makefile symlink in $(shell pwd)/$$i must link to ../../buildsystem/category.makefile" ; \
-			echo "It targets to $(shell readlink $i/Makefile)" ; \
-			echo "exit 11103" ; \
-			exit 1 ; \
-		fi ; \
-		\
-		$(MAKE) -C $$i $* || exit 1 ; \
-	done ; 
+		cd ${CURDIR}/$$category && $(MAKE) sanity-check ; \
+	done  
 
+#		cd ${CURDIR}/$$i && $(MAKE) sanity-check ; \
 # Build only u-boot  package target
 u-boot-package:
 	@for i in $(CATEGORIES) ; do \
-		if [ -f $$i/Makefile ] ; then \
-                $(MAKE) -C $$i u-boot-package || exit 1 ; \
+		if [ -f ${CURDIR}/$$i/Makefile ] ; then \
+                cd ${CURDIR}/$$i && $(MAKE) u-boot-package ; \
 		fi ; \
         done
 
@@ -70,14 +72,14 @@ u-boot-package:
 kernel-package:
 linux-kernel-package:
 	@for i in $(CATEGORIES) ; do \
-		if [ -f $$i/Makefile ] ; then \
-                $(MAKE) -C $$i kernel-package || exit 1 ; \
+		if [ -f ${CURDIR}/$$i/Makefile ] ; then \
+                cd ${CURDIR}/$$i && $(MAKE) kernel-package ; \
 		fi ; \
-        done
+	done
 
 
 # Catch all target. Call the same targets in each subfolder
 %:
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
-		$(MAKE) -C $$i $* || exit 1 ; \
+		cd ${CURDIR}/$$i && $(MAKE) $* ; \
 	done

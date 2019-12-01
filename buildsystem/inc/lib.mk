@@ -57,11 +57,15 @@ $(COOKIE_DIR)/%:
 
 # ------------------------------------------------------------------------------
 #
-# definition of function dft_error : display an error message and stop
-# execution returning with provided error codeor 1 as defaault value
-#
-define dft_error = 
-	echo "DFT ERROR" ;
+# definition of function dft_error : display an error code stop
+# execution returning with provided error code or 1 as default value
+# TODO Handle default error code
+define dft_error =
+echo "DFT ERROR CODE : $(1)" && exit 1
+endef
+
+define dft_error_message =
+echo "DFT ERROR MSG : $(1)" 
 endef
 
 # ------------------------------------------------------------------------------
@@ -69,8 +73,7 @@ endef
 # definition of function dft_warning : display a message and continue execution
 #
 define dft_warning = 
-	echo "DFT Warning : $(1)" ;
-	echo "$(1)" ;
+@echo "DFT Warning : $(1)" ;
 endef
 
 # Match initial ifndef DFT_LIB

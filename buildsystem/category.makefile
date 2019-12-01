@@ -36,10 +36,10 @@ sanity-check:
 	@echo "sanity-check from category.makefile"
 	@for board in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
 		if [ ! -e "$$board/Makefile" ] ; then \
-			echo "Makefile in $(shell pwd)/$$board is Missing. It should be a symlink to  $(buildsystem)/board.makefile" ; \
+			echo "Makefile in ${CURDIR}/$$board is Missing. It should be a symlink to  $(buildsystem)/board.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
 			echo "git rm -f $$board/Makefile" ; \
-			echo "ln -s $(buildsystem)/board.makefile $(shell pwd)/$$board/Makefile" ; \
+			echo "ln -s $(buildsystem)/board.makefile ${CURDIR}/$$board/Makefile" ; \
 			echo "git add $$board/Makefile" ; \
 			echo "exit 101101" ; \
 			exit 1 ; \
@@ -52,11 +52,11 @@ sanity-check:
 			exit 1 ; \
 		fi ; \
 		if [ ! -f $$board/board.mk ] ; then \
-			echo "Board description file board.mk is missing in directory $(shell pwd)/$$board" ; \
+			echo "Board description file board.mk is missing in directory ${CURDIR}//$$board" ; \
 			echo "You can fix with the following shell commands :" ; \
 			echo "git rm -f $$board/Makefile" ; \
-			echo "cp  $(buildsystem)/board.mk.template $(shell pwd)/$$board/board.mk" ; \
-			echo "git add $(shell pwd)/$$board/board.mk" ; \
+			echo "cp  $(buildsystem)/board.mk.template ${CURDIR}//$$board/board.mk" ; \
+			echo "git add ${CURDIR}//$$board/board.mk" ; \
 			echo "Warning !!! : Don't forget to edit this file and replace 'unkown' values with board specific values" ; \
 			echo "exit 191117-01" ; \
 			exit 1 ; \

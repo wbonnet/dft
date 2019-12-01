@@ -39,108 +39,105 @@ SW_NAME      = SW_NAME_undefined_at_board_level
 sanity-check:
 	@echo "sanity-check from board.makefile" ;
 	echo "Checking board definition sanity for $(BOARD_NAME)" ;
-	$(call dft_error) 
-	echo "test de la fonction dft_error ici a finir de coder c est unec erreur volontaire plop after call dft_error from board.makefile for $(BOARD_NAME)" ;
-	@if [ ! -f "board.mk" ] ; then \
+	if [ ! -f "board.mk" ] ; then \
 		pwd ; \
-		echo "file board.mk is missing in directory $(shell pwd)" ; \
-		echo "error 191112-01" ; \
-		exit 1 ; \
+		echo "file board.mk is missing in directory ${CURDIR}" ; \
+	        $(call dft_error ,191112-01) ; \
 	fi ;
-	@if [ ! -d "$(shell pwd)/kernel" ] ; then \
-		echo "kernel directory is missing in $(shell pwd). It should contains a symlink to the generic makefile for Linux kernel" ; \
+	@if [ ! -d "${CURDIR}/kernel" ] ; then \
+		echo "kernel directory is missing in i${CURDIR}. It should contains a symlink to the generic makefile for Linux kernel" ; \
 		echo "You can fix with the following commands : " ; \
-		echo "mkdir -p $(shell pwd)/kernel" ; \
-		echo "ln -s $(buildsystem)/linux-kernel.makefile $(shell pwd)/kernel/Makefile" ; \
-		echo "git add $(shell pwd)/kernel" ; \
+		echo "mkdir -p ${CURDIR}/kernel" ; \
+		echo "ln -s $(buildsystem)/linux-kernel.makefile ${CURDIR}/kernel/Makefile" ; \
+		echo "git add ${CURDIR}/kernel" ; \
 		echo "error 191114-01" ; \
 		exit 1 ; \
 	fi ;
-	@if [ ! -d "$(shell pwd)/kernel/defconfig" ] ; then \
-		echo "defconfig directory is missing in $(shell pwd)/kernel. It is used to store kernel configuration files. It should at least contain a hidden empty file .gitkeep until first kernel version is added for $(BOARD_NAME)" ; \
+	@if [ ! -d "${CURDIR}/kernel/defconfig" ] ; then \
+		echo "defconfig directory is missing in ${CURDIR}/kernel. It is used to store kernel configuration files. It should at least contain a hidden empty file .gitkeep until first kernel version is added for $(BOARD_NAME)" ; \
 		echo "You can fix with the following commands : " ; \
-		echo "mkdir -p $(shell pwd)/kernel/defconfig" ; \
-		echo "touch $(shell pwd)/kernel/defconfig/.gitkeep" ; \
-		echo "git add $(shell pwd)/kernel/defconfig" ; \
+		echo "mkdir -p ${CURDIR}/kernel/defconfig" ; \
+		echo "touch ${CURDIR}/kernel/defconfig/.gitkeep" ; \
+		echo "git add ${CURDIR}/kernel/defconfig" ; \
 		echo "error 191114-03" ; \
 		exit 1 ; \
 	fi ;
-	@if [ ! -d "$(shell pwd)/u-boot/files" ] ; then \
-		echo "files directory is missing in $(shell pwd)/u-boot. It is used to store u-boot installation procedures. It should at least contain a hidden empty file .gitkeep until first uboot version is added for $(BOARD_NAME)" ; \
+	@if [ ! -d "${CURDIR}/u-boot/files" ] ; then \
+		echo "files directory is missing in ${CURDIR}/u-boot. It is used to store u-boot installation procedures. It should at least contain a hidden empty file .gitkeep until first uboot version is added for $(BOARD_NAME)" ; \
 		echo "You can fix with the following commands : " ; \
-		echo "mkdir -p $(shell pwd)/u-boot/files" ; \
-		echo "touch $(shell pwd)/u-boot/files/.gitkeep" ; \
-		echo "git add $(shell pwd)/u-boot/files" ; \
+		echo "mkdir -p ${CURDIR}/u-boot/files" ; \
+		echo "touch ${CURDIR}/u-boot/files/.gitkeep" ; \
+		echo "git add ${CURDIR}/u-boot/files" ; \
 		echo "error 191117-01" ; \
 		exit 1 ; \
 	fi ;
-	@if [ ! -d "$(shell pwd)/u-boot" ] ; then \
-		echo "u-boot directory is missing in $(shell pwd). It should contains a symlink to the generic makefile for u-boot" ; \
+	@if [ ! -d "${CURDIR}/u-boot" ] ; then \
+		echo "u-boot directory is missing in ${CURDIR}. It should contains a symlink to the generic makefile for u-boot" ; \
 		echo "You can fix with the following commands : " ; \
-		echo "mkdir -p $(shell pwd)/u-boot" ; \
-		echo "ln -s $(buildsystem)/u-boot.makefile $(shell pwd)/u-boot/Makefile" ; \
-		echo "git add $(shell pwd)/u-boot" ; \
+		echo "mkdir -p ${CURDIR}/u-boot" ; \
+		echo "ln -s $(buildsystem)/u-boot.makefile ${CURDIR}/u-boot/Makefile" ; \
+		echo "git add ${CURDIR}/u-boot" ; \
 		echo "error 191114-02" ; \
 		exit 1 ; \
 	fi ;
-	@if [ ! "$(shell readlink u-boot/Makefile)" = "$(buildsystem)/u-boot.makefile" ] ; then \
-		echo "target of symlink Makefile should be $(buildsystem)/u-boot.makefile in directory $(shell pwd)/u-boot" ; \
+	@if [ ! "$(shell readlink ${CURDIR}/u-boot/Makefile)" = "$(buildsystem)/u-boot.makefile" ] ; then \
+		echo "target of symlink Makefile should be $(buildsystem)/u-boot.makefile in directory ${CURDIR}/u-boot" ; \
 		echo "You can fix with the following commands : " ; \
-		echo "git rm -f $(shell pwd)/u-boot/Makefile" ; \
-		echo "mkdir -p $(shell pwd)/u-boot" ; \
-		echo "ln -s $(buildsystem)/u-boot.makefile $(shell pwd)/u-boot/Makefile" ; \
-		echo "git add $(shell pwd)/u-boot/Makefile" ; \
+		echo "git rm -f ${CURDIR}/u-boot/Makefile" ; \
+		echo "mkdir -p ${CURDIR}/u-boot" ; \
+		echo "ln -s $(buildsystem)/u-boot.makefile ${CURDIR}/u-boot/Makefile" ; \
+		echo "git add ${CURDIR}/u-boot/Makefile" ; \
 		echo "error 191114-01" ; \
 		exit 1 ; \
 	fi ;
-	@if [ ! "$(shell readlink kernel/Makefile)" = "$(buildsystem)/linux-kernel.makefile" ] ; then \
-		echo "target of symlink Makefile should be $(buildsystem)/linux-kernel.makefile in directory $(shell pwd)/kernel" ; \
+	@if [ ! "$(shell readlink ${CURDIR}/kernel/Makefile)" = "$(buildsystem)/linux-kernel.makefile" ] ; then \
+		echo "target of symlink Makefile should be $(buildsystem)/linux-kernel.makefile in directory ${CURDIR}/kernel" ; \
 		echo "You can fix with the following commands : " ; \
-		echo "git rm -f $(shell pwd)/kernel/Makefile" ; \
-		echo "mkdir -p $(shell pwd)/kernel" ; \
-		echo "ln -s $(buildsystem)/linux-kernel.makefile $(shell pwd)/kernel/Makefile" ; \
-		echo "git add $(shell pwd)/kernel/Makefile" ; \
+		echo "git rm -f ${CURDIR}/kernel/Makefile" ; \
+		echo "mkdir -p ${CURDIR}/kernel" ; \
+		echo "ln -s $(buildsystem)/linux-kernel.makefile ${CURDIR}/kernel/Makefile" ; \
+		echo "git add ${CURDIR}/kernel/Makefile" ; \
 		echo "error 191114-02" ; \
 		$(call dft_error "error 191114-02") \
 		exit 1 ; \
 	fi ;
 	@if [ ! -L "kernel/board.mk" ] ; then \
-		echo "board.mk symlink to ../board.mk is missing in directory $(shell pwd)/kernel" ; \
+		echo "board.mk symlink to ../board.mk is missing in directory ${CURDIR}/kernel" ; \
 		echo "You can fix with the following commands : " ; \
 		if [  -f "kernel/board.mk" ] ; then \
-			echo "git rm $(shell pwd)/kernel/board.mk" ; \
+			echo "git rm ${CURDIR}/kernel/board.mk" ; \
 		fi ; \
-		echo "ln -s ../board.mk $(shell pwd)/kernel/board.mk" ; \
-		echo "git add $(shell pwd)/kernel/board.mk" ; \
+		echo "ln -s ../board.mk ${CURDIR}/kernel/board.mk" ; \
+		echo "git add ${CURDIR}/kernel/board.mk" ; \
 		echo "error 1911118-01" ; \
 		exit 1 ; \
 	fi ;
-	@if [ ! "$(shell readlink kernel/board.mk)" = "../board.mk" ] ; then \
-		echo "target of symlink board.mk should be ../board.mk in directory $(shell pwd)/kernel" ; \
+	@if [ ! "$(shell readlink ${CURDIR}/kernel/board.mk)" = "../board.mk" ] ; then \
+		echo "target of symlink board.mk should be ../board.mk in directory ${CURDIR}/kernel" ; \
 		echo "You can fix with the following commands : " ; \
-		echo "git rm -f $(shell pwd)/kernel/board.mk" ; \
-		echo "ln -s ../board.mk $(shell pwd)/kernel/board.mk" ; \
-		echo "git add $(shell pwd)/kernel/board.mk" ; \
+		echo "git rm -f ${CURDIR}/kernel/board.mk" ; \
+		echo "ln -s ../board.mk ${CURDIR}/kernel/board.mk" ; \
+		echo "git add ${CURDIR}/kernel/board.mk" ; \
 		echo "error 1911118-02" ; \
 		exit 1 ; \
 	fi ;
 	@if [ ! -L "u-boot/board.mk" ] ; then \
-		echo "board.mk symlink to ../board.mk is missing in directory $(shell pwd)/u-boot" ; \
+		echo "board.mk symlink to ../board.mk is missing in directory ${CURDIR}/u-boot" ; \
 		echo "You can fix with the following commands : " ; \
 		if [  -f "u-boot/board.mk" ] ; then \
-			echo "git rm $(shell pwd)/u-boot/board.mk" ; \
+			echo "git rm ${CURDIR}/u-boot/board.mk" ; \
 		fi ; \
-		echo "ln -s ../board.mk $(shell pwd)/u-boot/board.mk" ; \
-		echo "git add $(shell pwd)/u-boot/board.mk" ; \
+		echo "ln -s ../board.mk ${CURDIR}/u-boot/board.mk" ; \
+		echo "git add ${CURDIR}/u-boot/board.mk" ; \
 		echo "error 1911118-03" ; \
 		exit 1 ; \
 	fi ;
-	@if [ ! "$(shell readlink u-boot/board.mk)" = "../board.mk" ] ; then \
-		echo "target of symlink board.mk should be ../board.mk in directory $(shell pwd)/u-boot" ; \
+	@if [ ! "$(shell readlink ${CURDIR}u-boot/board.mk)" = "../board.mk" ] ; then \
+		echo "target of symlink board.mk should be ../board.mk in directory ${CURDIR}/u-boot" ; \
 		echo "You can fix with the following commands : " ; \
-		echo "git rm -f $(shell pwd)/u-boot/board.mk" ; \
-		echo "ln -s ../board.mk $(shell pwd)/u-boot/board.mk" ; \
-		echo "git add $(shell pwd)/u-boot/board.mk" ; \
+		echo "git rm -f ${CURDIR}/u-boot/board.mk" ; \
+		echo "ln -s ../board.mk ${CURDIR}/u-boot/board.mk" ; \
+		echo "git add ${CURDIR}/u-boot/board.mk" ; \
 		echo "error 1911118-04" ; \
 		exit 1 ; \
 	fi ;

@@ -57,55 +57,55 @@ endif
 sanity-check:
 	@echo "sanity-check from linux-kernel.makefile"
 	@echo "Checking Linux kernel $(SW_VERSION) folder sanity for board $(BOARD_NAME)" 
-	@if [ ! -d "$(shell pwd)/defconfig" ] ; then \
-		echo "defconfig directory is missing in $(shell pwd). It contains the configuration files of the different Linux kernel versions." ; \
+	@if [ ! -d "${CURDIR}/defconfig" ] ; then \
+		echo "defconfig directory is missing in ${CURDIR}. It contains the configuration files of the different Linux kernel versions." ; \
 		echo "You can fix with the following commands : " ; \
-		echo "mkdir -p $(shell pwd)/defconfig" ; \
-		echo "touch $(shell pwd)/defconfig/.gitkeep" ; \
-		echo "git add $(shell pwd)/defconfig/.gitkeep" ; \
+		echo "mkdir -p ${CURDIR}/defconfig" ; \
+		echo "touch ${CURDIR}/defconfig/.gitkeep" ; \
+		echo "git add ${CURDIR}//defconfig/.gitkeep" ; \
 		false ; \
 	fi ;
 	@if [ ! -L "Makefile"  ] ; then \
-		echo "Makefile symlink $(buildsystem)/$(SW_NAME)-kernel.makefile is missing in directory $(shell pwd)" ; \
+		echo "Makefile symlink $(buildsystem)/$(SW_NAME)-kernel.makefile is missing in directory ${CURDIR}" ; \
 		echo "You can fix with the following commands : " ; \
-		echo "git rm -f $(shell pwd)/Makefile" ; \
-		echo "ln -s $(buildsystem)/$(SW_NAME)-kernel.makefile $(shell pwd)/Makefile" ; \
-		echo "git add $(shell pwd)/Makefile" ; \
+		echo "git rm -f ${CURDIR}//Makefile" ; \
+		echo "ln -s $(buildsystem)/$(SW_NAME)-kernel.makefile ${CURDIR}//Makefile" ; \
+		echo "git add ${CURDIR}//Makefile" ; \
 		echo "error 191121-010" ; \
 		exit 1 ; \
 	fi ;
 	@if [ ! "$(shell readlink ./Makefile)" = "$(buildsystem)/$(SW_NAME)-kernel.makefile" ] ; then \
-		echo "target of symlink Makefile should be $(buildsystem)/$(SW_NAME)-kernel.makefile in directory $(shell pwd)" ; \
+		echo "target of symlink Makefile should be $(buildsystem)/$(SW_NAME)-kernel.makefile in directory ${CURDIR}/" ; \
 		echo "You can fix with the following commands : " ; \
-		echo "git rm -f $(shell pwd)/Makefile" ; \
-		echo "ln -s $(buildsystem)/$(SW_NAME)-kernel.makefile $(shell pwd)/Makefile" ; \
-		echo "git add $(shell pwd)/Makefile" ; \
+		echo "git rm -f ${CURDIR}//Makefile" ; \
+		echo "ln -s $(buildsystem)/$(SW_NAME)-kernel.makefile ${CURDIR}/Makefile" ; \
+		echo "git add ${CURDIR}/Makefile" ; \
 		echo "error 1911120-011" ; \
 		exit 1 ; \
 	fi ;
-	@if [ ! -d "$(shell pwd)/defconfig" ] ; then \
-		echo "defconfig directory is missing in $(shell pwd). It contains the configuration files of the different Linux kernel versions." ; \
+	@if [ ! -d "${CURDIR}//defconfig" ] ; then \
+		echo "defconfig directory is missing in ${CURDIR}/. It contains the configuration files of the different Linux kernel versions." ; \
 		echo "You can fix with the following commands : " ; \
-		echo "mkdir -p $(shell pwd)/defconfig" ; \
-		echo "touch $(shell pwd)/defconfig/.gitkeep" ; \
-		echo "git add $(shell pwd)/defconfig/.gitkeep" ; \
+		echo "mkdir -p ${CURDIR}//defconfig" ; \
+		echo "touch ${CURDIR}//defconfig/.gitkeep" ; \
+		echo "git add ${CURDIR}//defconfig/.gitkeep" ; \
 		echo "error 191120-013" ; \
  		exit 1 ; \
 	fi ;
 	@if [ ! -L "board.mk" ] ; then \
-		echo "board.mk symlink to ../board.mk is missing in directory $(shell pwd)" ; \
+		echo "board.mk symlink to ../board.mk is missing in directory ${CURDIR}/" ; \
 		echo "You can fix with the following commands : " ; \
-		echo "ln -s ../board.mk $(shell pwd)/board.mk" ; \
-		echo "git add $(shell pwd)/board.mk" ; \
+		echo "ln -s ../board.mk ${CURDIR}//board.mk" ; \
+		echo "git add ${CURDIR}//board.mk" ; \
 		echo "error 1911116-04" ; \
 		exit 1 ; \
 	fi ;
 	@if [ ! "$(shell readlink board.mk)" = "../board.mk" ] ; then \
-		echo "target of symlink board.mk should be ../board.mk in directory $(shell pwd)" ; \
+		echo "target of symlink board.mk should be ../board.mk in directory ${CURDIR}/" ; \
 		echo "You can fix with the following commands : " ; \
-		echo "git rm -f $(shell pwd)/board.mk" ; \
-		echo "ln -s ../board.mk $(shell pwd)/board.mk" ; \
-		echo "git add $(shell pwd)/board.mk" ; \
+		echo "git rm -f ${CURDIR}/${CURDIR}/board.mk" ; \
+		echo "ln -s ../board.mk ${CURDIR}/board.mk" ; \
+		echo "git add ${CURDIR}/board.mk" ; \
 		echo "error 1911116-05" ; \
 		exit 1 ; \
 	fi ;
@@ -113,28 +113,28 @@ sanity-check:
 		echo "checking version $$version subfolder" ; \
 		if [ ! -L "$$version/Makefile" ] ; then \
 			echo "version folder $$version" ; \
-			echo "Makefile symlink in $(shell pwd)/$$version is missing. It should be a symlink to $(buildsystem)/$(SW_NAME)-kernel-version.makefile" ; \
+			echo "Makefile symlink in ${CURDIR}/$$version is missing. It should be a symlink to $(buildsystem)/$(SW_NAME)-kernel-version.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
 			if [ -f "$$version/Makefile" ] ; then \
-				git rm $(shell pwd)/$$version/Makefile ; \
+				git rm ${CURDIR}//$$version/Makefile ; \
 			fi ; \
-			ln -s ../$(buildsystem)/$(SW_NAME)-kernel-version.makefile $(shell pwd)/$$version/Makefile ; \
-			git add $(shell pwd)/$$version/Makefile ; \
+			ln -s ../$(buildsystem)/$(SW_NAME)-kernel-version.makefile ${CURDIR}//$$version/Makefile ; \
+			git add ${CURDIR}//$$version/Makefile ; \
 			echo "exit 191116-07" ; \
 		fi ; \
 		s=`readlink $$version/Makefile` ; \
 		if [ !  "$$s" = "../$(buildsystem)/$(SW_NAME)-kernel-version.makefile" ] ; then \
 			echo "Makefile symlink in $$version must link to $(buildsystem)/$(SW_NAME)-kernel-version.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
-			git rm -f $(shell pwd)/$$version/Makefile || rm -f $(shell pwd)/$$version/Makefile ; \
-			ln -s ../$(buildsystem)/$(SW_NAME)-kernel-version.makefile $(shell pwd)/$$version/Makefile ; \
-			git add $(shell pwd)/$$version/Makefile ; \
+			git rm -f ${CURDIR}/$$version/Makefile || rm -f ${CURDIR}/$$version/Makefile ; \
+			ln -s ../$(buildsystem)/$(SW_NAME)-kernel-version.makefile ${CURDIR}//$$version/Makefile ; \
+			git add ${CURDIR}//$$version/Makefile ; \
 			echo "exit 191122-20" ; \
 		fi ; \
 	done ; 
 	@for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*') ; do \
 		if [ -f $$folder/Makefile ] ; then \
-			echo "make sanity-check in $(SW_NAME) version $(shell pwd)/$$folder" ; \
+			echo "make sanity-check in $(SW_NAME) version ${CURDIR}/$$folder" ; \
 			cd $$folder; \
 			$(MAKE) sanity-check || exit 1 ; \
 			cd ..; \
