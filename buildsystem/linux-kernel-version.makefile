@@ -24,6 +24,7 @@ SW_NAME     = linux
 SW_VERSION  = $(notdir $(patsubst %/,%,$(shell pwd)))
 
 buildsystem := ../../../../../buildsystem
+include ../board.mk
 include $(buildsystem)/inc/u-boot.mk
 include $(buildsystem)/dft.mk
 

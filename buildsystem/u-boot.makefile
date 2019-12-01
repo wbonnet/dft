@@ -22,9 +22,9 @@
 # Defines variables specific to u-boot
 SW_NAME     := u-boot
 buildsystem := ../../../../buildsystem
+include ../board.mk
 include $(buildsystem)/inc/u-boot.mk
 include $(buildsystem)/dft.mk
-include board.mk
 
 # Do not recurse the following subdirs
 MAKE_FILTERS  := files defconfig Makefile README.md patches .

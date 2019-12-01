@@ -23,13 +23,10 @@
 SW_NAME     = u-boot
 SW_VERSION  = $(notdir $(patsubst %/,%,$(shell pwd)))
 
+include ../board.mk
 buildsystem := ../../../../../buildsystem
 include $(buildsystem)/inc/u-boot.mk
 include $(buildsystem)/dft.mk
-
-# Include board specific definitions  from board level
-include ../board.mk
-
 
 # ------------------------------------------------------------------------------
 #
