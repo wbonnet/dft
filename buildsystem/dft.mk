@@ -65,8 +65,11 @@ define error_msg
 
 
 DFT_HOME must be defined in the environment of shell running the make command.
-You have to set it before continuing. This can be done by adding the following 
-line to ~/.bash_aliases or by executing it interactively.
+Warning ! DFT_HOME must be a relative path, you cannot git add symlinks to an
+absolute path. Otherwise, it would not work for environment different from yours.
+
+You have to set DFT_HOME before continuing. It can be done by adding following
+line to ~/.bash_aliases and by executing it interactively for current shell.
 
 export DFT_HOME="$(dir $(lastword $(MAKEFILE_LIST)))"
 
