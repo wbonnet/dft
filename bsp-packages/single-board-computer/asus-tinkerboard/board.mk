@@ -23,6 +23,10 @@
 BOARD_NAME = asus-tinkerboard
 BOARD_ARCH = armv7l
 
+# Defines if the board use u-boot (set UBOOT_SUPPORT to 1) (0 it does not)
+# if UBOOT_SUPPORT is disabled u-boot checks and generation are skipped
+UBOOT_SUPPORT = 1
+
 # Set config file to empty and define the name of the board to use a defconfig
 USE_CONFIG_FILE =
 UBOOT_DEFCONFIG = tinker-rk3288_defconfig

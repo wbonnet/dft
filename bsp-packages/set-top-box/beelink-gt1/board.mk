@@ -20,10 +20,14 @@
 #
 
 # Defines board name
-BOARD_NAME  = beelink-gt1-
+BOARD_NAME  = beelink-gt1
 
 # Defines boards architecture (armv7l, armel, aarch64, x86_64, i686, etc.)
 BOARD_ARCH  = aarch64
+
+# Defines if the board use u-boot (set UBOOT_SUPPORT to 1) (0 it does not)
+# if UBOOT_SUPPORT is disabled u-boot checks and generation are skipped
+UBOOT_SUPPORT = 1
 
 # Defines the default dtb to use (symlink used by generic boot.scr)
 DEFAULT_DTB = unknown

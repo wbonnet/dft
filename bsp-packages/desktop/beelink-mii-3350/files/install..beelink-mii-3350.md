@@ -1,1 +1,0 @@
-../../files/install..beelink-mii-3350.md

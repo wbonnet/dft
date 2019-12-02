@@ -1,4 +1,3 @@
-
 # vim: ft=make ts=4 sw=4 noet
 #
 # The contents of this file are subject to the Apache 2.0 license you may not
@@ -23,6 +22,10 @@
 # Defines board name
 BOARD_NAME = odroid-c1-plus
 BOARD_ARCH = armv7l
+
+# Defines if the board use u-boot (set UBOOT_SUPPORT to 1) (0 it does not)
+# if UBOOT_SUPPORT is disabled u-boot checks and generation are skipped
+UBOOT_SUPPORT = 1
 
 # Set config file to empty and define the name of the board to use a defconfig
 USE_CONFIG_FILE        =

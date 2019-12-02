@@ -22,6 +22,10 @@
 # Defines board name
 BOARD_NAME  = nanopi-neo-plus2
 
+# Defines if the board use u-boot (set UBOOT_SUPPORT to 1) (0 it does not)
+# if UBOOT_SUPPORT is disabled u-boot checks and generation are skipped
+UBOOT_SUPPORT = 1
+
 # Defines boards architecture (armv7l, armv6l, aarch64, x86_64, i386, etc.)
 BOARD_ARCH  = aarch64
 
