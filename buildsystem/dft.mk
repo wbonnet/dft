@@ -86,7 +86,7 @@ ifeq ($(BOARD_ARCH), unknown)
 define error_msg
 
 
-BOARD_ARCH variable as not yet been defined in the $(BOARD_NAME).mk Makefile.
+BOARD_ARCH variable as not yet been defined in the board.mk Makefile.
 Please replace "unknown" by the board architecture (armv7l, x86_64, ppc64, etc.).
 
 
