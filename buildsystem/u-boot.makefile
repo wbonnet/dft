@@ -52,7 +52,7 @@ endif
 # Board level u-boot makefile
 #
 sanity-check:
-	if [ $(UBOOT_SUPPORT) = 0  ] ; then \
+	@if [ $(UBOOT_SUPPORT) = 0  ] ; then \
 		exit 0 ; \
 	fi ;
 	@echo "Checking $(BOARD_NAME) u-boot packages folder" ;
