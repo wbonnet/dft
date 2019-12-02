@@ -61,12 +61,14 @@ do-package:
 		if [ "$(SW_NAME)" = "linux" ] ; then \
 			mkdir -p $(SW_NAME)-kernel-$(BOARD_NAME) ; \
 			cd $(SW_NAME)-kernel-$(BOARD_NAME) ; \
+			[ -f debian ] && rm -f debian ; \
+			cp -fr $(DFT_HOME)/templates/debian-kernel-package debian ; \
 		else \
 			mkdir -p $(SW_NAME)-$(BOARD_NAME) ; \
 			cd $(SW_NAME)-$(BOARD_NAME) ; \
+			[ -f debian ] && rm -f debian ; \
+			cp -fr $(DFT_HOME)/templates/debian-u-boot-package debian ; \
 		fi ; \
-		[ -f debian ] && rm -f debian ; \
-		cp -fr $(BASE_DIR)/debian debian ; \
 		cp -fr $(INSTALL_DIR)/* . ; \
 		if [ "$(SW_NAME)" = "linux" ] ; then \
 			tar cvfz ../$(SW_NAME)-kernel-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
