@@ -71,7 +71,7 @@ absolute path. Otherwise, it would not work for environment different from yours
 You have to set DFT_HOME before continuing. It can be done by adding following
 line to ~/.bash_aliases and by executing it interactively for current shell.
 
-export DFT_HOME="$(dir $(lastword $(MAKEFILE_LIST)))"
+export DFT_HOME=$(dir $(lastword $(MAKEFILE_LIST)))
 
 endef
   $(error $(error_msg))
