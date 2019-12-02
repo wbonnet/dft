@@ -52,6 +52,9 @@ endif
 # Board level u-boot makefile
 #
 sanity-check:
+	if [ $(UBOOT_SUPPORT) = 0  ] ; then \
+		exit 0 ; \
+	fi ;
 	@echo "Checking $(BOARD_NAME) u-boot packages folder" ;
 	@if [ ! -L "Makefile"  ] ; then \
 		echo "Makefile symlink $(buildsystem)/u-boot.makefile is missing in directory ${CURDIR}" ; \
