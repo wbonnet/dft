@@ -56,6 +56,26 @@ endif
 
 # ------------------------------------------------------------------------------
 #
+# Check if the DFT_HOME has been defined, if not output an error before doing anything.
+# DFT_HOME is a shell variable that must target to the path where dft id installed
+# DFT_HOME has to contain the buildsystem folder
+#
+ifeq ($(DFT_HOME), )
+define error_msg
+
+
+DFT_HOME must be defined in the environment of shell running the make command.
+You have to set it before continuing. This can be done by adding the following 
+line to ~/.bash_aliases or by executing it interactively.
+
+export DFT_HOME="$(dir $(lastword $(MAKEFILE_LIST)))"
+
+endef
+  $(error $(error_msg))
+endif
+
+# ------------------------------------------------------------------------------
+#
 # Check if the board arch is defined, if not output an error before doing anything.
 # It means this bard has been newly created and arch has to be defined
 #
@@ -84,7 +104,7 @@ define error_msg
 DEBFULLNAME environment variable should be defined. You have to set it before
 continuing. This can be done by adding the following line to ~/.bash_aliases
 
-export DEBFULLNAME "Jane Doe"
+export DEBFULLNAME="Jane Doe"
 
 endef
   $(error $(error_msg))
@@ -104,7 +124,7 @@ define error_msg
 DEBEMAIL environment variable shoould be defined. You have to set it before
 continuing. This can be done by adding the following line to ~/.bash_aliases
 
-export DEBEMAIL "jane@doe.org"
+export DEBEMAIL="jane@doe.org"
 
 endef
   $(error $(error_msg))
