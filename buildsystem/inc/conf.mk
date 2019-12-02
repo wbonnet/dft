@@ -91,11 +91,11 @@ HOST_ARCH ?= $(shell uname -m)
 # -----------------------------------------------------------------------------
 
 # Defines the work root (subfolders are persistent but workdir is destroyed)
-BASE_DIR            ?= $(CURDIR)
-WORK_DIR            ?= $(BASE_DIR)/workdir
-FILE_DIR            ?= $(BASE_DIR)/files
-DEFCONFIG_DIR       ?= $(BASE_DIR)/../defconfig
-PATCH_DIR           ?= $(BASE_DIR)/patches
+DFT_HOME            ?= $(CURDIR)
+WORK_DIR            ?= $(DFT_HOME)/workdir
+FILE_DIR            ?= $(DFT_HOME)/files
+DEFCONFIG_DIR       ?= $(DFT_HOME)/../defconfig
+PATCH_DIR           ?= $(DFT_HOME)/patches
 
 # Defines the working dir subfolders (all are volatile)
 SRC_DIR             ?= $(WORK_DIR)/sources
