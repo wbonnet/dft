@@ -55,7 +55,7 @@ endif
 #
 
 sanity-check:
-	@echo "Checking $(BOARD_NAME) kernel packages definition folder" 
+	@echo "Checking $(BOARD_NAME) kernel packages folder" 
 	@if [ ! -d "${CURDIR}/defconfig" ] ; then \
 		echo "defconfig directory is missing in ${CURDIR}. It contains the configuration files of the different Linux kernel versions." ; \
 		echo "You can fix with the following commands : " ; \
