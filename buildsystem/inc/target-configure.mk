@@ -78,7 +78,6 @@ do-configure:
 		echo "Processing will now continue only for $(HOST_ARCH) based boards package definitions." ; \
 		echo "You can get the missing binaries by running again this target on a $(BOARD_ARCH) based host and collect the generated items." ; \
 		echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
-	    exit 1; \
 	fi ; 
 	@if test -f $(COOKIE_DIR)/$* ; then \
 		true ; \
@@ -92,8 +91,6 @@ do-configure:
 				cp "$(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config" .config ; \
 				make silentoldconfig ; \
 				cp .config "$(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ; \
-			else \
-				echo "  UNKNOWN SW_NAME $(SW_NAME)" ; \
 			fi ; \
 		fi ; \
 	fi ;

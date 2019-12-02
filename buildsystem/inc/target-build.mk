@@ -53,7 +53,6 @@ build: configure $(SRC_DIR) pre-build $(BUILD_SCRIPTS) post-build
 		echo "Processing will now continue only for $(HOST_ARCH) based boards package definitions." ; \
 		echo "You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect the generated items." ; \
 		echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
-		exit 1; \
 	fi
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
