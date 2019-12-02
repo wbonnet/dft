@@ -144,6 +144,7 @@ sanity-check:
 
 # Catch all target. Call the same targets in each subfolder
 %:
-	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
-		cd $$i && $(MAKE) $* ; \
-        done
+#	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+#		echo dollar i $$i; \
+#		$(MAKE) -C $$i $* ; \
+#       done

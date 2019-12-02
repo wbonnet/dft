@@ -63,7 +63,7 @@ sanity-check:
 	done ; \
 	for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
 		if [ -f $$folder/Makefile ] ; then \
-			cd $$folder && $(MAKE) sanity-check ; \
+			cd $$folder && $(MAKE) sanity-check && cd .. ; \
 		fi ; \
 	done ;
 
@@ -72,7 +72,7 @@ u-boot-package:
 	@echo "u-boot-package from category.makefile"
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
-			cd $$i && $(MAKE) u-boot-package ; \
+			cd $$i && $(MAKE) u-boot-package && cd .. ; \
 		fi ; \
         done
 
@@ -83,7 +83,7 @@ kernel-package:
 	@pwd
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
-			cd $$i && $(MAKE) kernel-package ; \
+			cd $$i && $(MAKE) kernel-package && cd .. ; \
 		fi ; \
         done
 
@@ -92,6 +92,6 @@ kernel-package:
 	@echo "target $@ is called in category.makefile"
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
-			cd $$i && $(MAKE) $@ ; \
+			cd $$i && $(MAKE) $@ && cd .. ; \
 		fi ; \
         done

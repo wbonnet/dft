@@ -54,7 +54,7 @@ sanity-check:
 			$(call dft_error ,191103-01) ; \
 			exit 1 ; \
 		fi ; \
-		cd ${CURDIR}/$$category && $(MAKE) sanity-check ; \
+		cd ${CURDIR}/$$category && $(MAKE) sanity-check && cd .. ; \
 	done  
 
 #		cd ${CURDIR}/$$i && $(MAKE) sanity-check ; \
@@ -62,7 +62,7 @@ sanity-check:
 u-boot-package:
 	@for i in $(CATEGORIES) ; do \
 		if [ -f ${CURDIR}/$$i/Makefile ] ; then \
-                cd ${CURDIR}/$$i && $(MAKE) u-boot-package ; \
+                cd ${CURDIR}/$$i && $(MAKE) u-boot-package && cd ..; \
 		fi ; \
         done
 
@@ -71,7 +71,7 @@ kernel-package:
 linux-kernel-package:
 	@for i in $(CATEGORIES) ; do \
 		if [ -f ${CURDIR}/$$i/Makefile ] ; then \
-                cd ${CURDIR}/$$i && $(MAKE) kernel-package ; \
+                cd ${CURDIR}/$$i && $(MAKE) kernel-package && cd .. ; \
 		fi ; \
 	done
 
@@ -79,5 +79,5 @@ linux-kernel-package:
 # Catch all target. Call the same targets in each subfolder
 %:
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
-		cd ${CURDIR}/$$i && $(MAKE) $* ; \
+		cd ${CURDIR}/$$i && $(MAKE) $* && cd .. ; \
 	done

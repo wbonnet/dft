@@ -90,6 +90,7 @@ HOST_ARCH ?= $(shell uname -m)
 #
 # -----------------------------------------------------------------------------
 
+
 # Defines the work root (subfolders are persistent but workdir is destroyed)
 DFT_HOME            ?= $(CURDIR)
 WORK_DIR            ?= $(DFT_HOME)/workdir
@@ -102,7 +103,7 @@ SRC_DIR             ?= $(WORK_DIR)/sources
 DOWNLOAD_DIR        ?= $(WORK_DIR)/download
 GIT_DIR             ?= $(WORK_DIR)/git
 PARTIAL_DIR         ?= $(DOWNLOAD_DIR)/partial
-# TODO: should I keep BOARDNAME somewhere in the path
+# TODO: should I keep BOARD_NAME somewhere in the path
 # COOKIE_DIR          ?= $(WORK_DIR)/cookies-$(BOARD_NAME)
 COOKIE_DIR          ?= $(WORK_DIR)/cookies
 INSTALL_DIR         ?= $(WORK_DIR)/install
@@ -126,8 +127,9 @@ BUILD_SCRIPTS       ?= $(WORK_DIR)/Makefile
 # DOWNLOAD_TOOL should beset to git in custom makefiles if needed
 DOWNLOAD_TOOL       ?= wget
 
-# Defines board name
-BOARD_NAME          ?= default-board
+# Defines default values to undefined (to make simple retrieval with grep in logs...)
+BOARD_NAME          ?= undefined-board-name
+BOARD_NAME          ?= undefined-board-arch
 
 # If the KERNEL_DEFCONFIG variale is set, the given file will be copied to
 # .config in the source dirctory. Default value is set to board name.

@@ -133,18 +133,14 @@ sanity-check:
 	done ; 
 	@for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*') ; do \
 		if [ -f $$folder/Makefile ] ; then \
-			cd $$folder; \
-			$(MAKE) sanity-check || exit 1 ; \
-			cd .. ; \
+			cd $$folder && $(MAKE) sanity-check && cd .. ; \
 		fi ; \
 	done ;
 
 # Catch all target. Call the same targets in each subfolder
 %:
-	@for f in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
-		if [ -f $$f/Makefile ] ; then \
-			cd $$f ; \
-			$(MAKE) $* || exit 1 ; \
-			cd .. ; \
+	@for folder in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+		if [ -f $$folder/Makefile ] ; then \
+			cd $$folder && $(MAKE) $* && cd .. ; \
 		fi ; \
 	done

@@ -143,19 +143,19 @@ sanity-check:
 	@make -C u-boot sanity-check
 	@make -C kernel sanity-check
 	@for version in $(find . -mindepth 1 -maxdepth 1 -type d ) ; do \
-		cd $$version && $(MAKE) $* ; \
+		cd $$version && $(MAKE) $*  && cd .. ; \
         done
 
 # Build only u-boot  package target
 u-boot-package:
 	@echo "u-boot-package from board.makefile" ;
 	pwd ; \
-	cd u-boot && $(MAKE) package ;
+	cd u-boot && $(MAKE) package && cd .. ;
 
 # Build only linux kernel an package target
 kernel-package:
 	@echo "kernel-package from board.makefile" ;
-	cd kernel && $(MAKE) package ;
+	cd kernel && $(MAKE) package && cd .. ;
 
 # Catch all target. Call the same targets in each subfolder
 %:
@@ -163,6 +163,6 @@ kernel-package:
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		echo "examen de $$i" ; \
 		if [ -f $$i/Makefile ] ; then \
-			cd $$i && $(MAKE) $* ; \
+			cd $$i && $(MAKE) $* && cd .. ; \
 		fi ; \
         done
