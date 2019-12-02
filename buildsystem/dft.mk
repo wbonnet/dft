@@ -122,7 +122,7 @@ DISPLAY_COMPLETED_TARGET_NAME  = @echo "    completed [$@] "
 #
 # Cookie maker
 #
-TARGET_DONE = mkdir -p $(COOKIE_DIR) && touch $(COOKIE_DIR)/$(notdir $@)
+TARGET_DONE = echo "debug cookiemaker : cookiedir = $(COOKIE_DIR)" && mkdir -p $(COOKIE_DIR) && touch $(COOKIE_DIR)/$(notdir $@)
 
 # ------------------------------------------------------------------------------
 #
@@ -259,7 +259,7 @@ show-config:
 	@echo 
 	@echo "Directories configuration"
 	@echo "  BUILD_SYSTEM                      $(BUILD_SYSTEM)"
-	@echo "  BASE_DIR                          $(BASE_DIR)"
+	@echo "  DFT_HOME                          $(DFT_HOME)"
 	@echo "  WORK_DIR                          $(WORK_DIR)"
 	@echo "  FILE_DIR                          $(FILE_DIR)"
 	@echo "  DEFCONFIG_DIR                     $(DEFCONFIG_DIR)"
