@@ -50,7 +50,7 @@ kernel:
 
   # List of packages to install from the repository
   packages:
-    - linux-image-nanopi-neo-plus2
+    - linux-kernel-nanopi-neo-plus2
 
 #TODO: add flag to define if a specific source list ha to be generated under sources.list.define
 

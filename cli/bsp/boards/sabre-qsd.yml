@@ -50,7 +50,7 @@ kernel:
 
   # List of packages to install from the repository
   packages:
-    - linux-image-sabre-qsd
+    - linux-kernel-sabre-qsd
 
 # The uboot section defines the different parameters needed to select and install the uboot
 # used for this board. In some (rare) case, the uboot can include severa binaries, thus this

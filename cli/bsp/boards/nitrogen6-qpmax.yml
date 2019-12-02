@@ -51,7 +51,7 @@ kernel:
   # List of packages to install from the repository
   packages:
     # Kernel and firmware are the same for both version of sabre qsd and qsd+
-    - linux-image-nitrogen6-qpmax
+    - linux-kernel-nitrogen6-qpmax
 
 # The uboot section defines the different parameters needed to select and install the uboot
 # used for this board. In some (rare) case, the uboot can include severa binaries, thus this

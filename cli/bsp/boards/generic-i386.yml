@@ -50,6 +50,6 @@ architecture: i386
 
   # List of packages to install from the repository
   # packages:
-  #   - linux-image-i686
+  #   - linux-kernel-i686
 
 #TODO: add flag to define if a specific source list ha to be generated under sources.list.define

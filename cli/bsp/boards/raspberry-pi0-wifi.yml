@@ -50,7 +50,7 @@ kernel:
 
   # List of packages to install from the repository
   packages:
-    - linux-image-raspberry-pi0w
+    - linux-kernel-raspberry-pi0w
 
 #TODO: add flag to define if a specific source list ha to be generated under sources.list.define
 
