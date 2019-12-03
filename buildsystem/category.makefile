@@ -68,8 +68,9 @@ sanity-check:
 	done ;
 
 # If package is called then make both u-boot and kernel-package
-package: bsp-packages 
-bsp-packages: u-boot-package kernel-package 
+package: bsp-package
+bsp: bsp-package
+bsp-package: u-boot-package kernel-package 
 
 # Build only u-boot package target
 u-boot-package:
