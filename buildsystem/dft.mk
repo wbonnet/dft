@@ -245,7 +245,7 @@ help:
 	@echo "                           "
 
 help-config:
-	@echo "Writting in progress, please come back in a couple of days or so"
+	@echo "Writting is in progress, please come back in a couple of days or so"
 
 # ------------------------------------------------------------------------------
 #
