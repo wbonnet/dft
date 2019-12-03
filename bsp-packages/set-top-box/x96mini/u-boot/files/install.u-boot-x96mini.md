@@ -1,4 +1,4 @@
-# u-boot installation for s8-mini
+# u-boot installation for x96mini
 
 ## Disclaimer
 
@@ -12,17 +12,17 @@ You have been warned :)
 ## u-boot installation
 
 The u-boot binary to install has been copied by this package to :
-/boot/u-boot/u-boot-s8-mini
+/boot/u-boot/u-boot-x96mini
 
 This is a symlink to the current u-boot file stored at the same location in a
-file named u-boot-s8-mini.VERSION
+file named u-boot-x96mini.VERSION
 
 u-boot binary has to be installed on the first sectors of the device used by 
 the board to boot. This can be done by the following commands, assuming that :
 
 . The commands are run as root or using sudo ( that's the example)
 
-. The commands are run on the target board (s8-mini)
+. The commands are run on the target board (x96mini)
 
 . Which means the /dev/mmcblk0 is the internal CF card used to boot
 
@@ -33,4 +33,4 @@ u-boot itself.
 ## shell commands
 
 sudo dd if=/dev/zero of=/dev/mmcblk0 bs=1k count=1023 seek=1 status=noxfer
-sudo dd if=/boot/u-boot/u-boot-s8-mini of=/dev/mmcblk0 bs=1024 seek=8 status=noxfer
+sudo dd if=/boot/u-boot/u-boot-x96mini of=/dev/mmcblk0 bs=1024 seek=8 status=noxfer
