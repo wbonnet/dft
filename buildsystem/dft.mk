@@ -221,7 +221,7 @@ help:
 	@echo "   configure               Execute the configure script"
 	@echo "   build                   Build the software from sources"
 	@echo "   install                 Install the software to the target directory under workdir"
-	@echo "   bsp (or package)        Build all versions of BSP software packages (both linux kernel and u-boot)"
+	@echo "   bsp[-package] | package Build all versions of BSP software packages (both linux kernel and u-boot)"
 	@echo "   u-boot-package          Build all versions of u-boot package (and only u-boot, thus no kernel)"
 	@echo "                           for board $(BOARD_NAME)"
 	@echo "   kernel-package          Build all versions of linux kernel package (and only linux kernel, thus not of u-boot)"
