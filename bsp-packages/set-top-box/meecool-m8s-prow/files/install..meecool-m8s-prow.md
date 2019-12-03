@@ -1,1 +1,0 @@
-../../files/install..meecool-m8s-prow.md

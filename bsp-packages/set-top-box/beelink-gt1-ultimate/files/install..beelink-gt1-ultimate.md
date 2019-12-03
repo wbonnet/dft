@@ -1,1 +1,0 @@
-../../files/install..beelink-gt1-ultimate.md
