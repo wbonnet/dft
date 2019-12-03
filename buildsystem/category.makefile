@@ -67,6 +67,10 @@ sanity-check:
 		fi ; \
 	done ;
 
+# If package is called then make both u-boot and kernel-package
+package: bsp-packages 
+bsp-packages: u-boot-package kernel-package 
+
 # Build only u-boot package target
 u-boot-package:
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
