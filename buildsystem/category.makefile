@@ -25,7 +25,7 @@ include $(buildsystem)/inc/linux-kernel.mk
 include $(buildsystem)/dft.mk
 
 # Do not recurse the following subdirs
-MAKE_FILTERS  = Makefile README.md .
+MAKE_FILTERS  = Makefile workdir README.md .
 SW_NAME       = SW_NAME_undefined_at_category_level
 
 # Board category directory contains several folders, on per board in this category
@@ -69,7 +69,6 @@ sanity-check:
 
 # Build only u-boot package target
 u-boot-package:
-	@echo "u-boot-package from category.makefile"
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
 			cd $$i && $(MAKE) u-boot-package && cd .. ; \
@@ -78,9 +77,6 @@ u-boot-package:
 
 # Build only linux kernel an package target
 kernel-package:
-	@echo "kernel-package from category.makefile"
-	@echo "current dir is"
-	@pwd
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
 			cd $$i && $(MAKE) kernel-package && cd .. ; \
@@ -89,7 +85,6 @@ kernel-package:
 
 # Catch all target. Call the same targets in each subfolder
 %:
-	@echo "target $@ is called in category.makefile"
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
 			cd $$i && $(MAKE) $@ && cd .. ; \
