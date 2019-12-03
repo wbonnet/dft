@@ -240,6 +240,12 @@ help:
 	@echo "                           "
 	@echo "                           Since cross compilation is not yet supported, to build binaries for different arch"
 	@echo "                           you need at least one builder per arch and collect generated .deb files"
+	@echo "   help                    Display this help"
+	@echo "   help-config             Display help about global environment and configuration variables"
+	@echo "                           "
+
+help-config:
+	@echo "Writting in progress, please come back in a couple of days or so"
 
 # ------------------------------------------------------------------------------
 #
