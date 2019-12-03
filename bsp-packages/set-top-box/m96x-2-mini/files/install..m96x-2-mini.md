@@ -1,1 +1,0 @@
-../../files/install..m96x-2-mini.md
