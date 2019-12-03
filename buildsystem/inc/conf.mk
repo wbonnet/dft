@@ -92,7 +92,7 @@ HOST_ARCH ?= $(shell uname -m)
 
 
 # Defines the work root (subfolders are persistent but workdir is destroyed)
-DFT_HOME            ?= $(CURDIR)
+DFT_HOME            ?= $(dir $(lastword $(MAKEFILE_LIST)))
 WORK_DIR            ?= $(DFT_HOME)/workdir
 FILE_DIR            ?= $(DFT_HOME)/files
 DEFCONFIG_DIR       ?= $(DFT_HOME)/../defconfig
@@ -129,7 +129,7 @@ DOWNLOAD_TOOL       ?= wget
 
 # Defines default values to undefined (to make simple retrieval with grep in logs...)
 BOARD_NAME          ?= undefined-board-name
-BOARD_NAME          ?= undefined-board-arch
+BOARD_ARCH          ?= undefined-board-arch
 
 # If the KERNEL_DEFCONFIG variale is set, the given file will be copied to
 # .config in the source dirctory. Default value is set to board name.
