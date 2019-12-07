@@ -9,7 +9,7 @@
 # License.
 #
 #
-# Copyright 2019 DFT project (http://www.debianfirmwaretoolkit.org).
+# Copyright 2019 DFT project (http://www.firmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
 #
