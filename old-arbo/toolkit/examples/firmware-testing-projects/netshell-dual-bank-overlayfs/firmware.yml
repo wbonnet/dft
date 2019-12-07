@@ -8,11 +8,8 @@
 # License.
 #
 #
-# Copyright 2016 DFT project (http://www.firmwaretoolkit.org).  
+# Copyright 2016 DFT project (http://www.firmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
-#
-# Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
 #
 #
 # Contributors list :
@@ -43,7 +40,7 @@
 #
 # ----------------------------------------------------------------------------
 layout:
-  # Method to use to assembl the systm in memory. Can be either aufs 
+  # Method to use to assembl the systm in memory. Can be either aufs
   # or overlayfs
   method: overlayfs
 
@@ -52,10 +49,10 @@ layout:
   # to mount squashfs files using loopback
   filesystem: ext4
 
-  # Identification of the physical partition containing the squashfs files 
+  # Identification of the physical partition containing the squashfs files
   partition: /dev/sda1
 
-  # Defines the path under which the squashfs files are stored in the 
+  # Defines the path under which the squashfs files are stored in the
   # partition defined previously
   path: /
 
@@ -83,7 +80,7 @@ layout:
       # There is no default vallue ( it's too dangerous too guess that  :) )
       # partition:
 
-      # Path under which this object has to be mounted in the host file 
+      # Path under which this object has to be mounted in the host file
       # This information is mandatory
       mountpoint: /
 
@@ -91,7 +88,7 @@ layout:
       # Default is TODO
       # mount_options:
 
-    # Defines a tmpfs to stack over the root 
+    # Defines a tmpfs to stack over the root
   - stack_item:
       # Name of the mount point
       name: volatile
@@ -102,7 +99,7 @@ layout:
       # Target mount point
       mountpoint: /
 
-      # Specify the size of the tmpfs 
+      # Specify the size of the tmpfs
       mount_options: "size=256M,nr_inodes=10k,mode=777"
 
 
@@ -121,7 +118,7 @@ security:
 #
 # Definition of the firmware resilience and safety parameters
 #
-# Remember that Safety is not security  
+# Remember that Safety is not security
 #
 # ----------------------------------------------------------------------------
 resilience:
@@ -141,7 +138,7 @@ configuration:
   # Compressors available are gzip (default), lzo, xz
   compressor: "xz"
 
-  # Don't make the filesystem exportable via NFS. 
+  # Don't make the filesystem exportable via NFS.
   # no_exports: True
 
   # Don't detect sparse files. Default is False

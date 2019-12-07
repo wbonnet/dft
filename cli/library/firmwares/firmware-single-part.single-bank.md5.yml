@@ -11,9 +11,6 @@
 # Copyright 2016 DFT project (http://www.firmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
-# Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
-#
 #
 # Contributors list :
 #
@@ -51,7 +48,7 @@ layout:
     # to mount squshfs files using loopback
     filesystem: ext4
 
-    # Identification of the physical partition containing the squshfs files 
+    # Identification of the physical partition containing the squshfs files
     partition: /dev/mmcblk0p2
 
     # Stack items are individual element of the stack. They are processed

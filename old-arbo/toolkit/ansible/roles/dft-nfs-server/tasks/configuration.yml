@@ -8,11 +8,8 @@
 # License.
 #
 #
-# Copyright 2016 DFT project (http://www.firmwaretoolkit.org).  
+# Copyright 2016 DFT project (http://www.firmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
-#
-# Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
 #
 #
 # Contributors list :
@@ -29,14 +26,14 @@
 ---
 - name : DFT - Create /srv/nfs directory
   file: path=/srv/nfs
-        state=directory 
-        mode=0755 
+        state=directory
+        mode=0755
         owner=root
         group=root
 
 - name : DFT - Setup /etc/exports
-  template: src=templates/exports.j2 
+  template: src=templates/exports.j2
             dest=/etc/exports
-            owner=root 
-            group=root 
-            mode="u=rw,g=r,o=r"          
+            owner=root
+            group=root
+            mode="u=rw,g=r,o=r"

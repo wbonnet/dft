@@ -8,11 +8,8 @@
 # License.
 #
 #
-# Copyright 2016 DFT project (http://www.firmwaretoolkit.org).  
+# Copyright 2016 DFT project (http://www.firmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
-#
-# Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
 #
 #
 # Contributors list :
@@ -42,7 +39,7 @@ files:
   # The following files, directories and symlinks will be removed from rootfs
   #
   absent:
- 
+
   #
   # Testing file targets : will be removed from rootfs
   #
@@ -65,7 +62,7 @@ files:
   #
 
   # Remove a single symlink (preserve target)
-# TODO  - 
+# TODO  -
 
   # Remove a single symlink target (preserve symlink)
 
@@ -88,38 +85,38 @@ remove both
   #
 
   # Truncate a single file
-# TODO  - 
+# TODO  -
 
   # Find and truncate recursively a file
-# TODO  - 
+# TODO  -
 
   # Find and truncate a file recursivly, using a pattern (find command)
-# TODO  - 
+# TODO  -
 
   #
   # Testing directory targets : content will be removed from rootfs
   #
 
   # Empty a directory
-# TODO  - 
+# TODO  -
 
-  # Empty a directory rcursivly, preserving structure (remove only files, 
+  # Empty a directory rcursivly, preserving structure (remove only files,
   # not subirectories)
-# TODO  - 
+# TODO  -
 
   # Find and empty a directory
-# TODO  - 
+# TODO  -
 
   # Find and empty a directory rcursivly, preserving structure (remove only
   # files, not subirectories)
-# TODO  - 
+# TODO  -
 
   # Find and ampty a directory using a pattern (find command)
-# TODO  - 
+# TODO  -
 
   # Find and empty a directory rcursivly, preserving structure (remove only
   # files, not subirectories) using a pattern (find command)
-# TODO  - 
+# TODO  -
 
 
   #
@@ -127,13 +124,13 @@ remove both
   #
 
   # Truncate a single symlink target
-# TODO  - 
+# TODO  -
 
   # Find and truncate recursively symlinks targets
-# TODO  - 
+# TODO  -
 
   # Find and truncate symlinks targets recursivly, using a pattern (find command)
-# TODO  - 
+# TODO  -
 
 
 

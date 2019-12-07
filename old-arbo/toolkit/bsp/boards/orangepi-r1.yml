@@ -8,11 +8,8 @@
 # License.
 #
 #
-# Copyright 2017 DFT project (http://www.firmwaretoolkit.org).
+# Copyright 2016 DFT project (http://www.firmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
-#
-# Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
 #
 #
 # Contributors list :
@@ -68,7 +65,7 @@ kernel:
   # keep_source: True
 
 # The uboot section defines the different parameters needed to select and install the uboot
-# used to boot the board an run kernel. 
+# used to boot the board an run kernel.
 u-boot:
   # Defines the upstream site used to provide kernel for this device
   origin: armwizard
