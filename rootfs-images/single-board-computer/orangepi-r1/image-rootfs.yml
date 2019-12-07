@@ -11,9 +11,6 @@
 # Copyright 2016 DFT project (http://www.firmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
-# Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).
-#
 #
 # Contributors list :
 #
@@ -63,7 +60,7 @@ devices:
   # Should the filename include a timestamp ? Default is false
   filename_timestamp: True
 
-  # Defines the timestamp format. Syntax is based upon python datetime strftime method 
+  # Defines the timestamp format. Syntax is based upon python datetime strftime method
   # Default value is : %Y%m%d (ex: 20180312)
   filename_timestamp_format: "%Y%m%d"
 

@@ -8,11 +8,8 @@
 # License.
 #
 #
-# Copyright 2016 DFT project (http://www.firmwaretoolkit.org).  
+# Copyright 2016 DFT project (http://www.firmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
-#
-# Debian Firmware Toolkit is the new name of Linux Firmware From Scratch
-# Copyright 2014 LFFS project (http://www.linuxfirmwarefromscratch.org).  
 #
 #
 # Contributors list :
@@ -72,10 +69,10 @@ function teardown() {
   sudo umount "${mountdir}"
   sudo umount "${mountdir}/etc"
   sudo umount "${mountdir}/etc"
-  sudo umount "${configdir}" 
-  sudo umount "${secretdir}" 
-  sudo umount "${mountdir}" 
-  sudo umount "${tmpfsdir}" 
+  sudo umount "${configdir}"
+  sudo umount "${secretdir}"
+  sudo umount "${mountdir}"
+  sudo umount "${tmpfsdir}"
 }
 
 if [ "$1" == "-s" ] ; then setup ;    exit 0 ; fi
