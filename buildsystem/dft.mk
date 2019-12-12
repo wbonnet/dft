@@ -261,7 +261,7 @@ clean:
 # Delete everthing from the work, cookies and download directories
 #
 mrproper:
-	@rm -rf $(WORK_DIR)/*
+	@echo "warning this is dangerous to try_to_rm -rf $(WORK_DIR)/*"
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 
 
