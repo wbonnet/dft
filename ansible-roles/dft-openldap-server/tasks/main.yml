@@ -24,4 +24,4 @@
 #
 
 ---
-- include: slapd.yml
+- include: packages.yml

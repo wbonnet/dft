@@ -25,9 +25,10 @@
 
 ---
 - name : DFT - Install slapd
-  apt: name={{ item }}
+  apt: 
+       name={{item}}
        state=latest
        install_recommends=no
   with_items:
-    - slapd
-    - ldap-utils
+       - slapd
+       - ldap-utils
