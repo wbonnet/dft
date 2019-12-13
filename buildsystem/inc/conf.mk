@@ -91,20 +91,71 @@ HOST_ARCH ?= $(shell uname -m)
 # -----------------------------------------------------------------------------
 
 
-# Defines the work root (subfolders are persistent but workdir is destroyed)
-DFT_HOME            ?= $(dir $(lastword $(MAKEFILE_LIST)))
-WORK_DIR            ?= $(DFT_HOME)/workdir
-FILE_DIR            ?= $(DFT_HOME)/files
-DEFCONFIG_DIR       ?= $(DFT_HOME)/../defconfig
-PATCH_DIR           ?= $(DFT_HOME)/patches
+# Defines the work root (subfolders are persistent but workdir is destroyed)A
+# TODO remove all DFT_HOME after current debug sessions
+# TODO remove all DFT_WORKSPACE after current debug sessions keep only WORKDIR ?
+# reference to /fordidden are made to force failure of make an detect misuse
+# of env vars. The /fobidden should have access flags 400 and belong to root.
+# Keep It Stupid Simple KISS ;)
+
+# DFT_HOME is the path to where DFT is installed. It should contain buildsystem
+# folder storng all the Makefiles tool chain with and its .mk include files
+DFT_HOME            = /forbidden-dft_home
+
+# DFT_WORK is the root (highest level) of all work dirs used by DFT. Its
+# content is considered as volatile even if it will store some git stuff. 
+# It means it is "work dir" and if you changes and add to git folders are 
+# important you have to commit / push the files to upstream github.
+# Several context dependant wordirs will be created under this place 
+# during makefiles execution and recursion (for kernels etc.).
+#
+# It is up to you to ensure there will be enough free space depending
+# on how many targets you are building at a time. SSD or even ramdisk 
+# can really speed up thing s but don't expect to build all versions for a
+# board unles you have a few gigs of Ram :)
+#
+# If you build rootfs or firmware images the file system underneath DFT_WORK
+# has to support 'mount bind ' in chrooted environnement, so be careful is 
+# you use a NFS backend.
+DFT_WORK            ?= /forbidden-dft_work
+
+# DFT_BUILDSYSTEM is where the Mafile toolchain is installed. The following 
+# value is computed from the current makefile location if it has not been 
+# manually set. This is useful development purposes since all path are relative.
+# In the packaged version relative path are still the same (meaning don't care 
+# since it works out of the box), and this prevent you to add absolute path to 
+# git repo since it would fail when trying to write to a rea only place (in 
+# this use case fail fast approch is better).
+DFT_BUILDSYSTEM     ?= $(dir $(lastword $(MAKEFILE_LIST)))
+
+# DFT_WORKSPACE is where the current workdir should be located. It should be 
+# under DFT_WORK and can be vorriden on the commande line used to run make for 
+# instance to use a different place because of storage capacity or 
+# performance  reasons.
+DFT_WORKSPACE         ?= $(DFT_WORK)/dft-workspace
+
+# DFT_WORK is the name of directory under DFT_WORKSPACE used to build a version 
+# of a given pice of software (kernel, u-boot, etc.) or even a rootfs or firware
+# bootable disk image.
+WORK_DIR            ?= $(DFT_WORKSPACE)/$(BOARD_NAME)_$(SW_NAME)-$(SW_VERSION)
+
+# FILE_DIR contains alle the static files nedded by compilation of packaging steps
+FILE_DIR            ?= $(WORK_DIR)/files
+
+# DEFCONFIG_DIR contains the defconfig files used for kernel building. There
+# is one file under git per kernel version of a given board (the board is defined
+# by folder hierarchy).
+DEFCONFIG_DIR       ?= $(WORK_DIR)/defconfig
+
+# PATCH_DIR contains all the patches to be applied on upstream sources during
+# make patch target execution.
+PATCH_DIR           ?= $(WORK_DIR)/patches
 
 # Defines the working dir subfolders (all are volatile)
 SRC_DIR             ?= $(WORK_DIR)/sources
 DOWNLOAD_DIR        ?= $(WORK_DIR)/download
 GIT_DIR             ?= $(WORK_DIR)/git
 PARTIAL_DIR         ?= $(DOWNLOAD_DIR)/partial
-# TODO: should I keep BOARD_NAME somewhere in the path
-# COOKIE_DIR          ?= $(WORK_DIR)/cookies-$(BOARD_NAME)
 COOKIE_DIR          ?= $(WORK_DIR)/cookies
 INSTALL_DIR         ?= $(WORK_DIR)/install
 PACKAGE_DIR         ?= $(WORK_DIR)/package
