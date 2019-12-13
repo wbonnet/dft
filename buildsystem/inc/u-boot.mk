@@ -50,8 +50,8 @@ SRC_GIT_BRANCH      ?= "SRC_GIT_BRANCH Not Used -- stable"
 SRC_GIT_REPO        ?= "SRC_GIT_REPO Not Used -- linux-$(SRC_GIT_BRANCH)"
 SRC_GIT_REPO_EXT    ?= "SRC_GIT_REPO_EXT Not Used -- .git"
 SRC_FILE_VERSION    ?= $(shell echo $(SW_VERSION) | head -c 1)
-SRC_SITE             = SRC_SITE_nolonger-used-for-uboot
-SRC_DIST_URL         = https://github.com/$(SW_NAME)/$(SW_NAME)/archive
+DFT_SRC_SITE        ?= https://github.com/
+SRC_DIST_URL        ?= $(DFT_SRC_SITE)/$(SW_NAME)/$(SW_NAME)/archive
 
 # Defines the files to retrieve
 SRC_DIST_FILES      ?= v$(SW_VERSION).tar.gz
