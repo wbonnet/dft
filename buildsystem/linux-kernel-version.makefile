@@ -25,7 +25,7 @@ SW_VERSION  = $(notdir $(patsubst %/,%,${CURDIR}/))
 
 buildsystem := ../../../../../buildsystem
 include ../board.mk
-include $(buildsystem)/inc/u-boot.mk
+include $(buildsystem)/inc/linux-kernel.mk
 include $(buildsystem)/dft.mk
 
 # Retrieve th builder hot architecure if not defined yet
