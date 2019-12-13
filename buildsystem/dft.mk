@@ -56,29 +56,6 @@ endif
 
 # ------------------------------------------------------------------------------
 #
-# Check if the DFT_HOME has been defined, if not output an error before doing anything.
-# DFT_HOME is a shell variable that must target to the path where dft id installed
-# DFT_HOME has to contain the buildsystem folder
-#
-ifeq ($(DFT_HOME), )
-define error_msg
-
-
-DFT_HOME must be defined in the environment of shell running the make command.
-Warning ! DFT_HOME must be a relative path, you cannot git add symlinks to an
-absolute path. Otherwise, it would not work for environment different from yours.
-
-You have to set DFT_HOME before continuing. It can be done by adding following
-line to ~/.bash_aliases and by executing it interactively for current shell.
-
-export DFT_HOME=$(dir $(lastword $(MAKEFILE_LIST)))
-
-endef
-  $(error $(error_msg))
-endif
-
-# ------------------------------------------------------------------------------
-#
 # Check if the board arch is defined, if not output an error before doing anything.
 # It means this bard has been newly created and arch has to be defined
 #
@@ -145,28 +122,28 @@ DISPLAY_COMPLETED_TARGET_NAME  = @echo "    completed [$@] "
 #
 # Cookie maker
 #
-TARGET_DONE = echo "debug cookiemaker : cookiedir = $(COOKIE_DIR)" && mkdir -p $(COOKIE_DIR) && touch $(COOKIE_DIR)/$(notdir $@)
+TARGET_DONE = mkdir -p $(COOKIE_DIR) && touch $(COOKIE_DIR)/$(notdir $@)
 
 # ------------------------------------------------------------------------------
 #
 # Determine this Makefile directory which is the root of the build system
 #
-BUILD_SYSTEM := $(dir $(lastword $(MAKEFILE_LIST)))
+DFT_BUILDSYSTEM := $(dir $(lastword $(MAKEFILE_LIST)))
 
 # ------------------------------------------------------------------------------
 #
 # Includes the build system top level and target definitions
 #
 # ------------------------------------------------------------------------------
-include $(BUILD_SYSTEM)/inc/conf.mk
-include $(BUILD_SYSTEM)/inc/lib.mk
-include $(BUILD_SYSTEM)/inc/target-build.mk
-include $(BUILD_SYSTEM)/inc/target-configure.mk
-include $(BUILD_SYSTEM)/inc/target-extract.mk
-include $(BUILD_SYSTEM)/inc/target-fetch.mk
-include $(BUILD_SYSTEM)/inc/target-install.mk
-include $(BUILD_SYSTEM)/inc/target-package.mk
-include $(BUILD_SYSTEM)/inc/target-upload.mk
+include $(DFT_BUILDSYSTEM)/inc/conf.mk
+include $(DFT_BUILDSYSTEM)/inc/lib.mk
+include $(DFT_BUILDSYSTEM)/inc/target-build.mk
+include $(DFT_BUILDSYSTEM)/inc/target-configure.mk
+include $(DFT_BUILDSYSTEM)/inc/target-extract.mk
+include $(DFT_BUILDSYSTEM)/inc/target-fetch.mk
+include $(DFT_BUILDSYSTEM)/inc/target-install.mk
+include $(DFT_BUILDSYSTEM)/inc/target-package.mk
+include $(DFT_BUILDSYSTEM)/inc/target-upload.mk
 
 # ------------------------------------------------------------------------------
 #
@@ -261,7 +238,8 @@ clean:
 # Delete everthing from the work, cookies and download directories
 #
 mrproper:
-	@echo "warning this is dangerous to try_to_rm -rf $(WORK_DIR)/*"
+	@echo "Sorry mrproper has been temporarly disabled due to debugging sessions in progress"
+	@echo "I was about to run : rm -rf $(WORK_DIR) --one-file-system --preserve-root"
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 
 
@@ -287,8 +265,10 @@ show-config:
 	fi ;
 	@echo 
 	@echo "Directories configuration"
-	@echo "  BUILD_SYSTEM                      $(BUILD_SYSTEM)"
+	@echo "  DFT_BUILDSYSTEM                   $(DFT_BUILDSYSTEM)"
 	@echo "  DFT_HOME                          $(DFT_HOME)"
+	@echo "  DFT_WORK                          $(DFT_WORK)"
+	@echo "  DFT_WORKSPACE                     $(DFT_WORKSPACE)"
 	@echo "  WORK_DIR                          $(WORK_DIR)"
 	@echo "  FILE_DIR                          $(FILE_DIR)"
 	@echo "  DEFCONFIG_DIR                     $(DEFCONFIG_DIR)"
