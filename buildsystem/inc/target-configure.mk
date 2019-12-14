@@ -83,12 +83,15 @@ do-configure:
 		true ; \
 	else \
 		if [ "$(SW_NAME)" = "u-boot" ] ; then \
-			echo "    running make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) in $(SRC_DIR)" ; \
+			echo "    running u-boot make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) in $(SRC_DIR)" ; \
 			cd "$(SRC_DIR)/$(SW_NAME)-$(SW_VERSION)" && make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) ; \
 		else \
 			if [ "$(SW_NAME)" = "linux" ] ; then \
 				cd "$(SRC_DIR)/$(SW_NAME)-$(SW_VERSION)" ; \
 				cp "$(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config" .config ; \
+				pwd ; \
+				echo " cp $(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config .config ; \
+				echo "    running kernel make silentoldconfig in `pwd`" ; \
 				make silentoldconfig ; \
 				cp .config "$(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ; \
 			fi ; \

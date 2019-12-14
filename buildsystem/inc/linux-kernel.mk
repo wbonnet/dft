@@ -49,9 +49,9 @@ SRC_GIT_URL         ?= git://git.kernel.org/pub/scm/linux/kernel/git/stable
 SRC_GIT_BRANCH      ?= stable
 SRC_GIT_REPO        ?= linux-$(SRC_GIT_BRANCH)
 SRC_GIT_REPO_EXT    ?= .git
-DFT_SRC_SITE            ?= https://cdn.kernel.org/pub/linux/kernel
+DFT_SRC_SITE        ?= https://cdn.kernel.org
 SRC_FILE_VERSION    ?= $(SW_VERSION)
-SRC_DIST_URL        ?= $(DFT_SRC_SITE)/$(SRC_BRANCH)
+SRC_DIST_URL        ?= $(DFT_SRC_SITE)/pub/linux/kernel/$(SRC_BRANCH)
 SRC_BRANCH          ?= v$(shell echo $(SRC_FILE_VERSION) | head -c 1).x
 
 # Defines the files to retrieve
