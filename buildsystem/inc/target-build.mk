@@ -75,11 +75,13 @@ rebuild: configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 #
 
 %/Makefile:
-	@if test -f $(COOKIE_DIR)/build-$*/Makefile ; then \
+	if test -f $(COOKIE_DIR)/build-$*/Makefile ; then \
 		true ; \
 	else \
 		MY_OLD_PWD=`pwd` ; \
+		echo "SRC_DIR : $(SRC_DIR) " ; \
 		cd $(abspath $(SRC_DIR)/$(SW_NAME)-$(SW_VERSION)) \
+		pwd ;  \
 		$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
 		cd $(MY_OLD_PWD) ; \
 	fi ;

@@ -56,25 +56,35 @@ do-package:
 	if test -f $(COOKIE_DIR)/do-package ; then \
 		true ; \
 	else \
+		pwd ; \
+		echo "        before copying stuff to $(PACKAGE_DIR)"  ; \
+		if [ "$(SW_NAME)" = "linux" ] ; then \
+			cp -fr $(DFT_BUILDSYSTEM)/templates/debian-kernel-package $(PACKAGE_DIR)/debian ; \
+		else \
+			cp -fr $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package $(PACKAGE_DIR)/debian ; \
+		fi ; \
 		echo "        running package in $(PACKAGE_DIR)"  ; \
 		cd $(PACKAGE_DIR) ; \
-		if [ "$(SW_NAME)" = "linux" ] ; then \
-			mkdir -p $(SW_NAME)-kernel-$(BOARD_NAME) ; \
-			cd $(SW_NAME)-kernel-$(BOARD_NAME) ; \
-			[ -f debian ] && rm -f debian ; \
-			cp -fr $(DFT_HOME)/templates/debian-kernel-package debian ; \
+	        if [ "$(DEBEMAIL)" = "" ] ; then \
+			find ./debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/unknown/g" ; \
 		else \
-			mkdir -p $(SW_NAME)-$(BOARD_NAME) ; \
-			cd $(SW_NAME)-$(BOARD_NAME) ; \
-			[ -f debian ] && rm -f debian ; \
-			cp -fr $(DFT_HOME)/templates/debian-u-boot-package debian ; \
+			find ./debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/$(DEBEMAIL)/g" ; \
 		fi ; \
-		cp -fr $(INSTALL_DIR)/* . ; \
-		if [ "$(SW_NAME)" = "linux" ] ; then \
-			tar cvfz ../$(SW_NAME)-kernel-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
+		if [ "$(DEBFULLNAME)" = "" ] ; then \
+			find ./debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/unknown/g" ; \
 		else \
-			tar cvfz ../$(SW_NAME)-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
+			find ./debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/$(DEBFULLNAME)/g" ; \
 		fi ; \
+		sed -i -e "s/__SW_VERSION__/$(NEW_VERSION)/g" Makefile ; \
+		find ./debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(NEW_VERSION)/g" \
+								  -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" \
+								  -e "s/__DATE__/$(shell LC_ALL=C date +"%a, %d %b %Y %T %z")/g" ; \
+	fi ; \
+	cp -fr $(INSTALL_DIR)/* . ; \
+	if [ "$(SW_NAME)" = "linux" ] ; then \
+		tar cvfz ../$(SW_NAME)-kernel-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
+	else \
+		tar cvfz ../$(SW_NAME)-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
 		pwd ; \
 		$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ; \
 	fi ; \

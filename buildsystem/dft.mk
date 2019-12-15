@@ -64,52 +64,11 @@ define error_msg
 
 
 BOARD_ARCH variable as not yet been defined in the board.mk Makefile.
-Please replace "unknown" by the board architecture (armv7l, x86_64, ppc64, etc.).
-
-
-endef
-  $(error $(error_msg))
-endif
-
-
-# ------------------------------------------------------------------------------
-#
-# Check if the DEBFULLNAME is defined. Otherwise package template will not be
-# instanciated properly.
-#
-ifeq ($(DEBFULLNAME), )
-define error_msg
-
-
-DEBFULLNAME environment variable should be defined. You have to set it before
-continuing. This can be done by adding the following line to ~/.bash_aliases
-
-export DEBFULLNAME="Jane Doe"
-
-endef
-  $(error $(error_msg))
-  $(error $(DEBFULLNAME))
-endif
-
-
-# ------------------------------------------------------------------------------
-#
-# Check if the DEBEMAIL is defined. Otherwise package template will not be
-# instanciated properly.
-#
-ifeq ($(DEBEMAIL), )
-define error_msg
-
-
-DEBEMAIL environment variable shoould be defined. You have to set it before
-continuing. This can be done by adding the following line to ~/.bash_aliases
-
-export DEBEMAIL="jane@doe.org"
+Please replace "unknown" by the board architecture (armv7l, aarch64, mips, x86_64, ppc64, etc.).
 
 endef
   $(error $(error_msg))
 endif
-
 
 # ------------------------------------------------------------------------------
 #

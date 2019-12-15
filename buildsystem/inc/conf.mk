@@ -100,7 +100,7 @@ HOST_ARCH ?= $(shell uname -m)
 
 # DFT_HOME is the path to where DFT is installed. It should contain buildsystem
 # folder storng all the Makefiles tool chain with and its .mk include files
-DFT_HOME            = /forbidden-dft_home
+DFT_HOME            = /usr/share/dft
 
 # DFT_WORK is the root (highest level) of all work dirs used by DFT. Its
 # content is considered as volatile even if it will store some git stuff. 
@@ -117,7 +117,7 @@ DFT_HOME            = /forbidden-dft_home
 # If you build rootfs or firmware images the file system underneath DFT_WORK
 # has to support 'mount bind ' in chrooted environnement, so be careful is 
 # you use a NFS backend.
-DFT_WORK            ?= /forbidden-dft_work
+DFT_WORK ?= /forbidden-dft_workplopi
 
 # DFT_BUILDSYSTEM is where the Mafile toolchain is installed. The following 
 # value is computed from the current makefile location if it has not been 
@@ -139,8 +139,12 @@ DFT_WORKSPACE         ?= $(DFT_WORK)/dft-workspace
 # bootable disk image.
 WORK_DIR            ?= $(DFT_WORKSPACE)/$(BOARD_NAME)_$(SW_NAME)-$(SW_VERSION)
 
-# FILE_DIR contains alle the static files nedded by compilation of packaging steps
-FILE_DIR            ?= $(WORK_DIR)/files
+# FILE_DIR contains all the static files nedded by compilation of packaging steps
+# Since files in this folder are supposed to be static this folder should be located under
+# DFT_BUILDSYSTEM which is read-only for common use. DFT development like adding support
+# for a new board or new u-boot or kernel versions require git ande write access anyways,
+# thus git repo must be placed elsewhere than thedefault location which is /usr/share).
+FILE_DIR            ?= $(DFT_BUILDSYSTEM)/files
 
 # DEFCONFIG_DIR contains the defconfig files used for kernel building. There
 # is one file under git per kernel version of a given board (the board is defined

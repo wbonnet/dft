@@ -74,18 +74,29 @@ do-install:
 	@if test -f $(COOKIE_DIR)/do-install ; then \
 		true ; \
 	else \
+		echo "avant le cd $(SRC_DIR)/$(SW_NAME)-$(SW_VERSION)" ; \
+		pwd; \
 		cd $(SRC_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 		if [ "$(SW_NAME)" = "u-boot" ] ; then \
+			echo "DEBUG Dans le if u-boot" ; \
+			echo "INSTALL_DIR : $(INSTALL_DIR)" ; \
 			mkdir -p $(INSTALL_DIR)/u-boot/dtb ; \
 			mkdir -p $(INSTALL_DIR)/doc ; \
-			cp -frH $(FILE_DIR)/* $(INSTALL_DIR)/doc ; \
+			echo "avant le pwd" ; \
 			pwd ; \
-			cp -fr $(UBOOT_BINARY_FILE) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION) ; \
-			cp -fr u-boot.dtb $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb ; \
-			cd $(INSTALL_DIR)/u-boot/ ; \
-			ln -sf u-boot-$(BOARD_NAME)-$(SW_VERSION) u-boot-$(BOARD_NAME); \
+			echo "FILE_DIR avant : $(FILE_DIR)" ; \
+			FILE_DIR=../files-recalcul ; \
+			echo "FILE_DIR recalcul : ../files" ; \
+			echo "cp -frH ../files/* $(INSTALL_DIR)/doc" ; \
+			echo "INSTALL_DIR : $(INSTALL_DIR)" ; \
+			echo "UBOOT_BINARY_FILE : $(UBOOT_BINARY_FILE)" ; \
+			cp -fr $(SRC_DIR)/$(SW_NAME)-$(SW_VERSION)/$(UBOOT_BINARY_FILE) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION) ; \
+			cp -fr $(SRC_DIR)/$(SW_NAME)-$(SW_VERSION)/u-boot.dtb $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb ; \
+			ln -sf u-boot-$(BOARD_NAME)-$(SW_VERSION) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME); \
 		else \
 			if [ "$(SW_NAME)" = "linux" ] ; then \
+				echo "DEBUG Dans le else du if u-boot" ; \
+				echo "DEBUG Dans le if linux" ; \
 				mkdir -p $(INSTALL_DIR)/boot/dtb ; \
 				$(BUILD_ENV) $(MAKE) INSTALL_PATH=$(INSTALL_DIR)/boot $(INSTALL_ARGS) ; \
 				$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(INSTALL_DIR)/ INSTALL_MOD_STRIP=1 modules_install ; \

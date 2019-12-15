@@ -45,8 +45,8 @@ new-version:
 	echo ". Creating the directory for u-boot version $(VERSION)" ; \
 		mkdir -p $(VERSION) ; \
 		cd $(VERSION) ; \
-		cp -f $(DFT_HOME)/buildsystem/templates/u-boot-version.makefile Makefile ; \
-		ln -s $(DFT_HOME)/buildsystem/ buildsystem ; \
+		cp -f $(DFT_BUILDSYSTEM)/buildsystem/templates/u-boot-version.makefile Makefile ; \
+		ln -s $(DFT_BUILDSYSTEM)/buildsystem/ buildsystem ; \
 		mkdir -p files ; \
 		touch files/.gitkeep ; \
 		ln -s ../../files/install.u-boot-$(BOARD_NAME).md ./files/ ; \
@@ -54,7 +54,7 @@ new-version:
 		touch patches/.gitkeep ; \
 		echo "work-$(BOARD_NAME)/" > .gitignore ; \
 		sed -i -e "s/__SW_VERSION__/$(VERSION)/g" Makefile ; \
-		cp -fr $(DFT_HOME)/buildsystem/templates/debian.u-boot debian ; \
+		cp -fr $(DFT_BUILDSYSTEM)/buildsystem/templates/debian.u-boot debian ; \
 		cd debian ; \
 		mv u-boot.install u-boot-$(BOARD_NAME).install ; \
 		cd ../.. ; \

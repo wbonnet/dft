@@ -90,7 +90,7 @@ do-configure:
 				cd "$(SRC_DIR)/$(SW_NAME)-$(SW_VERSION)" ; \
 				cp "$(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config" .config ; \
 				pwd ; \
-				echo " cp $(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config .config ; \
+				echo " cp $(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config .config" ; \
 				echo "    running kernel make silentoldconfig in `pwd`" ; \
 				make silentoldconfig ; \
 				cp .config "$(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ; \
