@@ -60,23 +60,24 @@ do-package:
 		echo "        before copying stuff to $(PACKAGE_DIR)"  ; \
 		if [ "$(SW_NAME)" = "linux" ] ; then \
 			cp -fr $(DFT_BUILDSYSTEM)/templates/debian-kernel-package $(PACKAGE_DIR)/debian ; \
+			cp $(DFT_BUILDSYSTEM)/templates/templates/linux-kernel-version.makefile $(PACKAGE_DIR)/Makefile ; \
 		else \
 			cp -fr $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package $(PACKAGE_DIR)/debian ; \
+			cp $(DFT_BUILDSYSTEM)/templates/templates/u-boot-version.makefile $(PACKAGE_DIR)/Makefile ; \
 		fi ; \
 		echo "        running package in $(PACKAGE_DIR)"  ; \
-		cd $(PACKAGE_DIR) ; \
 	        if [ "$(DEBEMAIL)" = "" ] ; then \
-			find ./debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/unknown/g" ; \
+			find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/unknown/g" ; \
 		else \
-			find ./debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/$(DEBEMAIL)/g" ; \
+			find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/$(DEBEMAIL)/g" ; \
 		fi ; \
 		if [ "$(DEBFULLNAME)" = "" ] ; then \
-			find ./debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/unknown/g" ; \
+			find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/unknown/g" ; \
 		else \
-			find ./debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/$(DEBFULLNAME)/g" ; \
+			find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/$(DEBFULLNAME)/g" ; \
 		fi ; \
-		sed -i -e "s/__SW_VERSION__/$(NEW_VERSION)/g" Makefile ; \
-		find ./debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(NEW_VERSION)/g" \
+		sed -i -e "s/__SW_VERSION__/$(NEW_VERSION)/g" $(PACKAGE_DIR)/Makefile ; \
+		find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(NEW_VERSION)/g" \
 								  -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" \
 								  -e "s/__DATE__/$(shell LC_ALL=C date +"%a, %d %b %Y %T %z")/g" ; \
 	fi ; \
