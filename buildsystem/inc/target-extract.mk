@@ -128,7 +128,7 @@ extract-git-%:
 		true ; \
 	else \
 	  echo "        moving git data to $(EXTRACT)/$*" ; \
-		mv $(GIT_BUILD_DIR)/$(SRC_GIT_REPO) $(BUILD_DIR)/$(SW_NAME) ; \
+		mv $(GIT_BUILD_DIR)/$(SRC_GIT_REPO)/* $(BUILD_DIR)/ ; \
 	fi ;
 	$(TARGET_DONE)
 
