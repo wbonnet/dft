@@ -82,12 +82,12 @@ do-configure:
 	@if test -f $(COOKIE_DIR)/$* ; then \
 		true ; \
 	else \
+		cd $(BUILD_DIR) ; \
 		if [ "$(SW_NAME)" = "u-boot" ] ; then \
 			echo "    running u-boot make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) in $(BUILD_DIR)" ; \
-			cd "$(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)" && make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) ; \
+			make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) ; \
 		else \
 			if [ "$(SW_NAME)" = "linux" ] ; then \
-				cd "$(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)" ; \
 				cp "$(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config" .config ; \
 				pwd ; \
 				echo " cp $(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config .config" ; \
