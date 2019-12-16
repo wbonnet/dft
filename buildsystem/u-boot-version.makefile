@@ -121,5 +121,5 @@ sanity-check:
 # Sinc u-boot tarball contains sudir  sources have to be moves to the right location
 post-extract:
 	mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR)/ ;
-	for file in `find $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) -type f`; do rm -f $file ; done ;
+	for file in `find $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) -type f`; do rm -f $(file) ; done ;
 	rmdir  $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ;
