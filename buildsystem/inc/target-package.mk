@@ -86,7 +86,10 @@ do-package:
 		tar cvfz ../$(SW_NAME)-kernel-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
 	else \
 		tar cvfz ../$(SW_NAME)-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
+		echo env global :; \
+		env ; \
 		pwd ; \
+		echo "DEBUILD_ENV : $(DEBUILD_ENV)" ; \
 		$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ; \
 	fi ; \
 	$(TARGET_DONE)

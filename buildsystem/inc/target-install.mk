@@ -74,9 +74,9 @@ do-install:
 	@if test -f $(COOKIE_DIR)/do-install ; then \
 		true ; \
 	else \
-		echo "avant le cd $(SRC_DIR)/$(SW_NAME)-$(SW_VERSION)" ; \
+		echo "avant le cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)" ; \
 		pwd; \
-		cd $(SRC_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
+		cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 		if [ "$(SW_NAME)" = "u-boot" ] ; then \
 			echo "DEBUG Dans le if u-boot" ; \
 			echo "INSTALL_DIR : $(INSTALL_DIR)" ; \
@@ -90,8 +90,8 @@ do-install:
 			echo "cp -frH ../files/* $(INSTALL_DIR)/doc" ; \
 			echo "INSTALL_DIR : $(INSTALL_DIR)" ; \
 			echo "UBOOT_BINARY_FILE : $(UBOOT_BINARY_FILE)" ; \
-			cp -fr $(SRC_DIR)/$(SW_NAME)-$(SW_VERSION)/$(UBOOT_BINARY_FILE) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION) ; \
-			cp -fr $(SRC_DIR)/$(SW_NAME)-$(SW_VERSION)/u-boot.dtb $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb ; \
+			cp -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/$(UBOOT_BINARY_FILE) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION) ; \
+			cp -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/u-boot.dtb $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb ; \
 			ln -sf u-boot-$(BOARD_NAME)-$(SW_VERSION) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME); \
 		else \
 			if [ "$(SW_NAME)" = "linux" ] ; then \

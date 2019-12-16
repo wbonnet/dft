@@ -185,10 +185,12 @@ help-config:
 
 # ------------------------------------------------------------------------------
 #
-# Run the clean target only inside the work directory
-#
+# Run the clean target only inside the sources directory. Compilation occurs in 
+# BUILD_DIR, not in WORK_DIR which is parent of BUILD_DIR and also contain cookies 
+# download, install etc. directories (thus no Makefile)
+
 clean:
-	@if [ -d $(WORK_DIR) ] ; then make -C $(WORK_DIR) clean ; fi
+	if [ -d $(BUILD_DIR)/ ] ; then make -C $(BUILD_DIR) clean ; fi
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 
 
@@ -235,7 +237,7 @@ show-config:
 	@echo "  DOWNLOAD_DIR                      $(DOWNLOAD_DIR)"
 	@echo "  PARTIAL_DIR                       $(PARTIAL_DIR)"
 	@echo "  COOKIE_DIR                        $(COOKIE_DIR)"
-	@echo "  SRC_DIR                           $(SRC_DIR)"
+	@echo "  BUILD_DIR                         $(BUILD_DIR)"
 	@echo "  INSTALL_DIR                       $(INSTALL_DIR)"
 	@echo "  PACKAGE_DIR                       $(PACKAGE_DIR)"
 	@echo "  TEMP_DIR                          $(TEMP_DIR)"
@@ -278,6 +280,7 @@ show-config:
 
 setup: $(COOKIE_DIR)
 	$(DISPLAY_COMPLETED_TARGET_NAME)
+	@env
 	$(TARGET_DONE)
 
 # ------------------------------------------------------------------------------

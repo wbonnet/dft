@@ -45,7 +45,7 @@ endef
 #
 
 BUILD_TARGETS = $(addprefix build-,$(BUILD_CHECK_SCRIPTS)) $(addprefix build-,$(BUILD_SCRIPTS))
-build: configure $(SRC_DIR) pre-build $(BUILD_SCRIPTS) post-build
+build: configure $(BUILD_DIR) pre-build $(BUILD_SCRIPTS) post-build
 	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
 		then \
 		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
@@ -79,8 +79,8 @@ rebuild: configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 		true ; \
 	else \
 		MY_OLD_PWD=`pwd` ; \
-		echo "SRC_DIR : $(SRC_DIR) " ; \
-		cd $(abspath $(SRC_DIR)/$(SW_NAME)-$(SW_VERSION)) \
+		echo "BUILD_DIR : $(BUILD_DIR) " ; \
+		cd $(abspath $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)) \
 		pwd ;  \
 		$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
 		cd $(MY_OLD_PWD) ; \

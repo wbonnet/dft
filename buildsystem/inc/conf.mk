@@ -117,7 +117,10 @@ DFT_HOME            = /usr/share/dft
 # If you build rootfs or firmware images the file system underneath DFT_WORK
 # has to support 'mount bind ' in chrooted environnement, so be careful is 
 # you use a NFS backend.
-DFT_WORK ?= /forbidden-dft_workplopi
+# If variable is not defined in the makefile variables then its value is
+# retrieved from shell env. This means DFT_WORK value can be defined on the 
+# command line using DFT_WORK=/path/to/somewhere make show-config
+DFT_WORK ?= /tmp/dft-work
 
 # DFT_BUILDSYSTEM is where the Mafile toolchain is installed. The following 
 # value is computed from the current makefile location if it has not been 
@@ -144,7 +147,7 @@ WORK_DIR            ?= $(DFT_WORKSPACE)/$(BOARD_NAME)_$(SW_NAME)-$(SW_VERSION)
 # DFT_BUILDSYSTEM which is read-only for common use. DFT development like adding support
 # for a new board or new u-boot or kernel versions require git ande write access anyways,
 # thus git repo must be placed elsewhere than thedefault location which is /usr/share).
-FILE_DIR            ?= $(DFT_BUILDSYSTEM)/files
+FILE_DIR            ?= $(WORK_DIR)/files
 
 # DEFCONFIG_DIR contains the defconfig files used for kernel building. There
 # is one file under git per kernel version of a given board (the board is defined
@@ -156,7 +159,7 @@ DEFCONFIG_DIR       ?= $(WORK_DIR)/defconfig
 PATCH_DIR           ?= $(WORK_DIR)/patches
 
 # Defines the working dir subfolders (all are volatile)
-SRC_DIR             ?= $(WORK_DIR)/sources
+BUILD_DIR           ?= $(WORK_DIR)/build
 DOWNLOAD_DIR        ?= $(WORK_DIR)/download
 GIT_DIR             ?= $(WORK_DIR)/git
 PARTIAL_DIR         ?= $(DOWNLOAD_DIR)/partial
