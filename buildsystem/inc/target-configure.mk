@@ -71,6 +71,7 @@ reconfigure: patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconfi
 %/configure: do-configure 
 configure: do-configure 
 do-configure:
+	echo "DEBUG do-configure ligne 74"
 	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
 	then \
 		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
@@ -82,7 +83,8 @@ do-configure:
 	@if test -f $(COOKIE_DIR)/$* ; then \
 		true ; \
 	else \
-		cd $(BUILD_DIR) ; \
+		cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
+		pwd ; \
 		if [ "$(SW_NAME)" = "u-boot" ] ; then \
 			echo "    running u-boot make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) in $(BUILD_DIR)" ; \
 			make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) ; \

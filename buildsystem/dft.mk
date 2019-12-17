@@ -190,7 +190,12 @@ help-config:
 # download, install etc. directories (thus no Makefile)
 
 clean:
-	if [ -d $(BUILD_DIR)/ ] ; then make -C $(BUILD_DIR) clean ; fi
+	@echo " DEBUG : Entering target clean from dft.mk"
+	@echo "BUILD_DIR : $(BUILD_DIR)"
+	pwd ; 
+	ls -lh $(BUILD_DIR)
+	if [ -d $(BUILD_DIR)/ ] ; then make -C $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) clean ; fi
+	if [ -d $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ] ; then rmdir $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; fi
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 
 

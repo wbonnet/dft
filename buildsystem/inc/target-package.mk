@@ -62,8 +62,10 @@ do-package:
 			cp -fr $(DFT_BUILDSYSTEM)/templates/debian-kernel-package $(PACKAGE_DIR)/debian ; \
 			cp $(DFT_BUILDSYSTEM)/templates/templates/linux-kernel-version.makefile $(PACKAGE_DIR)/Makefile ; \
 		else \
-			cp -fr $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package $(PACKAGE_DIR)/debian ; \
-			cp $(DFT_BUILDSYSTEM)/templates/templates/u-boot-version.makefile $(PACKAGE_DIR)/Makefile ; \
+			echo DFT_BUILDSYSTEM : $(DFT_BUILDSYSTEM); \
+			ls -l $(DFT_BUILDSYSTEM); \
+			echo "cp -fr $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package $(PACKAGE_DIR)/debian" ; \
+			echo "cp $(DFT_BUILDSYSTEM)/templates/templates/u-boot-version.makefile $(PACKAGE_DIR)/Makefile" ; \
 		fi ; \
 		echo "        running package in $(PACKAGE_DIR)"  ; \
 	        if [ "$(DEBEMAIL)" = "" ] ; then \

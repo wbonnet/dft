@@ -120,18 +120,10 @@ sanity-check:
 
 # Since u-boot tarball contains sudir sources have to be moves to the right location
 # and hidden files and hidden empty dirs must be removed
-#	find $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) -type f | xargs -i mv {} $(BUILD_DIR)/
-#	find $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) -type d | xargs -i mv {} $(BUILD_DIR)/
-
 post-extract:
-	echo "DEBUG debut du post-extract"
-	mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) 
-	mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/.github $(BUILD_DIR) 
-	mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/.checkpatch.conf $(BUILD_DIR) 
-	mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/.gitignore $(BUILD_DIR) 
-	mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/.mailmap $(BUILD_DIR) 
-	mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/.travis.yml $(BUILD_DIR) 
-	find $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) -type d
-	echo "DEBUG avant le ls -l"
-	ls -l $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) 
-	echo "DEBUG fin  du post-extract"
+#	@mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR)/
+	@mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/.github $(BUILD_DIR)/
+	@mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/.checkpatch.conf $(BUILD_DIR)/
+	@mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/.gitignore $(BUILD_DIR)/
+	@mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/.mailmap $(BUILD_DIR)/
+	@mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/.travis.yml $(BUILD_DIR)/
