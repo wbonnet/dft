@@ -52,10 +52,10 @@ endef
 # the $(DOWNLOAD_DIR)/% target
 #
 ifeq ($(DOWNLOAD_TOOL), wget)
-FETCH_TARGETS ?=  $(addprefix fetch-wget-,$(SRC_CHECKSUM_FILES)) $(addprefix fetch-wget-,$(SRC_DIST_FILES))
+FETCH_TARGETS ?=  $(addprefix fetch-archive-,$(SRC_CHECKSUM_FILES)) $(addprefix fetch-archive-,$(SRC_DIST_FILES))
 else
 ifeq ($(DOWNLOAD_TOOL), git)
-FETCH_TARGETS ?=  $(addprefix fetch-git-,$(SW_NAME))
+FETCH_TARGETS ?=  $(addprefix clone-git-,$(SW_NAME))
 else
 define error_msg
 Unknown DOWNLOAD_TOOL : $(DOWNLOAD_TOOL)
@@ -71,8 +71,8 @@ fetch: setup $(COOKIE_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
-fetch-wget-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
-	if test -f $(COOKIE_DIR)/$* ; then \
+fetch-archive-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
+	@if test -f $(COOKIE_DIR)/$@ ; then \
 		true ; \
 	else \
 		wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$* ; \
@@ -103,8 +103,8 @@ fetch-wget-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 	fi ;
 	$(TARGET_DONE)
 
-fetch-git-%: $(GIT_DIR)
-	if test -f $(COOKIE_DIR)/$(GIT_DIR)/$* ; then \
+clone-git-%: $(GIT_DIR)
+	@if test -f $(COOKIE_DIR)/$(GIT_DIR)/$@ ; then \
 		true ; \
 	else \
 		echo "        cloning into $(GIT_DIR)/$*" ; \

@@ -81,6 +81,7 @@ extract-archive-%.tar:
 extract-archive-%.tar.gz:
 	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar.gz ; then \
 		true ; \
+		echo "        cookie deja la $(DOWNLOAD_DIR)/$*.tar.gz" ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz" ; \
 		tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tar.gz -C $(BUILD_DIR) ; \
