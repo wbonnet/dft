@@ -106,8 +106,10 @@ do-package:
 	fi ; \
 	echo "DEBUG de l aprem" ; \
 	echo "DEBUILD_ENV : $(DEBUILD_ENV)" ; \
-	$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ; \
-	$(TARGET_DONE)
+	$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS)  && $(TARGET_DONE) ; \
+	echo "ploposaure" ; exit 1 ;
+
+#	$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS)  || ( echo "ploposaure" ; exit 1 ; ) ; 
 
 do-repackage:
 	@if test -f $(COOKIE_DIR)/do-package ; then \
