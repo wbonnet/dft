@@ -84,14 +84,13 @@ do-install:
 			mkdir -p $(INSTALL_DIR)/doc ; \
 			echo "avant le pwd" ; \
 			pwd ; \
-			echo "FILE_DIR avant : $(FILE_DIR)" ; \
-			FILE_DIR=../files-recalcul ; \
-			echo "FILE_DIR recalcul : ../files" ; \
 			echo "cp -frH ../files/* $(INSTALL_DIR)/doc" ; \
 			echo "INSTALL_DIR : $(INSTALL_DIR)" ; \
 			echo "UBOOT_BINARY_FILE : $(UBOOT_BINARY_FILE)" ; \
+			echo "cp -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/$(UBOOT_BINARY_FILE) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION)" ; \
 			cp -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/$(UBOOT_BINARY_FILE) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION) ; \
 			cp -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/u-boot.dtb $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb ; \
+			echo "cp -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/u-boot.dtb $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb" ; \
 			ln -sf u-boot-$(BOARD_NAME)-$(SW_VERSION) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME); \
 		else \
 			if [ "$(SW_NAME)" = "linux" ] ; then \

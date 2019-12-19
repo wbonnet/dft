@@ -79,13 +79,13 @@ DISPLAY_COMPLETED_TARGET_NAME  = @echo "    completed [$@] "
 
 # ------------------------------------------------------------------------------
 #
-# Cookie maker
+# The cookie monster^Wmaker
 #
-TARGET_DONE = mkdir -p $(COOKIE_DIR) && touch $(COOKIE_DIR)/$(notdir $@)
+TARGET_DONE = mkdir -p $(COOKIE_DIR) && touch -a $(COOKIE_DIR)/$(notdir $@)
 
 # ------------------------------------------------------------------------------
 #
-# Determine this Makefile directory which is the root of the build system
+# Retrieve the directory where this Makefile is stored, its the build system root
 #
 DFT_BUILDSYSTEM := $(dir $(lastword $(MAKEFILE_LIST)))
 
@@ -195,7 +195,7 @@ clean:
 	pwd ; 
 	ls -lh $(BUILD_DIR)
 	if [ -d $(BUILD_DIR)/ ] ; then make -C $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) clean ; fi
-	if [ -d $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ] ; then rmdir $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; fi
+#	if [ -d $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ] ; then rmdir $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; fi
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 
 
@@ -285,7 +285,6 @@ show-config:
 
 setup: $(COOKIE_DIR)
 	$(DISPLAY_COMPLETED_TARGET_NAME)
-	@env
 	$(TARGET_DONE)
 
 # ------------------------------------------------------------------------------

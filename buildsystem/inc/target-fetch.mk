@@ -50,11 +50,12 @@ endef
 
 # Construct the list of files path under downloaddir which will be processed by
 # the $(DOWNLOAD_DIR)/% target
+#
 ifeq ($(DOWNLOAD_TOOL), wget)
-FETCH_TARGETS ?=  $(addprefix $(DOWNLOAD_DIR)/,$(SRC_CHECKSUM_FILES)) $(addprefix $(DOWNLOAD_DIR)/,$(SRC_DIST_FILES))
+FETCH_TARGETS ?=  $(addprefix fetch-wget-,$(SRC_CHECKSUM_FILES)) $(addprefix fetch-wget-,$(SRC_DIST_FILES))
 else
 ifeq ($(DOWNLOAD_TOOL), git)
-FETCH_TARGETS ?=  $(addprefix $(GIT_DIR)/,$(SW_NAME))
+FETCH_TARGETS ?=  $(addprefix fetch-git-,$(SW_NAME))
 else
 define error_msg
 Unknown DOWNLOAD_TOOL : $(DOWNLOAD_TOOL)
@@ -70,13 +71,15 @@ fetch: setup $(COOKIE_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
-$(DOWNLOAD_DIR)/%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
-	@if test -f $(COOKIE_DIR)/$* ; then \
+fetch-wget-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
+	if test -f $(COOKIE_DIR)/$* ; then \
 		true ; \
 	else \
 		wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$* ; \
-		mv $(PARTIAL_DIR)/$* $@ ; \
-		if test -f $@ ; then \
+		mv $(PARTIAL_DIR)/$* $(DOWNLOAD_DIR) ; \
+		rmdir --ignore-fail-on-non-empty $(PARTIAL_DIR) ; \
+		tree $(DOWNLOAD_DIR) ; \
+		if test -f $(DOWNLOAD_DIR)/$* ; then \
 			true ; \
 		else \
 			echo 'ERROR : Failed to download $@!' 1>&2; \
@@ -100,7 +103,7 @@ $(DOWNLOAD_DIR)/%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 	fi ;
 	$(TARGET_DONE)
 
-$(GIT_DIR)/%: $(GIT_DIR)
+fetch-git-%: $(GIT_DIR)
 	if test -f $(COOKIE_DIR)/$(GIT_DIR)/$* ; then \
 		true ; \
 	else \

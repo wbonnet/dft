@@ -68,7 +68,7 @@ do-upload:
 	else \
 		echo "        running upload"  ; \
 	 	if [ ! "" = "$(DFT_DEB_UPLOAD_PATH)" ] && [ ! "" = "$(DFT_DEB_UPLOAD_SERVER)" ] ; then \
-			scp $(abspath $(PACKAGE_DIR))/*.deb $(DFT_DEB_UPLOAD_SERVER):$(DFT_DEB_UPLOAD_PATH) ; \
+			scp $(PACKAGE_DIR)/*.deb $(DFT_DEB_UPLOAD_SERVER):$(DFT_DEB_UPLOAD_PATH) ; \
 	 	else \
 	 	    if [ "" = "$(DFT_DEB_UPLOAD_SERVER)" ] ; then \
 			    echo "        Variable DFT_DEB_UPLOAD_SERVER is not set, please define it your shell environment."  ; \
@@ -88,7 +88,6 @@ do-upload:
 do-reupload:
 	@if test -f $(COOKIE_DIR)/do-upload ; then \
 		rm -f $(COOKIE_DIR)/do-upload ; \
-		rm -fr $(abspath $(INSTALL_DIR)) ; \
 	fi ;
 	$(TARGET_DONE)
 

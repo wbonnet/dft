@@ -79,7 +79,11 @@ rebuild: configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 		true ; \
 	else \
 		MY_OLD_PWD=`pwd` ; \
-		cd $(abspath $(BUILD_DIR)) \
+		cd $(abspath $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)) \
+		echo "La je fais un cd en abspath" ; \
+		echo "cd $(abspath $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION))" \
+		echo "Et sans abspath ce serait " ; \
+		echo "cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)" \
 		pwd ;  \
 		$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
 		cd $(MY_OLD_PWD) ; \

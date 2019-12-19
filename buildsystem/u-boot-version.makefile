@@ -122,8 +122,8 @@ sanity-check:
 # and hidden files and hidden empty dirs must be removed
 post-extract:
 #	@mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR)/
-	@mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/.github $(BUILD_DIR)/
-	@mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/.checkpatch.conf $(BUILD_DIR)/
-	@mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/.gitignore $(BUILD_DIR)/
-	@mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/.mailmap $(BUILD_DIR)/
-	@mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/.travis.yml $(BUILD_DIR)/
+#	@mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/.github $(BUILD_DIR)/
+#	@mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/.checkpatch.conf $(BUILD_DIR)/
+#	@mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/.gitignore $(BUILD_DIR)/
+#	@mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/.mailmap $(BUILD_DIR)/
+#	@mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/.travis.yml $(BUILD_DIR)/
