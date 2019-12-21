@@ -30,4 +30,4 @@ include ../board.mk
 # PATCHFILES += 0000_some_patch.diff
 
 # Include build system
-include builsystem/inc/u-boot.mk
+include buildsystem/inc/u-boot.mk

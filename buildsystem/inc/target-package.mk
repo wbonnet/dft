@@ -44,9 +44,10 @@ endef
 # Execute the package target script
 #
 
+# cp $(DFT_BUILDSYSTEM)/templates/u-boot-version.makefile $(PACKAGE_DIR)/Makefile ; \
+
 do-package:
-	echo "DEBUG debut de do-package" ; \
-	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
+	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
 	then \
 	    echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make ris running on a $(HOST_ARCH) board." ; \
 	    echo "The generated binaries might be invalid or scripts could fail before reaching the end of target. Cross compilation is not yet supported." ; \
@@ -54,12 +55,8 @@ do-package:
 		echo "You can get the missing binaries by running again this target on a $(BOARD_ARCH) based host and collect the generated items." ; \
 		echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
 	fi ; 
-	echo "DEBUG : cible do-package du fichier target-package.mk" ; \
-	if test -f $(COOKIE_DIR)/do-package ; then \
-		echo "DEBUG le cookie do-package est deja la" ; \
-	else \
-	echo "DEBUG le cookie do-package est pas la :) au boulot !" ; \
-		echo "DEBUG before copying stuff to $(PACKAGE_DIR)"  ; \
+	if ! test -f $(COOKIE_DIR)/do-package ; then \
+		echo "DEBUG le cookie do-package est pas la :) au boulot !" ; \
 		echo "DEBUG SW_NAME : $(SW_NAME)"  ; \
 		echo "DEBUG je suis dans"  ; \
 		pwd ; \
@@ -70,7 +67,6 @@ do-package:
 		else \
 			echo DFT_BUILDSYSTEM : $(DFT_BUILDSYSTEM); \
 			cp -frv $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package $(PACKAGE_DIR)/debian ; \
-			cp $(DFT_BUILDSYSTEM)/templates/u-boot-version.makefile $(PACKAGE_DIR)/Makefile ; \
 			cp -frv --dereference `pwd`/files $(PACKAGE_DIR)/doc ; \
 			echo "DEBUG contenu de PACKAGE_DIR $(PACKAGE_DIR)" ; \
 			ls -lh $(PACKAGE_DIR) ; \
@@ -78,7 +74,6 @@ do-package:
 			ls -lh $(PACKAGE_DIR)/doc ; \
 		fi ; \
 		echo "        running package in $(PACKAGE_DIR)"  ; \
-		env ; \
 	        if [ "$(DEBEMAIL)" = "" ] ; then \
 			find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/unknown/g" ; \
 		else \
@@ -94,9 +89,10 @@ do-package:
 								  -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" \
 								  -e "s/__DATE__/$(shell LC_ALL=C date +"%a, %d %b %Y %T %z")/g" ; \
 	fi ; \
-	cp -fr $(INSTALL_DIR)/* . ; \
-	echo "apres le cp -fr $(INSTALL_DIR)/* ." ; \
-	pwd ; \
+	cp -fr $(INSTALL_DIR)/* $(PACKAGE_DIR) ; \
+	echo "apres le cp -fr $(INSTALL_DIR)/* $(PACKAGE_DIR)" ; \
+	cd $(PACKAGE_DIR) ; \
+	pwd; \
 	if [ "$(SW_NAME)" = "linux" ] ; then \
 		tar cfz ../$(SW_NAME)-kernel-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
 	else \
@@ -104,7 +100,6 @@ do-package:
 	fi ; \
 	echo "DEBUILD_ENV :$(DEBUILD_ENV): DEBBUILD :$(DEBUILD): DEBUID_ARGS :$(DEBUILD_ARGS):" ; \
 	$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) && $(TARGET_DONE) ; \
-	pwd; \
 	echo "ploposaure" ; exit 1 ;
 	$(TARGET_DONE)
 
