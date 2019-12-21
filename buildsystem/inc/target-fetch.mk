@@ -51,20 +51,21 @@ endef
 # Construct the list of files path under downloaddir which will be processed by
 # the $(DOWNLOAD_DIR)/% target
 #
+
 ifeq ($(DOWNLOAD_TOOL), wget)
-FETCH_TARGETS ?=  $(addprefix fetch-archive-,$(SRC_CHECKSUM_FILES)) $(addprefix fetch-archive-,$(SRC_DIST_FILES))
-else
-ifeq ($(DOWNLOAD_TOOL), git)
-FETCH_TARGETS ?=  $(addprefix clone-git-,$(SW_NAME))
-else
-define error_msg
+  FETCH_TARGETS ?=  $(addprefix fetch-archive-,$(SRC_CHECKSUM_FILES)) $(addprefix fetch-archive-,$(SRC_DIST_FILES))
+  else
+    ifeq ($(DOWNLOAD_TOOL), git)
+    FETCH_TARGETS ?=  $(addprefix clone-git-,$(SW_NAME))
+    else
+    define error_msg
 Unknown DOWNLOAD_TOOL : $(DOWNLOAD_TOOL)
-endef
+    endef
 $(error $(error_msg))
-endif
+    endif
 endif
 
-fetch-list:
+show-fetch-targets:
 	@echo $(FETCH_TARGETS)
 
 fetch: setup $(COOKIE_DIR) pre-fetch $(FETCH_TARGETS) post-fetch

@@ -68,8 +68,7 @@ reconfigure: patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconfi
 #
 # TODO : DELTA DEFCONFIG
 
-%/configure: do-configure 
-configure: do-configure 
+configure: extract pre-configure do-configure post-configure 
 do-configure:
 	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
 	then \
@@ -80,6 +79,7 @@ do-configure:
 		echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
 	fi ; 
 	@if test -f $(COOKIE_DIR)/$@ ; then \
+		echo "cookie $(COOKIE_DIR)/$@" ; \
 		true ; \
 	else \
 		cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \

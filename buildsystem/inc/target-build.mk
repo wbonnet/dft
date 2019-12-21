@@ -44,16 +44,24 @@ endef
 # Build the target binaries
 #
 
-BUILD_TARGETS = $(addprefix build-,$(BUILD_CHECK_SCRIPTS)) $(addprefix build-,$(BUILD_SCRIPTS))
-build: configure $(BUILD_DIR) pre-build $(BUILD_SCRIPTS) post-build
-	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
-		then \
+BUILD_TARGETS ?= $(addprefix build-,$(SRC_DIST_FILES))
+
+show-build-targets:
+	@echo $(BUILD_TARGETS) ;
+
+build: configure pre-build $(BUILD_TARGETS) post-build
+	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 		echo "The generated binaries might be invalid or scripts could fail before reaching the end of target. Cross compilation is not yet supported." ; \
 		echo "Processing will now continue only for $(HOST_ARCH) based boards package definitions." ; \
 		echo "You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect the generated items." ; \
 		echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
-	fi
+	fi ; 
+	@if ! test -f $(COOKIE_DIR)/build ; then \
+		cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
+		$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
+		cd - ; \
+	fi ; 
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -63,7 +71,7 @@ build: configure $(BUILD_DIR) pre-build $(BUILD_SCRIPTS) post-build
 # Rebuild the target binaries
 #
 
-REBUILD_TARGETS ?= $(addprefix rebuild-,$(BUILD_CHECK_SCRIPTS)) $(addprefix rebuild-,$(BUILD_SCRIPTS))
+REBUILD_TARGETS ?= $(addprefix rebuild-,$(BUILD_TARGETS))
 
 rebuild: configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 	$(DISPLAY_COMPLETED_TARGET_NAME)
@@ -74,25 +82,15 @@ rebuild: configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 # Execute the building script
 #
 
-%/Makefile:
-	if test -f $(COOKIE_DIR)/build-$*/Makefile ; then \
-		true ; \
-	else \
-		MY_OLD_PWD=`pwd` ; \
-		cd $(abspath $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)) \
-		echo "La je fais un cd en abspath" ; \
-		echo "cd $(abspath $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION))" \
-		echo "Et sans abspath ce serait " ; \
-		echo "cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)" \
-		pwd ;  \
+build-%:
+	@if ! test -f $(COOKIE_DIR)/build-$* ; then \
 		$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
-		cd $(MY_OLD_PWD) ; \
-	fi ;
+	fi ; 
 	$(TARGET_DONE)
 
-rebuild-%/Makefile:
-	@if test -f $(COOKIE_DIR)/build-$*/Makefile ; then \
-		rm -f $(COOKIE_DIR)/build-$*/Makefile ; \
+rebuild-%:
+	@if test -f $(COOKIE_DIR)/build-$* ; then \
+		rm -f $(COOKIE_DIR)/build-$* ; \
 	fi ;
 	$(TARGET_DONE)
 

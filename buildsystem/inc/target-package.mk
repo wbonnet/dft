@@ -45,6 +45,7 @@ endef
 #
 
 do-package:
+	echo "DEBUG debut de do-package" ; \
 	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
 	then \
 	    echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make ris running on a $(HOST_ARCH) board." ; \
@@ -55,67 +56,61 @@ do-package:
 	fi ; 
 	echo "DEBUG : cible do-package du fichier target-package.mk" ; \
 	if test -f $(COOKIE_DIR)/do-package ; then \
-		true ; \
 		echo "DEBUG le cookie do-package est deja la" ; \
 	else \
+	echo "DEBUG le cookie do-package est pas la :) au boulot !" ; \
 		echo "DEBUG before copying stuff to $(PACKAGE_DIR)"  ; \
 		echo "DEBUG SW_NAME : $(SW_NAME)"  ; \
 		echo "DEBUG je suis dans"  ; \
 		pwd ; \
+		echo "DEBUG et je vais copier le squelette de paquet dans $(PACKAGE_DIR)" ; \
 		if [ "$(SW_NAME)" = "linux" ] ; then \
 			cp -fr --dereference $(DFT_BUILDSYSTEM)/templates/debian-kernel-package $(PACKAGE_DIR)/debian ; \
-			cp --dereference $(DFT_BUILDSYSTEM)/templates/templates/linux-kernel-version.makefile $(PACKAGE_DIR)/Makefile ; \
+			cp --dereference $(DFT_BUILDSYSTEM)/templates/linux-kernel-version.makefile $(PACKAGE_DIR)/Makefile ; \
 		else \
 			echo DFT_BUILDSYSTEM : $(DFT_BUILDSYSTEM); \
-			echo "DEBUG contenu  de PACKAGE_DIR $(PACKAGE_DIR)" ; \
+			cp -frv $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package $(PACKAGE_DIR)/debian ; \
+			cp $(DFT_BUILDSYSTEM)/templates/u-boot-version.makefile $(PACKAGE_DIR)/Makefile ; \
+			cp -frv --dereference `pwd`/files $(PACKAGE_DIR)/doc ; \
+			echo "DEBUG contenu de PACKAGE_DIR $(PACKAGE_DIR)" ; \
 			ls -lh $(PACKAGE_DIR) ; \
-			mkdir $(PACKAGE_DIR)/doc ; \
-			cp -fr --dereference files/* $(PACKAGE_DIR)/doc ; \
-			echo "apres il y a dans le sub doc" ; \
-			ls -l $(PACKAGE_DIR)/doc ; \
-			echo "cp -fr $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package $(PACKAGE_DIR)/debian" ; \
-			echo "cp $(DFT_BUILDSYSTEM)/templates/templates/u-boot-version.makefile $(PACKAGE_DIR)/Makefile" ; \
+			echo "DEBUG contenu de PACKAGE_DIR/doc $(PACKAGE_DIR)/doc" ; \
+			ls -lh $(PACKAGE_DIR)/doc ; \
 		fi ; \
 		echo "        running package in $(PACKAGE_DIR)"  ; \
+		env ; \
 	        if [ "$(DEBEMAIL)" = "" ] ; then \
-		        echo "DEBUG 1 error find no such fils or directory"  ; \
 			find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/unknown/g" ; \
 		else \
-		        echo "DEBUG 2 error find no such fils or directory"  ; \
 			find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/$(DEBEMAIL)/g" ; \
 		fi ; \
 		if [ "$(DEBFULLNAME)" = "" ] ; then \
-		        echo "DEBUG 3 error find no such fils or directory"  ; \
 			find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/unknown/g" ; \
 		else \
-		        echo "DEBUG 4 error find no such fils or directory"  ; \
 			find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/$(DEBFULLNAME)/g" ; \
 		fi ; \
-		echo "DEBUG 6 error sed no input file "  ; \
-		sed -i -e "s/__SW_VERSION__/$(NEW_VERSION)/g" $(PACKAGE_DIR)/Makefile ; \
-  	        echo "DEBUG 5 error find no such fils or directory"  ; \
-		find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(NEW_VERSION)/g" \
+		sed -i -e "s/__SW_VERSION__/$(SW_VERSION)/g" $(PACKAGE_DIR)/Makefile ; \
+		find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(SW_VERSION)/g" \
 								  -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" \
 								  -e "s/__DATE__/$(shell LC_ALL=C date +"%a, %d %b %Y %T %z")/g" ; \
 	fi ; \
 	cp -fr $(INSTALL_DIR)/* . ; \
+	echo "apres le cp -fr $(INSTALL_DIR)/* ." ; \
+	pwd ; \
 	if [ "$(SW_NAME)" = "linux" ] ; then \
-		tar cvfz ../$(SW_NAME)-kernel-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
+		tar cfz ../$(SW_NAME)-kernel-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
 	else \
-		tar cvfz ../$(SW_NAME)-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
+		tar cfz ../$(SW_NAME)-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
 	fi ; \
-	echo "DEBUG de l aprem" ; \
-	echo "DEBUILD_ENV : $(DEBUILD_ENV)" ; \
-	$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS)  && $(TARGET_DONE) ; \
+	echo "DEBUILD_ENV :$(DEBUILD_ENV): DEBBUILD :$(DEBUILD): DEBUID_ARGS :$(DEBUILD_ARGS):" ; \
+	$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) && $(TARGET_DONE) ; \
+	pwd; \
 	echo "ploposaure" ; exit 1 ;
-
-#	$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS)  || ( echo "ploposaure" ; exit 1 ; ) ; 
+	$(TARGET_DONE)
 
 do-repackage:
 	@if test -f $(COOKIE_DIR)/do-package ; then \
 		rm -f $(COOKIE_DIR)/do-package ; \
-		echo "DEBUG : Why an abspath ? rm -fr $(abspath $(PACKAGE_DIR))" ; \
-		echo "DEBUG : Without abspath rm -fr $(PACKAGE_DIR)" ; \
 	fi ;
 	$(TARGET_DONE)
 
