@@ -100,7 +100,6 @@ do-package:
 	fi ; \
 	echo "DEBUILD_ENV :$(DEBUILD_ENV): DEBBUILD :$(DEBUILD): DEBUID_ARGS :$(DEBUILD_ARGS):" ; \
 	$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) && $(TARGET_DONE) ; \
-	echo "ploposaure" ; exit 1 ;
 	$(TARGET_DONE)
 
 do-repackage:
