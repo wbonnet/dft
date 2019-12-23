@@ -21,6 +21,11 @@
 
 # Defines variables specific to u-boot
 SW_NAME     := u-boot
+# no version at u-boot level#SW_VERSION   = $(shell pwd)
+SW_VERSION   = no-version-at-uboot
+SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+SW_VERSION = $(SELF_DIR)
+
 buildsystem := ../../../../buildsystem
 include ../board.mk
 include $(buildsystem)/inc/u-boot.mk
@@ -49,7 +54,6 @@ endif
 .PHONY: help check
 
 # 
-		#return 
 # Board level u-boot makefile
 #
 sanity-check:
@@ -143,8 +147,11 @@ sanity-check:
 		fi ;
 
 # Catch all target. Call the same targets in each subfolder
+#fetch:
+#	echo "dans le catch tech" ; 
+
 %:
-#	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
-#		echo dollar i $$i; \
-#		$(MAKE) -C $$i $* ; \
-#       done
+	echo "dans le catch all target vaut surement $*" ; \
+	for i in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		echo "$(MAKE) -C $$i  $*" ; \
+	done

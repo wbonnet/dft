@@ -30,29 +30,42 @@
 
 # ------------------------------------------------------------------------------
 #
-# Protection against multiple includes
+# Protection against multiple include
 #
 ifdef DFT_LIB
-$(error lib.mk has already been included)
+$(info lib.mk has already been included)
 else
-define DFT_LIB
-endef
-# the matching endif teminates this file
+$(info now including lib.mk)
+DFT_LIB = 1
+# Some temporary default values used to debug where where variables are initialized
+SW_NAME     ?= no-name-at-lib
+SW_VERSION  ?= no-version-at-lib
 
 # ------------------------------------------------------------------------------
 #
 # Directory maker used by the base rules
 #
-$(sort $(DFT_BUILDSYSTEM) $(FILE_DIR) $(GIT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(DEFCONFIG_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR) $(BUILD_DIR)):
-	@if test -d $@ ; then : ; else \
+# TODO some of the dir should be created some are errors or warning is missing
+#$(sort $(DFT_BUILDSYSTEM) $(FILE_DIR) $(GIT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(DEFCONFIG_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR) $(BUILD_DIR))
+$(sort $(DFT_WORKSPACE) $(FILE_DIR) $(GIT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(DEFCONFIG_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR) $(BUILD_DIR)):
+	echo "Dans la creation des repertoires la cible est : $@"; 
+	echo "Ma target est : $@"; 
+	if test -d $@ ; then : ; else \
 		mkdir -p $@; \
 		echo making $@; \
-	fi
+	fi ; 
 
 $(COOKIE_DIR)/%:
-	@if test -d $@; then : ; else \
-		touch $@; \
-	fi
+	@if ! test -d $(COOKIE_DIR) ; then \
+		echo "Force la creation du repertoire $(COOKIE_DIR)"; \
+		mkdir -p $(COOKIE_DIR); \
+	fi ;
+	@echo "Dans le cookiedir pourcent arobase : $@"; 
+	@echo "Dans le cookiedir pourcent etoile  : $*"; 
+#	if test -d $@; then 
+#	 else \
+#		touch $@; \
+#	fi
 
 # ------------------------------------------------------------------------------
 #
@@ -75,6 +88,5 @@ define dft_warning =
 @echo "DFT Warning : $(1)" ;
 endef
 
-# Match initial ifndef DFT_LIB
+# Match initial ifdef DFT_LIB
 endif
-

@@ -30,28 +30,26 @@
 
 # ------------------------------------------------------------------------------
 #
-# Protection against multiple includes
+# Protection against multiple include
 #
-ifdef DFT_BUILDSYSTEM_TARGET_FETCH
-$(error target-fetch.mk has already been included)
+ifdef DFT_TARGET_FETCH
+$(info target-fetch.mk has already been included)
 else
-define DFT_BUILDSYSTEM_TARGET_FETCH
-endef
-# the matching endif teminates this file
+$(info now including target-fetch.mk)
+DFT_TARGET_FETCH = 1
+
+# Some temporary default values used to debug where where variables are initialized
+SW_NAME     ?= no-name-at-target-fetch
+SW_VERSION  ?= no-version-at-target-fetch
 
 # ------------------------------------------------------------------------------
 #
-#   Fetch target is in charge of getting sources from a remote server or local
-#   file system. Files are copied into a local directory named files
-#
-#   This target only download files. Computing checksums and extracting files
-#   are done by other targets.
-#
+# Fetch target is in charge of getting idownloading sources from a remote server or local
+# file system. Files are copied into a local directory identified by the DOWNLOAD_DIR
+# variable. This target only download files. Computing checksums and extracting files
+# are done by other targets.
 
-# Construct the list of files path under downloaddir which will be processed by
-# the $(DOWNLOAD_DIR)/% target
-#
-
+# Construct the list of files to be fetched from the upstream site.
 ifeq ($(DOWNLOAD_TOOL), wget)
   FETCH_TARGETS ?=  $(addprefix fetch-archive-,$(SRC_CHECKSUM_FILES)) $(addprefix fetch-archive-,$(SRC_DIST_FILES))
   else
@@ -79,7 +77,6 @@ fetch-archive-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 		wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$* ; \
 		mv $(PARTIAL_DIR)/$* $(DOWNLOAD_DIR) ; \
 		rmdir --ignore-fail-on-non-empty $(PARTIAL_DIR) ; \
-		tree $(DOWNLOAD_DIR) ; \
 		if test -f $(DOWNLOAD_DIR)/$* ; then \
 			true ; \
 		else \
@@ -114,7 +111,5 @@ clone-git-%: $(GIT_DIR)
 	fi ;
 	$(TARGET_DONE)
 
-# ------------------------------------------------------------------------------
-# Match initial ifdef
+# Match initial ifdef DFT_TARGET_FETCH
 endif
-

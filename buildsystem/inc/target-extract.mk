@@ -30,14 +30,17 @@
 
 # ------------------------------------------------------------------------------
 #
-# Protection against multiple includes
+# Protection against multiple include
 #
-ifdef DFT_BUILDSYSTEM_TARGET_EXTRACT
-$(error target-extract.mk has already been included)
+ifdef DFT_TARGET_EXTRACT
+$(info target-extract.mk has already been included)
 else
-define DFT_BUILDSYSTEM_TARGET_EXTRACT
-endef
-# the matching endif teminates this file
+$(info now including target-extract.mk)
+DFT_TARGET_EXTRACT = 1
+
+# Some temporary default values used to debug where where variables are initialized
+SW_NAME     ?= no-name-at-target-extract
+SW_VERSION  ?= no-version-at-target-extract
 
 # ------------------------------------------------------------------------------
 #
@@ -82,6 +85,9 @@ extract-archive-%.tar.gz:
 	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar.gz ; then \
 		true ; \
 	else \
+		if ! test -f $(DOWNLOAD_DIR)/$*.tar.gz ; then \
+			echo "        archive $(DOWNLOAD_DIR)/$*.tar.gz is missing please check the files retrieved by the fetch target" ; \
+		fi ; \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz" ; \
 		tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tar.gz -C $(BUILD_DIR) ; \
 	fi ;
@@ -91,6 +97,9 @@ extract-archive-%.tgz:
 	@if test -f $(COOKIE_DIR)/extract-archive-$*.tgz ; then \
 		true ; \
 	else \
+		if ! test -f $(DOWNLOAD_DIR)/$*.tgz ; then \
+			echo "        archive $(DOWNLOAD_DIR)/$*.tgz is missing please check the files retrieved by the fetch target" ; \
+		fi ; \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tgz" ; \
 		tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tgz -C $(BUILD_DIR) ; \
 	fi ;
@@ -156,7 +165,6 @@ patch: extract pre-patch $(PATCH_TARGETS) post-patch
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
-# ------------------------------------------------------------------------------
-# Match initial ifdef
+# Match initial ifdef DFT_TARGET_EXTRACT
 endif
 

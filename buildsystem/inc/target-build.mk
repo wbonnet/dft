@@ -30,14 +30,17 @@
 
 # ------------------------------------------------------------------------------
 #
-# Protection against multiple includes
+# Protection against multiple include
 #
-ifdef DFT_BUILDSYSTEM_TARGET_BUILD
-$(error target-build.mk has already been included)
+ifdef DFT_TARGET_BUILD
+$(info target-build.mk has already been included)
 else
-define DFT_BUILDSYSTEM_TARGET_BUILD
-endef
-# the matching endif teminates this file
+$(info now including target-build.mk)
+DFT_TARGET_BUILD = 1
+
+# Some temporary default values used to debug where where variables are initialized
+SW_NAME     ?= no-name-at-target-build
+SW_VERSION  ?= no-version-at-target-build
 
 # ------------------------------------------------------------------------------
 #
@@ -105,6 +108,6 @@ PREREQUISITE_BASE_PKGS ?= make
 PREREQUISITE_BASE_PKGS_UBUNTU ?= build-essential
 PREREQUISITE_BASE_PKGS_DEBIAN ?= build-essential
 
-# ------------------------------------------------------------------------------
-# Match initial ifdef
+# Match initial ifdef DFT_TARGET_BUILD
 endif
+

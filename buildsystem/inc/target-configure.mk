@@ -30,14 +30,17 @@
 
 # ------------------------------------------------------------------------------
 #
-# Protection against multiple includes
+# Protection against multiple include
 #
-ifdef DFT_BUILDSYSTEM_TARGET_CONFIGURE
-$(error target-configure.mk has already been included)
+ifdef DFT_TARGET_CONFIGURE
+$(info target-configure.mk has already been included)
 else
-define DFT_BUILDSYSTEM_TARGET_CONFIGURE
-endef
-# the matching endif teminates this file
+$(info now including target-configure.mk)
+DFT_TARGET_CONFIGURE = 1
+
+# Some temporary default values used to debug where where variables are initialized
+SW_NAME     ?= no-name-at-target-configure
+SW_VERSION  ?= no-version-at-target-configure
 
 # ------------------------------------------------------------------------------
 #
@@ -100,7 +103,6 @@ do-configure:
 	fi ;
 	$(TARGET_DONE)
 
-# ------------------------------------------------------------------------------
-# Match initial ifdef
+# Match initial ifdef DFT_TARGET_CONFIGURE
 endif
 

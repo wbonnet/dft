@@ -30,16 +30,19 @@
 
 .PHONY: help
 
+#include $(buildsystem)/inc/lib.mk
+#include $(buildsystem)/inc/conf.mk
+#include $(buildsystem)/inc/u-boot.mk
+
 # ------------------------------------------------------------------------------
 #
-# Protection against multiple includes
+# Protection against multiple include
 #
 ifdef DFT_BUILDSYSTEM_ENTRY_POINT
-$(error dft.mk has already been included)
+$(info dft.mk has already been included)
 else
-define DFT_BUILDSYSTEM_ENTRY_POINT
-endef
-# the matching endif teminates this file
+$(info now including dft.mk)
+DFT_BUILDSYSTEM_ENTRY_POINT = 1
 
 # ------------------------------------------------------------------------------
 #
@@ -81,7 +84,7 @@ DISPLAY_COMPLETED_TARGET_NAME  = @echo "    completed [$@] "
 #
 # The cookie monster^Wmaker
 #
-TARGET_DONE = mkdir -p $(COOKIE_DIR) && touch -a $(COOKIE_DIR)/$(notdir $@)
+TARGET_DONE = pwd && mkdir -p $(COOKIE_DIR) && touch -a $(COOKIE_DIR)/$(notdir $@)
 
 # ------------------------------------------------------------------------------
 #

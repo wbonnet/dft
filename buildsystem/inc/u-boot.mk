@@ -30,14 +30,16 @@
 
 # ------------------------------------------------------------------------------
 #
-# Protection against multiple includes
+# Protection against multiple include
 #
-ifdef DFT_BUILDSYSTEM_UBOOT
-# the matching endif teminates this file
-$(error u-boot.mk has already been included)
+ifdef DFT_UBOOT
+$(info u-boot.mk has already been included)
 else
-define DFT_BUILDSYSTEM_UBOOT
-endef
+$(info now including u-boot.mk)
+DFT_UBOOT = 1
+# Some temporary default values used to debug where where variables are initialized
+SW_NAME     ?= no-name-at-u-boot
+SW_VERSION  ?= no-version-at-u-boot
 
 # ------------------------------------------------------------------------------
 #
@@ -68,7 +70,5 @@ DOWNLOAD_TOOL       := wget
 SW_NAME             := u-boot
 BUILD_ARGS          =
 
-# ------------------------------------------------------------------------------
-# Match initial ifdef
+# Match initial ifdef DFT_UBOOT
 endif
-

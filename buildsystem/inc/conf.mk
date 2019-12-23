@@ -29,16 +29,18 @@
 #
 
 # ------------------------------------------------------------------------------
-# 
-# Protection against multiple includes
 #
-ifdef DFT_INTERNALS_CONF
-$(error conf.mk has already been included)
+# Protection against multiple include
+#
+ifdef DFT_CONF
+$(info conf.mk has already been included)
 else
-define DFT_INTERNALS_CONF
-endef
-# the matching endif teminates this file
-#
+$(info now including dft.conf)
+DFT_CONF = 1
+
+# Some temporary default values used to debug where where variables are initialized
+SW_NAME     ?= no-name-at-conf
+SW_VERSION  ?= no-version-at-conf
 
 # ------------------------------------------------------------------------------
 #
@@ -163,7 +165,7 @@ BUILD_DIR           ?= $(WORK_DIR)/build
 DOWNLOAD_DIR        ?= $(WORK_DIR)/download
 GIT_DIR             ?= $(WORK_DIR)/git
 PARTIAL_DIR         ?= $(DOWNLOAD_DIR)/partial
-COOKIE_DIR          ?= $(WORK_DIR)/cookies
+COOKIE_DIR          ?= $(DFT_WORK)/cookies
 INSTALL_DIR         ?= $(WORK_DIR)/install
 PACKAGE_DIR         ?= $(WORK_DIR)/package
 CHECKSUM_FILE       ?= $(WORK_DIR)/checksums
@@ -237,6 +239,6 @@ DEBUILD_ARGS   = -us -uc
 DEBUILD_ENV    = DEBUILD_TGZ_CHECK=no
 
 # ------------------------------------------------------------------------------
-# Match initial ifdef
+# Match initial ifdef DFT_CONF
 endif
 

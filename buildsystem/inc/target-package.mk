@@ -30,14 +30,17 @@
 
 # ------------------------------------------------------------------------------
 #
-# Protection against multiple includes
+# Protection against multiple include
 #
-ifdef DFT_BUILDSYSTEM_TARGET_PACKAGE
-$(error target-package.mk has already been included)
+ifdef DFT_TARGET_PACKAGE
+$(info target-package.mk has already been included)
 else
-define DFT_BUILDSYSTEM_TARGET_PACKAGE
-endef
-# the matching endif teminates this file
+$(info now including target-package.mk)
+DFT_TARGET_PACKAGE = 1
+
+# Some temporary default values used to debug where where variables are initialized
+SW_NAME     ?= no-name-at-target-package
+SW_VERSION  ?= no-version-at-target-package
 
 # ------------------------------------------------------------------------------
 #
@@ -127,7 +130,5 @@ repackage: install pre-repackage do-repackage package post-repackage
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
-# ------------------------------------------------------------------------------
-# Match initial ifdef
+# Match initial ifdef DFT_TARGET_PACKAGE
 endif
-

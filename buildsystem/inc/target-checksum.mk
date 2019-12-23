@@ -30,14 +30,17 @@
 
 # ------------------------------------------------------------------------------
 #
-# Protection against multiple includes
+# Protection against multiple include
 #
-ifdef DFT_BUILDSYSTEM_TARGET_CHECKSUM
-$(error target-checksum.mk has already been included)
+ifdef DFT_TARGET_CHECKSUM
+$(info target-checksum.mk has already been included)
 else
-define DFT_BUILDSYSTEM_TARGET_CHECKSUM
-endef
-# the matching endif teminates this file
+$(info now including target-checksum.mk)
+DFT_TARGET_CHECKSUM = 1
+
+# Some temporary default values used to debug where where variables are initialized
+SW_NAME     ?= no-name-at-target-checksum
+SW_VERSION  ?= no-version-at-target-checksum
 
 # ------------------------------------------------------------------------------
 #
@@ -53,7 +56,6 @@ checksum: fetch pre-checksum checksum_banner $(CHECKSUM_TARGETS) post-checksum
 # Pretty output :)
 checksum_banner:
 	@echo "    running checksums"
-
 
 # ------------------------------------------------------------------------------
 #
@@ -108,7 +110,6 @@ makesum: pre-makesum fetch post-makesum
 # Provided for convenience
 makesums: makesum
 
-# ------------------------------------------------------------------------------
-# Match initial ifdef
+# Match initial ifdef DFT_TARGET_CHECKSUM
 endif
 

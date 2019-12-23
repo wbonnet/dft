@@ -30,14 +30,18 @@
 
 # ------------------------------------------------------------------------------
 #
-# Protection against multiple includes
+# Protection against multiple include
 #
-ifdef DFT_BUILDSYSTEM_LINUX_KERNEL
-# the matching endif teminates this file
-$(error linux-kernel.mk has already been included)
+ifdef DFT_LINUX_KERNEL
+$(info linux-kernel.mk has already been included)
 else
-define DFT_BUILDSYSTEM_LINUX_KERNEL
-endef
+$(info now including linux-kernel.mk)
+DFT_LINUX_KERNEL = 1
+
+# Some temporary default values used to debug where where variables are initialized
+SW_NAME     ?= no-name-at-linux-kernel
+SW_VERSION  ?= no-version-at-linux-kernel
+
 
 # ------------------------------------------------------------------------------
 #
@@ -68,7 +72,5 @@ DOWNLOAD_TOOL    = wget
 SW_NAME          = linux
 BUILD_ARGS       =
 
-# ------------------------------------------------------------------------------
-# Match initial ifdef
+# Match initial ifdef DFT_LINUX_KERNEL
 endif
-

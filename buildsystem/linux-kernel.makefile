@@ -21,7 +21,7 @@
 
 # Defines variables specific to Linux kernel
 SW_NAME	= linux
-
+SW_VERSION = no-version-at-kernel
 buildsystem := ../../../../buildsystem
 include board.mk
 include $(buildsystem)/inc/linux-kernel.mk

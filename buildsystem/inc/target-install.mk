@@ -30,14 +30,17 @@
 
 # ------------------------------------------------------------------------------
 #
-# Protection against multiple includes
+# Protection against multiple include
 #
-ifdef DFT_BUILDSYSTEM_TARGET_INSTALL
-$(error target-install.mk has already been included)
+ifdef DFT_TARGET_INSTALL
+$(info target-install.mk has already been included)
 else
-define DFT_BUILDSYSTEM_TARGET_INSTALL
-endef
-# the matching endif teminates this file
+$(info now including target-install.mk)
+DFT_TARGET_INSTALL = 1
+
+# Some temporary default values used to debug where where variables are initialized
+SW_NAME     ?= no-name-at-target-install
+SW_VERSION  ?= no-version-at-target-install
 
 # ------------------------------------------------------------------------------
 #
@@ -119,7 +122,6 @@ do-reinstall:
 	fi ;
 	$(TARGET_DONE)
 
-# ------------------------------------------------------------------------------
-# Match initial ifdef
+# Match initial ifdef DFT_TARGET_INSTALL
 endif
 

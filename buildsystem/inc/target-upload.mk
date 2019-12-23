@@ -30,14 +30,17 @@
 
 # ------------------------------------------------------------------------------
 #
-# Protection against multiple includes
+# Protection against multiple include
 #
-ifdef DFT_BUILDSYSTEM_TARGET_UPLOAD
-$(error target-upload.mk has already been included)
+ifdef DFT_TARGET_UPLOAD
+$(info target-upload.mk has already been included)
 else
-define DFT_BUILDSYSTEM_TARGET_UPLOAD
-endef
-# the matching endif teminates this file
+$(info now including target-upload.mk)
+DFT_TARGET_UPLOAD = 1
+
+# Some temporary default values used to debug where where variables are initialized
+SW_NAME     ?= no-name-at-target-upload
+SW_VERSION  ?= no-version-at-target-upload
 
 # ------------------------------------------------------------------------------
 #
@@ -91,7 +94,5 @@ do-reupload:
 	fi ;
 	$(TARGET_DONE)
 
-# ------------------------------------------------------------------------------
-# Match initial ifdef
+# Match initial ifdef DFT_TARGET_UPLOAD
 endif
-
