@@ -38,8 +38,6 @@ else
 $(info now including lib.mk)
 DFT_LIB = 1
 # Some temporary default values used to debug where where variables are initialized
-SW_NAME     ?= no-name-at-lib
-SW_VERSION  ?= no-version-at-lib
 
 # ------------------------------------------------------------------------------
 #
@@ -51,21 +49,16 @@ $(sort $(DFT_WORKSPACE) $(FILE_DIR) $(GIT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOK
 	echo "Dans la creation des repertoires la cible est : $@"; 
 	echo "Ma target est : $@"; 
 	if test -d $@ ; then : ; else \
+		echo "Force la creation du repertoire de ma target $@"; \
 		mkdir -p $@; \
 		echo making $@; \
 	fi ; 
 
 $(COOKIE_DIR)/%:
 	@if ! test -d $(COOKIE_DIR) ; then \
-		echo "Force la creation du repertoire $(COOKIE_DIR)"; \
+		echo "COOKIE_DIR does not exist thus create directory $(COOKIE_DIR)"; \
 		mkdir -p $(COOKIE_DIR); \
 	fi ;
-	@echo "Dans le cookiedir pourcent arobase : $@"; 
-	@echo "Dans le cookiedir pourcent etoile  : $*"; 
-#	if test -d $@; then 
-#	 else \
-#		touch $@; \
-#	fi
 
 # ------------------------------------------------------------------------------
 #

@@ -19,18 +19,17 @@
 #
 #
 
+# Defines variables specific to u-boot version level
+SW_NAME     := u-boot
+SW_VERSION  := $(notdir $(patsubst %/,%,${CURDIR}/))
+
 # Include DFT build system shared Makfile includes
-$(info include de board.mk)
 include ../board.mk
 buildsystem := ../../../../../buildsystem
 include $(buildsystem)/inc/lib.mk
 include $(buildsystem)/inc/conf.mk
 include $(buildsystem)/inc/u-boot.mk
 include $(buildsystem)/dft.mk
-
-# Defines variables specific to u-boot version level
-SW_NAME     := u-boot
-SW_VERSION  := $(notdir $(patsubst %/,%,${CURDIR}/))
 
 $(warning SW_NAME $(SW_NAME))
 $(warning SW_VERSION $(SW_VERSION))
