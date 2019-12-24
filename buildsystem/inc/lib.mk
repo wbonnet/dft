@@ -45,11 +45,11 @@ DFT_LIB = 1
 #
 # TODO some of the dir should be created some are errors or warning is missing
 #$(sort $(DFT_BUILDSYSTEM) $(FILE_DIR) $(GIT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(DEFCONFIG_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR) $(BUILD_DIR))
-$(sort $(DFT_WORKSPACE) $(FILE_DIR) $(GIT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(DEFCONFIG_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR) $(BUILD_DIR)):
+$(sort $(DFT_WORKSPACE) $(FILE_DIR) $(GIT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(DEFCONFIG_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR) $(BUILD_DIR))/%:
 	echo "Dans la creation des repertoires la cible est : $@"; 
 	echo "Ma target est : $@"; 
 	if test -d $@ ; then : ; else \
-		echo "Force la creation du repertoire de ma target $@"; \
+		echo "Force la creation du repertoire $@"; \
 		mkdir -p $@; \
 		echo making $@; \
 	fi ; 
@@ -59,6 +59,19 @@ $(COOKIE_DIR)/%:
 		echo "COOKIE_DIR does not exist thus create directory $(COOKIE_DIR)"; \
 		mkdir -p $(COOKIE_DIR); \
 	fi ;
+	@if ! test -d $(BUILD_DIR) ; then \
+		echo "BUILD_DIR does not exist thus create directory $(BUILD_DIR)"; \
+		mkdir -p $(BUILD_DIR); \
+	fi ;
+	@if ! test -d $(INSTALL_DIR) ; then \
+		echo "INSTALL_DIR does not exist thus create directory $(INSTALL_DIR)"; \
+		mkdir -p $(INSTALL_DIR); \
+	fi ;
+	@if ! test -d $(PACKAGE_DIR) ; then \
+		echo "PACKAGE_DIR does not exist thus create directory $(PACKAGE_DIR)"; \
+		mkdir -p $(PACKAGE_DIR); \
+	fi ;
+
 
 # ------------------------------------------------------------------------------
 #

@@ -72,7 +72,7 @@ extract: fetch $(BUILD_DIR) pre-extract $(EXTRACT_TARGETS) post-extract
 #
 TAR_ARGS = --no-same-owner
 
-extract-archive-%.tar:
+extract-archive-%.tar: $(BUILD_DIR)
 	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar ; then \
 		true ; \
 	else \
@@ -81,8 +81,8 @@ extract-archive-%.tar:
 	fi ;
 	$(TARGET_DONE)
 
-extract-archive-%.tar.gz:
-	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar.gz ; then \
+extract-archive-%.tar.gz: $(BUILD_DIR)
+	if test -f $(COOKIE_DIR)/extract-archive-$*.tar.gz ; then \
 		true ; \
 	else \
 		if ! test -f $(DOWNLOAD_DIR)/$*.tar.gz ; then \
@@ -93,7 +93,7 @@ extract-archive-%.tar.gz:
 	fi ;
 	$(TARGET_DONE)
 
-extract-archive-%.tgz:
+extract-archive-%.tgz: $(BUILD_DIR)
 	@if test -f $(COOKIE_DIR)/extract-archive-$*.tgz ; then \
 		true ; \
 	else \
@@ -105,7 +105,7 @@ extract-archive-%.tgz:
 	fi ;
 	$(TARGET_DONE)
 
-extract-archive-%.tar.bz2:
+extract-archive-%.tar.bz2: $(BUILD_DIR)
 	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar.bz2 ; then \
 		true ; \
 	else \
@@ -114,7 +114,7 @@ extract-archive-%.tar.bz2:
 	fi ;
 	$(TARGET_DONE)
 
-extract-archive-%.tar.xz:
+extract-archive-%.tar.xz: $(BUILD_DIR)
 	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar.xz ; then \
 		true ; \
 	else \
@@ -123,7 +123,7 @@ extract-archive-%.tar.xz:
 	fi ;
 	$(TARGET_DONE)
 
-extract-archive-%.zip:
+extract-archive-%.zip: $(BUILD_DIR)
 	@if test -f $(COOKIE_DIR)/extract-archive-$*.zip ; then \
 		true ; \
 	else \
@@ -132,7 +132,7 @@ extract-archive-%.zip:
 	fi ;
 	$(TARGET_DONE)
 
-extract-git-%:
+extract-git-%: $(BUILD_DIR)
 	@if test -f $(COOKIE_DIR)/extract-git-$* ; then \
 		true ; \
 	else \

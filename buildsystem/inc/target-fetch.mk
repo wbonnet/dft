@@ -66,7 +66,7 @@ endif
 show-fetch-targets:
 	@echo $(FETCH_TARGETS)
 
-fetch: setup $(COOKIE_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
+fetch: setup $(COOKIE_DIR) $(DOWNLOAD_DIR) $(PARTIAL_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
