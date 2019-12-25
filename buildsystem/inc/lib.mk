@@ -43,32 +43,48 @@ DFT_LIB = 1
 #
 # Directory maker used by the base rules
 #
-# TODO some of the dir should be created some are errors or warning is missing
 #$(sort $(DFT_WORKSPACE) $(FILE_DIR) $(GIT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(DEFCONFIG_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR) $(BUILD_DIR))/%:
-#	echo "Dans la creation des repertoires la cible est : $@"; 
-#	echo "Ma target est : $@"; 
-#	if test -d $@ ; then : ; else \
-#		echo "Force la creation du repertoire $@"; \
-#		mkdir -p $@; \
-#		echo making $@; \
-#	fi ; 
 
-$(COOKIE_DIR)/%:
+$(DOWNLOAD_DIR): $(WORK_DIR)
+	@if ! test -d $(DOWNLOAD_DIR) ; then \
+		echo "DOWNLOAD_DIR does not exist yet, let's create directory $(DOWNLOAD_DIR)"; \
+		mkdir -p $(DOWNLOAD_DIR); \
+	fi ;
+
+$(DFT_WORKSPACE): $(TEMP_DIR)
+	if ! test -d $@ ; then \
+		echo "$@ does not exist yet, let's create the missing directory"; \
+		mkdir -p $@; \
+	fi ;
+
+$(COOKIE_DIR):
 	@if ! test -d $(COOKIE_DIR) ; then \
-		echo "COOKIE_DIR does not exist thus create directory $(COOKIE_DIR)"; \
+		echo "COOKIE_DIR does not exist yet, let's create directory $(COOKIE_DIR)"; \
 		mkdir -p $(COOKIE_DIR); \
 	fi ;
+
+$(BUILD_DIR): $(WORK_DIR)
 	@if ! test -d $(BUILD_DIR) ; then \
-		echo "BUILD_DIR does not exist thus create directory $(BUILD_DIR)"; \
+		echo "BUILD_DIR does not exist yet, let's create directory $(BUILD_DIR)"; \
 		mkdir -p $(BUILD_DIR); \
 	fi ;
+
+$(INSTALL_DIR): $(WORK_DIR)
 	@if ! test -d $(INSTALL_DIR) ; then \
-		echo "INSTALL_DIR does not exist thus create directory $(INSTALL_DIR)"; \
+		echo "INSTALL_DIR does not exist yet, let's create directory $(INSTALL_DIR)"; \
 		mkdir -p $(INSTALL_DIR); \
 	fi ;
+
+$(PACKAGE_DIR): $(WORK_DIR)
 	@if ! test -d $(PACKAGE_DIR) ; then \
-		echo "PACKAGE_DIR does not exist thus create directory $(PACKAGE_DIR)"; \
+		echo "PACKAGE_DIR does not exist yet, let's create directory $(PACKAGE_DIR)"; \
 		mkdir -p $(PACKAGE_DIR); \
+	fi ;
+
+$(WORK_DIR):
+	@if ! test -d $(WORK_DIR) ; then \
+		echo "WORK_DIR does not exist yet, let's create directory $(WORK_DIR)"; \
+		mkdir -p $(WORK_DIR); \
 	fi ;
 
 

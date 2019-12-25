@@ -20,10 +20,10 @@
 #
 
 # Defines variables specific to u-boot version level
-SW_NAME     := u-boot
-PATH_WORDS    := $(subst /, ,$(abspath Makefile))
+SW_NAME         := u-boot
+PATH_WORDS      := $(subst /, ,$(abspath Makefile))
 SW_VERSIONFIELD := $(shell echo $(PATH_WORDS) |  awk '{ print NF-1 }')
-SW_VERSION := $(shell echo $(PATH_WORDS) |  cut -d ' ' -f$(SW_VERSIONFIELD))
+SW_VERSION      := $(shell echo $(PATH_WORDS) |  cut -d ' ' -f$(SW_VERSIONFIELD))
 
 # Include DFT build system shared Makfile includes
 include ../board.mk
@@ -33,7 +33,6 @@ include $(buildsystem)/inc/conf.mk
 include $(buildsystem)/inc/u-boot.mk
 include $(buildsystem)/dft.mk
 
-$(warning je suis la $(abspath $(PWD)/Makefile))
 $(warning SW_NAME $(SW_NAME))
 $(warning SW_VERSION $(SW_VERSION))
 

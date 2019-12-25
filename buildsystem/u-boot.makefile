@@ -153,17 +153,7 @@ package:
 	done
 
 # Catch all target. Call the same targets in each subfolder
-fetch-archive-v%:
-	@echo "INFO : dans le catch fetch-archive-vwildcard de u-boot.makefile" ; 
-	@echo "INFO : target was '$*' only dollar star between simple quote" ; 
-	exit 3 ; 
-
-fetch:
-	@echo "DEBUG : dans le catch fetch de u-boot.makefile" ; 
-	@echo "INFO : target was '$*' only dollar star between simple quote" ; 
-	@echo "INFO : dans le catch fetch de u-boot.makefile" ; 
-
-fetch%:
+muf%:
 	@echo "INFO : dans le catch fetchwildcard de u-boot.makefile" ; 
 	@echo "INFO : target was '$*' only dollar star between simple quote" ; 
 	@echo "INFO : dans le catch fetchmachin de u-boot.makefile" ; 
