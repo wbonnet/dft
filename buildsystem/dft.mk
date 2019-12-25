@@ -287,6 +287,26 @@ show-config:
 #
 
 setup: $(COOKIE_DIR)
+	@echo "Debut de setup dans dft.mk";
+	@echo "SW_NAME:$(SW_NAME)";
+	@echo "SW_VERSION:$(SW_VERSION)";
+	@echo "PWD:$(shell pwd)";
+	@echo "DFT_WORKSPACE:$(DFT_WORKSPACE)";
+	@echo "FILE_DIR: $(FILE_DIR)";
+	@echo "GIT_DIR:$(GIT_DIR)";
+	@echo "WORK_DIR:$(WORK_DIR)";
+	@echo "PARTIAL_DIR:$(PARTIAL_DIR)";
+	@echo "COOKIE_DIR:$(COOKIE_DIR)";
+	@echo "INSTALL_DIR:$(INSTALL_DIR)";
+	@echo "PACKAGE_DIR:$(PACKAGE_DIR)";
+	@echo "DEFCONFIG_DIR:$(DEFCONFIG_DIR)";
+	@echo "LOG_DIR:$(LOG_DIR)";
+	@echo "DOWNLOAD_DIR:$(DOWNLOAD_DIR)";
+	@echo "PATCH_DIR:$(PATCH_DIR)";
+	@echo "BUILD_DIR:$(BUILD_DIR)";
+	@echo "TEMP_DIR:$(TEMP_DIR)";
+	@echo "Fin de setup dans dft.mk";
+	@echo "DFT_WORKSPACE:$(DFT_WORKSPACE)";
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 

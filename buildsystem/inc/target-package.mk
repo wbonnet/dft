@@ -117,6 +117,7 @@ do-repackage:
 #
 
 package: install $(PACKAGE_DIR) pre-package do-package post-package
+	echo "INFO : Je suis pas supose voir ca" ; 
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 

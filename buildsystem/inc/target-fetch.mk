@@ -67,10 +67,12 @@ show-fetch-targets:
 	@echo $(FETCH_TARGETS)
 
 fetch: setup $(COOKIE_DIR) $(DOWNLOAD_DIR) $(PARTIAL_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
+	@echo "DEBUG : match fetch in target-fetch.mk" ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
 fetch-archive-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
+	@echo "DEBUG : match fetch-archive-wildcard in target-fetch.mk" ;
 	@if test -f $(COOKIE_DIR)/$@ ; then \
 		true ; \
 	else \

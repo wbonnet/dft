@@ -21,10 +21,7 @@
 
 # Defines variables specific to u-boot
 SW_NAME     := u-boot
-# no version at u-boot level#SW_VERSION   = $(shell pwd)
 SW_VERSION   = no-version-at-uboot
-SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
-SW_VERSION = $(SELF_DIR)
 
 buildsystem := ../../../../buildsystem
 include ../board.mk
@@ -146,12 +143,31 @@ sanity-check:
 		done ; \
 		fi ;
 
-# Catch all target. Call the same targets in each subfolder
-#fetch:
-#	echo "dans le catch tech" ; 
+# target forwarder for subdirs
+package:
+	@echo "INFO : pourquoi je vois pas ca" ; 
+	@echo "INFO : dans le catch forwarder de $* de u-boot.makefile" ; 
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		echo "AND NOW JE FAIS $(MAKE) -C $$i package" ; \
+		$(MAKE) -C $$i  package ; \
+	done
 
-%:
-	echo "dans le catch all target vaut surement $*" ; \
-	for i in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		echo "$(MAKE) -C $$i  $*" ; \
+# Catch all target. Call the same targets in each subfolder
+fetch-archive-v%:
+	@echo "INFO : dans le catch fetch-archive-vwildcard de u-boot.makefile" ; 
+	@echo "INFO : target was '$*' only dollar star between simple quote" ; 
+	exit 3 ; 
+
+fetch:
+	@echo "DEBUG : dans le catch fetch de u-boot.makefile" ; 
+	@echo "INFO : target was '$*' only dollar star between simple quote" ; 
+	@echo "INFO : dans le catch fetch de u-boot.makefile" ; 
+
+fetch%:
+	@echo "INFO : dans le catch fetchwildcard de u-boot.makefile" ; 
+	@echo "INFO : target was '$*' only dollar star between simple quote" ; 
+	@echo "INFO : dans le catch fetchmachin de u-boot.makefile" ; 
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		echo "AND NOW JE FAIS $(MAKE) -C $$i  $*" ; \
+		$(MAKE) -C $$i  $* ; \
 	done

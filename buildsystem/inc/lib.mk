@@ -44,15 +44,14 @@ DFT_LIB = 1
 # Directory maker used by the base rules
 #
 # TODO some of the dir should be created some are errors or warning is missing
-#$(sort $(DFT_BUILDSYSTEM) $(FILE_DIR) $(GIT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(DEFCONFIG_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR) $(BUILD_DIR))
-$(sort $(DFT_WORKSPACE) $(FILE_DIR) $(GIT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(DEFCONFIG_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR) $(BUILD_DIR))/%:
-	echo "Dans la creation des repertoires la cible est : $@"; 
-	echo "Ma target est : $@"; 
-	if test -d $@ ; then : ; else \
-		echo "Force la creation du repertoire $@"; \
-		mkdir -p $@; \
-		echo making $@; \
-	fi ; 
+#$(sort $(DFT_WORKSPACE) $(FILE_DIR) $(GIT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(DEFCONFIG_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR) $(BUILD_DIR))/%:
+#	echo "Dans la creation des repertoires la cible est : $@"; 
+#	echo "Ma target est : $@"; 
+#	if test -d $@ ; then : ; else \
+#		echo "Force la creation du repertoire $@"; \
+#		mkdir -p $@; \
+#		echo making $@; \
+#	fi ; 
 
 $(COOKIE_DIR)/%:
 	@if ! test -d $(COOKIE_DIR) ; then \
