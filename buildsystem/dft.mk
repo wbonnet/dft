@@ -30,9 +30,15 @@
 
 .PHONY: help
 
-#include $(buildsystem)/inc/lib.mk
-#include $(buildsystem)/inc/conf.mk
-#include $(buildsystem)/inc/u-boot.mk
+# build system sould be available under board folder as a symlink. Keep it
+# locally available under board folder computing a relative path is a nightmare
+# and does not work in all cases. Environment variables are not git friendly
+# since git add will loose variable name and generate an absolute path, which
+# is not comptible with user need ans or workspace relocation nor packagng needs.
+# better solutions wille be really welcomeds contributions.
+include $(buildsystem)/inc/lib.mk
+include $(buildsystem)/inc/conf.mk
+include $(buildsystem)/inc/u-boot.mk
 
 # ------------------------------------------------------------------------------
 #
@@ -90,15 +96,15 @@ TARGET_DONE = pwd && mkdir -p $(COOKIE_DIR) && touch -a $(COOKIE_DIR)/$(notdir $
 #
 # Retrieve the directory where this Makefile is stored, its the build system root
 #
-DFT_BUILDSYSTEM := $(dir $(lastword $(MAKEFILE_LIST)))
+DFT_BUILDSYSTEM := buildsystem/
 
 # ------------------------------------------------------------------------------
 #
 # Includes the build system top level and target definitions
 #
 # ------------------------------------------------------------------------------
-include $(DFT_BUILDSYSTEM)/inc/conf.mk
 include $(DFT_BUILDSYSTEM)/inc/lib.mk
+include $(DFT_BUILDSYSTEM)/inc/conf.mk
 include $(DFT_BUILDSYSTEM)/inc/target-build.mk
 include $(DFT_BUILDSYSTEM)/inc/target-configure.mk
 include $(DFT_BUILDSYSTEM)/inc/target-extract.mk

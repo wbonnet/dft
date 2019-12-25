@@ -28,8 +28,6 @@
 #
 #
 
-#$(error DOWNLOAD_DIR is $(DOWNLOAD_DIR))
-
 # ------------------------------------------------------------------------------
 #
 # Protection against multiple include

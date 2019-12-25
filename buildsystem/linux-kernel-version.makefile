@@ -20,10 +20,18 @@
 #
 
 # Defines variables specific to Linux kernel
-SW_NAME     = linux
-SW_VERSION  = $(notdir $(patsubst %/,%,${CURDIR}/))
+SW_NAME         := linux
+PATH_WORDS      := $(subst /, ,$(abspath Makefile))
+SW_VERSIONFIELD := $(shell echo $(PATH_WORDS) |  awk '{ print NF-1 }')
+SW_VERSION      := $(shell echo $(PATH_WORDS) |  cut -d ' ' -f$(SW_VERSIONFIELD))
 
-buildsystem := ../../../../../buildsystem
+# Build system sould be available under board folder as a symlink. Keep it
+# locally available under board folder computing a relative path is a nightmare
+# and does not work in all cases. Environment variables are not git friendly
+# since git add will loose variable name and generate an absolute path, which
+# is not comptible with user need ans or workspace relocation nor packagng needs.
+# better solutions wille be really welcomeds contributions.
+buildsystem := buildsystem
 include ../board.mk
 include $(buildsystem)/inc/linux-kernel.mk
 include $(buildsystem)/dft.mk

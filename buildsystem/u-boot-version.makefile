@@ -25,12 +25,15 @@ PATH_WORDS      := $(subst /, ,$(abspath Makefile))
 SW_VERSIONFIELD := $(shell echo $(PATH_WORDS) |  awk '{ print NF-1 }')
 SW_VERSION      := $(shell echo $(PATH_WORDS) |  cut -d ' ' -f$(SW_VERSIONFIELD))
 
+# Build system sould be available under board folder as a symlink. Keep it
+# locally available under board folder computing a relative path is a nightmare
+# and does not work in all cases. Environment variables are not git friendly
+# since git add will loose variable name and generate an absolute path, which
+# is not comptible with user need ans or workspace relocation nor packagng needs.
+# better solutions wille be really welcomeds contributions.
 # Include DFT build system shared Makfile includes
 include ../board.mk
-buildsystem := ../../../../../buildsystem
-include $(buildsystem)/inc/lib.mk
-include $(buildsystem)/inc/conf.mk
-include $(buildsystem)/inc/u-boot.mk
+buildsystem := buildsystem
 include $(buildsystem)/dft.mk
 
 $(warning SW_NAME $(SW_NAME))

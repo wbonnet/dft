@@ -43,8 +43,6 @@ DFT_LIB = 1
 #
 # Directory maker used by the base rules
 #
-#$(sort $(DFT_WORKSPACE) $(FILE_DIR) $(GIT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(DEFCONFIG_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR) $(BUILD_DIR))/%:
-
 $(DOWNLOAD_DIR): $(WORK_DIR)
 	@if ! test -d $(DOWNLOAD_DIR) ; then \
 		echo "DOWNLOAD_DIR does not exist yet, let's create directory $(DOWNLOAD_DIR)"; \
