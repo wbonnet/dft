@@ -32,11 +32,11 @@
 #
 # Protection against multiple include
 #
-ifdef DFT_LIB
-$(info lib.mk has already been included)
-else
+#ifdef DFT_LIB
+#$(info lib.mk has already been included)
+#else
 $(info now including lib.mk)
-DFT_LIB = 1
+#DFT_LIB = 1
 # Some temporary default values used to debug where where variables are initialized
 
 # ------------------------------------------------------------------------------
@@ -47,6 +47,12 @@ $(DOWNLOAD_DIR): $(WORK_DIR)
 	@if ! test -d $(DOWNLOAD_DIR) ; then \
 		echo "DOWNLOAD_DIR does not exist yet, let's create directory $(DOWNLOAD_DIR)"; \
 		mkdir -p $(DOWNLOAD_DIR); \
+	fi ;
+
+$(PARTIAL_DIR): $(DOWNLOAD_DIR)
+	@if ! test -d $(PARTIAL_DIR) ; then \
+		echo "PARTIAL_DIR does not exist yet, let's create directory $(PARTIAL_DIR)"; \
+		mkdir -p $(PARTIAL_DIR); \
 	fi ;
 
 $(DFT_WORKSPACE): $(TEMP_DIR)
@@ -108,4 +114,4 @@ define dft_warning =
 endef
 
 # Match initial ifdef DFT_LIB
-endif
+#endif
