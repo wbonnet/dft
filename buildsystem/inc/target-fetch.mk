@@ -61,6 +61,7 @@ Unknown DOWNLOAD_TOOL : $(DOWNLOAD_TOOL)
     endef
 $(error $(error_msg))
     endif
+	@echo "DEBUG : SW_VERSION :$(SW_VERSION):" ;
 endif
 
 show-fetch-targets:
@@ -72,35 +73,43 @@ fetch: setup $(COOKIE_DIR) $(DOWNLOAD_DIR) $(PARTIAL_DIR) pre-fetch $(FETCH_TARG
 	$(TARGET_DONE)
 
 fetch-archive-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
-	@echo "DEBUG : match fetch-archive-wildcard in target-fetch.mk" ;
-	@if test -f $(COOKIE_DIR)/$@ ; then \
-		true ; \
+	if [ ! "$(SW_VERSION_LEVEL)" = "1" ] ; then \
+		echo "DEBUG : Not at a version level skiping fetch " ; \
+		echo "DEBUG : match fetch-archive-wildcard in target-fetch.mk" ; \
+		exit 0 ; \
 	else \
-		wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$* ; \
-		mv $(PARTIAL_DIR)/$* $(DOWNLOAD_DIR) ; \
-		rmdir --ignore-fail-on-non-empty $(PARTIAL_DIR) ; \
-		if test -f $(DOWNLOAD_DIR)/$* ; then \
+		echo "DEBUG : match fetch-archive-wildcard in target-fetch.mk" ; \
+		echo "DEBUG : SW_VERSION :$(SW_VERSION):" ; \
+		echo "DEBUG : SW_VERSION_LEVEL :$(SW_VERSION_LEVEL):" ; \
+		if test -f $(COOKIE_DIR)/$@ ; then \
 			true ; \
 		else \
-			echo 'ERROR : Failed to download $@!' 1>&2; \
-			false; \
-		fi; \
-		if [ ! "" = "$(SRC_CHECKSUM_FILES)" ] ; then \
-			if [ ! "$*" = "$(SRC_CHECKSUM_FILES)" ] ; then \
-				if grep -- '$*' $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES) > /dev/null ; then  \
-					if cat $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES) | (cd $(DOWNLOAD_DIR); LC_ALL="C" LANG="C" md5sum -c 2>&1) | grep -- '$*' | grep -v ':[ ]\+OK' > /dev/null; then \
-						echo "        \033[1m[Failed] : checksum of file $* is invalid\033[0m" ; \
-						false; \
-					else \
-						echo "        [  OK   ] : $* checksum is valid	  " ; \
-					fi ;\
-				else  \
-					echo "        \033[1m[Missing] : $* is not in the checksum file\033[0m $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES)" ; \
-					false; \
+			wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$* ; \
+			mv $(PARTIAL_DIR)/$* $(DOWNLOAD_DIR) ; \
+			rmdir --ignore-fail-on-non-empty $(PARTIAL_DIR) ; \
+			if test -f $(DOWNLOAD_DIR)/$* ; then \
+				true ; \
+			else \
+				echo 'ERROR : Failed to download $@!' 1>&2; \
+				exit 0; \
+			fi; \
+			if [ ! "" = "$(SRC_CHECKSUM_FILES)" ] ; then \
+				if [ ! "$*" = "$(SRC_CHECKSUM_FILES)" ] ; then \
+					if grep -- '$*' $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES) > /dev/null ; then  \
+						if cat $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES) | (cd $(DOWNLOAD_DIR); LC_ALL="C" LANG="C" md5sum -c 2>&1) | grep -- '$*' | grep -v ':[ ]\+OK' > /dev/null; then \
+							echo "        \033[1m[Failed] : checksum of file $* is invalid\033[0m" ; \
+							false; \
+						else \
+							echo "        [  OK   ] : $* checksum is valid	  " ; \
+						fi ;\
+					else  \
+						echo "        \033[1m[Missing] : $* is not in the checksum file\033[0m $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES)" ; \
+						exit 1; \
+					fi ; \
 				fi ; \
 			fi ; \
 		fi ; \
-	fi ;
+	fi ; \
 	$(TARGET_DONE)
 
 clone-git-%: $(GIT_DIR)

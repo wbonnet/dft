@@ -90,7 +90,7 @@ DISPLAY_COMPLETED_TARGET_NAME  = @echo "    completed [$@] "
 #
 # The cookie monster^Wmaker
 #
-TARGET_DONE = pwd && mkdir -p $(COOKIE_DIR) && touch -a $(COOKIE_DIR)/$(notdir $@)
+TARGET_DONE = pwd && mkdir -p $(COOKIE_DIR) && touch $(COOKIE_DIR)/$(notdir $@)
 
 # ------------------------------------------------------------------------------
 #
@@ -110,9 +110,9 @@ include $(DFT_BUILDSYSTEM)/inc/target-configure.mk
 include $(DFT_BUILDSYSTEM)/inc/target-extract.mk
 include $(DFT_BUILDSYSTEM)/inc/target-fetch.mk
 include $(DFT_BUILDSYSTEM)/inc/target-install.mk
-$(warning i am in $(shell pwd))
 include $(DFT_BUILDSYSTEM)/inc/target-package.mk
 include $(DFT_BUILDSYSTEM)/inc/target-upload.mk
+$(warning i am in $(shell pwd))
 
 # ------------------------------------------------------------------------------
 #
