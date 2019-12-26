@@ -110,6 +110,7 @@ include $(DFT_BUILDSYSTEM)/inc/target-configure.mk
 include $(DFT_BUILDSYSTEM)/inc/target-extract.mk
 include $(DFT_BUILDSYSTEM)/inc/target-fetch.mk
 include $(DFT_BUILDSYSTEM)/inc/target-install.mk
+$(warning i am in $(shell pwd))
 include $(DFT_BUILDSYSTEM)/inc/target-package.mk
 include $(DFT_BUILDSYSTEM)/inc/target-upload.mk
 

@@ -21,7 +21,7 @@
 
 # Defines variables specific to u-boot
 SW_NAME     := u-boot
-SW_VERSION  := no-version-at-uboot
+SW_VERSION  := no-$(SW_NAME)-version
 
 # Build system sould be available under board folder as a symlink. Keep it
 # locally available under board folder computing a relative path is a nightmare
@@ -29,7 +29,7 @@ SW_VERSION  := no-version-at-uboot
 # since git add will loose variable name and generate an absolute path, which
 # is not comptible with user need ans or workspace relocation nor packagng needs.
 # better solutions wille be really welcomeds contributions.
-buildsystem := ../../../../buildsystem
+buildsystem := buildsystem
 include ../board.mk
 include $(buildsystem)/inc/u-boot.mk
 include $(buildsystem)/dft.mk
@@ -159,10 +159,9 @@ package:
 	done
 
 # Catch all target. Call the same targets in each subfolder
-muf%:
-	@echo "INFO : dans le catch fetchwildcard de u-boot.makefile" ; 
+fetch:
+	@echo "INFO : dans le catch fetch de u-boot.makefile" ; 
 	@echo "INFO : target was '$*' only dollar star between simple quote" ; 
-	@echo "INFO : dans le catch fetchmachin de u-boot.makefile" ; 
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
 		echo "AND NOW JE FAIS $(MAKE) -C $$i  $*" ; \
 		$(MAKE) -C $$i  $* ; \
