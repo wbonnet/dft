@@ -170,7 +170,7 @@ help:
 	@echo "   bsp[-package] | package Build all versions of BSP software packages (both linux kernel and u-boot)"
 	@echo "   u-boot-package          Build all versions of u-boot package (and only u-boot, thus no kernel)"
 	@echo "                           for board $(BOARD_NAME)"
-	@echo "   kernel-package          Build all versions of linux kernel package (and only linux kernel, thus not of u-boot)"
+	@echo "   kernel-package          Build all versions of linux kernel package (and only linux kernel, thus no u-boot)"
 	@echo "                           for board $(BOARD_NAME)"
 	@echo "   sanity-check            Verify the availability of required items (files, symlinks, directories)"
 	@echo "   re[target]              Force execution of [target] even if already done (without re-executing dependencies)"
