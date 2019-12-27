@@ -73,14 +73,13 @@ fetch: setup $(COOKIE_DIR) $(DOWNLOAD_DIR) $(PARTIAL_DIR) pre-fetch $(FETCH_TARG
 	$(TARGET_DONE)
 
 fetch-archive-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
-	if [ ! "$(SW_VERSION_LEVEL)" = "1" ] ; then \
-		echo "DEBUG : Not at a version level skiping fetch " ; \
+	@if [ "$(SW_VERSION)" = "" ] ; then \
+		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skiping fetch " ; \
 		echo "DEBUG : match fetch-archive-wildcard in target-fetch.mk" ; \
 		exit 0 ; \
 	else \
 		echo "DEBUG : match fetch-archive-wildcard in target-fetch.mk" ; \
 		echo "DEBUG : SW_VERSION :$(SW_VERSION):" ; \
-		echo "DEBUG : SW_VERSION_LEVEL :$(SW_VERSION_LEVEL):" ; \
 		if test -f $(COOKIE_DIR)/$@ ; then \
 			true ; \
 		else \

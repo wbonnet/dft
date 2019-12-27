@@ -54,7 +54,6 @@ SRC_GIT_REPO_EXT    ?= "SRC_GIT_REPO_EXT Not Used -- .git"
 SRC_FILE_VERSION    ?= $(shell echo $(SW_VERSION) | head -c 1)
 DFT_SRC_SITE        ?= https://github.com/
 SRC_DIST_URL        ?= $(DFT_SRC_SITE)/$(SW_NAME)/$(SW_NAME)/archive
-MUFETTE             := $(shell pwd)
 
 # Defines the files to retrieve
 SRC_DIST_FILES      ?= v$(SW_VERSION).tar.gz

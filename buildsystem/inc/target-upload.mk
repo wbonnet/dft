@@ -66,7 +66,11 @@ reupload: package pre-reupload do-reupload upload post-repupload
 #
 
 do-upload:
-	@if test -f $(COOKIE_DIR)/do-upload ; then \
+	@if [ "$(SW_VERSION)" = "" ] ; then \
+		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping upload" ; \
+		exit 0 ; \
+	fi ; \
+	if test -f $(COOKIE_DIR)/do-upload ; then \
 		true ; \
 	else \
 		echo "        running upload"  ; \

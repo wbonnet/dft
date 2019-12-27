@@ -24,7 +24,6 @@ SW_NAME          := u-boot
 PATH_WORDS       := $(subst /, ,$(abspath Makefile))
 SW_VERSIONFIELD  := $(shell echo $(PATH_WORDS) |  awk '{ print NF-1 }')
 SW_VERSION       := $(shell echo $(PATH_WORDS) |  cut -d ' ' -f$(SW_VERSIONFIELD))
-SW_VERSION_LEVEL := 1
 
 # Build system sould be available under board folder as a symlink. Keep it
 # locally available under board folder computing a relative path is a nightmare

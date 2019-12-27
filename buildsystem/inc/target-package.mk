@@ -50,14 +50,18 @@ SW_VERSION  ?= no-version-at-target-package
 # cp $(DFT_BUILDSYSTEM)/templates/u-boot-version.makefile $(PACKAGE_DIR)/Makefile ; \
 
 do-package:
-	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
+	@if [ ! "$(SW_VERSION_LEVEL)" = "1" ] ; then \
+		echo "DEBUG : Not at a version level skiping do-package" ; \
+		exit 0 ; \
+	fi ; \
+	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
 	then \
 	    echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make ris running on a $(HOST_ARCH) board." ; \
 	    echo "The generated binaries might be invalid or scripts could fail before reaching the end of target. Cross compilation is not yet supported." ; \
 		echo "Processing will now continue only for $(HOST_ARCH) based boards package definitions." ; \
 		echo "You can get the missing binaries by running again this target on a $(BOARD_ARCH) based host and collect the generated items." ; \
 		echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
-	fi ; 
+	fi ; \
 	if ! test -f $(COOKIE_DIR)/do-package ; then \
 		echo "DEBUG le cookie do-package est pas la :) au boulot !" ; \
 		echo "DEBUG SW_NAME : $(SW_NAME)"  ; \
@@ -117,7 +121,6 @@ do-repackage:
 #
 
 package: install $(PACKAGE_DIR) pre-package do-package post-package
-	echo "INFO : Je suis pas supose voir ca" ; 
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 

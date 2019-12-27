@@ -53,21 +53,24 @@ show-build-targets:
 	@echo $(BUILD_TARGETS) ;
 
 build: configure pre-build $(BUILD_TARGETS) post-build
-	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
+	@if [ "$(SW_VERSION)" = "" ] ; then \
+		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping build" ; \
+		exit 0 ; \
+	fi ; \
+	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 		echo "The generated binaries might be invalid or scripts could fail before reaching the end of target. Cross compilation is not yet supported." ; \
 		echo "Processing will now continue only for $(HOST_ARCH) based boards package definitions." ; \
 		echo "You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect the generated items." ; \
 		echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
-	fi ; 
-	@if ! test -f $(COOKIE_DIR)/build ; then \
+	fi ; \
+	if ! test -f $(COOKIE_DIR)/build ; then \
 		cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 		$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
 		cd - ; \
 	fi ; 
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
-
 
 # ------------------------------------------------------------------------------
 #

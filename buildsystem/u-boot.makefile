@@ -21,8 +21,7 @@
 
 # Defines variables specific to u-boot
 SW_NAME          := u-boot
-SW_VERSION       := no-$(SW_NAME)-version
-SW_VERSION_LEVEL := 0
+SW_VERSION       := 
 
 # Build system sould be available under board folder as a symlink. Keep it
 # locally available under board folder computing a relative path is a nightmare
@@ -158,7 +157,26 @@ package:
 
 # Catch all target. Call the same targets in each subfolder
 fetch:
+	for i in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		$(MAKE) -C $$i  $@ ; \
+	done
+
 extract:
+	for i in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		$(MAKE) -C $$i  $@ ; \
+	done
+
+configure:
+	for i in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		$(MAKE) -C $$i  $@ ; \
+	done
+
+build:
+	for i in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		$(MAKE) -C $$i  $@ ; \
+	done
+
+install:
 	for i in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
 		$(MAKE) -C $$i  $@ ; \
 	done

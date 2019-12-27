@@ -73,11 +73,11 @@ extract: fetch $(BUILD_DIR) pre-extract $(EXTRACT_TARGETS) post-extract
 TAR_ARGS = --no-same-owner
 
 extract-archive-%.tar: $(BUILD_DIR)
-	if [ ! "$(SW_VERSION_LEVEL)" = "1" ] ; then \
-		echo "DEBUG : Not at a version level skiping extract" ; \
+	@if [ "$(SW_VERSION)" = "" ] ; then \
+		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping tar extract" ; \
 		exit 0 ; \
 	fi ; \
-	if test -f $(COOKIE_DIR)/extract-archive-$*.tar ; then \
+	if [ test -f $(COOKIE_DIR)/extract-archive-$*.tar ] ; then \
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar" ; \
@@ -86,14 +86,14 @@ extract-archive-%.tar: $(BUILD_DIR)
 	$(TARGET_DONE)
 
 extract-archive-%.tar.gz: $(BUILD_DIR)
-	if [ ! "$(SW_VERSION_LEVEL)" = "1" ] ; then \
-		echo "DEBUG : Not at a version level skiping extract" ; \
+	if [ "$(SW_VERSION)" = "" ] ; then \
+		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping tar.gz extract" ; \
 		exit 0 ; \
 	fi ; \
 	if test -f $(COOKIE_DIR)/extract-archive-$*.tar.gz ; then \
 		true ; \
 	else \
-		if ! test -f $(DOWNLOAD_DIR)/$*.tar.gz ; then \
+		if [ ! test -f $(DOWNLOAD_DIR)/$*.tar.gz ] ; then \
 			echo "        archive $(DOWNLOAD_DIR)/$*.tar.gz is missing please check the files retrieved by the fetch target" ; \
 		fi ; \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz" ; \
@@ -102,14 +102,14 @@ extract-archive-%.tar.gz: $(BUILD_DIR)
 	$(TARGET_DONE)
 
 extract-archive-%.tgz: $(BUILD_DIR)
-	if [ ! "$(SW_VERSION_LEVEL)" = "1" ] ; then \
-		echo "DEBUG : Not at a version level skiping extract" ; \
+	@if [ "$(SW_VERSION)" = "" ] ; then \
+		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping tgz extract" ; \
 		exit 0 ; \
 	fi ; \
-	@if test -f $(COOKIE_DIR)/extract-archive-$*.tgz ; then \
+	if [ -f $(COOKIE_DIR)/extract-archive-$*.tgz ] ; then \
 		true ; \
 	else \
-		if ! test -f $(DOWNLOAD_DIR)/$*.tgz ; then \
+		if [ ! test -f $(DOWNLOAD_DIR)/$*.tgz ] ; then \
 			echo "        archive $(DOWNLOAD_DIR)/$*.tgz is missing please check the files retrieved by the fetch target" ; \
 		fi ; \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tgz" ; \
@@ -118,11 +118,11 @@ extract-archive-%.tgz: $(BUILD_DIR)
 	$(TARGET_DONE)
 
 extract-archive-%.tar.bz2: $(BUILD_DIR)
-	if [ ! "$(SW_VERSION_LEVEL)" = "1" ] ; then \
-		echo "DEBUG : Not at a version level skiping extract" ; \
+	@if [ "$(SW_VERSION)" = "" ] ; then \
+		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping tar.bz2 extract" ; \
 		exit 0 ; \
 	fi ; \
-	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar.bz2 ; then \
+	if [ -f $(COOKIE_DIR)/extract-archive-$*.tar.bz2 ] ; then \
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.bz2" ; \
@@ -131,11 +131,11 @@ extract-archive-%.tar.bz2: $(BUILD_DIR)
 	$(TARGET_DONE)
 
 extract-archive-%.tar.xz: $(BUILD_DIR)
-	if [ ! "$(SW_VERSION_LEVEL)" = "1" ] ; then \
-		echo "DEBUG : Not at a version level skiping extract" ; \
+	@if [ "$(SW_VERSION)" = "" ] ; then \
+		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping tar.xz extract" ; \
 		exit 0 ; \
 	fi ; \
-	@if test -f $(COOKIE_DIR)/extract-archive-$*.tar.xz ; then \
+	if [ -f $(COOKIE_DIR)/extract-archive-$*.tar.xz ] ; then \
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.xz" ; \
@@ -144,11 +144,11 @@ extract-archive-%.tar.xz: $(BUILD_DIR)
 	$(TARGET_DONE)
 
 extract-archive-%.zip: $(BUILD_DIR)
-	if [ ! "$(SW_VERSION_LEVEL)" = "1" ] ; then \
-		echo "DEBUG : Not at a version level skiping extract" ; \
+	@if [ "$(SW_VERSION)" = "" ] ; then \
+		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping zip extract" ; \
 		exit 0 ; \
 	fi ; \
-	@if test -f $(COOKIE_DIR)/extract-archive-$*.zip ; then \
+	if [ -f $(COOKIE_DIR)/extract-archive-$*.zip ] ; then \
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.zip" ; \
@@ -157,11 +157,11 @@ extract-archive-%.zip: $(BUILD_DIR)
 	$(TARGET_DONE)
 
 extract-git-%: $(BUILD_DIR)
-	if [ ! "$(SW_VERSION_LEVEL)" = "1" ] ; then \
-		echo "DEBUG : Not at a version level skiping extract" ; \
+	@if [ "$(SW_VERSION)" = "" ] ; then \
+		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping git clone" ; \
 		exit 0 ; \
 	fi ; \
-	@if test -f $(COOKIE_DIR)/extract-git-$* ; then \
+	if [ -f $(COOKIE_DIR)/extract-git-$* ] ; then \
 		true ; \
 	else \
 	  echo "        moving git data to $(EXTRACT)/$*" ; \

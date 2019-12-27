@@ -142,7 +142,7 @@ DFT_WORKSPACE         ?= $(DFT_WORK)/dft-workspace
 # DFT_WORK is the name of directory under DFT_WORKSPACE used to build a version 
 # of a given pice of software (kernel, u-boot, etc.) or even a rootfs or firware
 # bootable disk image.
-WORK_DIR            ?= $(DFT_WORKSPACE)/$(BOARD_NAME)_$(SW_NAME)-$(SW_VERSION)
+WORK_DIR            ?= $(DFT_WORKSPACE)/$(BOARD_NAME)_$(SW_NAME)/$(SW_VERSION)
 
 # FILE_DIR contains all the static files nedded by compilation of packaging steps
 # Since files in this folder are supposed to be static this folder should be located under

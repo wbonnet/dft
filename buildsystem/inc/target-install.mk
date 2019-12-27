@@ -66,15 +66,19 @@ reinstall: build pre-reinstall do-reinstall install post-reinstall
 #
 
 do-install:
-	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
+	@if [ "$(SW_VERSION)" = "" ] ; then \
+		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skiping install" ; \
+		exit 0 ; \
+	fi ; \
+	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
 	then \
 	    echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make srunning on a $(HOST_ARCH) board." ; \
 	    echo "The generated binaries might be invalid or scripts could fail before reaching the end of target. Cross compilation is not yet supported." ; \
 		echo "Processing will now continue only for $(HOST_ARCH) based boards package definitions." ; \
 		echo "You can get the missing binaries by running again this target on a $(BOARD_ARCH) based host and collect the generated items." ; \
 		echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
-	fi ;
-	@if test -f $(COOKIE_DIR)/do-install ; then \
+	fi ; \
+	if test -f $(COOKIE_DIR)/do-install ; then \
 		true ; \
 	else \
 		cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
