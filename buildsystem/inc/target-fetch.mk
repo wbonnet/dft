@@ -35,7 +35,7 @@
 ifdef DFT_TARGET_FETCH
 $(info target-fetch.mk has already been included)
 else
-$(info now including target-fetch.mk)
+#$(info now including target-fetch.mk)
 DFT_TARGET_FETCH = 1
 
 # Some temporary default values used to debug where where variables are initialized

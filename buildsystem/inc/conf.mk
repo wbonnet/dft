@@ -35,7 +35,7 @@
 ifdef DFT_CONF
 $(info conf.mk has already been included)
 else
-$(info now including conf.mk)
+#$(info now including conf.mk)
 DFT_CONF = 1
 
 # Some temporary default values used to debug where where variables are initialized

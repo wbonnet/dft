@@ -35,7 +35,7 @@
 ifdef DFT_TARGET_CONFIGURE
 $(info target-configure.mk has already been included)
 else
-$(info now including target-configure.mk)
+#$(info now including target-configure.mk)
 DFT_TARGET_CONFIGURE = 1
 
 # Some temporary default values used to debug where where variables are initialized

@@ -35,7 +35,7 @@
 ifdef DFT_TARGET_CHECKSUM
 $(info target-checksum.mk has already been included)
 else
-$(info now including target-checksum.mk)
+#$(info now including target-checksum.mk)
 DFT_TARGET_CHECKSUM = 1
 
 # Some temporary default values used to debug where where variables are initialized

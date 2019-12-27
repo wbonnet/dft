@@ -47,7 +47,7 @@ include $(buildsystem)/inc/u-boot.mk
 ifdef DFT_BUILDSYSTEM_ENTRY_POINT
 $(info dft.mk has already been included)
 else
-$(info now including dft.mk)
+#$(info now including dft.mk)
 DFT_BUILDSYSTEM_ENTRY_POINT = 1
 
 # ------------------------------------------------------------------------------
@@ -90,7 +90,7 @@ DISPLAY_COMPLETED_TARGET_NAME  = @echo "    completed [$@] "
 #
 # The cookie monster^Wmaker
 #
-TARGET_DONE = pwd && mkdir -p $(COOKIE_DIR) && touch $(COOKIE_DIR)/$(notdir $@)
+TARGET_DONE = @mkdir -p $(COOKIE_DIR) && touch $(COOKIE_DIR)/$(notdir $@)
 
 # ------------------------------------------------------------------------------
 #
@@ -112,7 +112,7 @@ include $(DFT_BUILDSYSTEM)/inc/target-fetch.mk
 include $(DFT_BUILDSYSTEM)/inc/target-install.mk
 include $(DFT_BUILDSYSTEM)/inc/target-package.mk
 include $(DFT_BUILDSYSTEM)/inc/target-upload.mk
-$(warning i am in $(shell pwd))
+$(warning warning comes from from dft.mk to disable it : i am in $(shell pwd))
 
 # ------------------------------------------------------------------------------
 #
@@ -294,26 +294,6 @@ show-config:
 #
 
 setup: $(COOKIE_DIR) $(DFT_WORK) $(DFT_WORKSPACE)
-	@echo "Debut de setup dans dft.mk";
-	@echo "SW_NAME       : $(SW_NAME)";
-	@echo "SW_VERSION    : $(SW_VERSION)";
-	@echo "DFT_WORK      : $(DFT_WORK)";
-	@echo "COOKIE_DIR    : $(COOKIE_DIR)";
-	@echo "DFT_WORKSPACE : $(DFT_WORKSPACE)";
-	@echo "WORK_DIR      : $(WORK_DIR)";
-	@echo "BUILD_DIR     : $(BUILD_DIR)";
-	@echo "DOWNLOAD_DIR  : $(DOWNLOAD_DIR)";
-	@echo "PARTIAL_DIR   : $(PARTIAL_DIR)";
-	@echo "DEFCONFIG_DIR : $(DEFCONFIG_DIR)";
-	@echo "FILE_DIR      : $(FILE_DIR)";
-	@echo "GIT_DIR       : $(GIT_DIR)";
-	@echo "INSTALL_DIR   : $(INSTALL_DIR)";
-	@echo "LOG_DIR       : $(LOG_DIR)";
-	@echo "PACKAGE_DIR   : $(PACKAGE_DIR)";
-	@echo "PATCH_DIR     : $(PATCH_DIR)";
-	@echo "TEMP_DIR      : $(TEMP_DIR)";
-	@echo "PWD           : $(shell pwd)";
-	@echo "Fin de setup dans dft.mk";
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 

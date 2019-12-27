@@ -35,7 +35,7 @@
 ifdef DFT_TARGET_EXTRACT
 $(info target-extract.mk has already been included)
 else
-$(info now including target-extract.mk)
+#$(info now including target-extract.mk)
 DFT_TARGET_EXTRACT = 1
 
 # Some temporary default values used to debug where where variables are initialized

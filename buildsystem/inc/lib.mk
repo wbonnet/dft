@@ -30,14 +30,8 @@
 
 # ------------------------------------------------------------------------------
 #
-# Protection against multiple include
+# No protection against multiple include and should not have since its just a lib
 #
-#ifdef DFT_LIB
-#$(info lib.mk has already been included)
-#else
-$(info now including lib.mk)
-#DFT_LIB = 1
-# Some temporary default values used to debug where where variables are initialized
 
 # ------------------------------------------------------------------------------
 #
@@ -87,6 +81,3 @@ endef
 define dft_warning = 
 @echo "DFT Warning : $(1)" ;
 endef
-
-# Match initial ifdef DFT_LIB
-#endif

@@ -35,7 +35,7 @@
 ifdef DFT_TARGET_UPLOAD
 $(info target-upload.mk has already been included)
 else
-$(info now including target-upload.mk)
+#$(info now including target-upload.mk)
 DFT_TARGET_UPLOAD = 1
 
 # Some temporary default values used to debug where where variables are initialized

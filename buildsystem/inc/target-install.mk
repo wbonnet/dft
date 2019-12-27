@@ -35,7 +35,7 @@
 ifdef DFT_TARGET_INSTALL
 $(info target-install.mk has already been included)
 else
-$(info now including target-install.mk)
+#$(info now including target-install.mk)
 DFT_TARGET_INSTALL = 1
 
 # Some temporary default values used to debug where where variables are initialized

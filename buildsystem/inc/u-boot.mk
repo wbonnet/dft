@@ -35,7 +35,7 @@
 ifdef DFT_UBOOT
 $(info u-boot.mk has already been included)
 else
-$(info now including u-boot.mk)
+#$(info now including u-boot.mk)
 DFT_UBOOT = 1
 # Some temporary default values used to debug where where variables are initialized
 SW_NAME     ?= no-name-at-u-boot

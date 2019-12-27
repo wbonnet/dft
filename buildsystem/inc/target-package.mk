@@ -35,7 +35,7 @@
 ifdef DFT_TARGET_PACKAGE
 $(info target-package.mk has already been included)
 else
-$(info now including target-package.mk)
+#$(info now including target-package.mk)
 DFT_TARGET_PACKAGE = 1
 
 # Some temporary default values used to debug where where variables are initialized
