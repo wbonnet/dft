@@ -43,54 +43,29 @@ $(info now including lib.mk)
 #
 # Directory maker used by the base rules
 #
-$(DOWNLOAD_DIR): $(WORK_DIR)
-	@if ! test -d $(DOWNLOAD_DIR) ; then \
-		echo "DOWNLOAD_DIR does not exist yet, let's create directory $(DOWNLOAD_DIR)"; \
-		mkdir -p $(DOWNLOAD_DIR); \
-	fi ;
+$(DOWNLOAD_DIR):
+		mkdir -p $(DOWNLOAD_DIR); 
 
-$(PARTIAL_DIR): $(DOWNLOAD_DIR)
-	@if ! test -d $(PARTIAL_DIR) ; then \
-		echo "PARTIAL_DIR does not exist yet, let's create directory $(PARTIAL_DIR)"; \
-		mkdir -p $(PARTIAL_DIR); \
-	fi ;
+$(PARTIAL_DIR):
+		mkdir -p $(PARTIAL_DIR); 
 
-$(DFT_WORKSPACE): $(TEMP_DIR)
-	if ! test -d $@ ; then \
-		echo "$@ does not exist yet, let's create the missing directory"; \
-		mkdir -p $@; \
-	fi ;
+$(DFT_WORKSPACE):
+		mkdir -p $(DFT_WORKSPACE); 
 
 $(COOKIE_DIR):
-	@if ! test -d $(COOKIE_DIR) ; then \
-		echo "COOKIE_DIR does not exist yet, let's create directory $(COOKIE_DIR)"; \
-		mkdir -p $(COOKIE_DIR); \
-	fi ;
+		mkdir -p $(COOKIE_DIR); 
 
-$(BUILD_DIR): $(WORK_DIR)
-	@if ! test -d $(BUILD_DIR) ; then \
-		echo "BUILD_DIR does not exist yet, let's create directory $(BUILD_DIR)"; \
-		mkdir -p $(BUILD_DIR); \
-	fi ;
+$(BUILD_DIR):
+		mkdir -p $(BUILD_DIR); 
 
-$(INSTALL_DIR): $(WORK_DIR)
-	@if ! test -d $(INSTALL_DIR) ; then \
-		echo "INSTALL_DIR does not exist yet, let's create directory $(INSTALL_DIR)"; \
-		mkdir -p $(INSTALL_DIR); \
-	fi ;
+$(INSTALL_DIR):
+		mkdir -p $(INSTALL_DIR); 
 
-$(PACKAGE_DIR): $(WORK_DIR)
-	@if ! test -d $(PACKAGE_DIR) ; then \
-		echo "PACKAGE_DIR does not exist yet, let's create directory $(PACKAGE_DIR)"; \
-		mkdir -p $(PACKAGE_DIR); \
-	fi ;
+$(PACKAGE_DIR):
+		mkdir -p $(PACKAGE_DIR); 
 
 $(WORK_DIR):
-	@if ! test -d $(WORK_DIR) ; then \
-		echo "WORK_DIR does not exist yet, let's create directory $(WORK_DIR)"; \
-		mkdir -p $(WORK_DIR); \
-	fi ;
-
+		mkdir -p $(WORK_DIR); 
 
 # ------------------------------------------------------------------------------
 #

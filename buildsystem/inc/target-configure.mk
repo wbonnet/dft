@@ -85,7 +85,7 @@ do-configure:
 		echo "You can get the missing binaries by running again this target on a $(BOARD_ARCH) based host and collect the generated items." ; \
 		echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
 	fi ; \
-	if test -f $(COOKIE_DIR)/$@ ; then \
+	if [ -f $(COOKIE_DIR)/$@ ] ; then \
 		echo "cookie $(COOKIE_DIR)/$@" ; \
 		true ; \
 	else \

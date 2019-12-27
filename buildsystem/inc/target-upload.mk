@@ -70,7 +70,7 @@ do-upload:
 		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping upload" ; \
 		exit 0 ; \
 	fi ; \
-	if test -f $(COOKIE_DIR)/do-upload ; then \
+	if [ -f $(COOKIE_DIR)/do-upload ] ; then \
 		true ; \
 	else \
 		echo "        running upload"  ; \
@@ -93,7 +93,7 @@ do-upload:
 	@$(TARGET_DONE)
 
 do-reupload:
-	@if test -f $(COOKIE_DIR)/do-upload ; then \
+	@if [ -f $(COOKIE_DIR)/do-upload ] ; then \
 		rm -f $(COOKIE_DIR)/do-upload ; \
 	fi ;
 	$(TARGET_DONE)

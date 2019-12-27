@@ -96,7 +96,7 @@ MAKESUM_TARGETS ?=  $(filter-out $(_NOCHECKSUM) $(NOCHECKSUM),$(SRC_DIST_FILES))
 # Check that the files really exist, even if they should be downloaded by
 # fetch  target. Then call md5sum to generate checksum file
 makesum: pre-makesum fetch post-makesum
-	@if test "x$(MAKESUM_TARGETS)" != "x"; then \
+	@if [ "x$(MAKESUM_TARGETS)" != "x" ] ; then \
 		(cd $(DOWNLOAD_DIR) && md5sum $(MAKESUM_TARGETS)) > $(CHECKSUM_FILE) ; \
 		echo "    checksums made for $(MAKESUM_TARGETS)" ; \
 		cat $(CHECKSUM_FILE) ; \

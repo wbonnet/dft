@@ -53,7 +53,7 @@ show-build-targets:
 	@echo $(BUILD_TARGETS) ;
 
 build: configure pre-build $(BUILD_TARGETS) post-build
-	@if [ "$(SW_VERSION)" = "" ] ; then \
+	if [ "$(SW_VERSION)" = "" ] ; then \
 		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping build" ; \
 		exit 0 ; \
 	fi ; \
@@ -64,7 +64,7 @@ build: configure pre-build $(BUILD_TARGETS) post-build
 		echo "You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect the generated items." ; \
 		echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
 	fi ; \
-	if ! test -f $(COOKIE_DIR)/build ; then \
+	if [ ! -f $(COOKIE_DIR)/build ] ; then \
 		cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 		$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
 		cd - ; \
@@ -89,18 +89,25 @@ rebuild: configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 #
 
 build-%:
-	@if ! test -f $(COOKIE_DIR)/build-$* ; then \
+	if [ "$(SW_VERSION)" = "" ] ; then \
+		echo "DEBUG : SW_VERSION is empty or undefined. Not at a defined version level skipping build" ; \
+		exit 0 ; \
+	fi ; \
+	echo "DEBUG : On demande la target build-$*" ; \
+	echo "DEBUG : Alors que je suis dans : $(PWD)" ; \
+	echo "DEBUG : Et j'aurais du etre la : $(BUILD_DIR)" ; \
+	cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
+	echo "DEBUG : Maintenant je suis la verifie que c'est bon : $(PWD)" ; \
+	if [ ! -f $(COOKIE_DIR)/build-$* ] ; then \
 		$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
 	fi ; 
 	$(TARGET_DONE)
 
 rebuild-%:
-	@if test -f $(COOKIE_DIR)/build-$* ; then \
+	@if [ -f $(COOKIE_DIR)/build-$* ] ; then \
 		rm -f $(COOKIE_DIR)/build-$* ; \
 	fi ;
 	$(TARGET_DONE)
-
-
 
 # ------------------------------------------------------------------------------
 #

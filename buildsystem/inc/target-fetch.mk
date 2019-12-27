@@ -80,13 +80,13 @@ fetch-archive-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 	else \
 		echo "DEBUG : match fetch-archive-wildcard in target-fetch.mk" ; \
 		echo "DEBUG : SW_VERSION :$(SW_VERSION):" ; \
-		if test -f $(COOKIE_DIR)/$@ ; then \
+		if [ -f $(COOKIE_DIR)/$@ ] ; then \
 			true ; \
 		else \
 			wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$* ; \
 			mv $(PARTIAL_DIR)/$* $(DOWNLOAD_DIR) ; \
 			rmdir --ignore-fail-on-non-empty $(PARTIAL_DIR) ; \
-			if test -f $(DOWNLOAD_DIR)/$* ; then \
+			if [ -f $(DOWNLOAD_DIR)/$* ] ; then \
 				true ; \
 			else \
 				echo 'ERROR : Failed to download $@!' 1>&2; \
@@ -112,7 +112,7 @@ fetch-archive-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 	$(TARGET_DONE)
 
 clone-git-%: $(GIT_DIR)
-	@if test -f $(COOKIE_DIR)/$(GIT_DIR)/$@ ; then \
+	@if [ -f $(COOKIE_DIR)/$(GIT_DIR)/$@ ] ; then \
 		true ; \
 	else \
 		echo "        cloning into $(GIT_DIR)/$*" ; \

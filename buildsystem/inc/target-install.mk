@@ -78,7 +78,7 @@ do-install:
 		echo "You can get the missing binaries by running again this target on a $(BOARD_ARCH) based host and collect the generated items." ; \
 		echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
 	fi ; \
-	if test -f $(COOKIE_DIR)/do-install ; then \
+	if [ -f $(COOKIE_DIR)/do-install ] ; then \
 		true ; \
 	else \
 		cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
@@ -113,7 +113,7 @@ do-install:
 	@$(TARGET_DONE)
 
 do-reinstall:
-	@if test -f $(COOKIE_DIR)/do-install ; then \
+	@if [ -f $(COOKIE_DIR)/do-install ] ; then \
 		rm -f $(COOKIE_DIR)/do-install ; \
 		rm -fr $(INSTALL_DIR) ; \
 	fi ;

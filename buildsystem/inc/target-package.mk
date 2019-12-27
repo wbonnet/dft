@@ -50,7 +50,7 @@ SW_VERSION  ?= no-version-at-target-package
 # cp $(DFT_BUILDSYSTEM)/templates/u-boot-version.makefile $(PACKAGE_DIR)/Makefile ; \
 
 do-package:
-	@if [ "$(SW_VERSION)" = "" ] ; then \
+	if [ "$(SW_VERSION)" = "" ] ; then \
 		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping do-package" ; \
 		exit 0 ; \
 	fi ; \
@@ -62,11 +62,12 @@ do-package:
 		echo "You can get the missing binaries by running again this target on a $(BOARD_ARCH) based host and collect the generated items." ; \
 		echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
 	fi ; \
-	if ! test -f $(COOKIE_DIR)/do-package ; then \
+	if [ ! -f $(COOKIE_DIR)/do-package ] ; then \
 		echo "DEBUG le cookie do-package est pas la :) au boulot !" ; \
 		echo "DEBUG SW_NAME : $(SW_NAME)"  ; \
 		echo "DEBUG je suis dans"  ; \
 		pwd ; \
+		echo "cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)" ;  \
 		echo "DEBUG et je vais copier le squelette de paquet dans $(PACKAGE_DIR)" ; \
 		if [ "$(SW_NAME)" = "linux" ] ; then \
 			cp -fr --dereference $(DFT_BUILDSYSTEM)/templates/debian-kernel-package $(PACKAGE_DIR)/debian ; \
@@ -110,7 +111,7 @@ do-package:
 	$(TARGET_DONE)
 
 do-repackage:
-	@if test -f $(COOKIE_DIR)/do-package ; then \
+	@if [ -f $(COOKIE_DIR)/do-package ]  ; then \
 		rm -f $(COOKIE_DIR)/do-package ; \
 	fi ;
 	$(TARGET_DONE)

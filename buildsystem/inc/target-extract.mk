@@ -77,7 +77,7 @@ extract-archive-%.tar: $(BUILD_DIR)
 		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping tar extract" ; \
 		exit 0 ; \
 	fi ; \
-	if [ test -f $(COOKIE_DIR)/extract-archive-$*.tar ] ; then \
+	if [ -f $(COOKIE_DIR)/extract-archive-$*.tar ] ; then \
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar" ; \
@@ -90,10 +90,10 @@ extract-archive-%.tar.gz: $(BUILD_DIR)
 		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping tar.gz extract" ; \
 		exit 0 ; \
 	fi ; \
-	if test -f $(COOKIE_DIR)/extract-archive-$*.tar.gz ; then \
+	if [ -f $(COOKIE_DIR)/extract-archive-$*.tar.gz ] ; then \
 		true ; \
 	else \
-		if [ ! test -f $(DOWNLOAD_DIR)/$*.tar.gz ] ; then \
+		if [ ! -f $(DOWNLOAD_DIR)/$*.tar.gz ] ; then \
 			echo "        archive $(DOWNLOAD_DIR)/$*.tar.gz is missing please check the files retrieved by the fetch target" ; \
 		fi ; \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz" ; \
@@ -109,7 +109,7 @@ extract-archive-%.tgz: $(BUILD_DIR)
 	if [ -f $(COOKIE_DIR)/extract-archive-$*.tgz ] ; then \
 		true ; \
 	else \
-		if [ ! test -f $(DOWNLOAD_DIR)/$*.tgz ] ; then \
+		if [ ! -f $(DOWNLOAD_DIR)/$*.tgz ] ; then \
 			echo "        archive $(DOWNLOAD_DIR)/$*.tgz is missing please check the files retrieved by the fetch target" ; \
 		fi ; \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tgz" ; \
