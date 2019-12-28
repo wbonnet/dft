@@ -99,7 +99,7 @@ sanity-check:
 		touch ${CURDIR}/files/.gitkeep ; \
 		ln -s ../../files/install.$(SW_NAME)-$(BOARD_NAME).md ${CURDIR}/files/ ; \
 		echo git add ${CURDIR}/files ; \
-	fi ; \
+	fi ; 
 	s=`readlink files/install.$(SW_NAME)-$(BOARD_NAME).md` ; \
 	if [ !  "$$s" = "../../files/install.$(SW_NAME)-$(BOARD_NAME).md" ] ; then \
 		echo "The link to the markdown file in ${CURDIR}/files must target to ../../files/install.$(SW_NAME)-$(BOARD_NAME).md" ; \
@@ -127,7 +127,7 @@ sanity-check:
 		git rm -f Makefile || rm -f Makefile ; \
 		ln -s $(buildsystem)/u-boot-version.makefile Makefile ; \
 		git add Makefile ; \
-	fi ; \
+	fi ; 
 
 # Since u-boot tarball contains sudir sources have to be moves to the right location
 # and hidden files and hidden empty dirs must be removed

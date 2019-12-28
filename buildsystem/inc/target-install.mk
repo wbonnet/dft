@@ -66,7 +66,7 @@ reinstall: build pre-reinstall do-reinstall install post-reinstall
 #
 
 do-install:
-	@if [ "$(SW_VERSION)" = "" ] ; then \
+	if [ "$(SW_VERSION)" = "" ] ; then \
 		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skiping install" ; \
 		exit 0 ; \
 	fi ; \
@@ -81,16 +81,16 @@ do-install:
 	if [ -f $(COOKIE_DIR)/do-install ] ; then \
 		true ; \
 	else \
+		if [ "$(SW_NAME)" = "u-boot" ] ; then \
+			cp -frv ../files $(INSTALL_DIR)/doc ; \
+		fi ; \
 		cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 		if [ "$(SW_NAME)" = "u-boot" ] ; then \
-			echo "cp -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/files/* $(INSTALL_DIR)/doc/" ; \
-			cp -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/files/* $(INSTALL_DIR)/doc/ ; \
-			echo "cp -f $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/$(UBOOT_BINARY_FILE) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION)" ; \
-			cp -f $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/$(UBOOT_BINARY_FILE) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION) ; \
-			cp -f $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/u-boot.dtb $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb ; \
-			echo "cp -f $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/u-boot.dtb $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb" ; \
+			mkdir $(INSTALL_DIR)/u-boot/ ; \
+			cp -fv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/$(UBOOT_BINARY_FILE) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION) ; \
+			cp -fv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/u-boot.dtb $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb ; \
 			ln -sf u-boot-$(BOARD_NAME)-$(SW_VERSION) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME); \
-			echo "ln -sf u-boot-$(BOARD_NAME)-$(SW_VERSION) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)"; \
+			tree $(INSTALL_DIR)/u-boot/; \
 		else \
 			if [ "$(SW_NAME)" = "linux" ] ; then \
 				echo "DEBUG Dans le else du if u-boot" ; \
@@ -110,7 +110,7 @@ do-install:
 			fi ; \
 		fi ; \
 	fi ;
-	@$(TARGET_DONE)
+	$(TARGET_DONE)
 
 do-reinstall:
 	@if [ -f $(COOKIE_DIR)/do-install ] ; then \

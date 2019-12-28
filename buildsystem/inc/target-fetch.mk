@@ -75,10 +75,10 @@ fetch: setup $(COOKIE_DIR) $(DOWNLOAD_DIR) $(PARTIAL_DIR) pre-fetch $(FETCH_TARG
 fetch-archive-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 	@if [ "$(SW_VERSION)" = "" ] ; then \
 		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skiping fetch " ; \
-		echo "DEBUG : match fetch-archive-wildcard in target-fetch.mk" ; \
+		echo "DEBUG : match fetch-archive-wildcard ($*) in target-fetch.mk" ; \
 		exit 0 ; \
 	else \
-		echo "DEBUG : match fetch-archive-wildcard in target-fetch.mk" ; \
+		echo "DEBUG : match fetch-archive-wildcard ($*) in target-fetch.mk" ; \
 		echo "DEBUG : SW_VERSION :$(SW_VERSION):" ; \
 		if [ -f $(COOKIE_DIR)/$@ ] ; then \
 			true ; \
@@ -91,7 +91,7 @@ fetch-archive-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 			else \
 				echo 'ERROR : Failed to download $@!' 1>&2; \
 				exit 0; \
-			fi; \
+			fi ; \
 			if [ ! "" = "$(SRC_CHECKSUM_FILES)" ] ; then \
 				if [ ! "$*" = "$(SRC_CHECKSUM_FILES)" ] ; then \
 					if grep -- '$*' $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES) > /dev/null ; then  \
@@ -108,7 +108,8 @@ fetch-archive-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 				fi ; \
 			fi ; \
 		fi ; \
-	fi ; \
+	fi ; 
+	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
 clone-git-%: $(GIT_DIR)

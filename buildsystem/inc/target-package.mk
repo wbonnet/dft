@@ -107,7 +107,7 @@ do-package:
 		tar cfz ../$(SW_NAME)-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
 	fi ; \
 	echo "DEBUILD_ENV :$(DEBUILD_ENV): DEBBUILD :$(DEBUILD): DEBUID_ARGS :$(DEBUILD_ARGS):" ; \
-	$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) && $(TARGET_DONE) ; \
+	$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ; 
 	$(TARGET_DONE)
 
 do-repackage:

@@ -73,7 +73,7 @@ reconfigure: patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconfi
 
 configure: extract pre-configure do-configure post-configure 
 do-configure:
-	@if [ ! "$(SW_VERSION_LEVEL)" = "1" ] ; then \
+	@if [ "$(SW_VERSION)" = "" ] ; then \
 		echo "DEBUG : Not at a version level skiping configure" ; \
 		exit 0 ; \
 	fi ; \
