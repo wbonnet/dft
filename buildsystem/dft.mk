@@ -28,6 +28,10 @@
 #
 #
 
+# Force bash use instead of sh which is a symlink to dash on Debian. Dash use
+# a slightly different syntax for some operators. This way it a known shell.
+SHELL := bash
+
 .PHONY: help
 
 # build system sould be available under board folder as a symlink. Keep it
@@ -36,9 +40,6 @@
 # since git add will loose variable name and generate an absolute path, which
 # is not comptible with user need ans or workspace relocation nor packagng needs.
 # better solutions wille be really welcomeds contributions.
-include $(buildsystem)/inc/lib.mk
-include $(buildsystem)/inc/conf.mk
-include $(buildsystem)/inc/u-boot.mk
 
 # ------------------------------------------------------------------------------
 #
@@ -47,7 +48,7 @@ include $(buildsystem)/inc/u-boot.mk
 ifdef DFT_BUILDSYSTEM_ENTRY_POINT
 $(info dft.mk has already been included)
 else
-#$(info now including dft.mk)
+$(info now including dft.mk)
 DFT_BUILDSYSTEM_ENTRY_POINT = 1
 
 # ------------------------------------------------------------------------------
@@ -90,7 +91,7 @@ DISPLAY_COMPLETED_TARGET_NAME  = @echo "    completed [$@] "
 #
 # The cookie monster^Wmaker
 #
-TARGET_DONE = @mkdir -p $(COOKIE_DIR) && touch $(COOKIE_DIR)/$(notdir $@)
+TARGET_DONE = mkdir -p $(COOKIE_DIR) && touch $(COOKIE_DIR)/$(notdir $@)
 
 # ------------------------------------------------------------------------------
 #
@@ -103,8 +104,8 @@ DFT_BUILDSYSTEM := buildsystem/
 # Includes the build system top level and target definitions
 #
 # ------------------------------------------------------------------------------
-include $(DFT_BUILDSYSTEM)/inc/lib.mk
 include $(DFT_BUILDSYSTEM)/inc/conf.mk
+include $(DFT_BUILDSYSTEM)/inc/lib.mk
 include $(DFT_BUILDSYSTEM)/inc/target-build.mk
 include $(DFT_BUILDSYSTEM)/inc/target-configure.mk
 include $(DFT_BUILDSYSTEM)/inc/target-extract.mk
@@ -112,7 +113,7 @@ include $(DFT_BUILDSYSTEM)/inc/target-fetch.mk
 include $(DFT_BUILDSYSTEM)/inc/target-install.mk
 include $(DFT_BUILDSYSTEM)/inc/target-package.mk
 include $(DFT_BUILDSYSTEM)/inc/target-upload.mk
-$(warning warning comes from from dft.mk to disable it : i am in $(shell pwd))
+#$(warning warning comes from from dft.mk to disable it : i am in $(shell pwd))
 
 # ------------------------------------------------------------------------------
 #
@@ -198,14 +199,13 @@ help-config:
 # Run the clean target only inside the sources directory. Compilation occurs in 
 # BUILD_DIR, not in WORK_DIR which is parent of BUILD_DIR and also contain cookies 
 # download, install etc. directories (thus no Makefile)
-
+#	if [ -d $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ] ; then rmdir $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; fi
 clean:
 	@echo " DEBUG : Entering target clean from dft.mk"
 	@echo "BUILD_DIR : $(BUILD_DIR)"
 	pwd ; 
 	ls -lh $(BUILD_DIR)
 	if [ -d $(BUILD_DIR)/ ] ; then make -C $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) clean ; fi
-#	if [ -d $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ] ; then rmdir $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; fi
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 
 
@@ -226,19 +226,19 @@ mrproper:
 show-configuration : show-config
 show-config:
 	@echo "Sources download with $(DOWNLOAD_TOOL) and parameters" ; 
-	@echo "  SW_NAME                           $(SW_NAME)" ; 
-	@echo "  SW_VERSION                        $(SW_VERSION)" ; 
-	@if [ "$(DOWNLOAD_TOOL)" = "wget" ]; then \
-		echo "  SRC_DIST_FILES                    $(SRC_DIST_FILES)" ; \
-		echo "  SRC_SIGN_FILES                    $(SRC_SIGN_FILES)" ; \
-		echo "  SRC_DIST_URL                      $(SRC_DIST_URL)" ; \
-	fi ;
-	@if [ "$(DOWNLOAD_TOOL)" = "git" ]; then \
+	@echo "  SW_NAME                           $(SW_NAME)" ;
+	@echo "  SW_VERSION                        $(SW_VERSION)" ;
+	@if [ "$(DOWNLOAD_TOOL)" = "wget" ] ; then \
+                echo "  SRC_DIST_FILES                    $(SRC_DIST_FILES)" ; \
+                echo "  SRC_SIGN_FILES                    $(SRC_SIGN_FILES)" ; \
+                echo "  SRC_DIST_URL                      $(SRC_DIST_URL)" ; \
+	fi
+	@if [ "$(DOWNLOAD_TOOL)" = 'git' ] ; then \
 		echo "  GIT_URL                           $(GIT_URL)" ; \
 		echo "  GIT_REPO                          $(GIT_REPO)" ; \
 		echo "  GIT_REPO_EXT                      $(GIT_REPO_EXT)" ; \
 		echo "  GIT_BRANCH                        $(GIT_BRANCH)" ; \
-	fi ;
+	fi 
 	@echo 
 	@echo "Directories configuration"
 	@echo "  DFT_BUILDSYSTEM                   $(DFT_BUILDSYSTEM)"
