@@ -35,7 +35,7 @@
 ifdef DFT_TARGET_BUILD
 $(info target-build.mk has already been included)
 else
-#$(info now including target-build.mk)
+$(info now including target-build.mk)
 DFT_TARGET_BUILD = 1
 
 # Some temporary default values used to debug where where variables are initialized
@@ -53,7 +53,7 @@ show-build-targets:
 	@echo $(BUILD_TARGETS) ;
 
 build: configure pre-build $(BUILD_TARGETS) post-build
-	if [ "$(SW_VERSION)" = "" ] ; then \ 
+	if [ "$(SW_VERSION)" = "" ] ; then \
 		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping build" ; \
 		exit 0 ; \
 	fi ; 
@@ -89,7 +89,7 @@ rebuild: configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 #
 
 build-%:
-	@if [ "$(SW_VERSION)" = "zlika" ] ; then \
+	if [ "$(SW_VERSION)" = "" ] ; then \
 		echo "DEBUG : SW_VERSION is empty or undefined. Not at a defined version level skipping build" ; \
 	else \
 		echo "DEBUG : On demande la target build-$*" ; \
@@ -97,11 +97,10 @@ build-%:
 		echo "DEBUG : Et j'aurais du etre la : $(BUILD_DIR)" ; \
 		cd $(BUILD_DIR) ; \
 		echo "DEBUG : Maintenant je suis la verifie que c'est bon : $(PWD)" ; \
-		echo "DEBUG : plopette" ; \
 		echo "$(COOKIE_DIR)/build-$*" ; \
 		if [ ! -f $(COOKIE_DIR)/build-$* ] ; then \
 			$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
-		fi \
+		fi ; \
 	fi ;
 	$(TARGET_DONE)
 
