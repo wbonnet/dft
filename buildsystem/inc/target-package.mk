@@ -65,7 +65,7 @@ do-package:
 				echo "DEBUG le cookie do-package est pas la :) au boulot !" ; \
 				echo "DEBUG SW_NAME : $(SW_NAME)"  ; \
 				echo "DEBUG je suis dans :"  ; \
-				pwd ; 
+				pwd ; \
 				echo "cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)" ;  \
 				"cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)" ;  \
 				echo "DEBUG je suis maintenant dans :"  ; \
