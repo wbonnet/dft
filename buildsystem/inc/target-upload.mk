@@ -66,35 +66,35 @@ reupload: package pre-reupload do-reupload upload post-repupload
 #
 
 do-upload:
-	@if [ "$(SW_VERSION)" = "" ] ; then 
-		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping upload" ; 
-		exit 0 ; 
+	@if [ "$(SW_VERSION)" = "" ] ; then \
+		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping upload" ; \
+		exit 73 ; \
 	fi ; 
-	if [ -f $(COOKIE_DIR)/do-upload ] ; then 
-		true ; 
-	else 
-		echo "        running upload"  ; 
-	 	if [ ! "" = "$(DFT_DEB_UPLOAD_PATH)" ] && [ ! "" = "$(DFT_DEB_UPLOAD_SERVER)" ] ; then 
-			scp $(PACKAGE_DIR)/*.deb $(DFT_DEB_UPLOAD_SERVER):$(DFT_DEB_UPLOAD_PATH) ; 
-	 	else 
-	 	    if [ "" = "$(DFT_DEB_UPLOAD_SERVER)" ] ; then 
-			    echo "        Variable DFT_DEB_UPLOAD_SERVER is not set, please define it your shell environment."  ; 
-			else 
-			    echo "        DFT_DEB_UPLOAD_SERVER = $(DFT_DEB_UPLOAD_SERVER)."  ; 
-			fi ; 
-	 	    if [ "" = "$(DFT_DEB_UPLOAD_PATH)" ] ; then 
-			    echo "        Variable DFT_DEB_UPLOAD_PATH is not set, please define it your shell environment."  ; 
-			else 
-			    echo "        DFT_DEB_UPLOAD_PATH = $(DFT_DEB_UPLOAD_PATH)"  ; 
-			fi ; 
-			false ; 
-		fi ; 
+	if [ -f $(COOKIE_DIR)/do-upload ] ; then \
+		true ; \
+	else \
+		echo "        running upload"  ; \
+	 	if [ ! "" = "$(DFT_DEB_UPLOAD_PATH)" ] && [ ! "" = "$(DFT_DEB_UPLOAD_SERVER)" ] ; then \
+			scp $(PACKAGE_DIR)/*.deb $(DFT_DEB_UPLOAD_SERVER):$(DFT_DEB_UPLOAD_PATH) ; \
+	 	else \
+	 	    if [ "" = "$(DFT_DEB_UPLOAD_SERVER)" ] ; then \
+			    echo "        Variable DFT_DEB_UPLOAD_SERVER is not set, please define it your shell environment." ; \
+			else \
+			    echo "        DFT_DEB_UPLOAD_SERVER = $(DFT_DEB_UPLOAD_SERVER)."  ; \
+			fi ; \
+	 	    if [ "" = "$(DFT_DEB_UPLOAD_PATH)" ] ; then \
+			    echo "        Variable DFT_DEB_UPLOAD_PATH is not set, please define it your shell environment." ; \ 
+			else \
+			    echo "        DFT_DEB_UPLOAD_PATH = $(DFT_DEB_UPLOAD_PATH)"  ; \
+			fi ; \
+			exit 74 ; \
+		fi ; \
 	fi ;
 	@$(TARGET_DONE)
 
 do-reupload:
-	@if [ -f $(COOKIE_DIR)/do-upload ] ; then 
-		rm -f $(COOKIE_DIR)/do-upload ; 
+	@if [ -f $(COOKIE_DIR)/do-upload ] ; then \
+		rm -f $(COOKIE_DIR)/do-upload ; \
 	fi ;
 	$(TARGET_DONE)
 

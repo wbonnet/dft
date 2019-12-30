@@ -99,12 +99,12 @@ fetch-archive-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 	$(TARGET_DONE)
 
 clone-git-%: $(GIT_DIR)
-	@if [ -f $(COOKIE_DIR)/$(GIT_DIR)/$@ ] ; then 
-		true ; 
-	else 
-		echo "        cloning into $(GIT_DIR)/$*" ; 
-		cd $(GIT_DIR) ; 
-		git clone --single-branch $(GIT_OPTS) -b $(GIT_BRANCH) $(GIT_URL)/$(GIT_REPO)$(GIT_REPO_EXT) ; 
+	@if [ -f $(COOKIE_DIR)/$(GIT_DIR)/$@ ] ; then \
+		true ; \
+	else \
+		echo "        cloning into $(GIT_DIR)/$*" ; \
+		cd $(GIT_DIR) ; \
+		git clone --single-branch $(GIT_OPTS) -b $(GIT_BRANCH) $(GIT_URL)/$(GIT_REPO)$(GIT_REPO_EXT) ; \
 	fi ;
 	$(TARGET_DONE)
 

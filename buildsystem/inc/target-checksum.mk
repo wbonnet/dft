@@ -65,16 +65,16 @@ checksum_banner:
 # Check a given file's checksum against $(CHECKSUM_FILE) and error out if it
 # mentions the file without an "OK".
 checksum-%: $(CHECKSUM_FILE)
-	@if grep -- '$*' $(CHECKSUM_FILE) > /dev/null; then  
-		if cat $(CHECKSUM_FILE) | (cd $(DOWNLOAD_DIR); LC_ALL="C" LANG="C" md5sum -c 2>&1) | grep -- '$*' | grep -v ':[ ]\+OK' > /dev/null; then 
-			echo "        [Failed] : checksum of file $* is invalid" ; 
-			false; 
-		else 
-			echo "        [  OK   ] : $*" ; 
-		fi 
+	@if grep -- '$*' $(CHECKSUM_FILE) > /dev/null; then \
+		if cat $(CHECKSUM_FILE) | (cd $(DOWNLOAD_DIR); LC_ALL="C" LANG="C" md5sum -c 2>&1) | grep -- '$*' | grep -v ':[ ]\+OK' > /dev/null ; then \
+			echo "        [Failed] : checksum of file $* is invalid" ; \
+			false; \
+		else \
+			echo "        [  OK   ] : $*" ; \
+		fi \
 	else  \
-		echo "        [Missing] : $* is not in the checksum file" ; 
-		false ; 
+		echo "        [Missing] : $* is not in the checksum file" ; \
+		false ; \
 	fi
 	$(TARGET_DONE)
 
@@ -112,4 +112,3 @@ makesums: makesum
 
 # Match initial ifdef DFT_TARGET_CHECKSUM
 endif
-

@@ -50,62 +50,62 @@ SW_VERSION  ?= no-version-at-target-package
 # cp $(DFT_BUILDSYSTEM)/templates/u-boot-version.makefile $(PACKAGE_DIR)/Makefile ; \
 
 do-package:
-	if [ "$(SW_VERSION)" = "" ] ; then 
-		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping do-package" ; 
-	else 
-		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then 
-			echo "Makefile processing had to be stopped during target $@ execution." ; 
-			echo "The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; 
-			echo "The generated binaries might be invalid or scripts could fail before reaching the end of target. Cross compilation is not yet supported." ; 
-			echo "Processing will now continue only for $(HOST_ARCH) based boards package definitions." ; 
-			echo "You can get the missing binaries by running again this target on a $(BOARD_ARCH) based host and collect the generated items." ; 
-			echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; 
-		else  
-			if [ ! -f $(COOKIE_DIR)/do-package ] ; then 
-				echo "DEBUG le cookie do-package est pas la :) au boulot !" ; 
-				echo "DEBUG SW_NAME : $(SW_NAME)"  ; 
-				echo "DEBUG je suis dans :"  ; 
+	if [ "$(SW_VERSION)" = "" ] ; then \
+		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping do-package" ; \
+	else \
+		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
+			echo "Makefile processing had to be stopped during target $@ execution." ; \
+			echo "The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
+			echo "The generated binaries might be invalid or scripts could fail before reaching the end of target. Cross compilation is not yet supported." ; \
+			echo "Processing will now continue only for $(HOST_ARCH) based boards package definitions." ; \
+			echo "You can get the missing binaries by running again this target on a $(BOARD_ARCH) based host and collect the generated items." ; \
+			echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
+		else \
+			if [ ! -f $(COOKIE_DIR)/do-package ] ; then \
+				echo "DEBUG le cookie do-package est pas la :) au boulot !" ; \
+				echo "DEBUG SW_NAME : $(SW_NAME)"  ; \
+				echo "DEBUG je suis dans :"  ; \
 				pwd ; 
-				echo "cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)" ;  
-				"cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)" ;  
-				echo "DEBUG je suis maintenant dans :"  ; 
-				pwd ; 
-				echo "DEBUG et je vais copier le squelette de paquet dans $(PACKAGE_DIR)" ; 
-				if [ "$(SW_NAME)" = "linux" ] ; then 
-					cp -fr --dereference $(DFT_BUILDSYSTEM)/templates/debian-kernel-package $(PACKAGE_DIR)/debian ; 
-					cp --dereference $(DFT_BUILDSYSTEM)/templates/linux-kernel-version.makefile $(PACKAGE_DIR)/Makefile ; 
-				else 
-					echo DFT_BUILDSYSTEM : $(DFT_BUILDSYSTEM); 
-					cp -frv $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package $(PACKAGE_DIR)/debian ; 
-					cp -frv --dereference `pwd`/files $(PACKAGE_DIR)/doc ; 
-					echo "DEBUG contenu de PACKAGE_DIR $(PACKAGE_DIR)" ; 
-					tree $(PACKAGE_DIR) ; 
-				fi ; 
-	        		if [ "$(DEBEMAIL)" = "" ] ; then 
-					find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/unknown/g" ; 
-				else 
-					find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/$(DEBEMAIL)/g" ; 
-				fi ; 
-				if [ "$(DEBFULLNAME)" = "" ] ; then 
-					find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/unknown/g" ; 
-				else 
-						find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/$(DEBFULLNAME)/g" ; 
-				fi ; 
-				sed -i -e "s/__SW_VERSION__/$(SW_VERSION)/g" $(PACKAGE_DIR)/Makefile ; 
-				find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(SW_VERSION)/g" 
-										  -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" 
-										  -e "s/__DATE__/$(shell LC_ALL=C date +"%a, %d %b %Y %T %z")/g" ; 
-				cp -fr $(INSTALL_DIR)/* $(PACKAGE_DIR) ; 
-				echo "apres le cp -fr $(INSTALL_DIR)/* $(PACKAGE_DIR)" ; 
-				cd $(PACKAGE_DIR) ; 
-				pwd; 
-				if [ "$(SW_NAME)" = "linux" ] ; then 
-					tar cfz ../$(SW_NAME)-kernel-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; 
-				else 
-					tar cfz ../$(SW_NAME)-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; 
-				fi ; 
-			fi ; 
-		fi ; 
+				echo "cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)" ;  \
+				"cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)" ;  \
+				echo "DEBUG je suis maintenant dans :"  ; \
+				pwd ; \
+				echo "DEBUG et je vais copier le squelette de paquet dans $(PACKAGE_DIR)" ; \
+				if [ "$(SW_NAME)" = "linux" ] ; then \
+					cp -fr --dereference $(DFT_BUILDSYSTEM)/templates/debian-kernel-package $(PACKAGE_DIR)/debian ; \
+					cp --dereference $(DFT_BUILDSYSTEM)/templates/linux-kernel-version.makefile $(PACKAGE_DIR)/Makefile ; \
+				else \
+					echo DFT_BUILDSYSTEM : $(DFT_BUILDSYSTEM); \
+					cp -frv $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package $(PACKAGE_DIR)/debian ; \
+					cp -frv --dereference `pwd`/files $(PACKAGE_DIR)/doc ; \
+					echo "DEBUG contenu de PACKAGE_DIR $(PACKAGE_DIR)" ; \
+					tree $(PACKAGE_DIR) ; \
+				fi ; \
+	        		if [ "$(DEBEMAIL)" = "" ] ; then \
+					find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/unknown/g" ; \
+				else \
+					find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/$(DEBEMAIL)/g" ; \
+				fi ; \
+				if [ "$(DEBFULLNAME)" = "" ] ; then \
+					find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/unknown/g" ; \
+				else \
+					find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/$(DEBFULLNAME)/g" ; \
+				fi ; \
+				sed -i -e "s/__SW_VERSION__/$(SW_VERSION)/g" $(PACKAGE_DIR)/Makefile ; \
+				find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(SW_VERSION)/g" \
+										  -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" \
+										  -e "s/__DATE__/$(shell LC_ALL=C date +"%a, %d %b %Y %T %z")/g" ; \
+				cp -fr $(INSTALL_DIR)/* $(PACKAGE_DIR) ; \
+				echo "apres le cp -fr $(INSTALL_DIR)/* $(PACKAGE_DIR)" ; \
+				cd $(PACKAGE_DIR) ; \
+				pwd; \
+				if [ "$(SW_NAME)" = "linux" ] ; then \
+					tar cfz ../$(SW_NAME)-kernel-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
+				else \
+					tar cfz ../$(SW_NAME)-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
+				fi ; \
+			fi ; \
+		fi ; \
 	fi ; 
 	echo "DEBUG : une fois de plus tu es pas dans le package dir et il est vide" ; 
 	echo "DEBUG : PACKAGE_DIR est la : $(PACKAGE_DIR)" ; 
