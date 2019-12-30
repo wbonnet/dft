@@ -66,18 +66,17 @@ do-package:
 				echo "DEBUG I try to cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)" ;  \
 				echo "ls -l $(PWD)/files"  ; \
 				ls -l $(PWD)/files  ; \
-				cd $(PACKAGE_DIR) ; \
+				cp -frv --dereference files $(PACKAGE_DIR)/doc ; \
 				echo "DEBUG et je vais copier le squelette de paquet dans $(PACKAGE_DIR)" ; \
 				if [ "$(SW_NAME)" = "linux" ] ; then \
 					cp -fr --dereference $(DFT_BUILDSYSTEM)/templates/debian-kernel-package $(PACKAGE_DIR)/debian ; \
 					cp --dereference $(DFT_BUILDSYSTEM)/templates/linux-kernel-version.makefile $(PACKAGE_DIR)/Makefile ; \
 				else \
-					echo DFT_BUILDSYSTEM : $(DFT_BUILDSYSTEM); \
-					cp $(DFT_BUILDSYSTEM)/templates/u-boot-version.makefile $(PACKAGE_DIR)/Makefile ; \
 					cp -frv $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package $(PACKAGE_DIR)/debian ; \
-					cp -frv --dereference `pwd`/files $(PACKAGE_DIR)/doc ; \
 					echo "DEBUG contenu de PACKAGE_DIR $(PACKAGE_DIR)" ; \
 					tree $(PACKAGE_DIR) ; \
+					echo "DEBUG et moi je suis dans" ; \
+					pwd ; \
 				fi ; \
 	        		if [ "$(DEBEMAIL)" = "" ] ; then \
 					find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/unknown/g" ; \
@@ -89,15 +88,11 @@ do-package:
 				else \
 					find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/$(DEBFULLNAME)/g" ; \
 				fi ; \
-				echo "DEBUG sed -i -e "s/__SW_VERSION__/$(SW_VERSION)/g" $(PACKAGE_DIR)/Makefile" ; \
-				sed -i -e "s/__SW_VERSION__/$(SW_VERSION)/g" $(PACKAGE_DIR)/Makefile ; \
 				find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(SW_VERSION)/g" \
 										  -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" \
 										  -e "s/__DATE__/$(shell LC_ALL=C date +"%a, %d %b %Y %T %z")/g" ; \
 				cp -fr $(INSTALL_DIR)/* $(PACKAGE_DIR) ; \
-				echo "apres le cp -fr $(INSTALL_DIR)/* $(PACKAGE_DIR)" ; \
 				cd $(PACKAGE_DIR) ; \
-				pwd; \
 				if [ "$(SW_NAME)" = "linux" ] ; then \
 					tar cfz ../$(SW_NAME)-kernel-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
 				else \
@@ -106,13 +101,8 @@ do-package:
 			fi ; \
 		fi ; \
 	fi ; 
-	@echo "DEBUG : une fois de plus tu es pas dans le package dir et il est vide" ; 
-	@echo "DEBUG : PACKAGE_DIR est la : $(PACKAGE_DIR)" ; 
-	@cd $(PACKAGE_DIR) ; 
-	@echo "DEBUG : toi tu es la" ; 
-	@pwd ; 
-	@echo "DEBUILD_ENV :$(DEBUILD_ENV): DEBBUILD :$(DEBUILD): DEBUID_ARGS :$(DEBUILD_ARGS):" ; 
-	$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ; 
+	cd $(PACKAGE_DIR) ; \
+	$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ;
 	$(TARGET_DONE)
 
 do-repackage:

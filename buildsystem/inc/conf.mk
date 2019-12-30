@@ -195,6 +195,7 @@ DOWNLOAD_TOOL       ?= wget
 # Defines default values to undefined (to make simple retrieval with grep in logs...)
 BOARD_NAME          ?= undefined-board-name
 BOARD_ARCH          ?= undefined-board-arch
+DEFAULT_DTB         ?= undefined-default.dtb
 
 # If the KERNEL_DEFCONFIG variale is set, the given file will be copied to
 # .config in the source dirctory. Default value is set to board name.

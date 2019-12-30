@@ -65,9 +65,8 @@ build: configure pre-build $(BUILD_TARGETS) post-build
 		echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
 	fi ; 
 	if [ ! -f $(COOKIE_DIR)/build ] ; then \
-		cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
+		cd $(BUILD_DIR) ; \
 		$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
-		cd - ; \
 	fi ; 
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
