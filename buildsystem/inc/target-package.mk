@@ -62,20 +62,18 @@ do-package:
 			echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
 		else \
 			if [ ! -f $(COOKIE_DIR)/do-package ] ; then \
-				echo "DEBUG le cookie do-package est pas la :) au boulot !" ; \
-				echo "DEBUG SW_NAME : $(SW_NAME)"  ; \
-				echo "DEBUG je suis dans :"  ; \
-				pwd ; \
-				echo "cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)" ;  \
-				"cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)" ;  \
-				echo "DEBUG je suis maintenant dans :"  ; \
-				pwd ; \
+				echo "DEBUG je suis dans le PWD :$(PWD)"  ; \
+				echo "DEBUG I try to cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)" ;  \
+				echo "ls -l $(PWD)/files"  ; \
+				ls -l $(PWD)/files  ; \
+				cd $(PACKAGE_DIR) ; \
 				echo "DEBUG et je vais copier le squelette de paquet dans $(PACKAGE_DIR)" ; \
 				if [ "$(SW_NAME)" = "linux" ] ; then \
 					cp -fr --dereference $(DFT_BUILDSYSTEM)/templates/debian-kernel-package $(PACKAGE_DIR)/debian ; \
 					cp --dereference $(DFT_BUILDSYSTEM)/templates/linux-kernel-version.makefile $(PACKAGE_DIR)/Makefile ; \
 				else \
 					echo DFT_BUILDSYSTEM : $(DFT_BUILDSYSTEM); \
+					cp $(DFT_BUILDSYSTEM)/templates/u-boot-version.makefile $(PACKAGE_DIR)/Makefile ; \
 					cp -frv $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package $(PACKAGE_DIR)/debian ; \
 					cp -frv --dereference `pwd`/files $(PACKAGE_DIR)/doc ; \
 					echo "DEBUG contenu de PACKAGE_DIR $(PACKAGE_DIR)" ; \
@@ -91,6 +89,7 @@ do-package:
 				else \
 					find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/$(DEBFULLNAME)/g" ; \
 				fi ; \
+				echo "DEBUG sed -i -e "s/__SW_VERSION__/$(SW_VERSION)/g" $(PACKAGE_DIR)/Makefile" ; \
 				sed -i -e "s/__SW_VERSION__/$(SW_VERSION)/g" $(PACKAGE_DIR)/Makefile ; \
 				find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(SW_VERSION)/g" \
 										  -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" \
@@ -107,11 +106,12 @@ do-package:
 			fi ; \
 		fi ; \
 	fi ; 
-	echo "DEBUG : une fois de plus tu es pas dans le package dir et il est vide" ; 
-	echo "DEBUG : PACKAGE_DIR est la : $(PACKAGE_DIR)" ; 
-	echo "DEBUG : toi tu es la" ; 
-	pwd ; 
-	echo "DEBUILD_ENV :$(DEBUILD_ENV): DEBBUILD :$(DEBUILD): DEBUID_ARGS :$(DEBUILD_ARGS):" ; 
+	@echo "DEBUG : une fois de plus tu es pas dans le package dir et il est vide" ; 
+	@echo "DEBUG : PACKAGE_DIR est la : $(PACKAGE_DIR)" ; 
+	@cd $(PACKAGE_DIR) ; 
+	@echo "DEBUG : toi tu es la" ; 
+	@pwd ; 
+	@echo "DEBUILD_ENV :$(DEBUILD_ENV): DEBBUILD :$(DEBUILD): DEBUID_ARGS :$(DEBUILD_ARGS):" ; 
 	$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ; 
 	$(TARGET_DONE)
 
