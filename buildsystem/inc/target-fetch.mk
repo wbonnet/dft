@@ -75,14 +75,13 @@ fetch : setup $(COOKIE_DIR) $(DOWNLOAD_DIR) $(PARTIAL_DIR) pre-fetch $(FETCH_TAR
 fetch-archive-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 	@echo "DEBUG : match fetch-archive-$* in target-fetch.mk" ; 
 	if [ "$(SW_VERSION)" = "" ] ; then \
-		echo "D3BUG : SW_VERSION is empty of undefined. Not at a defined version level skiping fetch " ; \
-		echo "plop je suis la" ; \
-		pwd ; \
-		exit 0 ; \
+		echo "DEBUG : SW_VERSION is empty or undefined. Not at a defined version level skiping fetch " ; \
+		exit 72 ; \
 	else \
 		echo "DEBUG : AROBASE :$@ : expected full fetch-archive-v_machin" ; \
 		echo "DEBUG : ETOILE  :$* : expected que_le_v_machin" ; \
 		if [ -f $(COOKIE_DIR)/$@ ] ; then \
+			echo "DEBUG : cookie already exist doing nothing at $@ target" ; \
 			true ; \
 		else \
 			wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$* ; \
@@ -93,21 +92,6 @@ fetch-archive-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 			else \
 				echo 'ERROR : Failed to download $(SRC_DIST_URL)/$*' 1>&2; \
 				exit 0; \
-			fi ; \
-			if [ ! "" = "$(SRC_CHECKSUM_FILES)" ] ; then \
-				if [ ! "$*" = "$(SRC_CHECKSUM_FILES)" ] ; then \
-					if grep -- '$*' $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES) > /dev/null ; then \
-						if cat $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES) | (cd $(DOWNLOAD_DIR); LC_ALL="C" LANG="C" md5sum -c 2>&1) | grep -- '$*' | grep -v ':[ ]\+OK' > /dev/null; then \
-							echo "        [Failed] : checksum of file $r*@ is invalid" ; \
-							false; \
-						else \
-							echo "        [  OK   ] : $* checksum is valid	  " ; \
-						fi ; \
-					else \
-						echo "        [Missing] : $* is not in the checksum file $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES)" ; \
-						exit 1 ; \
-					fi ; \
-				fi ; \
 			fi ; \
 		fi ; \
 	fi ; 
