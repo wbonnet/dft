@@ -55,7 +55,6 @@ endif
 #
 # Targets not associated with a file (aka PHONY)
 #
-.PHONY: help clean mrproper
 
 # 
 # Board level birectory generic Linux kernel makefile

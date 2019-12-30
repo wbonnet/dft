@@ -67,19 +67,21 @@ endif
 show-fetch-targets:
 	@echo $(FETCH_TARGETS)
 
-fetch: setup $(COOKIE_DIR) $(DOWNLOAD_DIR) $(PARTIAL_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
-	@echo "DEBUG : match fetch in target-fetch.mk" ;
+fetch : setup $(COOKIE_DIR) $(DOWNLOAD_DIR) $(PARTIAL_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
+	@echo "DEBUG : match fetch in target-fetch.mk => was supposed to do $(FETCH_TARGETS)" ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
 fetch-archive-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
-	@if [ "$(SW_VERSION)" = "" ] ; then \
-		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skiping fetch " ; \
-		echo "DEBUG : match fetch-archive-wildcard ($*) in target-fetch.mk" ; \
+	@echo "DEBUG : match fetch-archive-$* in target-fetch.mk" ; 
+	if [ "$(SW_VERSION)" = "" ] ; then \
+		echo "D3BUG : SW_VERSION is empty of undefined. Not at a defined version level skiping fetch " ; \
+		echo "plop je suis la" ; \
+		pwd ; \
 		exit 0 ; \
 	else \
-		echo "DEBUG : match fetch-archive-wildcard ($*) in target-fetch.mk" ; \
-		echo "DEBUG : SW_VERSION :$(SW_VERSION):" ; \
+		echo "DEBUG : AROBASE :$@ : expected full fetch-archive-v_machin" ; \
+		echo "DEBUG : ETOILE  :$* : expected que_le_v_machin" ; \
 		if [ -f $(COOKIE_DIR)/$@ ] ; then \
 			true ; \
 		else \
@@ -89,21 +91,21 @@ fetch-archive-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 			if [ -f $(DOWNLOAD_DIR)/$* ] ; then \
 				true ; \
 			else \
-				echo 'ERROR : Failed to download $@!' 1>&2; \
+				echo 'ERROR : Failed to download $(SRC_DIST_URL)/$*' 1>&2; \
 				exit 0; \
 			fi ; \
 			if [ ! "" = "$(SRC_CHECKSUM_FILES)" ] ; then \
 				if [ ! "$*" = "$(SRC_CHECKSUM_FILES)" ] ; then \
-					if grep -- '$*' $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES) > /dev/null ; then  \
+					if grep -- '$*' $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES) > /dev/null ; then \
 						if cat $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES) | (cd $(DOWNLOAD_DIR); LC_ALL="C" LANG="C" md5sum -c 2>&1) | grep -- '$*' | grep -v ':[ ]\+OK' > /dev/null; then \
-							echo "        \033[1m[Failed] : checksum of file $* is invalid\033[0m" ; \
+							echo "        [Failed] : checksum of file $r*@ is invalid" ; \
 							false; \
 						else \
 							echo "        [  OK   ] : $* checksum is valid	  " ; \
-						fi ;\
-					else  \
-						echo "        \033[1m[Missing] : $* is not in the checksum file\033[0m $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES)" ; \
-						exit 1; \
+						fi ; \
+					else \
+						echo "        [Missing] : $* is not in the checksum file $(DOWNLOAD_DIR)/$(SRC_CHECKSUM_FILES)" ; \
+						exit 1 ; \
 					fi ; \
 				fi ; \
 			fi ; \
@@ -113,12 +115,12 @@ fetch-archive-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 	$(TARGET_DONE)
 
 clone-git-%: $(GIT_DIR)
-	@if [ -f $(COOKIE_DIR)/$(GIT_DIR)/$@ ] ; then \
-		true ; \
-	else \
-		echo "        cloning into $(GIT_DIR)/$*" ; \
-		cd $(GIT_DIR) ; \
-        git clone --single-branch $(GIT_OPTS) -b $(GIT_BRANCH) $(GIT_URL)/$(GIT_REPO)$(GIT_REPO_EXT) ; \
+	@if [ -f $(COOKIE_DIR)/$(GIT_DIR)/$@ ] ; then 
+		true ; 
+	else 
+		echo "        cloning into $(GIT_DIR)/$*" ; 
+		cd $(GIT_DIR) ; 
+		git clone --single-branch $(GIT_OPTS) -b $(GIT_BRANCH) $(GIT_URL)/$(GIT_REPO)$(GIT_REPO_EXT) ; 
 	fi ;
 	$(TARGET_DONE)
 

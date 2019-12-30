@@ -40,7 +40,6 @@ SW_NAME      = SW_NAME_undefined_at_board_level
 #
 # Targets not associated with a file (aka PHONY)
 #
-.PHONY: help clean mrproper
 
 sanity-check:
 	@echo "Checking $(BOARD_NAME) board definition" ;

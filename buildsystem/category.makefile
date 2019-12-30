@@ -18,8 +18,6 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 
-.PHONY: help
-
 # Build system sould be available under board folder as a symlink. Keep it
 # locally available under board folder computing a relative path is a nightmare
 # and does not work in all cases. Environment variables are not git friendly

@@ -35,7 +35,6 @@ DFT_HOME     = ../../../../..
 #
 # Targets not associated with a file (aka PHONY)
 #
-.PHONY: help
 
 # Create a new u-boot version entry in the current board repository
 new-version:

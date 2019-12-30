@@ -63,6 +63,7 @@ endif
 endif
 
 extract: fetch $(BUILD_DIR) pre-extract $(EXTRACT_TARGETS) post-extract
+	@echo "DEBUG : EXTRACT_TARGETS $(EXTRACT_TARGETS)" ; 
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -72,25 +73,17 @@ extract: fetch $(BUILD_DIR) pre-extract $(EXTRACT_TARGETS) post-extract
 #
 TAR_ARGS = --no-same-owner
 
-extract-archive-%.tar: $(BUILD_DIR)
-	@if [ "$(SW_VERSION)" = "" ] ; then \
-		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping tar extract" ; \
-		exit 0 ; \
-	fi ; \
-	if [ -f $(COOKIE_DIR)/extract-archive-$*.tar ] ; then \
+extract-archive-%.tar:
+	@if [ -f $(COOKIE_DIR)/extract-archive-$*.tar ] ; then \ 
 		true ; \
-	else \
+	else  \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar" ; \
 		tar $(TAR_ARGS) -xf $(DOWNLOAD_DIR)/$*.tar -C $(BUILD_DIR) ; \
 	fi ;
 	$(TARGET_DONE)
 
-extract-archive-%.tar.gz: $(BUILD_DIR)
-	if [ "$(SW_VERSION)" = "" ] ; then \
-		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping tar.gz extract" ; \
-		exit 0 ; \
-	fi ; \
-	if [ -f $(COOKIE_DIR)/extract-archive-$*.tar.gz ] ; then \
+extract-archive-%.tar.gz:
+	@if [ -f $(COOKIE_DIR)/extract-archive-$*.tar.gz ] ; then \
 		true ; \
 	else \
 		if [ ! -f $(DOWNLOAD_DIR)/$*.tar.gz ] ; then \
@@ -98,15 +91,15 @@ extract-archive-%.tar.gz: $(BUILD_DIR)
 		fi ; \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz" ; \
 		tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tar.gz -C $(BUILD_DIR) ; \
+		if [ $(SW_NAME) = 'u-boot' ] ; then \
+			mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
+			rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
+		fi ; \
 	fi ;
 	$(TARGET_DONE)
 
-extract-archive-%.tgz: $(BUILD_DIR)
-	@if [ "$(SW_VERSION)" = "" ] ; then \
-		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping tgz extract" ; \
-		exit 0 ; \
-	fi ; \
-	if [ -f $(COOKIE_DIR)/extract-archive-$*.tgz ] ; then \
+extract-archive-%.tgz:
+	@if [ -f $(COOKIE_DIR)/extract-archive-$*.tgz ] ; then \
 		true ; \
 	else \
 		if [ ! -f $(DOWNLOAD_DIR)/$*.tgz ] ; then \
@@ -117,12 +110,8 @@ extract-archive-%.tgz: $(BUILD_DIR)
 	fi ;
 	$(TARGET_DONE)
 
-extract-archive-%.tar.bz2: $(BUILD_DIR)
-	@if [ "$(SW_VERSION)" = "" ] ; then \
-		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping tar.bz2 extract" ; \
-		exit 0 ; \
-	fi ; \
-	if [ -f $(COOKIE_DIR)/extract-archive-$*.tar.bz2 ] ; then \
+extract-archive-%.tar.bz2:
+	@if [ -f $(COOKIE_DIR)/extract-archive-$*.tar.bz2 ] ; then \
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.bz2" ; \
@@ -130,12 +119,8 @@ extract-archive-%.tar.bz2: $(BUILD_DIR)
 	fi ;
 	$(TARGET_DONE)
 
-extract-archive-%.tar.xz: $(BUILD_DIR)
-	@if [ "$(SW_VERSION)" = "" ] ; then \
-		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping tar.xz extract" ; \
-		exit 0 ; \
-	fi ; \
-	if [ -f $(COOKIE_DIR)/extract-archive-$*.tar.xz ] ; then \
+extract-archive-%.tar.xz:
+	@if [ -f $(COOKIE_DIR)/extract-archive-$*.tar.xz ] ; then \
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.xz" ; \
@@ -143,29 +128,21 @@ extract-archive-%.tar.xz: $(BUILD_DIR)
 	fi ;
 	$(TARGET_DONE)
 
-extract-archive-%.zip: $(BUILD_DIR)
-	@if [ "$(SW_VERSION)" = "" ] ; then \
-		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping zip extract" ; \
-		exit 0 ; \
-	fi ; \
-	if [ -f $(COOKIE_DIR)/extract-archive-$*.zip ] ; then \
+extract-archive-%.zip:
+	@if [ -f $(COOKIE_DIR)/extract-archive-$*.zip ] ; then \
 		true ; \
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.zip" ; \
 		unzip $(DOWNLOAD_DIR)/$*.zip -d $(BUILD_DIR) ; \
-	fi ;
+	fi ; \
 	$(TARGET_DONE)
 
-extract-git-%: $(BUILD_DIR)
-	@if [ "$(SW_VERSION)" = "" ] ; then \
-		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping git clone" ; \
-		exit 0 ; \
-	fi ; \
-	if [ -f $(COOKIE_DIR)/extract-git-$* ] ; then \
+extract-git-%:
+	@if [ -f $(COOKIE_DIR)/extract-git-$* ] ; then \
 		true ; \
 	else \
-	  echo "        moving git data to $(EXTRACT)/$*" ; \
-		mv $(GIT_BUILD_DIR)/$(SRC_GIT_REPO)/* $(BUILD_DIR)/ ; \
+	  	echo "        moving git data to $(EXTRACT)/$*" ; \
+		mv $(GIT_BUILD_DIR)/$(SRC_GIT_REPO)/* $(BUILD_DIR)/ ; \ 
 	fi ;
 	$(TARGET_DONE)
 

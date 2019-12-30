@@ -32,34 +32,19 @@
 #
 # No protection against multiple include and should not have since its just a lib
 #
+$(info now including inc/lib.mk)
 
 # ------------------------------------------------------------------------------
 #
 # Directory maker used by the base rules
 #
-$(DOWNLOAD_DIR):
-		mkdir -p $(DOWNLOAD_DIR); 
-
-$(PARTIAL_DIR):
-		mkdir -p $(PARTIAL_DIR); 
-
-$(DFT_WORKSPACE):
-		mkdir -p $(DFT_WORKSPACE); 
-
-$(COOKIE_DIR):
-		mkdir -p $(COOKIE_DIR); 
-
-$(BUILD_DIR):
-		mkdir -p $(BUILD_DIR); 
-
-$(INSTALL_DIR):
-		mkdir -p $(INSTALL_DIR); 
-
-$(PACKAGE_DIR):
-		mkdir -p $(PACKAGE_DIR); 
-
-$(WORK_DIR):
-		mkdir -p $(WORK_DIR); 
+$(sort $(FILE_DIR) $(GIT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(DEFCONFIG_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR) $(BUILD_DIR)):
+	@if [ ! -d $@ ] ; then \
+		mkdir -p $@; \
+		echo making $@; \
+	else \
+		echo "DEBUG : directory $@ alredy exist doing nothing"; \
+	fi ;
 
 # ------------------------------------------------------------------------------
 #

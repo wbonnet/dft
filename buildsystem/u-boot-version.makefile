@@ -32,12 +32,10 @@ SW_VERSION       := $(shell echo $(PATH_WORDS) |  cut -d ' ' -f$(SW_VERSIONFIELD
 # is not comptible with user need ans or workspace relocation nor packagng needs.
 # better solutions wille be really welcomeds contributions.
 # Include DFT build system shared Makfile includes
-include ../board.mk
 buildsystem := buildsystem
+include ../board.mk
+include $(buildsystem)/inc/u-boot.mk
 include $(buildsystem)/dft.mk
-
-$(warning SW_NAME $(SW_NAME))
-$(warning SW_VERSION $(SW_VERSION))
 
 # ------------------------------------------------------------------------------
 #
@@ -75,58 +73,57 @@ MAKE_FILTERS  = debian files patches
 #
 # Targets not associated with a file (aka PHONY)
 #
-.PHONY:
 
 sanity-check:
 	@echo "Checking $(BOARD_NAME) u-boot $(SW_VERSION) package definition" ; 
-	@if [ ! -f "../board.mk" ] ; then \
-		echo "file board.mk is missing in directory ${CURDIR}/.." ; \
-		echo "error 191115-12" ; \
-		exit 1 ; \
+	@if [ ! -f "../board.mk" ] then 
+		echo "file board.mk is missing in directory ${CURDIR}/.." ; 
+		echo "error 191115-12" ; 
+		exit 1 ; 
 	fi ;
-	@if [ ! -d "${CURDIR}/files" ] ; then \
-		echo "files directory is missing in ${CURDIR}. It should contains a link to the markdown file install.$(SW_NAME)-$(BOARD_NAME).md needed by target package." ; \
-		echo "You can fix this with the following commands : " ; \
-		mkdir -p ${CURDIR}/files ; \
-		touch ${CURDIR}/files/.gitkeep ; \
-		ln -s ../files/install.$(SW_NAME)-$(BOARD_NAME).md ${CURDIR}/files/ ; \
-		git add ${CURDIR}/files ; \
+	@if [ ! -d "${CURDIR}/files" ] then 
+		echo "files directory is missing in ${CURDIR}. It should contains a link to the markdown file install.$(SW_NAME)-$(BOARD_NAME).md needed by target package." ; 
+		echo "You can fix this with the following commands : " ; 
+		mkdir -p ${CURDIR}/files ; 
+		touch ${CURDIR}/files/.gitkeep ; 
+		ln -s ../files/install.$(SW_NAME)-$(BOARD_NAME).md ${CURDIR}/files/ ; 
+		git add ${CURDIR}/files ; 
 	fi ;
-	@if [ ! -L "files/install.$(SW_NAME)-$(BOARD_NAME).md" ] ; then \
-		echo "The link to the markdown file install.$(SW_NAME)-$(BOARD_NAME).md is missing in the ${CURDIR}/files directory." ; \
-		echo "You can fix this with the following commands : " ; \
-		mkdir -p ${CURDIR}/files ; \
-		touch ${CURDIR}/files/.gitkeep ; \
-		ln -s ../../files/install.$(SW_NAME)-$(BOARD_NAME).md ${CURDIR}/files/ ; \
-		echo git add ${CURDIR}/files ; \
+	@if [ ! -L "files/install.$(SW_NAME)-$(BOARD_NAME).md" ] then 
+		echo "The link to the markdown file install.$(SW_NAME)-$(BOARD_NAME).md is missing in the ${CURDIR}/files directory." ; 
+		echo "You can fix this with the following commands : " ; 
+		mkdir -p ${CURDIR}/files ; 
+		touch ${CURDIR}/files/.gitkeep ; 
+		ln -s ../../files/install.$(SW_NAME)-$(BOARD_NAME).md ${CURDIR}/files/ ; 
+		echo git add ${CURDIR}/files ; 
 	fi ; 
-	s=`readlink files/install.$(SW_NAME)-$(BOARD_NAME).md` ; \
-	if [ !  "$$s" = "../../files/install.$(SW_NAME)-$(BOARD_NAME).md" ] ; then \
-		echo "The link to the markdown file in ${CURDIR}/files must target to ../../files/install.$(SW_NAME)-$(BOARD_NAME).md" ; \
+	s=`readlink files/install.$(SW_NAME)-$(BOARD_NAME).md` ; 
+	if [ ! "$$s" == "../../files/install.$(SW_NAME)-$(BOARD_NAME).md" ] then 
+		echo "The link to the markdown file in ${CURDIR}/files must target to ../../files/install.$(SW_NAME)-$(BOARD_NAME).md" ; 
 		echo "You can fix this with the following shell commands :" ; \
-		git rm -f files/install.$(SW_NAME)-$(BOARD_NAME).md || rm -f files/install.$(SW_NAME)-$(BOARD_NAME).md ; \
-		ln -s ../../files/install.$(SW_NAME)-$(BOARD_NAME).md ${CURDIR}/files/ ; \
-		git add ${CURDIR}/files ; \
+		git rm -f files/install.$(SW_NAME)-$(BOARD_NAME).md || rm -f files/install.$(SW_NAME)-$(BOARD_NAME).md ; 
+		ln -s ../../files/install.$(SW_NAME)-$(BOARD_NAME).md ${CURDIR}/files/ ; 
+		git add ${CURDIR}/files ; 
 	fi ; 
-	@if [ ! -d "${CURDIR}/patches" ] ; then \
-		echo "patches directory is missing in ${CURDIR}. It is used to store patches to be applied on sources after extract and before build targets. By default it is an empty folder." ; \
-		echo "You can fix this with the following commands : " ; \
-		mkdir -p ${CURDIR}/patches ; \
-		touch ${CURDIR}/patches/.gitkeep ; \
-		git add ${CURDIR}/patches ; \
+	@if [ ! -d "${CURDIR}/patches" ]  then 
+		echo "patches directory is missing in ${CURDIR}. It is used to store patches to be applied on sources after extract and before build targets. By default it is an empty folder." ; 
+		echo "You can fix this with the following commands : " ; 
+		mkdir -p ${CURDIR}/patches ; 
+		touch ${CURDIR}/patches/.gitkeep ; 
+		git add ${CURDIR}/patches ; 
 	fi ;
-	@if [ ! -d "${CURDIR}/debian" ] ; then \
-		echo "debian directory is missing in ${CURDIR}. It should contains the files needed to create the debian package for $(BOARD_NAME) u-boot." ; \
-		echo "error 191115-10" ; \
-		exit 1 ; \
+	@if [ ! -d "${CURDIR}/debian" ]  then 
+		echo "debian directory is missing in ${CURDIR}. It should contains the files needed to create the debian package for $(BOARD_NAME) u-boot." ; 
+		echo "error 191115-10" ; 
+		exit 1 ; 
 	fi ;
-	@s=`readlink Makefile`; \
-	if [ !  "$$s" = "$(buildsystem)/u-boot-version.makefile" ] ; then \
-		echo "Makefile symlink must link to $(buildsystem)/u-boot-version.makefile" ; \
-		echo "You can fix this with the following shell commands :" ; \
-		git rm -f Makefile || rm -f Makefile ; \
-		ln -s $(buildsystem)/u-boot-version.makefile Makefile ; \
-		git add Makefile ; \
+	@s=`readlink Makefile`; 
+	if [ !  "$$s" == "$(buildsystem)/u-boot-version.makefile" ]  then 
+		echo "Makefile symlink must link to $(buildsystem)/u-boot-version.makefile" ; 
+		echo "You can fix this with the following shell commands :" ; 
+		git rm -f Makefile || rm -f Makefile ; 
+		ln -s $(buildsystem)/u-boot-version.makefile Makefile ; 
+		git add Makefile ; 
 	fi ; 
 
 # Since u-boot tarball contains sudir sources have to be moves to the right location

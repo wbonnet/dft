@@ -144,7 +144,11 @@ DFT_WORKSPACE         ?= $(DFT_WORK)/dft-workspace
 # bootable disk image.
 WORK_DIR            ?= $(DFT_WORKSPACE)/$(BOARD_NAME)_$(SW_NAME)/$(SW_VERSION)
 
-# FILE_DIR contains all the static files nedded by compilation of packaging steps
+# Hint : All the variables with a name ending with DIR define a path located in the 
+# context of the current board for a given software, then a given version of this 
+# sofware. Hoping thus hint can help you understand the logic behind the naming convention
+# 
+# FILE_DIR contain all the static files nedeed by compilation of packaging steps
 # Since files in this folder are supposed to be static this folder should be located under
 # DFT_BUILDSYSTEM which is read-only for common use. DFT development like adding support
 # for a new board or new u-boot or kernel versions require git ande write access anyways,
@@ -156,21 +160,22 @@ FILE_DIR            ?= $(WORK_DIR)/files
 # by folder hierarchy).
 DEFCONFIG_DIR       ?= $(WORK_DIR)/defconfig
 
-# PATCH_DIR contains all the patches to be applied on upstream sources during
+# PATCH_DIR contain all the patches to be applied on upstream sources during
 # make patch target execution.
 PATCH_DIR           ?= $(WORK_DIR)/patches
 
-# Defines the working dir subfolders (all are volatile)
+# Definition of the work dir subfolders (all are also volatile)
 BUILD_DIR           ?= $(WORK_DIR)/build
-DOWNLOAD_DIR        ?= $(WORK_DIR)/download
 GIT_DIR             ?= $(WORK_DIR)/git
-PARTIAL_DIR         ?= $(DOWNLOAD_DIR)/partial
-COOKIE_DIR          ?= $(DFT_WORK)/cookies
+COOKIE_DIR          ?= $(WORK_DIR)/cookies
 INSTALL_DIR         ?= $(WORK_DIR)/install
 PACKAGE_DIR         ?= $(WORK_DIR)/package
 CHECKSUM_FILE       ?= $(WORK_DIR)/checksums
 LOG_DIR             ?= $(WORK_DIR)/logs
-# if not overriden the temporary files will go to /tmp
+DOWNLOAD_DIR        ?= $(WORK_DIR)/download
+PARTIAL_DIR         ?= $(DOWNLOAD_DIR)/partial
+# if not overriden the temporary files will go to /tmp please check your env
+# in case you store /tmp into ramdisk it can use a lot a RAM...
 TEMP_DIR            ?= /tmp
 
 # Defines the default targets used for building

@@ -54,7 +54,6 @@ endif
 #
 # Targets not associated with a file (aka PHONY)
 #
-.PHONY: help check
 
 # 
 # Board level u-boot makefile

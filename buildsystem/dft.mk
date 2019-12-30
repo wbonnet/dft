@@ -32,8 +32,6 @@
 # a slightly different syntax for some operators. This way it a known shell.
 SHELL := bash
 
-.PHONY: help
-
 # build system sould be available under board folder as a symlink. Keep it
 # locally available under board folder computing a relative path is a nightmare
 # and does not work in all cases. Environment variables are not git friendly
@@ -91,7 +89,7 @@ DISPLAY_COMPLETED_TARGET_NAME  = @echo "    completed [$@] "
 #
 # The cookie monster^Wmaker
 #
-TARGET_DONE = mkdir -p $(COOKIE_DIR) && touch $(COOKIE_DIR)/$(notdir $@)
+TARGET_DONE = @mkdir -p $(COOKIE_DIR) && touch $(COOKIE_DIR)/$(notdir $@)
 
 # ------------------------------------------------------------------------------
 #
