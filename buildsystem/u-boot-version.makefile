@@ -98,7 +98,7 @@ sanity-check:
 		echo git add ${CURDIR}/files ; \
 	fi ; 
 	s=`readlink files/install.$(SW_NAME)-$(BOARD_NAME).md` ; 
-	if [ ! "$$s" == "../../files/install.$(SW_NAME)-$(BOARD_NAME).md" ] ; then \
+	@if [ ! "$$s" == "../../files/install.$(SW_NAME)-$(BOARD_NAME).md" ] ; then \
 		echo "The link to the markdown file in ${CURDIR}/files must target to ../../files/install.$(SW_NAME)-$(BOARD_NAME).md" ; \
 		echo "You can fix this with the following shell commands :" ; \
 		git rm -f files/install.$(SW_NAME)-$(BOARD_NAME).md || rm -f files/install.$(SW_NAME)-$(BOARD_NAME).md ; \
@@ -118,7 +118,7 @@ sanity-check:
 		exit 1 ; \
 	fi ;
 	@s=`readlink Makefile`; 
-	if [ !  "$$s" == "$(buildsystem)/u-boot-version.makefile" ] ; then \
+	@if [ !  "$$s" == "$(buildsystem)/u-boot-version.makefile" ] ; then \
 		echo "Makefile symlink must link to $(buildsystem)/u-boot-version.makefile" ; \
 		echo "You can fix this with the following shell commands :" ; \
 		git rm -f Makefile || rm -f Makefile ; \

@@ -148,34 +148,9 @@ sanity-check:
 		done ; \
 		fi ;
 
-# target forwarder for subdirs
-package:
-	@for i in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		$(MAKE) -C $$i  package ; \
-	done
-
 # Catch all target. Call the same targets in each subfolder
-fetch:
-	for i in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		$(MAKE) -C $$i  $@ ; \
-	done
-
-extract:
-	for i in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		$(MAKE) -C $$i  $@ ; \
-	done
-
-configure:
-	for i in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		$(MAKE) -C $$i  $@ ; \
-	done
-
-build:
-	for i in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		$(MAKE) -C $$i  $@ ; \
-	done
-
-install:
-	for i in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		$(MAKE) -C $$i  $@ ; \
+pre-%:
+	@echo "DEBUG target pre-catch_$* in u-boot.makefile" ;
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		$(MAKE) -C $$i  $* ; \
 	done

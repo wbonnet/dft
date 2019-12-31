@@ -74,8 +74,10 @@ fetch : setup $(COOKIE_DIR) $(DOWNLOAD_DIR) $(PARTIAL_DIR) pre-fetch $(FETCH_TAR
 
 fetch-archive-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 	@echo "DEBUG : match fetch-archive-$* in target-fetch.mk" ; 
-	if [ "$(SW_VERSION)" = "" ] ; then \
+	@if [ "$(SW_VERSION)" = "" ] ; then \
 		echo "DEBUG : SW_VERSION is empty or undefined. Not at a defined version level skiping fetch " ; \
+		echo "pwd avant erreur 72" ; \
+		pwd ; \
 		exit 72 ; \
 	else \
 		echo "DEBUG : AROBASE :$@ : expected full fetch-archive-v_machin" ; \
