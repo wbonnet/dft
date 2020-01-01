@@ -53,21 +53,25 @@ show-build-targets:
 	@echo $(BUILD_TARGETS) ;
 
 build: configure pre-build $(BUILD_TARGETS) post-build
-	@echo "DEBUG : make is doing build in target-build.mk" ;
-	@if [ "$(SW_VERSION)" = "" ] ; then \
-		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping build" ; \
-		exit 0 ; \
-	fi ; 
-	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
-		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
-		echo "The generated binaries might be invalid or scripts could fail before reaching the end of target. Cross compilation is not yet supported." ; \
-		echo "Processing will now continue only for $(HOST_ARCH) based boards package definitions." ; \
-		echo "You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect the generated items." ; \
-		echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
-	fi ; 
-	@if [ ! -f $(COOKIE_DIR)/build ] ; then \
-		cd $(BUILD_DIR) ; \
-		$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
+	if [ "$(SW_VERSION)" = "" ] ; then \
+		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping build. Make was running in the path below :" ; \
+		pwd ; \
+	else  \
+		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
+			echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
+			echo "The generated binaries might be invalid or scripts could fail before reaching the end of target. Cross compilation is not yet supported." ; \
+			echo "Processing will now continue only for $(HOST_ARCH) based boards package definitions." ; \
+			echo "You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect the generated items." ; \
+			echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
+		else \
+			if [ ! -f $(COOKIE_DIR)/build-v$(SW_VERSION) ] ; then \
+				echo "DEBUG : le cookie $(COOKIE_DIR)/build existe pas. Make was running in the path below :" ; \
+				pwd ; \
+				echo "DEBUG : et maintenant je tente un cd $(BUILD_DIR) avant de relancer un make " ; \
+				cd $(BUILD_DIR) ; \
+				$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
+			fi ; \
+		fi ; \
 	fi ; 
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
