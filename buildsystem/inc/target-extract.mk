@@ -63,7 +63,6 @@ endif
 endif
 
 extract: fetch $(BUILD_DIR) pre-extract $(EXTRACT_TARGETS) post-extract
-	@echo "DEBUG : EXTRACT_TARGETS $(EXTRACT_TARGETS)" ; 
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 

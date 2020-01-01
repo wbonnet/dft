@@ -76,7 +76,6 @@ fetch : setup $(COOKIE_DIR) $(DOWNLOAD_DIR) $(PARTIAL_DIR) pre-fetch $(FETCH_TAR
 # --ignore-fail-on-non-empty
 fetch-archive-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 	@if [ "$(SW_VERSION)" = "" ] ; then \
-		echo "DEBUG : SW_VERSION is empty or undefined. Not at a defined version level skiping fetch " ; \
 		rmdir --ignore-fail-on-non-empty $(PARTIAL_DIR) ; \
 		rmdir --ignore-fail-on-non-empty $(DOWNLOAD_DIR) ; \
 	else \

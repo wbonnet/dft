@@ -73,34 +73,35 @@ reconfigure: patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconfi
 
 configure: extract pre-configure do-configure post-configure 
 do-configure:
-	@if [ "$(SW_VERSION)" = "" ] ; then \
+	if [ "$(SW_VERSION)" = "" ] ; then \
 		echo "DEBUG : Not at a version level skiping configure" ; \
-		exit 0 ; \
-	fi ; 
-	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; \
-	then \
-		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
-		echo "The generated binaries might be invalid or scripts could fail before reaching the end of target. Cross compilation is not yet supported." ; \
-		echo "Processing will now continue only for $(HOST_ARCH) based boards package definitions." ; \
-		echo "You can get the missing binaries by running again this target on a $(BOARD_ARCH) based host and collect the generated items." ; \
-		echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
-	fi ; 
-	@if [ -f $(COOKIE_DIR)/$@ ] ; then \
-		echo "cookie $(COOKIE_DIR)/$@" ; \
-		true ; \
+		echo "DEBUG : je ne sors plus ici car avant cd allait planter pas de Build_DIR existant je pense qie je voulais faire cd $(BUILD_DIR)" ; \
 	else \
-		cd $(BUILD_DIR) ; \
-		if [ "$(SW_NAME)" = "u-boot" ] ; then \
-			echo "    running u-boot make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) in $(BUILD_DIR)" ; \
-			make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) ; \
+		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
+			echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
+			echo "The generated binaries might be invalid or scripts could fail before reaching the end of target. Cross compilation is not yet supported." ; \
+			echo "Processing will now continue only for $(HOST_ARCH) based boards package definitions." ; \
+			echo "You can get the missing binaries by running again this target on a $(BOARD_ARCH) based host and collect the generated items." ; \
+			echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
 		else \
-			if [ "$(SW_NAME)" = "linux" ] ; then \
-				cp "$(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config" .config ; \
-				pwd ; \
-				echo " cp $(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config .config" ; \
-				echo "    running kernel make silentoldconfig in `pwd`" ; \
-				make silentoldconfig ; \
-				cp .config "$(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ; \
+			if [ -f $(COOKIE_DIR)/$@ ] ; then \
+				echo " DEBUG : je test s il y a deja le cookie $(COOKIE_DIR)/$@" ; \
+				true ; \
+			else \
+				cd $(BUILD_DIR) ; \
+				if [ "$(SW_NAME)" = "u-boot" ] ; then \
+					echo "    running u-boot make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) in $(BUILD_DIR)" ; \
+					make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) ; \
+				else \
+					if [ "$(SW_NAME)" = "linux" ] ; then \
+						cp "$(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config" .config ; \
+						pwd ; \
+						echo " cp $(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config .config" ; \
+						echo "    running kernel make silentoldconfig in `pwd`" ; \
+						make silentoldconfig ; \
+						cp .config "$(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ; \
+					fi ; \
+				fi ; \
 			fi ; \
 		fi ; \
 	fi ;
