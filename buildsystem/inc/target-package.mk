@@ -100,9 +100,12 @@ do-package:
 				fi ; \
 			fi ; \
 		fi ; \
+		echo "DEBUG : avant le cd PACKAGE_DIR $(PACKAGE_DIR) ; \
+		echo "DEBUG : Je suis dans ; \
+		pwd ; \
+		cd $(PACKAGE_DIR) ; \
+		$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ; \
 	fi ; 
-	cd $(PACKAGE_DIR) ; \
-	$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ;
 	$(TARGET_DONE)
 
 do-repackage:
