@@ -68,8 +68,8 @@ SRC_SIGN_FILES      ?= $(SW_NAME)-$(SW_VERSION).tar.xz.sign
 #
 
 # Defines the git repository to use
-DOWNLOAD_TOOL    = wget
-SW_NAME          = linux
+DOWNLOAD_TOOL    := wget
+SW_NAME          := linux
 BUILD_ARGS       =
 
 # Match initial ifdef DFT_LINUX_KERNEL
