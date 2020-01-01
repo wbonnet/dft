@@ -68,7 +68,6 @@ show-fetch-targets:
 	@echo $(FETCH_TARGETS)
 
 fetch : setup $(COOKIE_DIR) $(DOWNLOAD_DIR) $(PARTIAL_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
-	@echo "DEBUG : match fetch in target-fetch.mk => was supposed to do $(FETCH_TARGETS)" ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
