@@ -76,14 +76,11 @@ fetch : setup $(COOKIE_DIR) $(DOWNLOAD_DIR) $(PARTIAL_DIR) pre-fetch $(FETCH_TAR
 # To keep stuf clean the useless empty folders are removed by command rmdir 
 # --ignore-fail-on-non-empty
 fetch-archive-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
-	@echo "DEBUG : match fetch-archive-$* in target-fetch.mk" ; 
-	@if [ "$(SW_VERSION)" = "" ] ; then \
+	if [ "$(SW_VERSION)" = "" ] ; then \
 		echo "DEBUG : SW_VERSION is empty or undefined. Not at a defined version level skiping fetch " ; \
 		rmdir --ignore-fail-on-non-empty $(PARTIAL_DIR) ; \
 		rmdir --ignore-fail-on-non-empty $(DOWNLOAD_DIR) ; \
 	else \
-		echo "DEBUG : AROBASE :$@ : expected full fetch-archive-v_machin" ; \
-		echo "DEBUG : ETOILE  :$* : expected que_le_v_machin" ; \
 		if [ -f $(COOKIE_DIR)/$@ ] ; then \
 			echo "DEBUG : cookie already exist doing nothing at $@ target" ; \
 		else \
