@@ -28,9 +28,9 @@ SW_NAME     = u-boot
 # since git add will loose variable name and generate an absolute path, which
 # is not comptible with user need ans or workspace relocation nor packagng needs.
 # better solutions wille be really welcomeds contributions.
-buildsystem := buildsystem
 include board.mk
-include $(buildsystem)/dft.mk
+include buildsystem/dft.mk
+DFT_BUILDSYSTEM := ../../../buildsystem
 
 # Do not recurse the following subdirs
 MAKE_FILTERS = files Makefile README.md
@@ -52,9 +52,9 @@ sanity-check:
 		echo "kernel directory is missing in i${CURDIR}. It should contains a symlink to the generic makefile for Linux kernel" ; \
 		echo "You can fix with the following commands : " ; \
 		echo "mkdir -p ${CURDIR}/kernel" ; \
-		echo "ln -s $(buildsystem)/linux-kernel.makefile ${CURDIR}/kernel/Makefile" ; \
+		echo "ln -s $(DFT_BUILDSYSTEM)/linux-kernel.makefile ${CURDIR}/kernel/Makefile" ; \
 		echo "git add ${CURDIR}/kernel" ; \
-		echo "error 191114-01" ; \
+		echo "error 200101-02" ; \
 		exit 1 ; \
 	fi ;
 	@if [ ! -d "${CURDIR}/kernel/defconfig" ] ; then \
@@ -79,27 +79,28 @@ sanity-check:
 		echo "u-boot directory is missing in ${CURDIR}. It should contains a symlink to the generic makefile for u-boot" ; \
 		echo "You can fix with the following commands : " ; \
 		echo "mkdir -p ${CURDIR}/u-boot" ; \
-		echo "ln -s $(buildsystem)/u-boot.makefile ${CURDIR}/u-boot/Makefile" ; \
+		echo "ln -s $(DFT_BUILDSYSTEM)/u-boot.makefile ${CURDIR}/u-boot/Makefile" ; \
 		echo "git add ${CURDIR}/u-boot" ; \
 		echo "error 191114-02" ; \
 		exit 1 ; \
 	fi ;
-	@if [ ! "$(shell readlink ${CURDIR}/u-boot/Makefile)" = "../$(buildsystem)/u-boot.makefile" ] ; then \
-		echo "target of symlink Makefile should be ../$(buildsystem)/u-boot.makefile in directory ${CURDIR}/u-boot" ; \
+	@if [ ! "$(shell readlink ${CURDIR}/u-boot/Makefile)" = "../$(DFT_BUILDSYSTEM)/u-boot.makefile" ] ; then \
+		echo "target of symlink Makefile should be ../$(DFT_BUILDSYSTEM)/u-boot.makefile in directory ${CURDIR}/u-boot" ; \
 		echo "You can fix with the following commands : " ; \
 		echo "git rm -f ${CURDIR}/u-boot/Makefile" ; \
 		echo "mkdir -p ${CURDIR}/u-boot" ; \
-		echo "ln -s $(buildsystem)/u-boot.makefile ${CURDIR}/u-boot/Makefile" ; \
+		echo "DFT_BUILDSYSTEM : ${DFT_BUILDSYSTEM}" ; \
+		echo "ln -s ../$(DFT_BUILDSYSTEM)/u-boot.makefile ${CURDIR}/u-boot/Makefile" ; \
 		echo "git add ${CURDIR}/u-boot/Makefile" ; \
-		echo "error 191114-01" ; \
+		echo "error 200101-01" ; \
 		exit 1 ; \
 	fi ;
-	@if [ ! "$(shell readlink ${CURDIR}/kernel/Makefile)" = "../$(buildsystem)/linux-kernel.makefile" ] ; then \
-		echo "target of symlink Makefile should be ../$(buildsystem)/linux-kernel.makefile in directory ${CURDIR}/kernel" ; \
+	@if [ ! "$(shell readlink ${CURDIR}/kernel/Makefile)" = "../$(DFT_BUILDSYSTEM)/linux-kernel.makefile" ] ; then \
+		echo "target of symlink Makefile should be ../$(DFT_BUILDSYSTEM)/linux-kernel.makefile in directory ${CURDIR}/kernel" ; \
 		echo "You can fix with the following commands : " ; \
 		echo "git rm -f ${CURDIR}/kernel/Makefile" ; \
 		echo "mkdir -p ${CURDIR}/kernel" ; \
-		echo "ln -s ../$(buildsystem)/linux-kernel.makefile ${CURDIR}/kernel/Makefile" ; \
+		echo "ln -s ../$(DFT_BUILDSYSTEM)/linux-kernel.makefile ${CURDIR}/kernel/Makefile" ; \
 		echo "git add ${CURDIR}/kernel/Makefile" ; \
 		echo "error 191114-02" ; \
 		$(call dft_error "error 191114-02") \
@@ -145,22 +146,25 @@ sanity-check:
 		echo "error 1911118-04" ; \
 		exit 1 ; \
 	fi ;
-	@make -C u-boot sanity-check
-	@make -C kernel sanity-check
+	@make -C u-boot $*
+	@make -C kernel $*
 	@for version in $(find . -mindepth 1 -maxdepth 1 -type d ) ; do \
-		cd $$version && $(MAKE) $*  && cd .. ; \
+		$(MAKE) -C $$version $* ; \
         done
+
+# cd $$version && $(MAKE) -C $$version $*  && cd .. ;
 
 # Build only u-boot  package target
 u-boot-package:
 	@echo "u-boot-package from board.makefile" ;
-	pwd ; \
-	cd u-boot && $(MAKE) package && cd .. ;
+	$(MAKE) -C u-boot package && cd .. ;
+#	cd u-boot && $(MAKE) package && cd .. ;
 
 # Build only linux kernel an package target
 kernel-package:
 	@echo "kernel-package from board.makefile" ;
-	cd kernel && $(MAKE) package && cd .. ;
+	$(MAKE) -C kernel package ;
+#	cd kernel && $(MAKE) package && cd .. ;
 
 # Catch all target. Call the same targets in each subfolder
 %:

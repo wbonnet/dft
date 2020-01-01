@@ -102,7 +102,7 @@ DFT_BUILDSYSTEM := buildsystem/
 # Includes the build system top level and target definitions
 #
 # ------------------------------------------------------------------------------
-include $(DFT_BUILDSYSTEM)/inc/conf.mk
+include $(DFT_BUILDSYSTEM)/inc/conf.mkkk
 include $(DFT_BUILDSYSTEM)/inc/lib.mk
 include $(DFT_BUILDSYSTEM)/inc/target-build.mk
 include $(DFT_BUILDSYSTEM)/inc/target-configure.mk

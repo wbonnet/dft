@@ -29,10 +29,10 @@ SW_VERSION       :=
 # since git add will loose variable name and generate an absolute path, which
 # is not comptible with user need ans or workspace relocation nor packagng needs.
 # better solutions wille be really welcomeds contributions.
-buildsystem := buildsystem
+DFT_BUILDSYSTEM := buildsystem
 include ../board.mk
-include $(buildsystem)/inc/u-boot.mk
-include $(buildsystem)/dft.mk
+include $(DFT_BUILDSYSTEM)/inc/u-boot.mk
+include $(DFT_BUILDSYSTEM)/dft.mk
 
 # Do not recurse the following subdirs
 MAKE_FILTERS  := files defconfig Makefile README.md patches .
@@ -62,20 +62,20 @@ sanity-check:
 	@if [ $(UBOOT_SUPPORT) = 1  ] ; then \
 		echo "Checking $(BOARD_NAME) u-boot packages folder" ; \
 		if [ ! -L "Makefile"  ] ; then \
-			echo "Makefile symlink $(buildsystem)/u-boot.makefile is missing in directory ${CURDIR}" ; \
+			echo "Makefile symlink $(DFT_BUILDSYSTEM)/u-boot.makefile is missing in directory ${CURDIR}" ; \
 			echo "You can fix with the following commands : " ; \
 			echo "git rm -f ${CURDIR}/Makefile" ; \
-			echo "ln -s $(buildsystem)/u-boot.makefile ${CURDIR}/Makefile" ; \
+			echo "ln -s $(DFT_BUILDSYSTEM)/u-boot.makefile ${CURDIR}/Makefile" ; \
 			echo "git add ${CURDIR}/Makefile" ; \
 			echo "error 1911115-02" ; \
 			echo "error 1911115-02" ; \
 			exit 1 ; \
 		fi ; \
-		if [ ! "$(shell readlink ./Makefile)" = "$(buildsystem)/u-boot.makefile" ] ; then \
-			echo "target of symlink Makefile should be $(buildsystem)/u-boot.makefile in directory ${CURDIR}" ; \
+		if [ ! "$(shell readlink ./Makefile)" = "$(DFT_BUILDSYSTEM)/u-boot.makefile" ] ; then \
+			echo "target of symlink Makefile should be $(DFT_BUILDSYSTEM)/u-boot.makefile in directory ${CURDIR}" ; \
 			echo "You can fix with the following commands : " ; \
 			echo "git rm -f ${CURDIR}/Makefile" ; \
-			echo "ln -s $(buildsystem)/u-boot.makefile ${CURDIR}/Makefile" ; \
+			echo "ln -s $(DFT_BUILDSYSTEM)/u-boot.makefile ${CURDIR}/Makefile" ; \
 			echo "git add ${CURDIR}/Makefile" ; \
 			echo "error 1911115-01" ; \
 			exit 1 ; \
@@ -124,26 +124,26 @@ sanity-check:
 		for version in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*' ) ; do \
 		 echo "Checking $(BOARD_NAME) u-boot $$version package definition" ; \
 	         if [ ! -L "$$version/Makefile" ] ; then \
-        	    echo "Makefile in ${CURDIR}/$$version is missing. It should be a symlink to $(buildsystem)/u-boot-version.makefile" ; \
+        	    echo "Makefile in ${CURDIR}/$$version is missing. It should be a symlink to $(DFT_BUILSYYSTEM)/u-boot-version.makefile" ; \
 	            echo "You can fix with the following shell commands :" ; \
-        	    echo "ln -s ../$(buildsystem)/u-boot-version.makefile $$version/Makefile" ; \
+        	    echo "ln -s ../$(DFT_BUILDSYSTEM)/u-boot-version.makefile $$version/Makefile" ; \
 	            echo "git add $$version/Makefile" ; \
         	    echo "exit 191115-07" ; \
 	            exit 1 ; \
         	   fi ; \
 	           s=`readlink $$version/Makefile` ; \
-        	   if [ !  "$$s" = "../$(buildsystem)/u-boot-version.makefile" ] ; then \
-	               echo "Makefile symlink in $$version must link to $(buildsystem)/u-boot-version.makefile" ; \
+        	   if [ !  "$$s" = "../$(DFT_BUILDSYSTEM)/u-boot-version.makefile" ] ; then \
+	               echo "Makefile symlink in $$version must link to $(DFT_BUILDSYSTEM)/u-boot-version.makefile" ; \
         	       echo "You can fix with the following shell commands :" ; \
 	               git rm -f ${CURDIR}/$$version/Makefile || rm -f ${CURDIR}/$$version/Makefile ; \
-	               ln -s ../$(buildsystem)/u-boot-version.makefile ${CURDIR}/$$version/Makefile ; \
+	               ln -s ../$(DFT_BUILDSYSTEM)/u-boot-version.makefile ${CURDIR}/$$version/Makefile ; \
         	       git add ${CURDIR}/$$version/Makefile ; \
 	               echo "exit 191122-21" ; \
         	    fi ; \
 		done ; \
-		for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*\.*' ) ; do \
-			if [ -f $$version/Makefile ] ; then \
-				cd $$version && $(MAKE) sanity-check ; \
+		for v in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*\.*' ) ; do \
+			if [ -f $$v/Makefile ] ; then \
+				$(MAKE) -C $$v sanity-check ; \
 			fi ; \
 		done ; \
 		fi ;
@@ -151,6 +151,6 @@ sanity-check:
 # Catch all target. Call the same targets in each subfolder
 pre-%:
 	@echo "DEBUG target pre-catch_$* in u-boot.makefile" ;
-	@for i in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		$(MAKE) -C $$i  $* ; \
+	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		$(MAKE) -C $$v  $* ; \
 	done

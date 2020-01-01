@@ -32,10 +32,10 @@ SW_VERSION       := $(shell echo $(PATH_WORDS) |  cut -d ' ' -f$(SW_VERSIONFIELD
 # is not comptible with user need ans or workspace relocation nor packagng needs.
 # better solutions wille be really welcomeds contributions.
 # Include DFT build system shared Makfile includes
-buildsystem := buildsystem
+DFT_BUILDSYSTEM := ../../../../buildsystem
 include ../board.mk
-include $(buildsystem)/inc/u-boot.mk
-include $(buildsystem)/dft.mk
+include $(DFT_BUILDSYSTEM)/inc/u-boot.mk
+include $(DFT_BUILDSYSTEM)/dft.mk
 
 # ------------------------------------------------------------------------------
 #
@@ -118,10 +118,10 @@ sanity-check:
 		exit 1 ; \
 	fi ;
 	@s=`readlink Makefile`; 
-	@if [ !  "$$s" == "$(buildsystem)/u-boot-version.makefile" ] ; then \
-		echo "Makefile symlink must link to $(buildsystem)/u-boot-version.makefile" ; \
+	@if [ !  "$$s" == "$(DFT_BUILDSYSTEM)/u-boot-version.makefile" ] ; then \
+		echo "Makefile symlink must link to $(DFT_BUILDSYSTEM)/u-boot-version.makefile" ; \
 		echo "You can fix this with the following shell commands :" ; \
 		git rm -f Makefile || rm -f Makefile ; \
-		ln -s $(buildsystem)/u-boot-version.makefile Makefile ; \
+		ln -s $(DFT_BUILDSYSTEM)/u-boot-version.makefile Makefile ; \
 		git add Makefile ; \
 	fi ; 

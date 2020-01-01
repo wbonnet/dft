@@ -29,14 +29,13 @@ SW_VERSION  := no-$(SW_NAME)-version
 # since git add will loose variable name and generate an absolute path, which
 # is not comptible with user need ans or workspace relocation nor packagng needs.
 # better solutions wille be really welcomeds contributions.
-buildsystem := buildsystem
+DFT_BUILDSYSTEM = ../../../buildsystem
 include board.mk
-include $(buildsystem)/inc/linux-kernel.mk
-include $(buildsystem)/dft.mk
+include $(DFT_BUILDSYSTEM)/inc/linux-kernel.mk
+include $(DFT_BUILDSYSTEM)/dft.mk
 
 # Do not recurse the following subdirs
 MAKE_FILTERS  = files defconfig Makefile README.md .
-
 
 # ------------------------------------------------------------------------------
 #
@@ -71,19 +70,19 @@ sanity-check:
 		false ; \
 	fi ;
 	@if [ ! -L "Makefile"  ] ; then \
-		echo "Makefile symlink $(buildsystem)/$(SW_NAME)-kernel.makefile is missing in directory ${CURDIR}" ; \
+		echo "Makefile symlink $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile is missing in directory ${CURDIR}" ; \
 		echo "You can fix with the following commands : " ; \
 		echo "git rm -f ${CURDIR}//Makefile" ; \
-		echo "ln -s $(buildsystem)/$(SW_NAME)-kernel.makefile ${CURDIR}//Makefile" ; \
+		echo "ln -s $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile ${CURDIR}//Makefile" ; \
 		echo "git add ${CURDIR}//Makefile" ; \
 		echo "error 191121-010" ; \
 		exit 1 ; \
 	fi ;
-	@if [ ! "$(shell readlink ./Makefile)" = "$(buildsystem)/$(SW_NAME)-kernel.makefile" ] ; then \
-		echo "target of symlink Makefile should be $(buildsystem)/$(SW_NAME)-kernel.makefile in directory ${CURDIR}/" ; \
+	@if [ ! "$(shell readlink ./Makefile)" = "$(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile" ] ; then \
+		echo "target of symlink Makefile should be $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile in directory ${CURDIR}/" ; \
 		echo "You can fix with the following commands : " ; \
 		echo "git rm -f ${CURDIR}//Makefile" ; \
-		echo "ln -s $(buildsystem)/$(SW_NAME)-kernel.makefile ${CURDIR}/Makefile" ; \
+		echo "ln -s $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile ${CURDIR}/Makefile" ; \
 		echo "git add ${CURDIR}/Makefile" ; \
 		echo "error 1911120-011" ; \
 		exit 1 ; \
@@ -108,7 +107,7 @@ sanity-check:
 	@if [ ! "$(shell readlink board.mk)" = "../board.mk" ] ; then \
 		echo "target of symlink board.mk should be ../board.mk in directory ${CURDIR}/" ; \
 		echo "You can fix with the following commands : " ; \
-		echo "git rm -f ${CURDIR}/${CURDIR}/board.mk" ; \
+		echo "git rm -f ${CURDIR}/board.mk" ; \
 		echo "ln -s ../board.mk ${CURDIR}/board.mk" ; \
 		echo "git add ${CURDIR}/board.mk" ; \
 		echo "error 1911116-05" ; \
@@ -118,28 +117,28 @@ sanity-check:
 		echo "Checking $(BOARD_NAME) kernel $$version package definition" ; \
 		if [ ! -L "$$version/Makefile" ] ; then \
 			echo "version folder $$version" ; \
-			echo "Makefile symlink in ${CURDIR}/$$version is missing. It should be a symlink to $(buildsystem)/$(SW_NAME)-kernel-version.makefile" ; \
+			echo "Makefile symlink in ${CURDIR}/$$version is missing. It should be a symlink to $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel-version.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
 			if [ -f "$$version/Makefile" ] ; then \
 				git rm ${CURDIR}//$$version/Makefile ; \
 			fi ; \
-			ln -s ../$(buildsystem)/$(SW_NAME)-kernel-version.makefile ${CURDIR}//$$version/Makefile ; \
+			ln -s ../$(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel-version.makefile ${CURDIR}//$$version/Makefile ; \
 			git add ${CURDIR}//$$version/Makefile ; \
 			echo "exit 191116-07" ; \
 		fi ; \
 		s=`readlink $$version/Makefile` ; \
-		if [ !  "$$s" = "../$(buildsystem)/$(SW_NAME)-kernel-version.makefile" ] ; then \
-			echo "Makefile symlink in $$version must link to $(buildsystem)/$(SW_NAME)-kernel-version.makefile" ; \
+		if [ !  "$$s" = "../$(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel-version.makefile" ] ; then \
+			echo "Makefile symlink in $$version must link to $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel-version.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
 			git rm -f ${CURDIR}/$$version/Makefile || rm -f ${CURDIR}/$$version/Makefile ; \
-			ln -s ../$(buildsystem)/$(SW_NAME)-kernel-version.makefile ${CURDIR}//$$version/Makefile ; \
+			ln -s ../$(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel-version.makefile ${CURDIR}//$$version/Makefile ; \
 			git add ${CURDIR}//$$version/Makefile ; \
 			echo "exit 191122-20" ; \
 		fi ; \
 	done ; 
 	@for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*') ; do \
 		if [ -f $$folder/Makefile ] ; then \
-			cd $$folder && $(MAKE) sanity-check && cd .. ; \
+			$(MAKE) -C $$folder sanity-check ; \
 		fi ; \
 	done ;
 
@@ -147,6 +146,6 @@ sanity-check:
 %:
 	@for folder in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$folder/Makefile ] ; then \
-			cd $$folder && $(MAKE) $* && cd .. ; \
+			$(MAKE) -C $$folder $* ; \
 		fi ; \
 	done
