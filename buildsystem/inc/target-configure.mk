@@ -83,6 +83,7 @@ do-configure:
 			echo "Processing will now continue only for $(HOST_ARCH) based boards package definitions." ; \
 			echo "You can get the missing binaries by running again this target on a $(BOARD_ARCH) based host and collect the generated items." ; \
 			echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
+			true ; \
 		else \
 			if [ -f $(COOKIE_DIR)/$@ ] ; then \
 				echo " DEBUG : je test s il y a deja le cookie $(COOKIE_DIR)/$@" ; \

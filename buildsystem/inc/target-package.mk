@@ -100,12 +100,15 @@ do-package:
 				fi ; \
 			fi ; \
 		fi ; \
-		echo "DEBUG : avant le cd PACKAGE_DIR $(PACKAGE_DIR) ; \
-		echo "DEBUG : Je suis dans ; \
+		echo "DEBUG : dans le do-package avant le cd PACKAGE_DIR $(PACKAGE_DIR)" ; \
+		echo "DEBUG : Je suis dans "; \
 		pwd ; \
 		cd $(PACKAGE_DIR) ; \
+		echo "DEBUG : Juste avant le debuild"; \
 		$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ; \
-	fi ; 
+		echo "DEBUG : Juste apres le debuild"; \
+	fi ; \
+	echo "DEBUG : fin de do-package juste avant le target-done"; 
 	$(TARGET_DONE)
 
 do-repackage:

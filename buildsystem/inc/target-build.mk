@@ -96,16 +96,14 @@ build-%:
 	@if [ "$(SW_VERSION)" = "" ] ; then \
 		echo "DEBUG : SW_VERSION is empty or undefined. Not at a defined version level skipping build" ; \
 	else \
-		echo "DEBUG : On demande la target build-$*" ; \
-		echo "DEBUG : Alors que je suis dans : $(PWD)" ; \
-		echo "DEBUG : Et j'aurais du etre la : $(BUILD_DIR)" ; \
 		cd $(BUILD_DIR) ; \
-		echo "DEBUG : Maintenant je suis la verifie que c'est bon : $(PWD)" ; \
-		echo "$(COOKIE_DIR)/build-$*" ; \
 		if [ ! -f $(COOKIE_DIR)/build-$* ] ; then \
+			echo "DEBUG : Avant le MAKE" ; \
 			$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
+			echo "DEBUG : Apres le MAKE" ; \
 		fi ; \
-	fi ;
+	fi ; \
+	echo "DEBUG : Apres le if version juste avant le target done" ; 
 	$(TARGET_DONE)
 
 rebuild-%:
@@ -125,4 +123,3 @@ PREREQUISITE_BASE_PKGS_DEBIAN ?= build-essential
 
 # Match initial ifdef DFT_TARGET_BUILD
 endif
-
