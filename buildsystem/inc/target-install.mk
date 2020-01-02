@@ -68,7 +68,6 @@ reinstall: build pre-reinstall do-reinstall install post-reinstall
 do-install:
 	@if [ "$(SW_VERSION)" = "" ] ; then \
 		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skiping install" ; \
-		exit 0 ; \
 	fi ; 
 	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make srunning on a $(HOST_ARCH) board." ; \
@@ -76,36 +75,37 @@ do-install:
 		echo "Processing will now continue only for $(HOST_ARCH) based boards package definitions." ; \
 		echo "You can get the missing binaries by running again this target on a $(BOARD_ARCH) based host and collect the generated items." ; \
 		echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
-	fi ; 
-	@if [ -f $(COOKIE_DIR)/do-install ] ; then \
-		true ; \
 	else \
-		if [ "$(SW_NAME)" = "u-boot" ] ; then \
-			cp -frv ../files $(INSTALL_DIR)/doc ; \
-		fi ; \
-		pwd ; \
-		cd $(BUILD_DIR) ; \
-		if [ "$(SW_NAME)" = "u-boot" ] ; then \
-			mkdir $(INSTALL_DIR)/u-boot/ ; \
-			cp -fv $(BUILD_DIR)/$(UBOOT_BINARY_FILE) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION) ; \
-			cp -fv $(BUILD_DIR)/u-boot.dtb $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb ; \
-			ln -sf u-boot-$(BOARD_NAME)-$(SW_VERSION) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME); \
-			tree $(INSTALL_DIR)/u-boot/; \
+		if [ -f $(COOKIE_DIR)/do-install ] ; then \
+			true ; \
 		else \
-			if [ "$(SW_NAME)" = "linux" ] ; then \
-				echo "DEBUG Dans le else du if u-boot" ; \
-				echo "DEBUG Dans le if linux" ; \
-				echo "INSTALL_DIR : $(INSTALL_DIR)" ; \
-				mkdir -p $(INSTALL_DIR)/boot/dtb ; \
-				$(BUILD_ENV) $(MAKE) INSTALL_PATH=$(INSTALL_DIR)/boot $(INSTALL_ARGS) ; \
-				$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(INSTALL_DIR)/ INSTALL_MOD_STRIP=1 modules_install ; \
-				cp -fr arch/arm/boot/dts/*.dtb $(INSTALL_DIR)/boot/dtb ; \
-	 	 		if [ ! "" = "$(DEFAULT_DTB)" ] ; then \
-					echo "DEBUG Je suis dans le if a la con" ; \
-					cd $(INSTALL_DIR)/boot ; \
-					ln -sf dtb/$(DEFAULT_DTB) default.dtb ; \
-				else \
-					echo "DEBUG Je suis dans le else a la con" ; \
+			if [ "$(SW_NAME)" = "u-boot" ] ; then \
+				cp -frv ../files $(INSTALL_DIR)/doc ; \
+			fi ; \
+			pwd ; \
+			cd $(BUILD_DIR) ; \
+			if [ "$(SW_NAME)" = "u-boot" ] ; then \
+				mkdir $(INSTALL_DIR)/u-boot/ ; \
+				cp -fv $(BUILD_DIR)/$(UBOOT_BINARY_FILE) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION) ; \
+				cp -fv $(BUILD_DIR)/u-boot.dtb $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb ; \
+				ln -sf u-boot-$(BOARD_NAME)-$(SW_VERSION) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME); \
+				tree $(INSTALL_DIR)/u-boot/; \
+			else \
+				if [ "$(SW_NAME)" = "linux" ] ; then \
+					echo "DEBUG Dans le else du if u-boot" ; \
+					echo "DEBUG Dans le if linux" ; \
+					echo "INSTALL_DIR : $(INSTALL_DIR)" ; \
+					mkdir -p $(INSTALL_DIR)/boot/dtb ; \
+					$(BUILD_ENV) $(MAKE) INSTALL_PATH=$(INSTALL_DIR)/boot $(INSTALL_ARGS) ; \
+					$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(INSTALL_DIR)/ INSTALL_MOD_STRIP=1 modules_install ; \
+					cp -fr arch/arm/boot/dts/*.dtb $(INSTALL_DIR)/boot/dtb ; \
+		 	 		if [ ! "" = "$(DEFAULT_DTB)" ] ; then \
+						echo "DEBUG Je suis dans le if a la con" ; \
+						cd $(INSTALL_DIR)/boot ; \
+						ln -sf dtb/$(DEFAULT_DTB) default.dtb ; \
+					else \
+						echo "DEBUG Je suis dans le else a la con" ; \
+					fi ; \
 				fi ; \
 			fi ; \
 		fi ; \
