@@ -62,7 +62,7 @@ sanity-check:
 u-boot-package:
 	@for i in $(CATEGORIES) ; do \
 		if [ -f ${CURDIR}/$$i/Makefile ] ; then \
-                cd ${CURDIR}/$$i && $(MAKE) u-boot-package && cd ..; \
+                	$(MAKE) -C $$i u-boot-package ; \
 		fi ; \
         done
 
@@ -71,7 +71,7 @@ kernel-package:
 linux-kernel-package:
 	@for i in $(CATEGORIES) ; do \
 		if [ -f ${CURDIR}/$$i/Makefile ] ; then \
-                cd ${CURDIR}/$$i && $(MAKE) kernel-package && cd .. ; \
+                	$(MAKE) -C $$i kernel-package ; \
 		fi ; \
 	done
 
@@ -79,5 +79,5 @@ linux-kernel-package:
 # Catch all target. Call the same targets in each subfolder
 %:
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
-		cd ${CURDIR}/$$i && $(MAKE) $* && cd .. ; \
+		$(MAKE) -C $$i $* ; \
 	done
