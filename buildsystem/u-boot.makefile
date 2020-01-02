@@ -42,9 +42,8 @@ MAKE_FILTERS  := files defconfig Makefile README.md patches .
 # Mandatory defines that have to be defined at least in the main Makefile
 #
 
-$(warning MUF $(SW_NAME))
-ifeq ($(SW_NAME),wget)
-$(error MUFF is set)
+ifeq ($(SW_NAME),)
+$(error SW_NAME is not set)
 endif
 
 ifeq ($(DOWNLOAD_TOOL),)
