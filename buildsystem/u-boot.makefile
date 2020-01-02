@@ -150,8 +150,8 @@ sanity-check:
 		fi ;
 
 # Catch all target. Call the same targets in each subfolder
-pre-%:
-	@echo "DEBUG target pre-catch_$* in u-boot.makefile" ;
+%:
+	@echo "DEBUG target catch_all_$* in u-boot.makefile" ;
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
 		$(MAKE) -C $$v  $* ; \
 	done

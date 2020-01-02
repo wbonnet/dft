@@ -207,7 +207,7 @@ KERNEL_DEFCONFIG     ?= $(BOARD_NAME).config
 # XXXX TODO If this variable is set, and USE_CONFIG_FILE is undefined, a config file will
 # be generated using the given target. Default is to define nothing and let the
 # user set one of the two choice, or run make by himself.
-UBOOT_DEFCONFIG       ?=
+UBOOT_DEFCONFIG       ?= undefined_defconfig_in_board_mk
 
 # The config file can be modified once set in the build dir (either using a build
 # defconfig or by copying our own config file) by applying modifications defined

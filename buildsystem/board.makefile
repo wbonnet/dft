@@ -57,7 +57,6 @@ sanity-check:
 		echo "error 200101-02" ; \
 		exit 1 ; \
 	fi ;
-	@echo "plopinette" ;
 	@if [ ! -d "${CURDIR}/kernel/defconfig" ] ; then \
 		echo "defconfig directory is missing in ${CURDIR}/kernel. It is used to store kernel configuration files. It should at least contain a hidden empty file .gitkeep until first kernel version is added for $(BOARD_NAME)" ; \
 		echo "You can fix with the following commands : " ; \
@@ -158,7 +157,7 @@ sanity-check:
 # Build only u-boot  package target
 u-boot-package:
 	@echo "u-boot-package from board.makefile" ;
-	$(MAKE) -C u-boot package && cd .. ;
+	$(MAKE) -C u-boot package ;
 #	cd u-boot && $(MAKE) package && cd .. ;
 
 # Build only linux kernel an package target
