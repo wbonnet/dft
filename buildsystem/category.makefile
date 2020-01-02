@@ -40,7 +40,7 @@ sanity-check:
 	for board in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
 		echo "Now checking board $$board" ; \
 		if [ ! -e "$$board/buildsystem" ] ; then \
-			echo "buildsystem symlink ${CURDIR}/$$board is Missing. It should be a symlink to  $(DFT_BUILDSYSTEM)/buildsystem" ; \
+			echo "buildsystem symlink ${CURDIR}/$$board is Missing. It should be a symlink to  $(DFT_BUILDSYSTEM)" ; \
 			echo "You can fix with the following shell commands :" ; \
 			echo "ln -s $(DFT_BUILDSYSTEM) ${CURDIR}/$$board" ; \
 			echo "git add ${CURDIR}/$$board/buildsystem" ; \
