@@ -168,11 +168,12 @@ kernel-package:
 #	cd kernel && $(MAKE) package && cd .. ;
 
 # Catch all target. Call the same targets in each subfolder
+# cd $$i && $(MAKE) $* && cd .. ; 
 sanity-check:
 	@echo "target $@ is called in board.makefile"
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		echo "examen de $$i" ; \
 		if [ -f $$i/Makefile ] ; then \
-			cd $$i && $(MAKE) $* && cd .. ; \
+			$(MAKE) -C$$i $* ; \
 		fi ; \
         done

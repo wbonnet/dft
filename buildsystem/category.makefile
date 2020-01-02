@@ -107,6 +107,7 @@ bsp-package: u-boot-package kernel-package
 
 # Build only u-boot package target
 u-boot-package:
+	echo "DEBUG : u-boot-package in catagory.makefile" ; 
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
 			cd $$i && $(MAKE) u-boot-package && cd .. ; \
@@ -115,6 +116,7 @@ u-boot-package:
 
 # Build only linux kernel an package target
 kernel-package:
+	echo "DEBUG : kernel-package in catagory.makefile" ; 
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
 			cd $$i && $(MAKE) kernel-package && cd .. ; \
@@ -123,6 +125,7 @@ kernel-package:
 
 # Catch all target. Call the same targets in each subfolder
 %:
+	echo "DEBUG : catch-all $@ in catagory.makefile" ; 
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
 			cd $$i && $(MAKE) $@ && cd .. ; \
