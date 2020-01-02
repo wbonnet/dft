@@ -42,9 +42,25 @@ sanity-check:
 		if [ ! -e "$$board/buildsystem" ] ; then \
 			echo "buildsystem symlink ${CURDIR}/$$board is Missing. It should be a symlink to  $(DFT_BUILDSYSTEM)" ; \
 			echo "You can fix with the following shell commands :" ; \
-			echo "ln -s $(DFT_BUILDSYSTEM) ${CURDIR}/$$board" ; \
-			echo "git add ${CURDIR}/$$board/buildsystem" ; \
+			ln -s $(DFT_BUILDSYSTEM) ${CURDIR}/$$board ; \
+			git add ${CURDIR}/$$board/buildsystem ; \
 			echo "exit 200102-0201" ; \
+			exit 1 ; \
+		fi ; \
+		if [ ! -e "$$board/kernel/buildsystem" ] ; then \
+			echo "buildsystem symlink ${CURDIR}/$$board/kernel is Missing. It should be a symlink to  ../$(DFT_BUILDSYSTEM)" ; \
+			echo "You can fix with the following shell commands :" ; \
+			ln -s ../$(DFT_BUILDSYSTEM) ${CURDIR}/$$board/kernel ; \
+			git add ${CURDIR}/$$board/kernel/buildsystem ; \
+			echo "exit 200102-0202" ; \
+			exit 1 ; \
+		fi ; \
+		if [ ! -e "$$board/u-boot/buildsystem" ] ; then \
+			echo "buildsystem symlink ${CURDIR}/$$board/u-boot is Missing. It should be a symlink to  ../$(DFT_BUILDSYSTEM)" ; \
+			echo "You can fix with the following shell commands :" ; \
+			ln -s ../$(DFT_BUILDSYSTEM) ${CURDIR}/$$board/u-boot ; \
+			git add ${CURDIR}/$$board/u-boot/buildsystem ; \
+			echo "exit 200102-0203" ; \
 			exit 1 ; \
 		fi ; \
 		if [ ! -e "$$board/Makefile" ] ; then \
@@ -57,8 +73,6 @@ sanity-check:
 			exit 1 ; \
 		fi ; \
 		s=`readlink ${CURDIR}/$$board/Makefile` ; \
-		echo " 0 : $$s" ; \
-		echo " 1 : $(DFT_BUILDSYSTEM)/board.makefile" ; \
 		if [ ! "$$s" = "$(DFT_BUILDSYSTEM)/board.makefile" ] ; then \
 			echo "Makefile symlink in $$board must link to $(DFT_BUILDSYSTEM)/board.makefile" ; \
 			echo "It targets to $(shell readlink ${CURDIR}/$$board/Makefile)" ; \
