@@ -35,7 +35,7 @@
 ifdef DFT_CONF
 $(info conf.mk has already been included)
 else
-#$(info now including conf.mk)
+$(info now including conf.mk)
 DFT_CONF = 1
 
 # Some temporary default values used to debug where where variables are initialized
@@ -190,10 +190,10 @@ BUILD_SCRIPTS       ?= $(WORK_DIR)/Makefile
 
 # Default download tool is wget since it is used to retrieve most of source. git is available
 # DOWNLOAD_TOOL should beset to git in custom makefiles if needed
-DOWNLOAD_TOOL       ?= wget
+DOWNLOAD_TOOL       := wget
 
 # Default is to turn wget to quiet mode to hide progress bar in shell output 
-WGET_OPTS           ?= -q
+WGET_OPTS           := -q
 
 # Defines default values to undefined (to make simple retrieval with grep in logs...)
 BOARD_NAME          ?= undefined-board-name

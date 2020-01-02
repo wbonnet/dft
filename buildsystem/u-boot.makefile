@@ -42,11 +42,12 @@ MAKE_FILTERS  := files defconfig Makefile README.md patches .
 # Mandatory defines that have to be defined at least in the main Makefile
 #
 
-ifndef SW_NAME
-$(error SW_NAME is not set)
+$(warning MUF $(SW_NAME))
+ifeq ($(SW_NAME),wget)
+$(error MUFF is set)
 endif
 
-ifndef DOWNLOAD_TOOL
+ifeq ($(DOWNLOAD_TOOL),)
 $(error DOWNLOAD_TOOL is not set)
 endif
 
@@ -71,7 +72,7 @@ sanity-check:
 			echo "error 1911115-02" ; \
 			exit 1 ; \
 		fi ; \
-		if [ ! "$(shell readlink ./Makefile)" = "$(DFT_BUILDSYSTEM)/u-boot.makefile" ] ; then \
+		if [ ! "$(shell readlink Makefile)" = "$(DFT_BUILDSYSTEM)/u-boot.makefile" ] ; then \
 			echo "target of symlink Makefile should be $(DFT_BUILDSYSTEM)/u-boot.makefile in directory ${CURDIR}" ; \
 			echo "You can fix with the following commands : " ; \
 			echo "git rm -f ${CURDIR}/Makefile" ; \

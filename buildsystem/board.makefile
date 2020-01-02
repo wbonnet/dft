@@ -28,9 +28,9 @@ SW_NAME     = u-boot
 # since git add will loose variable name and generate an absolute path, which
 # is not comptible with user need ans or workspace relocation nor packagng needs.
 # better solutions wille be really welcomeds contributions.
+DFT_BUILDSYSTEM := buildsystem
 include board.mk
-include buildsystem/dft.mk
-DFT_BUILDSYSTEM := ../../../buildsystem
+include $(DFT_BUILDSYSTEM)/dft.mk
 
 # Do not recurse the following subdirs
 MAKE_FILTERS = files Makefile README.md
@@ -57,6 +57,7 @@ sanity-check:
 		echo "error 200101-02" ; \
 		exit 1 ; \
 	fi ;
+	@echo "plopinette" ;
 	@if [ ! -d "${CURDIR}/kernel/defconfig" ] ; then \
 		echo "defconfig directory is missing in ${CURDIR}/kernel. It is used to store kernel configuration files. It should at least contain a hidden empty file .gitkeep until first kernel version is added for $(BOARD_NAME)" ; \
 		echo "You can fix with the following commands : " ; \
@@ -167,7 +168,7 @@ kernel-package:
 #	cd kernel && $(MAKE) package && cd .. ;
 
 # Catch all target. Call the same targets in each subfolder
-%:
+sanity-check:
 	@echo "target $@ is called in board.makefile"
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		echo "examen de $$i" ; \

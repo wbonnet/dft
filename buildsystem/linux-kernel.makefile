@@ -21,7 +21,7 @@
 
 # Defines variables specific to Linux kernel
 SW_NAME	   := linux
-SW_VERSION  := no-$(SW_NAME)-version
+SW_VERSION := no-$(SW_NAME)-version
 
 # Build system sould be available under board folder as a symlink. Keep it
 # locally available under board folder computing a relative path is a nightmare
@@ -29,8 +29,9 @@ SW_VERSION  := no-$(SW_NAME)-version
 # since git add will loose variable name and generate an absolute path, which
 # is not comptible with user need ans or workspace relocation nor packagng needs.
 # better solutions wille be really welcomeds contributions.
-DFT_BUILDSYSTEM = ../../../buildsystem
-include board.mk
+
+DFT_BUILDSYSTEM := buildsystem
+include ../board.mk
 include $(DFT_BUILDSYSTEM)/inc/linux-kernel.mk
 include $(DFT_BUILDSYSTEM)/dft.mk
 
@@ -41,12 +42,11 @@ MAKE_FILTERS  = files defconfig Makefile README.md .
 #
 # Mandatory defines that have to be defined at least in the main Makefile
 #
-
-ifndef SW_NAME
+ifeq ($(SW_NAME),)
 $(error SW_NAME is not set)
 endif
 
-ifndef DOWNLOAD_TOOL
+ifeq ($(DOWNLOAD_TOOL),)
 $(error DOWNLOAD_TOOL is not set)
 endif
 

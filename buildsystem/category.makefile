@@ -24,9 +24,9 @@
 # since git add will loose variable name and generate an absolute path, which
 # is not comptible with user need ans or workspace relocation nor packagng needs.
 # better solutions wille be really welcomeds contributions.
-buildsystem := buildsystem
+DFT_BUILDSYSTEM := ../../../buildsystem
 # TODO why ?include $(buildsystem)/inc/linux-kernel.mk
-include $(buildsystem)/dft.mk
+include $(DFT_BUILDSYSTEM)/dft.mk
 
 # Do not recurse the following subdirs
 MAKE_FILTERS  = Makefile workdir README.md .
@@ -37,20 +37,31 @@ SW_NAME       = SW_NAME_undefined_at_category_level
 # a mandatory kernel folder, optional folders like u-boot for boot loader and files 
 # to store needed additionnal files
 sanity-check:
-	@for board in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
+	for board in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
+		echo "Now checking board $$board" ; \
+		if [ ! -e "$$board/buildsystem" ] ; then \
+			echo "buildsystem symlink ${CURDIR}/$$board is Missing. It should be a symlink to  $(DFT_BUILDSYSTEM)/buildsystem" ; \
+			echo "You can fix with the following shell commands :" ; \
+			echo "ln -s $(DFT_BUILDSYSTEM) ${CURDIR}/$$board" ; \
+			echo "git add ${CURDIR}/$$board/buildsystem" ; \
+			echo "exit 200102-0201" ; \
+			exit 1 ; \
+		fi ; \
 		if [ ! -e "$$board/Makefile" ] ; then \
-			echo "Makefile in ${CURDIR}/$$board is Missing. It should be a symlink to  $(buildsystem)/board.makefile" ; \
+			echo "Makefile in ${CURDIR}/$$board is Missing. It should be a symlink to  $(DFT_BUILDSYSTEM)/board.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
 			echo "git rm -f $$board/Makefile" ; \
-			echo "ln -s $(buildsystem)/board.makefile ${CURDIR}/$$board/Makefile" ; \
+			echo "ln -s $(DFT_BUILDSYSTEM)/board.makefile ${CURDIR}/$$board/Makefile" ; \
 			echo "git add $$board/Makefile" ; \
 			echo "exit 101101" ; \
 			exit 1 ; \
 		fi ; \
-		s=`readlink $$board/Makefile` ; \
-		if [ !  "$$s" = "../$(buildsystem)/board.makefile" ] ; then \
-			echo "Makefile symlink in $$board must link to $(buildsystem)/board.makefile" ; \
-			echo "It targets to $$s" ; \
+		s=`readlink ${CURDIR}/$$board/Makefile` ; \
+		echo " 0 : $$s" ; \
+		echo " 1 : $(DFT_BUILDSYSTEM)/board.makefile" ; \
+		if [ ! "$$s" = "$(DFT_BUILDSYSTEM)/board.makefile" ] ; then \
+			echo "Makefile symlink in $$board must link to $(DFT_BUILDSYSTEM)/board.makefile" ; \
+			echo "It targets to $(shell readlink ${CURDIR}/$$board/Makefile)" ; \
 			echo "exit 825" ; \
 			exit 1 ; \
 		fi ; \
@@ -58,7 +69,7 @@ sanity-check:
 			echo "Board description file board.mk is missing in directory ${CURDIR}//$$board" ; \
 			echo "You can fix with the following shell commands :" ; \
 			echo "git rm -f $$board/Makefile" ; \
-			echo "cp  $(buildsystem)/board.mk.template ${CURDIR}//$$board/board.mk" ; \
+			echo "cp  $(DFT_BUILDSYSTEM)/board.mk.template ${CURDIR}//$$board/board.mk" ; \
 			echo "git add ${CURDIR}//$$board/board.mk" ; \
 			echo "Warning !!! : Don't forget to edit this file and replace 'unkown' values with board specific values" ; \
 			echo "exit 191117-01" ; \
@@ -66,8 +77,12 @@ sanity-check:
 		fi ; \
 	done ; \
 	for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
-		if [ -f $$folder/Makefile ] ; then \
-			cd $$folder && $(MAKE) sanity-check && cd .. ; \
+		echo "DEBUG : Je vais tester le repertoire $$folder" ; \
+		if [ -e $$folder/Makefile ] ; then \
+			$(MAKE) -C $$folder sanity-check ; \
+		else  \
+			echo "Error there is no Makefile in ${CURDIR}/$$folder}" ; \
+			exit 1 ; \
 		fi ; \
 	done ;
 

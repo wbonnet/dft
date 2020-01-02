@@ -41,12 +41,14 @@ include $(DFT_BUILDSYSTEM)/dft.mk
 #
 # Mandatory defines that have to be defined at least in the main Makefile
 #
+$(warning SW_NAME:$(SW_NAME))
 
-ifndef SW_NAME
+ifeq ($(SW_NAME),)
 $(error SW_NAME is not set)
 endif
 
-ifndef DOWNLOAD_TOOL
+$(warning DOWNLOAD_TOOL:$(DOWNLOAD_TOOL))
+ifeq ($(DOWNLOAD_TOOL),)
 $(error DOWNLOAD_TOOL is not set)
 endif
 
