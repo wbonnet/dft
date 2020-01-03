@@ -142,10 +142,47 @@ sanity-check:
 		fi ; \
 	done ;
 
+# Override standard targets
+install:
+	echo "DEBUG install in linux-kernel.makefile" ;
+	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		$(MAKE) -C $$v  install; \
+	done
+
+build:
+	echo "DEBUG build in linux-kernel.makefile" ;
+	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		$(MAKE) -C $$v  build; \
+	done
+
+package:
+	echo "DEBUG package in linux-kernel.makefile" ;
+	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		$(MAKE) -C $$v  package; \
+	done
+
+extract:
+	echo "DEBUG extract in linux-kernel.makefile" ;
+	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		$(MAKE) -C $$v  extract ; \
+	done
+
+fetch:
+	echo "DEBUG target fetch in linux-kernel.makefile" ;
+	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		$(MAKE) -C $$v  fetch ; \
+	done
+
+configure:
+	echo "DEBUG target configure in linux-kernel.makefile" ;
+	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		$(MAKE) -C $$v  configure ; \
+	done
+
 # Catch all target. Call the same targets in each subfolder
 %:
-	@for folder in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
-		if [ -f $$folder/Makefile ] ; then \
-			$(MAKE) -C $$folder $* ; \
-		fi ; \
+	echo "DEBUG target catch_all_$* in linux-kernel.makefile" ;
+	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		$(MAKE) -C $$v  $* ; \
 	done
+
