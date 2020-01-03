@@ -148,9 +148,46 @@ sanity-check:
 		done ; \
 		fi ;
 
+# Override standard targets
+install:
+	echo "DEBUG install in u-boot.makefile" ;
+	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		$(MAKE) -C $$v  install; \
+	done
+
+build:
+	echo "DEBUG build in u-boot.makefile" ;
+	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		$(MAKE) -C $$v  build; \
+	done
+
+package:
+	echo "DEBUG package in u-boot.makefile" ;
+	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		$(MAKE) -C $$v  package; \
+	done
+
+extract:
+	echo "DEBUG extract in u-boot.makefile" ;
+	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		$(MAKE) -C $$v  extract ; \
+	done
+
+fetch:
+	echo "DEBUG target fetch in u-boot.makefile" ;
+	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		$(MAKE) -C $$v  fetch ; \
+	done
+
+configure:
+	echo "DEBUG target configure in u-boot.makefile" ;
+	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		$(MAKE) -C $$v  configure ; \
+	done
+
 # Catch all target. Call the same targets in each subfolder
 %:
-	@echo "DEBUG target catch_all_$* in u-boot.makefile" ;
-	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+	echo "DEBUG target catch_all_$* in u-boot.makefile" ;
+	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
 		$(MAKE) -C $$v  $* ; \
 	done
