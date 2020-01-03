@@ -24,7 +24,7 @@
 # since git add will loose variable name and generate an absolute path, which
 # is not comptible with user need ans or workspace relocation nor packagng needs.
 # better solutions wille be really welcomeds contributions.
-DFT_BUILDSYSTEM := ../../../buildsystem
+DFT_BUILDSYSTEM := buildsystem
 # TODO why ?include $(buildsystem)/inc/linux-kernel.mk
 include $(DFT_BUILDSYSTEM)/dft.mk
 
@@ -41,54 +41,50 @@ sanity-check:
 	for board in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
 		echo "Now checking board $$board" ; \
 		if [ ! -e "$$board/buildsystem" ] ; then \
-			echo "buildsystem symlink ${CURDIR}/$$board is Missing. It should be a symlink to  $(DFT_BUILDSYSTEM)" ; \
+			echo "buildsystem symlink ${CURDIR}/$$board/buildsystem is Missing. It should be a symlink to  $(DFT_BUILDSYSTEM)" ; \
 			echo "You can fix with the following shell commands :" ; \
-			ln -s $(DFT_BUILDSYSTEM) ${CURDIR}/$$board ; \
+			ln -s ../$(DFT_BUILDSYSTEM) ${CURDIR}/$$board ; \
 			git add ${CURDIR}/$$board/buildsystem ; \
-			echo "exit 200102-0201" ; \
-			exit 1 ; \
+			$(call dft_error ,200102-0201) ; \
 		fi ; \
 		if [ ! -e "$$board/kernel/buildsystem" ] ; then \
 			echo "buildsystem symlink ${CURDIR}/$$board/kernel is Missing. It should be a symlink to  ../$(DFT_BUILDSYSTEM)" ; \
 			echo "You can fix with the following shell commands :" ; \
 			ln -s ../$(DFT_BUILDSYSTEM) ${CURDIR}/$$board/kernel ; \
 			git add ${CURDIR}/$$board/kernel/buildsystem ; \
-			echo "exit 200102-0202" ; \
-			exit 1 ; \
+			$(call dft_error ,200102-0202) ; \
 		fi ; \
 		if [ ! -e "$$board/u-boot/buildsystem" ] ; then \
 			echo "buildsystem symlink ${CURDIR}/$$board/u-boot is Missing. It should be a symlink to  ../$(DFT_BUILDSYSTEM)" ; \
 			echo "You can fix with the following shell commands :" ; \
 			ln -s ../$(DFT_BUILDSYSTEM) ${CURDIR}/$$board/u-boot ; \
 			git add ${CURDIR}/$$board/u-boot/buildsystem ; \
-			echo "exit 200102-0203" ; \
-			exit 1 ; \
+			$(call dft_error , 200102-0203) ; \
 		fi ; \
 		if [ ! -e "$$board/Makefile" ] ; then \
 			echo "Makefile in ${CURDIR}/$$board is Missing. It should be a symlink to  $(DFT_BUILDSYSTEM)/board.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
-			echo "git rm -f $$board/Makefile" ; \
-			echo "ln -s $(DFT_BUILDSYSTEM)/board.makefile ${CURDIR}/$$board/Makefile" ; \
-			echo "git add $$board/Makefile" ; \
-			echo "exit 101101" ; \
-			exit 1 ; \
+			git rm -f ${CURDIR}/$$board/Makefile ; \
+			ln -s $(DFT_BUILDSYSTEM)/board.makefile ${CURDIR}/$$board/Makefile ; \
+			git add ${CURDIR}/$$board/Makefile ; \
+			$(call dft_error ,101101) ; \
 		fi ; \
 		s=`readlink ${CURDIR}/$$board/Makefile` ; \
 		if [ ! "$$s" = "$(DFT_BUILDSYSTEM)/board.makefile" ] ; then \
-			echo "Makefile symlink in $$board must link to $(DFT_BUILDSYSTEM)/board.makefile" ; \
-			echo "It targets to $(shell readlink ${CURDIR}/$$board/Makefile)" ; \
-			echo "exit 825" ; \
-			exit 1 ; \
+			echo "Makefile symlink in ${CURDIR}/$$board must link to $(DFT_BUILDSYSTEM)/board.makefile" ; \
+			git rm -f ${CURDIR}/$$board/Makefile ; \
+			ln -s $(DFT_BUILDSYSTEM)/board.makefile ${CURDIR}/$$board/Makefile ; \
+			git add ${CURDIR}/$$board/Makefile ; \
+			$(call dft_error ,exit 2001-0208) ; \
 		fi ; \
 		if [ ! -f $$board/board.mk ] ; then \
 			echo "Board description file board.mk is missing in directory ${CURDIR}//$$board" ; \
 			echo "You can fix with the following shell commands :" ; \
 			echo "git rm -f $$board/Makefile" ; \
 			echo "cp  $(DFT_BUILDSYSTEM)/board.mk.template ${CURDIR}//$$board/board.mk" ; \
-			echo "git add ${CURDIR}//$$board/board.mk" ; \
-			echo "Warning !!! : Don't forget to edit this file and replace 'unkown' values with board specific values" ; \
-			echo "exit 191117-01" ; \
-			exit 1 ; \
+			echo "git add ${CURDIR}/$$board/board.mk" ; \
+			echo "Warning !!! : Dont forget to edit this file and replace 'unkown' values with board specific values" ; \
+			$(call dft_error ,191117-01) ; \
 		fi ; \
 	done ; \
 	for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
@@ -97,7 +93,7 @@ sanity-check:
 			$(MAKE) -C $$folder sanity-check ; \
 		else  \
 			echo "Error there is no Makefile in ${CURDIR}/$$folder}" ; \
-			exit 1 ; \
+			$(call dft_error ,2001-0205) ; \
 		fi ; \
 	done ;
 
