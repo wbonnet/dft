@@ -46,7 +46,6 @@ SHELL := bash
 ifdef DFT_BUILDSYSTEM_ENTRY_POINT
 $(info dft.mk has already been included)
 else
-$(info now including dft.mk)
 DFT_BUILDSYSTEM_ENTRY_POINT = 1
 
 # ------------------------------------------------------------------------------

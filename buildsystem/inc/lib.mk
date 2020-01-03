@@ -32,7 +32,6 @@
 #
 # No protection against multiple include and should not have since its just a lib
 #
-$(info now including inc/lib.mk)
 
 # ------------------------------------------------------------------------------
 #
