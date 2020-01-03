@@ -108,7 +108,8 @@ do-package:
 		$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ; \
 		echo "DEBUG : Juste apres le debuild"; \
 	fi ; \
-	echo "DEBUG : fin de do-package juste avant le target-done"; 
+	echo "DEBUG : fin de do-package juste avant le target-done. Je suis dans :"; \
+	pwd;
 	$(TARGET_DONE)
 
 do-repackage:
