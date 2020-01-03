@@ -37,6 +37,7 @@ SW_NAME       = SW_NAME_undefined_at_category_level
 # a mandatory kernel folder, optional folders like u-boot for boot loader and files 
 # to store needed additionnal files
 sanity-check:
+	@echo "DEBUG : into target sanity-check from category.makefile" ;
 	for board in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
 		echo "Now checking board $$board" ; \
 		if [ ! -e "$$board/buildsystem" ] ; then \
@@ -107,27 +108,18 @@ bsp-package: u-boot-package kernel-package
 
 # Build only u-boot package target
 u-boot-package:
-	echo "DEBUG : u-boot-package in catagory.makefile" ; 
+	echo "DEBUG : u-boot-package in category.makefile" ; 
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
-			cd $$i && $(MAKE) u-boot-package && cd .. ; \
+			$(MAKE) -C $$i u-boot-package ; \
 		fi ; \
         done
 
 # Build only linux kernel an package target
 kernel-package:
-	echo "DEBUG : kernel-package in catagory.makefile" ; 
+	echo "DEBUG : kernel-package in category.makefile" ; 
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
-			cd $$i && $(MAKE) kernel-package && cd .. ; \
-		fi ; \
-        done
-
-# Catch all target. Call the same targets in each subfolder
-%:
-	echo "DEBUG : catch-all $@ in catagory.makefile" ; 
-	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
-		if [ -f $$i/Makefile ] ; then \
-			cd $$i && $(MAKE) $@ && cd .. ; \
+			$(MAKE) -C $$i kernel-package ; \
 		fi ; \
         done

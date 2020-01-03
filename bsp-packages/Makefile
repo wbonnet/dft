@@ -19,11 +19,11 @@
 #
 
 
-buildsystem := ../buildsystem
-include $(buildsystem)/dft.mk
+DFT_BUILDSYSTEM := ../buildsystem
+include $(DFT_BUILDSYSTEM)/dft.mk
 
 # Do not recurse the following subdirs
-MAKE_FILTERS  = Makefile README.md . kernel-defconfig-fragments
+MAKE_FILTERS  = Makefile README.md .
 
 # definition of the liste of boards category 
 CATEGORIES    = laptop desktop set-top-box single-board-computer
@@ -34,11 +34,27 @@ CATEGORIES    = laptop desktop set-top-box single-board-computer
 #
 .PHONY: help
 
-#check que tes subdirs de category ont la et ont un lien makefile valide ensuite ca recurse
 sanity-check:
-	@for category in $(CATEGORIES) ; do \
+	@echo "DEBUG sanity-check Makefile directement sous bsp-packages" ;
+	for category in $(CATEGORIES) ; do \
 		if [ ! -d ${CURDIR}/$$category ] ; then \
-			echo "Warning : $$c category folder is missing, recursive targets may fail or produce incomplete set of binaries." ; \
+			echo "Warning : $$category folder is missing, recursive targets may fail or produce incomplete set of binaries." ; \
+		fi ; \
+		if [ ! -e "${CURDIR}/$$category/buildsystem" ] ; then \
+			echo "buildsystem symlink in ${CURDIR}/$$category is missing or target does not exist. It should be a symlink to ../buildsystem" ; \
+			echo "You can fix with the following shell commands :" ; \
+			echo "ln -s ../buildsystem ${CURDIR}/$$category/buildsystem" ; \
+			echo "git add ${CURDIR}/$$category/buildsystem" ; \
+			$(call dft_error ,200103-01) ; \
+		fi ; \
+		if [ ! $(shell readlink ${CURDIR}/$$category/buildsystem) = "../$(DFT_BUILDSYSTEM)" ] ; then \
+			echo "buildsystem symlink in ${CURDIR}/$$category must link to ../$(DFT_BUILDSYSTEM)" ; \
+			echo "It targets to $(shell readlink ${CURDIR}/$$category/buildsystem)" ; \
+			echo "You can fix with the following shell commands :" ; \
+			echo "git rm -f ${CURDIR}/$$category/buildsystem" ; \
+			echo "ln -s ../buildsystem ${CURDIR}/$$category/buildsystem" ; \
+			echo "git add ${CURDIR}/$$category/buildsystem" ; \
+			$(call dft_error ,200103-02) ; \
 		fi ; \
 		if [ ! -e "${CURDIR}/$$category/Makefile" ] ; then \
 			echo "Makefile symlink in ${CURDIR}/$$category is missing or target does not exist. It should be a symlink to ../buildsystem/category.makefile" ; \
@@ -50,14 +66,15 @@ sanity-check:
 		if [ ! $(shell readlink ${CURDIR}/$$category/Makefile) = "../$(buildsystem)/category.makefile" ] ; then \
 			echo "Makefile symlink in ${CURDIR}/$$category must link to ../$(buildsystem)/category.makefile" ; \
 			echo "It targets to $(shell readlink ${CURDIR}/$$category/Makefile)" ; \
-			echo "exit 191103-01" ; \
 			$(call dft_error ,191103-01) ; \
-			exit 1 ; \
 		fi ; \
-		cd ${CURDIR}/$$category && $(MAKE) sanity-check && cd .. ; \
+		if [ -f ${CURDIR}/$$category/Makefile ] ; then \
+			$(MAKE) -C $$category sanity-check ; \
+		else  \
+			echo "DEBUG: Makefile is missing in ${CURDIR}/$$category" ; \
+		fi ; \
 	done  
 
-#		cd ${CURDIR}/$$i && $(MAKE) sanity-check ; \
 # Build only u-boot  package target
 u-boot-package:
 	@for i in $(CATEGORIES) ; do \
@@ -73,11 +90,4 @@ linux-kernel-package:
 		if [ -f ${CURDIR}/$$i/Makefile ] ; then \
                 	$(MAKE) -C $$i kernel-package ; \
 		fi ; \
-	done
-
-
-# Catch all target. Call the same targets in each subfolder
-%:
-	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -maxdepth 1 -type d )) ; do \
-		$(MAKE) -C $$i $* ; \
 	done

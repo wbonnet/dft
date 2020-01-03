@@ -158,13 +158,11 @@ sanity-check:
 u-boot-package:
 	@echo "u-boot-package from board.makefile" ;
 	$(MAKE) -C u-boot package ;
-#	cd u-boot && $(MAKE) package && cd .. ;
 
 # Build only linux kernel an package target
 kernel-package:
 	@echo "kernel-package from board.makefile" ;
 	$(MAKE) -C kernel package ;
-#	cd kernel && $(MAKE) package && cd .. ;
 
 # Catch all target. Call the same targets in each subfolder
 # cd $$i && $(MAKE) $* && cd .. ; 
