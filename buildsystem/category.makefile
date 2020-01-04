@@ -92,7 +92,8 @@ sanity-check:
 		if [ -e $$folder/Makefile ] ; then \
 			$(MAKE) -C $$folder sanity-check ; \
 		else  \
-			echo "Error there is no Makefile in ${CURDIR}/$$folder}" ; \
+			echo "Error there is no Makefile in ${CURDIR}/$$folder" ; \
+			pwd ; \
 			$(call dft_error ,2001-0205) ; \
 		fi ; \
 	done ;
