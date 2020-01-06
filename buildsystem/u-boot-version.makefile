@@ -32,19 +32,16 @@ SW_VERSION       := $(shell echo $(PATH_WORDS) |  cut -d ' ' -f$(SW_VERSIONFIELD
 # is not comptible with user need ans or workspace relocation nor packagng needs.
 # better solutions wille be really welcomeds contributions.
 # Include DFT build system shared Makfile includes
-#DFT_BUILDSYSTEM := ../../../../buildsystem
 DFT_BUILDSYSTEM := buildsystem
 include ../board.mk
 include $(DFT_BUILDSYSTEM)/inc/u-boot.mk
-#include $(DFT_BUILDSYSTEM)/inc/u-boot.mk
-#include $(DFT_BUILDSYSTEM)/dft.mk
 include $(DFT_BUILDSYSTEM)/dft.mk
 
 # ------------------------------------------------------------------------------
 #
 # Mandatory defines that have to be defined at least in the main Makefile
 #
-$(warning SW_NAME:$(SW_NAME))
+$(warning BOARD_ARCHzz$(BOARD_ARCH)zz)
 
 ifeq ($(SW_NAME),)
 $(error SW_NAME is not set)

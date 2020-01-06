@@ -50,6 +50,7 @@ SW_VERSION  ?= no-version-at-target-package
 # cp $(DFT_BUILDSYSTEM)/templates/u-boot-version.makefile $(PACKAGE_DIR)/Makefile ; \
 
 do-package:
+	echo "DEBUG target-package.mk HOST_ARCH __$(HOST_ARCH)__ BOARD_ARCH __$(BOARD_ARCH)__" ; \
 	if [ "$(SW_VERSION)" = "" ] ; then \
 		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping do-package" ; \
 	else \

@@ -35,7 +35,7 @@
 ifdef DFT_TARGET_CONFIGURE
 $(info target-configure.mk has already been included)
 else
-#$(info now including target-configure.mk)
+$(info now including target-configure.mk)
 DFT_TARGET_CONFIGURE = 1
 
 # Some temporary default values used to debug where where variables are initialized
@@ -73,6 +73,7 @@ reconfigure: patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconfi
 
 configure: extract pre-configure do-configure post-configure 
 do-configure:
+	echo "DEBUG target-configure.mk HOST_ARCH __$(HOST_ARCH)__ BOARD_ARCH __$(BOARD_ARCH)__" ; \
 	if [ "$(SW_VERSION)" = "" ] ; then \
 		echo "DEBUG : Not at a version level skiping configure" ; \
 		echo "DEBUG : je ne sors plus ici car avant cd allait planter pas de Build_DIR existant je pense qie je voulais faire cd $(BUILD_DIR)" ; \
@@ -92,7 +93,7 @@ do-configure:
 				cd $(BUILD_DIR) ; \
 				if [ "$(SW_NAME)" = "u-boot" ] ; then \
 					echo "    running u-boot make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) in $(BUILD_DIR)" ; \
-					make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) ; \
+					make -C $(BUILD_DIR) $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) ; \
 				else \
 					if [ "$(SW_NAME)" = "linux" ] ; then \
 						cp "$(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config" .config ; \

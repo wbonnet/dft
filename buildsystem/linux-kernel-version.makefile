@@ -36,11 +36,19 @@ include ../board.mk
 include $(buildsystem)/inc/linux-kernel.mk
 include $(buildsystem)/dft.mk
 
+# Strip the variables defined in board.mk to remove trailing whitespaces or
+# some calls will fail (when passing defconfig name etc.)
+BOARD_NAME      := $(subst ,,$(BOARD_NAME))
+BOARD_ARCH      := $(subst ,,$(BOARD_ARCH))
+UBOOT_SUPPORT   := $(subst ,,$(UBOOT_SUPPORT))
+UBOOT_DEFCONFIG := $(subst ,,$(UBOOT_DEFCONFIG))
+USE_CONFIG_FILE := $(subst ,,$(USE_CONFIG_FILE))
+
 # Retrieve th builder hot architecure if not defined yet
 HOST_ARCH      ?= $(shell uname -m)
 
 # Do not recurse the following subdirs
-MAKE_FILTERS  = Makefile README.md .
+MAKE_FILTERS  := Makefile README.md .
 
 # ------------------------------------------------------------------------------
 #

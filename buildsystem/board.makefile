@@ -20,7 +20,7 @@
 #
 
 # Defines variables specific to u-boot
-SW_NAME     = u-boot
+SW_NAME     := u-boot
 
 # Build system sould be available under board folder as a symlink. Keep it
 # locally available under board folder computing a relative path is a nightmare
@@ -32,9 +32,17 @@ DFT_BUILDSYSTEM := buildsystem
 include board.mk
 include $(DFT_BUILDSYSTEM)/dft.mk
 
+# Strip the variables defined in board.mk to remove trailing whitespaces or 
+# some calls will fail (when passing defconfig name etc.)
+BOARD_NAME      := $(strip $(BOARD_NAME))
+BOARD_ARCH      := $(strip $(BOARD_ARCH)) 
+UBOOT_SUPPORT   := $(strip $(UBOOT_SUPPORT))
+UBOOT_DEFCONFIG := $(strip $(UBOOT_DEFCONFIG))
+USE_CONFIG_FILE := $(strip $(USE_CONFIG_FILE))
+
 # Do not recurse the following subdirs
-MAKE_FILTERS = files Makefile README.md
-SW_NAME      = SW_NAME_undefined_at_board_level
+MAKE_FILTERS := files Makefile README.md
+SW_NAME      := SW_NAME_undefined_at_board_level
 
 # ------------------------------------------------------------------------------
 #
@@ -124,6 +132,15 @@ sanity-check:
 		echo "ln -s ../board.mk ${CURDIR}/kernel/board.mk" ; \
 		echo "git add ${CURDIR}/kernel/board.mk" ; \
 		echo "error 1911118-02" ; \
+		exit 1 ; \
+	fi ;
+	@if [ ! "" = "" ] ; then \
+		echo "target of symlink board.mk should be ../board.mk in directory ${CURDIR}/kernel" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "git rm -f ${CURDIR}/kernel/board.mk" ; \
+		echo "ln -s ../board.mk ${CURDIR}/kernel/board.mk" ; \
+		echo "git add ${CURDIR}/kernel/board.mk" ; \
+		echo "error 20200106-01" ; \
 		exit 1 ; \
 	fi ;
 	@if [ ! -L "u-boot/board.mk" ] ; then \

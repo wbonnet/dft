@@ -25,12 +25,11 @@
 # is not comptible with user need ans or workspace relocation nor packagng needs.
 # better solutions wille be really welcomeds contributions.
 DFT_BUILDSYSTEM := buildsystem
-# TODO why ?include $(buildsystem)/inc/linux-kernel.mk
 include $(DFT_BUILDSYSTEM)/dft.mk
 
 # Do not recurse the following subdirs
-MAKE_FILTERS  = Makefile workdir README.md .
-SW_NAME       = SW_NAME_undefined_at_category_level
+MAKE_FILTERS  := Makefile workdir README.md .
+SW_NAME       := SW_NAME_undefined_at_category_level
 
 # Board category directory contains several folders, on per board in this category
 # Each board folder must contain a board.mk file with board specific information, 

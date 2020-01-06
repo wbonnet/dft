@@ -35,8 +35,16 @@ include ../board.mk
 include $(DFT_BUILDSYSTEM)/inc/linux-kernel.mk
 include $(DFT_BUILDSYSTEM)/dft.mk
 
+# Strip the variables defined in board.mk to remove trailing whitespaces or
+# some calls will fail (when passing defconfig name etc.)
+BOARD_NAME      := $(subst ,,$(BOARD_NAME))
+BOARD_ARCH      := $(subst ,,$(BOARD_ARCH))
+UBOOT_SUPPORT   := $(subst ,,$(UBOOT_SUPPORT))
+UBOOT_DEFCONFIG := $(subst ,,$(UBOOT_DEFCONFIG))
+USE_CONFIG_FILE := $(subst ,,$(USE_CONFIG_FILE))
+
 # Do not recurse the following subdirs
-MAKE_FILTERS  = files defconfig Makefile README.md .
+MAKE_FILTERS  := files defconfig Makefile README.md .
 
 # ------------------------------------------------------------------------------
 #

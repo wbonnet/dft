@@ -66,6 +66,7 @@ reinstall: build pre-reinstall do-reinstall install post-reinstall
 #
 
 do-install:
+	echo "target-install.mk DEBUG HOST_ARCH __$(HOST_ARCH)__ BOARD_ARCH __$(BOARD_ARCH)__" ; 
 	@if [ "$(SW_VERSION)" = "" ] ; then \
 		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skiping install" ; \
 	fi ; 

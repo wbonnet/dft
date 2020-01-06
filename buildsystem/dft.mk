@@ -110,7 +110,6 @@ include $(DFT_BUILDSYSTEM)/inc/target-fetch.mk
 include $(DFT_BUILDSYSTEM)/inc/target-install.mk
 include $(DFT_BUILDSYSTEM)/inc/target-package.mk
 include $(DFT_BUILDSYSTEM)/inc/target-upload.mk
-#$(warning warning comes from from dft.mk to disable it : i am in $(shell pwd))
 
 # ------------------------------------------------------------------------------
 #

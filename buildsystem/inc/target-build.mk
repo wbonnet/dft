@@ -67,9 +67,9 @@ build: configure pre-build $(BUILD_TARGETS) post-build
 			if [ ! -f $(COOKIE_DIR)/build-v$(SW_VERSION) ] ; then \
 				echo "DEBUG : le cookie $(COOKIE_DIR)/build existe pas. Make was running in the path below :" ; \
 				pwd ; \
-				echo "DEBUG : et maintenant je tente un cd $(BUILD_DIR) avant de relancer un make " ; \
-				cd $(BUILD_DIR) ; \
-				$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
+				echo "DEBUG : maintenant je lance le make suivant" ; \
+				echo "DEBUG : $(BUILD_ENV) $(MAKE) -C $(BUILD_DIR) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS)" ; \
+				$(BUILD_ENV) $(MAKE) -C $(BUILD_DIR) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
 			fi ; \
 		fi ; \
 	fi ; 
