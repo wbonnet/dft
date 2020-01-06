@@ -21,7 +21,7 @@
 
 # Defines board name
 BOARD_NAME = odroid-c0
-BOARD_ARCH = armv7l 
+BOARD_ARCH = armv7l
 
 # Defines if the board use u-boot (set UBOOT_SUPPORT to 1) (0 it does not)
 # if UBOOT_SUPPORT is disabled u-boot checks and generation are skipped
@@ -29,7 +29,7 @@ UBOOT_SUPPORT = 1
 
 # Set config file to empty and define the name of the board to use a defconfig
 USE_CONFIG_FILE        =
-UBOOT_DEFCONFIG        = odroid-c0_defconfig
+UBOOT_DEFCONFIG        = orangepi_zero_defconfig
 
 # Defines the list of files to copy (#path is relative to build dir)
 #UBOOT_BINARY_FILE      = u-boot-sunxi-with-spl.bin
