@@ -41,7 +41,6 @@ include $(DFT_BUILDSYSTEM)/dft.mk
 #
 # Mandatory defines that have to be defined at least in the main Makefile
 #
-$(warning BOARD_ARCHzz$(BOARD_ARCH)zz)
 
 ifeq ($(SW_NAME),)
 $(error SW_NAME is not set)
