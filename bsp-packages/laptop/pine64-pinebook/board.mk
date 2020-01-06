@@ -29,12 +29,11 @@ UBOOT_SUPPORT = 1
 
 # Set config file to empty and define the name of the board to use a defconfig
 USE_CONFIG_FILE        =
-#USE_DEFCONFIG         = orangepi_zerio_defconfig
+DEFAULT_DTB            = sun50i-a64-pine64.dtb 
 
-DEFAULT_DTB = sun50i-a64-pinebook.dtb 
 # Set config file to empty and define the name of the board to use a defconfig
 USE_CONFIG_FILE        =
-UBOOT_DEFCONFIG        = orangepi_zero_defconfig
+UBOOT_DEFCONFIG        = pine64_plus_defconfig
 
 # Defines the list of files to copy (path is relative to build dir)
 UBOOT_BINARY_FILE      = u-boot-sunxi-with-spl.bin
