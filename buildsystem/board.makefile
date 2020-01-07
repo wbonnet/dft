@@ -191,3 +191,9 @@ sanity-check:
 			$(MAKE) -C$$i $* ; \
 		fi ; \
         done
+
+# Create a new u-boot version entry
+new-u-boot-version:
+	echo "DEBUG : from board.makefile new-u-boot-version with argument new-version $(new-version)" ;
+	exit 0;
+

@@ -191,9 +191,9 @@ help:
 	@echo "   and folders will be created under buildsystem during execution. New items will not be added automatically"
 	@echo "   to git. git add has to be done manually, depending on you workspace, as the pull request if needed by the git server."
 	@echo "                           "
-	@echo "   new-u-boot-version      VERSION=YYYY.MM (require write acess)"
-	@echo "                           Create a new u-boot version entry. ex: make new-u-boot-version VERSION=2019.07"
-	@echo "                           This target will create a subdirectory named after the content of the VERSION variable."
+	@echo "   new-u-boot-version      new-version=YYYY.MM (require write acess)"
+	@echo "                           Create a new u-boot version entry. ex: make new-u-boot-version new-version=2019.07"
+	@echo "                           This target will create a subdirectory named after the content of the new-version variable."
 	@echo "                           It will contain the Makefile and all the files needed to fetch and build the given"
 	@echo "                           version. It also instanciate Debian package template."
 

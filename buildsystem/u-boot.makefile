@@ -156,6 +156,52 @@ sanity-check:
 		done ; \
 		fi ;
 
+
+# Create a new u-boot version entry
+new-u-boot-version:
+	@if [ "$(new-version)" = "" ] ; then \
+		echo "DEBUG : from u-boot.makefile Argument new-version is missing or has no value. Doing nothing..." ; \
+		exit 0; \
+	fi ;
+	@echo "DEBUG : je suis dans et il y a ca " ; 
+	@pwd;
+	@ls -l;
+	@exit 0;
+	if [ -d "./$(new-version)" ] ; then \
+		echo ". Version $(new-version) already exist. Doing nothing..." ; \
+	else  \
+		echo ". Creating the directory for u-boot version $(new-version)" ; \
+		mkdir -p $(new-version) ; \
+		cp -f $(DFT_BUILDSYSTEM)/templates/u-boot-version.makefile $(new-version)/Makefile ; \
+		ln -s ../$(DFT_BUILDSYSTEM) $(new-version)/buildsystem ; \
+		ls -l  $(new-version)/Makefile ; \
+		mkdir -p $(new-version)/files ; \
+		ln -s ../../files/install.u-boot-$(BOARD_NAME).md $(new-version)/files/ ; \
+		mkdir -p $(new-version)/files ; \
+		touch $(new-version)/files/.gitkeep ; \
+		mkdir -p $(new-version)/patches ; \
+		touch $(new-version)/patches/.gitkeep ; \
+		echo "work-$(BOARD_NAME)/" > .gitignore ; \
+		ls -l  $(new-version) ; \
+		sed -i -e "s/__SW_VERSION__/$(new-version)/g" $(new-version)/Makefile ; \
+		cp -fr $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package $(new-version)/debian ; \
+		mv $(new-version)/debian/u-boot.install $(new-version)/debian/u-boot-$(BOARD_NAME).install ; \
+		find $(new-version)/debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(new-version)/g" \
+	                                         -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" \
+	                                         -e "s/__DATE__/$(shell LC_ALL=C date +"%a, %d %b %Y %T %z")/g" ; \
+        if [ "${DEBEMAIL}" = "" ] ; then \
+			find /$(new-version)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/unknown/g" ; \
+		else \
+			find $(new-version)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/${DEBEMAIL}/g" ; \
+		fi ; \
+		if [ "${DEBFULLNAME}" = "" ] ; then \
+			find $(new-version)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/unknown/g" ; \
+		else \
+			find $(new-version)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/${DEBFULLNAME}/g" ; \
+		fi ; \
+		echo " DEBUG : should i git add $(new-version)" ; \
+	fi ;
+
 # Override standard targets
 install:
 	echo "DEBUG install in u-boot.makefile" ;

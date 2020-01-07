@@ -47,8 +47,6 @@ SW_VERSION  ?= no-version-at-target-package
 # Execute the package target script
 #
 
-# cp $(DFT_BUILDSYSTEM)/templates/u-boot-version.makefile $(PACKAGE_DIR)/Makefile ; \
-
 do-package:
 	echo "DEBUG target-package.mk HOST_ARCH __$(HOST_ARCH)__ BOARD_ARCH __$(BOARD_ARCH)__" ; \
 	if [ "$(SW_VERSION)" = "" ] ; then \
