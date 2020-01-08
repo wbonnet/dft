@@ -62,8 +62,7 @@ sanity-check:
 		echo "mkdir -p ${CURDIR}/kernel" ; \
 		echo "ln -s $(DFT_BUILDSYSTEM)/linux-kernel.makefile ${CURDIR}/kernel/Makefile" ; \
 		echo "git add ${CURDIR}/kernel" ; \
-		echo "error 200101-02" ; \
-		exit 1 ; \
+	        $(call dft_error ,200101-02) ; \
 	fi ;
 	@if [ ! -d "${CURDIR}/kernel/defconfig" ] ; then \
 		echo "defconfig directory is missing in ${CURDIR}/kernel. It is used to store kernel configuration files. It should at least contain a hidden empty file .gitkeep until first kernel version is added for $(BOARD_NAME)" ; \
@@ -71,8 +70,7 @@ sanity-check:
 		echo "mkdir -p ${CURDIR}/kernel/defconfig" ; \
 		echo "touch ${CURDIR}/kernel/defconfig/.gitkeep" ; \
 		echo "git add ${CURDIR}/kernel/defconfig" ; \
-		echo "error 191114-03" ; \
-		exit 1 ; \
+	        $(call dft_error ,191114-03) ; \
 	fi ;
 	@if [ ! -d "${CURDIR}/u-boot/files" ] ; then \
 		echo "files directory is missing in ${CURDIR}/u-boot. It is used to store u-boot installation procedures. It should at least contain a hidden empty file .gitkeep until first uboot version is added for $(BOARD_NAME)" ; \
@@ -80,8 +78,7 @@ sanity-check:
 		echo "mkdir -p ${CURDIR}/u-boot/files" ; \
 		echo "touch ${CURDIR}/u-boot/files/.gitkeep" ; \
 		echo "git add ${CURDIR}/u-boot/files" ; \
-		echo "error 191117-01" ; \
-		exit 1 ; \
+	        $(call dft_error ,191117-01) ; \
 	fi ;
 	@if [ ! -d "${CURDIR}/u-boot" ] ; then \
 		echo "u-boot directory is missing in ${CURDIR}. It should contains a symlink to the generic makefile for u-boot" ; \
@@ -89,8 +86,7 @@ sanity-check:
 		echo "mkdir -p ${CURDIR}/u-boot" ; \
 		echo "ln -s $(DFT_BUILDSYSTEM)/u-boot.makefile ${CURDIR}/u-boot/Makefile" ; \
 		echo "git add ${CURDIR}/u-boot" ; \
-		echo "error 191114-02" ; \
-		exit 1 ; \
+	        $(call dft_error ,191114-02) ; \
 	fi ;
 	@if [ ! "$(shell readlink ${CURDIR}/u-boot/Makefile)" = "../$(DFT_BUILDSYSTEM)/u-boot.makefile" ] ; then \
 		echo "target of symlink Makefile should be ../$(DFT_BUILDSYSTEM)/u-boot.makefile in directory ${CURDIR}/u-boot" ; \
@@ -100,8 +96,7 @@ sanity-check:
 		echo "DFT_BUILDSYSTEM : ${DFT_BUILDSYSTEM}" ; \
 		echo "ln -s ../$(DFT_BUILDSYSTEM)/u-boot.makefile ${CURDIR}/u-boot/Makefile" ; \
 		echo "git add ${CURDIR}/u-boot/Makefile" ; \
-		echo "error 200101-01" ; \
-		exit 1 ; \
+	        $(call dft_error ,200101-01) ; \
 	fi ;
 	@if [ ! "$(shell readlink ${CURDIR}/kernel/Makefile)" = "../$(DFT_BUILDSYSTEM)/linux-kernel.makefile" ] ; then \
 		echo "target of symlink Makefile should be ../$(DFT_BUILDSYSTEM)/linux-kernel.makefile in directory ${CURDIR}/kernel" ; \
@@ -110,9 +105,7 @@ sanity-check:
 		echo "mkdir -p ${CURDIR}/kernel" ; \
 		echo "ln -s ../$(DFT_BUILDSYSTEM)/linux-kernel.makefile ${CURDIR}/kernel/Makefile" ; \
 		echo "git add ${CURDIR}/kernel/Makefile" ; \
-		echo "error 191114-02" ; \
 		$(call dft_error "error 191114-02") \
-		exit 1 ; \
 	fi ;
 	@if [ ! -L "kernel/board.mk" ] ; then \
 		echo "board.mk symlink to ../board.mk is missing in directory ${CURDIR}/kernel" ; \
@@ -122,8 +115,7 @@ sanity-check:
 		fi ; \
 		echo "ln -s ../board.mk ${CURDIR}/kernel/board.mk" ; \
 		echo "git add ${CURDIR}/kernel/board.mk" ; \
-		echo "error 1911118-01" ; \
-		exit 1 ; \
+	        $(call dft_error ,191118-01) ; \
 	fi ;
 	@if [ ! "$(shell readlink ${CURDIR}/kernel/board.mk)" = "../board.mk" ] ; then \
 		echo "target of symlink board.mk should be ../board.mk in directory ${CURDIR}/kernel" ; \
@@ -131,8 +123,7 @@ sanity-check:
 		echo "git rm -f ${CURDIR}/kernel/board.mk" ; \
 		echo "ln -s ../board.mk ${CURDIR}/kernel/board.mk" ; \
 		echo "git add ${CURDIR}/kernel/board.mk" ; \
-		echo "error 1911118-02" ; \
-		exit 1 ; \
+	        $(call dft_error ,191118-02) ; \
 	fi ;
 	@if [ ! "" = "" ] ; then \
 		echo "target of symlink board.mk should be ../board.mk in directory ${CURDIR}/kernel" ; \
@@ -140,8 +131,7 @@ sanity-check:
 		echo "git rm -f ${CURDIR}/kernel/board.mk" ; \
 		echo "ln -s ../board.mk ${CURDIR}/kernel/board.mk" ; \
 		echo "git add ${CURDIR}/kernel/board.mk" ; \
-		echo "error 20200106-01" ; \
-		exit 1 ; \
+	        $(call dft_error ,200106-01) ; \
 	fi ;
 	@if [ ! -L "u-boot/board.mk" ] ; then \
 		echo "board.mk symlink to ../board.mk is missing in directory ${CURDIR}/u-boot" ; \
@@ -151,8 +141,7 @@ sanity-check:
 		fi ; \
 		echo "ln -s ../board.mk ${CURDIR}/u-boot/board.mk" ; \
 		echo "git add ${CURDIR}/u-boot/board.mk" ; \
-		echo "error 1911118-03" ; \
-		exit 1 ; \
+	        $(call dft_error ,191118-03) ; \
 	fi ;
 	@if [ ! "$(shell readlink ${CURDIR}/u-boot/board.mk)" = "../board.mk" ] ; then \
 		echo "target of symlink board.mk should be ../board.mk in directory ${CURDIR}/u-boot" ; \
@@ -160,8 +149,7 @@ sanity-check:
 		echo "git rm -f ${CURDIR}/u-boot/board.mk" ; \
 		echo "ln -s ../board.mk ${CURDIR}/u-boot/board.mk" ; \
 		echo "git add ${CURDIR}/u-boot/board.mk" ; \
-		echo "error 1911118-04" ; \
-		exit 1 ; \
+	        $(call dft_error ,191118-04) ; \
 	fi ;
 	@make -C u-boot $*
 	@make -C kernel $*
@@ -188,12 +176,13 @@ sanity-check:
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		echo "examen de $$i" ; \
 		if [ -f $$i/Makefile ] ; then \
-			$(MAKE) -C$$i $* ; \
+			$(MAKE) -C $$i $* ; \
 		fi ; \
         done
 
 # Create a new u-boot version entry
 new-u-boot-version:
-	echo "DEBUG : from board.makefile new-u-boot-version with argument new-version $(new-version)" ;
-	exit 0;
+	@echo "DEBUG : from board.makefile new-u-boot-version with argument new-version $(new-version)" ;
+	pwd ;
+	$(MAKE) -C u-boot new-u-boot-version=$(new-version) ; 
 
