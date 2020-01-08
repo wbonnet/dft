@@ -79,8 +79,7 @@ sanity-check:
 	@echo "Checking $(BOARD_NAME) u-boot $(SW_VERSION) package definition" ; 
 	@if [ ! -f "../board.mk" ] ; then \
 		echo "file board.mk is missing in directory ${CURDIR}/.." ; \
-		echo "error 191115-12" ; \
-		exit 1 ; \
+		$(call dft_error ,1911-1512) ; \
 	fi ;
 	@if [ ! -d "${CURDIR}/files" ] ; then \
 		echo "files directory is missing in ${CURDIR}. It should contains a link to the markdown file install.$(SW_NAME)-$(BOARD_NAME).md needed by target package." ; \
@@ -115,8 +114,7 @@ sanity-check:
 	fi ;
 	@if [ ! -d "${CURDIR}/debian" ] ; then \
 		echo "debian directory is missing in ${CURDIR}. It should contains the files needed to create the debian package for $(BOARD_NAME) u-boot." ; \
-		echo "error 191115-10" ; \
-		exit 1 ; \
+		$(call dft_error ,1911-1510) ; \
 	fi ;
 	@s=`readlink Makefile`; 
 	@if [ !  "$$s" == "$(DFT_BUILDSYSTEM)/u-boot-version.makefile" ] ; then \

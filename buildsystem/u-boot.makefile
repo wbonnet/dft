@@ -75,9 +75,7 @@ sanity-check:
 			echo "git rm -f ${CURDIR}/Makefile" ; \
 			echo "ln -s $(DFT_BUILDSYSTEM)/u-boot.makefile ${CURDIR}/Makefile" ; \
 			echo "git add ${CURDIR}/Makefile" ; \
-			echo "error 1911115-02" ; \
-			echo "error 1911115-02" ; \
-			exit 1 ; \
+			$(call dft_error ,2001-0810) ; \
 		fi ; \
 		if [ ! "$(shell readlink Makefile)" = "$(DFT_BUILDSYSTEM)/u-boot.makefile" ] ; then \
 			echo "target of symlink Makefile should be $(DFT_BUILDSYSTEM)/u-boot.makefile in directory ${CURDIR}" ; \
@@ -85,8 +83,7 @@ sanity-check:
 			echo "git rm -f ${CURDIR}/Makefile" ; \
 			echo "ln -s $(DFT_BUILDSYSTEM)/u-boot.makefile ${CURDIR}/Makefile" ; \
 			echo "git add ${CURDIR}/Makefile" ; \
-			echo "error 1911115-01" ; \
-			exit 1 ; \
+			$(call dft_error ,2001-0809) ; \
 		fi ; \
 			if [ ! -d "${CURDIR}/files" ] ; then \
 			echo "files directory is missing in ${CURDIR}. It should contains the markdown file install.u-boot-$(BOARD_NAME).md needed by target package." ; \
@@ -95,30 +92,26 @@ sanity-check:
 			echo "touch ${CURDIR}/files/.gitkeep" ; \
 			echo "ln -s ../../files/install.$(SW_NAME)-$(BOARD_NAME).md ${CURDIR}/files/" ; \
 			echo "git add ${CURDIR}/files" ; \
-			echo "error 1911115-03" ; \
-			exit 1 ; \
+			$(call dft_error ,2001-0808) ; \
 		fi ; \
 		if [ ! -d "${CURDIR}/files" ] ; then \
 			echo "You can fix with the following commands : " ; \
 			echo "mkdir -p ${CURDIR}/files" ; \
 			echo "touch ${CURDIR}/files/.gitkeep" ; \
 			echo "git add ${CURDIR}/files" ; \
-			echo "error 191112-02" ; \
-			exit 1 ; \
+			$(call dft_error ,2001-0807) ; \
 		fi ; \
 		if [ ! -f "${CURDIR}/files/install.$(SW_NAME)-$(BOARD_NAME).md" ] ; then \
 			ls -lh "${CURDIR}/files/install.$(SW_NAME)-$(BOARD_NAME).md" ;  \
 			echo "the $(SW_NAME) installation procedure is missing in the files/ folder. This folder should contain a file named install.$(SW_NAME)-$(BOARD_NAME).md describing. This file is needed by target package." ; \
-			echo "error 191116-01" ; \
-			exit 1 ; \
+			$(call dft_error ,2001-0806) ; \
 		fi ; \
 		if [ ! -L "board.mk" ] ; then \
 			echo "board.mk symlink to ../board.mk is missing in directory ${CURDIR}" ; \
 			echo "You can fix with the following commands : " ; \
 			echo "ln -s ../board.mk board.mk" ; \
 			echo "git add board.mk" ; \
-			echo "error 1911115-04" ; \
-			exit 1 ; \
+			$(call dft_error ,2001-0805) ; \
 		fi ; \
 		if [ ! "$(shell readlink ${CURDIR}/board.mk)" = "../board.mk" ] ; then \
 			echo "target of symlink board.mk should be ../board.mk in directory ${CURDIR}" ; \
@@ -126,8 +119,7 @@ sanity-check:
 			echo "git rm -f ${CURDIR}/board.mk" ; \
 			echo "ln -s ../board.mk ${CURDIR}/board.mk" ; \
 			echo "git add ${CURDIR}/board.mk" ; \
-			echo "error 1911115-05" ; \
-			exit 1 ; \
+			$(call dft_error ,2001-0804) ; \
 		fi ; \
 		for version in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*' ) ; do \
 		 echo "Checking $(BOARD_NAME) u-boot $$version package definition" ; \
@@ -135,9 +127,8 @@ sanity-check:
         	    echo "Makefile in ${CURDIR}/$$version is missing. It should be a symlink to $(DFT_BUILSYYSTEM)/u-boot-version.makefile" ; \
 	            echo "You can fix with the following shell commands :" ; \
         	    echo "ln -s ../$(DFT_BUILDSYSTEM)/u-boot-version.makefile $$version/Makefile" ; \
-	            echo "git add $$version/Makefile" ; \
-        	    echo "exit 191115-07" ; \
-	            exit 1 ; \
+				echo "git add $$version/Makefile" ; \
+				$(call dft_error ,2001-0803) ; \
         	   fi ; \
 	           s=`readlink $$version/Makefile` ; \
         	   if [ !  "$$s" = "../$(DFT_BUILDSYSTEM)/u-boot-version.makefile" ] ; then \
@@ -146,7 +137,7 @@ sanity-check:
 	               git rm -f ${CURDIR}/$$version/Makefile || rm -f ${CURDIR}/$$version/Makefile ; \
 	               ln -s ../$(DFT_BUILDSYSTEM)/u-boot-version.makefile ${CURDIR}/$$version/Makefile ; \
         	       git add ${CURDIR}/$$version/Makefile ; \
-	               echo "exit 191122-21" ; \
+				$(call dft_error ,2001-0802) ; \
         	    fi ; \
 		done ; \
 		for v in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*\.*' ) ; do \
@@ -158,14 +149,20 @@ sanity-check:
 
 
 # Create a new u-boot version entry
+
 new-u-boot-version:
-	@if [ "$(new-version)" = "" ] ; then \
+	@echo "DEBUG : je dois le faire dans uboot o je suis deja au bon endroit" ;
+	@echo "DEBUG : from board.makefile new-u-boot-version with argument new-version $(new-version)" ;
+	@echo "DEBUG : from u-boot.makefile start of new-u-boot-version" ; 
+	pwd ;
+	if [ "$(new-version)" == "" ] ; then \
 		echo "DEBUG : from u-boot.makefile Argument new-version is missing or has no value. Doing nothing..." ; \
-		exit 0; \
+		$(call dft_error ,2001-0801) ; \
 	fi ;
 	@echo "DEBUG : je suis dans et il y a ca " ; 
 	@pwd;
-	@ls -l;
+	@ls -lh;
+	@echo "DEBUG : why do or not => $(MAKE) -C u-boot new-u-boot-version new-version=$(new-version)" ;
 	@exit 0;
 	if [ -d "./$(new-version)" ] ; then \
 		echo ". Version $(new-version) already exist. Doing nothing..." ; \
@@ -201,10 +198,10 @@ new-u-boot-version:
 		fi ; \
 		echo " DEBUG : should i git add $(new-version)" ; \
 	fi ;
+	echo "DEBUG : end of new-u-boot-version in -boot.makefile" ; 
 
 # Override standard targets
 install:
-	echo "DEBUG install in u-boot.makefile" ;
 	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
 		$(MAKE) -C $$v  install; \
 	done
@@ -216,10 +213,11 @@ build:
 	done
 
 package:
-	echo "DEBUG package in u-boot.makefile" ;
+	echo "DEBUG start of target package in u-boot.makefile" ;
 	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
 		$(MAKE) -C $$v  package; \
 	done
+	echo "DEBUG end of target package in u-boot.makefile" ;
 
 extract:
 	echo "DEBUG extract in u-boot.makefile" ;
