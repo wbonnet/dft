@@ -44,21 +44,21 @@ sanity-check:
 			echo "You can fix with the following shell commands :" ; \
 			ln -s ../$(DFT_BUILDSYSTEM) ${CURDIR}/$$board ; \
 			git add ${CURDIR}/$$board/buildsystem ; \
-			$(call dft_error ,200102-0201) ; \
+			$(call dft_error ,2001-0201) ; \
 		fi ; \
 		if [ ! -e "$$board/kernel/buildsystem" ] ; then \
 			echo "buildsystem symlink ${CURDIR}/$$board/kernel is Missing. It should be a symlink to  ../$(DFT_BUILDSYSTEM)" ; \
 			echo "You can fix with the following shell commands :" ; \
 			ln -s ../$(DFT_BUILDSYSTEM) ${CURDIR}/$$board/kernel ; \
 			git add ${CURDIR}/$$board/kernel/buildsystem ; \
-			$(call dft_error ,200102-0202) ; \
+			$(call dft_error ,2001-0202) ; \
 		fi ; \
 		if [ ! -e "$$board/u-boot/buildsystem" ] ; then \
 			echo "buildsystem symlink ${CURDIR}/$$board/u-boot is Missing. It should be a symlink to  ../$(DFT_BUILDSYSTEM)" ; \
 			echo "You can fix with the following shell commands :" ; \
 			ln -s ../$(DFT_BUILDSYSTEM) ${CURDIR}/$$board/u-boot ; \
 			git add ${CURDIR}/$$board/u-boot/buildsystem ; \
-			$(call dft_error , 200102-0203) ; \
+			$(call dft_error ,2001-0203) ; \
 		fi ; \
 		if [ ! -e "$$board/Makefile" ] ; then \
 			echo "Makefile in ${CURDIR}/$$board is Missing. It should be a symlink to  $(DFT_BUILDSYSTEM)/board.makefile" ; \
@@ -66,7 +66,7 @@ sanity-check:
 			git rm -f ${CURDIR}/$$board/Makefile ; \
 			ln -s $(DFT_BUILDSYSTEM)/board.makefile ${CURDIR}/$$board/Makefile ; \
 			git add ${CURDIR}/$$board/Makefile ; \
-			$(call dft_error ,101101) ; \
+			$(call dft_error ,2001-1101) ; \
 		fi ; \
 		s=`readlink ${CURDIR}/$$board/Makefile` ; \
 		if [ ! "$$s" = "$(DFT_BUILDSYSTEM)/board.makefile" ] ; then \
@@ -74,7 +74,7 @@ sanity-check:
 			git rm -f ${CURDIR}/$$board/Makefile ; \
 			ln -s $(DFT_BUILDSYSTEM)/board.makefile ${CURDIR}/$$board/Makefile ; \
 			git add ${CURDIR}/$$board/Makefile ; \
-			$(call dft_error ,exit 2001-0208) ; \
+			$(call dft_error ,2001-0208) ; \
 		fi ; \
 		if [ ! -f $$board/board.mk ] ; then \
 			echo "Board description file board.mk is missing in directory ${CURDIR}//$$board" ; \
@@ -83,7 +83,7 @@ sanity-check:
 			echo "cp  $(DFT_BUILDSYSTEM)/board.mk.template ${CURDIR}//$$board/board.mk" ; \
 			echo "git add ${CURDIR}/$$board/board.mk" ; \
 			echo "Warning !!! : Dont forget to edit this file and replace 'unkown' values with board specific values" ; \
-			$(call dft_error ,191117-01) ; \
+			$(call dft_error ,1911-1701) ; \
 		fi ; \
 	done ; \
 	for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
@@ -122,6 +122,9 @@ kernel-package:
 
 # Create a new u-boot version entry
 new-u-boot-version:
-	echo "DEBUG : from category.makefile new-u-boot-version with argument new-version $(new-version)" ;
-	exit 0;
-
+	echo "DEBUG : in category.makefile new-u-boot-version with argument new-version $(new-version)" ;
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+		if [ -f $$i/Makefile ] ; then \
+			$(MAKE) --warn-undefined-variables --print-directory --directory=$$i new-u-boot-version new-version=$(new-version) ; \
+		fi ; \
+        done

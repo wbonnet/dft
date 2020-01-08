@@ -67,6 +67,7 @@ endif
 # Board level u-boot makefile
 #
 sanity-check:
+	@echo "DEBUG : in u-boot.makefile running sanity-check" ;
 	@if [ $(UBOOT_SUPPORT) = 1  ] ; then \
 		echo "Checking $(BOARD_NAME) u-boot packages folder" ; \
 		if [ ! -L "Makefile"  ] ; then \
@@ -149,90 +150,64 @@ sanity-check:
 
 
 # Create a new u-boot version entry
-
 new-u-boot-version:
-	@echo "DEBUG : je dois le faire dans uboot o je suis deja au bon endroit" ;
-	@echo "DEBUG : from board.makefile new-u-boot-version with argument new-version $(new-version)" ;
-	@echo "DEBUG : from u-boot.makefile start of new-u-boot-version" ; 
-	pwd ;
-	if [ "$(new-version)" == "" ] ; then \
+	@echo "DEBUG : in u-boot.makefile running new-u-boot-version with argument new-version $(new-version)" ;
+	@pwd;
+	@if [ "$(new-version)" == "" ] ; then \
 		echo "DEBUG : from u-boot.makefile Argument new-version is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2001-0801) ; \
 	fi ;
-	@echo "DEBUG : je suis dans et il y a ca " ; 
-	@pwd;
-	@ls -lh;
-	@echo "DEBUG : why do or not => $(MAKE) -C u-boot new-u-boot-version new-version=$(new-version)" ;
-	@exit 0;
 	if [ -d "./$(new-version)" ] ; then \
 		echo ". Version $(new-version) already exist. Doing nothing..." ; \
 	else  \
 		echo ". Creating the directory for u-boot version $(new-version)" ; \
 		mkdir -p $(new-version) ; \
-		cp -f $(DFT_BUILDSYSTEM)/templates/u-boot-version.makefile $(new-version)/Makefile ; \
-		ln -s ../$(DFT_BUILDSYSTEM) $(new-version)/buildsystem ; \
-		ls -l  $(new-version)/Makefile ; \
+		ln -s ../$(DFT_BUILDSYSTEM)/u-boot-version.makefile $(new-version)/Makefile ; \
 		mkdir -p $(new-version)/files ; \
 		ln -s ../../files/install.u-boot-$(BOARD_NAME).md $(new-version)/files/ ; \
 		mkdir -p $(new-version)/files ; \
 		touch $(new-version)/files/.gitkeep ; \
 		mkdir -p $(new-version)/patches ; \
 		touch $(new-version)/patches/.gitkeep ; \
-		echo "work-$(BOARD_NAME)/" > .gitignore ; \
-		ls -l  $(new-version) ; \
-		sed -i -e "s/__SW_VERSION__/$(new-version)/g" $(new-version)/Makefile ; \
-		cp -fr $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package $(new-version)/debian ; \
-		mv $(new-version)/debian/u-boot.install $(new-version)/debian/u-boot-$(BOARD_NAME).install ; \
-		find $(new-version)/debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(new-version)/g" \
-	                                         -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" \
-	                                         -e "s/__DATE__/$(shell LC_ALL=C date +"%a, %d %b %Y %T %z")/g" ; \
-        if [ "${DEBEMAIL}" = "" ] ; then \
-			find /$(new-version)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/unknown/g" ; \
-		else \
-			find $(new-version)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/${DEBEMAIL}/g" ; \
-		fi ; \
-		if [ "${DEBFULLNAME}" = "" ] ; then \
-			find $(new-version)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/unknown/g" ; \
-		else \
-			find $(new-version)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/${DEBFULLNAME}/g" ; \
-		fi ; \
-		echo " DEBUG : should i git add $(new-version)" ; \
+		echo "git add $(new-version)" ; \
 	fi ;
-	echo "DEBUG : end of new-u-boot-version in -boot.makefile" ; 
+	@echo "DEBUG : end of new-u-boot-version in u-boot.makefile" ; 
+	$(MAKE) --warn-undefined-variables --print-directory --directory=u-boot new-u-boot-version new-version=$(new-version) ; 
 
 # Override standard targets
 install:
+	@echo "DEBUG : in u-boot.makefile running install" ;
 	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		$(MAKE) -C $$v  install; \
+		$(MAKE) --directory=$$v  install; \
 	done
 
 build:
-	echo "DEBUG build in u-boot.makefile" ;
+	@echo "DEBUG : in u-boot.makefile running build" ;
 	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		$(MAKE) -C $$v  build; \
+		$(MAKE) --directory=$$v  build; \
 	done
 
 package:
-	echo "DEBUG start of target package in u-boot.makefile" ;
+	@echo "DEBUG : in u-boot.makefile running package" ;
 	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		$(MAKE) -C $$v  package; \
+		$(MAKE) --directory=$$v  package; \
 	done
 	echo "DEBUG end of target package in u-boot.makefile" ;
 
 extract:
-	echo "DEBUG extract in u-boot.makefile" ;
+	@echo "DEBUG : in u-boot.makefile running extract" ;
 	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		$(MAKE) -C $$v  extract ; \
+		$(MAKE) --directory=$$v  extract ; \
 	done
 
 fetch:
-	echo "DEBUG target fetch in u-boot.makefile" ;
+	@echo "DEBUG : in u-boot.makefile running fetch" ;
 	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		$(MAKE) -C $$v  fetch ; \
+		$(MAKE) --directory=$$v  fetch ; \
 	done
 
 configure:
-	echo "DEBUG target configure in u-boot.makefile" ;
+	@echo "DEBUG : in u-boot.makefile running configure" ;
 	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		$(MAKE) -C $$v  configure ; \
+		$(MAKE) --directory=$$v  configure ; \
 	done
