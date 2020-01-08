@@ -75,7 +75,7 @@ sanity-check:
 		echo "mkdir -p ${CURDIR}/defconfig" ; \
 		echo "touch ${CURDIR}/defconfig/.gitkeep" ; \
 		echo "git add ${CURDIR}//defconfig/.gitkeep" ; \
-		false ; \
+		$(call dft_error ,2001-0809) ; \
 	fi ;
 	@if [ ! -L "Makefile"  ] ; then \
 		echo "Makefile symlink $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile is missing in directory ${CURDIR}" ; \
@@ -83,8 +83,7 @@ sanity-check:
 		echo "git rm -f ${CURDIR}//Makefile" ; \
 		echo "ln -s $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile ${CURDIR}//Makefile" ; \
 		echo "git add ${CURDIR}//Makefile" ; \
-		echo "error 191121-010" ; \
-		exit 1 ; \
+		$(call dft_error ,1911-2110) ; \
 	fi ;
 	@if [ ! "$(shell readlink ./Makefile)" = "$(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile" ] ; then \
 		echo "target of symlink Makefile should be $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile in directory ${CURDIR}/" ; \
@@ -92,8 +91,7 @@ sanity-check:
 		echo "git rm -f ${CURDIR}//Makefile" ; \
 		echo "ln -s $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile ${CURDIR}/Makefile" ; \
 		echo "git add ${CURDIR}/Makefile" ; \
-		echo "error 1911120-011" ; \
-		exit 1 ; \
+		$(call dft_error ,1911-2011) ; \
 	fi ;
 	@if [ ! -d "${CURDIR}//defconfig" ] ; then \
 		echo "defconfig directory is missing in ${CURDIR}/. It contains the configuration files of the different Linux kernel versions." ; \
@@ -101,16 +99,14 @@ sanity-check:
 		echo "mkdir -p ${CURDIR}//defconfig" ; \
 		echo "touch ${CURDIR}//defconfig/.gitkeep" ; \
 		echo "git add ${CURDIR}//defconfig/.gitkeep" ; \
-		echo "error 191120-013" ; \
- 		exit 1 ; \
+		$(call dft_error ,1911-2013) ; \
 	fi ;
 	@if [ ! -L "board.mk" ] ; then \
 		echo "board.mk symlink to ../board.mk is missing in directory ${CURDIR}/" ; \
 		echo "You can fix with the following commands : " ; \
 		echo "ln -s ../board.mk ${CURDIR}//board.mk" ; \
 		echo "git add ${CURDIR}//board.mk" ; \
-		echo "error 1911116-04" ; \
-		exit 1 ; \
+		$(call dft_error ,1911-1604) ; \
 	fi ;
 	@if [ ! "$(shell readlink board.mk)" = "../board.mk" ] ; then \
 		echo "target of symlink board.mk should be ../board.mk in directory ${CURDIR}/" ; \
@@ -118,8 +114,7 @@ sanity-check:
 		echo "git rm -f ${CURDIR}/board.mk" ; \
 		echo "ln -s ../board.mk ${CURDIR}/board.mk" ; \
 		echo "git add ${CURDIR}/board.mk" ; \
-		echo "error 1911116-05" ; \
-		exit 1 ; \
+		$(call dft_error ,1911-1605) ; \
 	fi ;
 	@for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*\.*' ) ; do \
 		echo "Checking $(BOARD_NAME) kernel $$version package definition" ; \
@@ -132,7 +127,7 @@ sanity-check:
 			fi ; \
 			ln -s ../$(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel-version.makefile ${CURDIR}//$$version/Makefile ; \
 			git add ${CURDIR}//$$version/Makefile ; \
-			echo "exit 191116-07" ; \
+			$(call dft_error ,1911-1607) ; \
 		fi ; \
 		s=`readlink $$version/Makefile` ; \
 		if [ !  "$$s" = "../$(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel-version.makefile" ] ; then \
@@ -141,7 +136,7 @@ sanity-check:
 			git rm -f ${CURDIR}/$$version/Makefile || rm -f ${CURDIR}/$$version/Makefile ; \
 			ln -s ../$(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel-version.makefile ${CURDIR}//$$version/Makefile ; \
 			git add ${CURDIR}//$$version/Makefile ; \
-			echo "exit 191122-20" ; \
+			$(call dft_error ,1911-2110) ; \
 		fi ; \
 	done ; 
 	@for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*') ; do \

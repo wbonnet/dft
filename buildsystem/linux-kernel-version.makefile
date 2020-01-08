@@ -75,8 +75,7 @@ sanity-check:
 	@echo "Checking $(BOARD_NAME) kernel $(SW_VERSION) package definition"
 	@if [ ! -f "../board.mk" ] ; then \
 		echo "file board.mk is missing in directory ${CURDIR}//.." ; \
-		echo "error 191121-02" ; \
-		exit 1 ; \
+		$(call dft_error ,2011-2102) ; \
 	fi ;
 	@if [ ! -L "./Makefile" ] ; then \
 		echo "Makefile symlink to ../../../../../buildsystem/linux-kernel-version.makefile is missing in ${CURDIR}/" ; \
@@ -84,8 +83,7 @@ sanity-check:
 		echo "git rm -f ${CURDIR}//Makefile || rm -f ${CURDIR}//Makefile" ; \
 		echo "ln -s $(buildsystem)/$(SW_NAME)-kernel-version.makefile ${CURDIR}//Makefile" ; \
 		echo "git add ${CURDIR}//Makefile" ; \
-		echo "error 191122-01" ; \
-		exit 1 ; \
+		$(call dft_error ,2011-2201) ; \
 	fi ;
 	@if [ ! "$(shell readlink ./Makefile)" = "../../../../../buildsystem/linux-kernel-version.makefile" ] ; then \
 		echo "target of symlink Makefile should be ../../../../../buildsystem/linux-kernel-version.makefile in directory ${CURDIR}/" ; \
@@ -93,8 +91,7 @@ sanity-check:
 		echo "git rm -f ${CURDIR}//Makefile || rm -f ${CURDIR}/Makefile" ; \
 		echo "ln -s $(buildsystem)/$(SW_NAME)-kernel-version.makefile ${CURDIR}/Makefile" ; \
 		echo "git add ${CURDIR}//Makefile" ; \
-		echo "error 191121-03" ; \
-		exit 1 ; \
+		$(call dft_error ,2011-2103) ; \
 	fi ;
 	@if [ ! -d "../defconfig" ] ; then \
 		echo "kernel config files directory is missing ${CURDIR}//.." ; \
@@ -102,24 +99,20 @@ sanity-check:
 		echo "mkdir ../defconfig" ; \
 		echo "touch ../defconfig/.gitkeep" ; \
 		echo "git add ../defconfig" ; \
-		echo "error 191121-01" ; \
-		exit 1 ; \
+		$(call dft_error ,2011-2101) ; \
 	fi ;
 	@if [ ! -d "./debian" ] ; then \
 		echo "debian directory is missing in ${CURDIR}/. It should contain the files needed to create the debian package for $(BOARD_NAME) $(SW_NAME) kernel" ; \
-		echo "error 191121-04" ; \
-		echo "You can fix with the following commands : " ; \
-		exit 1 ; \
+		echo "You can fix with the following commands : TODO" ; \
+		$(call dft_error ,2011-2104) ; \
 	fi ;
 	@if [ ! -L "./buildsystem" ] ; then \
 		echo "buildsystem symlink to ../../../../../buildsystem is missing in ${CURDIR}/. You are using your own custom buildsystem" ; \
 		echo "ln -s $(buildsystem) ${CURDIR}//buildsystem" ; \
 		echo "git add ${CURDIR}//buildsystem" ; \
-		echo "error 191121-06" ; \
-		exit 1 ; \
+		$(call dft_error ,2011-2106) ; \
 	fi ;
 	@if [ ! "$(shell readlink ./buildsystem)" = "../../../../../buildsystem" ] ; then \
 		echo "target of symlink buildsystem should be ../../../../../buildsystem in directory ${CURDIR}" ; \
-		echo "error 191121-08" ; \
-		exit 1 ; \
+		$(call dft_error ,2011-2108) ; \
 	fi ;
