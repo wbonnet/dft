@@ -154,6 +154,7 @@ sanity-check:
 	@make -C u-boot $*
 	@make -C kernel $*
 	@for version in $(find . -mindepth 1 -maxdepth 1 -type d ) ; do \
+		echo "DEBUG :tring make in folder $$version : $(MAKE) -C $$version $*" ; \
 		$(MAKE) -C $$version $* ; \
         done
 
@@ -183,4 +184,4 @@ sanity-check:
 # Create a new u-boot version entry
 new-u-boot-version:
 	@echo "DEBUG : from board.makefile new-u-boot-version with argument new-version $(new-version)" ;
-	$(MAKE) --warn-undefined-variables --print-directory --directory=u-boot new-u-boot-version new-version=$(new-version) ; 
+	$(MAKE) --warn-undefined-variables --directory=u-boot new-u-boot-version new-version=$(new-version) ; 

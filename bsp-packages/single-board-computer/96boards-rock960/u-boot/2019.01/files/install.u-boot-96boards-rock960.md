@@ -1,1 +1,0 @@
-../../files/install.u-boot-96boards-rock960.md

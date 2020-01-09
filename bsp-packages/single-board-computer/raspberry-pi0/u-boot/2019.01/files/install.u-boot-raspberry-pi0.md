@@ -1,1 +1,0 @@
-../../files/install.u-boot-raspberry-pi0.md

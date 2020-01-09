@@ -1,1 +1,0 @@
-../../files/install.u-boot-pine64-a64.md

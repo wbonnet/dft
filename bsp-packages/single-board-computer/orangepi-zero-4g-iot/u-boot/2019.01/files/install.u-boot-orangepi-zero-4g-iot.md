@@ -1,1 +1,0 @@
-../../files/install.u-boot-orangepi-zero-4g-iot.md

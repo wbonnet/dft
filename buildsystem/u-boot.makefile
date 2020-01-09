@@ -164,12 +164,28 @@ new-u-boot-version:
 		mkdir -p $(new-version) ; \
 		ln -s ../$(DFT_BUILDSYSTEM) $(new-version)/buildsystem ; \
 		ln -s ../$(DFT_BUILDSYSTEM)/u-boot-version.makefile $(new-version)/Makefile ; \
+		ln -s ../$(DFT_BUILDSYSTEM) $(new-version)/buildsystem ; \
 		mkdir -p $(new-version)/files ; \
 		ln -s ../../files/install.u-boot-$(BOARD_NAME).md $(new-version)/files/ ; \
 		mkdir -p $(new-version)/files ; \
 		touch $(new-version)/files/.gitkeep ; \
 		mkdir -p $(new-version)/patches ; \
 		touch $(new-version)/patches/.gitkeep ; \
+		cp -fr ../$(DFT_BUILDSYSTEM)/templates/debian-u-boot-package $(new-version)/debian ; \
+		mv $(new-version)/debian/u-boot.install $(new-version)/debian/u-boot-$(BOARD_NAME).install ; \
+		find $(new-version)/debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(new-version)/g" \
+                                           -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" \
+                                           -e "s/__DATE__/$(shell LC_ALL=C date +"%a, %d %b %Y %T %z")/g" ; \
+		if [ "${DEBEMAIL}" = "" ] ; then \
+			find $(new-version)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/unknown/g" ; \
+		else \
+			find $(new-version)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/${DEBEMAIL}/g" ; \
+		fi ; \
+		if [ "${DEBFULLNAME}" = "" ] ; then \
+			find $(new-version)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/unknown/g" ; \
+		else \
+			find $(new-version)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/${DEBFULLNAME}/g" ; \
+		fi ; \
 		echo "git add $(new-version)" ; \
 	fi ;
 	@echo "DEBUG : end of new-u-boot-version in u-boot.makefile" ; 
