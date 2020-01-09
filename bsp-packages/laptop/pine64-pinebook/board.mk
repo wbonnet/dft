@@ -33,7 +33,7 @@ DEFAULT_DTB            = sun50i-a64-pine64.dtb
 
 # Set config file to empty and define the name of the board to use a defconfig
 USE_CONFIG_FILE        =
-UBOOT_DEFCONFIG        = pine64_plus_defconfig
+UBOOT_DEFCONFIG        = pinebook_defconfig
 
 # Defines the list of files to copy (path is relative to build dir)
 UBOOT_BINARY_FILE      = u-boot-sunxi-with-spl.bin
