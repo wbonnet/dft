@@ -35,7 +35,7 @@
 ifdef DFT_TARGET_BUILD
 $(info target-build.mk has already been included)
 else
-$(info now including target-build.mk)
+#$(info now including target-build.mk)
 DFT_TARGET_BUILD = 1
 
 # Some temporary default values used to debug where where variables are initialized
