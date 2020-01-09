@@ -162,6 +162,7 @@ new-u-boot-version:
 	else  \
 		echo ". Creating the directory for u-boot version $(new-version)" ; \
 		mkdir -p $(new-version) ; \
+		ln -s ../$(DFT_BUILDSYSTEM) $(new-version)/buildsystem ; \
 		ln -s ../$(DFT_BUILDSYSTEM)/u-boot-version.makefile $(new-version)/Makefile ; \
 		mkdir -p $(new-version)/files ; \
 		ln -s ../../files/install.u-boot-$(BOARD_NAME).md $(new-version)/files/ ; \
@@ -172,7 +173,6 @@ new-u-boot-version:
 		echo "git add $(new-version)" ; \
 	fi ;
 	@echo "DEBUG : end of new-u-boot-version in u-boot.makefile" ; 
-	$(MAKE) --warn-undefined-variables --print-directory --directory=u-boot new-u-boot-version new-version=$(new-version) ; 
 
 # Override standard targets
 install:
