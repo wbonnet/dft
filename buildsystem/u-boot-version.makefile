@@ -46,7 +46,6 @@ ifeq ($(SW_NAME),)
 $(error SW_NAME is not set)
 endif
 
-$(warning DOWNLOAD_TOOL:$(DOWNLOAD_TOOL))
 ifeq ($(DOWNLOAD_TOOL),)
 $(error DOWNLOAD_TOOL is not set)
 endif
