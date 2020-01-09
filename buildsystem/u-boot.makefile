@@ -186,7 +186,7 @@ new-u-boot-version:
 		else \
 			find $(new-version)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/${DEBFULLNAME}/g" ; \
 		fi ; \
-		echo "git add $(new-version)" ; \
+		git add $(new-version) ; \
 	fi ;
 	@echo "DEBUG : end of new-u-boot-version in u-boot.makefile" ; 
 
