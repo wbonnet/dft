@@ -41,7 +41,7 @@ new-version:
 	@if [ -d "./$(VERSION)" ] ; then \
 		echo ". Version $(VERSION) already exist. Doing nothing..." ; \
 	else  \
-	echo ". Creating the directory for u-boot version $(VERSION)" ; \
+		echo ". Creating the directory for u-boot version $(VERSION)" ; \
 		mkdir -p $(VERSION) ; \
 		cd $(VERSION) ; \
 		cp -f $(DFT_BUILDSYSTEM)/buildsystem/templates/u-boot-version.makefile Makefile ; \
@@ -55,7 +55,8 @@ new-version:
 		sed -i -e "s/__SW_VERSION__/$(VERSION)/g" Makefile ; \
 		cp -fr $(DFT_BUILDSYSTEM)/buildsystem/templates/debian.u-boot debian ; \
 		cd debian ; \
-		mv u-boot.install u-boot-$(BOARD_NAME).install ; \
+		mv -vf u-boot.install u-boot-$(BOARD_NAME).install ; \
+		pwd ; \
 		cd ../.. ; \
 		find $(VERSION)/debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(VERSION)/g" \
 	                                         -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" \

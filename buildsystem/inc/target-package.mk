@@ -61,23 +61,25 @@ do-package:
 			echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
 		else \
 			if [ ! -f $(COOKIE_DIR)/do-package ] ; then \
-				echo "DEBUG je suis dans le PWD :$(PWD)"  ; \
-				echo "DEBUG I try to cd $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)" ;  \
-				echo "ls -l $(PWD)/files"  ; \
+				echo "DEBUG do-package :je suis dans le PWD :$(PWD)"  ; \
+				echo "DEBUG do-package :ls -l $(PWD)/files"  ; \
 				ls -l $(PWD)/files  ; \
+				echo "DEBUG do-package : avant le cp dereference"  ; \
 				cp -frv --dereference files $(PACKAGE_DIR)/doc ; \
+				echo "DEBUG do-package : apres le cp dereference"  ; \
 				echo "DEBUG et je vais copier le squelette de paquet dans $(PACKAGE_DIR)" ; \
 				if [ "$(SW_NAME)" = "linux" ] ; then \
 					cp -fr --dereference $(DFT_BUILDSYSTEM)/templates/debian-kernel-package $(PACKAGE_DIR)/debian ; \
 					cp --dereference $(DFT_BUILDSYSTEM)/templates/linux-kernel-version.makefile $(PACKAGE_DIR)/Makefile ; \
 				else \
 					cp -frv $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package $(PACKAGE_DIR)/debian ; \
-					echo "DEBUG contenu de PACKAGE_DIR $(PACKAGE_DIR)" ; \
+					echo "DEBUG do-package : contenu de PACKAGE_DIR $(PACKAGE_DIR)" ; \
+					mv  $(PACKAGE_DIR)/debian/u-boot.install $(PACKAGE_DIR)/debian/u-boot-$(BOARD_NAME).install ; \
 					tree $(PACKAGE_DIR) ; \
-					echo "DEBUG et moi je suis dans" ; \
+					echo "DEBUG do-package : et moi je suis dans" ; \
 					pwd ; \
 				fi ; \
-	        		if [ "$(DEBEMAIL)" = "" ] ; then \
+				if [ "$(DEBEMAIL)" = "" ] ; then \
 					find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/unknown/g" ; \
 				else \
 					find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/$(DEBEMAIL)/g" ; \
@@ -90,7 +92,7 @@ do-package:
 				find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(SW_VERSION)/g" \
 										  -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" \
 										  -e "s/__DATE__/$(shell LC_ALL=C date +"%a, %d %b %Y %T %z")/g" ; \
-				cp -fr $(INSTALL_DIR)/* $(PACKAGE_DIR) ; \
+				cp -frv $(INSTALL_DIR)/* $(PACKAGE_DIR) ; \
 				cd $(PACKAGE_DIR) ; \
 				if [ "$(SW_NAME)" = "linux" ] ; then \
 					tar cfz ../$(SW_NAME)-kernel-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
