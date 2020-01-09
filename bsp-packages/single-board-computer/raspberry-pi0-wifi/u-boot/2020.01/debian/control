@@ -1,0 +1,12 @@
+Source: u-boot-raspberry-pi0-wifi
+Section: misc
+Priority: optional
+Maintainer: William Bonnet <wbonnet@theitmakers.com>
+Standards-Version: 3.9.8
+Build-Depends: debhelper (>= 9)
+
+Package: u-boot-raspberry-pi0-wifi
+Architecture: any
+Depends: ${misc:Depends}
+Description: u-boot, version 2020.01 for raspberry-pi0-wifi
+ This packages contains u-boot version 2020.01 compiled for raspberry-pi0-wifi board.
