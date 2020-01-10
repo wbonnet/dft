@@ -63,12 +63,12 @@ endif
 # Targets not associated with a file (aka PHONY)
 #
 
-# 
+#
 # Board level birectory generic Linux kernel makefile
 #
 
 sanity-check:
-	@echo "Checking $(BOARD_NAME) kernel packages folder" 
+	@echo "Checking $(BOARD_NAME) kernel packages folder"
 	@if [ ! -d "${CURDIR}/defconfig" ] ; then \
 		echo "defconfig directory is missing in ${CURDIR}. It contains the configuration files of the different Linux kernel versions." ; \
 		echo "You can fix with the following commands : " ; \
@@ -138,7 +138,7 @@ sanity-check:
 			git add ${CURDIR}//$$version/Makefile ; \
 			$(call dft_error ,1911-2110) ; \
 		fi ; \
-	done ; 
+	done ;
 	@for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*') ; do \
 		if [ -f $$folder/Makefile ] ; then \
 			$(MAKE) -C $$folder sanity-check ; \
@@ -183,9 +183,9 @@ configure:
 	done
 
 # Catch all target. Call the same targets in each subfolder
-%:
-	echo "DEBUG target catch_all_$* in linux-kernel.makefile" ;
-	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		$(MAKE) -C $$v  $* ; \
-	done
+#%:
+#	echo "DEBUG target catch_all_$* in linux-kernel.makefile" ;
+#	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+#		$(MAKE) -C $$v  $* ; \
+#	done
 

@@ -66,9 +66,9 @@ endif
 # Defines patches to apply to the upstream sources :
 # PATCHFILES += 0000_some_patch.diff
 
-# If you use this patche feature please make a copy of this file to store 
-# version specific list of patches. You should not modify the target of the link, 
-# otherwise it would then behave as new default value for all unmodified versions 
+# If you use this patche feature please make a copy of this file to store
+# version specific list of patches. You should not modify the target of the link,
+# otherwise it would then behave as new default value for all unmodified versions
 # of all existing boards.
 
 sanity-check:
