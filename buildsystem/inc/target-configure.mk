@@ -35,7 +35,7 @@
 ifdef DFT_TARGET_CONFIGURE
 $(info target-configure.mk has already been included)
 else
-$(info now including target-configure.mk)
+#$(info now including target-configure.mk)
 DFT_TARGET_CONFIGURE = 1
 
 # Some temporary default values used to debug where where variables are initialized
@@ -92,8 +92,14 @@ do-configure:
 			else \
 				cd $(BUILD_DIR) ; \
 				if [ "$(SW_NAME)" = "u-boot" ] ; then \
-					echo "    running u-boot make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) in $(BUILD_DIR)" ; \
-					make -C $(BUILD_DIR) $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) ; \
+					if [ ! -f "configs/$(UBOOT_DEFCONFIG)" ] ; then \
+						echo "defconfig file $(UBOOT_DEFCONFIG) for board $(BOARD_NAME) does not exist in $(SW_NAME) v$(SW_VERSION) sources." ; \
+						$(call dft_error ,2001-1001) ; \
+						exit 17 ; \
+					else \
+						echo "    running u-boot make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) in $(BUILD_DIR)" ; \
+						make -C $(BUILD_DIR) $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) ; \
+					fi ; \
 				else \
 					if [ "$(SW_NAME)" = "linux" ] ; then \
 						cp "$(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config" .config ; \
