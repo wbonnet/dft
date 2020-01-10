@@ -32,8 +32,8 @@ MAKE_FILTERS  := Makefile workdir README.md .
 SW_NAME       := SW_NAME_undefined_at_category_level
 
 # Board category directory contains several folders, on per board in this category
-# Each board folder must contain a board.mk file with board specific information, 
-# a mandatory kernel folder, optional folders like u-boot for boot loader and files 
+# Each board folder must contain a board.mk file with board specific information,
+# a mandatory kernel folder, optional folders like u-boot for boot loader and files
 # to store needed additionnal files
 sanity-check:
 	@echo "DEBUG : into target sanity-check from category.makefile" ;
@@ -100,11 +100,11 @@ sanity-check:
 # If package is called then make both u-boot and kernel-package
 package: bsp-package
 bsp: bsp-package
-bsp-package: u-boot-package kernel-package 
+bsp-package: u-boot-package kernel-package
 
 # Build only u-boot package target
 u-boot-package:
-	echo "DEBUG : u-boot-package in category.makefile" ; 
+	echo "DEBUG : u-boot-package in category.makefile" ;
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
 			$(MAKE) -C $$i u-boot-package ; \
@@ -113,7 +113,7 @@ u-boot-package:
 
 # Build only linux kernel an package target
 kernel-package:
-	echo "DEBUG : kernel-package in category.makefile" ; 
+	echo "DEBUG : kernel-package in category.makefile" ;
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
 			$(MAKE) -C $$i kernel-package ; \
@@ -128,3 +128,8 @@ new-u-boot-version:
 			$(MAKE) --warn-undefined-variables --print-directory --directory=$$i new-u-boot-version new-version=$(new-version) ; \
 		fi ; \
         done
+
+check-u-boot-defconfig:
+	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d )) ; do \
+		$(MAKE) --directory=$$v  check-u-boot-defconfig ; \
+	done

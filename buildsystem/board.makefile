@@ -19,9 +19,6 @@
 #
 #
 
-# Defines variables specific to u-boot
-SW_NAME     := u-boot
-
 # Build system sould be available under board folder as a symlink. Keep it
 # locally available under board folder computing a relative path is a nightmare
 # and does not work in all cases. Environment variables are not git friendly
@@ -32,10 +29,10 @@ DFT_BUILDSYSTEM := buildsystem
 include board.mk
 include $(DFT_BUILDSYSTEM)/dft.mk
 
-# Strip the variables defined in board.mk to remove trailing whitespaces or 
+# Strip the variables defined in board.mk to remove trailing whitespaces or
 # some calls will fail (when passing defconfig name etc.)
 BOARD_NAME      := $(strip $(BOARD_NAME))
-BOARD_ARCH      := $(strip $(BOARD_ARCH)) 
+BOARD_ARCH      := $(strip $(BOARD_ARCH))
 UBOOT_SUPPORT   := $(strip $(UBOOT_SUPPORT))
 UBOOT_DEFCONFIG := $(strip $(UBOOT_DEFCONFIG))
 USE_CONFIG_FILE := $(strip $(USE_CONFIG_FILE))
@@ -171,7 +168,7 @@ kernel-package:
 	$(MAKE) -C kernel package ;
 
 # Catch all target. Call the same targets in each subfolder
-# cd $$i && $(MAKE) $* && cd .. ; 
+# cd $$i && $(MAKE) $* && cd .. ;
 sanity-check:
 	@echo "target $@ is called in board.makefile"
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
@@ -184,4 +181,7 @@ sanity-check:
 # Create a new u-boot version entry
 new-u-boot-version:
 	@echo "DEBUG : from board.makefile new-u-boot-version with argument new-version $(new-version)" ;
-	$(MAKE) --warn-undefined-variables --directory=u-boot new-u-boot-version new-version=$(new-version) ; 
+	$(MAKE) --warn-undefined-variables --directory=u-boot new-u-boot-version new-version=$(new-version) ;
+
+check-u-boot-defconfig:
+	$(MAKE) --directory=u-boot check-u-boot-defconfig ;

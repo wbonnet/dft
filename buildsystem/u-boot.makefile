@@ -21,7 +21,7 @@
 
 # Defines variables specific to u-boot
 SW_NAME          := u-boot
-SW_VERSION       := 
+SW_VERSION       :=
 
 # Build system sould be available under board folder as a symlink. Keep it
 # locally available under board folder computing a relative path is a nightmare
@@ -63,7 +63,7 @@ endif
 # Targets not associated with a file (aka PHONY)
 #
 
-# 
+#
 # Board level u-boot makefile
 #
 sanity-check:
@@ -189,7 +189,7 @@ new-u-boot-version:
 		fi ; \
 		git add $(new-version) ; \
 	fi ;
-	@echo "DEBUG : end of new-u-boot-version in u-boot.makefile" ; 
+	@echo "DEBUG : end of new-u-boot-version in u-boot.makefile" ;
 
 # Override standard targets
 install:
@@ -221,4 +221,9 @@ fetch:
 configure:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
 		$(MAKE) --directory=$$v  configure ; \
+	done
+
+check-u-boot-defconfig:
+	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		$(MAKE) --directory=$$v  check-u-boot-defconfig ; \
 	done

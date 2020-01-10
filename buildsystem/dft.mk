@@ -196,20 +196,22 @@ help:
 	@echo "                           This target will create a subdirectory named after the content of the new-version variable."
 	@echo "                           It will contain the Makefile and all the files needed to fetch and build the given"
 	@echo "                           version. It also instanciate Debian package template."
+	@echo "                           "
+	@echo "   check-u-boot-defconfig  Check defconfig target availability from upstream sources"
 
 help-config:
 	@echo "Writting is in progress, please come back in a couple of days or so"
 
 # ------------------------------------------------------------------------------
 #
-# Run the clean target only inside the sources directory. Compilation occurs in 
-# BUILD_DIR, not in WORK_DIR which is parent of BUILD_DIR and also contain cookies 
+# Run the clean target only inside the sources directory. Compilation occurs in
+# BUILD_DIR, not in WORK_DIR which is parent of BUILD_DIR and also contain cookies
 # download, install etc. directories (thus no Makefile)
 #	if [ -d $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ] ; then rmdir $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; fi
 clean:
 	@echo " DEBUG : Entering target clean from dft.mk"
 	@echo "BUILD_DIR : $(BUILD_DIR)"
-	pwd ; 
+	pwd ;
 	ls -lh $(BUILD_DIR)
 	if [ -d $(BUILD_DIR)/ ] ; then make -C $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) clean ; fi
 	$(DISPLAY_COMPLETED_TARGET_NAME)
@@ -231,7 +233,7 @@ mrproper:
 #
 show-configuration : show-config
 show-config:
-	@echo "Sources download with $(DOWNLOAD_TOOL) and parameters" ; 
+	@echo "Sources download with $(DOWNLOAD_TOOL) and parameters" ;
 	@echo "  SW_NAME                           $(SW_NAME)" ;
 	@echo "  SW_VERSION                        $(SW_VERSION)" ;
 	@if [ "$(DOWNLOAD_TOOL)" = "wget" ] ; then \
@@ -244,8 +246,8 @@ show-config:
 		echo "  GIT_REPO                          $(GIT_REPO)" ; \
 		echo "  GIT_REPO_EXT                      $(GIT_REPO_EXT)" ; \
 		echo "  GIT_BRANCH                        $(GIT_BRANCH)" ; \
-	fi 
-	@echo 
+	fi
+	@echo
 	@echo "Directories configuration"
 	@echo "  DFT_BUILDSYSTEM                   $(DFT_BUILDSYSTEM)"
 	@echo "  DFT_HOME                          $(DFT_HOME)"
