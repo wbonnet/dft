@@ -29,7 +29,7 @@ UBOOT_SUPPORT = 1
 
 # Set config file to empty and define the name of the board to use a defconfig
 USE_CONFIG_FILE        =
-UBOOT_DEFCONFIG        =unknon_defconfig
+UBOOT_DEFCONFIG        = nanopi_neo2_defconfig
 
 # Defines the default dtb to use (symlink used by generic boot.scr)
 DEFAULT_DTB = sun50i-h5-nanopi-neo2.dtb 

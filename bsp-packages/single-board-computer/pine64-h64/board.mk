@@ -29,7 +29,7 @@ UBOOT_SUPPORT = 1
 
 # Set config file to empty and define the name of the board to use a defconfig
 USE_CONFIG_FILE =
-UBOOT_DEFCONFIG = unknownpine64_plus_defconfig
+UBOOT_DEFCONFIG = pine_h64_defconfig
 DEFAULT_DTB = sun50i-h6-pine-h64.dtb
 
 # Defines the list of files to copy (#path is relative to build dir)

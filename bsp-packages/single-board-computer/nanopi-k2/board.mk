@@ -20,16 +20,17 @@
 #
 
 # Defines board name
-BOARD_NAME  = nanopi-k2
+BOARD_NAME = nanopi-k2
 
 # Defines boards architecture (armv7l, armv6l, aarch64, x86_64, i386, etc.)
-BOARD_ARCH  = aarch64
+BOARD_ARCH = aarch64
 
 # Defines if the board use u-boot (set UBOOT_SUPPORT to 1) (0 it does not)
 # if UBOOT_SUPPORT is disabled u-boot checks and generation are skipped
 UBOOT_SUPPORT = 1
 
 # Defines the default dtb to use (symlink used by generic boot.scr)
+UBOOT_DEFCONFIG = nanopi-k2_defconfig
 DEFAULT_DTB = meson-gxbb-nanopi-k2.dtb 
 
 # Defines if all dtb should be included in the generated package (uncomment

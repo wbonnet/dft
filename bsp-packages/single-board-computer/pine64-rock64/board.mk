@@ -30,6 +30,7 @@ BOARD_ARCH  = aarch64
 UBOOT_SUPPORT = 1
 
 # Defines the default dtb to use (symlink used by generic boot.scr)
+UBOOT_DEFCONFIG = rock64-rk3328_defconfig
 DEFAULT_DTB = rk3328-rock64.dtb
 
 # Defines if all dtb should be included in the generated package (uncomment

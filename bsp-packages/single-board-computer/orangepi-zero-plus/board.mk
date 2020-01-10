@@ -28,10 +28,11 @@ BOARD_ARCH = aarch64
 UBOOT_SUPPORT = 1
 
 # Set config file to empty and define the name of the board to use a defconfig
-USE_CONFIG_FILE  =
+USE_CONFIG_FILE =
+UBOOT_DEFCONFIG = orangepi_zero_plus_defconfig
 
 # Defines the default dtb to use (symlink used by generic boot.scr)
-DEFAULT_DTB = sun50i-h5-orangepi-zero-plus2.dtb 
+#DEFAULT_DTB = sun50i-h5-orangepi-zero-plus2.dtb 
 
 # Defines the list of files to copy (#path is relative to build dir)
 #UBOOT_BINARY_FILE      = u-boot-sunxi-with-spl.bin

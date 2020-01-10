@@ -20,17 +20,18 @@
 #
 
 # Defines board name
-BOARD_NAME  = nanopi-neo-plus2
+BOARD_NAME = nanopi-neo-plus2
 
 # Defines if the board use u-boot (set UBOOT_SUPPORT to 1) (0 it does not)
 # if UBOOT_SUPPORT is disabled u-boot checks and generation are skipped
 UBOOT_SUPPORT = 1
 
 # Defines boards architecture (armv7l, armv6l, aarch64, x86_64, i386, etc.)
-BOARD_ARCH  = aarch64
+BOARD_ARCH = aarch64
 
 # Defines the default dtb to use (symlink used by generic boot.scr)
 DEFAULT_DTB = sun50i-h5-nanopi-neo-plus2.dtb 
+UBOOT_DEFCONFIG = nanopi_neo_plus2_defconfig
 
 # Defines if all dtb should be included in the generated package (uncomment
 # and set value to 1) or if only default dtb is included (keep commented or

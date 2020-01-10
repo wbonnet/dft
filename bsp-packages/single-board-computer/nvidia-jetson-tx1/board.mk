@@ -1,4 +1,3 @@
-# vim: ft=make ts=4 sw=4 noet
 #
 # The contents of this file are subject to the Apache 2.0 license you may not
 # use this file except in compliance with the License.
@@ -29,7 +28,7 @@ UBOOT_SUPPORT = 1
 
 # Set config file to empty and define the name of the board to use a defconfig
 USE_CONFIG_FILE        =
-#UBOOT_DEFCONFIG        = orangepi_zerio_defconfig
+UBOOT_DEFCONFIG        = jetson-tx1_defconfig
 
 # Defines the list of files to copy (#path is relative to build dir)
 #UBOOT_BINARY_FILE      = u-boot-sunxi-with-spl.bin

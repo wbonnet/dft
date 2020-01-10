@@ -29,7 +29,7 @@ UBOOT_SUPPORT = 1
 
 # Set config file to empty and define the name of the board to use a defconfig
 USE_CONFIG_FILE        =
-#UBOOT_DEFCONFIG        = orangepi_zerio_defconfig
+UBOOT_DEFCONFIG        = ci20_mmc_defconfig
 
 # Defines the list of files to copy (#path is relative to build dir)
 #UBOOT_BINARY_FILE      = u-boot-sunxi-with-spl.bin

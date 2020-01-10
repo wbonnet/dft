@@ -54,13 +54,13 @@ echo "DFT ERROR CODE : $(1)" && exit 1
 endef
 
 define dft_error_message =
-echo "DFT ERROR MSG : $(1)" 
+echo "DFT ERROR MSG : $(1)"
 endef
 
 # ------------------------------------------------------------------------------
 #
 # definition of function dft_warning : display a message and continue execution
 #
-define dft_warning = 
+define dft_warning =
 @echo "DFT Warning : $(1)" ;
 endef
