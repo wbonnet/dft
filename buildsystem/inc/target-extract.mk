@@ -73,7 +73,7 @@ extract: fetch $(BUILD_DIR) pre-extract $(EXTRACT_TARGETS) post-extract
 TAR_ARGS = --no-same-owner
 
 extract-archive-%.tar:
-	@if [ -f $(COOKIE_DIR)/extract-archive-$*.tar ] ; then \ 
+	@if [ -f $(COOKIE_DIR)/extract-archive-$*.tar ] ; then \
 		true ; \
 	else  \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar" ; \
@@ -90,10 +90,8 @@ extract-archive-%.tar.gz:
 		fi ; \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz" ; \
 		tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tar.gz -C $(BUILD_DIR) ; \
-		if [ $(SW_NAME) = 'u-boot' ] ; then \
-			mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
-			rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
-		fi ; \
+		mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
+		rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 	fi ;
 	$(TARGET_DONE)
 
@@ -106,6 +104,8 @@ extract-archive-%.tgz:
 		fi ; \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tgz" ; \
 		tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tgz -C $(BUILD_DIR) ; \
+		mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
+		rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 	fi ;
 	$(TARGET_DONE)
 
@@ -115,6 +115,8 @@ extract-archive-%.tar.bz2:
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.bz2" ; \
 		tar $(TAR_ARGS) -xjf $(DOWNLOAD_DIR)/$*.tar.bz2 -C $(BUILD_DIR) ; \
+		mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
+		rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 	fi ;
 	$(TARGET_DONE)
 
@@ -124,6 +126,8 @@ extract-archive-%.tar.xz:
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.xz" ; \
 		tar $(TAR_ARGS) -xJf $(DOWNLOAD_DIR)/$*.tar.xz -C $(BUILD_DIR) ; \
+		mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
+		rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 	fi ;
 	$(TARGET_DONE)
 
@@ -133,14 +137,16 @@ extract-archive-%.zip:
 	else \
 		echo "        extracting $(DOWNLOAD_DIR)/$*.zip" ; \
 		unzip $(DOWNLOAD_DIR)/$*.zip -d $(BUILD_DIR) ; \
-	fi ; \
+		mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
+		rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
+	fi ;
 	$(TARGET_DONE)
 
 extract-git-%:
 	@if [ -f $(COOKIE_DIR)/extract-git-$* ] ; then \
 		true ; \
 	else \
-	  	echo "        moving git data to $(EXTRACT)/$*" ; \
+	  echo "        moving git data to $(EXTRACT)/$*" ; \
 		mv $(GIT_BUILD_DIR)/$(SRC_GIT_REPO)/* $(BUILD_DIR)/ ; \
 	fi ;
 	$(TARGET_DONE)
