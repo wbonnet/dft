@@ -90,24 +90,31 @@ do-configure:
 				echo " DEBUG : je test s il y a deja le cookie $(COOKIE_DIR)/$@" ; \
 				true ; \
 			else \
-				cd $(BUILD_DIR) ; \
+				ls -l ../defconfig ; \
 				if [ "$(SW_NAME)" = "u-boot" ] ; then \
+					cd $(BUILD_DIR) ; \
 					if [ ! -f "configs/$(UBOOT_DEFCONFIG)" ] ; then \
-						echo "defconfig file $(UBOOT_DEFCONFIG) for board $(BOARD_NAME) does not exist in $(SW_NAME) v$(SW_VERSION) sources." ; \
+						echo "ERROR defconfig file $(UBOOT_DEFCONFIG) for board $(BOARD_NAME) does not exist in $(SW_NAME) v$(SW_VERSION) sources." ; \
 						$(call dft_error ,2001-1001) ; \
-						exit 17 ; \
 					else \
 						echo "    running u-boot make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) in $(BUILD_DIR)" ; \
 						make -C $(BUILD_DIR) $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) ; \
 					fi ; \
 				else \
 					if [ "$(SW_NAME)" = "linux" ] ; then \
-						cp "$(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config" .config ; \
-						pwd ; \
-						echo " cp $(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config .config" ; \
-						echo "    running kernel make silentoldconfig in `pwd`" ; \
-						make silentoldconfig ; \
-						cp .config "$(DEFCONFIG_DIR)/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ; \
+						if [ ! -f "../defconfig/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ] ; then \
+							echo "DEBUG : ../defconfig/$(BOARD_NAME)-kernel-$(SW_VERSION).config does not exist using default instead" ; \
+							cp "../defconfig/$(BOARD_NAME)-kernel-default.config" $(BUILD_DIR)/.config ; \
+						else \
+							echo "DEBUG : ../defconfig/$(BOARD_NAME)-kernel-$(SW_VERSION).config exist !" ; \
+							cp "../defconfig/$(BOARD_NAME)-kernel-$(SW_VERSION).config" $(BUILD_DIR)/.config ; \
+							ls -l "../defconfig/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ; \
+						fi ; \
+						cd $(BUILD_DIR) ; \
+						echo "DEBUG : running kernel make olddefconfig in `pwd`. .config is backuped up to beforolddefconfig and afterolddefconfig" ; \
+						cp .config "$(BOARD_NAME)-kernel-$(SW_VERSION).beforeolddefconfig" ; \
+						make olddefconfig ; \
+						cp .config $(BOARD_NAME)-kernel-$(SW_VERSION).afterolddefconfig ; \
 					fi ; \
 				fi ; \
 			fi ; \
