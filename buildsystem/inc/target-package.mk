@@ -48,21 +48,20 @@ SW_VERSION  ?= no-version-at-target-package
 #
 
 do-package:
-	echo "DEBUG target-package.mk HOST_ARCH __$(HOST_ARCH)__ BOARD_ARCH __$(BOARD_ARCH)__" ; \
-	if [ "$(SW_VERSION)" = "" ] ; then \
+	@echo "DEBUG target-package.mk HOST_ARCH __$(HOST_ARCH)__ BOARD_ARCH __$(BOARD_ARCH)__" ; \
+	@if [ "$(SW_VERSION)" = "" ] ; then \
 		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping do-package" ; \
 	else \
 		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 			echo "Makefile processing had to be stopped during target $@ execution." ; \
 			echo "The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
-			echo "The generated binaries might be invalid or scripts could fail before reaching the end of target. Cross compilation is not yet supported." ; \
-			echo "Processing will now continue only for $(HOST_ARCH) based boards package definitions." ; \
-			echo "You can get the missing binaries by running again this target on a $(BOARD_ARCH) based host and collect the generated items." ; \
+		       	echo "Since cross compilation is not yet supported, the generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
+			echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
 			echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
 		else \
 			if [ ! -f $(COOKIE_DIR)/do-package ] ; then \
-				echo "DEBUG do-package :je suis dans le PWD :$(PWD)"  ; \
-				echo "DEBUG do-package :ls -l $(PWD)/files"  ; \
+				echo "DEBUG do-package : je suis dans le PWD :$(PWD)"  ; \
+				echo "DEBUG do-package : ls -l $(PWD)/files"  ; \
 				ls -l $(PWD)/files  ; \
 				echo "DEBUG do-package : avant le cp dereference"  ; \
 				cp -frv --dereference files $(PACKAGE_DIR)/doc ; \
@@ -99,10 +98,11 @@ do-package:
 				else \
 					tar cfz ../$(SW_NAME)-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
 				fi ; \
+			else \
+				echo " DEBUG : cookie $(COOKIE_DIR)/$@ already exist, nothing left to do for make do-package" ; \
 			fi ; \
 		fi ; \
-		echo "DEBUG : dans le do-package avant le cd PACKAGE_DIR $(PACKAGE_DIR)" ; \
-		echo "DEBUG : Je suis dans "; \
+		echo "DEBUG : dans le do-package avant le cd PACKAGE_DIR $(PACKAGE_DIR) I run in folder" ; \
 		pwd ; \
 		cd $(PACKAGE_DIR) ; \
 		echo "DEBUG : Juste avant le debuild"; \
