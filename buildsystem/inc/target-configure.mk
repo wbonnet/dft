@@ -90,7 +90,6 @@ do-configure:
 				echo " DEBUG : je test s il y a deja le cookie $(COOKIE_DIR)/$@" ; \
 				true ; \
 			else \
-				ls -l ../defconfig ; \
 				if [ "$(SW_NAME)" = "u-boot" ] ; then \
 					cd $(BUILD_DIR) ; \
 					if [ ! -f "configs/$(UBOOT_DEFCONFIG)" ] ; then \
