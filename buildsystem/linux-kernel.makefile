@@ -148,21 +148,42 @@ sanity-check:
 # Override standard targets
 install:
 	echo "DEBUG install in linux-kernel.makefile" ;
-	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		$(MAKE) -C $$v  install; \
-	done
+	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
+		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
+	  	echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
+		echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
+		echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
+	else \
+		for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+			$(MAKE) -C $$v  install; \
+		done \
+	fi ; \
 
 build:
 	echo "DEBUG build in linux-kernel.makefile" ;
-	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		$(MAKE) -C $$v  build; \
-	done
+	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
+		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
+	  	echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
+		echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
+		echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
+	else \
+		for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+			$(MAKE) -C $$v  build; \
+		done
+	fi ; \
 
 package:
 	echo "DEBUG package in linux-kernel.makefile" ;
-	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		$(MAKE) -C $$v  package; \
-	done
+	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
+		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
+	  	echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
+		echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
+		echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
+	else \
+		for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+			$(MAKE) -C $$v  package; \
+		done
+	fi ; \
 
 extract:
 	echo "DEBUG extract in linux-kernel.makefile" ;
@@ -178,9 +199,16 @@ fetch:
 
 configure:
 	echo "DEBUG target configure in linux-kernel.makefile" ;
-	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		$(MAKE) -C $$v  configure ; \
-	done
+	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
+		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
+	  	echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
+		echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
+		echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
+	else \
+		for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+			$(MAKE) -C $$v  configure ; \
+		done
+	fi ; \
 
 # Catch all target. Call the same targets in each subfolder
 #%:
