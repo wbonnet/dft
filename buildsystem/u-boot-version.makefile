@@ -142,7 +142,7 @@ check-u-boot-defconfig: extract
 		$(call dft_error ,2001-1002) ; \
 	fi ;
 	@echo "Checking $(UBOOT_DEFCONFIG) u-boot definition availability for version $(SW_VERSION)" ;
-	@if [ ! -f "$(BUILD_DIR)/configs/$(UBOOT_DEFCONFIG)" ] ; then \
+	if [ ! -f "$(BUILD_DIR)/configs/$(UBOOT_DEFCONFIG)" ] ; then \
 		echo "ERROR : u-boot $(UBOOT_DEFCONFIG) defconfig is not available in version $(SW_VERSION). Make was working on board $(BOARD_NAME)" ; \
 		$(call dft_error ,2001-1003) ; \
 	fi ;
