@@ -73,16 +73,13 @@ reconfigure: patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconfi
 
 configure: extract pre-configure do-configure post-configure 
 do-configure:
-	@if [ "$(SW_VERSION)" = "" ] ; then \
-		echo "DEBUG : Not at a version level skiping configure" ; \
-		echo "DEBUG : je ne sors plus ici car avant cd allait planter pas de Build_DIR existant je pense qie je voulais faire cd $(BUILD_DIR)" ; \
-	else \
+	@if [ ! "$(SW_VERSION)" = "" ] ; then \
 		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 			echo "Makefile processing had to be stopped during target $@ execution." ; \
 			echo "The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 		       	echo "Since cross compilation is not yet supported, the generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
 			echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
-			echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
+			echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
 		else \
 			if [ -f $(COOKIE_DIR)/$@ ] ; then \
 				echo " DEBUG : cookie $(COOKIE_DIR)/$@ already exist, nothing left to do for make do-configure" ; \

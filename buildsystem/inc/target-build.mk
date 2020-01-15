@@ -62,7 +62,7 @@ build: configure pre-build $(BUILD_TARGETS) post-build
 			echo "The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 		       	echo "Since cross compilation is not yet supported, the generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
 			echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
-			echo "To generate binaries for all architectures you will need (for now) several builders, one for each target architecture flavor." ; \
+			echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
 		else \
 			if [ ! -f $(COOKIE_DIR)/build-v$(SW_VERSION) ] ; then \
 				echo "DEBUG : cookie $(COOKIE_DIR)/build does not exist. Make was running in the path below :" ; \
