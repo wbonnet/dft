@@ -62,7 +62,7 @@ $(error $(error_msg))
 endif
 endif
 
-extract: fetch $(BUILD_DIR) pre-extract $(EXTRACT_TARGETS) post-extract
+extract: fetch pre-extract $(EXTRACT_TARGETS) post-extract
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -72,82 +72,92 @@ extract: fetch $(BUILD_DIR) pre-extract $(EXTRACT_TARGETS) post-extract
 #
 TAR_ARGS = --no-same-owner
 
+show-extract-targets:
+	@echo $(EXTRACT_TARGETS)
+
+extract-archive-v.tar:
 extract-archive-%.tar:
-	@if [ -f $(COOKIE_DIR)/extract-archive-$*.tar ] ; then \
-		true ; \
-	else  \
-		echo "        extracting $(DOWNLOAD_DIR)/$*.tar" ; \
-		tar $(TAR_ARGS) -xf $(DOWNLOAD_DIR)/$*.tar -C $(BUILD_DIR) ; \
+	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
+			echo "        extracting $(DOWNLOAD_DIR)/$*.tar" ; \
+			tar $(TAR_ARGS) -xf $(DOWNLOAD_DIR)/$*.tar -C $(BUILD_DIR) ; \
+		fi ; \
 	fi ;
 	$(TARGET_DONE)
 
+extract-archive-v.tar.gz:
 extract-archive-%.tar.gz:
-	@if [ -f $(COOKIE_DIR)/extract-archive-$*.tar.gz ] ; then \
-		true ; \
-	else \
-		if [ ! -f $(DOWNLOAD_DIR)/$*.tar.gz ] ; then \
-			echo "        archive $(DOWNLOAD_DIR)/$*.tar.gz is missing please check the files retrieved by the fetch target" ; \
+	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
+			if [ ! -f $(DOWNLOAD_DIR)/$*.tar.gz ] ; then \
+				echo "        archive $(DOWNLOAD_DIR)/$*.tar.gz is missing please check the files retrieved by the fetch target" ; \
+			fi ; \
+			echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz" ; \
+			tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tar.gz -C $(BUILD_DIR) ; \
+			mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
+			rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 		fi ; \
-		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz" ; \
-		tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tar.gz -C $(BUILD_DIR) ; \
-		mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
-		rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 	fi ;
 	$(TARGET_DONE)
 
+extract-archive-v.tgz:
 extract-archive-%.tgz:
-	@if [ -f $(COOKIE_DIR)/extract-archive-$*.tgz ] ; then \
-		true ; \
-	else \
-		if [ ! -f $(DOWNLOAD_DIR)/$*.tgz ] ; then \
-			echo "        archive $(DOWNLOAD_DIR)/$*.tgz is missing please check the files retrieved by the fetch target" ; \
+	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
+			if [ ! -f $(DOWNLOAD_DIR)/$*.tgz ] ; then \
+				echo "        archive $(DOWNLOAD_DIR)/$*.tgz is missing please check the files retrieved by the fetch target" ; \
+			fi ; \
+			echo "        extracting $(DOWNLOAD_DIR)/$*.tgz" ; \
+			tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tgz -C $(BUILD_DIR) ; \
+			mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
+			rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 		fi ; \
-		echo "        extracting $(DOWNLOAD_DIR)/$*.tgz" ; \
-		tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tgz -C $(BUILD_DIR) ; \
-		mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
-		rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 	fi ;
 	$(TARGET_DONE)
 
+extract-archive-v.tar.bz2: 
 extract-archive-%.tar.bz2:
-	@if [ -f $(COOKIE_DIR)/extract-archive-$*.tar.bz2 ] ; then \
-		true ; \
-	else \
-		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.bz2" ; \
-		tar $(TAR_ARGS) -xjf $(DOWNLOAD_DIR)/$*.tar.bz2 -C $(BUILD_DIR) ; \
-		mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
-		rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
+	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
+			echo "        extracting $(DOWNLOAD_DIR)/$*.tar.bz2" ; \
+			tar $(TAR_ARGS) -xjf $(DOWNLOAD_DIR)/$*.tar.bz2 -C $(BUILD_DIR) ; \
+			mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
+			rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
+		fi ; \
 	fi ;
 	$(TARGET_DONE)
 
+extract-archive-v.tar.xz:
 extract-archive-%.tar.xz:
-	@if [ -f $(COOKIE_DIR)/extract-archive-$*.tar.xz ] ; then \
-		true ; \
-	else \
-		echo "        extracting $(DOWNLOAD_DIR)/$*.tar.xz" ; \
-		tar $(TAR_ARGS) -xJf $(DOWNLOAD_DIR)/$*.tar.xz -C $(BUILD_DIR) ; \
-		mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
-		rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
+	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
+			echo "        extracting $(DOWNLOAD_DIR)/$*.tar.xz" ; \
+			tar $(TAR_ARGS) -xJf $(DOWNLOAD_DIR)/$*.tar.xz -C $(BUILD_DIR) ; \
+			mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
+			rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
+			fi ; \
 	fi ;
 	$(TARGET_DONE)
 
-extract-archive-%.zip:
-	@if [ -f $(COOKIE_DIR)/extract-archive-$*.zip ] ; then \
-		true ; \
-	else \
-		echo "        extracting $(DOWNLOAD_DIR)/$*.zip" ; \
-		unzip $(DOWNLOAD_DIR)/$*.zip -d $(BUILD_DIR) ; \
-		mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
-		rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
+extract-archive-v.zip: 
+extract-archive-%.zip: 
+	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
+			echo "        extracting $(DOWNLOAD_DIR)/$*.zip" ; \
+			unzip $(DOWNLOAD_DIR)/$*.zip -d $(BUILD_DIR) ; \
+			mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
+			rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
+		fi ; \
 	fi ;
 	$(TARGET_DONE)
 
+extract-git-v: 
 extract-git-%:
-	@if [ -f $(COOKIE_DIR)/extract-git-$* ] ; then \
-		true ; \
-	else \
-	  echo "        moving git data to $(EXTRACT)/$*" ; \
-		mv $(GIT_BUILD_DIR)/$(SRC_GIT_REPO)/* $(BUILD_DIR)/ ; \
+	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
+		  	echo "        moving git data to $(EXTRACT)/$*" ; \
+			mv $(GIT_BUILD_DIR)/$(SRC_GIT_REPO)/* $(BUILD_DIR)/ ; \
+		fi ; \
 	fi ;
 	$(TARGET_DONE)
 

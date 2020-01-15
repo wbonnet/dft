@@ -61,24 +61,20 @@ Unknown DOWNLOAD_TOOL : $(DOWNLOAD_TOOL)
     endef
 $(error $(error_msg))
     endif
-	@echo "DEBUG : SW_VERSION :$(SW_VERSION):" ;
 endif
 
 show-fetch-targets:
 	@echo $(FETCH_TARGETS)
 
-fetch : setup $(COOKIE_DIR) $(DOWNLOAD_DIR) $(PARTIAL_DIR) pre-fetch $(FETCH_TARGETS) post-fetch
+fetch : setup pre-fetch $(FETCH_TARGETS) post-fetch
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
 # Some directories that will remain empty are created by dependancy mechanism
 # To keep stuf clean the useless empty folders are removed by command rmdir 
 # --ignore-fail-on-non-empty
-fetch-archive-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
-	@if [ "$(SW_VERSION)" = "" ] ; then \
-		rmdir --ignore-fail-on-non-empty $(PARTIAL_DIR) ; \
-		rmdir --ignore-fail-on-non-empty $(DOWNLOAD_DIR) ; \
-	else \
+fetch-archive-%:
+	@if [ ! "$(SW_VERSION)" = "" ] ; then \
 		if [ -f $(COOKIE_DIR)/$@ ] ; then \
 			true ; \
 		else \
@@ -89,14 +85,14 @@ fetch-archive-%: $(DOWNLOAD_DIR) $(PARTIAL_DIR)
 				true ; \
 			else \
 				echo 'ERROR : Failed to download $(SRC_DIST_URL)/$*' 1>&2; \
-				exit 0; \
+				exit 72; \
 			fi ; \
 		fi ; \
 	fi ; 
-	$(DISPLAY_COMPLETED_TARGET_NAME)
-	$(TARGET_DONE)
+	$(DISPLAY_COMPLETED_TARGET_NAME) 
+	$(TARGET_DONE) 
 
-clone-git-%: $(GIT_DIR)
+clone-git-%:
 	@if [ -f $(COOKIE_DIR)/$(GIT_DIR)/$@ ] ; then \
 		true ; \
 	else \

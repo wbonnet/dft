@@ -37,12 +37,12 @@
 #
 # Directory maker used by the base rules
 #
-$(sort $(FILE_DIR) $(GIT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(DEFCONFIG_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR) $(BUILD_DIR)):
-	@if [ ! -d $@ ] ; then \
-		mkdir -p $@; \
-	else \
-		echo "DEBUG : directory $@ alredy exist doing nothing"; \
-	fi ;
+#$(sort $(FILE_DIR) $(GIT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(DEFCONFIG_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR) $(BUILD_DIR)):
+#	@if [ ! -d $@ ] ; then \
+#		mkdir -p $@; \
+#	else \
+#		echo "DEBUG : directory $@ alredy exist doing nothing"; \
+#	fi ;
 
 # ------------------------------------------------------------------------------
 #

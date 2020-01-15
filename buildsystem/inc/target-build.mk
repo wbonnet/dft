@@ -64,9 +64,8 @@ build: configure pre-build $(BUILD_TARGETS) post-build
 			echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
 			echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
 		else \
-			if [ ! -f $(COOKIE_DIR)/build-v$(SW_VERSION) ] ; then \
-				echo "DEBUG : cookie $(COOKIE_DIR)/build does not exist. Make was running in the path below :" ; \
-				pwd ; \
+			if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
+				echo "DEBUG : cookie $(COOKIE_DIR)/$@ does not exist. Make was running in the path below :" ; \
 				echo "DEBUG : now running this make command" ; \
 				echo "DEBUG : $(BUILD_ENV) $(MAKE) -C $(BUILD_DIR) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS)" ; \
 				$(BUILD_ENV) $(MAKE) -C $(BUILD_DIR) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
@@ -100,12 +99,10 @@ build-%:
 	else \
 		cd $(BUILD_DIR) ; \
 		if [ ! -f $(COOKIE_DIR)/build-$* ] ; then \
-			echo "DEBUG : Avant le MAKE" ; \
 			$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
-			echo "DEBUG : Apres le MAKE" ; \
 		fi ; \
-	fi ; \
-	echo "DEBUG : Apres le if version juste avant le target done" ; 
+	fi ; 
+	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
 rebuild-%:

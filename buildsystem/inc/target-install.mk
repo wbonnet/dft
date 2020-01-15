@@ -47,7 +47,7 @@ SW_VERSION  ?= no-version-at-target-install
 # Install software to the target directory
 #
 
-install: build $(INSTALL_DIR) pre-install do-install post-install
+install: build pre-install do-install post-install
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 

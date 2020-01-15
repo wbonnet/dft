@@ -48,7 +48,6 @@ SW_VERSION  ?= no-version-at-target-package
 #
 
 do-package:
-	@echo "DEBUG target-package.mk HOST_ARCH __$(HOST_ARCH)__ BOARD_ARCH __$(BOARD_ARCH)__" ; \
 	@if [ "$(SW_VERSION)" = "" ] ; then \
 		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping do-package" ; \
 	else \
@@ -106,6 +105,8 @@ do-package:
 		pwd ; \
 		cd $(PACKAGE_DIR) ; \
 		echo "DEBUG : Juste avant le debuild"; \
+		echo "DEBUG : Liste des cookies existants"; \
+		ls -l $(COOKIE_DIR) ; \
 		$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ; \
 		echo "DEBUG : Juste apres le debuild"; \
 	fi ; \
@@ -124,7 +125,7 @@ do-repackage:
 # Create the Debian package
 #
 
-package: install $(PACKAGE_DIR) pre-package do-package post-package
+package: install pre-package do-package post-package
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 

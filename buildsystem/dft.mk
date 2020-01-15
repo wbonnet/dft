@@ -301,7 +301,27 @@ show-config:
 # packages to be avaiable. Should add a check based on the flavor.
 #
 
-setup: $(COOKIE_DIR) $(DFT_WORK) $(DFT_WORKSPACE)
+setup:
+	@mkdir -p $(DFT_WORK)
+	@mkdir -p $(DFT_WORKSPACE)
+	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+		mkdir -p $(WORK_DIR) ; \
+		mkdir -p $(COOKIE_DIR) ; \
+		mkdir -p $(INSTALL_DIR) ; \
+		mkdir -p $(PACKAGE_DIR) ; \
+		mkdir -p $(DOWNLOAD_DIR) ; \
+		mkdir -p $(BUILD_DIR) ; \
+		mkdir -p $(LOG_DIR) ; \
+		if [ "$(DOWNLOAD_TOOL)" = "wget" ] ; then \
+			mkdir -p $(PARTIAL_DIR) ; \
+		fi ; \
+		if [ "$(DOWNLOAD_TOOL)" = "wget" ] ; then \
+			mkdir -p $(GIT_DIR) ; \
+		fi ; \
+	fi
+	@mkdir -p $(FILE_DIR)
+	@mkdir -p $(DEFCONFIG_DIR)
+	@mkdir -p $(PATCH_DIR) 
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 

@@ -103,6 +103,15 @@ bsp: bsp-package
 bsp-package: u-boot-package kernel-package
 
 # Build only u-boot package target
+configure:
+	echo "DEBUG : configure in category.makefile" ;
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+		if [ -f $$i/Makefile ] ; then \
+			$(MAKE) -C $$i configure ; \
+		fi ; \
+        done
+
+# Build only u-boot package target
 u-boot-package:
 	echo "DEBUG : u-boot-package in category.makefile" ;
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
