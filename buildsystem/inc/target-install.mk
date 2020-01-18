@@ -92,9 +92,6 @@ do-install:
 				tree $(INSTALL_DIR)/u-boot/; \
 			else \
 				if [ "$(SW_NAME)" = "linux" ] ; then \
-					echo "DEBUG Dans le else du if u-boot" ; \
-					echo "DEBUG Dans le if linux" ; \
-					echo "INSTALL_DIR : $(INSTALL_DIR)" ; \
 					mkdir -p $(INSTALL_DIR)/boot/dtb ; \
 					$(BUILD_ENV) $(MAKE) INSTALL_PATH=$(INSTALL_DIR)/boot $(INSTALL_ARGS) ; \
 					$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(INSTALL_DIR)/ INSTALL_MOD_STRIP=1 modules_install ; \
