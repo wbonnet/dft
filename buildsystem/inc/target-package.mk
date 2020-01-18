@@ -100,7 +100,7 @@ do-package:
 		fi ; \
 		cd $(PACKAGE_DIR) ; \
 		$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ; \
-	fi ; \
+	fi ; 
 	$(TARGET_DONE)
 
 do-repackage:
