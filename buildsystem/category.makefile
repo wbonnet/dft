@@ -36,7 +36,7 @@ SW_NAME       := SW_NAME_undefined_at_category_level
 # a mandatory kernel folder, optional folders like u-boot for boot loader and files
 # to store needed additionnal files
 sanity-check:
-	@echo "DEBUG : into target sanity-check from category.makefile" ;
+	@echo "DEBUG : in category.makefile target sanity-check" ;
 	for board in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
 		echo "Now checking board $$board" ; \
 		if [ ! -e "$$board/buildsystem" ] ; then \
@@ -142,3 +142,56 @@ check-u-boot-defconfig:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d )) ; do \
 		$(MAKE) --directory=$$v  check-u-boot-defconfig ; \
 	done
+
+# Create a new board entry
+new-board:
+	@echo "DEBUG : in category.makefile running new-board with argument board-name $(board-name) board-arch $(board-arch)" ;
+	@if [ "$(board-name)" == "" ] ; then \
+		echo "DEBUG : from category.makefile argument board-name is missing or has no value. Doing nothing..." ; \
+		$(call dft_error ,2001-1601) ; \
+	fi ;
+	if [ "$(board-arch)" == "" ] ; then \
+		echo "DEBUG : from category.makefile argument board-arch is missing or has no value. Doing nothing..." ; \
+		$(call dft_error ,2001-1602) ; \
+	fi ; \
+	if [ -d "./$(board-name)" ] ; then \
+		echo ". Board $(board-name) already exist. Doing nothing..." ; \
+	else  \
+		echo ". Creating the directory for board $(board-name)" ; \
+		mkdir -p $(board-name) ; \
+		cp  $(DFT_BUILDSYSTEM)/templates/board.mk.template $(board-name)/board.mk ; \
+		sed -i -e "s/__BOARD_ARCH__/$(board-arch)/g" -e "s/__BOARD_NAME__/$(board-name)/g" $(board-name)/board.mk ; \
+		ln -s buildsystem/board.makefile $(board-name)/Makefile ; \
+		ln -s ../buildsystem $(board-name)/buildsystem ; \
+	fi ; \
+	if [ ! "$(u-boot-defconfig)" == "" ] ; then \
+		sed -i -e "s/__UBOOT_DEFCONFIG__/$(u-boot-defconfig)/g" $(board-name)/board.mk ; \
+	else  \
+		sed -i -e "s/__UBOOT_DEFCONFIG__/unknown_defconfig/g" $(board-name)/board.mk ; \
+	fi ; \
+	if [ "$(u-boot-support)" == "1" ] ; then \
+		sed -i -e "s/__UBOOT_SUPPORT__/1/g" $(board-name)/board.mk ; \
+	else  \
+		if [ "$(u-boot-support)" == "0" ] ; then \
+			sed -i -e "s/__UBOOT_SUPPORT__/0/g" $(board-name)/board.mk ; \
+		else  \
+			echo "u-boot-support value should be 0 or 1. No value is equivalent to 1, u-boot is activated" ; \
+		fi ; \
+	fi ; \
+	if [ "$(grub-support)" == "1" ] ; then \
+		sed -i -e "s/__GRUB_SUPPORT__/1/g" $(board-name)/board.mk ; \
+	else  \
+		if [ "$(grub-support-support)" == "0" ] ; then \
+			sed -i -e "s/__GRUB_SUPPORT__/0/g" $(board-name)/board.mk ; \
+		else  \
+			echo "grub-support value should be 0 or 1. No value is equivalent to 0, grub is deactivated" ; \
+		fi ; \
+		mkdir $(board-name)/kernel/ ; \
+		ln -s ../buildsystem $(board-name)/kernel/buildsystem ; \
+		ln -s buildsystem/linux-kernel.makefile $(board-name)/kernel/Makefile ; \
+		if [ "$(u-boot-support)" == "1" ] ; then \
+			mkdir $(board-name)/u-boot/ ; \
+			ln -s ../buildsystem $(board-name)/u-boot/buildsystem ; \
+			ln -s buildsystem/u-boot.makefile $(board-name)/u-boot/Makefile ; \
+		fi ; \
+	fi ;
