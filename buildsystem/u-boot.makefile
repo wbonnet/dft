@@ -193,7 +193,7 @@ new-u-boot-version:
 
 # Override standard targets
 install:
-	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
+	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 	  	echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
 		echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
@@ -205,7 +205,7 @@ install:
 	fi ; \
 
 build:
-	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
+	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 	  	echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
 		echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
@@ -217,7 +217,7 @@ build:
 	fi ; \
 
 package:
-	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
+	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 	  	echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
 		echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
@@ -239,7 +239,7 @@ fetch:
 	done
 
 configure:
-	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
+	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 	  	echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
 		echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
