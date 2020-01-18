@@ -93,14 +93,10 @@ rebuild: configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 #
 
 build-%:
-	@if [ "$(SW_VERSION)" = "" ] ; then \
-		echo "DEBUG : SW_VERSION is empty or undefined. Not at a defined version level skipping build" ; \
-	else \
+	@if [ ! "$(SW_VERSION)" = "" ] ; then \
 		cd $(BUILD_DIR) ; \
 		if [ ! -f $(COOKIE_DIR)/build-$* ] ; then \
-			echo "$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS)" ; \
 			$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
-			echo "DEBUG : PLOP" ; \
 		fi ; \
 	fi ; 
 	$(DISPLAY_COMPLETED_TARGET_NAME)
