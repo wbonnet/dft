@@ -48,9 +48,7 @@ SW_VERSION  ?= no-version-at-target-package
 #
 
 do-package:
-	@if [ "$(SW_VERSION)" = "" ] ; then \
-		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping do-package" ; \
-	else \
+	@if [ ! "$(SW_VERSION)" = "" ] ; then \
 		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 			echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 		       	echo "Compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
@@ -100,17 +98,9 @@ do-package:
 				echo " DEBUG : cookie $(COOKIE_DIR)/$@ already exist, nothing left to do for make do-package" ; \
 			fi ; \
 		fi ; \
-		echo "DEBUG : dans le do-package avant le cd PACKAGE_DIR $(PACKAGE_DIR) I run in folder" ; \
-		pwd ; \
 		cd $(PACKAGE_DIR) ; \
-		echo "DEBUG : Juste avant le debuild"; \
-		echo "DEBUG : Liste des cookies existants"; \
-		ls -l $(COOKIE_DIR) ; \
 		$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ; \
-		echo "DEBUG : Juste apres le debuild"; \
 	fi ; \
-	echo "DEBUG : fin de do-package juste avant le target-done. Je suis dans :"; \
-	pwd;
 	$(TARGET_DONE)
 
 do-repackage:
