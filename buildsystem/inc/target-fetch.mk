@@ -71,8 +71,9 @@ fetch : setup pre-fetch $(FETCH_TARGETS) post-fetch
 	$(TARGET_DONE)
 
 # Some directories that will remain empty are created by dependancy mechanism
-# To keep stuf clean the useless empty folders are removed by command rmdir
+# To keep stuf clean the useless empty folders are removed by command rmdir 
 # --ignore-fail-on-non-empty
+fetch-archive-%:
 	@if [ ! "$(SW_VERSION)" = "" ] ; then \
 		if [ -f $(COOKIE_DIR)/$@ ] ; then \
 			true ; \
@@ -87,9 +88,9 @@ fetch : setup pre-fetch $(FETCH_TARGETS) post-fetch
 				exit 72; \
 			fi ; \
 		fi ; \
-	fi ;
-	$(DISPLAY_COMPLETED_TARGET_NAME)
-	$(TARGET_DONE)
+	fi ; 
+	$(DISPLAY_COMPLETED_TARGET_NAME) 
+	$(TARGET_DONE) 
 
 clone-git-%:
 	@if [ -f $(COOKIE_DIR)/$(GIT_DIR)/$@ ] ; then \
