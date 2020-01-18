@@ -19,27 +19,35 @@
 #
 #
 
-# Defines board name
-BOARD_NAME  = jetson-tk1
+#
+# Board global parameters
+#
 
-# Defines if the board use u-boot (set UBOOT_SUPPORT to 1) (0 it does not)
-# if UBOOT_SUPPORT is disabled u-boot checks and generation are skipped
+# The board name fragment will be used in package naming, path and files content generation
+BOARD_NAME = jetson-tk1
+
+# Board architecture as defined by uname -m (armv7l, mips, aarch64, x86_64, etc.)
+BOARD_ARCH = armv7l
+
+
+
+#
+# u-boot support and configuration
+#
+
+# Defines if u-boot should be generated (set UBOOT_SUPPORT to 1) (0 means u-boot is not available).
+# if UBOOT_SUPPORT is disabled packaging is skipped. In this case, you may have to activate GRUB.
 UBOOT_SUPPORT = 1
 
-# Defines boards architecture (armv7l, armv6l, aarch64, x86_64, i386, etc.)
-BOARD_ARCH  = armv7l
+# Make use the defconfig file from UBOOT_DEFCONFIG unless you specify your own in USE_CONFIG_FILE
+UBOOT_DEFCONFIG = jetson-tk1_defconfig
 
-# Defines the default dtb to use (symlink used by generic boot.scr)
-DEFAULT_DTB = unknown
+# List of files to copy from build to install directory (path is relative to build dir)
+UBOOT_BINARY_FILE = u-boot.bin
+UBOOT_DEFAULT_DTB =
 
-# Set config file to empty and define the name of the board to use a defconfig
-USE_CONFIG_FILE        =
-UBOOT_DEFCONFIG        = jetson-tk1_defconfig
 
-# Defines the list of files to copy (path is relative to build dir)
-UBOOT_BINARY_FILE      = u-boot.bin
-
-# Defines if all dtb should be included in the generated package (uncomment
-# and set value to 1) or if only default dtb is included (keep commented or
-# set the value to 0)
-# INCLUDE_ALL_DTB_IN_PACKAGE = 0
+#
+# GRUB support and configuration (u-boot or grub should be activated to be able to boot the board).
+#
+GRUB_SUPPORT = 0

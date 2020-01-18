@@ -19,21 +19,35 @@
 #
 #
 
-# Defines board name
+#
+# Board global parameters
+#
+
+# The board name fragment will be used in package naming, path and files content generation
 BOARD_NAME = nanopi-neo-plus2
 
-# Defines if the board use u-boot (set UBOOT_SUPPORT to 1) (0 it does not)
-# if UBOOT_SUPPORT is disabled u-boot checks and generation are skipped
-UBOOT_SUPPORT = 1
-
-# Defines boards architecture (armv7l, armv6l, aarch64, x86_64, i386, etc.)
+# Board architecture as defined by uname -m (armv7l, mips, aarch64, x86_64, etc.)
 BOARD_ARCH = aarch64
 
-# Defines the default dtb to use (symlink used by generic boot.scr)
-DEFAULT_DTB = sun50i-h5-nanopi-neo-plus2.dtb 
+
+
+#
+# u-boot support and configuration
+#
+
+# Defines if u-boot should be generated (set UBOOT_SUPPORT to 1) (0 means u-boot is not available).
+# if UBOOT_SUPPORT is disabled packaging is skipped. In this case, you may have to activate GRUB.
+UBOOT_SUPPORT = 1
+
+# Make use the defconfig file from UBOOT_DEFCONFIG unless you specify your own in USE_CONFIG_FILE
 UBOOT_DEFCONFIG = nanopi_neo_plus2_defconfig
 
-# Defines if all dtb should be included in the generated package (uncomment
-# and set value to 1) or if only default dtb is included (keep commented or
-# set the value to 0) 
-# INCLUDE_ALL_DTB_IN_PACKAGE = 0
+# List of files to copy from build to install directory (path is relative to build dir)
+UBOOT_BINARY_FILE = u-boot-sunxi-with-spl.bin
+UBOOT_DEFAULT_DTB = sun50i-h5-nanopi-neo-plus2.dtb
+
+
+#
+# GRUB support and configuration (u-boot or grub should be activated to be able to boot the board).
+#
+GRUB_SUPPORT = 0

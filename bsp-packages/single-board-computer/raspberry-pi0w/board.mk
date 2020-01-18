@@ -24,7 +24,7 @@
 #
 
 # The board name fragment will be used in package naming, path and files content generation
-BOARD_NAME = orangepi-r1
+BOARD_NAME = raspberry-pi0w
 
 # Board architecture as defined by uname -m (armv7l, mips, aarch64, x86_64, etc.)
 BOARD_ARCH = armv7l
@@ -40,10 +40,10 @@ BOARD_ARCH = armv7l
 UBOOT_SUPPORT = 1
 
 # Make use the defconfig file from UBOOT_DEFCONFIG unless you specify your own in USE_CONFIG_FILE
-UBOOT_DEFCONFIG = orangepi_r1_defconfig
+UBOOT_DEFCONFIG = rpi_0_w_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
-UBOOT_BINARY_FILE = u-boot-sunxi-with-spl.bin
+UBOOT_BINARY_FILE = u-boot.bin
 UBOOT_DEFAULT_DTB =
 
 

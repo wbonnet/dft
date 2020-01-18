@@ -19,6 +19,38 @@
 #
 #
 
+#
+# Board global parameters
+#
+
+# The board name fragment will be used in package naming, path and files content generation
+BOARD_NAME = nanopi-neo2
+
+# Board architecture as defined by uname -m (armv7l, mips, aarch64, x86_64, etc.)
+BOARD_ARCH = aarch64
+
+
+
+#
+# u-boot support and configuration
+#
+
+# Defines if u-boot should be generated (set UBOOT_SUPPORT to 1) (0 means u-boot is not available).
+# if UBOOT_SUPPORT is disabled packaging is skipped. In this case, you may have to activate GRUB.
+UBOOT_SUPPORT = 1
+
+# Make use the defconfig file from UBOOT_DEFCONFIG unless you specify your own in USE_CONFIG_FILE
+UBOOT_DEFCONFIG = nanopi_neo2_defconfig
+
+# List of files to copy from build to install directory (path is relative to build dir)
+UBOOT_BINARY_FILE = u-boot.bin
+UBOOT_DEFAULT_DTB = sun50i-h5-nanopi-neo2.dtb
+
+
+#
+# GRUB support and configuration (u-boot or grub should be activated to be able to boot the board).
+#
+GRUB_SUPPORT = 0
 # Defines board name
 BOARD_NAME = nanopi-neo2
 BOARD_ARCH = aarch64
@@ -32,7 +64,7 @@ USE_CONFIG_FILE        =
 UBOOT_DEFCONFIG        = nanopi_neo2_defconfig
 
 # Defines the default dtb to use (symlink used by generic boot.scr)
-DEFAULT_DTB = sun50i-h5-nanopi-neo2.dtb 
+DEFAULT_DTB = sun50i-h5-nanopi-neo2.dtb
 
 # Defines the list of files to copy (path is relative to build dir)
 UBOOT_BINARY_FILE      = u-boot.bin

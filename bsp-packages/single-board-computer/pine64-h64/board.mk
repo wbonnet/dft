@@ -19,18 +19,35 @@
 #
 #
 
-# Defines board name
+#
+# Board global parameters
+#
+
+# The board name fragment will be used in package naming, path and files content generation
 BOARD_NAME = pine64-h64
+
+# Board architecture as defined by uname -m (armv7l, mips, aarch64, x86_64, etc.)
 BOARD_ARCH = aarch64
 
-# Defines if the board use u-boot (set UBOOT_SUPPORT to 1) (0 it does not)
-# if UBOOT_SUPPORT is disabled u-boot checks and generation are skipped
+
+
+#
+# u-boot support and configuration
+#
+
+# Defines if u-boot should be generated (set UBOOT_SUPPORT to 1) (0 means u-boot is not available).
+# if UBOOT_SUPPORT is disabled packaging is skipped. In this case, you may have to activate GRUB.
 UBOOT_SUPPORT = 1
 
-# Set config file to empty and define the name of the board to use a defconfig
-USE_CONFIG_FILE =
+# Make use the defconfig file from UBOOT_DEFCONFIG unless you specify your own in USE_CONFIG_FILE
 UBOOT_DEFCONFIG = pine_h64_defconfig
-DEFAULT_DTB = sun50i-h6-pine-h64.dtb
 
-# Defines the list of files to copy (#path is relative to build dir)
-UBOOT_BINARY_FILE = u-boot
+# List of files to copy from build to install directory (path is relative to build dir)
+UBOOT_BINARY_FILE = u-boot.bin
+UBOOT_DEFAULT_DTB = sun50i-h6-pine-h64.dtb
+
+
+#
+# GRUB support and configuration (u-boot or grub should be activated to be able to boot the board).
+#
+GRUB_SUPPORT = 0

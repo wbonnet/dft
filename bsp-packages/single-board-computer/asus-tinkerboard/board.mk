@@ -19,6 +19,38 @@
 #
 #
 
+#
+# Board global parameters
+#
+
+# The board name fragment will be used in package naming, path and files content generation
+BOARD_NAME = asus-tinkerboard
+
+# Board architecture as defined by uname -m (armv7l, mips, aarch64, x86_64, etc.)
+BOARD_ARCH = armv7l
+
+
+
+#
+# u-boot support and configuration
+#
+
+# Defines if u-boot should be generated (set UBOOT_SUPPORT to 1) (0 means u-boot is not available).
+# if UBOOT_SUPPORT is disabled packaging is skipped. In this case, you may have to activate GRUB.
+UBOOT_SUPPORT = 1
+
+# Make use the defconfig file from UBOOT_DEFCONFIG unless you specify your own in USE_CONFIG_FILE
+UBOOT_DEFCONFIG = tinker-rk3288_defconfig
+
+# List of files to copy from build to install directory (path is relative to build dir)
+UBOOT_BINARY_FILE = u-boot.bin
+UBOOT_DEFAULT_DTB =
+
+
+#
+# GRUB support and configuration (u-boot or grub should be activated to be able to boot the board).
+#
+GRUB_SUPPORT = 0
 # Defines board name
 BOARD_NAME = asus-tinkerboard
 BOARD_ARCH = armv7l
