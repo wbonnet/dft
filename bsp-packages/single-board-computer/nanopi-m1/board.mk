@@ -44,7 +44,7 @@ UBOOT_DEFCONFIG = nanopi_m1_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
 UBOOT_BINARY_FILE = u-boot-sunxi-with-spl.bin
-UBOOT_DEFAULT_DTB = sun8i-h3-nanopi-m1.dtb
+DEFAULT_DTB = sun8i-h3-nanopi-m1.dtb
 
 
 #

@@ -44,7 +44,7 @@ UBOOT_DEFCONFIG = mx6sabresd_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
 UBOOT_BINARY_FILE = .bin
-UBOOT_DEFAULT_DTB =
+DEFAULT_DTB =
 
 
 #

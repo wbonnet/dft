@@ -44,7 +44,7 @@ UBOOT_DEFCONFIG =
 
 # List of files to copy from build to install directory (path is relative to build dir)
 UBOOT_BINARY_FILE = u-boot.bin
-UBOOT_DEFAULT_DTB =rock960-rk3399_defconfig
+DEFAULT_DTB =rock960-rk3399_defconfig
 
 
 #

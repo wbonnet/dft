@@ -66,7 +66,7 @@ reinstall: build pre-reinstall do-reinstall install post-reinstall
 #
 
 do-install:
-	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+	if [ ! "$(SW_VERSION)" = "" ] ; then \
 		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 			echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 		       	echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
@@ -93,12 +93,12 @@ do-install:
 						$(BUILD_ENV) $(MAKE) INSTALL_PATH=$(INSTALL_DIR)/boot $(INSTALL_ARGS) ; \
 						$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(INSTALL_DIR)/ INSTALL_MOD_STRIP=1 modules_install ; \
 						cp -fr arch/arm/boot/dts/*.dtb $(INSTALL_DIR)/boot/dtb ; \
+						echo "DEBUG : le DEFAULT_DTB $(DEFAULT_DTB)" ; \
 			 	 		if [ ! "" = "$(DEFAULT_DTB)" ] ; then \
-							echo "DEBUG Je suis dans le if a la con" ; \
 							cd $(INSTALL_DIR)/boot ; \
-							ln -sf dtb/$(DEFAULT_DTB) default.dtb ; \
+							ln -sf dtb/$(DEFAULT_DTB) $(INSTALL_DIR)/boot/default.dtb ; \
 						else \
-							echo "DEBUG Je suis dans le else a la con" ; \
+							cp -fr arch/arm/boot/dts/*.dtb $(INSTALL_DIR)/boot/dtb ; \
 						fi ; \
 					fi ; \
 				fi ; \

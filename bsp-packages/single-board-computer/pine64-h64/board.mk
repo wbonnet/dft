@@ -44,7 +44,7 @@ UBOOT_DEFCONFIG = pine_h64_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
 UBOOT_BINARY_FILE = u-boot.bin
-UBOOT_DEFAULT_DTB = sun50i-h6-pine-h64.dtb
+DEFAULT_DTB = sun50i-h6-pine-h64.dtb
 
 
 #

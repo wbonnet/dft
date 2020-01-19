@@ -44,7 +44,7 @@ UBOOT_DEFCONFIG = odroid-xu3_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
 UBOOT_BINARY_FILE = u-boot.bin
-UBOOT_DEFAULT_DTB = exynos5422-odroidhc1.dtb7
+DEFAULT_DTB = exynos5422-odroidhc1.dtb7
 
 
 #

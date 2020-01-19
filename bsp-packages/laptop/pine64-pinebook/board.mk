@@ -44,7 +44,7 @@ UBOOT_DEFCONFIG = pinebook_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
 UBOOT_BINARY_FILE = u-boot-sunxi-with-spl.bin
-UBOOT_DEFAULT_DTB = sun50i-a64-pine64.dtb
+DEFAULT_DTB = sun50i-a64-pine64.dtb
 
 
 #

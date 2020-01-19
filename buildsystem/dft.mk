@@ -279,8 +279,12 @@ show-config:
 	@echo
 	@echo "  BOARD_NAME                        $(BOARD_NAME)"
 	@echo "  BOARD_ARCH                        $(BOARD_ARCH)"
+	@echo "  DEFAULT_DTB                       $(DEFAULT_DTB)"
 	@echo "  KERNEL_DEFCONFIG                  $(KERNEL_DEFCONFIG)"
+	@echo "  UBOOT_SUPPORT                     $(UBOOT_SUPPORT)"
 	@echo "  UBOOT_DEFCONFIG                   $(UBOOT_DEFCONFIG)"
+	@echo "  UBOOT_BINARY_FILE                 $(UBOOT_BINARY_FILE)"
+	@echo "  GRUB_SUPPORT                      $(GRUB_SUPPORT)"
 	@echo
 	@echo "  BUILD_FLAGS                       $(BUILD_FLAGS)"
 	@echo "  BUILD_ARGS                        $(BUILD_ARGS)"
