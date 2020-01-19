@@ -44,7 +44,7 @@ UBOOT_DEFCONFIG = Cubieboard4_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
 UBOOT_BINARY_FILE = u-boot-sunxi-with-spl.bin
-DEFAULT_DTB = sun4.dtb
+DEFAULT_DTB = sun9i-a80-cubieboard4.dtb 
 
 
 #
