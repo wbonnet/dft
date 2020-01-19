@@ -43,7 +43,7 @@ UBOOT_DEFCONFIG = firefly-rk3399_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
 UBOOT_BINARY_FILE = u-boot.bin
-DEFAULT_DTB =
+DEFAULT_DTB = rk3399-firefly.dtb
 
 
 #

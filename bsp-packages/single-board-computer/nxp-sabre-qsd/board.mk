@@ -43,8 +43,8 @@ UBOOT_SUPPORT = 1
 UBOOT_DEFCONFIG = mx6sabresd_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
-UBOOT_BINARY_FILE = .bin
-DEFAULT_DTB =
+UBOOT_BINARY_FILE = u-boot.bin
+DEFAULT_DTB =imx6q-sabreauto.dtb
 
 
 #

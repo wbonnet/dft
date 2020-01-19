@@ -41,6 +41,9 @@ UBOOT_SUPPORT = 1
 
 # Make use the defconfig file from UBOOT_DEFCONFIG unless you specify your own in USE_CONFIG_FILE
 UBOOT_DEFCONFIG = omap3_beagle_defconfig
+
 # List of files to copy from build to install directory (path is relative to build dir)
 UBOOT_BINARY_FILE = u-boot.bin
-DEFAULT_DTB =
+
+# List of files to copy from build to install directory (path is relative to build dir)
+DEFAULT_DTB = omap3-beagle.dtb

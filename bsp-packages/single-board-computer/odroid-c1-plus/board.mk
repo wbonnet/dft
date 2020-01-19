@@ -44,7 +44,7 @@ UBOOT_DEFCONFIG = odroid_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
 UBOOT_BINARY_FILE = u-boot.bin
-DEFAULT_DTB =
+DEFAULT_DTB = meson8b-odroidc1.dtb
 
 
 #

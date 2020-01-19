@@ -44,7 +44,7 @@ UBOOT_DEFCONFIG = jetson-tk1_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
 UBOOT_BINARY_FILE = u-boot.bin
-DEFAULT_DTB =
+DEFAULT_DTB = tegra124-jetson-tk1.dtb
 
 
 #
