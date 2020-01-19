@@ -27,7 +27,7 @@
 BOARD_NAME = raspberry-pi3
 
 # Board architecture as defined by uname -m (armv7l, mips, aarch64, x86_64, etc.)
-BOARD_ARCH = aa7
+BOARD_ARCH = aarch64
 
 
 
