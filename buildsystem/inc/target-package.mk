@@ -66,13 +66,10 @@ do-package:
 				if [ "$(SW_NAME)" = "linux" ] ; then \
 					cp -fr --dereference $(DFT_BUILDSYSTEM)/templates/debian-kernel-package $(PACKAGE_DIR)/debian ; \
 					cp --dereference $(DFT_BUILDSYSTEM)/templates/linux-kernel-version.makefile $(PACKAGE_DIR)/Makefile ; \
+					mv  $(PACKAGE_DIR)/debian/linux-kernel.install $(PACKAGE_DIR)/debian/linux-kernel-$(BOARD_NAME).install ; \
 				else \
-					cp -frv $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package $(PACKAGE_DIR)/debian ; \
-					echo "DEBUG do-package : contenu de PACKAGE_DIR $(PACKAGE_DIR)" ; \
+					cp -fr $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package $(PACKAGE_DIR)/debian ; \
 					mv  $(PACKAGE_DIR)/debian/u-boot.install $(PACKAGE_DIR)/debian/u-boot-$(BOARD_NAME).install ; \
-					tree $(PACKAGE_DIR) ; \
-					echo "DEBUG do-package : et moi je suis dans" ; \
-					pwd ; \
 				fi ; \
 				if [ "$(DEBEMAIL)" = "" ] ; then \
 					find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/unknown/g" ; \
@@ -99,6 +96,9 @@ do-package:
 			fi ; \
 		fi ; \
 		cd $(PACKAGE_DIR) ; \
+		echo " DEBUG : la jy suis" ; \
+		pwd ; \
+		echo " DEBUG : $(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS)" ; \
 		$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ; \
 	fi ; 
 	$(TARGET_DONE)
