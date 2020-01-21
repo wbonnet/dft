@@ -1,1 +1,0 @@
-../../files/install..odroid-n2.md

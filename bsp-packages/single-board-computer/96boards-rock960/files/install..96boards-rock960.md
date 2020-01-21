@@ -1,1 +1,0 @@
-../../files/install..96boards-rock960.md

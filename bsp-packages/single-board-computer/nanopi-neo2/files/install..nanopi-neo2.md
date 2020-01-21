@@ -1,1 +1,0 @@
-../../files/install..nanopi-neo2.md
