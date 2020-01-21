@@ -57,12 +57,10 @@ do-package:
 		else \
 			if [ ! -f $(COOKIE_DIR)/do-package ] ; then \
 				echo "DEBUG do-package : je suis dans le PWD :$(PWD)"  ; \
-				echo "DEBUG do-package : ls -l $(PWD)/files"  ; \
-				ls -l $(PWD)/files  ; \
-				echo "DEBUG do-package : avant le cp dereference"  ; \
-				cp -frv --dereference files $(PACKAGE_DIR)/doc ; \
-				echo "DEBUG do-package : apres le cp dereference"  ; \
-				echo "DEBUG et je vais copier le squelette de paquet dans $(PACKAGE_DIR)" ; \
+				if [ "$(SW_NAME)" = "u-boot" ] ; then \
+					echo "DEBUG : je fais cp -frv --dereference $(PWD)/files $(PACKAGE_DIR)/doc" ; \
+					cp -frv --dereference $(PWD)/files $(PACKAGE_DIR)/doc ; \
+				fi ; \
 				if [ "$(SW_NAME)" = "linux" ] ; then \
 					cp -fr --dereference $(DFT_BUILDSYSTEM)/templates/debian-kernel-package $(PACKAGE_DIR)/debian ; \
 					cp --dereference $(DFT_BUILDSYSTEM)/templates/linux-kernel-version.makefile $(PACKAGE_DIR)/Makefile ; \
