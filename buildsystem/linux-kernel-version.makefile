@@ -116,3 +116,8 @@ sanity-check:
 		echo "target of symlink buildsystem should be ../../../../../buildsystem in directory ${CURDIR}" ; \
 		$(call dft_error ,2011-2108) ; \
 	fi ;
+
+# Simple forwarder just  in case
+linux-kernel-package : package
+kernel-package : package
+

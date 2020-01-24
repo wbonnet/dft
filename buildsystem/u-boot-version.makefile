@@ -146,3 +146,6 @@ check-u-boot-defconfig: extract
 		echo "ERROR : u-boot $(UBOOT_DEFCONFIG) defconfig is not available in version $(SW_VERSION). Make was working on board $(BOARD_NAME)" ; \
 		$(call dft_error ,2001-1003) ; \
 	fi ;
+
+# Simple forwarder just  in case
+u-boot-package : package
