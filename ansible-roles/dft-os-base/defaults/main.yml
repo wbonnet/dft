@@ -19,7 +19,7 @@
 #
 
 # Default hostname to set if not ovrriden in project variables
-dft_hostname: "dft-default"
+dft_hostname: "dft-undefined-hostname"
 
 
 # Default locales to configure if not overiden in project variables
