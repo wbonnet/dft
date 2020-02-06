@@ -148,24 +148,24 @@ sanity-check:
 		echo "git add ${CURDIR}/u-boot/board.mk" ; \
 	        $(call dft_error ,1911-1804) ; \
 	fi ;
-	@make -C u-boot $*
-	@make -C kernel $*
+	@make --directory=u-boot $*
+	@make --directory=kernel $*
 	@for version in $(find . -mindepth 1 -maxdepth 1 -type d ) ; do \
-		echo "DEBUG :tring make in folder $$version : $(MAKE) -C $$version $*" ; \
-		$(MAKE) -C $$version $* ; \
+		$(MAKE) --directory=$$version $* ; \
         done
 
 # cd $$version && $(MAKE) -C $$version $*  && cd .. ;
 
 # Build only u-boot  package target
 u-boot-package:
-	@echo "u-boot-package from board.makefile" ;
-	$(MAKE) -C u-boot package ;
+	@echo "target $@ is called in board.makefile"
+	$(MAKE) --directory=u-boot package ;
 
 # Build only linux kernel an package target
+linux-kernel-package:
 kernel-package:
-	@echo "kernel-package from board.makefile" ;
-	$(MAKE) -C kernel package ;
+	@echo "target $@ is called in board.makefile"
+	$(MAKE) --directory=kernel package ;
 
 # Catch all target. Call the same targets in each subfolder
 # cd $$i && $(MAKE) $* && cd .. ;
@@ -174,7 +174,7 @@ sanity-check:
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		echo "examen de $$i" ; \
 		if [ -f $$i/Makefile ] ; then \
-			$(MAKE) -C $$i $* ; \
+			$(MAKE) --directory=$$i $* ; \
 		fi ; \
         done
 
@@ -185,3 +185,14 @@ new-u-boot-version:
 
 check-u-boot-defconfig:
 	$(MAKE) --directory=u-boot check-u-boot-defconfig ;
+
+# Simple forwarder
+extract:
+fetch:
+setup:
+	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d )) ; do \
+		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
+                	$(MAKE) --directory=$$v $@ ; \
+		fi ; \
+	done
+
