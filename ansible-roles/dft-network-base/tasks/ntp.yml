@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install ntp
+- name : DFT - Install NTP
   apt: name={{ item }}
        state=latest
        install_recommends=no
