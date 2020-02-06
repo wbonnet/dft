@@ -91,3 +91,17 @@ linux-kernel-package:
                 	$(MAKE) -C $$i kernel-package ; \
 		fi ; \
 	done
+
+# Simple forwarder
+extract:
+configure:
+install:
+package:
+build:
+fetch:
+setup:
+	@for i in $(CATEGORIES) ; do \
+		if [ -f ${CURDIR}/$$i/Makefile ] ; then \
+                	$(MAKE) -C $$i $@ ; \
+		fi ; \
+	done
