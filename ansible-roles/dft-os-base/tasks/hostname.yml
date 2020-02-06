@@ -31,20 +31,18 @@
 #  when: ansible_connection != "local"
 
 # If it is run through a local connection, we assume it is working in a chrooted environment
-# thus only modify /etc/hostname file since we are creating a rootfs. No need to change the
-# real hostname
+# thus only modify /etc/hostname file since we are creating a rootfs. No don't need to change the
+# actual (running) hostname
 - name: DFT - Setup hostname (local connection)
   template:  src=hostname.j2
              dest=/etc/hostname
              owner=root
              group=root
              mode="0644"
-#  when: ansible_connection == "local"
+  #when:      ansible_connection == "local"
+  # DEBUG : try to remeber why it was added for rootfs in chroot check and merge commented lines
 
 - name: DFT - Add hostname to /etc/hosts
   lineinfile: dest=/etc/hosts
               regexp='^127\.0\.0\.1'
-              line='127.0.0.1\tlocalhost {{ dft_hostname }}'
-              owner=root
-              group=root
-              mode=0644
+              line=127.0.0.1   localhost {{ dft_hostname }}
