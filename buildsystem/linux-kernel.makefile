@@ -141,7 +141,7 @@ sanity-check:
 	done ;
 	@for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*') ; do \
 		if [ -f $$folder/Makefile ] ; then \
-			$(MAKE) -C $$folder sanity-check ; \
+			$(MAKE) --directory=$$folder sanity-check ; \
 		fi ; \
 	done ;
 
@@ -185,12 +185,8 @@ package:
 		done
 	fi ; \
 
+# Simple forwarder
 extract:
-	echo "DEBUG extract in linux-kernel.makefile" ;
-	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		$(MAKE) -C $$v  extract ; \
-	done
-
 fetch:
 	echo "DEBUG target fetch in linux-kernel.makefile" ;
 	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
@@ -210,10 +206,9 @@ configure:
 		done
 	fi ; \
 
-# Catch all target. Call the same targets in each subfolder
-#%:
-#	echo "DEBUG target catch_all_$* in linux-kernel.makefile" ;
-#	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-#		$(MAKE) -C $$v  $* ; \
-#	done
-
+setup:
+	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d )) ; do \
+		if [ -e ${CURDIR}/$$v/Makefile ] ; then \
+                	$(MAKE) --directory=$$v $@ ; \
+		fi ; \
+	done
