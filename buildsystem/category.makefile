@@ -113,25 +113,26 @@ configure:
 
 # Build only u-boot package target
 u-boot-package:
-	echo "DEBUG : u-boot-package in category.makefile" ;
+	@echo "DEBUG : $@ in category.makefile" ;
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
-			$(MAKE) -C $$i u-boot-package ; \
+			$(MAKE) -directory= $$i u-boot-package ; \
 		fi ; \
         done
 
 # Build only linux kernel an package target
+linux-kernel-package:
 kernel-package:
-	echo "DEBUG : kernel-package in category.makefile" ;
+	@echo "DEBUG : $@ in category.makefile" ;
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
-			$(MAKE) -C $$i kernel-package ; \
+			$(MAKE) --directory=$$i kernel-package ; \
 		fi ; \
         done
 
 # Create a new u-boot version entry
 new-u-boot-version:
-	echo "DEBUG : in category.makefile new-u-boot-version with argument new-version $(new-version)" ;
+	@echo "DEBUG : in category.makefile new-u-boot-version with argument new-version $(new-version)" ;
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
 			$(MAKE) --warn-undefined-variables --print-directory --directory=$$i new-u-boot-version new-version=$(new-version) ; \
@@ -195,3 +196,13 @@ new-board:
 			ln -s buildsystem/u-boot.makefile $(board-name)/u-boot/Makefile ; \
 		fi ; \
 	fi ;
+
+# Simple forwarder
+extract:
+fetch:
+setup:
+	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d )) ; do \
+		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
+                	$(MAKE) --directory=$$v $@ ; \
+		fi ; \
+	done
