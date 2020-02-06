@@ -143,7 +143,7 @@ sanity-check:
 		done ; \
 		for v in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*\.*' ) ; do \
 			if [ -f $$v/Makefile ] ; then \
-				$(MAKE) -C $$v sanity-check ; \
+				$(MAKE) --directory=$$v sanity-check ; \
 			fi ; \
 		done ; \
 		fi ;
@@ -228,11 +228,8 @@ package:
 		done \
 	fi ; \
 
+# Simple forwarder
 extract:
-	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		$(MAKE) --directory=$$v  extract ; \
-	done
-
 fetch:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
 		$(MAKE) --directory=$$v  fetch ; \
@@ -253,4 +250,10 @@ configure:
 check-u-boot-defconfig:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
 		$(MAKE) --directory=$$v  check-u-boot-defconfig ; \
+
+setup:
+	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d )) ; do \
+		if [ -e ${CURDIR}/$$v/Makefile ] ; then \
+                	$(MAKE) --directory=$$v $@ ; \
+		fi ; \
 	done
