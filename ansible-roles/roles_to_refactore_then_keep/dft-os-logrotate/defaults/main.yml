@@ -1,0 +1,211 @@
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2016 DFT project (http://www.firmwaretoolkit.org).
+# All rights reserved. Use is subject to license terms.
+#
+#
+# Contributors list :
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#
+#
+
+# Defines the list of files to add and remov from logrotate configuration
+# Currently templating is no supported since syntax may be rich. The chosen
+# solution is to list the files to remove from standard logrotate installation
+# (files will be remove from /etc/logrotate.d), then to list the files to
+# add from files/ directory either from dft-logrotate, or from the directory
+# copied over dft-logrotate (in order to bring custom configuration)
+#
+# Files deletion always happens before copying.
+#
+dft_logrotate:
+  # Frequency of log rotation. Valid values are : hourly, daily, weekly, monthly, yearly
+  frequency: "daily"
+
+  # Nmber of backlogs to keep track of
+  rotate_count: 30
+
+  # Immediately after rotation (before the postrotate script is run) the log file is created
+  # (with the same name  as  the  log  file just rotated).  mode specifies the mode for the log
+  # file in octal (the same as chmod(2)), owner specifies the user name who will own the log file,
+  # and group specifies the  group  the log  file will belong to. Any of the log file attributes
+  # may be omitted, in which case those attributes for the new file will use the same values as
+  # the original log file for  the  omitted  attributes. This option can be disabled using the
+  # nocreate option.
+  create:
+
+  # If  the  directory specified by olddir directive does not exist, it is created. mode specifies
+  # the mode for the olddir directory in octal (the same as chmod(2)), owner specifies the user
+  # name who will own the  olddir  directory,  and group specifies the group the olddir directory
+  # will belong to. This option can be disabled using the nocreateolddir option.
+  # create_old_dir: "mode owner group"
+  create_old_dir:
+
+  # Flag to define if you want your log files compressed
+  compress: True
+
+  # Command used to compress log files
+  # compress_command: "bzip2"
+
+  # Extension of the compressed log files
+  # compress_extension: "compressed"
+
+  # Command used to uncompress log files
+  # uncompress_command: "bzip2 -d"
+
+  # Options passed to the compress command. The default, for gzip(1),  is  "-6"
+  # (biased  towards high compression at the expense of speed).  If you use a
+  # different compression command, you may need to change the compressoptions to match.
+  # compress_options: "-6"
+
+  # Make a copy of the log file, but don't change the original at all.
+  # This option can be used, for instance, to make  a snapshot  of  the
+  # current log file, or when some other utility needs to truncate or parse
+  # the file.  When this option is used, the create option will have no
+  # effect, as the old log file stays in place.Command used for log
+  # uncompression
+  # copy: True
+
+  # Truncate the original log file to zero size in place after creating a copy,
+  # instead of moving the old  log  file  and optionally  creating  a new one.
+  # It can be used when some program cannot be told to close its logfile and thus might
+  # continue writing (appending) to the previous log file forever.  Note that there is
+  # a very small  time  slice  between copying  the file and truncating it, so some
+  # logging data might be lost.  When this option is used, the create option
+  # will have no effect, as the old log file stays in place.
+  copy_truncate: True
+
+  # Archive old versions of log files adding a date extension like YYYYMMDD instead of
+  # simply adding a number. The extension may be configured using the dateformat and
+  # dateyesterday options.
+  date_extension: True
+
+  # Specify  the  extension for dateext using the notation similar to strftime(3) function.
+  # Only %Y %m %d %H %M %S %V and %s specifiers are allowed.  The default value is -%Y%m%d
+  # except hourly, which uses -%Y%m%d%H as default value. Note that also the character
+  # separating log name from the extension is part of the dateformat string. The system clock
+  # must be set past Sep 9th 2001 for %s to work correctly.  Note that the datestamps generated
+  # by this format must be lexically sortable (i.e., first the year, then the month then the day.
+  # e.g., 2001/12/01 is ok, but 01/12/2001 is not, since 01/11/2002 would sort lower while it
+  # is later).  This is because when using the rotate option, logrotate sorts all rotated
+  # filenames to find out which logfiles are older and should be removed.
+  date_format: "-%Y-%m-%d"
+
+  # Use  yesterday's  instead of today's date to create the dateext extension, so that the rotated
+  # log file has a date in its name that is the same as the timestamps within it.
+  date_yesterday: True
+
+  # Postpone compression of the previous log file to the next rotation cycle.  This only has effect
+  # when used in combination with compress. It can be used when some program cannot be told to
+  # close its logfile and thus might continue writing to the previous log file for some time.
+  # delay_compress: True
+
+  # Log files with ext extension can keep it after the rotation. If compression is used, the
+  # compression extension (normally .gz) appears after ext. For example you have a logfile named
+  # mylog.foo and want to rotate it to mylog.1.foo.gz instead of mylog.foo.1.gz.
+  # extension: "extension"
+
+  # Log files are given the final extension ext after rotation. If the original file already ends
+  # with ext, the extension is not duplicated, but merely moved to the end, i.e. both filename
+  # and filenameext would get rotated to filename.1ext. If compression is used, the compression
+  # extension (normally .gz) appears after ext.
+  # add_extension: "add_extension"
+
+  # Rotate the log file even if it is empty, overriding the notifempty option (ifempty is the
+  # default).
+  if_empty: True
+
+  # Do not rotate logs which are less than <count> days old.
+  # min_age: 10
+
+  # Remove rotated logs older than <count> days. The age is only checked if the logfile is to be
+  # rotated. The files are mailed to the configured address if maillast and mail are configured.
+  # max_age: 20
+
+  # Log files are rotated when they grow bigger than size bytes even before the additionally
+  # specified time interval (daily, weekly, monthly, or yearly). The related size option is similar
+  # except that it is mutually exclusive with the time interval options, and it causes log files
+  # to be rotated without regard for the last rotation time. When maxsize is used, both the size
+  # and timestamp of a log file are considered.
+  # max_size: 10000
+
+  # Log files are rotated when they grow bigger than size bytes, but not before the additionally
+  # specified time interval (daily, weekly, monthly, or yearly). The related size option is similar
+  # except that it is mutually exclusive with the time interval options, and it causes log files
+  # to be rotated without regard for the last rotation time. When minsize is used, both the size
+  # and timestamp of a log file are considered.
+  # min_size:  1000
+
+  # If the log file is missing, go on to the next one without issuing an error message. See also
+  # nomissingok. Default is nomissingok. If nomissingok is activated, and if a log file does not
+  # exist, issue an error. There is only one variable to control both. If missingok is set to
+  # false, then nomissingok is output to configuration file.
+  missing_ok: True
+
+  # Do not copy the original log file and leave it in place.  (this overrides the copy option).
+  # no_copy: True
+
+  # Do not truncate the original log file in place after creating a copy (this overrides the
+  # copytruncate option).
+  # no_copy_truncate: True
+
+  # olddir directory is not created by logrotate when it does not exist.
+  # no_create_old_dir: True
+
+  # Do  not  postpone  compression  of the previous log file to the next rotation cycle (this
+  # overrides the delaycompress
+  # option).
+  # no_delay_compress: True
+
+  # Do not rotate the log if it is empty (this overrides the ifempty option).
+  # not_if_empty: True
+
+  # Logs are moved into directory for rotation. The directory must be on the same physical device
+  # as the log file being rotated, unless copy, copytruncate or renamecopy option is used. The
+  # directory is assumed to be relative to the directory holding the log file unless an absolute
+  # path name is specified. When this option is used all old versions of the log end up in
+  # directory. This option may be overridden by the noolddir option.
+  # old_dir: "directory"
+
+  # Log file is renamed to temporary filename in the same directory by adding ".tmp" extension to
+  # it. After that, postrotate script is run and log file is copied from temporary filename to
+  # final filename. This allows storing rotated log files on the different devices using olddir
+  # directive. In the end, temporary filename is removed.
+  # rename_copy: True
+
+  # Log  files  are rotated only if they grow bigger than size bytes. If size is followed by k,
+  # the size is assumed to be in kilobytes. If the M is used, the size is in megabytes, and if
+  # G is used, the size is in gigabytes. So  size  100, size 100k, size 100M and size 100G are
+  # all valid.
+  # size: 100k
+
+  # Delete  log  files  using  shred  -u  instead of unlink().  This should ensure that logs are
+  # not readable after their scheduled deletion; this is off by default. See also noshred.
+  # shred: True
+
+  # Rotate log files set under this user and group instead of using default user/group (usually
+  # root). user specifies the user name used for rotation and group specifies the group used for
+  # rotation. If the user/group you specify here does not have sufficient privilege to make files
+  # with the ownership you've specified in a create instruction, it will cause an error.
+  # su: "user group"
+
+  # New log files are not created (this overrides the create option).
+  # no_create: True
+
+  # List the files to remove
+  # remove_config_files:
+    # Remove a dummy configuration file from /etc/logrotate.d/dummy
+    # -  remove_me
+  # List the files to add
+  # add_config_files:
+    # Add a sample configuration file from files/saple to /etc/logrotate.d/sample
+    # -  add_me

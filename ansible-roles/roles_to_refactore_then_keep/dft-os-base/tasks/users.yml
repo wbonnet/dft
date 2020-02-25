@@ -1,0 +1,71 @@
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2016 DFT project (http://www.firmwaretoolkit.org).
+# All rights reserved. Use is subject to license terms.
+#
+#
+# Contributors list :
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#
+#
+
+#
+# Include the list of specific tasks. Tasks are separated into different
+# files, one file per functionnality.
+#
+
+---
+- name : DFT - Update root password when the defined password
+  user: name=root
+        password="{{ dft_root_password }}"
+        update_password=always
+  when: dft_root_password is defined
+
+- name : DFT - Update root password with random value when no password is defined
+  shell: /usr/sbin/usermod root -p $(/usr/bin/openssl rand -base64 32)
+  when: dft_root_password is not defined
+
+- name: DFT - Create local users (using password hash)
+  user: name="{{ item.name }}"
+        password="{{ item.password_hash }}"
+        createhome="{{ item.createhome }}"
+        group="{{ item.group }}"
+        groups="{{ item.groups }}"
+        shell="{{ item.shell }}"
+        generate_ssh_key="{{ item.generate_ssh_key | default ('no') }}"
+        update_password=always
+        state=present
+  with_items: "{{ dft_users }}"
+  when: dft_users is defined and item.password_hash is defined
+
+- name: DFT - Create local users (plaintext password)
+  user: name="{{ item.name }}"
+        password="{{ item.password | password_hash('sha512') }}"
+        createhome="{{ item.createhome }}"
+        group="{{ item.group }}"
+        groups="{{ item.groups }}"
+        shell="{{ item.shell }}"
+        generate_ssh_key="{{ item.generate_ssh_key | default ('no') }}"
+        update_password=always
+        state=present
+  with_items: "{{ dft_users }}"
+  when: dft_users is defined and item.password_hash is not defined
+
+- name: DFT - Copy SSH keys to user directories
+  authorized_key:  key="{{ lookup('file', 'files/{{ item.ssh_key_file }}') }}"
+                   manage_dir=yes
+                   state=present
+                   user={{ item.name }}
+                   exclusive={{ item.ssh_key_are_exclusive | default ('yes') }}
+                   key_options={{ item.ssh_key_options | default('') }}
+  with_items: "{{ dft_users }}"
+  when: dft_users is defined and item.ssh_key_file is defined

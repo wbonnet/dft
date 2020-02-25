@@ -1,0 +1,22 @@
+//
+// Do any local configuration here
+//
+
+zone "puteaux.wbonnet.net" {
+       type master;
+       file "/etc/bind/db.puteaux.wbonnet.net";
+       allow-query { internals; };
+//       forwarders {};
+};
+
+zone "71.168.192.in-addr.arpa" {
+       type master;
+       file "/etc/bind/71.168.192.in-addr.arpa";
+       allow-query { internals; };
+//       forwarders {};
+};
+
+// Consider adding the 1918 zones here, if they are not used in your
+// organization
+//include "/etc/bind/zones.rfc1918";
+
