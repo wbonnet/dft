@@ -1,2 +1,0 @@
-# Grant full sudo privileges without password
-localadmin	ALL=(ALL:ALL) NOPASSWD: ALL
