@@ -93,7 +93,7 @@ rebuild: configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 #
 
 build-%:
-	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+	if [ ! "$(SW_VERSION)" = "" ] ; then \
 		cd $(BUILD_DIR) ; \
 		if [ ! -f $(COOKIE_DIR)/build-$* ] ; then \
 			$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
