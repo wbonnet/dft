@@ -222,8 +222,7 @@ clean:
 # Delete everthing from the work, cookies and download directories
 #
 mrproper:
-	@echo "Sorry mrproper has been temporarly disabled due to debugging sessions in progress"
-	@echo "I was about to run : rm -rf $(WORK_DIR) --one-file-system --preserve-root"
+	@rm -rf "$(WORK_DIR)" --one-file-system --preserve-root
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 
 
