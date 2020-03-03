@@ -101,13 +101,14 @@ do-configure:
 							echo "DEBUG : ../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config exist !" ; \
 							cp "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" $(BUILD_DIR)/.config ; \
 						fi ; \
-						ls -l "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ; \
-						md5sum "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ; \
 						cd $(BUILD_DIR) ; \
-						echo "DEBUG : running kernel make olddefconfig in `pwd`. existing .config files have been backuped up to beforolddefconfig and afterolddefconfig" ; \
+						echo "DEBUG : now running kernel make olddefconfig in `pwd`" ; \
+						echo "DEBUG : existing .config files have been backuped up to beforolddefconfig and afterolddefconfig" ; \
 						cp .config "$(BOARD_NAME)-kernel-$(SW_VERSION).beforeolddefconfig" ; \
+						md5sum "$(BOARD_NAME)-kernel-$(SW_VERSION).beforeolddefconfig" ; \
 						make olddefconfig ; \
-						cp .config $(BOARD_NAME)-kernel-$(SW_VERSION).afterolddefconfig ; \
+						cp .config "$(BOARD_NAME)-kernel-$(SW_VERSION).afterolddefconfig" ; \
+						md5sum "$(BOARD_NAME)-kernel-$(SW_VERSION).afterolddefconfig" ; \
 					fi ; \
 				fi ; \
 			fi ; \
