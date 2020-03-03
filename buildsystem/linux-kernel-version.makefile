@@ -93,12 +93,12 @@ sanity-check:
 		echo "git add ${CURDIR}//Makefile" ; \
 		$(call dft_error ,2011-2103) ; \
 	fi ;
-	@if [ ! -d "../defconfig" ] ; then \
-		echo "kernel config files directory is missing ${CURDIR}//.." ; \
+	@if [ ! -d "../config" ] ; then \
+		echo "kernel config files directory is missing ${CURDIR}/.." ; \
 		echo "You can fix with the following commands : " ; \
-		echo "mkdir ../defconfig" ; \
-		echo "touch ../defconfig/.gitkeep" ; \
-		echo "git add ../defconfig" ; \
+		echo "mkdir ../config" ; \
+		echo "touch ../config/.gitkeep" ; \
+		echo "git add ../config" ; \
 		$(call dft_error ,2011-2101) ; \
 	fi ;
 	@if [ ! -d "./debian" ] ; then \

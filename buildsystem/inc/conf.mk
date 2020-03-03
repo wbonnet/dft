@@ -157,7 +157,7 @@ FILE_DIR            ?= $(WORK_DIR)/files
 # DEFCONFIG_DIR contains the defconfig files used for kernel building. There
 # is one file under git per kernel version of a given board (the board is defined
 # by folder hierarchy).
-DEFCONFIG_DIR       ?= $(WORK_DIR)/defconfig
+DEFCONFIG_DIR       ?= $(WORK_DIR)/config
 
 # PATCH_DIR contain all the patches to be applied on upstream sources during
 # make patch target execution.
@@ -206,7 +206,7 @@ KERNEL_DEFCONFIG     ?= $(BOARD_NAME).config
 # XXXX TODO If this variable is set, and USE_CONFIG_FILE is undefined, a config file will
 # be generated using the given target. Default is to define nothing and let the
 # user set one of the two choice, or run make by himself.
-UBOOT_DEFCONFIG       ?= undefined_defconfig_in_board_mk
+UBOOT_DEFCONFIG       ?= undefined_config_in_board_mk
 
 # The config file can be modified once set in the build dir (either using a build
 # defconfig or by copying our own config file) by applying modifications defined

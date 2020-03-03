@@ -44,7 +44,7 @@ UBOOT_DEFCONFIG := $(subst ,,$(UBOOT_DEFCONFIG))
 USE_CONFIG_FILE := $(subst ,,$(USE_CONFIG_FILE))
 
 # Do not recurse the following subdirs
-MAKE_FILTERS  := files defconfig Makefile README.md .
+MAKE_FILTERS  := files config Makefile README.md .
 
 # ------------------------------------------------------------------------------
 #
@@ -69,12 +69,12 @@ endif
 
 sanity-check:
 	@echo "Checking $(BOARD_NAME) kernel packages folder"
-	@if [ ! -d "${CURDIR}/defconfig" ] ; then \
-		echo "defconfig directory is missing in ${CURDIR}. It contains the configuration files of the different Linux kernel versions." ; \
+	@if [ ! -d "${CURDIR}//config" ] ; then \
+		echo "config directory is missing in ${CURDIR}. It contains the configuration files of the different Linux kernel versions." ; \
 		echo "You can fix with the following commands : " ; \
-		echo "mkdir -p ${CURDIR}/defconfig" ; \
-		echo "touch ${CURDIR}/defconfig/.gitkeep" ; \
-		echo "git add ${CURDIR}//defconfig/.gitkeep" ; \
+		echo "mkdir -p ${CURDIR}//config" ; \
+		echo "touch ${CURDIR}//config/.gitkeep" ; \
+		echo "git add ${CURDIR}//config/.gitkeep" ; \
 		$(call dft_error ,2001-0809) ; \
 	fi ;
 	@if [ ! -L "Makefile"  ] ; then \
@@ -93,12 +93,12 @@ sanity-check:
 		echo "git add ${CURDIR}/Makefile" ; \
 		$(call dft_error ,1911-2011) ; \
 	fi ;
-	@if [ ! -d "${CURDIR}//defconfig" ] ; then \
-		echo "defconfig directory is missing in ${CURDIR}/. It contains the configuration files of the different Linux kernel versions." ; \
+	@if [ ! -d "${CURDIR}//config" ] ; then \
+		echo "config directory is missing in ${CURDIR}/. It contains the configuration files of the different Linux kernel versions." ; \
 		echo "You can fix with the following commands : " ; \
-		echo "mkdir -p ${CURDIR}//defconfig" ; \
-		echo "touch ${CURDIR}//defconfig/.gitkeep" ; \
-		echo "git add ${CURDIR}//defconfig/.gitkeep" ; \
+		echo "mkdir -p ${CURDIR}//config" ; \
+		echo "touch ${CURDIR}//config/.gitkeep" ; \
+		echo "git add ${CURDIR}//config/.gitkeep" ; \
 		$(call dft_error ,1911-2013) ; \
 	fi ;
 	@if [ ! -L "board.mk" ] ; then \

@@ -85,7 +85,7 @@ do-configure:
 			else \
 				if [ "$(SW_NAME)" = "u-boot" ] ; then \
 					cd $(BUILD_DIR) ; \
-					if [ ! -f "configs/$(UBOOT_DEFCONFIG)" ] ; then \
+					if [ ! -f "config/$(UBOOT_DEFCONFIG)" ] ; then \
 						echo "ERROR defconfig file $(UBOOT_DEFCONFIG) for board $(BOARD_NAME) does not exist in $(SW_NAME) v$(SW_VERSION) sources." ; \
 						$(call dft_error ,2001-1001) ; \
 					else \
@@ -94,13 +94,13 @@ do-configure:
 					fi ; \
 				else \
 					if [ "$(SW_NAME)" = "linux" ] ; then \
-						if [ ! -f "../defconfig/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ] ; then \
-							echo "DEBUG : ../defconfig/$(BOARD_NAME)-kernel-$(SW_VERSION).config does not exist using default instead" ; \
-							cp "../defconfig/$(BOARD_NAME)-kernel-default.config" $(BUILD_DIR)/.config ; \
+						if [ ! -f "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ] ; then \
+							echo "DEBUG : ../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config does not exist using default instead" ; \
+							cp "../config/$(BOARD_NAME)-kernel-default.config" $(BUILD_DIR)/.config ; \
 						else \
-							echo "DEBUG : ../defconfig/$(BOARD_NAME)-kernel-$(SW_VERSION).config exist !" ; \
-							cp "../defconfig/$(BOARD_NAME)-kernel-$(SW_VERSION).config" $(BUILD_DIR)/.config ; \
-							ls -l "../defconfig/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ; \
+							echo "DEBUG : ../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config exist !" ; \
+							cp "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" $(BUILD_DIR)/.config ; \
+							ls -l "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ; \
 						fi ; \
 						cd $(BUILD_DIR) ; \
 						echo "DEBUG : running kernel make olddefconfig in `pwd`. .config is backuped up to beforolddefconfig and afterolddefconfig" ; \
