@@ -103,7 +103,7 @@ do-configure:
 							ls -l "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ; \
 						fi ; \
 						cd $(BUILD_DIR) ; \
-						echo "DEBUG : running kernel make olddefconfig in `pwd`. .config is backuped up to beforolddefconfig and afterolddefconfig" ; \
+						echo "DEBUG : running kernel make olddefconfig in `pwd`. existing .config files have been backuped up to beforolddefconfig and afterolddefconfig" ; \
 						cp .config "$(BOARD_NAME)-kernel-$(SW_VERSION).beforeolddefconfig" ; \
 						make olddefconfig ; \
 						cp .config $(BOARD_NAME)-kernel-$(SW_VERSION).afterolddefconfig ; \
