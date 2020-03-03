@@ -100,8 +100,9 @@ do-configure:
 						else \
 							echo "DEBUG : ../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config exist !" ; \
 							cp "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" $(BUILD_DIR)/.config ; \
-							ls -l "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ; \
 						fi ; \
+						ls -l "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ; \
+						md5sum "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ; \
 						cd $(BUILD_DIR) ; \
 						echo "DEBUG : running kernel make olddefconfig in `pwd`. existing .config files have been backuped up to beforolddefconfig and afterolddefconfig" ; \
 						cp .config "$(BOARD_NAME)-kernel-$(SW_VERSION).beforeolddefconfig" ; \
