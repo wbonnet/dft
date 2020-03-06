@@ -73,7 +73,7 @@ reconfigure: patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconfi
 
 configure: extract pre-configure do-configure post-configure 
 do-configure:
-	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+	if [ ! "$(SW_VERSION)" = "" ] && [ ! "$(SW_VERSION)" = "no-linux-version" ]; then \
 		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 			echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 		       	echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
@@ -85,7 +85,7 @@ do-configure:
 			else \
 				if [ "$(SW_NAME)" = "u-boot" ] ; then \
 					cd $(BUILD_DIR) ; \
-					if [ ! -f "config/$(UBOOT_DEFCONFIG)" ] ; then \
+					if [ ! -f "configs/$(UBOOT_DEFCONFIG)" ] ; then \
 						echo "ERROR defconfig file $(UBOOT_DEFCONFIG) for board $(BOARD_NAME) does not exist in $(SW_NAME) v$(SW_VERSION) sources." ; \
 						$(call dft_error ,2001-1001) ; \
 					else \
@@ -94,12 +94,12 @@ do-configure:
 					fi ; \
 				else \
 					if [ "$(SW_NAME)" = "linux" ] ; then \
-						if [ ! -f "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ] ; then \
-							echo "DEBUG : ../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config does not exist using default instead" ; \
-							cp "../config/$(BOARD_NAME)-kernel-default.config" $(BUILD_DIR)/.config ; \
+						if [ ! -f "config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ] ; then \
+							echo "DEBUG : config/$(BOARD_NAME)-kernel-$(SW_VERSION).config does not exist using default instead" ; \
+							cp "config/$(BOARD_NAME)-kernel-default.config" $(BUILD_DIR)/.config ; \
 						else \
-							echo "DEBUG : ../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config exist !" ; \
-							cp "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" $(BUILD_DIR)/.config ; \
+							echo "DEBUG : config/$(BOARD_NAME)-kernel-$(SW_VERSION).config exist !" ; \
+							cp "config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" $(BUILD_DIR)/.config ; \
 						fi ; \
 						cd $(BUILD_DIR) ; \
 						echo "DEBUG : now running kernel make olddefconfig in `pwd`" ; \
