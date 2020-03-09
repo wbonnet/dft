@@ -53,8 +53,10 @@ show-build-targets:
 	@echo $(BUILD_TARGETS) ;
 
 build: configure pre-build $(BUILD_TARGETS) post-build
-	@if [ "$(SW_VERSION)" = "" ] ; then \
-		echo "DEBUG : SW_VERSION is empty of undefined. Not at a defined version level skipping build. Make was running in the path below :" ; \
+	echo "DEBUG : target is $@ make is running in " ; \
+	pwd ; 
+	if [ "$(SW_VERSION)" = "" ] ; then \
+		echo "DEBUG : SW_VERSION is empty or undefined. Not at a defined version level skipping build. Make was running in the path below :" ; \
 		pwd ; \
 	else  \
 		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
