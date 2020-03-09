@@ -156,7 +156,7 @@ install:
 	else \
 		for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
 			$(MAKE) -C $$v  install; \
-		done \
+		done ; \
 	fi ; \
 
 build:
@@ -169,7 +169,7 @@ build:
 	else \
 		for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
 			$(MAKE) -C $$v  build; \
-		done
+		done ; \
 	fi ; \
 
 package:
@@ -182,7 +182,7 @@ package:
 	else \
 		for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
 			$(MAKE) -C $$v  package; \
-		done
+		done ; \
 	fi ; \
 
 # Simple forwarder
@@ -191,10 +191,13 @@ fetch:
 	echo "DEBUG target fetch in linux-kernel.makefile" ;
 	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
 		$(MAKE) -C $$v  fetch ; \
-	done
+	done ; \
 
 configure:
-	echo "DEBUG target configure in linux-kernel.makefile" ;
+	echo "DEBUG target configure in linux-kernel.makefile" ; \
+	echo "DEBUG je suis dans"  ; \
+	pwd ; \
+	find .  -mindepth 1 -maxdepth 1 -type d  -name "2*"  ; \
 	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 	  	echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
@@ -203,7 +206,7 @@ configure:
 	else \
 		for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
 			$(MAKE) -C $$v  configure ; \
-		done
+		done ; \
 	fi ; \
 
 setup:
