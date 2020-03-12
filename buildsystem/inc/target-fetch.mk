@@ -74,7 +74,7 @@ fetch : setup pre-fetch $(FETCH_TARGETS) post-fetch
 # To keep stuf clean the useless empty folders are removed by command rmdir 
 # --ignore-fail-on-non-empty
 fetch-archive-%:
-	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+	if [ ! "$(SW_VERSION)" = "" ] && [ ! "$(SW_VERSION)" = "no-linux-version" ] ; then \
 		if [ -f $(COOKIE_DIR)/$@ ] ; then \
 			true ; \
 		else \
