@@ -154,8 +154,6 @@ sanity-check:
 		$(MAKE) --directory=$$version $* ; \
         done
 
-# cd $$version && $(MAKE) -C $$version $*  && cd .. ;
-
 # Build only u-boot  package target
 u-boot-package:
 	@echo "target $@ is called in board.makefile"
@@ -189,6 +187,8 @@ check-u-boot-defconfig:
 # Simple forwarder
 extract:
 fetch:
+build:
+configure:
 setup:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
