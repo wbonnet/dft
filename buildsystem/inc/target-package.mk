@@ -48,6 +48,7 @@ SW_VERSION  ?= no-version-at-target-package
 #
 
 do-package:
+	echo "DEBUG : SW_VERSION " $(SW_VERSION) ; \
 	if [ ! "$(SW_VERSION)" = "" ] ; then \
 		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 			echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
