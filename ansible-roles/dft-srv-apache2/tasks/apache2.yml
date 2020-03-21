@@ -69,7 +69,7 @@
 # Deactivate the virtual hosts configuration files
 #
 - name : DFT - Deactivate apache2 disabled virtual hosts
-  command: a2ensite {{ item.name }}
+  command: a2dissite {{ item.name }}
   with_items: "{{ dft_apache2.sites_disabled}}"
   when: dft_apache2.sites_disabled is defined
 #-  notify:
