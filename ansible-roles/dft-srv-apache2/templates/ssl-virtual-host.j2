@@ -1,0 +1,151 @@
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2020 DFT project (http://www.firmwaretoolkit.org).
+# All rights reserved. Use is subject to license terms.
+#
+#
+# Contributors list :
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#
+#
+
+<IfModule mod_ssl.c>
+<VirtualHost {{ item.ServerName }}:443>
+  # The ServerName directive sets the request scheme, hostname and port that
+  # the server uses to identify itself. This is used when creating
+  # redirection URLs. In the context of virtual hosts, the ServerName
+  # specifies what hostname must appear in the request's Host: header to
+  # match this virtual host. For the default virtual host (this file) this
+  # value is not decisive as it is used as a last resort host regardless.
+  # However, you must set it for any further virtual host explicitly.
+
+{% if item.ServerName is defined %}
+  ServerName {{ item.ServerName }}
+{% else %}
+  # ServerName is undefined by template variable item.ServerName
+{% endif %}
+{% if item.ServerAdmin is defined %}
+  ServerAdmin {{ item.ServerAdmin }}
+{% else %}
+  ServerAdmin webmaster@localhost
+{% endif %}
+{% if item.DocumentRoot is defined %}
+  DocumentRoot {{ item.DocumentRoot }}
+{% else %}
+  DocumentRoot /var/www/html
+{% endif %}
+
+  # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
+  # error, crit, alert, emerg.
+  # It is also possible to configure the loglevel for particular
+  # modules, e.g.
+  #LogLevel info ssl:warn
+
+{% if item.ErroLog is defined %}
+  ErrorLog ${APACHE_LOG_DIR}/{{ item.ErrorLog }}
+{% else %}
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+{% endif %}
+{% if item.AccessLog is defined %}
+  CustomLog ${APACHE_LOG_DIR}/{{ item.AccessLog }} combined
+{% else %}
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
+{% endif %}
+
+    #   SSL Engine Switch:
+    #   Enable/Disable SSL for this virtual host.
+    SSLEngine on
+
+    #   A self-signed (snakeoil) certificate can be created by installing
+    #   the ssl-cert package. See
+    #   /usr/share/doc/apache2/README.Debian.gz for more info.
+    #   If both key and certificate are stored in the same file, only the
+    #   SSLCertificateFile directive is needed.
+    # SSLCertificateFile  /etc/ssl/certs/ssl-cert-snakeoil.pem
+    # SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
+
+    #   Server Certificate Chain:
+    #   Point SSLCertificateChainFile at a file containing the
+    #   concatenation of PEM encoded CA certificates which form the
+    #   certificate chain for the server certificate. Alternatively
+    #   the referenced file can be the same as SSLCertificateFile
+    #   when the CA certificates are directly appended to the server
+    #   certificate for convinience.
+    #SSLCertificateChainFile /etc/apache2/ssl.crt/server-ca.crt
+
+    #   Certificate Authority (CA):
+    #   Set the CA certificate verification path where to find CA
+    #   certificates for client authentication or alternatively one
+    #   huge file containing all of them (file must be PEM encoded)
+    #   Note: Inside SSLCACertificatePath you need hash symlinks
+    #    to point to the certificate files. Use the provided
+    #    Makefile to update the hash symlinks after changes.
+    #SSLCACertificatePath /etc/ssl/certs/
+    #SSLCACertificateFile /etc/apache2/ssl.crt/ca-bundle.crt
+
+    #   Certificate Revocation Lists (CRL):
+    #   Set the CA revocation path where to find CA CRLs for client
+    #   authentication or alternatively one huge file containing all
+    #   of them (file must be PEM encoded)
+    #   Note: Inside SSLCARevocationPath you need hash symlinks
+    #    to point to the certificate files. Use the provided
+    #    Makefile to update the hash symlinks after changes.
+    #SSLCARevocationPath /etc/apache2/ssl.crl/
+    #SSLCARevocationFile /etc/apache2/ssl.crl/ca-bundle.crl
+
+    #   Client Authentication (Type):
+    #   Client certificate verification type and depth.  Types are
+    #   none, optional, require and optional_no_ca.  Depth is a
+    #   number which specifies how deeply to verify the certificate
+    #   issuer chain before deciding the certificate is not valid.
+    #SSLVerifyClient require
+    #SSLVerifyDepth  10
+
+    #   SSL Engine Options:
+    #   Set various options for the SSL engine.
+    #   o FakeBasicAuth:
+    #  Translate the client X.509 into a Basic Authorisation.  This means that
+    #  the standard Auth/DBMAuth methods can be used for access control.  The
+    #  user name is the `one line' version of the client's X.509 certificate.
+    #  Note that no password is obtained from the user. Every entry in the user
+    #  file needs this password: `xxj31ZMTZzkVA'.
+    #   o ExportCertData:
+    #  This exports two additional environment variables: SSL_CLIENT_CERT and
+    #  SSL_SERVER_CERT. These contain the PEM-encoded certificates of the
+    #  server (always existing) and the client (only existing when client
+    #  authentication is used). This can be used to import the certificates
+    #  into CGI scripts.
+    #   o StdEnvVars:
+    #  This exports the standard SSL/TLS related `SSL_*' environment variables.
+    #  Per default this exportation is switched off for performance reasons,
+    #  because the extraction step is an expensive operation and is usually
+    #  useless for serving static content. So one usually enables the
+    #  exportation for CGI and SSI requests only.
+    #   o OptRenegotiate:
+    #  This enables optimized SSL connection renegotiation handling when SSL
+    #  directives are used in per-directory context.
+    #SSLOptions +FakeBasicAuth +ExportCertData +StrictRequire
+    <FilesMatch "\.(cgi|shtml|phtml|php)$">
+        SSLOptions +StdEnvVars
+    </FilesMatch>
+    <Directory /usr/lib/cgi-bin>
+        SSLOptions +StdEnvVars
+    </Directory>
+
+    # Defines path to the web site certificate
+    SSLCertificateFile /etc/ssl/certs/{{ item.ServerName }}-fullchain.pem
+
+    # Defines path to the certificate private key
+    SSLCertificateKeyFile /etc/ssl/private/{{ item.ServerName }}-privkey.pem
+  </VirtualHost>
+</IfModule>
