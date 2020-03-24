@@ -39,9 +39,6 @@ zombie_count=$(ps --no-headers axo stat | grep Z | wc -l)
 defunct_count=$(ps --no-headers axo stat | grep D | wc -l)
 zombie_count=$(( ${zombie_count} + ${defunct_count} ))
 
-# Retrieves the main IP
-main_ip="192.18.1.2"
-
 # Retrieves the CPU temp
 cpu_temp="32"
 
@@ -49,4 +46,4 @@ printf "\n"
 printf "System load: %-15s Uptime:     %-14s Users:        %s\n" "${system_load}" "${uptime}" "${user_count}"
 printf "Memory used: %-15s Swap used:  %-14s Usage of /:   %s\n" "${used_mem}" "${used_swap}" "${used_rootfs}"
 printf "Processes:   %-15s Threads:    %-14s Dead/Zombie:  %s\n" "${process_count}" "${thread_count}" "${zombie_count}"
-#printf "IP: %-15s   CPU temp:   %3d °C\n" "${main_ip}" "${cpu_temp}"
+#printf "CPU temp:   %3d °C\n" "${main_ip}" "${cpu_temp}"
