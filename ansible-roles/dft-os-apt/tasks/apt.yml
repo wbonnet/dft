@@ -1,0 +1,90 @@
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2016 DFT project (http://www.firmwaretoolkit.org).
+# All rights reserved. Use is subject to license terms.
+#
+#
+# Contributors list :
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#
+#
+
+#
+# Include the list of specific tasks. Tasks are separated into different
+# files, one file per functionnality.
+#
+
+#---
+# Deactivate repository validity check
+- name : DFT - Deactivate repository expiration check
+  copy: src=files/10no-check-valid-until
+        dest=/etc/apt/apt.conf.d/10no-check-valid-until
+        mode=0644
+        owner=root
+        group=root
+  when: ( dft_os_apt is defined and dft_os_apt.options is defined and
+          dft_os_apt.options.deactivate_check_valid_until is defined and
+          dft_os_apt.options.deactivate_check_valid_until == True)
+
+# Generate the sources.list file
+- name: DFT - Deploy APT sources main configuration file (/etc/apt/sources.list)
+  template: src=sources.list.j2
+            dest=/etc/apt/sources.list
+            owner=root
+            group=root
+            mode="0644"
+  when: ( dft_os_apt is defined and dft_os_apt.generate_sources_list is defined and
+          dft_os_apt.generate_sources_list == True)
+
+# Generate the extra sources.list.d files
+- name: DFT - Deploy APT sources.list.d extra configuration files (/etc/apt/sources.list.d/)
+  template: src=sources.list.d.j2
+            dest=/etc/apt/sources.list.d/{{ item.file }}.list
+            owner=root
+            group=root
+            mode="0644"
+  with_items: "{{ dft_os_apt.extra_sources_list_content }}"
+  when: ( dft_os_apt is defined and dft_os_apt.generate_sources_list is defined and
+          dft_os_apt.generate_sources_list == True and dft_os_apt.extra_sources_list_content is defined)
+
+# Import the needed keys
+- name: DFT - Import APT keys (from a keyserver)
+  apt_key: id={{ item.key_id }}
+           keyserver={{ item.key_server }}
+           state=present
+  with_items: "{{ dft_os_apt.repositories_keys }}"
+  when: ( dft_os_apt is defined and dft_os_apt.repositories_keys is defined and
+          item.key_id is defined)
+
+# Import the needed keys
+- name: DFT - Import APT keys (from a key url)
+  apt_key: url={{ item.key_url }}
+  with_items: "{{ dft_os_apt.repositories_keys }}"
+  when: ( dft_os_apt is defined and dft_os_apt.repositories_keys is defined and
+          item.key_url is defined)
+
+# Update APT catalog once new apt list has been deployed
+- name : DFT - Update catalog after sources.list modification
+  apt:
+    update_cache: yes
+
+# Install the "apt" packages
+- name : DFT - Install APT packages management
+  apt: name={{ item }}
+       state=latest
+       install_recommends=no
+  with_items:
+    - apt
+# TODO  should it be everywhere if no remove the line in comment   - dpkg-dev
+# TODO  remove version test in comment* once fully tested it is useless now  and 10 are out
+#  when: (ansible_distribution == "Debian" and ansible_distribution_major_version == "8")
+  when: (ansible_distribution == "Debian")
