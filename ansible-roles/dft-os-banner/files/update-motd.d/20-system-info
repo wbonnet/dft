@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Retrieves the system load
+system_load=$(LC_ALL=C uptime | rev | cut -f2 -d, | rev | tr -d \  )
+
+# Retrieves the uptime
+uptime=$(LC_ALL=C uptime | cut -d, -f1 | cut -d\  -f4- | sed -e "s/^ //")
+
+# Retrieves the number of users
+user_count=$(who | wc -l)
+
+# Retrieves the memory used
+used_mem=$(free -h | grep "^Mem:" | awk '{ print $3 " of " $2}')
+
+# Retrieves the swap used
+used_swap=$(free -h | grep "^Swap:" | awk '{ print $2 }')
+if [ "${used_swap}" == "0B" ] ;
+then
+  used_swap="Deactivated"
+else
+  used_swap=$(free -h | grep "^Swap:" | awk '{ print $3 " of " $2}')
+fi
+
+# Retrieves the root usage
+used_rootfs="$(df -h / | tail -n 1 | awk '{ print $5 " of " $2}')"
+
+# Retrieves the number of processes
+process_count=$(ps --no-headers -Ao cmd | grep -v "^\[" | grep -v "\]$" | wc -l)
+
+# Retrieves the number of kernel threads
+kthread_count=$(ps --no-headers -Ao cmd | grep "^\[" | grep "\]$" | wc -l)
+
+# Retrieves the number of threads
+thread_count=$(( $(ps --no-headers -AL | wc -l) - ${process_count} - ${kthread_count} ))
+thread_count="${thread_count} (${kthread_count} kt)"
+
+# Retrieve zombie and defunct processes
+zombie_count=$(ps --no-headers axo stat | grep Z | wc -l)
+defunct_count=$(ps --no-headers axo stat | grep D | wc -l)
+zombie_count=$(( ${zombie_count} + ${defunct_count} ))
+
+# Retrieves the CPU temp
+cpu_temp="32"
+
+printf "\n"
+printf "System load: %-15s Uptime:     %-14s Users:        %s\n" "${system_load}" "${uptime}" "${user_count}"
+printf "Memory used: %-15s Swap used:  %-14s Usage of /:   %s\n" "${used_mem}" "${used_swap}" "${used_rootfs}"
+printf "Processes:   %-15s Threads:    %-14s Dead/Zombie:  %s\n" "${process_count}" "${thread_count}" "${zombie_count}"
+#printf "CPU temp:   %3d °C\n" "${main_ip}" "${cpu_temp}"
