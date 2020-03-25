@@ -1,0 +1,175 @@
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2016 DFT project (http://www.firmwaretoolkit.org).
+# All rights reserved. Use is subject to license terms.
+#
+#
+# Contributors list :
+#
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#    Jean-Marc Lacroix  jeanmarc.lacroix@free.fr
+#
+#
+
+#
+# This file describes the level of support and status of the different boards
+# DFT is aware of. For each board board i defines :
+#  . the level of support (stable, testing, experimental, planning)
+#  . the u-boot current version
+#  . the kernel current version
+#  . the list of target that should be produced on a daily basis
+
+board-status:
+  desktop:
+          - b1eelink-j45:
+            support-level: planning
+          - beelink-mii-3350:
+            support-level: planning
+          - generic-amd64:
+            support-level: planning
+  laptop:
+          - pine64-pinebook:
+            support-level: planning
+          - pine64-pinebookpro:
+            support-level: planning
+  set-top-box:
+          - alfawise-s95:
+            support-level: planning
+          - beelink-gt1:
+                  support-level: planning
+          - beelink-gt1-ultimate:
+                  support-level: planning
+          - h96max-plus:
+                  support-level: planning
+          - hk1:
+                  support-level: planning
+          - hk1mini:
+                  support-level: planning
+          - m96x-2:
+                  support-level: planning
+          - m96x-2-mini:
+                  support-level: planning
+          - meecool-m8s-prow:
+                  support-level: planning
+          - rovtop-t9:
+                  support-level: planning
+          - s8-mini:
+                  support-level: planning
+          - scishion-v88-plus:
+                  support-level: planning
+          - sunvell-t95max:
+                  support-level: planning
+          - tanix-tx3:
+                  support-level: planning
+          - x96mini:
+                  support-level: planning
+ single-board-computer:
+         - 96boards-rock960:
+                  support-level: planning
+         - asus-tinkerboard:
+                  support-level: planning
+         - bananapi-r2:
+                  support-level: planning
+         - beagleboard-beaglebone-black:
+                  support-level: planning
+         - boundarydevices-nitrogen6-qpmax:
+                  support-level: planning
+         - boundarydevices-nitrogen8m:
+                  support-level: planning
+         - cubieboard-1:
+                  support-level: planning
+         - cubieboard-2:
+                  support-level: planning
+         - cubieboard-3:
+                  support-level: planning
+         - cubieboard-4:
+                  support-level: planning
+         - cubieboard-5:
+                  support-level: planning
+         - firefly-rk3399:
+                  support-level: planning
+         - imagination-creator-ci20:
+                  support-level: planning
+         - marsboard-imx6:
+                  support-level: planning
+         - nanopi-k2:
+                  support-level: planning
+         - nanopi-m1:
+                  support-level: planning
+         - nanopi-neo:
+                  support-level: planning
+         - nanopi-neo2:
+                  support-level: planning
+         - nanopi-neo-plus2:
+                  support-level: planning
+         - nvidia-jetson-nano:
+                  support-level: planning
+         - nvidia-jetson-tk1:
+                  support-level: planning
+         - nvidia-jetson-tx1:
+                  support-level: planning
+         - nvidia-jetson-tx2:
+                  support-level: planning
+         - nxp-sabre-qsd:
+                  support-level: planning
+         - nxp-sabre-qsd-plus:
+                  support-level: planning
+         - odroid-c0:
+                  support-level: planning
+         - odroid-c1-plus:
+                  support-level: planning
+         - odroid-c2:
+                  support-level: planning
+         - odroid-hc1:
+                  support-level: planning
+         - odroid-n2:
+                  support-level: planning
+         - odroid-:xu4:
+                  support-level: planning
+         - orangepi-3:
+                  support-level: planning
+         - orangepi-4:
+                  support-level: planning
+         - orangepi-one-plus:
+                  support-level: planning
+         - orangepi-plus-2e:
+                  support-level: planning
+         - orangepi-r1:
+                  support-level: planning
+         - orangepi-zero:
+                  support-level: planning
+         - orangepi-zero-2g-iot:
+                  support-level: planning
+         - orangepi-zero-4g-iot:
+                  support-level: planning
+         - orangepi-zero-plus:
+                  support-level: planning
+         - pine64-a64:
+                  support-level: planning
+         - pine64-h64:
+                  support-level: planning
+         - pine64-rock64:
+                  support-level: planning
+         - raspberry-pi0:
+                  support-level: planning
+         - raspberry-pi0w:
+                  support-level: planning
+         - raspberry-pi1:
+                  support-level: planning
+         - raspberry-pi2:
+                  support-level: planning
+         - raspberry-pi3:
+                  support-level: planning
+         - raspberry-pi4b:
+                  support-level: planning
+         - raspberry-pi3-32bits:
+                  support-level: planning
