@@ -18,11 +18,6 @@
 #
 #
 
-#
-# Include the list of specific tasks. Tasks are separated into different
-# files, one file per functionnality.
-#
-
 ---
 - name : DFT - Install sudo
   apt: name={{ item }}
