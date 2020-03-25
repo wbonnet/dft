@@ -24,4 +24,5 @@
 #
 
 ---
+- include: packages.yml
 - include: configuration.yml
