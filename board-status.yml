@@ -144,9 +144,9 @@ board-status:
          - orangepi-plus-2e:
                   support-level: planning
          - orangepi-r1:
-                  support-level: planning
+                  support-level: stable
          - orangepi-zero:
-                  support-level: planning
+                  support-level: stable
          - orangepi-zero-2g-iot:
                   support-level: planning
          - orangepi-zero-4g-iot:
