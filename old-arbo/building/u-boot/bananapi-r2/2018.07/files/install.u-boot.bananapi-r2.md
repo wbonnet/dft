@@ -1,1 +1,0 @@
-../../files/install.u-boot.bananapi-r2.md

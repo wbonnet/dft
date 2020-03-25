@@ -1,7 +1,0 @@
-config/dftrc /etc/dft/
-ansible /usr/share/dft
-bsp /usr/share/dft
-library /usr/share/dft
-scripts /usr/share/dft
-bin/* /usr/bin
-debian/tmp/usr/lib /usr

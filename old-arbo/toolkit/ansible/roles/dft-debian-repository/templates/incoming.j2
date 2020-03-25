@@ -1,7 +1,0 @@
-Name: incoming-{{ item.codename }}
-IncomingDir: {{ dft_debian_repository_directory }}/{{ item.base_dir }}/incoming
-TempDir: {{ dft_debian_repository_directory }}/{{ item.base_dir }}/tmp
-LogDir: {{ dft_debian_repository_directory }}/{{ item.base_dir }}/logs
-{% if item.allow is defined %}
-Allow: {% for rule_allow in item.allow %} {{ rule_allow }} {% endfor %}
-{% endif %}

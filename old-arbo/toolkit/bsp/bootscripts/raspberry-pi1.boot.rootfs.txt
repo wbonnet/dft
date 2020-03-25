@@ -1,1 +1,0 @@
-generic-board.boot.rootfs.txt

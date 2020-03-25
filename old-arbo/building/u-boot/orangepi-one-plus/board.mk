@@ -1,1 +1,0 @@
-orangepi-one-plus.mk

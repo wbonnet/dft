@@ -1,8 +1,0 @@
-Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: dft
-Upstream-Contact: William Bonnet <wbonnet@theitmakers.com>
-Source: https://github.com/wbonnet/dft/
-
-Files: *
-Copyright: 2017, William Bonnet <wbonnet@theitmakers.com>
-License: Apache

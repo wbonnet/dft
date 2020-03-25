@@ -1,1 +1,0 @@
-imx6-board.boot.rootfs.txt
