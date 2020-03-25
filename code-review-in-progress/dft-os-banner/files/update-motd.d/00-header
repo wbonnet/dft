@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# Import os-release definitions
+if [ -f /etc/os-release ] ; then . /etc/os-release ; fi
+
+# Populate local variable with system information
+KERNEL_VERSION=$(uname -r)
+if [ -f /etc/update-motd.d/dft-banner ] ;
+then
+  BANNER=$(cat /etc/update-motd.d/dft-banner)
+else
+  BANNER=$(hostname)
+fi
+
+# Display the banner
+toilet -f standard ${BANNER}
+
+# And finaly the welcome message
+printf '\nWelcome to \e[0;91m%s\e[m %s\n' "$PRETTY_NAME" "$KERNELID"
+printf "\n"

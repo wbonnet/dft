@@ -1,0 +1,5 @@
+{% if item.uploaders is defined %}
+{% for uploader in item.uploaders %}
+allow {{ uploader.rule }} by key {{ uploader.key }}
+{% endfor %}
+{% endif %}

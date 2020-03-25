@@ -1,0 +1,13 @@
+#ACTION   SOURCE    DEST    PROTO DEST  SOURCE    ORIGINAL  RATE    USER/ MARK
+#             PORT  PORT(S)   DEST    LIMIT   GROUP
+{% if dft_shorewall.rules is defined %}
+{% for rule in dft_shorewall.rules %}
+{% if rule.comment is defined %}
+
+# {{ rule.comment }}
+{% endif %}
+{{ rule.action }}	{{ rule.source }}	{{ rule.dest }}	{% if rule.proto is defined %}{{ rule.proto }}{% else %}-{% endif %}	{% if rule.dest_port is defined %}{{ rule.dest_port }}{% else %}-{% endif %}	{% if rule.source_port is defined %}{{ rule.source_port }}{% else %}-{% endif %}	{% if rule.original_dest is defined %}{{ rule.original_dest }}{% else %}-{% endif %}	{% if rule.rate_limit is defined %}{{ rule.rate_limit }}{% else %}-{% endif %} {% if rule.mark is defined %}{{ rule.mark }}{% else %}-{% endif %}
+
+{%endfor %}
+{% endif %}
+#LAST LINE -- ADD YOUR ENTRIES ABOVE THIS LINE -- DO NOT REMOVE

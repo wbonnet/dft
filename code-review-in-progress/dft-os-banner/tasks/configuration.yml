@@ -1,0 +1,61 @@
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2016 DFT project (http://www.firmwaretoolkit.org).
+# All rights reserved. Use is subject to license terms.
+#
+#
+# Contributors list :
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#
+#
+
+#
+# Include the list of specific tasks. Tasks are separated into different
+# files, one file per functionnality.
+#
+
+---
+- name : DFT - Install /etc/issue
+  copy: src=files/issue
+        dest=/etc/issue
+        mode=0644
+        owner=root
+        group=root
+  when: dft_banner_install_issue is defined and dft_banner_install_issue == True
+
+- name : DFT - Install /etc/issue.net
+  copy: src=files/issue.net
+        dest=/etc/issue.net
+        mode=0644
+        owner=root
+        group=root
+  when: dft_banner_install_issue_net is defined and dft_banner_install_issue_net == True
+
+- name : DFT - Install /etc/motd
+  copy: src=files/motd
+        dest=/etc/motd
+        mode=0644
+        owner=root
+        group=root
+  when: dft_banner_install_motd is defined and dft_banner_install_motd == True
+
+- name : DFT - Install /etc/update-motd.d content
+  copy: src=files/update-motd.d/{{ item }}
+        dest=/etc/update-motd.d/{{ item }}
+        mode=0755
+        owner=root
+        group=root
+  when: dft_banner_install_update_motd is defined and dft_banner_install_update_motd == True
+  with_items:
+    - 00-header
+    - 20-system-info
+    - 30-tip-of-the-day

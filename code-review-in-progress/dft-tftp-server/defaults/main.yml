@@ -1,0 +1,10 @@
+# TFTP server default configuration
+dft_tftp_server:
+  # User runing the tftp server
+  username: tftp
+  # Base directory to be served
+  directory: /srv/tftp
+  # Server listening address
+  address: 0.0.0.0:69
+  # Server options
+  options: --secure

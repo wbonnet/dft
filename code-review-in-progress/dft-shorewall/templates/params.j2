@@ -1,0 +1,5 @@
+{% if dft_shorewall.params is defined %}
+{% for param in dft_shorewall.params %}
+{{ param.name }}={{ param.value }}
+{%endfor %}
+{% endif %}

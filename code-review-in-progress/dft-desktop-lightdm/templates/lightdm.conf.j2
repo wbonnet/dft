@@ -1,0 +1,13 @@
+[LightDM]
+
+[Seat:*]
+
+[XDMCPServer]
+
+[VNCServer]
+
+{% if dft_lightdm is defined and dft_lightdm.autologin == True %}
+[SeatDefaults]
+autologin-user={{ dft_lightdm.autologin_user }}
+autologin-user-timeout={{ dft_lightdm.autologin_user_timeout }}
+{% endif %}

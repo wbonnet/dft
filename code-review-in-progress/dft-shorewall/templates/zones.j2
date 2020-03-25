@@ -1,0 +1,12 @@
+#ZONE TYPE  OPTIONS     IN      OUT
+{% if dft_shorewall.zones is defined %}
+{% for zone in dft_shorewall.zones %}
+{% if zone.comment is defined %}
+
+# {{ zone.comment }}
+{% endif %}
+{{ zone.zone }}	{{ zone.type }}	{% if zone.options is defined %}{{ zone.options }}{% else %}-{% endif %}	{% if zone.in is defined %}{{ zone.in }}{% else %}-{% endif %}	{% if zone.out is defined %}{{ zone.out }}{% else %}-{% endif %}
+
+{%endfor %}
+{% endif %}
+#LAST LINE - ADD YOUR ENTRIES ABOVE THIS ONE - DO NOT REMOVE
