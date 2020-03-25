@@ -13,7 +13,9 @@ A role name is made of three components or fields which are dashed separated. Th
   * os (operating system and unix system itself)
   * network
   * security
+  * sysop (administration tasks such as backups)
   * webapps (web and remote software applications)
   * xde (X Desktop Environment)
+  * srv (service or server, a service runs on a server)
 * The software ***functionality***
   * Definitions coming soon...
