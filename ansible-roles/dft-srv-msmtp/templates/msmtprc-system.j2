@@ -1,4 +1,3 @@
-# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
 #
 # The contents of this file are subject to the Apache 2.0 license you may not
 # use this file except in compliance with the License.
@@ -25,34 +24,37 @@ defaults
 # System wide configuration file
 account default
 
-{% if dft_msmtp.smtp_host %}
-# Defines the SMTP host
-host {% dft_msmtp.smtp_host %}
+{% if dft_msmtp is not defined  %}
+# dft_msmtp Ansible variable as not defined. Unable to instanciate configuration file
+{% else %}
+{% if dft_msmtp.tls is defined and dft_msmtp.tls == "on" %}
+tls {{dft_msmtp.tls}}
 {% endif %}
-{% if dft_msmtp.tls is defined and dft_msmtp.tls is true %}
-tls on
 {% if dft_msmtp.tls_port is defined %}
 # Use TLS on port {{ dft_msmtp.tls_port }}
 port {{ dft_msmtp.tls_port }}
 {% endif %}
 {% if dft_msmtp.tls_starttls is defined %}
-tls_starttls {% dft_msmtp.tls_starttls %}
+tls_starttls {{ dft_msmtp.tls_starttls }}
 {% endif %}
-{% else %}
-tls {% dft_msmtp.tls %}
-
 {% if dft_msmtp.auto_from is defined %}
+auto_from {{ dft_msmtp.auto_from is defined and auto_from }}
+{% else %}
 # Construct envelope-from addresses of the form "user@oursite.example"
-auto_from {% if dft_msmtp.auto_from %}
 {% endif %}
 {% if dft_msmtp.maildomain is defined %}
-maildomain {% dft_msmtp.maildomain %}
+maildomain {{ dft_msmtp.maildomain }}
 {% endif %}
 
 # Syslog logging with facility LOG_MAIL instead of the default LOG_USER
-{% if dft_msmtp.syslog is defined %}
-syslog {% if dft_msmtp.syslog %}
+{% if dft_msmtp.syslog_facility is defined %}
+syslog {{ dft_msmtp.syslog_facility }}
 {% else %}
 # Syslog logging with facility LOG_MAIL instead of the default LOG_USER
 syslog LOG_MAIL
+{% endif %}
+
+{% if dft_msmtp.smtp_host is defined %}
+host {{ dft_msmtp.smtp_host }}
+{% endif %}
 {% endif %}

@@ -8,7 +8,7 @@
 # License.
 #
 #
-# Copyright 2016 DFT project (http://www.firmwaretoolkit.org).
+# Copyright 2020 DFT project (http://www.firmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
 #
@@ -25,4 +25,3 @@
              owner=root
              group=root
              mode="0644"
-             when: dft_msmtp_system_level is defined and dft_msmtp_system_level = true
