@@ -1,0 +1,58 @@
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2020 DFT project (http://www.firmwaretoolkit.org).
+# All rights reserved. Use is subject to license terms.
+#
+#
+# Contributors list :
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#
+#
+
+# Set default values for all following accounts.
+defaults
+
+# System wide configuration file
+account default
+
+{% if dft_msmtp.smtp_host %}
+# Defines the SMTP host
+host {% dft_msmtp.smtp_host %}
+{% endif %}
+{% if dft_msmtp.tls is defined and dft_msmtp.tls is true %}
+tls on
+{% if dft_msmtp.tls_port is defined %}
+# Use TLS on port {{ dft_msmtp.tls_port }}
+port {{ dft_msmtp.tls_port }}
+{% endif %}
+{% if dft_msmtp.tls_starttls is defined %}
+tls_starttls {% dft_msmtp.tls_starttls %}
+{% endif %}
+{% else %}
+tls {% dft_msmtp.tls %}
+
+{% if dft_msmtp.auto_from is defined %}
+# Construct envelope-from addresses of the form "user@oursite.example"
+auto_from {% if dft_msmtp.auto_from %}
+{% endif %}
+{% if dft_msmtp.maildomain is defined %}
+maildomain {% dft_msmtp.maildomain %}
+{% endif %}
+
+# Syslog logging with facility LOG_MAIL instead of the default LOG_USER
+{% if dft_msmtp.syslog is defined %}
+syslog {% if dft_msmtp.syslog %}
+{% else %}
+# Syslog logging with facility LOG_MAIL instead of the default LOG_USER
+syslog LOG_MAIL
+{% endif %}
