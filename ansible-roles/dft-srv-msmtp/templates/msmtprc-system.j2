@@ -1,3 +1,4 @@
+# vim:filetype=msmtp
 #
 # The contents of this file are subject to the Apache 2.0 license you may not
 # use this file except in compliance with the License.
@@ -27,20 +28,44 @@ account default
 {% if dft_msmtp is not defined  %}
 # dft_msmtp Ansible variable as not defined. Unable to instanciate configuration file
 {% else %}
-{% if dft_msmtp.tls is defined and dft_msmtp.tls == "on" %}
-tls {{dft_msmtp.tls}}
+{% if dft_msmtp.auth is defined and (dft_msmtp.auth == True or dft_msmtp.auth == "on") %}
+auth on
+{% else %}
+auth off
+{% endif %}
+{% if dft_msmtp.tls is defined and (dft_msmtp.tls == True or dft_msmtp.tls == "on") %}
+tls on
+{% else %}
+tls off
+{% endif %}
+{% if dft_msmtp.logfile is defined %}
+logfile {{dft_msmtp.logfile}}
+{% else %}
+logfile /var/log/mssmtp.log
 {% endif %}
 {% if dft_msmtp.tls_port is defined %}
-# Use TLS on port {{ dft_msmtp.tls_port }}
 port {{ dft_msmtp.tls_port }}
 {% endif %}
-{% if dft_msmtp.tls_starttls is defined %}
-tls_starttls {{ dft_msmtp.tls_starttls }}
-{% endif %}
-{% if dft_msmtp.auto_from is defined %}
-auto_from {{ dft_msmtp.auto_from is defined and auto_from }}
+{% if dft_msmtp.tls_starttls is defined and (dft_msmtp.tls_starttls == True or dft_msmtp.tls_starttls == "on")%}
+tls_starttls on
 {% else %}
-# Construct envelope-from addresses of the form "user@oursite.example"
+tls_starttls off
+{% endif %}
+{% if dft_msmtp.tls_trust_file is defined %}
+tls_trust_file {{dft_msmtp.tls_trust_file}}
+{% else %}
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
+{% endif %}
+
+
+{% if dft_msmtp.from is defined %}
+from {{ dft_msmtp.from }}
+{% endif %}
+{% if dft_msmtp.user is defined %}
+user {{ dft_msmtp.user }}
+{% endif %}
+{% if dft_msmtp.password is defined %}
+password {{ dft_msmtp.password }}
 {% endif %}
 {% if dft_msmtp.maildomain is defined %}
 maildomain {{ dft_msmtp.maildomain }}
