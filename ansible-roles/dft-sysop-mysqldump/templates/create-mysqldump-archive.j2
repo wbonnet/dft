@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 #
 # The contents of this file are subject to the Apache 2.0 license you may not
 # use this file except in compliance with the License.
@@ -18,17 +20,16 @@
 #
 #
 
- ---
- - name: DFT - Create script target directory
-   file:    path= /opt/dft/bin/
-            state=directory
-            owner=root
-            group=root
-            mode= "0755"
+#
+# This script has been generated using the template provided by dft-sysop-rsync role.
+# Its purpose is to create dump backup file of one or several mariadb database(s).
+#
 
- - name: DFT - Deploy rsync synchronization script
-   template: src=create-rsync-archive.j2
-             dest=/opt/dft/bin/create-rsync-archive
-             owner=root
-             group=root
-             mode="0755"
+# Stop a first error
+set -e
+
+# Retrive the project filename from the command line
+#DFT_PROJECT=$1
+
+# Stores the current working dir
+#WORKING_DIR=$(pwd)

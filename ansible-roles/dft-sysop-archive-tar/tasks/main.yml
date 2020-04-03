@@ -18,17 +18,11 @@
 #
 #
 
- ---
- - name: DFT - Create script target directory
-   file:    path= /opt/dft/bin/
-            state=directory
-            owner=root
-            group=root
-            mode= "0755"
+#
+# Include the list of specific tasks. Tasks are separated into different
+# files, one file per functionnality.
+#
 
- - name: DFT - Deploy rsync synchronization script
-   template: src=create-rsync-archive.j2
-             dest=/opt/dft/bin/create-rsync-archive
-             owner=root
-             group=root
-             mode="0755"
+---
+- include: packages.yml
+- include: configuration.yml

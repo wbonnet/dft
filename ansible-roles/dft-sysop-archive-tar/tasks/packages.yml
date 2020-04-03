@@ -14,21 +14,15 @@
 #
 # Contributors list :
 #
-#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com, william@wbonnet.net
 #
 #
 
- ---
- - name: DFT - Create script target directory
-   file:    path= /opt/dft/bin/
-            state=directory
-            owner=root
-            group=root
-            mode= "0755"
-
- - name: DFT - Deploy rsync synchronization script
-   template: src=create-rsync-archive.j2
-             dest=/opt/dft/bin/create-rsync-archive
-             owner=root
-             group=root
-             mode="0755"
+---
+- name : DFT - Install tar
+  apt:
+       name={{item}}
+       state=latest
+       install_recommends=no
+  with_items:
+       - tar

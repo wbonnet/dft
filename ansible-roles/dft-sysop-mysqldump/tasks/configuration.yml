@@ -18,10 +18,17 @@
 #
 #
 
-# ---
-# - name: DFT - Deploy MSMTP configuration file
-#   template: src=msmtprc-system.j2
-#             dest=/etc/msmtprc
-#             owner=root
-#             group=root
-#             mode="0644"
+ ---
+ - name: DFT - Create script target directory
+   file:    path= /opt/dft/bin/
+            state=directory
+            owner=root
+            group=root
+            mode= "0755"
+
+ - name: DFT - Deploy mysqldump archive creation script
+   template: src=create-tar-archive.j2
+             dest=/opt/dft/bin/create-mysqldump-archive
+             owner=root
+             group=root
+             mode="0755"

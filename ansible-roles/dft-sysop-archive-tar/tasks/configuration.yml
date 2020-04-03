@@ -26,9 +26,9 @@
             group=root
             mode= "0755"
 
- - name: DFT - Deploy rsync synchronization script
-   template: src=create-rsync-archive.j2
-             dest=/opt/dft/bin/create-rsync-archive
+ - name: DFT - Deploy tar archive creation script
+   template: src=create-tar-archive.j2
+             dest=/opt/dft/bin/create-tar-archive
              owner=root
              group=root
              mode="0755"
