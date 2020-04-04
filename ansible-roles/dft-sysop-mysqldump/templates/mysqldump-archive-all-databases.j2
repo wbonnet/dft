@@ -1,0 +1,10 @@
+# Stop a first error
+set -e
+
+# Configuration de base: datestamp e.g. YYYYMMDD
+TIMESTAMP=$(date +"%Y%m%d")
+
+# Defines the dump options
+DUMP_OPTIONS  = "--opt --force --skip-lock-tables --events --add-drop-database --add-drop-trigger"
+#DUMP_OPTIONS = "${DUMP_OPTIONS} {{dft_sysop_mysqldump.extra_mysqldump_options}}"
+mysqldump ${DUMP_OPTIONS} > ${BACKUP_DIR}/${BACKUP_FILE}
