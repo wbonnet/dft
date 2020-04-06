@@ -36,10 +36,10 @@ TIMESTAMP_FORMAT="%Y%m%d"
 TIMESTAMP=$(date +${TIMESTAMP_FORMAT})
 
 # Defines the backup target directory
-{% if item.dump_path is defined %}
-BACKUP_DIR={{ item.dump_path }}
-{% elif dft_sysop_mysqldump.dump_path is defined %}
-BACKUP_DIR={{ dft_sysop_mysqldump.dump_path }}
+{% if item.archive_path is defined %}
+BACKUP_DIR={{ item.archive_path }}
+{% elif dft_sysop_mysqldump.archive_path is defined %}
+BACKUP_DIR={{ dft_sysop_mysqldump.archive_path }}
 {% else %}
 BACKUP_DIR=/var/backups
 {% endif %}
@@ -50,7 +50,7 @@ BACKUP_FILE={{ item.filename }}
 {% elif dft_sysop_mysqldump.filename is defined %}
 BACKUP_FILE={{ dft_sysop_mysqldump.filename }}
 {% else %}
-BACKUP_FILE={{ dft_sysop_mysqldump.name }}
+BACKUP_FILE="mariadb.dump.sql"
 {% endif %}
 
 # Check that target directory exist, if not try to create i
@@ -60,7 +60,7 @@ then
 fi
 
 # Defines the dump options
-DUMP_OPTIONS="--opt --force --events --add-drop-table --quick --extented-insert --skip-lock-tables"
+DUMP_OPTIONS="--opt --force --events --add-drop-database --add-drop-table --add-drop-trigger"
 DUMP_OPTIONS="${DUMP_OPTIONS} --single-transaction"
 {% if item.extra_mysqldump_options is defined %}
 DUMP_OPTIONS="${DUMP_OPTIONS} {{item.extra_mysqldump_options}}"
@@ -71,13 +71,9 @@ mysqldump ${DUMP_OPTIONS} --user {{item.user}} --password {{item.password}} --da
 mysqldump ${DUMP_OPTIONS} --user {{dft_sysop_mysqldump.user}} --password {{dft_sysop_mysqldump.password}} --databases {{item.name}} > ${BACKUP_DIR}/${BACKUP_FILE}
 {% endif %}
 
-
-# reste append timestamp
-# Defines the backup target filename
+# Defines the backup target filename using timestamp suffix
 {% if item.append_timestamp is defined and item.append_timestamp %}
 ${BACKUP_FILE}=${BACKUP_FILE}.${TIMESTAMP}
 {% elif dft_sysop_mysqldump.append_timestamp is defined and dft_sysop_mysqldump.append_timestamp %}
 ${BACKUP_FILE}=${BACKUP_FILE}.${TIMESTAMP}
 {% endif %}
-
-# reste compress tool
