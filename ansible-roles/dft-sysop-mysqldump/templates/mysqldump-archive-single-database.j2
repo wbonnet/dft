@@ -75,8 +75,13 @@ DUMP_OPTIONS="${DUMP_OPTIONS} --single-transaction"
 DUMP_OPTIONS="${DUMP_OPTIONS} {{item.extra_mysqldump_options}}"
 {% endif %}
 {% if item.user is defined %}
+DUMP_OPTIONS="${DUMP_OPTIONS} --user {{item.user}}"
 mysqldump ${DUMP_OPTIONS} --user {{item.user}} --password={{item.password}} --databases {{item.name}} > ${BACKUP_DIR}/${BACKUP_FILE}
 {% else %}
 mysqldump ${DUMP_OPTIONS} --user {{dft_sysop_mysqldump.user}} --password={{dft_sysop_mysqldump.password}} --databases {{item.name}} > ${BACKUP_DIR}/${BACKUP_FILE}
 {% endif %}
 
+# Compress the archive file
+{% if item.compress_archive is defined and item.compress_archive %}
+{{item.compress_tool}} {{item.compress_options}} ${BACKUP_DIR}/${BACKUP_FILE}
+{% endif %}
