@@ -83,14 +83,13 @@ DUMP_OPTIONS="${DUMP_OPTIONS} {{item.extra_mysqldump_options}}"
 {% endif %}
 {% if item.user is defined %}
 DUMP_OPTIONS="${DUMP_OPTIONS} --user {{item.user}}"
-mysqldump ${DUMP_OPTIONS} --user {{item.user}} --password={{item.password}} > "${BACKUP_DIR}/${BACKUP_FILE}"
 {% else %}
-mysqldump ${DUMP_OPTIONS} --user {{dft_sysop_mysqldump.user}} --password={{dft_sysop_mysqldump.password}} > "${BACKUP_DIR}/${BACKUP_FILE}"
+mysqldump ${DUMP_OPTIONS} --user {{dft_sysop_mysqldump.user}} > "${BACKUP_DIR}/${BACKUP_FILE}"
 {% endif %}
 {% if item.password is defined %}
 DUMP_OPTIONS="${DUMP_OPTIONS} --password={{item.password}}"
 {% else %}
-DUMP_OPTIONS="${DUMP_OPTIONS} --password="
+DUMP_OPTIONS="${DUMP_OPTIONS} --password={{dft_sysop_mysqldump.password}}"
 {% endif %}
 mysqldump ${DUMP_OPTIONS} > "${BACKUP_DIR}/${BACKUP_FILE}"
 
