@@ -26,8 +26,9 @@ set -e
 TIMESTAMP=$(date +"%Y%m%d")
 
 # Defines the dump options
-DUMP_OPTIONS  = "--opt --force --skip-lock-tables --events --add-drop-database --add-drop-trigger"
+DUMP_OPTIONS="--opt --force --events --add-drop-table --quick --extented-insert --skip-lock-tables"
+DUMP_OPTIONS="${DUMP_OPTIONS} --single-transaction"
 {% if dft_sysop_mysqldump.extra_mysqldump_options is defined %}
 DUMP_OPTIONS = "${DUMP_OPTIONS} {{dft_sysop_mysqldump.extra_mysqldump_options}}"
 {% endif %}
-mysqldump ${DUMP_OPTIONS} --all-databases > ${BACKUP_DIR}/${BACKUP_FILE}
+mysqldump ${DUMP_OPTIONS} --password {{dft_sysop_mysqldump.password}} --all-databases > ${BACKUP_DIR}/${BACKUP_FILE}

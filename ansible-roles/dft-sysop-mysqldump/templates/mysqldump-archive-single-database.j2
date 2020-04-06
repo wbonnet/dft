@@ -33,7 +33,7 @@ TIMESTAMP_FORMAT="%Y%m%d"
 
 # Configuration de base: datestamp e.g. YYYYMMDD
 TIMESTAMP_FORMAT="%Y%m%d"
-TIMESTAMP=$(date + $(TIMESTAMP_FORMAT"%Y%m%d"))
+TIMESTAMP=$(date +$(TIMESTAMP_FORMAT))
 
 # Defines the backup target directory
 {% if item.dump_path is defined %}
@@ -53,18 +53,23 @@ BACKUP_FILE={{ dft_sysop_mysqldump.filename }}
 BACKUP_FILE={{ dft_sysop_mysqldump.name }}
 {% endif %}
 
-# Check that target directory exist, if not try to create it
+# Check that target directory exist, if not try to create i
 if [ ! -d "${BACKUP_DIR}" ] ;
 then
   mkdir -p "${BACKUP_DIR}"
 fi
 
 # Defines the dump options
-DUMP_OPTIONS="--opt --force --skip-lock-tables --events --add-drop-database --add-drop-trigger"
+DUMP_OPTIONS="--opt --force --events --add-drop-table --quick --extented-insert --skip-lock-tables"
+DUMP_OPTIONS="${DUMP_OPTIONS} --single-transaction"
 {% if item.extra_mysqldump_options is defined %}
 DUMP_OPTIONS="${DUMP_OPTIONS} {{item.extra_mysqldump_options}}"
 {% endif %}
-mysqldump ${DUMP_OPTIONS}  --databases {{item.name}} > ${BACKUP_DIR}/${BACKUP_FILE}
+{% if item.user is defined %}
+mysqldump ${DUMP_OPTIONS} --user {{item.user}} --password {{item.password}} --databases {{item.name}} > ${BACKUP_DIR}/${BACKUP_FILE}
+{% else %}
+mysqldump ${DUMP_OPTIONS} --user {{dft_sysop_mysqldump.user}} --password {{dft_sysop_mysqldump.password}} --databases {{item.name}} > ${BACKUP_DIR}/${BACKUP_FILE}
+{% endif %}
 
 
 # reste append timestamp
