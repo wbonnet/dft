@@ -61,9 +61,11 @@ fi
 
 # Defines the backup target filename using timestamp suffix
 {% if item.append_timestamp is defined and item.append_timestamp %}
-BACKUP_FILE=${BACKUP_FILE}.${TIMESTAMP}
+BACKUP_FILE=${BACKUP_FILE}.${TIMESTAMP}.sql
 {% elif dft_sysop_mysqldump.append_timestamp is defined and dft_sysop_mysqldump.append_timestamp %}
-BACKUP_FILE=${BACKUP_FILE}.${TIMESTAMP}
+BACKUP_FILE=${BACKUP_FILE}.${TIMESTAMP}.sql
+{% else %}
+BACKUP_FILE=${BACKUP_FILE}.sql
 {% endif %}
 
 # Defines the dump options
