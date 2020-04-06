@@ -24,7 +24,7 @@ set -e
 
 # Defines the imestamp filenam suffix format
 {% if item.timestamp_format is defined %}
-${TIMESTAMP_FORMAT}={{ item.timestamp_format }}
+TIMESTAMP_FORMAT={{ item.timestamp_format }}
 {% elif dft_sysop_mysqldump.timestamp_format is defined %}
 TIMESTAMP_FORMAT={{ dft_sysop_mysqldump.timestamp_format }}
 {% else %}
@@ -33,11 +33,11 @@ TIMESTAMP_FORMAT="%Y%m%d"
 
 # Configuration de base: datestamp e.g. YYYYMMDD
 TIMESTAMP_FORMAT="%Y%m%d"
-TIMESTAMP=$(date +$(TIMESTAMP_FORMAT))
+TIMESTAMP=$(date +${TIMESTAMP_FORMAT})
 
 # Defines the backup target directory
 {% if item.dump_path is defined %}
-${BACKUP_DIR}={{ item.dump_path }}
+BACKUP_DIR={{ item.dump_path }}
 {% elif dft_sysop_mysqldump.dump_path is defined %}
 BACKUP_DIR={{ dft_sysop_mysqldump.dump_path }}
 {% else %}
@@ -46,7 +46,7 @@ BACKUP_DIR=/var/backups
 
 # Defines the backup target filename
 {% if item.filename is defined %}
-${BACKUP_FILE}={{ item.filename }}
+BACKUP_FILE={{ item.filename }}
 {% elif dft_sysop_mysqldump.filename is defined %}
 BACKUP_FILE={{ dft_sysop_mysqldump.filename }}
 {% else %}
