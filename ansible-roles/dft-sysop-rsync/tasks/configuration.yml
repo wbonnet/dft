@@ -18,17 +18,17 @@
 #
 #
 
- ---
- - name: DFT - Create script target directory
-   file:    path= /opt/dft/bin/
+---
+- name: DFT - Create script target directory
+  file:     path=/opt/dft/bin
             state=directory
             owner=root
             group=root
-            mode= "0755"
+            mode="0755"
 
- - name: DFT - Deploy rsync synchronization script
-   template: src=create-rsync-archive.j2
-             dest=/opt/dft/bin/create-rsync-archive
-             owner=root
-             group=root
-             mode="0755"
+- name: DFT - Deploy rsync synchronization script
+  template: src=create-rsync-archive.j2
+            dest=/opt/dft/bin/create-rsync-archive
+            owner=root
+            group=root
+            mode="0755"

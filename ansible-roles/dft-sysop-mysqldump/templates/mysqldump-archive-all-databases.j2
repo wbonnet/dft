@@ -1,4 +1,25 @@
-# Stop a first error
+#!/usr/bin/env bash
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2020 DFT project (http://www.firmwaretoolkit.org).
+# All rights reserved. Use is subject to license terms.
+#
+#
+# Contributors list :
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#
+#
+
+# Stop at first error
 set -e
 
 # Configuration de base: datestamp e.g. YYYYMMDD
@@ -6,5 +27,7 @@ TIMESTAMP=$(date +"%Y%m%d")
 
 # Defines the dump options
 DUMP_OPTIONS  = "--opt --force --skip-lock-tables --events --add-drop-database --add-drop-trigger"
-#DUMP_OPTIONS = "${DUMP_OPTIONS} {{dft_sysop_mysqldump.extra_mysqldump_options}}"
-mysqldump ${DUMP_OPTIONS} > ${BACKUP_DIR}/${BACKUP_FILE}
+{% if dft_sysop_mysqldump.extra_mysqldump_options is defined %}
+DUMP_OPTIONS = "${DUMP_OPTIONS} {{dft_sysop_mysqldump.extra_mysqldump_options}}"
+{% endif %}
+mysqldump ${DUMP_OPTIONS} --all-databases > ${BACKUP_DIR}/${BACKUP_FILE}

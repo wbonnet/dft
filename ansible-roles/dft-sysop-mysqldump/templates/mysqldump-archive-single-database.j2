@@ -1,13 +1,78 @@
-# Stop a first error
+#! /usr/bin/bash
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2020 DFT project (http://www.firmwaretoolkit.org).
+# All rights reserved. Use is subject to license terms.
+#
+#
+# Contributors list :
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#
+#
+
+# Stop at first error
 set -e
 
-# Configuration de base: datestamp e.g. YYYYMMDD
-TIMESTAMP=$(date +"%Y%m%d")
-
-# Defines the dump options
-DUMP_OPTIONS  = "--opt --force --skip-lock-tables --events --add-drop-database --add-drop-trigger"
-{% if item.extra_mysqldump_options is defined %}
-#DUMP_OPTIONS = "${DUMP_OPTIONS} {{item.extra_mysqldump_options}}"
+# Defines the imestamp filenam suffix format
+{% if item.timestamp_format is defined %}
+${TIMESTAMP_FORMAT}={{ item.timestamp_format }}
+{% elif dft_sysop_mysqldump.timestamp_format is defined %}
+TIMESTAMP_FORMAT={{ dft_sysop_mysqldump.timestamp_format }}
+{% else %}
+TIMESTAMP_FORMAT="%Y%m%d"
 {% endif %}
 
-mysqldump ${DUMP_OPTIONS} > ${BACKUP_DIR}/${BACKUP_FILE}
+# Configuration de base: datestamp e.g. YYYYMMDD
+TIMESTAMP_FORMAT="%Y%m%d"
+TIMESTAMP=$(date + $(TIMESTAMP_FORMAT"%Y%m%d"))
+
+# Defines the backup target directory
+{% if item.dump_path is defined %}
+${BACKUP_DIR}={{ item.dump_path }}
+{% elif dft_sysop_mysqldump.dump_path is defined %}
+BACKUP_DIR={{ dft_sysop_mysqldump.dump_path }}
+{% else %}
+BACKUP_DIR=/var/backups
+{% endif %}
+
+# Defines the backup target filename
+{% if item.filename is defined %}
+${BACKUP_FILE}={{ item.filename }}
+{% elif dft_sysop_mysqldump.filename is defined %}
+BACKUP_FILE={{ dft_sysop_mysqldump.filename }}
+{% else %}
+BACKUP_FILE={{ dft_sysop_mysqldump.name }}
+{% endif %}
+
+# Check that target directory exist, if not try to create it
+if [ ! -d "${BACKUP_DIR}" ] ;
+then
+  mkdir -p "${BACKUP_DIR}"
+fi
+
+# Defines the dump options
+DUMP_OPTIONS="--opt --force --skip-lock-tables --events --add-drop-database --add-drop-trigger"
+{% if item.extra_mysqldump_options is defined %}
+DUMP_OPTIONS="${DUMP_OPTIONS} {{item.extra_mysqldump_options}}"
+{% endif %}
+mysqldump ${DUMP_OPTIONS}  --databases {{item.name}} > ${BACKUP_DIR}/${BACKUP_FILE}
+
+
+# reste append timestamp
+# Defines the backup target filename
+{% if item.append_timestamp is defined and item.append_timestamp %}
+${BACKUP_FILE}=${BACKUP_FILE}.${TIMESTAMP}
+{% elif dft_sysop_mysqldump.append_timestamp is defined and dft_sysop_mysqldump.append_timestamp %}
+${BACKUP_FILE}=${BACKUP_FILE}.${TIMESTAMP}
+{% endif %}
+
+# reste compress tool

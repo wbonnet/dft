@@ -18,16 +18,16 @@
 #
 #
 
- ---
- - name: DFT - Create script target directory
-   file:    path= /opt/dft/bin/
+---
+- name: DFT - Create script target directory
+  file:     path=/opt/dft/bin
             state=directory
             owner=root
             group=root
-            mode= "0755"
+            mode="0755"
 
- - name: DFT - Deploy tar archive creation script
-   template: src=create-tar-archive.j2
+- name: DFT - Deploy tar archiving script
+  template:  src=create-tar-archive.j2
              dest=/opt/dft/bin/create-tar-archive
              owner=root
              group=root
