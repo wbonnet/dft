@@ -31,4 +31,4 @@ DUMP_OPTIONS="${DUMP_OPTIONS} --single-transaction"
 {% if dft_sysop_mysqldump.extra_mysqldump_options is defined %}
 DUMP_OPTIONS = "${DUMP_OPTIONS} {{dft_sysop_mysqldump.extra_mysqldump_options}}"
 {% endif %}
-mysqldump ${DUMP_OPTIONS} --password {{dft_sysop_mysqldump.password}} --all-databases > ${BACKUP_DIR}/${BACKUP_FILE}
+mysqldump ${DUMP_OPTIONS} --password={{dft_sysop_mysqldump.password}} --all-databases > ${BACKUP_DIR}/${BACKUP_FILE}
