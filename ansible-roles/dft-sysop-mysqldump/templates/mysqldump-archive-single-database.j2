@@ -68,13 +68,6 @@ BACKUP_FILE="${BACKUP_FILE}.${TIMESTAMP}.sql"
 BACKUP_FILE="${BACKUP_FILE}.sql"
 {% endif %}
 
-# Force removal if th target already exist. Backup rotation should be handled by other means
-# than this Ansible role generated script.
-if [ -f "${BACKUP_DIR}/${BACKUP_FILE}" ] ;
-then
-    rm "${BACKUP_DIR}/${BACKUP_FILE}"
-fi
-
 # Defines the dump options
 DUMP_OPTIONS="--opt --force --events --add-drop-database --add-drop-table --add-drop-trigger"
 DUMP_OPTIONS="${DUMP_OPTIONS} --single-transaction --databases {{item.name}}"
