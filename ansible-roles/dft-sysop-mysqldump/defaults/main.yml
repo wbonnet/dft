@@ -1,0 +1,49 @@
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2016 DFT project (http://www.firmwaretoolkit.org).
+# All rights reserved. Use is subject to license terms.
+#
+#
+# Contributors list :
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#
+#
+
+
+# -------------------------------------------------------------------------------------------------
+#
+#
+
+#TODO : wite documentation for the following
+#         dft_sysop_mysqldump:
+#              password:
+#              user: root
+#              archive_path: /var/backups/xxx
+#              all_databases: True
+#              append_timestamp: True
+#              timestamp_format: "%Y%m%d"
+#              filename: alldb
+#              compress_archive: True
+#              compress_tool: bzip2
+#              compress_options: ""
+#              databases_to_dump:
+#              - name: awz_phpbb
+#                password:
+#                user: root
+#                archive_path: /var/backups/
+#                append_timestamp: True
+#                filename: filenametest
+#                compress_archive: True
+#                compress_tool: gzip
+#                compress_options: ""
+#                add_cronjob: True
+
