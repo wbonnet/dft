@@ -30,9 +30,6 @@ TIMESTAMP_FORMAT={{ dft_sysop_mysqldump.timestamp_format }}
 {% else %}
 TIMESTAMP_FORMAT="%Y%m%d"
 {% endif %}
-
-# Configuration de base: datestamp e.g. YYYYMMDD
-TIMESTAMP_FORMAT="%Y%m%d"
 TIMESTAMP=$(date +${TIMESTAMP_FORMAT})
 
 # Defines the backup target directory

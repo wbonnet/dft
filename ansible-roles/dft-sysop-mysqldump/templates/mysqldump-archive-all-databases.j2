@@ -22,8 +22,40 @@
 # Stop at first error
 set -e
 
-# Configuration de base: datestamp e.g. YYYYMMDD
-TIMESTAMP=$(date +"%Y%m%d")
+# Defines the imestamp filenam suffix format
+{% if dft_sysop_mysqldump.timestamp_format is defined %}
+TIMESTAMP_FORMAT={{ dft_sysop_mysqldump.timestamp_format }}
+{% else %}
+TIMESTAMP_FORMAT="%Y%m%d"
+{% endif %}
+TIMESTAMP=$(date +${TIMESTAMP_FORMAT})
+
+# Defines the backup target directory
+{% if dft_sysop_mysqldump.archive_path is defined %}
+BACKUP_DIR="{{ dft_sysop_mysqldump.archive_path }}"
+{% else %}
+BACKUP_DIR=/var/backups
+{% endif %}
+
+# Defines the backup target filename
+{% if dft_sysop_mysqldump.filename is defined %}
+BACKUP_FILE="{{ dft_sysop_mysqldump.filename }}"
+{% else %}
+BACKUP_FILE="mariadb.dump.sql"
+{% endif %}
+
+# Check that target directory exist, if not try to create it
+if [ ! -d "${BACKUP_DIR}" ] ;
+then
+  mkdir -p "${BACKUP_DIR}"
+fi
+
+# Defines the backup target filename using timestamp suffix
+{% if dft_sysop_mysqldump.append_timestamp is defined and dft_sysop_mysqldump.append_timestamp %}
+BACKUP_FILE="${BACKUP_FILE}.${TIMESTAMP}.sql"
+{% else %}
+BACKUP_FILE="${BACKUP_FILE}.sql"
+{% endif %}
 
 # Defines the dump options
 DUMP_OPTIONS="--opt --force --events --add-drop-database --add-drop-table --add-drop-trigger"
@@ -32,3 +64,8 @@ DUMP_OPTIONS="${DUMP_OPTIONS} --single-transaction"
 DUMP_OPTIONS = "${DUMP_OPTIONS} {{dft_sysop_mysqldump.extra_mysqldump_options}}"
 {% endif %}
 mysqldump ${DUMP_OPTIONS} --password={{dft_sysop_mysqldump.password}} --all-databases > ${BACKUP_DIR}/${BACKUP_FILE}
+
+# Compress the archive file
+{% if dft_sysop_mysqldump.compress_archive is defined and dft_sysop_mysqldump.compress_archive %}
+{{dft_sysop_mysqldump.compress_tool}} {{dft_sysop_mysqldump.compress_options}} "${BACKUP_DIR}/${BACKUP_FILE}"
+{% endif %}
