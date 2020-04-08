@@ -17,6 +17,25 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 #
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2020 DFT project (http://www.firmwaretoolkit.org).
+# All rights reserved. Use is subject to license terms.
+#
+#
+# Contributors list :
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#
+#
 
 ---
 - name: DFT - Create script target directory
@@ -26,9 +45,11 @@
             group=root
             mode="0755"
 
-- name: DFT - Deploy rsync synchronization script
-  template: src=create-rsync-archive.j2
-            dest=/opt/dft/bin/create-rsync-archive
-            owner=root
-            group=root
-            mode="0755"
+- name: DFT - Deploy rsync based path (files or folders) synchronization script
+  template:  src=rsync-path.j2
+             dest=/opt/dft/bin/rsync-path-{{ item.name }}
+             owner=root
+             group=root
+             mode="0755"
+  with_items: "{{ dft_sysop_rsync.path_to_sync }}"
+  when: dft_sysop_rsync is defined and dft_sysop_rsync.path_to_sync is defined
