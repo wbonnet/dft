@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 
 #
 # The contents of this file are subject to the Apache 2.0 license you may not
@@ -21,15 +21,32 @@
 #
 
 #
-# This script has been generated using the template provided by dft-sysop-rsync role.
-# Its purpose is to create a synchronize a local directory content to a local or remote path.
-#
+# This script has been generated using the template provided by dft-sysop-archive role. its
+# function is to create a tar archive using given source path (the data to archive), target
+# (produced file) and cli options.
 
 # Stop a first error
 set -e
 
-# Retrive the project filename from the command line
-#DFT_PROJECT=$1
+# Defines the rsync command options
+{% if item.rsync_options is defined and item.rsync_options != "" %}
+RSYNC_OPTIONS="{{ item.rsync_options }}"
+{% else %}
+RSYNC_OPTIONS="--archive"
+{% endif %}
 
-# Stores the current working dir
-#WORKING_DIR=$(pwd)
+# Defines the backup target directory
+{% if item.archive_path is defined %}
+RSYNC_DST="{{ item.rsync_dest }}"
+{% else %}
+RSYNC_DST=/var/backups
+{% endif %}
+
+# Defines the list of sources path to rsync
+RSYNC_SRC=""
+{% for source in item.rsync_sources %}
+RSYNC_SRC="${RSYNC_SRC} {{ source.path }}"
+{% endfor %}
+
+# Finally run the rsync command
+rsync ${RSYNC_OPTIONS} ${RSYNC_SRC} ${RSYNC_DST}
