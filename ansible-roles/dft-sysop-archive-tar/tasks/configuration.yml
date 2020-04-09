@@ -28,7 +28,9 @@
 
 - name: DFT - Deploy tar archiving script
   template:  src=create-tar-archive.j2
-             dest=/opt/dft/bin/create-tar-archive
+             dest=/opt/dft/bin/create-{{item.name}}-tar-archive
              owner=root
              group=root
              mode="0755"
+  with_items: "{{ dft_sysop_archive_tar.archives }}"
+  when: dft_sysop_archive_tar is defined and dft_sysop_archive_tar.archives is defined

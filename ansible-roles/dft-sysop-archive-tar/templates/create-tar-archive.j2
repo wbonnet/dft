@@ -28,8 +28,54 @@
 # Stop a first error
 set -e
 
-# Retrive the project filename from the command line
-#DFT_PROJECT=$1
+# Defines the timestamp filenam suffix format
+{% if item.timestamp_format is defined %}
+TIMESTAMP_FORMAT={{ item.timestamp_format }}
+{% else %}
+TIMESTAMP_FORMAT="%Y%m%d"
+{% endif %}
+TIMESTAMP=$(date +${TIMESTAMP_FORMAT})
 
-# Stores the current working dir
-#WORKING_DIR=$(pwd)
+# Defines the backup target directory
+{% if item.archive_path is defined %}
+ARCHIVE_DIR="{{ item.archive_path }}"
+{% else %}
+ARCHIVE_DIR=/var/backups
+{% endif %}
+
+# Defines the archive file basename
+{% if item.archive_basename is defined %}
+ARCHIVE_NAME="{{ item.archive_basename }}"
+{% else %}
+ARCHIVE_NAME="{{ item.name }}"
+{% endif %}
+
+# Defines the archive file suffix
+{% if item.archive_suffix is defined %}
+ARCHIVE_SUFFIX="{{ item.archive_suffix }}"
+{% endif %}
+
+# Concatenate path element to get full archive path
+ARCHIVE_NAME="${ARCHIVE_DIR}/${ARCHIVE_NAME}.${ARCHIVE_SUFFIX}"
+{% if item.append_timestamp %}
+ARCHIVE_NAME="${ARCHIVE_NAME}-${TIMESTAMP}"
+{% endif %}
+ARCHIVE_NAME="${ARCHIVE_NAME}.${ARCHIVE_SUFFIX}"
+
+# Check that target directory exist, if not try to create it
+if [ ! -d "${ARCHIVE_DIR}" ] ;
+then
+  mkdir -p "${ARCHIVE_DIR}"
+fi
+
+# Defines the tar command options
+{% if item.tar_options is defined and item.tar_options != "" %}
+TAR_OPTIONS="{{ item.tar_options }}"
+{% else %}
+TAR_OPTIONS="cf"
+{% endif %}
+TAR_CONTENT=""
+{% for content in item.archive_content %}
+TAR_CONTENT="${TAR_CONTENT} {{ content.path }}"
+{% endfor %}
+tar ${TAR_OPTIONS} "${ARCHIVE_NAME}" ${TAR_CONTENT}

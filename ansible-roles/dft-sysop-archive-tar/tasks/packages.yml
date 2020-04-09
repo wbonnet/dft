@@ -21,8 +21,6 @@
 ---
 - name : DFT - Install tar
   apt:
-       name={{item}}
+       name=tar
        state=latest
        install_recommends=no
-  with_items:
-       - tar
