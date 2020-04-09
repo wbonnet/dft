@@ -36,7 +36,7 @@ RSYNC_OPTIONS="--archive"
 {% endif %}
 
 # Defines the backup target directory
-{% if item.archive_path is defined %}
+{% if item.destination is defined %}
 RSYNC_DST="{{ item.destination }}"
 {% else %}
 RSYNC_DST=/var/backups
