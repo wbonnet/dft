@@ -18,10 +18,10 @@
 #
 #
 
----
-- name: DFT - Deploy LVM2 main configuration file
-  template: src=lvm.conf.j2
-            dest=/etc/lvm/lvm.conf
-            owner=root
-            group=root
-            mode=644
+#---
+#- name: DFT - Deploy LVM2 main configuration file
+#  template: src=lvm.conf.j2
+#            dest=/etc/lvm/lvm.conf
+#            owner=root
+#            group=root
+#            mode=644
