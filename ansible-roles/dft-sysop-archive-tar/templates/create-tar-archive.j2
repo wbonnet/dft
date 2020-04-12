@@ -1,5 +1,4 @@
-#!/usr/bin/bash
-
+#!/usr/bin/env bash
 #
 # The contents of this file are subject to the Apache 2.0 license you may not
 # use this file except in compliance with the License.
@@ -26,7 +25,12 @@
 # (produced file) and cli options.
 
 # Stop a first error
-set -e
+set -ex
+
+# Redirect script to log file
+exec 1> /var/log/create-tar-archive.log 2>&1
+
+#set -x
 
 # Defines the timestamp filenam suffix format
 {% if item.timestamp_format is defined %}
