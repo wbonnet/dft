@@ -22,7 +22,7 @@
 # Stop at first error
 set -e
 
-# Defines the timestamp filenam suffix format
+# Defines the timestamp filename suffix format
 {% if item.timestamp_format is defined %}
 TIMESTAMP_FORMAT={{ item.timestamp_format }}
 {% elif dft_sysop_mysqldump.timestamp_format is defined %}
