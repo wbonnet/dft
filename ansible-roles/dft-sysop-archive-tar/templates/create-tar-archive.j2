@@ -54,17 +54,17 @@ ARCHIVE_NAME="{{ item.archive_basename }}"
 ARCHIVE_NAME="{{ item.name }}"
 {% endif %}
 
-# Defines the archive file suffix
-{% if item.archive_suffix is defined %}
-ARCHIVE_SUFFIX="{{ item.archive_suffix }}"
-{% endif %}
-
 # Concatenate path element to get full archive path
-ARCHIVE_NAME="${ARCHIVE_DIR}/${ARCHIVE_NAME}.${ARCHIVE_SUFFIX}"
+ARCHIVE_NAME="${ARCHIVE_DIR}/${ARCHIVE_NAME}"
 {% if item.append_timestamp %}
 ARCHIVE_NAME="${ARCHIVE_NAME}-${TIMESTAMP}"
 {% endif %}
+
+# Defines the archive file suffix
+{% if item.archive_suffix is defined %}
+ARCHIVE_SUFFIX="{{ item.archive_suffix }}"
 ARCHIVE_NAME="${ARCHIVE_NAME}.${ARCHIVE_SUFFIX}"
+{% endif %}
 
 # Check that target directory exist, if not try to create it
 if [ ! -d "${ARCHIVE_DIR}" ] ;
