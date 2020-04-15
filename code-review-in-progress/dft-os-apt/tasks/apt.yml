@@ -83,5 +83,4 @@
        state=latest
        install_recommends=no
   with_items:
-    - aptitude
     - dpkg-dev
