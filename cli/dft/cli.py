@@ -74,8 +74,8 @@ Available commands are :
                         and bootchain
 . build_firmware        Build the firmware configuration files and scripts
                         used to load in memory the firmware
-. build_firmware_update Build the signed archive containing the firmware
-                        and all the scripts needed to update a target update
+. build_firmware_update Build the signed archive containing the firmware update
+                        and all the scripts needed to deploy it on a target.
                         Use this way to deploy online updates instead of images
 . build_partitions      Build the disk partitions and store them into
                         separate files
