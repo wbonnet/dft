@@ -177,9 +177,9 @@ sanity-check:
         done
 
 # Create a new u-boot version entry
-new-u-boot-version:
-	@echo "DEBUG : from board.makefile new-u-boot-version with argument new-version $(new-version)" ;
-	$(MAKE) --warn-undefined-variables --directory=u-boot new-u-boot-version new-version=$(new-version) ;
+add-u-boot-version:
+	@echo "DEBUG : from board.makefile add-u-boot-version with argument new-version $(new-version)" ;
+	$(MAKE) --warn-undefined-variables --directory=u-boot add-u-boot-version new-version=$(new-version) ;
 
 check-u-boot-defconfig:
 	$(MAKE) --directory=u-boot check-u-boot-defconfig ;
