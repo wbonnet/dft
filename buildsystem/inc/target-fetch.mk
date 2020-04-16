@@ -78,14 +78,14 @@ fetch-archive-%:
 		if [ -f $(COOKIE_DIR)/$@ ] ; then \
 			true ; \
 		else \
-			wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$* ; \
+			wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$*  || 	$(call dft_error ,2004-1601); \
 			mv $(PARTIAL_DIR)/$* $(DOWNLOAD_DIR) ; \
 			rmdir --ignore-fail-on-non-empty $(PARTIAL_DIR) ; \
 			if [ -f $(DOWNLOAD_DIR)/$* ] ; then \
 				true ; \
 			else \
 				echo 'ERROR : Failed to download $(SRC_DIST_URL)/$*' 1>&2; \
-				exit 72; \
+			        $(call dft_error ,2004-1602); \
 			fi ; \
 		fi ; \
 	fi ; 
