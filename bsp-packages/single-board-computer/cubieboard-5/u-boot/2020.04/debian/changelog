@@ -1,0 +1,5 @@
+u-boot-cubieboard-5 (2020.04-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Thu, 16 Apr 2020 19:16:25 +0000
