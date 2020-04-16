@@ -150,8 +150,8 @@ sanity-check:
 
 
 # Create a new u-boot version entry
-new-u-boot-version:
-	@echo "DEBUG : in u-boot.makefile running new-u-boot-version with argument new-version $(new-version)" ;
+add-u-boot-version:
+	@echo "DEBUG : in u-boot.makefile running add-u-boot-version with argument new-version $(new-version)" ;
 	@pwd;
 	@if [ "$(new-version)" == "" ] ; then \
 		echo "DEBUG : from u-boot.makefile Argument new-version is missing or has no value. Doing nothing..." ; \
@@ -164,14 +164,12 @@ new-u-boot-version:
 		mkdir -p $(new-version) ; \
 		ln -s ../$(DFT_BUILDSYSTEM) $(new-version)/buildsystem ; \
 		ln -s ../$(DFT_BUILDSYSTEM)/u-boot-version.makefile $(new-version)/Makefile ; \
-		ln -s ../$(DFT_BUILDSYSTEM) $(new-version)/buildsystem ; \
 		mkdir -p $(new-version)/files ; \
 		ln -s ../../files/install.u-boot-$(BOARD_NAME).md $(new-version)/files/ ; \
 		mkdir -p $(new-version)/files ; \
 		touch $(new-version)/files/.gitkeep ; \
 		mkdir -p $(new-version)/patches ; \
 		touch $(new-version)/patches/.gitkeep ; \
-		mv -vf $(new-version)/debian/u-boot.install $(new-version)/debian/u-boot-$(BOARD_NAME).install ; \
 		cp -fr ../$(DFT_BUILDSYSTEM)/templates/debian-u-boot-package $(new-version)/debian ; \
 		mv $(new-version)/debian/u-boot.install $(new-version)/debian/u-boot-$(BOARD_NAME).install ; \
 		find $(new-version)/debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(new-version)/g" \
@@ -189,14 +187,14 @@ new-u-boot-version:
 		fi ; \
 		git add $(new-version) ; \
 	fi ;
-	@echo "DEBUG : end of new-u-boot-version in u-boot.makefile" ;
+	@echo "DEBUG : end of add-u-boot-version in u-boot.makefile" ;
 
 # Override standard targets
 install:
 	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
-	  	echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
-		echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
+    echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
+    echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
 		echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
 	else \
 		for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
