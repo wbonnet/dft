@@ -131,11 +131,11 @@ kernel-package:
         done
 
 # Create a new u-boot version entry
-new-u-boot-version:
-	@echo "DEBUG : in category.makefile new-u-boot-version with argument new-version $(new-version)" ;
+add-u-boot-version:
+	@echo "DEBUG : in category.makefile add-u-boot-version with argument new-version $(new-version)" ;
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
-			$(MAKE) --warn-undefined-variables --print-directory --directory=$$i new-u-boot-version new-version=$(new-version) ; \
+			$(MAKE) --warn-undefined-variables --print-directory --directory=$$i add-u-boot-version new-version=$(new-version) ; \
 		fi ; \
         done
 
