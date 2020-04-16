@@ -138,7 +138,7 @@ setenv boot_firmware '\
   run dft_load_fdt ; \
   run dft_load_kernel ; \
   run dft_load_initrd ; \
-  bootz ${kernel_addr_r} ${ramdisk_addr_r} ${fdt_addr_r} \
+  bootz ${kernel_addr_r} ${ramdisk_addr_r}:${initrd_size} ${fdt_addr_r} \
 '
 
 #
