@@ -78,7 +78,7 @@ fetch-archive-%:
 		if [ -f $(COOKIE_DIR)/$@ ] ; then \
 			true ; \
 		else \
-			wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$*  || 	$(call dft_error ,2004-1601); \
+			wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$* || $(call dft_error ,2004-1601); \
 			mv $(PARTIAL_DIR)/$* $(DOWNLOAD_DIR) ; \
 			rmdir --ignore-fail-on-non-empty $(PARTIAL_DIR) ; \
 			if [ -f $(DOWNLOAD_DIR)/$* ] ; then \
