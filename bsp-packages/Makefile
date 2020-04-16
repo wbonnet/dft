@@ -34,6 +34,26 @@ CATEGORIES    = laptop desktop set-top-box single-board-computer
 #
 .PHONY: help
 
+
+# Build only u-boot package target
+u-boot-package:
+	@echo "DEBUG : $@ in category.makefile" ;
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+		if [ -f $$i/Makefile ] ; then \
+			$(MAKE) -directory= $$i u-boot-package ; \
+		fi ; \
+        done
+
+# Build only linux kernel an package target
+linux-kernel-package:
+kernel-package:
+	@echo "DEBUG : $@ in category.makefile" ;
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+		if [ -f $$i/Makefile ] ; then \
+			$(MAKE) --directory=$$i kernel-package ; \
+		fi ; \
+        done
+
 sanity-check:
 	@echo "DEBUG sanity-check Makefile directement sous bsp-packages" ;
 	for category in $(CATEGORIES) ; do \
