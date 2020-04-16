@@ -34,13 +34,12 @@ CATEGORIES    = laptop desktop set-top-box single-board-computer
 #
 .PHONY: help
 
-
 # Build only u-boot package target
 u-boot-package:
 	@echo "DEBUG : $@ in category.makefile" ;
-	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
-			$(MAKE) -directory= $$i u-boot-package ; \
+			echo "$(MAKE) -directory=$$i u-boot-package"; \
 		fi ; \
         done
 

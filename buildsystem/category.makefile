@@ -89,7 +89,7 @@ sanity-check:
 	for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
 		echo "DEBUG : Je vais tester le repertoire $$folder" ; \
 		if [ -e $$folder/Makefile ] ; then \
-			$(MAKE) -C $$folder sanity-check ; \
+			$(MAKE) --directory=$$folder sanity-check ; \
 		else  \
 			echo "Error there is no Makefile in ${CURDIR}/$$folder" ; \
 			pwd ; \
@@ -107,7 +107,7 @@ configure:
 	echo "DEBUG : configure in category.makefile" ;
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
-			$(MAKE) -C $$i configure ; \
+			$(MAKE) --directory=$$i configure ; \
 		fi ; \
         done
 
@@ -116,7 +116,7 @@ u-boot-package:
 	@echo "DEBUG : $@ in category.makefile" ;
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
-			$(MAKE) -directory= $$i u-boot-package ; \
+			$(MAKE) --directory=$$i u-boot-package ; \
 		fi ; \
         done
 
