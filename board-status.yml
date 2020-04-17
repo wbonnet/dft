@@ -147,6 +147,15 @@ board-status:
                   support-level: stable
          - orangepi-zero:
                   support-level: stable
+                  kernel_version: 4.17.1
+                  uboot_version: 4.17.1
+                  feature_support:
+                    wifi: supported
+                    lan: supported
+                    mmc: supported
+                    lan: supported
+                    video: unavailable
+                    bluetooth: unknown
          - orangepi-zero-2g-iot:
                   support-level: planning
          - orangepi-zero-4g-iot:
