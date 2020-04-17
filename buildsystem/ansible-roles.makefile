@@ -1,0 +1,198 @@
+# vim: ft=make ts=4 sw=4 noet
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2016 DFT project (http://www.firmwaretoolkit.org).
+# All rights reserved. Use is subject to license terms.
+#
+#
+# Contributors list :
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#
+#
+
+# Build system sould be available under board folder as a symlink. Keep it
+# locally available under board folder computing a relative path is a nightmare
+# and does not work in all cases. Environment variables are not git friendly
+# since git add will loose variable name and generate an absolute path, which
+# is not comptible with user need ans or workspace relocation nor packagng needs.
+# better solutions wille be really welcomeds contributions.
+DFT_BUILDSYSTEM := buildsystem
+include board.mk
+include $(DFT_BUILDSYSTEM)/dft.mk
+
+# Strip the variables defined in board.mk to remove trailing whitespaces or
+# some calls will fail (when passing defconfig name etc.)
+BOARD_NAME      := $(strip $(BOARD_NAME))
+BOARD_ARCH      := $(strip $(BOARD_ARCH))
+UBOOT_SUPPORT   := $(strip $(UBOOT_SUPPORT))
+UBOOT_DEFCONFIG := $(strip $(UBOOT_DEFCONFIG))
+USE_CONFIG_FILE := $(strip $(USE_CONFIG_FILE))
+
+# Do not recurse the following subdirs
+MAKE_FILTERS := files Makefile README.md
+SW_NAME      := SW_NAME_undefined_at_board_level
+
+# ------------------------------------------------------------------------------
+#
+# Targets not associated with a file (aka PHONY)
+#
+
+sanity-check:
+	@echo "Checking $(BOARD_NAME) board definition" ;
+	@if [ ! -f "board.mk" ] ; then \
+		pwd ; \
+		echo "file board.mk is missing in directory ${CURDIR}" ; \
+	        $(call dft_error ,1911-1201) ; \
+	fi ;
+	@if [ ! -d "${CURDIR}/kernel" ] ; then \
+		echo "kernel directory is missing in i${CURDIR}. It should contains a symlink to the generic makefile for Linux kernel" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "mkdir -p ${CURDIR}/kernel" ; \
+		echo "ln -s $(DFT_BUILDSYSTEM)/linux-kernel.makefile ${CURDIR}/kernel/Makefile" ; \
+		echo "git add ${CURDIR}/kernel" ; \
+	        $(call dft_error ,2001-0102) ; \
+	fi ;
+	@if [ ! -d "${CURDIR}/kernel/defconfig" ] ; then \
+		echo "defconfig directory is missing in ${CURDIR}/kernel. It is used to store kernel configuration files. It should at least contain a hidden empty file .gitkeep until first kernel version is added for $(BOARD_NAME)" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "mkdir -p ${CURDIR}/kernel/defconfig" ; \
+		echo "touch ${CURDIR}/kernel/defconfig/.gitkeep" ; \
+		echo "git add ${CURDIR}/kernel/defconfig" ; \
+	        $(call dft_error ,1911-1403) ; \
+	fi ;
+	@if [ ! -d "${CURDIR}/u-boot/files" ] ; then \
+		echo "files directory is missing in ${CURDIR}/u-boot. It is used to store u-boot installation procedures. It should at least contain a hidden empty file .gitkeep until first uboot version is added for $(BOARD_NAME)" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "mkdir -p ${CURDIR}/u-boot/files" ; \
+		echo "touch ${CURDIR}/u-boot/files/.gitkeep" ; \
+		echo "git add ${CURDIR}/u-boot/files" ; \
+	        $(call dft_error ,1911-1701) ; \
+	fi ;
+	@if [ ! -d "${CURDIR}/u-boot" ] ; then \
+		echo "u-boot directory is missing in ${CURDIR}. It should contains a symlink to the generic makefile for u-boot" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "mkdir -p ${CURDIR}/u-boot" ; \
+		echo "ln -s $(DFT_BUILDSYSTEM)/u-boot.makefile ${CURDIR}/u-boot/Makefile" ; \
+		echo "git add ${CURDIR}/u-boot" ; \
+	        $(call dft_error ,1911-1402) ; \
+	fi ;
+	@if [ ! "$(shell readlink ${CURDIR}/u-boot/Makefile)" = "../$(DFT_BUILDSYSTEM)/u-boot.makefile" ] ; then \
+		echo "target of symlink Makefile should be ../$(DFT_BUILDSYSTEM)/u-boot.makefile in directory ${CURDIR}/u-boot" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "git rm -f ${CURDIR}/u-boot/Makefile" ; \
+		echo "mkdir -p ${CURDIR}/u-boot" ; \
+		echo "DFT_BUILDSYSTEM : ${DFT_BUILDSYSTEM}" ; \
+		echo "ln -s ../$(DFT_BUILDSYSTEM)/u-boot.makefile ${CURDIR}/u-boot/Makefile" ; \
+		echo "git add ${CURDIR}/u-boot/Makefile" ; \
+	        $(call dft_error ,2001-0101) ; \
+	fi ;
+	@if [ ! "$(shell readlink ${CURDIR}/kernel/Makefile)" = "../$(DFT_BUILDSYSTEM)/linux-kernel.makefile" ] ; then \
+		echo "target of symlink Makefile should be ../$(DFT_BUILDSYSTEM)/linux-kernel.makefile in directory ${CURDIR}/kernel" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "git rm -f ${CURDIR}/kernel/Makefile" ; \
+		echo "mkdir -p ${CURDIR}/kernel" ; \
+		echo "ln -s ../$(DFT_BUILDSYSTEM)/linux-kernel.makefile ${CURDIR}/kernel/Makefile" ; \
+		echo "git add ${CURDIR}/kernel/Makefile" ; \
+		$(call dft_error 1911-1409) \
+	fi ;
+	@if [ ! -L "kernel/board.mk" ] ; then \
+		echo "board.mk symlink to ../board.mk is missing in directory ${CURDIR}/kernel" ; \
+		echo "You can fix with the following commands : " ; \
+		if [  -f "kernel/board.mk" ] ; then \
+			echo "git rm ${CURDIR}/kernel/board.mk" ; \
+		fi ; \
+		echo "ln -s ../board.mk ${CURDIR}/kernel/board.mk" ; \
+		echo "git add ${CURDIR}/kernel/board.mk" ; \
+	        $(call dft_error ,1911-1801) ; \
+	fi ;
+	@if [ ! "$(shell readlink ${CURDIR}/kernel/board.mk)" = "../board.mk" ] ; then \
+		echo "target of symlink board.mk should be ../board.mk in directory ${CURDIR}/kernel" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "git rm -f ${CURDIR}/kernel/board.mk" ; \
+		echo "ln -s ../board.mk ${CURDIR}/kernel/board.mk" ; \
+		echo "git add ${CURDIR}/kernel/board.mk" ; \
+	        $(call dft_error ,1911-1802) ; \
+	fi ;
+	@if [ ! "" = "" ] ; then \
+		echo "target of symlink board.mk should be ../board.mk in directory ${CURDIR}/kernel" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "git rm -f ${CURDIR}/kernel/board.mk" ; \
+		echo "ln -s ../board.mk ${CURDIR}/kernel/board.mk" ; \
+		echo "git add ${CURDIR}/kernel/board.mk" ; \
+	        $(call dft_error ,2001-0601) ; \
+	fi ;
+	@if [ ! -L "u-boot/board.mk" ] ; then \
+		echo "board.mk symlink to ../board.mk is missing in directory ${CURDIR}/u-boot" ; \
+		echo "You can fix with the following commands : " ; \
+		if [  -f "u-boot/board.mk" ] ; then \
+			echo "git rm ${CURDIR}/u-boot/board.mk" ; \
+		fi ; \
+		echo "ln -s ../board.mk ${CURDIR}/u-boot/board.mk" ; \
+		echo "git add ${CURDIR}/u-boot/board.mk" ; \
+	        $(call dft_error ,1911-1803) ; \
+	fi ;
+	@if [ ! "$(shell readlink ${CURDIR}/u-boot/board.mk)" = "../board.mk" ] ; then \
+		echo "target of symlink board.mk should be ../board.mk in directory ${CURDIR}/u-boot" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "git rm -f ${CURDIR}/u-boot/board.mk" ; \
+		echo "ln -s ../board.mk ${CURDIR}/u-boot/board.mk" ; \
+		echo "git add ${CURDIR}/u-boot/board.mk" ; \
+	        $(call dft_error ,1911-1804) ; \
+	fi ;
+	@make --directory=u-boot $*
+	@make --directory=kernel $*
+	@for version in $(find . -mindepth 1 -maxdepth 1 -type d ) ; do \
+		$(MAKE) --directory=$$version $* ; \
+        done
+
+# Build only u-boot  package target
+u-boot-package:
+	@echo "target $@ is called in board.makefile"
+	$(MAKE) --directory=u-boot package ;
+
+# Build only linux kernel an package target
+linux-kernel-package:
+kernel-package:
+	@echo "target $@ is called in board.makefile"
+	$(MAKE) --directory=kernel package ;
+
+# Catch all target. Call the same targets in each subfolder
+# cd $$i && $(MAKE) $* && cd .. ;
+sanity-check:
+	@echo "target $@ is called in board.makefile"
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+		echo "examen de $$i" ; \
+		if [ -f $$i/Makefile ] ; then \
+			$(MAKE) --directory=$$i $* ; \
+		fi ; \
+        done
+
+# Create a new u-boot version entry
+add-u-boot-version:
+	@echo "DEBUG : from board.makefile add-u-boot-version with argument new-version $(new-version)" ;
+	$(MAKE) --warn-undefined-variables --directory=u-boot add-u-boot-version new-version=$(new-version) ;
+
+check-u-boot-defconfig:
+	$(MAKE) --directory=u-boot check-u-boot-defconfig ;
+
+# Simple forwarder
+extract:
+fetch:
+build:
+configure:
+setup:
+	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d )) ; do \
+		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
+                	$(MAKE) --directory=$$v $@ ; \
+		fi ; \
+	done
+
