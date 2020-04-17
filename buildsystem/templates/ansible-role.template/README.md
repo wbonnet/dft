@@ -7,7 +7,8 @@ Requirements
 ------------
 
 Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here.
-For instance, if the role depends on given versions of kernel, drivers or u-boot. It should also cover specific papreinstalled packages needs when generating a rootfs or firmware image, thus not deploring role on a live system.
+For instance, if the role depends on given versions of kernel, drivers or u-boot.
+It should also cover specific reinstalled packages needs when generating a rootfs or firmware image, thus not deploying role on a live system.
 
 Role Variables
 --------------
