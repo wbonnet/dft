@@ -21,6 +21,6 @@
 ---
 - name : DFT - Install reprepro
   apt:
-       name=reprepro
+       pkg=reprepro
        state=latest
        install_recommends=no
