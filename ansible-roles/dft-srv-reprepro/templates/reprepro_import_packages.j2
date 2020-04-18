@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 {% for repo in dft_srv_reprepro.repositories %}
-# Importing packages from {{ repo.origin }}
-
+# Import packages to {{ repo.origin }} repository
+reprepro -b {{ dft_srv_reprepro.base_directory}}/{{ repo.directory}} processincoming incoming-{{ repo.codename }} >> {{ dft_srv_reprepro.base_directory }}/{{ repo.directory}}/logs/{{ repo.log}}
+reprepro -b {{ dft_srv_reprepro.base_directory}}/{{ repo.directory}} export
 
 {% endfor %}

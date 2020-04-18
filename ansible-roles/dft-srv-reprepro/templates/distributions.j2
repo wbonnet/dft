@@ -28,7 +28,7 @@ Description: {{ item.description }}
 {% if item.log is defined %}
 Log: {{ item.log }}
 {% else %}
-Log: {{ dft_srv_reprepro.base_directory }}/{{ item.directory }}/logs/{{ item.origin }}
+Log: {{ dft_srv_reprepro.base_directory }}/{{ item.directory }}/logs/{{ item.name }}
 {% endif %}
 {% if item.sign_with is defined %}
 SignWith: {{ item.sign_with }}

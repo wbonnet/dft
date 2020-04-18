@@ -26,6 +26,7 @@ dft_srv_reprepro:
 # This variable is a list of repository configurations. Each item in the list is a repo
   repositories:
   - origin: DFT
+    name: dft_repo
     directory: debian
     label: DFT Test repository
     suite: testing

@@ -48,10 +48,12 @@
 # Instanciate the options template file
 - name: DFT - Copy reprepro_import_packages script template
   template: src=reprepro_import_packages.j2
-            dest={{ dft_srv_reprepro.user_definition.home_dir }}/bin/reprepro_import_packages
+            dest={{ dft_srv_reprepro.user_definition.home_dir }}/bin/reprepro_import_{{ item.name }}_packages
             owner={{ dft_srv_reprepro.user_definition.username }}
             group={{ dft_srv_reprepro.user_definition.group }}
             mode="0755"
+  with_items:
+    - "{{ dft_srv_reprepro.repositories }}"
 
 # -------------------------------------------------------------------------------------------------
 # Create the repositories subdirectories
@@ -149,6 +151,8 @@
         hour={{ dft_srv_reprepro.cron_definition.hour }}
         minute={{ dft_srv_reprepro.cron_definition.minute }}
         user="{{ dft_srv_reprepro.user_definition.username }}"
-        job="cd {{ dft_srv_reprepro.user_definition.home_dir }} && {{ dft_srv_reprepro.user_definition.home_dir }}/bin/reprepro_import_packages"
+        job="cd {{ dft_srv_reprepro.user_definition.home_dir }} && {{ dft_srv_reprepro.user_definition.home_dir }}/bin/reprepro_import_{{ item.name }}_packages"
+  with_items:
+    - "{{ dft_srv_reprepro.repositories }}"
 
 # -------------------------------------------------------------------------------------------------
