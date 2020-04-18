@@ -1,7 +1,7 @@
 Name: incoming-{{ item.codename }}
-IncomingDir: {{ dft_srv_reprepro_directory }}/{{ item.base_dir }}/incoming
-TempDir: {{ dft_srv_reprepro_directory }}/{{ item.base_dir }}/tmp
-LogDir: {{ dft_srv_reprepro_directory }}/{{ item.base_dir }}/logs
+IncomingDir: {{ dft_srv_reprepro.base_directory }}/{{ item.directory }}/incoming
+TempDir: {{ dft_srv_reprepro.base_directory }}/{{ item.directory }}/tmp
+LogDir: {{ dft_srv_reprepro.base_directory }}/{{ item.directory }}/logs
 {% if item.allow is defined %}
 Allow: {% for rule_allow in item.allow %} {{ rule_allow }} {% endfor %}
 {% endif %}

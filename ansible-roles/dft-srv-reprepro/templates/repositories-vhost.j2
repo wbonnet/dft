@@ -1,7 +1,7 @@
 <VirtualHost *>
     # If the path is not under /var/www or /usr/share, don't forget to activate it in
     # /etc/apache2/apache2.conf
-    DocumentRoot {{ dft_srv_reprepro_directory }}
+    DocumentRoot {{ dft_srv_reprepro.base_directory }}
     ServerName {{ dft_srv_reprepro_server_name }}
     ErrorLog /var/log/apache2/{{ dft_srv_reprepro_server_name }}.error.log
 
@@ -17,7 +17,7 @@
     </Directory>
 
     # Allow directory listings so that people can browse the repository from their browser too
-    <Directory "{{ dft_srv_reprepro_directory }}">
+    <Directory "{{ dft_srv_reprepro.base_directory }}">
         Options Indexes FollowSymLinks MultiViews
         Order allow,deny
         Allow from all
@@ -25,18 +25,18 @@
 
     # The following directives prevents from browsing some internal repo structures
     # The syntax allow multiple repositories (there is no need to generate a rule per repo).
-    # The * joker match any repo under the dft_srv_reprepro_directory base directory
-    <Directory "{{ dft_srv_reprepro_directory }}/*/conf">
+    # The * joker match any repo under the dft_srv_reprepro.base_directory base directory
+    <Directory "{{ dft_srv_reprepro.base_directory }}/*/conf">
         Order allow,deny
         Deny from all
     </Directory>
 
-    <Directory "{{ dft_srv_reprepro_directory }}/*/db">
+    <Directory "{{ dft_srv_reprepro.base_directory }}/*/db">
         Order allow,deny
         Deny from all
     </Directory>
 
-    <Directory "{{ dft_srv_reprepro_directory }}/*/incoming">
+    <Directory "{{ dft_srv_reprepro.base_directory }}/*/incoming">
         Order allow,deny
         Deny from all
     </Directory>
