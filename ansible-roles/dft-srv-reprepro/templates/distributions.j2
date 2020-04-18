@@ -26,7 +26,9 @@ UDebComponents: {{ item.udeb_components }}
 Description: {{ item.description }}
 {% endif %}
 {% if item.log is defined %}
-Log: {{ dft_srv_reprepro_directory }}/{{ item.base_dir }}/logs/{{ item.log }}
+Log: {{ item.log }}
+{% else %}
+Log: {{ dft_srv_reprepro.base_directory }}/{{ item.base_dir }}/logs/{{ item.origin }}
 {% endif %}
 {% if item.sign_with is defined %}
 SignWith: {{ item.sign_with }}
