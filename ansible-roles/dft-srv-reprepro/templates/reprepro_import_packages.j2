@@ -2,7 +2,9 @@
 
 {% for repo in dft_srv_reprepro.repositories %}
 # Import packages to {{ repo.origin }} repository
-reprepro -b {{ dft_srv_reprepro.base_directory}}/{{ repo.directory}} processincoming incoming-{{ repo.codename }} >> {{ dft_srv_reprepro.base_directory }}/{{ repo.directory}}/logs/{{ repo.log}}
-reprepro -b {{ dft_srv_reprepro.base_directory}}/{{ repo.directory}} export
+reprepro -b {{ dft_srv_reprepro.base_directory }}/{{ repo.directory }} processincoming incoming-{{ repo.codename }} >> /var/log/reprepro/}}/
+{{ repo.name }}.log
+reprepro -b {{ dft_srv_reprepro.base_directoryn }}/{{ repo.directory }} export >> /var/log/reprepro/}}/
+{{ repo.name }}.log
 
 {% endfor %}
