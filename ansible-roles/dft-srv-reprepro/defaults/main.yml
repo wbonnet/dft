@@ -20,15 +20,13 @@
 
 # This variables is the base directory for the repositories, everything will be created under
 # this path
-dft_srv_reprepro_directory: /srv/debian-repositories
-
-# This variable controls the apache virtualhost server name
-dft_srv_reprepro_server_name: undefined.variable.dft_srv_reprepro_server_name
-
+dft_srv_reprepro:
+  base_directory: /srv/debian-repositories
+  server_name: undefined.dft_srv_reprepro.server_name
 # This variable is a list of repository configurations. Each item in the list is a repo
-dft_srv_reprepro_configuration:
+  repositories:
   - origin: DFT
-    base_dir: debian
+    directory: debian
     label: DFT Test repository
     suite: testing
     codename: buster
@@ -36,7 +34,7 @@ dft_srv_reprepro_configuration:
     architectures: arm64 amd64 source
     components: main
     udeb_components: main
-    log: /var/log/dft-reprepro.log
+    log: /var/log/dft-srv-reprepro.log
     description: DFT test repository (you should change this to your real configuration)
     # deb_override: override.buster
     # dsc_override: override.buster
@@ -50,26 +48,20 @@ dft_srv_reprepro_configuration:
     # The allow variable is a list of rules to output to the Allow section
     allow:
       - testing>buster buster
+    user_definition:
+      username: reprepro
+      group: reprepro
+      groups: "www-data"
+      home_dir: /home/reprepro/
+      shell: /bin/bash
+    cron_definition:
+      month: "*"
+      weekday: "*"
+      day: "*"
+      hour: "*"
+      minute: "0"
+
+
 #    uploaders:
 #      - rule: "*"
 #        key: "123456789ABCDEF"
-
-
-# reprepro role variables definition
-#
-dft_srv_reprepro_user_definition:
-  username: reprepro
-  group: reprepro
-  home_dir: /home/reprepro/
-  shell: /bin/bash
-
-# Parameters of the cron job. Cron is running the reprepro_import_packages script
-dft_srv_reprepro_cron_definition:
-  month: "*"
-  weekday: "*"
-  day: "*"
-  hour: "*"
-  minute: "0"
-
-dft_srv_reprepro_web_server_definition:
-  group: "www-data"
