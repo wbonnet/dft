@@ -25,11 +25,11 @@
 
 ---
 - name : DFT - Install OS base packages
-  apt: name={{ item }}
-       state=latest
-       install_recommends=no
-  with_items:
-    - udev
-    - kmod
-    - whois
-    - initscripts
+  apt: 
+    state: latest
+    install_recommends: no
+    pkg:
+      - udev
+      - kmod
+      - whois
+      - initscripts
