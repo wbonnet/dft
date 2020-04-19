@@ -30,13 +30,13 @@
          state=present
 
 # Add the user 'reprepro' with a bash shell, appending the group reprepro and
-# {{ dft_debian_repository_web_server_definition.group }} to the user's groups
+# {{ dft_debian_repository_webserver_definition.group }} to the user's groups
 - name: Create the reprepro user
   user: name={{ dft_debian_repository_user_definition.username }}
         shell={{ dft_debian_repository_user_definition.shell }}
         home={{ dft_debian_repository_user_definition.home_dir }}
         group={{ dft_debian_repository_user_definition.group }}
-        groups={{ dft_debian_repository_web_server_definition.group }}
+        groups={{ dft_debian_repository_webserver_definition.group }}
         append=yes
 
 # Create the reprepro script directory
@@ -62,8 +62,8 @@
   file: path={{ dft_debian_repository_directory }}/{{ item[1].base_dir }}/{{ item[0] }}
         state=directory
         recurse=yes
-        owner={{ dft_debian_repository_web_server_definition.group }}
-        group={{ dft_debian_repository_web_server_definition.group }}
+        owner={{ dft_debian_repository_webserver_definition.group }}
+        group={{ dft_debian_repository_webserver_definition.group }}
         mode="0775"
   with_nested:
     - ['conf', 'db', 'dists', 'logs', 'indices', 'override', 'pool', 'project', 'tmp' ]
@@ -73,8 +73,8 @@
 - name: DFT - Create override files
   file: path={{ dft_debian_repository_directory }}/{{ item.base_dir }}/conf/{{ item.deb_override }}
         state=touch
-        owner={{ dft_debian_repository_web_server_definition.group }}
-        group={{ dft_debian_repository_web_server_definition.group }}
+        owner={{ dft_debian_repository_webserver_definition.group }}
+        group={{ dft_debian_repository_webserver_definition.group }}
         mode="0775"
   when: "{{ item.deb_override }} is defined"
   with_items:
@@ -84,8 +84,8 @@
 - name: DFT - Create override files
   file: path={{ dft_debian_repository_directory }}/{{ item.base_dir }}/conf/{{ item.dsc_override }}
         state=touch
-        owner={{ dft_debian_repository_web_server_definition.group }}
-        group={{ dft_debian_repository_web_server_definition.group }}
+        owner={{ dft_debian_repository_webserver_definition.group }}
+        group={{ dft_debian_repository_webserver_definition.group }}
         mode="0775"
   when: "{{ item.dsc_override }} is defined"
   with_items:
@@ -96,8 +96,8 @@
   file: path={{ dft_debian_repository_directory }}/{{ item.base_dir }}/incoming
         state=directory
         recurse=yes
-        owner={{ dft_debian_repository_web_server_definition.group }}
-        group={{ dft_debian_repository_web_server_definition.group }}
+        owner={{ dft_debian_repository_webserver_definition.group }}
+        group={{ dft_debian_repository_webserver_definition.group }}
         mode="0775"
   with_items:
     - "{{ dft_debian_repository_configuration }}"
@@ -106,8 +106,8 @@
 - name: DFT - Copy distributions template
   template: src=distributions.j2
             dest={{ dft_debian_repository_directory }}/{{ item.base_dir }}/conf/distributions
-            owner={{ dft_debian_repository_web_server_definition.group }}
-            group={{ dft_debian_repository_web_server_definition.group }}
+            owner={{ dft_debian_repository_webserver_definition.group }}
+            group={{ dft_debian_repository_webserver_definition.group }}
             mode="0644"
   with_items:
     - "{{ dft_debian_repository_configuration }}"
@@ -116,8 +116,8 @@
 - name: DFT - Copy options template
   template: src=options.j2
             dest={{ dft_debian_repository_directory }}/{{ item.base_dir }}/conf/options
-            owner={{ dft_debian_repository_web_server_definition.group }}
-            group={{ dft_debian_repository_web_server_definition.group }}
+            owner={{ dft_debian_repository_webserver_definition.group }}
+            group={{ dft_debian_repository_webserver_definition.group }}
             mode="0644"
   with_items:
     - "{{ dft_debian_repository_configuration }}"
@@ -126,8 +126,8 @@
 - name: DFT - Copy incoming template
   template: src=incoming.j2
             dest={{ dft_debian_repository_directory }}/{{ item.base_dir }}/conf/incoming
-            owner={{ dft_debian_repository_web_server_definition.group }}
-            group={{ dft_debian_repository_web_server_definition.group }}
+            owner={{ dft_debian_repository_webserver_definition.group }}
+            group={{ dft_debian_repository_webserver_definition.group }}
             mode="0644"
   with_items:
     - "{{ dft_debian_repository_configuration }}"
@@ -136,8 +136,8 @@
 - name: DFT - Copy uploaders template
   template: src=uploaders.j2
             dest={{ dft_debian_repository_directory }}/{{ item.base_dir }}/conf/uploaders
-            owner={{ dft_debian_repository_web_server_definition.group }}
-            group={{ dft_debian_repository_web_server_definition.group }}
+            owner={{ dft_debian_repository_webserver_definition.group }}
+            group={{ dft_debian_repository_webserver_definition.group }}
             mode="0644"
   with_items:
     - "{{ dft_debian_repository_configuration }}"
