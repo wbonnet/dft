@@ -11,8 +11,8 @@ The bsp-packages directory tree is organized in the same way as others top level
 * The following categories are availables :
   * desktop
   * laptop
-  * single-board-computer (aka SBC)
-  * set-top-box (aka STB)
+  * single-board-computer (*SBC*)
+  * set-top-box (*STB*)
 
 The category folders contain sublevel folders, one per board in the given category.
 All the board folders have the same structure, even if hardware architecture differ.
