@@ -15,7 +15,8 @@ The bsp-packages directory tree is organized in the same way as others top level
   * set-top-box (aka STB)
 
 The category folders contain sublevel folders, one per board in the given category.
-All the board folders have the same structure, even if hardware architecture differ, folders contain a kernel and a u-boot subfolder, if u-boot is supported by hardware otherwise grub can be used.
+All the board folders have the same structure, even if hardware architecture differ.
+Board folders contain a kernel and a u-boot subfolder, if u-boot is supported by hardware otherwise grub can be used.
 
 Linux kernel and u-boot folders contain a separate subdirectory per supported kernel and u-boot version.
 
