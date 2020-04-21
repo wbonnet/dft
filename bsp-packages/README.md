@@ -24,9 +24,9 @@ This tree structure is consistent for all the board categories, whatever archite
 
 <h2>Makefile targets
 </h2>
-The following make targets are avalable to hep you to run the most common tasks.
-<h3>u-boot-package
+The following targets are available to help you run the most common tasks.
+<h3>make u-boot-package
 </h3>
-<h3>linux-kernel-package
+<h3>make linux-kernel-package
 target kernel-package is a synonym since only linux kernel is supported.
 </h3>
