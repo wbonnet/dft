@@ -29,4 +29,4 @@ The following targets are available to help you run the most common tasks.
 </h3>
 <h3>linux-kernel-package
 </h3>
-You can also use the target *kernel-package* as a synonym, since only linux kernel is supported.
+You can also use the target **kernel-package** as a synonym, since only linux kernel is supported.
