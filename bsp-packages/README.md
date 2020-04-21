@@ -27,10 +27,10 @@ This tree structure is consistent for all the board categories, whatever archite
 The following targets are available to help you run the most common tasks.
 <h3>u-boot-package
 </h3>
-This target is recursivly called in category subfolders in order to build u-boot packages  for every board (if supported by the board).
+This target is recursivly called in categories subfolders in order to build u-boot packages for every board in the current category (if u-boot is supported by the board).
 <h3>linux-kernel-package
 </h3>
-This target is recursivly called in category subfolders in order to build kernel packages every board.
+This target is recursivly called in categories subfolders in order to build kernel packages for every board in the current category.
 
 You can also use the target kernel-package as a synonym, since only linux kernel is supported.
 
