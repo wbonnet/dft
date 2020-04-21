@@ -28,9 +28,14 @@ The following targets are available to help you run the most common tasks.
 <h3>u-boot-package
 </h3>
 This target is recursivly called in categories subfolders in order to build u-boot packages for every board in the current category (if u-boot is supported by the board).
-<h3>linux-kernel-package
+<h3>linux-kernel-package (aliased to kernel-package)
 </h3>
-This target is recursivly called in categories subfolders in order to build kernel packages for every board in the current category.
-
+This target is recursivly called in categories subfolders in order to build kernel packages for every board in the current category. This target does not compile u-boot, if you need to produce both kernel and u-boot at the same time with a single make commande please use make bsp-package.
 You can also use the target kernel-package as a synonym, since only linux kernel is supported.
+<h3>bsp-package
+</h3>
+This target is recursivly called in categories subfolders in order to build all the Board Support Packages for every board in the current category, including both kerl and u-boot (if u-boot is supported by the board).
+
+You can also use the target bsp as a synonym.
+
 
