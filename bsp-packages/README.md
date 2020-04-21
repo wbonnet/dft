@@ -28,5 +28,5 @@ The following targets are available to help you run the most common tasks.
 <h3>make u-boot-package
 </h3>
 <h3>make linux-kernel-package
-target kernel-package is a synonym since only linux kernel is supported.
 </h3>
+target kernel-package is a synonym since only linux kernel is supported.
