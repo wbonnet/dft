@@ -21,3 +21,12 @@ Board folders contain a kernel and a u-boot subfolder, if u-boot is supported by
 Linux kernel and u-boot folders contain a separate subdirectory per supported kernel and u-boot version.
 
 This tree structure is consistent for all the board categories, whatever architecture or manufacturer are. Providing a standardized interface and Makefile driven interface to build and packages sofware components.
+
+<h2>Makefile targets
+The following make targets are avalable to hep you to run the most common tasks.
+</h2>
+<h3>u-boot-package
+</h3>
+<h3>linux-kernel-package
+target kernel-package is a synonym since only linux kernel is supported.
+</h3>
