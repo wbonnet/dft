@@ -1,5 +1,4 @@
-<h1>Ansible naming rules
-</h1>
+#Ansible naming rules
 This folder contains the Ansible roles provided by the DFT project.
 Roles are named according the following rules.
 

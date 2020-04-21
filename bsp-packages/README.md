@@ -1,5 +1,4 @@
-<h1>BSP Packages
-</h1>
+#BSP Packages
 This folder contains the makefiles used to compile and build BSP (Board Support Packages) from upstream sources, a local mirror or even modified/patched sources, handling both Linux kernel and u-boot.
 
 The produced Debian ***deb*** packages can be installed to your own system and can also be used by the DFT command line tool when producing a bootable image.
@@ -22,19 +21,15 @@ Linux kernel and u-boot folders contain a separate subdirectory per supported ke
 
 This tree structure is consistent for all the board categories, whatever architecture or manufacturer are. Providing a standardized interface and Makefile driven interface to build and packages sofware components.
 
-<h2>Makefile targets
-</h2>
+##Makefile targets
 The following targets are available to help you run the most common tasks.
-<h3>u-boot-package
-</h3>
+###u-boot-package
 This target is recursivly called in categories subfolders in order to build u-boot packages for every board in the current category (if u-boot is supported by the board).
-<h3>linux-kernel-package
-</h3>
+###linux-kernel-package
 This target is recursivly called in categories subfolders in order to build kernel packages for every board in the current category. This target does not compile u-boot, if you need to produce both kernel and u-boot at the same time with a single make commande please use make bsp-package.
 
 You can also use the target ***kernel-package*** as a synonym, since only linux kernel is supported.
-<h3>bsp-package
-</h3>
+###bsp-package
 This target is recursivly called in categories subfolders in order to build all the Board Support Packages for every board in the current category, including both kerl and u-boot (if u-boot is supported by the board).
 
 You can also use the target ***bsp*** as a synonym.

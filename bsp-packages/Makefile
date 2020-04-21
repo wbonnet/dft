@@ -18,14 +18,13 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 
-
 DFT_BUILDSYSTEM := ../buildsystem
 include $(DFT_BUILDSYSTEM)/dft.mk
 
 # Do not recurse the following subdirs
 MAKE_FILTERS  = Makefile README.md .
 
-# definition of the liste of boards category 
+# definition of the liste of boards category
 CATEGORIES    = laptop desktop set-top-box single-board-computer
 
 # ------------------------------------------------------------------------------
@@ -91,23 +90,6 @@ sanity-check:
 			$(MAKE) -C $$category sanity-check ; \
 		else  \
 			echo "DEBUG: Makefile is missing in ${CURDIR}/$$category" ; \
-		fi ; \
-	done  
-
-# Build only u-boot  package target
-u-boot-package:
-	@for i in $(CATEGORIES) ; do \
-		if [ -f ${CURDIR}/$$i/Makefile ] ; then \
-                	$(MAKE) -C $$i u-boot-package ; \
-		fi ; \
-        done
-
-# Build only linux kernel an package target
-kernel-package:
-linux-kernel-package:
-	@for i in $(CATEGORIES) ; do \
-		if [ -f ${CURDIR}/$$i/Makefile ] ; then \
-                	$(MAKE) -C $$i kernel-package ; \
 		fi ; \
 	done
 
