@@ -219,7 +219,7 @@ new-board:
 		fi ; \
 	fi ;
 
-# Simple forwarder
+# Simple target forwarder
 extract:
 fetch:
 setup:
