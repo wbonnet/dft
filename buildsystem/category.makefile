@@ -215,7 +215,7 @@ new-board:
 			echo "You work is still local, you now have to run : " ; \
 			echo "git add $(board_name) then commit and push to make it available." ; \
 			echo "then do a git commit and git push to make the new board entry available." ; \
-			echo "The next step is to add at least a u-boot version to the newly created $(board_name) board. You can do it with following commands (change the version given as example) :" ; \
+			echo "Next step is to add a u-boot version to the new $(board_name) board. You can use thie example (changing example version) :" ; \
 			echo "cd $(board_name)/u-boot" ; \
 			echo "make new-version version=2020.10" ; \
 		fi ; \
