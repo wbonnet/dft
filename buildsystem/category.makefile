@@ -204,7 +204,7 @@ new-board:
 		touch $(board_name)/u-boot/files/.gitkeep ; \
 		ln -s ../buildsystem $(board_name)/u-boot/buildsystem ; \
 		ln -s ../board.mk $(board_name)/u-boot/board.mk ; \
-		ln -s buildsystem/u-boot.makefile $(board_name)/u-sboot/Makefile ; \
+		ln -s buildsystem/u-boot.makefile $(board_name)/u-boot/Makefile ; \
 		echo "Your work is still local, to make it available, you have to run git add commit and push : " ; \
 		echo "git add $(board_name)" ; \
 		echo "Last step before building is to add a u-boot version to the new $(board_name) board. You can use this example :" ; \
