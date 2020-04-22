@@ -103,7 +103,7 @@ bsp: bsp-package
 bsp-package: u-boot-package kernel-package
 
 # Build only u-boot package target
-configure:
+do-configure:
 	echo "DEBUG : configure in category.makefile" ;
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
@@ -146,54 +146,70 @@ check-u-boot-defconfig:
 
 # Create a new board entry
 new-board:
-	@echo "DEBUG : in category.makefile running new-board with argument board-name $(board-name) board-arch $(board-arch)" ;
-	@if [ "$(board-name)" == "" ] ; then \
-		echo "DEBUG : from category.makefile argument board-name is missing or has no value. Doing nothing..." ; \
+	echo "DEBUG : in category.makefile running new-board with argument board_name $(board_name) board_arch $(board_arch) board_arch $(board_arch) uboot_support $(uboot_support) uboot_support $(uboot_support)  uboot_defconfig $(uboot_defconfig) default_dtb $(default_dtb)" ; \
+	if [ "$(board_name)" == "" ] ; then \
+		echo "DEBUG : from category.makefile argument board_name is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2001-1601) ; \
-	fi ;
-	if [ "$(board-arch)" == "" ] ; then \
-		echo "DEBUG : from category.makefile argument board-arch is missing or has no value. Doing nothing..." ; \
+	fi ; \
+	if [ "$(board_arch)" == "" ] ; then \
+		echo "DEBUG : from category.makefile argument board_arch is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2001-1602) ; \
 	fi ; \
-	if [ -d "./$(board-name)" ] ; then \
-		echo ". Board $(board-name) already exist. Doing nothing..." ; \
+	if [ -d "./$(board_name)" ] ; then \
+		echo ". Board $(board_name) already exist. Doing nothing..." ; \
 	else  \
-		echo ". Creating the directory for board $(board-name)" ; \
-		mkdir -p $(board-name) ; \
-		cp  $(DFT_BUILDSYSTEM)/templates/board.mk.template $(board-name)/board.mk ; \
-		sed -i -e "s/__BOARD_ARCH__/$(board-arch)/g" -e "s/__BOARD_NAME__/$(board-name)/g" $(board-name)/board.mk ; \
-		ln -s buildsystem/board.makefile $(board-name)/Makefile ; \
-		ln -s ../buildsystem $(board-name)/buildsystem ; \
+		echo ". Creating the directory for board $(board_name)" ; \
+		mkdir -p $(board_name) ; \
+		cp  $(DFT_BUILDSYSTEM)/templates/board.mk.template $(board_name)/board.mk ; \
+		sed -i -e "s/__BOARD_ARCH__/$(board_arch)/g" -e "s/__BOARD_NAME__/$(board_name)/g" $(board_name)/board.mk ; \
+		ln -s buildsystem/board.makefile $(board_name)/Makefile ; \
+		ln -s ../buildsystem $(board_name)/buildsystem ; \
 	fi ; \
-	if [ ! "$(u-boot-defconfig)" == "" ] ; then \
-		sed -i -e "s/__UBOOT_DEFCONFIG__/$(u-boot-defconfig)/g" $(board-name)/board.mk ; \
+	if [ ! "$(uboot_defconfig)" == "" ] ; then \
+		sed -i -e "s/__UBOOT_DEFCONFIG__/$(uboot_defconfig)/g" $(board_name)/board.mk ; \
 	else  \
-		sed -i -e "s/__UBOOT_DEFCONFIG__/unknown_defconfig/g" $(board-name)/board.mk ; \
+		sed -i -e "s/__UBOOT_DEFCONFIG__/$(uboot_defconfig)/g" $(board_name)/board.mk ; \
 	fi ; \
-	if [ "$(u-boot-support)" == "1" ] ; then \
-		sed -i -e "s/__UBOOT_SUPPORT__/1/g" $(board-name)/board.mk ; \
+	if [ ! "$(default_dtb)" == "" ] ; then \
+		sed -i -e "s/__DEFAULT_DTB__/$(default_dtb)/g" $(board_name)/board.mk ; \
 	else  \
-		if [ "$(u-boot-support)" == "0" ] ; then \
-			sed -i -e "s/__UBOOT_SUPPORT__/0/g" $(board-name)/board.mk ; \
+		sed -i -e "s/__DEFAULT_DTB__/default.dtb/g" $(board_name)/board.mk ; \
+	fi ; \
+	if [ "$(uboot_support)" == "1" ] ; then \
+		sed -i -e "s/__UBOOT_SUPPORT__/1/g" $(board_name)/board.mk ; \
+	else  \
+		if [ "$(uboot_support)" == "0" ] ; then \
+			sed -i -e "s/__UBOOT_SUPPORT__/0/g" $(board_name)/board.mk ; \
 		else  \
-			echo "u-boot-support value should be 0 or 1. No value is equivalent to 1, u-boot is activated" ; \
+			echo "uboot_support value should be 0 or 1. No value is equivalent to 1, u-boot wiil be activated" ; \
 		fi ; \
 	fi ; \
-	if [ "$(grub-support)" == "1" ] ; then \
-		sed -i -e "s/__GRUB_SUPPORT__/1/g" $(board-name)/board.mk ; \
+	if [ "$(grub_support)" == "1" ] ; then \
+		sed -i -e "s/__GRUB_SUPPORT__/1/g" $(board_name)/board.mk ; \
 	else  \
-		if [ "$(grub-support-support)" == "0" ] ; then \
-			sed -i -e "s/__GRUB_SUPPORT__/0/g" $(board-name)/board.mk ; \
+		if [ "$(grub_support)" == "0" ] ; then \
+			sed -i -e "s/__GRUB_SUPPORT__/0/g" $(board_name)/board.mk ; \
 		else  \
-			echo "grub-support value should be 0 or 1. No value is equivalent to 0, grub is deactivated" ; \
+			echo "grub_support value should be 0 or 1. No value is equivalent to 0, grub will be deactivated" ; \
+			export grub-support=0 ; \
 		fi ; \
-		mkdir $(board-name)/kernel/ ; \
-		ln -s ../buildsystem $(board-name)/kernel/buildsystem ; \
-		ln -s buildsystem/linux-kernel.makefile $(board-name)/kernel/Makefile ; \
-		if [ "$(u-boot-support)" == "1" ] ; then \
-			mkdir $(board-name)/u-boot/ ; \
-			ln -s ../buildsystem $(board-name)/u-boot/buildsystem ; \
-			ln -s buildsystem/u-boot.makefile $(board-name)/u-boot/Makefile ; \
+	fi ; \
+	if [ "$(uboot_defconfig)" == "" ] ; then \
+		sed -i -e "s/__UBOOT_DEFCONFIG__/1/g" $(board_name)/board.mk ; \
+	else  \
+		if [ "$(grub_support)" == "0" ] ; then \
+			sed -i -e "s/__GRUB_SUPPORT__/0/g" $(board_name)/board.mk ; \
+		else  \
+			echo "grub_support value should be 0 or 1. No value is equivalent to 0, grub will be deactivated" ; \
+			export grub-support=0 ; \
+		fi ; \
+		mkdir $(board_name)/kernel/ ; \
+		ln -s ../buildsystem $(board_name)/kernel/buildsystem ; \
+		ln -s buildsystem/linux-kernel.makefile $(board_name)/kernel/Makefile ; \
+		if [ "$(uboot_support)" == "1" ] ; then \
+			mkdir $(board_name)/u-boot/ ; \
+			ln -s ../buildsystem $(board_name)/u-boot/buildsystem ; \
+			ln -s buildsystem/u-boot.makefile $(board_name)/u-boot/Makefile ; \
 		fi ; \
 	fi ;
 
@@ -206,3 +222,11 @@ setup:
                 	$(MAKE) --directory=$$v $@ ; \
 		fi ; \
 	done
+
+# ------------------------------------------------------------------------------
+#
+# Target that prints the help
+#
+help:
+	@echo "The existing local targets are the following. Local targets are executed only at this"
+	@echo "level in the category, without recursion nor walk down the tree of board categories"
