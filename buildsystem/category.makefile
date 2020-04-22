@@ -208,8 +208,11 @@ new-board:
 		ln -s buildsystem/linux-kernel.makefile $(board_name)/kernel/Makefile ; \
 		if [ "$(uboot_support)" == "1" ] ; then \
 			mkdir $(board_name)/u-boot/ ; \
+			mkdir $(board_name)/u-boot/files/ ; \
+			touch $(board_name)/u-boot/files/.gitkeep ; \
 			ln -s ../buildsystem $(board_name)/u-boot/buildsystem ; \
-			ln -s buildsystem/u-boot.makefile $(board_name)/u-boot/Makefile ; \
+			ln -s ../board.mk $(board_name)/u-boot/buildsystem ; \
+			ln -s buildsystem/u-boot.makefile $(board_name)/u-boot/board.mk ; \
 		fi ; \
 		if [ "$(uboot_support)" == "1" ] ; then \
 			echo "Your work is still local, to make it available, you have to run git add commit and push : " ; \
