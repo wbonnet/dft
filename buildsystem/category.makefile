@@ -216,7 +216,7 @@ new-board:
 			echo "git add $(board_name)" ; \
 			echo "Last step before building is to add a u-boot version to the new $(board_name) board. You can use this example :" ; \
 			echo "cd $(board_name)/u-boot" ; \
-			echo "make new-version version=2020.10" ; \
+			echo "make add-u-boot-version version=2020.10" ; \
 		fi ; \
 	fi ;
 
