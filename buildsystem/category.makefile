@@ -212,10 +212,9 @@ new-board:
 			ln -s buildsystem/u-boot.makefile $(board_name)/u-boot/Makefile ; \
 		fi ; \
 		if [ "$(uboot_support)" == "1" ] ; then \
-			echo "You work is still local, you now have to run : " ; \
-			echo "git add $(board_name) then commit and push to make it available." ; \
-			echo "then do a git commit and git push to make the new board entry available." ; \
-			echo "Next step is to add a u-boot version to the new $(board_name) board. You can use thie example (changing example version) :" ; \
+			echo "You work is still local, to make it available, you now have to git add commit and push : " ; \
+			echo "git add $(board_name)" ; \
+			echo "Next step is to add a u-boot version to the new $(board_name) board. You can use this example :" ; \
 			echo "cd $(board_name)/u-boot" ; \
 			echo "make new-version version=2020.10" ; \
 		fi ; \
