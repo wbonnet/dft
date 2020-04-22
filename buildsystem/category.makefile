@@ -211,10 +211,12 @@ new-board:
 			ln -s ../buildsystem $(board_name)/u-boot/buildsystem ; \
 			ln -s buildsystem/u-boot.makefile $(board_name)/u-boot/Makefile ; \
 		fi ; \
-		echo "You work is still local, so don't forget tu run git add $(board_name) and commit  then push to make it public." ; \
-		echo "The next step is to add a uboot version before you can compile it. You do it by running the following commands (you my ahe to change the version)." ; \
-		echo "cd $(board_name)/" ; \
+		echo "You work is still local, you have to run git add $(board_name) then commit and push to make it available." ; \
+		if [ "$(grub_support)" == "1" ] ; then \
+		echo "The next step is to add at least a u-boot version to the newly created $(board_name) board. You can do it with following commands (if needed change the version given as example)." ; \
+		echo "cd $(board_name)/u-boot" ; \
 		echo "make new-version version=2020.10" ; \
+		fi ; \
 	fi ;
 
 # Simple forwarder
