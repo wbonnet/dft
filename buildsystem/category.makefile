@@ -168,7 +168,8 @@ new-board:
 	if [ ! "$(uboot_defconfig)" == "" ] ; then \
 		sed -i -e "s/__UBOOT_DEFCONFIG__/$(uboot_defconfig)/g" $(board_name)/board.mk ; \
 	else  \
-		sed -i -e "s/__UBOOT_DEFCONFIG__/$(uboot_defconfig)/g" $(board_name)/board.mk ; \
+		sed -i -e "s/__UBOOT_DEFCONFIG__/unknown_defconfig/g" $(board_name)/board.mk ; \
+		echo "uboot_defconfig variable was not set on make commande line, you will have to set it manually in $(board_name)/board.mk It is currely defined to unknown_defconffig by defaul and thus won't compile" ; \
 	fi ; \
 	if [ ! "$(default_dtb)" == "" ] ; then \
 		sed -i -e "s/__DEFAULT_DTB__/$(default_dtb)/g" $(board_name)/board.mk ; \
@@ -194,33 +195,22 @@ new-board:
 			export grub-support=0 ; \
 		fi ; \
 	fi ; \
-	if [ "$(uboot_defconfig)" == "" ] ; then \
-		sed -i -e "s/__UBOOT_DEFCONFIG__/1/g" $(board_name)/board.mk ; \
-	else  \
-		if [ "$(grub_support)" == "0" ] ; then \
-			sed -i -e "s/__GRUB_SUPPORT__/0/g" $(board_name)/board.mk ; \
-		else  \
-			echo "grub_support value should be 0 or 1. No value is equivalent to 0, grub will be deactivated" ; \
-			export grub-support=0 ; \
-		fi ; \
-		mkdir $(board_name)/kernel/ ; \
-		ln -s ../buildsystem $(board_name)/kernel/buildsystem ; \
-		ln -s buildsystem/linux-kernel.makefile $(board_name)/kernel/Makefile ; \
-		if [ "$(uboot_support)" == "1" ] ; then \
-			mkdir $(board_name)/u-boot/ ; \
-			mkdir $(board_name)/u-boot/files/ ; \
-			touch $(board_name)/u-boot/files/.gitkeep ; \
-			ln -s ../buildsystem $(board_name)/u-boot/buildsystem ; \
-			ln -s ../board.mk $(board_name)/u-boot/buildsystem ; \
-			ln -s buildsystem/u-boot.makefile $(board_name)/u-boot/board.mk ; \
-		fi ; \
-		if [ "$(uboot_support)" == "1" ] ; then \
-			echo "Your work is still local, to make it available, you have to run git add commit and push : " ; \
-			echo "git add $(board_name)" ; \
-			echo "Last step before building is to add a u-boot version to the new $(board_name) board. You can use this example :" ; \
-			echo "cd $(board_name)/u-boot" ; \
-			echo "make add-u-boot-version new-version=2020.04" ; \
-		fi ; \
+	mkdir $(board_name)/kernel/ ; \
+	ln -s ../buildsystem $(board_name)/kernel/buildsystem ; \
+	ln -s buildsystem/linux-kernel.makefile $(board_name)/kernel/Makefile ; \
+	if [ "$(uboot_support)" == "1" ] ; then \
+		mkdir $(board_name)/u-boot/ ; \
+		mkdir $(board_name)/u-boot/files/ ; \
+		touch $(board_name)/u-boot/files/.gitkeep ; \
+		ln -s ../buildsystem $(board_name)/u-boot/buildsystem ; \
+		ln -s ../board.mk $(board_name)/u-boot/board.mk ; \
+		ln -s buildsystem/u-boot.makefile $(board_name)/u-boot/Makefile ; \
+		echo "Your work is still local, to make it available, you have to run git add commit and push : " ; \
+		echo "git add $(board_name)" ; \
+		echo "Last step before building is to add a u-boot version to the new $(board_name) board. You can use this example :" ; \
+		echo "cd $(board_name)/u-boot" ; \
+		echo "make add-u-boot-version new-version=2020.04" ; \
+	fi ; \
 	fi ;
 
 # Simple target forwarder
