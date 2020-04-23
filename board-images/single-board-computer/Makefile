@@ -1,0 +1,1 @@
+../../buildsystem/board-images-category.makefile

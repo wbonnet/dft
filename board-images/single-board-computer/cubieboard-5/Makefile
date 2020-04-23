@@ -1,1 +1,1 @@
-../../examples-makefile.mk
+../../../buildsystem/board-images.makefile
