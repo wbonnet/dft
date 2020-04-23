@@ -24,14 +24,14 @@ include $(DFT_BUILDSYSTEM)/dft.mk
 # Do not recurse the following subdirs
 MAKE_FILTERS  = Makefile README.md .
 
-# definition of the liste of boards category
+# definition of the board categories to process
 CATEGORIES    = laptop desktop set-top-box single-board-computer
 
 # ------------------------------------------------------------------------------
 #
 # Targets not associated with a file (aka PHONY)
 #
-.PHONY: help
+.PHONY: help sanity-check
 
 # Build only u-boot package target
 u-boot-package:
