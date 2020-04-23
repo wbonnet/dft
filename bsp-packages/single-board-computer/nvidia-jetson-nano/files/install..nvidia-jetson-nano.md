@@ -1,1 +1,0 @@
-../../files/install..nvidia-jetson-nano.md
