@@ -19,11 +19,7 @@
 #
 
 ---
-#- name : DFT - Install XXX
-#  apt:
-#       name={{item}}
-#       state=latest
-#       install_recommends=no
-#  with_items:
-#       - rsync
-#       - openssh-client
+- name : DFT - Install ftpsync
+       pkg=ftpsync
+       state=latest
+       install_recommends=no

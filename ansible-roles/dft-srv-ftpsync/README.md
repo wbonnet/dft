@@ -32,10 +32,11 @@ Including an example of how to use your role (for instance, with variables passe
 License
 -------
 
-This role and provided files from are subject to the Apache 2.0 license (default FT License) unless specified differently in distinct files.
+This role and provided files are subject to the Apache 2.0 license unless specified differently in files.
 
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Contributors list :
+	- William Bonnet     (wllmbnnt@gmail.com, wbonnet@theitmakers.com)
