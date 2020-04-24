@@ -138,12 +138,14 @@ sanity-check:
 		fi ; \
 		echo "trying to readlink $$version/Makefile" ; \
 		s=`readlink $$version/Makefile` ; \
-		if [ !  "$$s" = "../../$(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel-version.makefile" ] ; then \
-			echo "Makefile symlink in $$version must link to $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel-version.makefile" ; \
+		echo "s vaut $$s" ; \
+		pwd ; \
+		if [ !  "$$s" = "buildsystem/$(SW_NAME)-kernel-version.makefile" ] ; then \
+			echo "Makefile symlink in $$version must link to buildsystem/$(SW_NAME)-kernel-version.makefile" ; \
 			echo "it currently targets to $$s" ; \
 			echo "You can fix with the following shell commands :" ; \
 			echo "git rm -f ${CURDIR}/$$version/Makefile || rm -f ${CURDIR}/$$version/Makefile" ; \
-			echo "ln -s ../../$(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel-version.makefile ${CURDIR}/$$version/Makefile" ; \
+			echo "ln -s buildsystem/$(SW_NAME)-kernel-version.makefile ${CURDIR}/$$version/Makefile" ; \
 			echo "git add ${CURDIR}//$$version/Makefile" ; \
 			echo "make sanity-check" ; \
 			$(call dft_error ,1911-2118) ; \
