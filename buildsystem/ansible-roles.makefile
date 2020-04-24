@@ -30,6 +30,12 @@ include $(DFT_BUILDSYSTEM)/inc/lib.mk
 # Do not recurse the following subdirs
 MAKE_FILTERS  := Makefile README.md .
 
+# ------------------------------------------------------------------------------
+#
+# Targets not associated with a file (aka PHONY)
+#
+.PHONY: help sanity-check
+
 # Create a role entry
 new-role:
 	@echo "DEBUG : in ansible-roles.makefile running new-role with argument role-name $(role-name)" ; \
@@ -45,3 +51,23 @@ new-role:
 			sed -i -e "s/__ROLENAME__/$(role-name)/g" $(role-name)/README.md ; \
 		fi ; \
 	fi ;
+
+# Simple forwarder
+sanity-check:
+	@for i in $(CHECK_FOR_SANITY) ; do \
+		if [ -f ${CURDIR}/$$i/Makefile ] ; then \
+			$(MAKE) -C $$i $@ ; \
+		fi ; \
+	done
+
+# ------------------------------------------------------------------------------
+#
+# Target that prints the help
+#
+help:
+	@echo "Available targets are :"
+	@echo "   new-role                role-name=new_role_name"
+	@echo "                           Initialize a new role entry (not added to git) with content of"
+	@echo "                           $(DFT_BUILDSYSTEM)/templates/ansible-role.template"
+	@echo "                           You will have to edit the generated files according to you role needs"
+	@echo "   help                    Display this help"
