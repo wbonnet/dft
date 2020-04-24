@@ -1,1 +1,1 @@
-../../../../../buildsystem/linux-kernel-version.makefile
+buildsystem/linux-kernel-version.makefile
