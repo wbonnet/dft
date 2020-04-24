@@ -32,7 +32,7 @@ Including an example of how to use your role (for instance, with variables passe
 License
 -------
 
-This role and provided files from are subject to the Apache 2.0 license (default FT License) unless specified differently in distinct files.
+This role and provided files are subject to the Apache 2.0 license (default DFT License) unless specified differently in distinct files.
 
 
 Author Information
