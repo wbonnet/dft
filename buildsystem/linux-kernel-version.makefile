@@ -82,7 +82,8 @@ sanity-check:
 		echo "You can fix with theyy following commands : " ; \
 		echo "git rm -f ${CURDIR}//Makefile || rm -f ${CURDIR}//Makefile" ; \
 		echo "ln -s $(buildsystem)/$(SW_NAME)-kernel-version.makefile ${CURDIR}//Makefile" ; \
-		echo "git add ${CURDIR}//Makefile" ; \
+		echo "git add ${CURDIR}/Makefile" ; \
+		echo "make sanity-check" ; \
 		$(call dft_error ,2011-2201) ; \
 	fi ;
 	@if [ ! "$(shell readlink ./Makefile)" = "../../../../../buildsystem/linux-kernel-version.makefile" ] ; then \
@@ -90,7 +91,8 @@ sanity-check:
 		echo "You can fix with the following commands : " ; \
 		echo "git rm -f ${CURDIR}//Makefile || rm -f ${CURDIR}/Makefile" ; \
 		echo "ln -s $(buildsystem)/$(SW_NAME)-kernel-version.makefile ${CURDIR}/Makefile" ; \
-		echo "git add ${CURDIR}//Makefile" ; \
+		echo "git add ${CURDIR}/Makefile" ; \
+		echo "make sanity-check" ; \
 		$(call dft_error ,2011-2103) ; \
 	fi ;
 	@if [ ! -d "../config" ] ; then \
@@ -99,7 +101,12 @@ sanity-check:
 		echo "mkdir ../config" ; \
 		echo "touch ../config/.gitkeep" ; \
 		echo "git add ../config" ; \
+		echo "make sanity-check" ; \
 		$(call dft_error ,2011-2101) ; \
+	fi ;
+	@if [ ! -e "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ] ; then \
+		echo "kernel config $(BOARD_NAME)-kernel-$(SW_VERSION).config is missing" ; \
+		$(call dft_error ,2004-2301) ; \
 	fi ;
 	@if [ ! -d "./debian" ] ; then \
 		echo "debian directory is missing in ${CURDIR}/. It should contain the files needed to create the debian package for $(BOARD_NAME) $(SW_NAME) kernel" ; \
@@ -110,6 +117,7 @@ sanity-check:
 		echo "buildsystem symlink to ../../../../../buildsystem is missing in ${CURDIR}/. You are using your own custom buildsystem" ; \
 		echo "ln -s $(buildsystem) ${CURDIR}//buildsystem" ; \
 		echo "git add ${CURDIR}//buildsystem" ; \
+		echo "make sanity-check" ; \
 		$(call dft_error ,2011-2106) ; \
 	fi ;
 	@if [ ! "$(shell readlink ./buildsystem)" = "../../../../../buildsystem" ] ; then \
