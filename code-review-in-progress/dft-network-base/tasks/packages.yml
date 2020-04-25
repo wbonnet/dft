@@ -25,15 +25,15 @@
 
 ---
 - name : DFT - Install network base packages
-  apt: name={{ item }}
-       state=latest
-       install_recommends=no
-  with_items:
-    - iproute2
-    - iputils-ping
-    - ethtool
-    - netbase
-    - ifupdown
-    - traceroute
-    - bind9-host
-    - net-tools
+  apt:
+      state: latest
+      install_recommends: no
+      pkg:
+        - iproute2
+        - iputils-ping
+        - ethtool
+        - netbase
+        - ifupdown
+        - traceroute
+        - bind9-host
+        - net-tools

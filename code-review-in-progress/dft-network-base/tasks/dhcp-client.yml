@@ -25,11 +25,11 @@
 
 ---
 - name : DFT - Install dhcp client
-  apt: name={{ item }}
-       state=latest
-       install_recommends=no
-  with_items:
-    - isc-dhcp-client
+  apt:
+      state: latest
+      install_recommends: no
+      pkg:
+        - isc-dhcp-client
 
     # Generate the DHCP client configuration file
 - name: DFT - Generate dhclient configuration

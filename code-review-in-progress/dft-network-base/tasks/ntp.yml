@@ -25,11 +25,11 @@
 
 ---
 - name : DFT - Install ntp
-  apt: name={{ item }}
-       state=latest
-       install_recommends=no
-  with_items:
-    - ntp
+  apt:
+      state: latest
+      install_recommends: no
+      pkg:
+        - ntp
 
 # Generate the NTP client and server configuration file
 - name : DFT - Configure NTP client
