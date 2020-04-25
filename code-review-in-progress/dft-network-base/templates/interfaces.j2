@@ -8,8 +8,11 @@ auto lo
 iface lo inet loopback
 
 {% if dft_network_interfaces %}
+# Interfaces definition
 {% for interface in dft_network_interfaces %}
-# Definition of interface {{ interface.name }}
+{% if interface.comment is defined %}
+# {{ interface.name }} : {{ interface.comment }}
+{% endif %}
 auto {{ interface.name }}
 {% if interface.dhcp is defined %}
 iface {{ interface.name }} inet dhcp
