@@ -19,4 +19,46 @@
 #
 
 ---
-#fau creer le user
+# Add the user 'ftpsync' with a bash shell, appending the group ftpsync and
+# {{ dft_srv_ftpsync.webserver_definition.group }} to the user's groups
+- name: Create the ftpsync user
+  user: name={{ dft_srv_ftpsync.user_definition.username }}
+        shell={{ dft_srv_ftpsync.user_definition.shell }}
+        home={{ dft_srv_ftpsync.user_definition.home_dir }}
+        group={{ dft_srv_ftpsync.user_definition.group }}
+        groups={{ dft_srv_ftpsync.user_definition.groups }}
+        append=yes
+
+
+# -------------------------------------------------------------------------------------------------
+# Create the ftpsync group
+- name: Create the ftpsync group
+  group: name={{ dft_srv_ftpsync.user_definition.group }}
+         state=present
+
+# Add the user 'ftpsync' with a bash shell, appending the group ftpsync and
+# {{ dft_srv_ftpsync.webserver_definition.group }} to the user's groups
+- name: Create the ftpsync user
+  user: name={{ dft_srv_ftpsync.user_definition.username }}
+        shell={{ dft_srv_ftpsync.user_definition.shell }}
+        home={{ dft_srv_ftpsync.user_definition.home_dir }}
+        group={{ dft_srv_ftpsync.user_definition.group }}
+        groups={{ dft_srv_ftpsync.user_definition.groups }}
+        append=yes
+
+# Create the ftpsync script directory
+- name: DFT - Create ftpsync script directory
+  file: path={{ dft_srv_ftpsync.user_definition.home_dir }}/bin
+        state=directory
+        recurse=yes
+        owner={{ dft_srv_ftpsync.user_definition.username }}
+        group={{ dft_srv_ftpsync.user_definition.group }}
+        mode="0755"
+
+# Create the ftpsync log directory
+- name: DFT - Create ftpsync log directory
+  file: path=/var/log/ftpsync
+        state=directory
+        owner={{ dft_srv_ftpsync.user_definition.username }}
+        group={{ dft_srv_ftpsync.user_definition.group }}
+        mode="0750"
