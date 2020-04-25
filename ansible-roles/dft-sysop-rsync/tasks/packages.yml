@@ -21,9 +21,8 @@
 ---
 - name : DFT - Install rsync
   apt:
-       name={{item}}
-       state=latest
-       install_recommends=no
-  with_items:
-       - rsync
-       - openssh-client
+       pkg:
+          - rsync
+          - openssh-client
+       state: latest
+       install_recommends: no

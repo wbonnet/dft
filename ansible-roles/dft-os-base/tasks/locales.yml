@@ -25,11 +25,10 @@
 
 ---
 - name : DFT - Install locales
-  apt: name={{ item }}
+  apt:
+       pkg=locales
        state=latest
        install_recommends=no
-  with_items:
-    - locales
 
 - name: DFT - Configure locales
   locale_gen: name={{ item.name }}

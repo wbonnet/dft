@@ -25,11 +25,10 @@
 
 ---
 - name : DFT - Install timezone data
-  apt: name={{ item }}
+  apt:
+       pkg=tzdata
        state=latest
        install_recommends=no
-  with_items:
-    - tzdata
 
 # Use the timezone module if it does not run on a local connection, otherwise bus is not available
 - name: DFT - Configure timezone (non local connection)

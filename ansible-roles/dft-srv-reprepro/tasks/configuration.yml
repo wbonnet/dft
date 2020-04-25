@@ -162,5 +162,3 @@
         job="cd {{ dft_srv_reprepro.user_definition.home_dir }} && {{ dft_srv_reprepro.user_definition.home_dir }}/bin/reprepro_import_{{ item.name }}_packages"
   with_items:
     - "{{ dft_srv_reprepro.repositories }}"
-
-# -------------------------------------------------------------------------------------------------
