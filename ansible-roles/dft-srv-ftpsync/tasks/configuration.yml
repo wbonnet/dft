@@ -19,36 +19,26 @@
 #
 
 ---
-# Add the user 'ftpsync' with a bash shell, appending the group ftpsync and
-# {{ dft_srv_ftpsync.webserver_definition.group }} to the user's groups
-- name: Create the ftpsync user
-  user: name={{ dft_srv_ftpsync.user_definition.username }}
-        shell={{ dft_srv_ftpsync.user_definition.shell }}
-        home={{ dft_srv_ftpsync.user_definition.home_dir }}
-        group={{ dft_srv_ftpsync.user_definition.group }}
-        groups={{ dft_srv_ftpsync.user_definition.groups }}
-        append=yes
-
 
 # -------------------------------------------------------------------------------------------------
 # Create the ftpsync group
 - name: Create the ftpsync group
-  group: name={{ dft_srv_ftpsync.user_definition.group }}
+  group: name={{ dft_srv_ftpsync.user_definition.group | default('ftpsync')}}
          state=present
 
 # Add the user 'ftpsync' with a bash shell, appending the group ftpsync and
 # {{ dft_srv_ftpsync.webserver_definition.group }} to the user's groups
 - name: Create the ftpsync user
-  user: name={{ dft_srv_ftpsync.user_definition.username }}
-        shell={{ dft_srv_ftpsync.user_definition.shell }}
-        home={{ dft_srv_ftpsync.user_definition.home_dir }}
-        group={{ dft_srv_ftpsync.user_definition.group }}
-        groups={{ dft_srv_ftpsync.user_definition.groups }}
+  user: name={{ dft_srv_ftpsync.user_definition.username | default('ftpsync') }}
+        shell={{ dft_srv_ftpsync.user_definition.shell | default('/bin/bash')}}
+        home={{ dft_srv_ftpsync.user_definition.home_dir | default('/home/ftpsync')}}
+        group={{ dft_srv_ftpsync.user_definition.group | default('ftpsync') }}
+        groups={{ dft_srv_ftpsync.user_definition.groups | default('ftpsync') }}
         append=yes
 
 # Create the ftpsync script directory
-- name: DFT - Create ftpsync script directory
-  file: path={{ dft_srv_ftpsync.user_definition.home_dir }}/bin
+- name: DFT - Create ftpsync home directory
+  file: path={{ dft_srv_ftpsync.user_definition.home_dir | default('/home/ftpsync') }}/bin
         state=directory
         recurse=yes
         owner={{ dft_srv_ftpsync.user_definition.username }}
