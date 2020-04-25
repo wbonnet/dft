@@ -20,6 +20,7 @@
 
 ---
 - name : DFT - Install ftpsync
-       pkg=ftpsync
+  apt:
+       name=ftpsync
        state=latest
        install_recommends=no
