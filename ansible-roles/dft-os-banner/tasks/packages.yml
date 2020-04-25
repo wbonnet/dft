@@ -25,9 +25,9 @@
 
 ---
 - name : DFT - Install software used to output banner (figlet and toilet)
-  apt: name={{ item }}
-       state=latest
-       install_recommends=no
-  with_items:
-    - toilet
-    - figlet
+  apt:
+    pkg:
+      - toilet
+      - figlet
+    state: latest
+    install_recommends: no

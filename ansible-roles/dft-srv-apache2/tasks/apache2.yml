@@ -27,12 +27,11 @@
 # Instal the needed Apache2 packages (core and libs)
 #
 ---
-- name : DFT - Install apache2
-  apt: name={{ item }}
-       state=latest
-       install_recommends=no
-  with_items:
-    - apache2
+- name : DFT - Install Apache2
+  apt:
+       pkg: apache2
+       state: latest
+       install_recommends: no
 
 #
 # Create the virtual hosts configuration files into sites-available from template
