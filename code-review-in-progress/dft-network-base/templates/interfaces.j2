@@ -8,7 +8,7 @@ auto lo
 iface lo inet loopback
 
 {% if dft_network_interfaces %}
-# Interfaces definition
+# Network interfaces definition
 {% for interface in dft_network_interfaces %}
 {% if interface.comment is defined %}
 # {{ interface.name }} : {{ interface.comment }}
