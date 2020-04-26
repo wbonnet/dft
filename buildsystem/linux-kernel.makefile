@@ -138,7 +138,7 @@ sanity-check:
 		fi ; \
 		echo "trying to readlink $$version/Makefile" ; \
 		s=`readlink $$version/Makefile` ; \
-		echo "s vaut $$s" ; \
+		echo "Le lien $$version/Makefile vaut $$s" ; \
 		pwd ; \
 		if [ !  "$$s" = "buildsystem/$(SW_NAME)-kernel-version.makefile" ] ; then \
 			echo "Makefile symlink in $$version must link to buildsystem/$(SW_NAME)-kernel-version.makefile" ; \
