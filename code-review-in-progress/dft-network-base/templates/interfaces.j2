@@ -1,14 +1,15 @@
 # This file describes the network interfaces available on your system
 # and how to activate them. For more information, see interfaces(5).
 
+# Include the definitions of network interfaces declared in dedicated configuration files
 source /etc/network/interfaces.d/*
 
-# The loopback network interface
+# Definition of the loopback network interface
 auto lo
 iface lo inet loopback
 
 {% if dft_network_interfaces %}
-# Network interfaces definition
+# Definition of network interfaces declared in the main configuration file
 {% for interface in dft_network_interfaces %}
 {% if interface.comment is defined %}
 # {{ interface.name }} : {{ interface.comment }}
