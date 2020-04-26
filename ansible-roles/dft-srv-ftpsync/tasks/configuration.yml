@@ -38,7 +38,15 @@
 
 # Create the ftpsync script directory
 - name: DFT - Create ftpsync home directory
-  file: path={{ dft_srv_ftpsync.user_definition.home_dir | default('/home/ftpsync') }}/bin
+  file: path={{ dft_srv_ftpsync.user_definition.home_dir | default('/home/ftpsync') }}
+        state=directory
+        recurse=yes
+        owner={{ dft_srv_ftpsync.user_definition.username }}
+        group={{ dft_srv_ftpsync.user_definition.group }}
+        mode="0755"
+
+- name: DFT - Create ftpsync configuration directory
+  file: path={{ dft_srv_ftpsync.user_definition.home_dir | default('/home/ftpsync') }}/etc
         state=directory
         recurse=yes
         owner={{ dft_srv_ftpsync.user_definition.username }}
@@ -58,8 +66,8 @@
 #
 - name : DFT - Generate ftpsync configuration file
   template:  src=ftpsync.conf.j2
-             dest=/etc/ftpsync.conf
-             owner=root
-             group=root
+             dest={{ dft_srv_ftpsync.user_definition.home_dir | default('/home/ftpsync') }}/etc/ftpsync-{{ dft_srv_ftpsync.upstream_server }}.conf
+             owner={{ dft_srv_ftpsync.user_definition.username }}
+             group={{ dft_srv_ftpsync.user_definition.group }}
              mode="0644"
   when: dft_srv_ftpsync.config_file is defined
