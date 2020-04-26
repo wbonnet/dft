@@ -52,3 +52,14 @@
         owner={{ dft_srv_ftpsync.user_definition.username }}
         group={{ dft_srv_ftpsync.user_definition.group }}
         mode="0750"
+
+#
+# Create the ftpsync configuration file
+#
+- name : DFT - Generate ftpsync configuration file
+  template:  src=ftpsync.conf.j2
+             dest=/etc/ftpsync.conf
+             owner=root
+             group=root
+             mode="0644"
+  when: dft_srv_ftpsync.config_file is defined
