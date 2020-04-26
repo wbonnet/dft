@@ -15,13 +15,13 @@
 #
 # Contributors list :
 #
-#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#		William Bonnet	 	wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 #
 
 # Defines variables specific to u-boot
-SW_NAME          := u-boot
-SW_VERSION       :=
+SW_NAME    := u-boot
+SW_VERSION := no-$(SW_NAME)-version
 
 # Build system sould be available under board folder as a symlink. Keep it
 # locally available under board folder computing a relative path is a nightmare
@@ -29,6 +29,7 @@ SW_VERSION       :=
 # since git add will loose variable name and generate an absolute path, which
 # is not comptible with user need ans or workspace relocation nor packagng needs.
 # better solutions wille be really welcomeds contributions.
+
 DFT_BUILDSYSTEM := buildsystem
 include ../board.mk
 include $(DFT_BUILDSYSTEM)/inc/u-boot.mk
@@ -49,7 +50,6 @@ MAKE_FILTERS  := files defconfig Makefile README.md patches .
 #
 # Mandatory defines that have to be defined at least in the main Makefile
 #
-
 ifeq ($(SW_NAME),)
 $(error SW_NAME is not set)
 endif
@@ -64,10 +64,10 @@ endif
 #
 
 #
-# Board level u-boot makefile
+# Board level directory generic u-boot kernel makefile
 #
+
 sanity-check:
-	@echo "DEBUG : in u-boot.makefile running sanity-check" ;
 	@if [ $(UBOOT_SUPPORT) = 1  ] ; then \
 		echo "Checking $(BOARD_NAME) u-boot packages folder" ; \
 		if [ ! -L "Makefile"  ] ; then \
@@ -78,15 +78,15 @@ sanity-check:
 			echo "git add ${CURDIR}/Makefile" ; \
 			$(call dft_error ,2001-0810) ; \
 		fi ; \
-		if [ ! "$(shell readlink Makefile)" = "$(DFT_BUILDSYSTEM)/u-boot.makefile" ] ; then \
-			echo "target of symlink Makefile should be $(DFT_BUILDSYSTEM)/u-boot.makefile in directory ${CURDIR}" ; \
+		if [ ! "$(shell readlink ./Makefile)" = "$(DFT_BUILDSYSTEM)/$(SW_NAME).makefile" ] ; then \
+			echo "target of symlink Makefile should be $(DFT_BUILDSYSTEM)/$(SW_NAME).makefile in directory ${CURDIR}" ; \
 			echo "You can fix with the following commands : " ; \
 			echo "git rm -f ${CURDIR}/Makefile" ; \
 			echo "ln -s $(DFT_BUILDSYSTEM)/u-boot.makefile ${CURDIR}/Makefile" ; \
 			echo "git add ${CURDIR}/Makefile" ; \
 			$(call dft_error ,2001-0809) ; \
 		fi ; \
-			if [ ! -d "${CURDIR}/files" ] ; then \
+		if [ ! -d "${CURDIR}/files" ] ; then \
 			echo "files directory is missing in ${CURDIR}. It should contains the markdown file install.u-boot-$(BOARD_NAME).md needed by target package." ; \
 			echo "You can fix with the following commands : " ; \
 			echo "mkdir -p ${CURDIR}/files" ; \
@@ -94,13 +94,6 @@ sanity-check:
 			echo "ln -s ../../files/install.$(SW_NAME)-$(BOARD_NAME).md ${CURDIR}/files/" ; \
 			echo "git add ${CURDIR}/files" ; \
 			$(call dft_error ,2001-0808) ; \
-		fi ; \
-		if [ ! -d "${CURDIR}/files" ] ; then \
-			echo "You can fix with the following commands : " ; \
-			echo "mkdir -p ${CURDIR}/files" ; \
-			echo "touch ${CURDIR}/files/.gitkeep" ; \
-			echo "git add ${CURDIR}/files" ; \
-			$(call dft_error ,2001-0807) ; \
 		fi ; \
 		if [ ! -f "${CURDIR}/files/install.$(SW_NAME)-$(BOARD_NAME).md" ] ; then \
 			ls -lh "${CURDIR}/files/install.$(SW_NAME)-$(BOARD_NAME).md" ;  \
@@ -120,34 +113,46 @@ sanity-check:
 			echo "git rm -f ${CURDIR}/board.mk" ; \
 			echo "ln -s ../board.mk ${CURDIR}/board.mk" ; \
 			echo "git add ${CURDIR}/board.mk" ; \
+			echo "make sanity-check" ; \
 			$(call dft_error ,2001-0804) ; \
 		fi ; \
+# first loop is to control that version makefile exist \
 		for version in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*' ) ; do \
-		 echo "Checking $(BOARD_NAME) u-boot $$version package definition" ; \
-	         if [ ! -L "$$version/Makefile" ] ; then \
-        	    echo "Makefile in ${CURDIR}/$$version is missing. It should be a symlink to $(DFT_BUILSYYSTEM)/u-boot-version.makefile" ; \
-	            echo "You can fix with the following shell commands :" ; \
-        	    echo "ln -s ../$(DFT_BUILDSYSTEM)/u-boot-version.makefile $$version/Makefile" ; \
-				echo "git add $$version/Makefile" ; \
-				$(call dft_error ,2001-0803) ; \
-        	   fi ; \
-	           s=`readlink $$version/Makefile` ; \
-        	   if [ !  "$$s" = "../$(DFT_BUILDSYSTEM)/u-boot-version.makefile" ] ; then \
-	               echo "Makefile symlink in $$version must link to $(DFT_BUILDSYSTEM)/u-boot-version.makefile" ; \
-        	       echo "You can fix with the following shell commands :" ; \
-	               git rm -f ${CURDIR}/$$version/Makefile || rm -f ${CURDIR}/$$version/Makefile ; \
-	               ln -s ../$(DFT_BUILDSYSTEM)/u-boot-version.makefile ${CURDIR}/$$version/Makefile ; \
-        	       git add ${CURDIR}/$$version/Makefile ; \
-				$(call dft_error ,2001-0802) ; \
-        	    fi ; \
-		done ; \
-		for v in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*\.*' ) ; do \
-			if [ -f $$v/Makefile ] ; then \
-				$(MAKE) --directory=$$v sanity-check ; \
+			echo "Checking $(BOARD_NAME) u-boot $$version package definition" ; \
+			if [ ! -L "$$version/Makefile" ] ; then \
+				echo "version folder $$version" ; \
+				echo "Makefile symlink in ${CURDIR}/$$version is missing. It should be a symlink to $(DFT_BUILDSYSTEM)/$(SW_NAME)-version.makefile" ; \
+				echo "You can fix with the following shell commands :" ; \
+				if [ -f "$$version/Makefile" ] ; then \
+					echo "git rm ${CURDIR}//$$version/Makefile" ; \
+				fi ; \
+				echo "ln -s ../../$(DFT_BUILDSYSTEM)/$(SW_NAME)-version.makefile ${CURDIR}/$$version/Makefile" ; \
+				echo "git add ${CURDIR}//$$version/Makefile" ; \
+				echo "make sanity-check" ; \
+				$(call dft_error ,1911-2118) ; \
+			fi ; \
+		#		echo "trying to readlink $$version/Makefile" ; \
+			s=`readlink $$version/Makefile` ; \
+		#		echo "Le lien $$version/Makefile vaut $$s" ; \
+			pwd ; \
+			if [ !  "$$s" = "buildsystem/$(SW_NAME)-version.makefile" ] ; then \
+				echo "Makefile symlink in $$version must link to buildsystem/$(SW_NAME)-version.makefile" ; \
+				echo "it currently targets to $$s" ; \
+				echo "You can fix with the following shell commands :" ; \
+				echo "git rm -f ${CURDIR}/$$version/Makefile || rm -f ${CURDIR}/$$version/Makefile" ; \
+				echo "ln -s buildsystem/$(SW_NAME)-version.makefile ${CURDIR}/$$version/Makefile" ; \
+				echo "git add ${CURDIR}//$$version/Makefile" ; \
+				echo "make sanity-check" ; \
+				$(call dft_error ,1911-0803) ; \
 			fi ; \
 		done ; \
-		fi ;
-
+# second loop is to forward recursive cal to version folders \
+		for version in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*') ; do \
+			if [ -f $$version/Makefile ] ; then \
+				$(MAKE) --directory=$$versionfolder sanity-check ; \
+			fi ; \
+		done ; \
+	fi ; \
 
 # Create a new u-boot version entry
 add-u-boot-version:

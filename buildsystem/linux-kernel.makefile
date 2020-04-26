@@ -15,7 +15,7 @@
 #
 # Contributors list :
 #
-#	William Bonnet	 wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#		William Bonnet	 	wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 #
 
@@ -64,7 +64,7 @@ endif
 #
 
 #
-# Board level birectory generic Linux kernel makefile
+# Board level directory generic Linux kernel makefile
 #
 
 sanity-check:
@@ -88,28 +88,28 @@ sanity-check:
 		$(call dft_error ,1911-2110) ; \
 	fi ;
 	@if [ ! "$(shell readlink ./Makefile)" = "$(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile" ] ; then \
-		echo "target of symlink Makefile should be $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile in directory ${CURDIR}/" ; \
+		echo "target of symlink Makefile should be $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile in directory ${CURDIR}" ; \
 		echo "You can fix with the following commands : " ; \
-		echo "git rm -f ${CURDIR}//Makefile" ; \
+		echo "git rm -f ${CURDIR}/Makefile" ; \
 		echo "ln -s $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile ${CURDIR}/Makefile" ; \
 		echo "git add ${CURDIR}/Makefile" ; \
 		echo "make sanity-check" ; \
 		$(call dft_error ,1911-2011) ; \
 	fi ;
-	@if [ ! -d "${CURDIR}//config" ] ; then \
+	@if [ ! -d "${CURDIR}/config" ] ; then \
 		echo "config directory is missing in ${CURDIR}/. It contains the configuration files of the different Linux kernel versions." ; \
 		echo "You can fix with the following commands : " ; \
-		echo "mkdir -p ${CURDIR}//config" ; \
-		echo "touch ${CURDIR}//config/.gitkeep" ; \
-		echo "git add ${CURDIR}//config/.gitkeep" ; \
+		echo "mkdir -p ${CURDIR}/config" ; \
+		echo "touch ${CURDIR}/config/.gitkeep" ; \
+		echo "git add ${CURDIR}/config/.gitkeep" ; \
 		echo "make sanity-check" ; \
 		$(call dft_error ,1911-2013) ; \
 	fi ;
 	@if [ ! -L "board.mk" ] ; then \
 		echo "board.mk symlink to ../board.mk is missing in directory ${CURDIR}/" ; \
 		echo "You can fix with the following commands : " ; \
-		echo "ln -s ../board.mk ${CURDIR}//board.mk" ; \
-		echo "git add ${CURDIR}//board.mk" ; \
+		echo "ln -s ../board.mk ${CURDIR}/board.mk" ; \
+		echo "git add ${CURDIR}/board.mk" ; \
 		echo "make sanity-check" ; \
 		$(call dft_error ,1911-1604) ; \
 	fi ;
@@ -136,9 +136,9 @@ sanity-check:
 			echo "make sanity-check" ; \
 			$(call dft_error ,1911-1607) ; \
 		fi ; \
-		echo "trying to readlink $$version/Makefile" ; \
+#		echo "trying to readlink $$version/Makefile" ; \
 		s=`readlink $$version/Makefile` ; \
-		echo "Le lien $$version/Makefile vaut $$s" ; \
+#		echo "Le lien $$version/Makefile vaut $$s" ; \
 		pwd ; \
 		if [ !  "$$s" = "buildsystem/$(SW_NAME)-kernel-version.makefile" ] ; then \
 			echo "Makefile symlink in $$version must link to buildsystem/$(SW_NAME)-kernel-version.makefile" ; \
