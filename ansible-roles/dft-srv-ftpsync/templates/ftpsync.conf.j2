@@ -13,6 +13,9 @@
 {% if dft_srv_ftpsync.config_file.mailto is defined %}
        MAILOTO {{ dft_srv_ftpsync.config_file.mailto }}
 {% endif %}
+{% if dft_srv_ftpsync.config_file.hub is defined %}
+       HUB {{ dft_srv_ftpsync.config_file.hub }}
+{% endif %}
 {% if dft_srv_ftpsync.config_file.rsync_host is defined %}
        RSYNC_HOST {{ dft_srv_ftpsync.config_file.rsync_host }}
 {% endif %}
