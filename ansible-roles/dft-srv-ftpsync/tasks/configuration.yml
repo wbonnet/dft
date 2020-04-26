@@ -71,3 +71,12 @@
              group={{ dft_srv_ftpsync.user_definition.group }}
              mode="0644"
   when: dft_srv_ftpsync.config_file is defined
+
+
+# Create the ftpsync target directory
+- name: DFT - Create ftpsync target directory
+  file: path={{ dft_srv_ftpsync.config_file.to }}
+        state=directory
+        owner={{ dft_srv_ftpsync.user_definition.username }}
+        group={{ dft_srv_ftpsync.user_definition.group }}
+        mode="0755"
