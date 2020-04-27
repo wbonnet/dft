@@ -37,7 +37,7 @@ SW_NAME       := SW_NAME_undefined_at_category_level
 # to store needed additionnal files
 sanity-check:
 	@echo "DEBUG : in category.makefile target sanity-check" ;
-	for board in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
+	@for board in $(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n') ; do \
 		echo "Now checking board $$board" ; \
 		if [ ! -e "$$board/buildsystem" ] ; then \
 			echo "buildsystem symlink ${CURDIR}/$$board/buildsystem is Missing. It should be a symlink to  $(DFT_BUILDSYSTEM)" ; \
@@ -215,7 +215,7 @@ new-board:
 extract:
 fetch:
 setup:
-	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d )) ; do \
+	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
                 	$(MAKE) --directory=$$v $@ ; \
 		fi ; \
