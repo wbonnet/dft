@@ -112,7 +112,7 @@ sanity-check:
 		ln -s ../../files/install.$(SW_NAME)-$(BOARD_NAME).md ${CURDIR}/files/ ; \
 		git add ${CURDIR}/files ; \
 		echo "la je merde sur le sur CURDIR et lechemin courant de la boucle for et make recursif" ; \
-		$(call dft_error ,2004-2701) ; \
+		$(call dft_warning ,2004-2701) ; \
 	fi ;
 	@if [ ! -d "${CURDIR}/patches" ] ; then \
 		echo "patches directory is missing in ${CURDIR}. It is used to store patches to be applied on sources after extract and before build targets. By default it is an empty folder." ; \
