@@ -68,7 +68,7 @@ endif
 #
 
 sanity-check:
-	@if [ $(UBOOT_SUPPORT) = 1  ] ; then \
+	if [ $(UBOOT_SUPPORT) = 1  ] ; then \
 		echo "Checking $(BOARD_NAME) u-boot packages folder" ; \
 		if [ ! -L "Makefile"  ] ; then \
 			echo "Makefile symlink $(DFT_BUILDSYSTEM)/u-boot.makefile is missing in directory ${CURDIR}" ; \
@@ -79,7 +79,7 @@ sanity-check:
 			$(call dft_error ,2001-0810) ; \
 		fi ; \
 		if [ ! "$(shell readlink ./Makefile)" = "$(DFT_BUILDSYSTEM)/$(SW_NAME).makefile" ] ; then \
-			echo "target of symlink Makefile should be $(DFT_BUILDSYSTEM)/$(SW_NAME).makefile in directory ${CURDIR}" ; \
+			echo "The target of symlink Makefile should be $(DFT_BUILDSYSTEM)/$(SW_NAME).makefile in directory ${CURDIR}" ; \
 			echo "You can fix with the following commands : " ; \
 			echo "git rm -f ${CURDIR}/Makefile" ; \
 			echo "ln -s $(DFT_BUILDSYSTEM)/u-boot.makefile ${CURDIR}/Makefile" ; \
@@ -87,7 +87,7 @@ sanity-check:
 			$(call dft_error ,2001-0809) ; \
 		fi ; \
 		if [ ! -d "${CURDIR}/files" ] ; then \
-			echo "files directory is missing in ${CURDIR}. It should contains the markdown file install.u-boot-$(BOARD_NAME).md needed by target package." ; \
+			echo "The files directory is missing in ${CURDIR}. It should contains the markdown file install.u-boot-$(BOARD_NAME).md needed by target package." ; \
 			echo "You can fix with the following commands : " ; \
 			echo "mkdir -p ${CURDIR}/files" ; \
 			echo "touch ${CURDIR}/files/.gitkeep" ; \
@@ -101,14 +101,14 @@ sanity-check:
 			$(call dft_error ,2001-0806) ; \
 		fi ; \
 		if [ ! -L "board.mk" ] ; then \
-			echo "board.mk symlink to ../board.mk is missing in directory ${CURDIR}" ; \
+			echo "The board.mk symlink to ../board.mk is missing in directory ${CURDIR}" ; \
 			echo "You can fix with the following commands : " ; \
 			echo "ln -s ../board.mk board.mk" ; \
 			echo "git add board.mk" ; \
 			$(call dft_error ,2001-0805) ; \
 		fi ; \
 		if [ ! "$(shell readlink ${CURDIR}/board.mk)" = "../board.mk" ] ; then \
-			echo "target of symlink board.mk should be ../board.mk in directory ${CURDIR}" ; \
+			echo "The target of symlink board.mk should be ../board.mk in directory ${CURDIR}" ; \
 			echo "You can fix with the following commands : " ; \
 			echo "git rm -f ${CURDIR}/board.mk" ; \
 			echo "ln -s ../board.mk ${CURDIR}/board.mk" ; \
@@ -137,7 +137,7 @@ sanity-check:
 			pwd ; \
 			if [ !  "$$s" = "buildsystem/$(SW_NAME)-version.makefile" ] ; then \
 				echo "Makefile symlink in $$version must link to buildsystem/$(SW_NAME)-version.makefile" ; \
-				echo "it currently targets to $$s" ; \
+				echo "The link currently targets to $$s" ; \
 				echo "You can fix with the following shell commands :" ; \
 				echo "git rm -f ${CURDIR}/$$version/Makefile || rm -f ${CURDIR}/$$version/Makefile" ; \
 				echo "ln -s buildsystem/$(SW_NAME)-version.makefile ${CURDIR}/$$version/Makefile" ; \
@@ -149,7 +149,7 @@ sanity-check:
 # second loop is to forward recursive cal to version folders \
 		for version in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*') ; do \
 			if [ -f $$version/Makefile ] ; then \
-				$(MAKE) --directory=$$versionfolder sanity-check ; \
+				$(MAKE) --directory=$$version sanity-check ; \
 			fi ; \
 		done ; \
 	fi ; \
