@@ -87,7 +87,7 @@ sanity-check:
 		$(call dft_error ,2011-2201) ; \
 	fi ;
 	@if [ ! "$(shell readlink ./Makefile)" = "buildsystem/$(SW_NAME)-kernel-version.makefile" ] ; then \
-		echo "target of symlink Makefile should be buildsystem/$(SW_NAME)-kernel-version.makefile in directory ${CURDIR}/" ; \
+		echo "The target of symlink Makefile should be buildsystem/$(SW_NAME)-kernel-version.makefile in directory ${CURDIR}/" ; \
 		echo "You can fix with the following commands : " ; \
 		echo "git rm -f ${CURDIR}//Makefile || rm -f ${CURDIR}/Makefile" ; \
 		echo "ln -s $(buildsystem)/$(SW_NAME)-kernel-version.makefile ${CURDIR}/Makefile" ; \
@@ -106,7 +106,7 @@ sanity-check:
 	fi ;
 	@if [ ! -e "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ] ; then \
 		echo "The kernel kernel config file $(BOARD_NAME)-kernel-$(SW_VERSION).config is missing" ; \
-		$(call dft_error ,2004-2301) ; \
+		$(call dft_warning ,2004-2301) ; \
 	fi ;
 	@if [ ! -d "./debian" ] ; then \
 		echo "The debian directory is missing in ${CURDIR}/. It should contain the files needed to create the debian package for $(BOARD_NAME) $(SW_NAME) kernel" ; \

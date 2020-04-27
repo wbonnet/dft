@@ -69,26 +69,26 @@ endif
 
 sanity-check:
 	@echo "Checking $(BOARD_NAME) kernel packages folder"
-	@if [ ! -d "${CURDIR}//config" ] ; then \
-		echo "config directory is missing in ${CURDIR}. It contains the configuration files of the different Linux kernel versions." ; \
+	@if [ ! -d "${CURDIR}/config" ] ; then \
+		echo "The directory config is missing in ${CURDIR}. It contains the configuration files of the different Linux kernel versions." ; \
 		echo "You can fix with the following commands : " ; \
-		echo "mkdir -p ${CURDIR}//config" ; \
-		echo "touch ${CURDIR}//config/.gitkeep" ; \
-		echo "git add ${CURDIR}//config/.gitkeep" ; \
+		echo "mkdir -p ${CURDIR}/config" ; \
+		echo "touch ${CURDIR}/config/.gitkeep" ; \
+		echo "git add ${CURDIR}/config/.gitkeep" ; \
 		echo "make sanity-check" ; \
 		$(call dft_error ,2001-0809) ; \
 	fi ;
 	@if [ ! -L "Makefile"  ] ; then \
-		echo "Makefile symlink $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile is missing in directory ${CURDIR}" ; \
+		echo "The Makefile symlink to $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile is missing in directory ${CURDIR}" ; \
 		echo "You can fix with the following commands : " ; \
-		echo "git rm -f ${CURDIR}//Makefile" ; \
-		echo "ln -s $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile ${CURDIR}//Makefile" ; \
-		echo "git add ${CURDIR}//Makefile" ; \
+		echo "git rm -f ${CURDIR}/Makefile" ; \
+		echo "ln -s $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile ${CURDIR}/Makefile" ; \
+		echo "git add ${CURDIR}/Makefile" ; \
 		echo "make sanity-check" ; \
 		$(call dft_error ,1911-2110) ; \
 	fi ;
 	@if [ ! "$(shell readlink ./Makefile)" = "$(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile" ] ; then \
-		echo "target of symlink Makefile should be $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile in directory ${CURDIR}" ; \
+		echo "The target of symlink Makefile should be $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile in directory ${CURDIR}" ; \
 		echo "You can fix with the following commands : " ; \
 		echo "git rm -f ${CURDIR}/Makefile" ; \
 		echo "ln -s $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel.makefile ${CURDIR}/Makefile" ; \
@@ -97,7 +97,7 @@ sanity-check:
 		$(call dft_error ,1911-2011) ; \
 	fi ;
 	@if [ ! -d "${CURDIR}/config" ] ; then \
-		echo "config directory is missing in ${CURDIR}/. It contains the configuration files of the different Linux kernel versions." ; \
+		echo "The directory config is missing in ${CURDIR}/. It contains the configuration files of the different Linux kernel versions." ; \
 		echo "You can fix with the following commands : " ; \
 		echo "mkdir -p ${CURDIR}/config" ; \
 		echo "touch ${CURDIR}/config/.gitkeep" ; \
@@ -106,7 +106,7 @@ sanity-check:
 		$(call dft_error ,1911-2013) ; \
 	fi ;
 	@if [ ! -L "board.mk" ] ; then \
-		echo "board.mk symlink to ../board.mk is missing in directory ${CURDIR}/" ; \
+		echo "The board.mk symlink to ../board.mk is missing in directory ${CURDIR}/" ; \
 		echo "You can fix with the following commands : " ; \
 		echo "ln -s ../board.mk ${CURDIR}/board.mk" ; \
 		echo "git add ${CURDIR}/board.mk" ; \
@@ -114,7 +114,7 @@ sanity-check:
 		$(call dft_error ,1911-1604) ; \
 	fi ;
 	@if [ ! "$(shell readlink board.mk)" = "../board.mk" ] ; then \
-		echo "target of symlink board.mk should be ../board.mk in directory ${CURDIR}/" ; \
+		echo "The target of symlink board.mk should be ../board.mk in directory ${CURDIR}/" ; \
 		echo "You can fix with the following commands : " ; \
 		echo "git rm -f ${CURDIR}/board.mk" ; \
 		echo "ln -s ../board.mk ${CURDIR}/board.mk" ; \
@@ -122,38 +122,39 @@ sanity-check:
 		echo "make sanity-check" ; \
 		$(call dft_error ,1911-1605) ; \
 	fi ;
-	for version in $(shell find . -mindepth 1 -maxdepth 1 -type d  -name '*\.*' ) ; do \
+	for version in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -name "2*" -type d -printf '%P\n' )) ; do \
 		echo "Checking $(BOARD_NAME) kernel $$version package definition" ; \
 		if [ ! -L "$$version/Makefile" ] ; then \
 			echo "version folder $$version" ; \
 			echo "Makefile symlink in ${CURDIR}/$$version is missing. It should be a symlink to $(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel-version.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
 			if [ -f "$$version/Makefile" ] ; then \
-				echo "git rm ${CURDIR}//$$version/Makefile" ; \
+				echo "git rm ${CURDIR}/$$version/Makefile" ; \
 			fi ; \
 			echo "ln -s ../../$(DFT_BUILDSYSTEM)/$(SW_NAME)-kernel-version.makefile ${CURDIR}/$$version/Makefile" ; \
-			echo "git add ${CURDIR}//$$version/Makefile" ; \
+			echo "git add ${CURDIR}/$$version/Makefile" ; \
 			echo "make sanity-check" ; \
 			$(call dft_error ,1911-1607) ; \
 		fi ; \
-#		echo "trying to readlink $$version/Makefile" ; \
+		if [ ! -e "config/$(BOARD_NAME)-kernel-$$version.config" ] ; then \
+			echo "Kernel configuration file $(BOARD_NAME)-kernel-$$version.config is missing" ; \
+			$(call dft_warning ,2004-2710) ; \
+		fi ; \
 		s=`readlink $$version/Makefile` ; \
-#		echo "Le lien $$version/Makefile vaut $$s" ; \
-		pwd ; \
 		if [ !  "$$s" = "buildsystem/$(SW_NAME)-kernel-version.makefile" ] ; then \
 			echo "Makefile symlink in $$version must link to buildsystem/$(SW_NAME)-kernel-version.makefile" ; \
 			echo "it currently targets to $$s" ; \
 			echo "You can fix with the following shell commands :" ; \
 			echo "git rm -f ${CURDIR}/$$version/Makefile || rm -f ${CURDIR}/$$version/Makefile" ; \
 			echo "ln -s buildsystem/$(SW_NAME)-kernel-version.makefile ${CURDIR}/$$version/Makefile" ; \
-			echo "git add ${CURDIR}//$$version/Makefile" ; \
+			echo "git add ${CURDIR}/$$version/Makefile" ; \
 			echo "make sanity-check" ; \
 			$(call dft_error ,1911-2118) ; \
 		fi ; \
-	done ;
-	@for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*') ; do \
+	done ; \
+	for folder in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -name "*\.*" -type d -printf '%P\n' )) ; do \
 		if [ -f $$folder/Makefile ] ; then \
-			$(MAKE) --directory=$$folder sanity-check || $(call dft_error ,2004-2701); \
+			$(MAKE) --directory=$$folder sanity-check || $(call dft_error ,2004-2708); \
 		fi ; \
 	done ;
 

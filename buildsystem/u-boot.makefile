@@ -68,7 +68,7 @@ endif
 #
 
 sanity-check:
-	if [ $(UBOOT_SUPPORT) = 1  ] ; then \
+	@if [ $(UBOOT_SUPPORT) = 1  ] ; then \
 		echo "Checking $(BOARD_NAME) u-boot packages folder" ; \
 		if [ ! -L "Makefile"  ] ; then \
 			echo "Makefile symlink $(DFT_BUILDSYSTEM)/u-boot.makefile is missing in directory ${CURDIR}" ; \
@@ -134,7 +134,7 @@ sanity-check:
 		#		echo "trying to readlink $$version/Makefile" ; \
 			s=`readlink $$version/Makefile` ; \
 		#		echo "Le lien $$version/Makefile vaut $$s" ; \
-			pwd ; \
+#			pwd ; \
 			if [ !  "$$s" = "buildsystem/$(SW_NAME)-version.makefile" ] ; then \
 				echo "Makefile symlink in $$version must link to buildsystem/$(SW_NAME)-version.makefile" ; \
 				echo "The link currently targets to $$s" ; \
@@ -157,7 +157,6 @@ sanity-check:
 # Create a new u-boot version entry
 add-u-boot-version:
 	@echo "DEBUG : in u-boot.makefile running add-u-boot-version with argument new-version $(new-version)" ;
-	@pwd;
 	@if [ "$(new-version)" == "" ] ; then \
 		echo "DEBUG : from u-boot.makefile Argument new-version is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2001-0801) ; \

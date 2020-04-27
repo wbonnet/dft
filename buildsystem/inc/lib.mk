@@ -50,7 +50,7 @@
 # execution returning with provided error code or 1 as default value
 # TODO Handle default error code
 define dft_error =
-echo "DFT ERROR : $(1)" && exit 72
+echo "DFT ERROR : $1" ; exit 73
 endef
 
 define dft_error_message =

@@ -38,7 +38,7 @@ UBOOT_DEFCONFIG := $(strip $(UBOOT_DEFCONFIG))
 USE_CONFIG_FILE := $(strip $(USE_CONFIG_FILE))
 
 # Do not recurse the following subdirs
-MAKE_FILTERS := files Makefile README.md
+MAKE_FILTERS := kernel u-boot buildsystem files Makefile README.md
 SW_NAME      := SW_NAME_undefined_at_board_level
 
 # ------------------------------------------------------------------------------
@@ -150,7 +150,7 @@ sanity-check:
 	fi ;
 	@make --directory=u-boot $*
 	@make --directory=kernel $*
-	@for version in $(find . -mindepth 1 -maxdepth 1 -type d ) ; do \
+	@for version in $(find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n') ; do \
 		$(MAKE) --directory=$$version $* ; \
         done
 
@@ -169,7 +169,7 @@ kernel-package:
 # cd $$i && $(MAKE) $* && cd .. ;
 sanity-check:
 	@echo "target $@ is called in board.makefile"
-	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		echo "examen de $$i" ; \
 		if [ -f $$i/Makefile ] ; then \
 			$(MAKE) --directory=$$i $* ; \
@@ -190,7 +190,7 @@ fetch:
 build:
 configure:
 setup:
-	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d )) ; do \
+	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
                 	$(MAKE) --directory=$$v $@ ; \
 		fi ; \
