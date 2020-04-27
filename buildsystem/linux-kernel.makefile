@@ -153,7 +153,7 @@ sanity-check:
 	done ;
 	@for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*') ; do \
 		if [ -f $$folder/Makefile ] ; then \
-			$(MAKE) --directory=$$folder sanity-check ; \
+			$(MAKE) --directory=$$folder sanity-check || $(call dft_error ,2004-2701); \
 		fi ; \
 	done ;
 
