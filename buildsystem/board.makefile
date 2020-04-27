@@ -47,7 +47,6 @@ SW_NAME      := SW_NAME_undefined_at_board_level
 #
 
 sanity-check:
-	@echo "Checking $(BOARD_NAME) board definition" ;
 	@if [ ! -f "board.mk" ] ; then \
 		pwd ; \
 		echo "file board.mk is missing in directory ${CURDIR}" ; \
@@ -156,19 +155,16 @@ sanity-check:
 
 # Build only u-boot  package target
 u-boot-package:
-	@echo "target $@ is called in board.makefile"
 	$(MAKE) --directory=u-boot package ;
 
 # Build only linux kernel an package target
 linux-kernel-package:
 kernel-package:
-	@echo "target $@ is called in board.makefile"
 	$(MAKE) --directory=kernel package ;
 
 # Catch all target. Call the same targets in each subfolder
 # cd $$i && $(MAKE) $* && cd .. ;
 sanity-check:
-	@echo "target $@ is called in board.makefile"
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		echo "examen de $$i" ; \
 		if [ -f $$i/Makefile ] ; then \
@@ -178,7 +174,6 @@ sanity-check:
 
 # Create a new u-boot version entry
 add-u-boot-version:
-	@echo "DEBUG : from board.makefile add-u-boot-version with argument new-version $(new-version)" ;
 	$(MAKE) --warn-undefined-variables --directory=u-boot add-u-boot-version new-version=$(new-version) ;
 
 check-u-boot-defconfig:

@@ -86,8 +86,7 @@ sanity-check:
 			$(call dft_error ,1911-1701) ; \
 		fi ; \
 	done ; \
-	for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d ) ; do \
-		echo "DEBUG : Je vais tester le repertoire $$folder" ; \
+	for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n') ; do \
 		if [ -e $$folder/Makefile ] ; then \
 			$(MAKE) --directory=$$folder sanity-check ; \
 		else  \
@@ -105,7 +104,7 @@ bsp-package: u-boot-package kernel-package
 # Build only u-boot package target
 do-configure:
 	echo "DEBUG : configure in category.makefile" ;
-	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f $$i/Makefile ] ; then \
 			$(MAKE) --directory=$$i configure ; \
 		fi ; \
@@ -114,7 +113,7 @@ do-configure:
 # Build only u-boot package target
 u-boot-package:
 	@echo "DEBUG : $@ in category.makefile" ;
-	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f $$i/Makefile ] ; then \
 			$(MAKE) --directory=$$i u-boot-package ; \
 		fi ; \
@@ -124,7 +123,7 @@ u-boot-package:
 linux-kernel-package:
 kernel-package:
 	@echo "DEBUG : $@ in category.makefile" ;
-	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f $$i/Makefile ] ; then \
 			$(MAKE) --directory=$$i kernel-package ; \
 		fi ; \
@@ -133,14 +132,14 @@ kernel-package:
 # Create a new u-boot version entry
 add-u-boot-version:
 	@echo "DEBUG : in category.makefile add-u-boot-version with argument new-version $(new-version)" ;
-	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f $$i/Makefile ] ; then \
 			$(MAKE) --warn-undefined-variables --print-directory --directory=$$i add-u-boot-version new-version=$(new-version) ; \
 		fi ; \
         done
 
 check-u-boot-defconfig:
-	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d )) ; do \
+	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		$(MAKE) --directory=$$v  check-u-boot-defconfig ; \
 	done
 
