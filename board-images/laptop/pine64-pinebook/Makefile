@@ -1,1 +1,1 @@
-../../../buildsystem/board-images-board.makefile
+../../../buildsystem/board-images.makefile
