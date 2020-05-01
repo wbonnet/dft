@@ -23,60 +23,91 @@
 # -------------------------------------------------------------------------------------------------
 # Create the ftpsync group
 - name: Create the ftpsync group
-  group: name={{ dft_srv_ftpsync.user_definition.group | default('ftpsync')}}
+  group: name={{ dft_srv_ftpsync.group | default('ftpsync')}}
          state=present
 
 # Add the user 'ftpsync' with a bash shell, appending the group ftpsync and
 # {{ dft_srv_ftpsync.webserver_definition.group }} to the user's groups
 - name: Create the ftpsync user
-  user: name={{ dft_srv_ftpsync.user_definition.username | default('ftpsync') }}
-        shell={{ dft_srv_ftpsync.user_definition.shell | default('/bin/bash')}}
-        home={{ dft_srv_ftpsync.user_definition.home_dir | default('/home/ftpsync')}}
-        group={{ dft_srv_ftpsync.user_definition.group | default('ftpsync') }}
-        groups={{ dft_srv_ftpsync.user_definition.groups | default('ftpsync') }}
+  user: name={{ dft_srv_ftpsync.username | default('ftpsync') }}
+        shell={{ dft_srv_ftpsync.shell | default('/bin/bash')}}
+        home={{ dft_srv_ftpsync.home | default('/home/ftpsync')}}
+        group={{ dft_srv_ftpsync.group | default('ftpsync') }}
+        groups={{ dft_srv_ftpsync.groups | default('ftpsync') }}
         append=yes
 
 # Create the ftpsync script directory
 - name: DFT - Create ftpsync home directory
-  file: path={{ dft_srv_ftpsync.user_definition.home_dir | default('/home/ftpsync') }}
+  file: path={{ dft_srv_ftpsync.home | default('/home/ftpsync') }}
         state=directory
         recurse=yes
-        owner={{ dft_srv_ftpsync.user_definition.username }}
-        group={{ dft_srv_ftpsync.user_definition.group }}
+        owner={{ dft_srv_ftpsync.username }}
+        group={{ dft_srv_ftpsync.group }}
         mode="0755"
 
 - name: DFT - Create ftpsync configuration directory
-  file: path={{ dft_srv_ftpsync.user_definition.home_dir | default('/home/ftpsync') }}/etc
+  file: path={{ dft_srv_ftpsync.home | default('/home/ftpsync') }}/etc
         state=directory
         recurse=yes
-        owner={{ dft_srv_ftpsync.user_definition.username }}
-        group={{ dft_srv_ftpsync.user_definition.group }}
+        owner={{ dft_srv_ftpsync.username }}
+        group={{ dft_srv_ftpsync.group }}
+        mode="0755"
+
+- name: DFT - Create ftpsync synchrnization scripts directory
+  file: path={{ dft_srv_ftpsync.home | default('/home/ftpsync') }}/bin
+        state=directory
+        recurse=yes
+        owner={{ dft_srv_ftpsync.username }}
+        group={{ dft_srv_ftpsync.group }}
         mode="0755"
 
 # Create the ftpsync log directory
 - name: DFT - Create ftpsync log directory
   file: path=/var/log/ftpsync
         state=directory
-        owner={{ dft_srv_ftpsync.user_definition.username }}
-        group={{ dft_srv_ftpsync.user_definition.group }}
+        owner={{ dft_srv_ftpsync.username }}
+        group={{ dft_srv_ftpsync.group }}
         mode="0750"
+  with_items:
+    - "{{ dft_srv_ftpsync.repositories }}"
+  when: dft_srv_ftpsync.repositories is defined
+
 
 #
 # Create the ftpsync configuration file
 #
-- name : DFT - Generate ftpsync configuration file
+- name : DFT - Generate ftpsync synchronization script
   template:  src=ftpsync.conf.j2
-             dest={{ dft_srv_ftpsync.user_definition.home_dir | default('/home/ftpsync') }}/etc/ftpsync-{{ dft_srv_ftpsync.upstream_server }}.conf
-             owner={{ dft_srv_ftpsync.user_definition.username }}
-             group={{ dft_srv_ftpsync.user_definition.group }}
-             mode="0644"
-  when: dft_srv_ftpsync.config_file is defined
+             dest={{ dft_srv_ftpsync.home }}/etc/ftpsync-{{ item.name }}.conf
+             owner={{ dft_srv_ftpsync.username }}
+             group={{ dft_srv_ftpsync.group }}
+             mode="0755"
+  with_items:
+    - "{{ dft_srv_ftpsync.repositories }}"
+  when: dft_srv_ftpsync.repositories is defined
 
 
 # Create the ftpsync target directory
 - name: DFT - Create ftpsync target directory
-  file: path={{ dft_srv_ftpsync.config_file.to }}
+  file: path={{ item.sync_path }}
         state=directory
-        owner={{ dft_srv_ftpsync.user_definition.username }}
-        group={{ dft_srv_ftpsync.user_definition.group }}
+        owner={{ dft_srv_ftpsync.username }}
+        group={{ dft_srv_ftpsync.group }}
         mode="0755"
+  with_items:
+        - "{{ dft_srv_ftpsync.repositories }}"
+  when: dft_srv_ftpsync.repositories is defined
+
+# -------------------------------------------------------------------------------------------------
+# Add ftpsync user ftpsync. Scheduled once a day per default
+- cron: name="DFT - Add repository synchronization script to user cron table"
+        month={{ item.cron_month }}
+        weekday={{ item.cron_weekday }}
+        day={{ item.cron_day }}
+        hour={{ item.cron_hour }}
+        minute={{ item.cron_minute }}
+        user={{ dft_srv_ftpsync.username }}
+        job={{ dft_srv_ftpsync.home }}/bin/ftpsync_repo_{{ item.name }}
+  with_items:
+        - "{{ dft_srv_ftpsync.repositories }}"
+  when: dft_srv_ftpsync.repositories is defined

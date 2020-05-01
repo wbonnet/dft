@@ -3,136 +3,135 @@
 # ansible-playbook command. When being redeployed the role will add missing variables and remove unsed one.
 
 # You can access documentation on variables defined in this file by running man ftpsync.conf
-
-{% if dft_srv_ftpsync.config_file.mirrorname is defined %}
-MIRRORNAME={{ dft_srv_ftpsync.config_file.mirrorname }}
+{% if item.mirrorname is defined %}
+MIRRORNAME={{ item.mirrorname }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.to is defined %}
-TO={{ dft_srv_ftpsync.config_file.to }}
+{% if item.sync_path is defined %}
+TO={{ item.sync_path }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.mailto is defined %}
-MAILOTO={{ dft_srv_ftpsync.config_file.mailto }}
+{% if item.mailto is defined %}
+MAILOTO={{ item.mailto }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.hub is defined %}
-HUB={{ dft_srv_ftpsync.config_file.hub }}
+{% if item.hub is defined %}
+HUB={{ item.hub }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.rsync_host is defined %}
-RSYNC_HOST={{ dft_srv_ftpsync.config_file.rsync_host }}
+{% if item.rsync_host is defined %}
+RSYNC_HOST={{ item.rsync_host }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.rsync_path is defined %}
-RSYNC_PATH={{ dft_srv_ftpsync.config_file.rsync_path }}
+{% if item.rsync_path is defined %}
+RSYNC_PATH={{ item.rsync_path }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.rsync_user is defined %}
-RSYNC_USER={{ dft_srv_ftpsync.config_file.rsync_user }}
+{% if item.rsync_user is defined %}
+RSYNC_USER={{ item.rsync_user }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.rsync_password is defined %}
-RSYNC_PASSWORD{{ dft_srv_ftpsync.config_file.rsync_password }}
+{% if item.rsync_password is defined %}
+RSYNC_PASSWORD={{ item.rsync_password }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.rsync_transport is defined %}
-RSYNC_TRANSPORT={{ dft_srv_ftpsync.config_file.rsync_transport }}
+{% if item.rsync_transport is defined %}
+RSYNC_TRANSPORT={{ item.rsync_transport }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.rsync_ssl_port is defined %}
-RSYNC_SSL_PORT={{ dft_srv_ftpsync.config_file.rsync_ssl_port }}
+{% if item.rsync_ssl_port is defined %}
+RSYNC_SSL_PORT={{ item.rsync_ssl_port }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.rsync_ssl_ca_path is defined %}
-RSYNC_SSL_CAPATH={{ dft_srv_ftpsync.config_file.rsync_ssl_ca_path }}
+{% if item.rsync_ssl_ca_path is defined %}
+RSYNC_SSL_CAPATH={{ item.rsync_ssl_ca_path }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.rsync_ssl_method is defined %}
-RSYNC_SSL_METHOD{{ dft_srv_ftpsync.config_file.rsync_ssl_method }}
+{% if item.rsync_ssl_method is defined %}
+RSYNC_SSL_METHOD={{ item.rsync_ssl_method }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.rsync_proxy is defined %}
-RSYNC_PROXY{{ dft_srv_ftpsync.config_file.rsync_proxy }}
+{% if item.rsync_proxy is defined %}
+RSYNC_PROXY={{ item.rsync_proxy }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.info_maintainer is defined %}
-INFO_MAINTAINER={{ dft_srv_ftpsync.config_file.info_maintainer }}
+{% if item.info_maintainer is defined %}
+INFO_MAINTAINER={{ item.info_maintainer }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.info_sponsor is defined %}
-INFO_SPONSOR="{{ dft_srv_ftpsync.config_file.info_sponsor }}"
+{% if item.info_sponsor is defined %}
+INFO_SPONSOR="{{ item.info_sponsor }}"
 {% endif %}
-{% if dft_srv_ftpsync.config_file.info_country is defined %}
-INFO_COUNTRY={{ dft_srv_ftpsync.config_file.info_country }}
+{% if item.info_country is defined %}
+INFO_COUNTRY={{ item.info_country }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.info_location is defined %}
-INFO_LOCATION="{{ dft_srv_ftpsync.config_file.info_location }}"
+{% if item.info_location is defined %}
+INFO_LOCATION="{{ item.info_location }}"
 {% endif %}
-{% if dft_srv_ftpsync.config_file.info_troughput is defined %}
-INFO_THROUGHPUT={{ dft_srv_ftpsync.config_file.info_troughput }}
+{% if item.info_troughput is defined %}
+INFO_THROUGHPUT={{ item.info_troughput }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.arch_include is defined %}
-ARCH_INCLUDE="{{ dft_srv_ftpsync.config_file.arch_include }}"
+{% if item.arch_include is defined %}
+ARCH_INCLUDE="{{ item.arch_include }}"
 {% endif %}
-{% if dft_srv_ftpsync.config_file.arch_exclude is defined %}
-ARCH_EXCLUDE="{{ dft_srv_ftpsync.config_file.arch_exclude }}"
+{% if item.arch_exclude is defined %}
+ARCH_EXCLUDE="{{ item.arch_exclude }}"
 {% endif %}
-{% if dft_srv_ftpsync.config_file.exclude is defined %}
-EXCLUDE="{{ dft_srv_ftpsync.config_file.exclude }}"
+{% if item.exclude is defined %}
+EXCLUDE="{{ item.exclude }}"
 {% endif %}
-{% if dft_srv_ftpsync.config_file.logdir is defined %}
-LOGDIR="{{ dft_srv_ftpsync.config_file.logdir }}"
+{% if item.logdir is defined %}
+LOGDIR="{{ item.logdir }}"
 {% endif %}
-{% if dft_srv_ftpsync.config_file.log is defined %}
-LOG="{{ dft_srv_ftpsync.config_file.log }}"
+{% if item.log is defined %}
+LOG="{{ item.log }}"
 {% endif %}
-{% if dft_srv_ftpsync.config_file.errorsonly is defined %}
-ERRORSONLY={{ dft_srv_ftpsync.config_file.errorsonly }}
+{% if item.errorsonly is defined %}
+ERRORSONLY={{ item.errorsonly }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.fulllogs is defined %}
-FULLLOGS={{ dft_srv_ftpsync.config_file.fulllogs }}
+{% if item.fulllogs is defined %}
+FULLLOGS={{ item.fulllogs }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.logrotate is defined %}
-LOGROTATE={{ dft_srv_ftpsync.config_file.logrotate }}
+{% if item.logrotate is defined %}
+LOGROTATE={{ item.logrotate }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.locktimeout is defined %}
-LOCKTIMEOUT={{ dft_srv_ftpsync.config_file.locktimeout }}
+{% if item.locktimeout is defined %}
+LOCKTIMEOUT={{ item.locktimeout }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.uisleep is defined %}
-UIPSLEEP={{ dft_srv_ftpsync.config_file.uisleep }}
+{% if item.uisleep is defined %}
+UIPSLEEP={{ item.uisleep }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.uipretries is defined %}
-UIPRETRIES={{ dft_srv_ftpsync.config_file.uipretries }}
+{% if item.uipretries is defined %}
+UIPRETRIES={{ item.uipretries }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.tracehost is defined %}
-TRACEHOST={{ dft_srv_ftpsync.config_file.tracehost }}
+{% if item.tracehost is defined %}
+TRACEHOST={{ item.tracehost }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.rsync is defined %}
-RSYNC={{ dft_srv_ftpsync.config_file.rsync }}
+{% if item.rsync is defined %}
+RSYNC={{ item.rsync }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.rsync_extra is defined %}
-RSYNC_EXTRA={{ dft_srv_ftpsync.config_file.rsync_extra }}
+{% if item.rsync_extra is defined %}
+RSYNC_EXTRA={{ item.rsync_extra }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.rsync_bw is defined %}
-RSYNC_BW={{ dft_srv_ftpsync.config_file.rsync_bw }}
+{% if item.rsync_bw is defined %}
+RSYNC_BW={{ item.rsync_bw }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.rsync_options is defined %}
-RSYNC_OPTIONS={{ dft_srv_ftpsync.config_file.rsync_options }}
+{% if item.rsync_options is defined %}
+RSYNC_OPTIONS={{ item.rsync_options }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.rsync_options1 is defined %}
-RSYNC_OPTIONS1={{ dft_srv_ftpsync.config_file.rsync_options1 }}
+{% if item.rsync_options1 is defined %}
+RSYNC_OPTIONS1={{ item.rsync_options1 }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.rsync_options2 is defined %}
-RSYNC_OPTIONS2={{ dft_srv_ftpsync.config_file.rsync_options2 }}
+{% if item.rsync_options2 is defined %}
+RSYNC_OPTIONS2={{ item.rsync_options2 }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.callbackuser is defined %}
-CALLBACKUSER={{ dft_srv_ftpsync.config_file.callbackuser }}
+{% if item.callbackuser is defined %}
+CALLBACKUSER={{ item.callbackuser }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.callbackhost is defined %}
-CALLBACKHOST={{ dft_srv_ftpsync.config_file.callbackhost }}
+{% if item.callbackhost is defined %}
+CALLBACKHOST={{ item.callbackhost }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.callbackkey is defined %}
-CALLBACKKEY={{ dft_srv_ftpsync.config_file.callbackkey }}
+{% if item.callbackkey is defined %}
+CALLBACKKEY={{ item.callbackkey }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.hook1 is defined %}
-HOOK1={{ dft_srv_ftpsync.config_file.hook1 }}
+{% if item.hook1 is defined %}
+HOOK1={{ item.hook1 }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.hook2 is defined %}
-HOOK2={{ dft_srv_ftpsync.config_file.hook2 }}
+{% if item.hook2 is defined %}
+HOOK2={{ item.hook2 }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.hook3 is defined %}
-HOOK3={{ dft_srv_ftpsync.config_file.hook3 }}
+{% if item.hook3 is defined %}
+HOOK3={{ item.hook3 }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file.hook4 is defined %}
-HOOK4={{ dft_srv_ftpsync.config_file.hook4 }}
+{% if item.hook4 is defined %}
+HOOK4={{ item.hook4 }}
 {% endif %}
-{% if dft_srv_ftpsync.config_file._hook5 is defined %}
-HOOK5={{ dft_srv_ftpsync.config_file.hook5 }}
+{% if item._hook5 is defined %}
+HOOK5={{ item.hook5 }}
 {% endif %}
