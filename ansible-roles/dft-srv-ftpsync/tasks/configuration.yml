@@ -46,7 +46,7 @@
         mode="0755"
 
 - name: DFT - Create ftpsync configuration directory
-  file: path={{ dft_srv_ftpsync.home | default('/home/ftpsync') }}/etc
+  file: path={{ dft_srv_ftpsync.home | default('/home/ftpsync') }}/.config/ftpsync
         state=directory
         recurse=yes
         owner={{ dft_srv_ftpsync.username }}
@@ -78,13 +78,27 @@
 #
 - name : DFT - Generate ftpsync synchronization script
   template:  src=ftpsync.conf.j2
-             dest={{ dft_srv_ftpsync.home }}/etc/ftpsync-{{ item.name }}.conf
+             dest={{ dft_srv_ftpsync.home }}/.config/ftpsync/ftpsync.conf
              owner={{ dft_srv_ftpsync.username }}
              group={{ dft_srv_ftpsync.group }}
              mode="0755"
   with_items:
     - "{{ dft_srv_ftpsync.repositories }}"
   when: dft_srv_ftpsync.repositories is defined
+
+#
+# Create the ftpsync script file (used by cron)
+#
+- name : DFT - Generate ftpsync synchronization script
+  template:  src=run-ftpsync.j2
+             dest={{ dft_srv_ftpsync.home }}/bin/run-ftpsync-{{ item.name }}.sh
+             owner={{ dft_srv_ftpsync.username }}
+             group={{ dft_srv_ftpsync.group }}
+             mode="0755"
+  with_items:
+    - "{{ dft_srv_ftpsync.repositories }}"
+  when: dft_srv_ftpsync.repositories is defined
+
 
 
 # Create the ftpsync target directory
@@ -107,7 +121,7 @@
         hour={{ item.cron_hour }}
         minute={{ item.cron_minute }}
         user={{ dft_srv_ftpsync.username }}
-        job={{ dft_srv_ftpsync.home }}/bin/ftpsync_repo_{{ item.name }}
+        job=/bin/run-ftpsync-{{ item.name }}.sh
   with_items:
         - "{{ dft_srv_ftpsync.repositories }}"
   when: dft_srv_ftpsync.repositories is defined
