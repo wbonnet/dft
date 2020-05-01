@@ -121,7 +121,7 @@
         hour={{ item.cron_hour }}
         minute={{ item.cron_minute }}
         user={{ dft_srv_ftpsync.username }}
-        job=/bin/run-ftpsync-{{ item.name }}.sh
+        job={{ dft_srv_ftpsync.home }}/bin/run-ftpsync-{{ item.name }}.sh
   with_items:
         - "{{ dft_srv_ftpsync.repositories }}"
   when: dft_srv_ftpsync.repositories is defined
