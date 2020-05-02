@@ -244,17 +244,17 @@ configure:
 		echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
 		echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
 	else \
-		for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+		for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" -printf '%P\n')) ; do \
 			$(MAKE) --directory=$$v  configure ; \
 		done \
 	fi ; \
 
 check-u-boot-defconfig:
-	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
+	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" -printf '%P\n')) ; do \
 		$(MAKE) --directory=$$v  check-u-boot-defconfig ; \
 
 setup:
-	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d )) ; do \
+	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -e ${CURDIR}/$$v/Makefile ] ; then \
                 	$(MAKE) --directory=$$v $@ ; \
 		fi ; \

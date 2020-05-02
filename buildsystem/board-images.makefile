@@ -50,21 +50,21 @@ sanity-check:
 		echo "ln -s ../buildsystem ${CURDIR}/buildsystem" ; \
 		echo "git add ${CURDIR}//buildsystem" ; \
 		$(call dft_error ,2005-0205) ; \
-	fi ; \
-	if [ ! "$(shell readlink ./Makefile)" = "$(DFT_BUILDSYSTEM)/board-images.makefile" ] ; then \
+	fi ; 
+	@if [ ! "$(shell readlink ./Makefile)" = "$(DFT_BUILDSYSTEM)/board-images.makefile" ] ; then \
 		echo "The target of symlink Makefile should be $(DFT_BUILDSYSTEM)/board-images.makefile in directory ${CURDIR}" ; \
 		echo "You can fix with the following commands : " ; \
 		echo "git rm -f ${CURDIR}/Makefile" ; \
 		echo "ln -s $(DFT_BUILDSYSTEM)/board-images.makefile ${CURDIR}/Makefile" ; \
 		echo "git add ${CURDIR}/Makefile" ; \
 		$(call dft_error ,2005-0809) ; \
-	fi ; \
-	for image in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*' ) ; do \
+	fi ; 
+	for image in $(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n') ; do \
 		echo "Checking $(BOARD_NAME) image $$image definition" ; \
 		if [ ! -L "$$image/Makefile" ] ; then \
 			echo "Makefile symlink in ${CURDIR}/$$image is missing. It should be a symlink to ../$(DFT_BUILDSYSTEM)/board-image.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
-			echo "ln -s .$(DFT_BUILDSYSTEM)/board-image.makefile ${CURDIR}/$$image/Makefile" ; \
+			echo "ln -s ../$(DFT_BUILDSYSTEM)/board-image.makefile ${CURDIR}/$$image/Makefile" ; \
 			echo "git add ${CURDIR}/$$image/Makefile" ; \
 			echo "make sanity-check" ; \
 			$(call dft_error ,2005-0810) ; \
@@ -75,7 +75,7 @@ sanity-check:
 			echo "The link currently targets to $$s" ; \
 			echo "You can fix with the following shell commands :" ; \
 			echo "git rm -f ${CURDIR}/$$image/Makefile || rm -f ${CURDIR}/$$image/Makefile" ; \
-			echo "ln -s $(DFT_BUILDSYSTEM)/board-image.makefile ${CURDIR}/$$image/Makefile" ; \
+			echo "ln -s ../$(DFT_BUILDSYSTEM)/board-image.makefile ${CURDIR}/$$image/Makefile" ; \
 			echo "git add ${CURDIR}/$$image/Makefile" ; \
 			echo "make sanity-check" ; \
 			$(call dft_error ,2015-0813) ; \
