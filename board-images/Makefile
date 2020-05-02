@@ -19,11 +19,16 @@
 #
 
 # Do not recurse the following subdirs
-MAKE_FILTERS  := Makefile workdir README.md .
+MAKE_FILTERS  = Makefile README.md .
+
+# definition of the board categories to process
+CATEGORIES    = laptop desktop set-top-box single-board-computer
+
 
 # Simple target forwarder
 list-images:
-	@echo "DEBUG list-images in board-images top level makefile"
+sanity-check:
+	@echo "DEBUG $@ in board-images top level makefile"
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
                 	$(MAKE) --directory=$$v $@ ; \
@@ -36,5 +41,11 @@ list-images:
 #
 help:
 	@echo "DEBUG help in board-images top level makefile"
-	@echo "The existing local targets are the following. Local targets are executed only at this"
-	@echo "level in the category, without recursion nor walk down the tree of board categories"
+	@echo "Available targets are :"
+	@echo "   list-images             Display the liste of images available in this category."
+	@echo "                           The following filters can be used to display only matching images : "
+	@echo "                           arch=(armv7l,aarch64,x86_64 or any valid arch from uname -m)."
+	@echo "                           type=(rootfs or firmware)."
+	@echo "   sanity-check            Check recursivly the availability of required items (files, symlinks, directories)"
+	@echo "                           This target only warns you and do not make any change to the tree content."
+	@echo "   help                    Display this help"
