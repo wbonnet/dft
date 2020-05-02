@@ -35,7 +35,6 @@ CATEGORIES    = laptop desktop set-top-box single-board-computer
 
 # Build only u-boot package target
 u-boot-package:
-	@echo "DEBUG : $@ in category.makefile" ;
 	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
 			echo "$(MAKE) -directory=$$i u-boot-package"; \
@@ -45,7 +44,6 @@ u-boot-package:
 # Build only linux kernel an package target
 linux-kernel-package:
 kernel-package:
-	@echo "DEBUG : $@ in category.makefile" ;
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
 			$(MAKE) --directory=$$i kernel-package ; \
@@ -53,8 +51,7 @@ kernel-package:
         done
 
 sanity-check:
-	@echo "DEBUG sanity-check Makefile directement sous bsp-packages" ;
-	for category in $(CATEGORIES) ; do \
+	@for category in $(CATEGORIES) ; do \
 		if [ ! -d ${CURDIR}/$$category ] ; then \
 			echo "Warning : $$category folder is missing, recursive targets may fail or produce incomplete set of binaries." ; \
 		fi ; \

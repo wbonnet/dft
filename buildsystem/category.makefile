@@ -36,9 +36,8 @@ SW_NAME       := SW_NAME_undefined_at_category_level
 # a mandatory kernel folder, optional folders like u-boot for boot loader and files
 # to store needed additionnal files
 sanity-check:
-	@echo "DEBUG : in category.makefile target sanity-check" ;
 	@for board in $(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n') ; do \
-		echo "Now checking board $$board" ; \
+		echo "Now checking manifest sanity for board $$board" ; \
 		if [ ! -e "$$board/buildsystem" ] ; then \
 			echo "buildsystem symlink ${CURDIR}/$$board/buildsystem is Missing. It should be a symlink to  $(DFT_BUILDSYSTEM)" ; \
 			echo "You can fix with the following shell commands :" ; \
