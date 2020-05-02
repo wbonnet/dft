@@ -38,7 +38,7 @@ CATEGORIES    = laptop desktop set-top-box single-board-computer
 list-images:
 sanity-check:
 	@echo "DEBUG $@ in board-images top level makefile"
-	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ ! -e "$$v/buildsystem" ] ; then \
 			echo "buildsystem symlink ${CURDIR}/$$v/buildsystem is Missing. It should be a symlink to ../buildsystem" ; \
 			echo "You can fix with the following shell commands :" ; \
