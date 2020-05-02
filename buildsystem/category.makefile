@@ -51,7 +51,7 @@ sanity-check:
 			echo "You can fix with the following shell commands :" ; \
 			ln -s ../$(DFT_BUILDSYSTEM) ${CURDIR}/$$board/kernel ; \
 			git add ${CURDIR}/$$board/kernel/buildsystem ; \
-			$(call dft_error ,2001-0202) ; \
+			$(call dft_error ,2001-0206) ; \
 		fi ; \
 		if [ ! -e "$$board/u-boot/buildsystem" ] ; then \
 			echo "buildsystem symlink ${CURDIR}/$$board/u-boot is Missing. It should be a symlink to  ../$(DFT_BUILDSYSTEM)" ; \

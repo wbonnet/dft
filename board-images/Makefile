@@ -17,9 +17,18 @@
 #
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
+ 
+# Build system sould be available under board folder as a symlink. Keep it
+# locally available under board folder computing a relative path is a nightmare
+# and does not work in all cases. Environment variables are not git friendly
+# since git add will loose variable name and generate an absolute path, which
+# is not comptible with user need ans or workspace relocation nor packagng needs.
+# better solutions wille be really welcomeds contributions.
+DFT_BUILDSYSTEM := buildsystem
+include $(DFT_BUILDSYSTEM)/dft.mk
 
 # Do not recurse the following subdirs
-MAKE_FILTERS  = Makefile README.md .
+MAKE_FILTERS  = Makefile README.md . inc
 
 # definition of the board categories to process
 CATEGORIES    = laptop desktop set-top-box single-board-computer
@@ -29,7 +38,14 @@ CATEGORIES    = laptop desktop set-top-box single-board-computer
 list-images:
 sanity-check:
 	@echo "DEBUG $@ in board-images top level makefile"
-	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+		if [ ! -e "$$v/buildsystem" ] ; then \
+			echo "buildsystem symlink ${CURDIR}/$$v/buildsystem is Missing. It should be a symlink to ../buildsystem" ; \
+			echo "You can fix with the following shell commands :" ; \
+			echo "ln -s ../buildstem ${CURDIR}/$$v/buildsystem" ; \
+			echo "git add ${CURDIR}/$$v/buildsystem" ; \
+			$(call dft_error ,2005-0201) ; \
+		fi ; \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
                 	$(MAKE) --directory=$$v $@ ; \
 		fi ; \

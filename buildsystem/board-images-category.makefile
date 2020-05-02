@@ -18,16 +18,40 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 
+# Build system sould be available under board folder as a symlink. Keep it
+# locally available under board folder computing a relative path is a nightmare
+# and does not work in all cases. Environment variables are not git friendly
+# since git add will loose variable name and generate an absolute path, which
+# is not comptible with user need ans or workspace relocation nor packagng needs.
+# better solutions wille be really welcomeds contributions.
+DFT_BUILDSYSTEM := buildsystem
+include $(DFT_BUILDSYSTEM)/dft.mk
+
 # Do not recurse the following subdirs
 MAKE_FILTERS  := Makefile workdir README.md .
 
-# Simple target forwarder
+# Forward sanity-check in subdirs
+sanity-check:
+	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+		if [ ! -L "${CURDIR}/$$v/buildsystem" ] ; then \
+			echo "buildsystem symlink ${CURDIR}/$$v/buildsystem is Missing. It should be a symlink to ../buildsystem" ; \
+			echo "You can fix with the following shell commands :" ; \
+			echo "ln -s ../buildsystem ${CURDIR}/$$v/buildsystem" ; \
+			echo "git add ${CURDIR}/$$v/buildsystem" ; \
+			echo "make sanity-check" ; \
+			$(call dft_error ,2005-0204) ; \
+		fi ; \
+		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
+                	$(MAKE) --directory=$$v sanity-check ; \
+		fi ; \
+	done
+
 list-images:
-	@echo "DEBUG list-images in board-images-category.makdefile"
-	@echo "DEBUG list-images is stil IP TODO"
+	@echo "DEBUG list-images in board-images-category.makefile"
+	@echo "DEBUG list-images is still TO TODO"
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
-                	$(MAKE) --directory=$$v $@ ; \
+                	$(MAKE) --directory=$$v list-images ; \
 		fi ; \
 	done
 
