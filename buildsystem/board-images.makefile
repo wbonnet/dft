@@ -59,7 +59,7 @@ sanity-check:
 		echo "git add ${CURDIR}/Makefile" ; \
 		$(call dft_error ,2005-0809) ; \
 	fi ; 
-	for image in $(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n') ; do \
+	@for image in $(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n') ; do \
 		echo "Checking $(BOARD_NAME) image $$image definition" ; \
 		if [ ! -L "$$image/Makefile" ] ; then \
 			echo "Makefile symlink in ${CURDIR}/$$image is missing. It should be a symlink to ../$(DFT_BUILDSYSTEM)/board-image.makefile" ; \
