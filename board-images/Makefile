@@ -37,7 +37,6 @@ CATEGORIES    = laptop desktop set-top-box single-board-computer
 # Simple target forwarder
 list-images:
 sanity-check:
-	@echo "DEBUG $@ in board-images top level makefile"
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ ! -e "$$v/buildsystem" ] ; then \
 			echo "buildsystem symlink ${CURDIR}/$$v/buildsystem is Missing. It should be a symlink to ../buildsystem" ; \
