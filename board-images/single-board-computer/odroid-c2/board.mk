@@ -1,0 +1,1 @@
+../../../bsp-packages/single-board-computer/odroid-c2/board.mk

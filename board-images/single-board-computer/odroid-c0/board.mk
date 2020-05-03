@@ -1,0 +1,1 @@
+../../../bsp-packages/single-board-computer/odroid-c0/board.mk

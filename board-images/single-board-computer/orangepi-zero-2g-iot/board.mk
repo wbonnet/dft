@@ -1,0 +1,1 @@
+../../../bsp-packages/single-board-computer/orangepi-zero-2g-iot/board.mk

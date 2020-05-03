@@ -1,0 +1,1 @@
+../../../bsp-packages/single-board-computer/cubieboard-4/board.mk

@@ -1,0 +1,1 @@
+../../../bsp-packages/single-board-computer/beagleboard-beaglebone-black/board.mk

@@ -81,7 +81,7 @@ sanity-check:
 			echo "make sanity-check" ; \
 			$(call dft_error ,2015-0813) ; \
 		fi ; \
-		if [ ! -L "$$image/image.mk" ] ; then \
+		if [ ! -f "$$image/image.mk" ] ; then \
 			echo "The file image.mk is missing in ${CURDIR}/$$image is missing" ; \
 			echo "You can initialize if from the folowing tempate :" ; \
 			echo "cp ../$(DFT_BUILDSYSTEM)/templates/image.mk ${CURDIR}/$$image/image.mk" ; \

@@ -1,0 +1,1 @@
+../../../bsp-packages/single-board-computer/orangepi-zero/board.mk
