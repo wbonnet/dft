@@ -1,0 +1,1 @@
+../../../bsp-packages/single-board-computer/nxp-sabre-qsd/board.mk

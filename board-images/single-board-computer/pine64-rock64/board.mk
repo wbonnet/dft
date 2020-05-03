@@ -1,0 +1,1 @@
+../../../bsp-packages/single-board-computer/pine64-rock64/board.mk
