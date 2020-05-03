@@ -24,10 +24,10 @@ SHELL := bash
 
 # ------------------------------------------------------------------------------
 #
-# Target that cal the dft command line tool to build the image
+# Target that call the dft command line tool to build the image
 #
 build-image:
-	@echo dft --project project-rootfs.yml
+	dft --project image.yml
 
 # ------------------------------------------------------------------------------
 #
@@ -45,13 +45,11 @@ check-sanity:
 	@echo "variables-orangepi-zero.yml"
 	@echo "variables.yml -> /usr/share/dft/examples/rootfs-projects/netshell/variables.yml"
 
-
 # ------------------------------------------------------------------------------
 #
 # Target that prints the help
 #
 help:
-	@echo "DEBUG help in board-image.makdefile"
 	@echo "Available targets are :"
 	@echo "   build-image             Build the $(BOARD_NAME) board image"
 	@echo "   help                    Display this help"
