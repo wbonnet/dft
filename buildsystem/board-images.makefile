@@ -30,6 +30,7 @@ SHELL := bash
 # better solutions wille be really welcomeds contributions.
 DFT_BUILDSYSTEM := buildsystem
 include $(DFT_BUILDSYSTEM)/dft.mk
+include board.mk
 
 
 # Do not recurse the following subdirs
@@ -79,6 +80,17 @@ sanity-check:
 			echo "git add ${CURDIR}/$$image/Makefile" ; \
 			echo "make sanity-check" ; \
 			$(call dft_error ,2015-0813) ; \
+		fi ; \
+		if [ ! -e "$$image/image.mk" ] ; then \
+			echo "The file image.mk is missing in ${CURDIR}/$$image is missing" ; \
+			echo "You can initialize if from the folowing tempate :" ; \
+			echo "cp ../$(DFT_BUILDSYSTEM)/templates/image.mk ${CURDIR}/$$image/image.mk" ; \
+			echo "git add ${CURDIR}/$$image/image.mk" ; \
+			echo "make sanity-check" ; \
+			echo "" ; \
+			echo "Please you should read this warning before copy paste it or shell command will fail" ; \
+			echo "You have to check the image type in board.mk. You may have to change it to firmware, default is rootfs" ; \
+			$(call dft_error ,2005-0311) ; \
 		fi ; \
 	done ; \
 	
