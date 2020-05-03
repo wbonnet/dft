@@ -27,23 +27,23 @@ SHELL := bash
 # Target that cal the dft command line tool to build the image
 #
 build-image:
-	@echo "appel a dft en cli"
+	@echo dft --project project-rootfs.yml
 
 # ------------------------------------------------------------------------------
 #
 # Checks that all mandatory files are available
 #
 check-sanity:
-l outil dft controle pas des trucs aussi?
-firmware.yml
-image-firmware.yml
-image-rootfs.yml
-project-firmware.yml
-project-rootfs.yml
-repositories.yml -> /usr/share/dft/library/repositories/repository-debian-fr-stretch.yml
-rootfs.yml -> /usr/share/dft/library/rootfs/rootfs-netshell.yml
-variables-orangepi-zero.yml
-variables.yml -> /usr/share/dft/examples/rootfs-projects/netshell/variables.yml
+	@echo "l outil dft controle pas des trucs aussi?"
+	@echo "firmware.yml"
+	@echo "image-firmware.yml"
+	@echo "image-rootfs.yml"
+	@echo "project-firmware.yml"
+	@echo "project-rootfs.yml"
+	@echo "repositories.yml -> /usr/share/dft/library/repositories/repository-debian-fr-stretch.yml"
+	@echo "rootfs.yml -> /usr/share/dft/library/rootfs/rootfs-netshell.yml"
+	@echo "variables-orangepi-zero.yml"
+	@echo "variables.yml -> /usr/share/dft/examples/rootfs-projects/netshell/variables.yml"
 
 
 # ------------------------------------------------------------------------------
