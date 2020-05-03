@@ -22,12 +22,19 @@
 # a slightly different syntax for some operators. This way it a known shell.
 SHELL := bash
 
+# Include image variables definition
+include ../board.mk
+include image.mk
+
 # ------------------------------------------------------------------------------
 #
 # Target that call the dft command line tool to build the image
 #
 build-image:
 	dft --project image.yml
+
+list-images:
+	@echo $(IMAGE_NAME)
 
 # ------------------------------------------------------------------------------
 #
