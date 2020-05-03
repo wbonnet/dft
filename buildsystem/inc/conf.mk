@@ -200,7 +200,7 @@ BOARD_ARCH          ?= undefined-board-arch
 DEFAULT_DTB         ?= undefined-default.dtb
 
 # If the KERNEL_DEFCONFIG variale is set, the given file will be copied to
-# .config in the source dirctory. Default value is set to board name.
+# .config in the source directory. Default value is set to board name.
 KERNEL_DEFCONFIG     ?= $(BOARD_NAME).config
 
 # XXXX TODO If this variable is set, and USE_CONFIG_FILE is undefined, a config file will

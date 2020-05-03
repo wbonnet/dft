@@ -31,7 +31,7 @@
 #   means that only some of the directories can be redefined. Undefined ones
 #   default to the values defined in dft tool configuration
 #
-#   Some values contains a list of dirctories, for instance 'additional_roles'
+#   Some values contains a list of directories, for instance 'additional_roles'
 #   The list is used to defined exta roles and playbooks, within scope project
 #   (thus which are not in the dft open-source scope). Additional directories
 #   content is copied to /dft_bootstrap during bootstrap phase, and can be used
@@ -40,7 +40,7 @@
 # ----------------------------------------------------------------------------
 configuration:
 
-  # Defines the root of the working directories. A dirctory named after
+  # Defines the root of the working directories. A directory named after
   # project name will be created under this path, and subdirectories used to
   # store rootfs, bootchain, image, etc will be created
   # working_dir: "/home/foo/working_dir"
