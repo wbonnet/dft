@@ -37,7 +37,7 @@ include board.mk
 MAKE_FILTERS  := Makefile workdir README.md .
 
 # List available images
-list-images:
+show-images:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
                 	$(MAKE) --directory=$$v list-images ; \
@@ -62,8 +62,27 @@ sanity-check:
 	fi ; 
 	@for image in $(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n') ; do \
 		echo "Checking $(BOARD_NAME) image $$image definition" ; \
+		if [ ! -L "$$image/inc" ] ; then \
+			echo "The inc symlink in ${CURDIR}/$$image is missing. It should be a symlink to ../../../inc" ; \
+			echo "You can fix with the following shell commands :" ; \
+			echo "ln -s ../../../inc ${CURDIR}/$$image/inc" ; \
+			echo "git add ${CURDIR}/$$image/inc" ; \
+			echo "make sanity-check" ; \
+			$(call dft_error ,2005-0816) ; \
+		fi ; \
+		s=`readlink $$image/inc` ; \
+		if [ !  "$$s" = "../../../inc" ] ; then \
+			echo "The inc symlink in $$image must link to ../../../inc" ; \
+			echo "The link currently targets to $$s" ; \
+			echo "You can fix with the following shell commands :" ; \
+			echo "git rm -f ${CURDIR}/$$image/inc || rm -f ${CURDIR}/$$image/inc" ; \
+			echo "ln -s ../../../inc ${CURDIR}/$$image/inc" ; \
+			echo "git add ${CURDIR}/$$image/inc" ; \
+			echo "make sanity-check" ; \
+			$(call dft_error ,2015-0815) ; \
+		fi ; \
 		if [ ! -L "$$image/Makefile" ] ; then \
-			echo "Makefile symlink in ${CURDIR}/$$image is missing. It should be a symlink to ../$(DFT_BUILDSYSTEM)/board-image.makefile" ; \
+			echo "The Makefile symlink in ${CURDIR}/$$image is missing. It should be a symlink to ../$(DFT_BUILDSYSTEM)/board-image.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
 			echo "ln -s ../$(DFT_BUILDSYSTEM)/board-image.makefile ${CURDIR}/$$image/Makefile" ; \
 			echo "git add ${CURDIR}/$$image/Makefile" ; \
@@ -72,14 +91,14 @@ sanity-check:
 		fi ; \
 		s=`readlink $$image/Makefile` ; \
 		if [ !  "$$s" = "../$(DFT_BUILDSYSTEM)/board-image.makefile" ] ; then \
-			echo "Makefile symlink in $$image must link to ../$(DFT_BUILDSYSTEM)/board-image.makefile" ; \
+			echo "The Makefile symlink in $$image must link to ../$(DFT_BUILDSYSTEM)/board-image.makefile" ; \
 			echo "The link currently targets to $$s" ; \
 			echo "You can fix with the following shell commands :" ; \
 			echo "git rm -f ${CURDIR}/$$image/Makefile || rm -f ${CURDIR}/$$image/Makefile" ; \
 			echo "ln -s ../$(DFT_BUILDSYSTEM)/board-image.makefile ${CURDIR}/$$image/Makefile" ; \
 			echo "git add ${CURDIR}/$$image/Makefile" ; \
 			echo "make sanity-check" ; \
-			$(call dft_error ,2015-0813) ; \
+			$(call dft_error ,2015-0814) ; \
 		fi ; \
 		if [ ! -f "$$image/image.mk" ] ; then \
 			echo "The file image.mk is missing in ${CURDIR}/$$image is missing" ; \
