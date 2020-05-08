@@ -122,7 +122,7 @@ sanity-check:
 		echo "make sanity-check" ; \
 		$(call dft_error ,1911-1605) ; \
 	fi ;
-	for version in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -name "2*" -type d -printf '%P\n' )) ; do \
+	@for version in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -name "2*" -type d -printf '%P\n' )) ; do \
 		echo "Checking $(BOARD_NAME) kernel $$version package definition" ; \
 		if [ ! -L "$$version/Makefile" ] ; then \
 			echo "version folder $$version" ; \
@@ -151,10 +151,10 @@ sanity-check:
 			echo "make sanity-check" ; \
 			$(call dft_error ,1911-2118) ; \
 		fi ; \
-	done ; \
-	for folder in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -name "*\.*" -type d -printf '%P\n' )) ; do \
-		if [ -f $$folder/Makefile ] ; then \
-			$(MAKE) --directory=$$folder sanity-check || $(call dft_error ,2004-2708); \
+	done ;
+	@for version in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -name "*\.*" -type d -printf '%P\n' )) ; do \
+		if [ -f $$version/Makefile ] ; then \
+			$(MAKE) --directory=$$version sanity-check || $(call dft_error ,2004-2708); \
 		fi ; \
 	done ;
 
