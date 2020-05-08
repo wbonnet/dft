@@ -31,7 +31,7 @@ include image.mk
 # Target that call the dft command line tool to build the image
 #
 build-image:
-	dft --project image.yml
+	dft --project project.yml
 
 list-images:
 	@echo $(IMAGE_NAME)
