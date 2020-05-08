@@ -101,7 +101,7 @@ sanity-check:
 			$(call dft_error ,2015-0814) ; \
 		fi ; \
 		if [ ! -f "$$image/image.mk" ] ; then \
-			echo "The file image.mk is missing in ${CURDIR}/$$image is missing" ; \
+			echo "The file image.mk in ${CURDIR}/$$image is missing" ; \
 			echo "You can initialize if from the folowing tempate :" ; \
 			echo "cp ../$(DFT_BUILDSYSTEM)/templates/image.mk ${CURDIR}/$$image/image.mk" ; \
 			echo "git add ${CURDIR}/$$image/image.mk" ; \
@@ -110,6 +110,17 @@ sanity-check:
 			echo "Please you should read this warning before copy paste it or shell command will fail" ; \
 			echo "You have to check the image type in board.mk. You may have to change it to firmware, default is rootfs" ; \
 			$(call dft_error ,2005-0311) ; \
+		fi ; \
+		if [ ! -f "$$image/disk-image.yml" ] ; then \
+			echo "The file disk-image.yml is missing in ${CURDIR}/$$image" ; \
+			echo "You can initialize if from the folowing tempate :" ; \
+			echo "cp ../$(DFT_BUILDSYSTEM)/templates/disk-image.yml ${CURDIR}/$$image/" ; \
+			echo "git add ${CURDIR}/$$image/disk-image.yml" ; \
+			echo "make sanity-check" ; \
+			echo "" ; \
+			echo "Please you should read this warning before copy paste it or shell command will fail" ; \
+			echo "You have to check the disk image definition in disk-image.yml. You may have to change partitionning and file names" ; \
+			$(call dft_error ,2005-0817) ; \
 		fi ; \
 	done ; \
 	
