@@ -32,7 +32,7 @@ MAKE_FILTERS  := Makefile workdir README.md .
 
 # Forward sanity-check in subdirs
 sanity-check:
-	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ ! -L "${CURDIR}/$$v/buildsystem" ] ; then \
 			echo "The buildsystem symlink in ${CURDIR}/$$v/buildsystem is Missing. It should be a symlink to ../buildsystem" ; \
 			echo "You can fix with the following shell commands :" ; \
