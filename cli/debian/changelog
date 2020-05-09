@@ -2,7 +2,7 @@ dft (0.6.16-1) unstable; urgency=low
 
   * Fix typo
 
- -- William Bonnet <wbonnet@theitmakers.com>  Sun, 10 May 2020 00:368:00 +0100
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 10 May 2020 00:38:00 +0100
 
 dft (0.6.13-1) unstable; urgency=low
 
@@ -27,6 +27,7 @@ dft (0.6.10-1) unstable; urgency=low
   * Minor fixes
 
  -- William Bonnet <wbonnet@theitmakers.com>  Mon, 26 Mar 2018 19:25:00 +0100
+
 dft (0.6.9-2) unstable; urgency=low
 
   * Fix version in CLI
