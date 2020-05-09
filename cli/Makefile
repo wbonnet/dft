@@ -48,4 +48,18 @@ test:
 #	Build the debian packages using debuild
 #
 deb-package:
-	idebuild -us -uc -ui
+	pwd ; \
+	ls -l .. \
+	rm -f ../dft_`grep ^dft debian/changelog | head -n 1 | tr \( \  | tr \) \ | tr - \ | awk ' { print $$2 } '`.orig.tar.gz ; \
+	tar cvfz ../dft_`grep ^dft debian/changelog | head -n 1 | tr \( \  | tr \) \ | tr - \ | awk ' { print $$2 } '`.orig.tar.gz * ; \
+	debuild -us -uc -ui ; 
+
+#
+# Target : publish_dft_pkg_to_armwizard_repo
+#
+# Description :
+#
+#	Build if needed the debian packages using debuild and push them to armwizard repository incoming folder
+#
+publish_dft_armwizard: deb-package
+	scp ../dft_*.{deb,build,buildinfo,changes,tar.xz,dsc} ${ARMWIZARD_REPO_USER}@${ARMWIZARD_WEBSERVER}:${DFT_REMOTE_REPO_INCOMING_PATH}/
