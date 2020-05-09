@@ -55,11 +55,12 @@ deb-package:
 	debuild -us -uc -ui ; 
 
 #
-# Target : publish_dft_pkg_to_armwizard_repo
+# Target : publish_dft_to_repo
 #
 # Description :
 #
-#	Build if needed the debian packages using debuild and push them to armwizard repository incoming folder
+#	Build if needed the debian packages using debuild then push to repository repository incoming folder
 #
-publish_dft_armwizard: deb-package
-	scp ../dft_*.{deb,build,buildinfo,changes,tar.xz,dsc} ${ARMWIZARD_REPO_USER}@${ARMWIZARD_WEBSERVER}:${DFT_REMOTE_REPO_INCOMING_PATH}/
+publish_dft_to_repo: deb-package
+	@COPY_LIST="$(shell ls ../dft_*.deb ../dft-*.deb ../dft_*.changes ../dft_*.buildinfo ../dft_*.dsc ../dft_*.debian.tar.xz ../dft_*.orig.tar.gz)" ;  \
+	scp $$COPY_LIST ${DFT_REPO_USER}@${DFT_REPO_SERVER}:${DFT_REPO_INCOMING_PATH} ; \
