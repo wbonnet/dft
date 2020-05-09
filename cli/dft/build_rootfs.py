@@ -205,7 +205,7 @@ class BuildRootFS(CliCommand):
       logging.critical("Error: %s - %s.", exception.filename, exception.strerror)
       exit(1)
 
-    # Flag if someroles has been foundand added to site.yml
+    # Flag if some roles have been found and added to site.yml
     role_has_been_found = False
 
     # Generate the site file including all the roles from rootfs
