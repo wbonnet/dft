@@ -39,3 +39,13 @@ tests: test
 
 test:
 	nosetests
+
+#
+# Target : deb-package
+#
+# Description :
+#
+#	Build the debian packages using debuild
+#
+deb-package:
+	idebuild -us -uc -ui
