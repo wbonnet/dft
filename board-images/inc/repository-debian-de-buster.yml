@@ -27,13 +27,13 @@ distributions:
     - name: 'buster'
       architectures: [ 'amd64' , 'mips' , 'armel' , 'armhf' , 'arm64' , 'i386' ]
       repositories:
-        - url: 'http://ftp.fr.debian.org/debian/'
+        - url: 'http://ftp.de.debian.org/debian/'
           suite: 'buster'
           sections: [ 'main' , 'contrib' , 'non-free' ]
-        - url: 'http://ftp.fr.debian.org/debian-security/'
+        - url: 'http://ftp.de.debian.org/debian-security/'
           suite: 'buster/updates'
           sections: [ 'main', 'contrib', 'non-free' ]
-        - url: 'http://ftp.fr.debian.org/debian/'
+        - url: 'http://ftp.de.debian.org/debian/'
           suite: 'buster-updates'
           sections: [ 'main', 'contrib', 'non-free' ]
 
