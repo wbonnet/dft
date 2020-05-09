@@ -66,7 +66,7 @@ class BuildRootFS(CliCommand):
     CliCommand.__init__(self, dft, project)
 
     # Path to the ansible roles under dft_base
-    self.ansible_role_sdir = project.get_dft_base()  + "/ansible-roles"
+    self.ansible_roles_dir = project.get_dft_base()  + "/ansible-roles"
 
     # Set the log level from the configuration
     print("setting logs " + project.dft.log_level)
