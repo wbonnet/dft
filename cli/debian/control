@@ -16,6 +16,7 @@ Architecture: all
 Depends: ${misc:Depends},
          ${python3:Depends},
          python3-parted,
+	 pypy3-lib,
          python3-yaml,
          debootstrap,
          ansible,
