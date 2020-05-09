@@ -1,1 +1,1 @@
-../../../bsp-packages/single-board-computer/raspberry-pi0-wifi/board.mk
+../../../bsp-packages/single-board-computer/raspberry-pi0w/board.mk
