@@ -1,3 +1,9 @@
+dft (0.6.13-1) unstable; urgency=low
+
+  * Add missing dependency to python3-distutils, remove depends to pypy3-lib
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 09 May 2020 21:54:00 +0100
+
 dft (0.6.12-1) unstable; urgency=low
 
   * Add missing dependency to pypy3-lib
