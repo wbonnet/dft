@@ -69,6 +69,7 @@ configuration:
   # of rootfs generation process. Default value is False
   # remove_validity_check: False
 
+  keep_bootstrap_files: true
 
 # ----------------------------------------------------------------------------
 #
@@ -97,11 +98,11 @@ project_definition:
 
   # Definition of the repositories to use
   repositories:
-    - inc/repository-debian-de-buster.yml
+    - repository-debian.yml
 
   # Definition of the rootfs content
   rootfs:
-    - inc/rootfs-netshell.yml
+    - rootfs-netshell.yml
 
   # Definition of the image structure
   image:
@@ -109,7 +110,7 @@ project_definition:
 
   # Definition of the variables to be passed to rootfs creation
   variables:
-    - inc/variables-netshell.yml
+    - variables-netshell.yml
     - board-variables.yml
 
   # Definition of the list of targets, with architectures, versions and optionaly board.
