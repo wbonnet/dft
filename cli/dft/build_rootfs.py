@@ -66,7 +66,7 @@ class BuildRootFS(CliCommand):
     CliCommand.__init__(self, dft, project)
 
     # Path to the ansible roles under dft_base
-    self.ansible_dir = project.get_dft_base()  + "/ansible"
+    self.ansible_role_sdir = project.get_dft_base()  + "/ansible-roles"
 
     # Set the log level from the configuration
     print("setting logs " + project.dft.log_level)
@@ -89,7 +89,7 @@ class BuildRootFS(CliCommand):
     """
 
     # Check that DFT path is valid
-    if not os.path.isdir(self.ansible_dir):
+    if not os.path.isdir(self.ansible_roles_dir):
       logging.critical("Path to DFT installation is not valid : %s. Ansible directory is missing",
                        self.project.get_dft_base())
       exit(1)
@@ -173,9 +173,9 @@ class BuildRootFS(CliCommand):
         logging.debug("dft_bootstrap already exist under " + dft_target_path)
 
       # Copy the DFT toolkit content to the target rootfs
-      for copy_target in os.listdir(self.ansible_dir):
+      for copy_target in os.listdir(self.ansible_roles_dir):
         logging.debug("Copy the DFT toolkit : preparing to copy " + copy_target)
-        copy_target_path = os.path.join(self.ansible_dir, copy_target)
+        copy_target_path = os.path.join(self.ansible_roles_dir, copy_target)
         if os.path.isfile(copy_target_path):
           logging.debug("copying file " + copy_target_path + " => " + dft_target_path)
           file_util.copy_file(copy_target_path, dft_target_path)
