@@ -38,19 +38,39 @@
   user: name="{{ item.name }}"
         password="{{ item.password_hash }}"
         createhome="{{ item.createhome }}"
-        comment="{{ item.comment | default(omit) }}"
+        {% if item.comment is defined %}
+        comment="{{ item.comment }}"
+        {% endif %}
         home="{{ item.home }}"
-        append="{{ item.append | default(omit)}}"
+        {% if item.append is defined %}
+        append="{{ item.append }}"
+        {% endif %}
         group="{{ item.group }}"
-        groups="{{ item.groups| default(omit) }}"
+        {% if item.groups is defined %}
+        groups="{{ item.groups }}"
+        {% endif %}
         shell="{{ item.shell }}"
+        {% if item.skeleton is defined %}
         skeleton="{{ item.skeleton | default(omit) }}"
+        {% endif %}
+        {% if item.ssh_key_bits is defined %}
         ssh_key_bits="{{ item.ssh_key_bits | default(omit) }}"
+        {% endif %}
+        {% if item.ssh_key_comment is defined %}
         ssh_key_comment="{{ item.ssh_key_comment | default(omit) }}"
+        {% endif %}
+        {% if item.ssh_key_file is defined %}
         ssh_key_file="{{ item.ssh_key_file | default(omit) }}"
+        {% endif %}
+        {% if item.ssh_key_passphrase is defined %}
         ssh_key_passphrase="{{ item.ssh_key_passphrase| default(omit)  }}"
+        {% endif %}
+        {% if item.ssh_key_type is defined %}
         ssh_key_type="{{ item.ssh_key_type| default(omit)  }}"
+        {% endif %}
+        {% if item.generate_ssh_key is defined %}
         generate_ssh_key="{{ item.generate_ssh_key | default ('no') }}"
+        {% endif %}
         update_password=always
         state=present
   with_items: "{{ dft_users }}"
