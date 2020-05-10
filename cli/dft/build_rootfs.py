@@ -229,7 +229,7 @@ class BuildRootFS(CliCommand):
                                                  [Key.VARIABLES.value]:
           # Append the file to the site.yml file
           working_file.write("  - " + vars_file + "\n")
-          logging.debug("Adding variables file " + vars_file)
+          logging.info("Adding variables file " + vars_file)
 
           # Complete the path to have a full path on disk (in case of path local
           # to where is located the project file)
@@ -253,7 +253,7 @@ class BuildRootFS(CliCommand):
       for role in self.project.rootfs[Key.ROLES.value]:
         # At least one role has beenfound, flag it
         role_has_been_found = True
-        logging.debug("Adding role " + role)
+        logging.info("Adding role " + role)
         working_file.write("  - " + role + "\n")
 
     # We are done with file generation, close it now
