@@ -360,9 +360,9 @@ Available commands are :
     self.parser.add_argument(Key.OPT_FORCE_KEEP_BOOTSTRAP_FILES.value,
                              action='store_true',
                              dest=Key.FORCE_KEEP_BOOTSTRAP_FILES.value,
-                             help="force to keep files after debootstrap (sequence debug "
-                                  "purpose only, not harmful but you will have to clean "
-                                  "up deboostrap workdir and files by hand)")
+                             help="force to keep files after debootstrap (only for sequence debug "
+                                  "purposes, it cannot be harmful to use it but you will have to"
+                                  "clean up deboostrap workdir and files by hand)")
 
 
 
