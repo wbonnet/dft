@@ -1,0 +1,315 @@
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2016 DFT project (http://www.firmwaretoolkit.org).
+# All rights reserved. Use is subject to license terms.
+#
+#
+# Contributors list :
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#
+#
+
+#
+# Defines the default values used to initialize shorewall iptable frontend
+#
+# dft_shorewall:
+  #
+  # This section controls the content of the /etc/default/shorewall file
+  #
+  # default:
+    # set the following varible to 1 in order to allow Shorewall to start
+    # startup: 0
+
+    # If your Shorewall configuration requires detection of the ip address of a ppp
+    # interface, you must list such interfaces in "wait_interface" to get Shorewall
+    # to wait until the interface is configured. Otherwise the script will fail
+    # because it won't be able to detect the IP address.
+    #
+    # Example:
+    #    wait_interface: "ppp0"
+    # wait_interface:
+
+    # Global start/restart options
+    # options: ""
+
+    # Start options
+    # start_options: ""
+
+    # Restart options
+    # restart_options: ""
+
+    # Init Log -- Default is /dev/null, use the STARTUP_LOG defined in shorewall.conf
+    # init_log:
+
+    # Set this to 1 to cause '/etc/init.d/shorewall stop' to place the firewall in
+    # a safe state rather than to open it. Default value is 0
+    # safe_stop:
+
+  #
+  # This section controls the content of the /etc/shorewall/params file
+  #
+  # params:
+    # Params contains a list of tuples composed of name and value keys. Each entry
+    # defines a variable
+    # - name: VARIABLE_1
+    #   value: "value of variable 1"
+    # - name: VARIABLE_2
+    #   value: "value of variable 2"
+
+  #
+  # This section controls the content of the /etc/shorewall/policy file
+  #
+  # policy:
+    # policy contains a list of tuples composed of source, dest and policy (all three are
+    # mandatories) and (optionaly) comment, log_level and limit_burst.
+    # Each entry defines a policy line
+    # - comment: "Policy for connections initiated from zone lan"
+    #   source: lan
+    #   dest: net
+    #   policy: ACCEPT
+    # - source: lan
+    #   dest: $FW
+    #   policy: ACCEPT
+
+  #
+  # This section controls the content of the /etc/shorewall/stoppedrules file
+  #
+  # stopped_rules:
+    # stopped_rules list of tuples composed of action, dest and source (all three are mandatories)
+    # and (optionaly) comment, proto dest_port and src_port. Each entry defines a rule to apply
+    # when firewall is in the stopped state
+    # - comment: "Rule 1"
+    #   action: ACCEPT
+    #   source: "eth1:0.0.0.0/0"
+    #   dest: $FW
+    #   proto: proto
+    #   dest_ports: dest_ports
+    #   src_ports: src_ports
+
+  #
+  # This section controls the content of the /etc/shorewall/zones file
+  #
+  # stopped_rules:
+    # zones list of tuple composed of action source and (all three are mandatories)
+    # and (optionaly) comment, proto dest_port and src_port. Each entry defines a rule to apply
+    # when firewall is in the stopped state
+    # - comment: "Rule 1"
+    #   action: ACCEPT
+    #   source: "eth1:0.0.0.0/0"
+    #   dest: $FW
+    #   proto: proto
+    #   dest_ports: dest_ports
+    #   src_ports: src_ports
+
+  #
+  # This section controls the content of the /etc/shorewall/zones file
+  #
+  # zones:
+    # zones list of tuple composed of zone and type (both are mandatories)
+    # and (optionaly) comment, options, in and out. Each entry defines a zone to control
+    # by the  firewall
+    # - comment: "Rule 1"
+    #   zone: fw
+    #   type: firewall
+    #   options: options
+    #   in: in
+    #   out: out
+
+  #
+  # This section controls the content of the /etc/shorewall/masq file
+  #
+  # masq:
+    # masq list of tuple composed of interface and source (both are mandatories)
+    # and (optionaly) address, proto, ports, ipsec and mark. Each entry defines an interface
+    # to be masqueraded by the  firewall
+    # - comment: "Rule 1"
+    #   interface: eth1
+    #   source: eth0
+    #   address: address
+    #   proto: proto
+    #   ipsec: ipsec
+    #   mark: mark
+
+  #
+  # This section controls the content of the /etc/shorewall/interfaces file
+  #
+  # interfaces:
+    # interfaces list of tuple composed of zone, interface, broadcast and options (all mandatories)
+    # Each entry defines an interface to be managed by the  firewall
+    # - comment: "Rule 1"
+    #   zone: net
+    #   interface: eth0
+    #   broadcast: detect
+    #   options: tcpflags,dhcp,nosmurfs,routefilter
+
+  #
+  # This section controls the content of the /etc/shorewall/rules file
+  #
+  # rules:
+    # rules list of tuple composed of action, source and dest (all mandatories) plus proto
+    # dest_port, source_port, original_dest, rate_limit and mark (optinal values)
+    # Each entry defines a rule applied by the firewall
+    # - comment: "Rule 1"
+    #   action: action
+    #   source: source
+    #   dest: dest
+    #   proto: proto
+    #   dest_port: dest_port
+    #   source_port: source_port
+    #   original_dest: original_dest
+    #   rate_limit: rate_limit
+    #   mark: mark
+
+  #
+  # This section controls the content of the /etc/shorewall/shorewall.conf file
+  #
+  # shorewall_conf:
+  #   # General configuration
+  #   startup_enabled:
+  #   verbosity:
+  #   pager:
+  #   firewall:
+
+  #   # Logging
+  #   blacklist_log_level:
+  #   invalid_log_level:
+  #   log_backend:
+  #   log_martians:
+  #   log_verbosity:
+  #   logallnew:
+  #   logfile:
+  #   logformat:
+  #   logtagonly:
+  #   loglimit:
+  #   maclist_log_level:
+  #   related_log_level:
+  #   pfilter_log_level:
+  #   sfilter_log_level:
+  #   smurf_log_level:
+  #   startup_log:
+  #   tcp_flags_log_level:
+  #   untracked_log_level:
+
+  #   # Location offiles and directories
+  #   arptables:
+  #   config_path:
+  #   geoipdir:
+  #   iptables:
+  #   ip:
+  #   ipset:
+  #   lockfile:
+  #   modulesdir:
+  #   nfacct:
+  #   path:
+  #   perl:
+  #   restorefile:
+  #   shorewall_shell:
+  #   subsyslock:
+  #   tc:
+
+  #   # Default actions & macros
+  #   accept_default:
+  #   drop_default:
+  #   nfqueue_default:
+  #   queue_default:
+  #   reject_default:
+
+  #   # RSH & RCP commands
+  #   rcp_command:
+  #   rsh_command:
+
+  #   # Firewall options
+  #   accounting:
+  #   accounting_table:
+  #   add_ip_aliases:
+  #   add_snat_aliases:
+  #   adminisabsentminded:
+  #   autocomment:
+  #   autohelpers:
+  #   automake:
+  #   basic_filters:
+  #   blacklist:
+  #   chain_scripts:
+  #   clampmss:
+  #   clear_tc:
+  #   complete:
+  #   defer_dns_resolution:
+  #   delete_then_add:
+  #   detect_dnat_ipaddrs:
+  #   disable_ipv6:
+  #   docker:
+  #   dont_load:
+  #   dynamic_blacklist:
+  #   expand_policies:
+  #   exportmodules:
+  #   fastaccept:
+  #   forward_clear_mark:
+  #   helpers:
+  #   ignoreunknownvariables:
+  #   implicit_continue:
+  #   inline_matches:
+  #   ipset_warnings:
+  #   ip_forwarding:
+  #   keep_rt_tables:
+  #   load_helpers_only:
+  #   maclist_table:
+  #   maclist_ttl:
+  #   mangle_enabled:
+  #   mapoldactions:
+  #   mark_in_forward_chain:
+  #   miniupnpd:
+  #   module_suffix:
+  #   multicast:
+  #   mutex_timeout:
+  #   null_route_rfc1918:
+  #   optimize:
+  #   optimize_accounting:
+  #   reject_action:
+  #   require_interface:
+  #   restart:
+  #   restore_default_route:
+  #   restore_routemarks:
+  #   retain_aliases:
+  #   route_filter:
+  #   save_arptables:
+  #   save_ipsets:
+  #   tc_enabled:
+  #   tc_expert:
+  #   tc_priomap:
+  #   track_providers:
+  #   track_rules:
+  #   use_default_rt:
+  #   use_physical_names:
+  #   use_rt_names:
+  #   verbose_messages:
+  #   warnoldcapversion:
+  #   workarounds:
+  #   zero_marks:
+  #   zone2zone:
+
+  #   # Packet disposition
+  #   blacklist_disposition:
+  #   invalid_disposition:
+  #   maclist_disposition:
+  #   related_disposition:
+  #   rpfilter_disposition:
+  #   smurf_disposition:
+  #   sfilter_disposition:
+  #   tcp_flags_disposition:
+  #   untracked_disposition:
+
+  #   # Packet mark layout
+  #   tc_bits:
+  #   provider_bits:
+  #   provider_offset:
+  #   mask_bits:
+  #   zone_bits:

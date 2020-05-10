@@ -57,3 +57,18 @@ configuration:
   # open-source tool)
   # additional_roles:
   # - "/home/bar/examples/redefined-roles"
+  #
+
+  # Defines the debootstrap cache location
+  deboostrap_cachedir: "/home/william/dft-work/debootstrap-cachedir"
+
+  # Defines if an apt proxy should be used inside the chrooted environment
+  activate_chroot_apt_proxy: True
+
+  # Defines the apt-proxy parameters. It must be a string as defined by apt.
+  # It is highly recommanded to use IP adress instead of hostname. According to
+  # the roles you use, hostname resolution inside the chroot may not be
+  # properly configured yeti when proxy will be used. This situation could
+  # lead to cache missi or worst errors.
+  chroot_apt_proxy: "Acquire::http::proxy "http://proxy-sortant:3142";"
+
