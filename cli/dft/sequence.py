@@ -85,14 +85,14 @@ class Sequence(CliCommand):
     # Is there only one sequence and no sequence name argument ? If yes default to this sequence
     if self.dft.sequence_name == Key.DEFAULT_SEQUENCE_NAME.value and \
        len(self.project.project[Key.BUILDING_SEQUENCES.value]):
-      logging.debug("Defaulting to sequence : " + \
+      logging.info("Defaulting to sequence : " + \
                     self.project.project[Key.BUILDING_SEQUENCES.value][0][Key.SEQUENCE_NAME.value])
 
     # Then search the sequence by its name. Use a boolean flag to mark it has been found
     sequence = None
     for seq in self.project.project[Key.BUILDING_SEQUENCES.value]:
       if self.dft.sequence_name == seq[Key.SEQUENCE_NAME.value].lower():
-        logging.debug("Found sequence " + self.dft.sequence_name)
+        logging.info("Found sequence " + self.dft.sequence_name)
         sequence = seq
         break
 
@@ -126,7 +126,7 @@ class Sequence(CliCommand):
     """
 
     # According to the step action, call the method dedicated to execute it
-    logging.debug("Executing step : " + step[Key.ACTION.value])
+    logging.info("Executing step : " + step[Key.ACTION.value])
 
     # Command object used for step processing
     command = None
