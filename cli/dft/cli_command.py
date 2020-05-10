@@ -604,7 +604,8 @@ class CliCommand(object):
           # Defines the file name and content for armbian APT sources
           logging.debug("Using Armbian repo as source provider. Adding armbian.list")
           filepath += "armbian_repository.list"
-          working_file.write("deb http://apt.armbian.com jessie main utils jessie-desktop\n")
+          working_file.write("deb https://apt.armbian.com " + version )
+          working_file.write(" main utils " + version +"-desktop\n")
 
           # Check if the public key of the repository is defined in the BSP file, otherwise
           # Set the default value of the key
@@ -619,8 +620,8 @@ class CliCommand(object):
           # Defines the file name and content for armbian APT sources
           logging.debug("Using ArmWizard repo as source provider. Adding armwizard.list")
           filepath += "armwizard_repository.list"
-          working_file.write("deb http://apt.armwizard.org/armwizard " + version)
-          working_file.write(" bsp\n")
+          working_file.write("deb https://apt.armwizard.org/armwizard " + version)
+          working_file.write(" main armwizard\n")
 
           # Check if the public key of the repository is defined in the BSP file, otherwise
           # Set the default value of the key
