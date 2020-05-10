@@ -353,6 +353,17 @@ Available commands are :
                              choices=['debug', 'info', 'warning', 'error', 'critical'],
                              help="defines the minimal log level. Default value is  warning")
 
+    # During installation ansible files from DFT toolkit are copied to
+    # /dft_bootstrap in the target rootfs. This option prevents DFT from
+    # removing these files. This is useful to debug ansible stuff and
+    # replay an playbooks at will
+    self.parser.add_argument(Key.OPT_FORCE_KEEP_BOOTSTRAP_FILES.value,
+                             action='store_true',
+                             dest=Key.FORCE_KEEP_BOOTSTRAP_FILES.value,
+                             help="force to keep files after debootstrap (sequence debug "
+                                  "purpose only, not harmful but you will have to clean "
+                                  "up deboostrap workdir and files by hand)")
+
 
 
   # -------------------------------------------------------------------------
