@@ -1,8 +1,0 @@
-{% for repo in item.repositories %}
-{%if repo.deb is not defined or repo.deb %}
-deb {{ repo.url }} {{ repo.suite }} {{ repo.sections }}
-{% endif %}
-{%if repo.debsrc is defined and repo.debsrc %}
-deb-src {{ repo.url }} {{ repo.suite }} {{ repo.sections }}
-{% endif %}
-{% endfor %}

@@ -1,7 +1,0 @@
-dft_lighttpd_document_root: "/var/www/html"
-dft_lighttpd_server_uploaddirs: "/var/cache/lighttpd/uploads"
-dft_lighttpd_server_errorlog: "/var/log/lighttpd/error.log"
-dft_lighttpd_server_pidfile: "/var/run/lighttpd.pid"
-dft_lighttpd_server_username: "www-data"
-dft_lighttpd_server_groupname: "www-data"
-dft_lighttpd_server_port: 80
