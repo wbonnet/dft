@@ -171,6 +171,7 @@ class Key(Enum):
   INSTALLATION_CONSTRAINT = "installation_constraint"
   INSTALLED_SIZE = "installed_size"
   JSON = "json"
+  FORCE_KEEP_BOOTSTRAP_FILES = "force_keep_bootstrap_files"
   KEEP_BOOTSTRAP_FILES = "keep_bootstrap_files"
   KEEP_ROOTFS_HISTORY = "keep_rootfs_history"
   KEEP_SOURCE = "keep_source"
