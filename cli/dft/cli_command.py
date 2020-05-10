@@ -255,7 +255,7 @@ class CliCommand(object):
     if self.use_qemu_static != True:
       return
 
-    if self.project.dft.keep_bootstrap_files:
+    if self.project.dft.keep_bootstrap_files or self.project.dft.force_keep_bootstrap_files:
       self.project.logging.debug("keep_bootstrap_files is activated, keeping QEMU in " +
                                  self.project.get_rootfs_mountpoint())
       return
