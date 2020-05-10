@@ -92,6 +92,8 @@ class BuildRootFS(CliCommand):
     if not os.path.isdir(self.ansible_roles_dir):
       logging.critical("Path to DFT installation is not valid : %s. Ansible directory is missing",
                        self.project.get_dft_base())
+      logging.critical("self.project.get_dft_base : %s", self.project.get_dft_base())
+      logging.critical("self.ansible_roles_dir : %s", self.ansible_roles_dir)
       exit(1)
 
     # Ensure target rootfs mountpoint exists and is a dir
