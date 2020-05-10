@@ -1,26 +1,8 @@
-dft (0.6.23-1) unstable; urgency=low
+dft (0.6.26-1) unstable; urgency=low
 
   * Fix missing key issue
 
- -- William Bonnet <wbonnet@theitmakers.com>  Sun, 10 May 2020 20:42:00 +0100
-
-dft (0.6.22-1) unstable; urgency=low
-
-  * Fix missing key issue
-
- -- William Bonnet <wbonnet@theitmakers.com>  Sun, 10 May 2020 19:47:00 +0100
-
-dft (0.6.21-1) unstable; urgency=low
-
-  * Fix user creation missing default role values
-
- -- William Bonnet <wbonnet@theitmakers.com>  Sun, 10 May 2020 19:40:00 +0100
-
-dft (0.6.20-1) unstable; urgency=low
-
-  * Fix user creation missing default role values
-
- -- William Bonnet <wbonnet@theitmakers.com>  Sun, 10 May 2020 19:32:00 +0100
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 10 May 2020 21:00:00 +0100
 
 dft (0.6.19-1) unstable; urgency=low
 
