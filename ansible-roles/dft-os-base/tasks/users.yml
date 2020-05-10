@@ -74,7 +74,7 @@
         update_password=always
         state=present
   with_items: "{{ dft_users }}"
-  when: dft_users is defined and item.password_hash != None
+  when: dft_users is defined and item.password_hash is defined
 
 - name: DFT - Create local users (plaintext password)
   user: name="{{ item.name }}"
@@ -96,7 +96,7 @@
         update_password=always
         state=present
   with_items: "{{ dft_users }}"
-  when: dft_users is defined and item.password_hash != None
+  when: dft_users is defined and item.password_hash is defined
 
 - name: DFT - Copy SSH keys to user directories
   authorized_key:  key="{{ lookup('file', 'files/{{ item.ssh_key_file }}') }}"
@@ -106,4 +106,4 @@
                    exclusive={{ item.ssh_key_are_exclusive | default ('yes') }}
                    key_options={{ item.ssh_key_options | default('') }}
   with_items: "{{ dft_users }}"
-  when: dft_users is defined and item.ssh_key_file != None
+  when: dft_users is defined and item.ssh_key_file is defined
