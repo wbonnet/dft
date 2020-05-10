@@ -269,17 +269,17 @@ class BuildRootFS(CliCommand):
     # Warn the user if no role is found. In such case rootfs will be same
     # debotstrap, which is certainly not what is expected
     if not role_has_been_found:
-      logging.warning("No role has been found in rootfs definition. Rootfs is same as debootstrap \
-                       output")
+      logging.warning("No role has been found in the rootfs content definition. The generated \
+                       rootfs contains only debootstrap default output")
       logging.error("You may wish to have a look to : " + self.project.generate_def_file_path(\
                       self.project.project[Key.PROJECT_DEFINITION.value][Key.ROOTFS.value][0]))
 
     # Generate the command line to execute Ansible in the chrooted environment
     # The HOME variable is redefined to prevent creation of an extra dir in home of the chroot
-    logging.info("running ansible")
+    logging.info("now running ansible-playbook to deploy packages and roles inside the chrooted environment")
     command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
     command += " /bin/bash -c \"cd /dft_bootstrap && HOME=/root /usr/bin/ansible-playbook -i"
-    command += " inventory.yml -c local site.yml\""
+    command += " inventory.yml -c local site.yml -e ansible_python_interpreter=/usr/bin/python3\""
     self.execute_command(command)
 
     # Depending on Ansible version, a .rnd file and two directories may be left in /root
