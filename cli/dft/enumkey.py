@@ -222,6 +222,7 @@ class Key(Enum):
   OPT_CONTENT_VULNERABILITIES = "--generate-vulnerabilities-information"
   OPT_HELP_LABEL = "Command to execute"
   OPT_KEEP_BOOTSTRAP_FILES = "--keep-bootstrap-files"
+  OPT_FORCE_KEEP_BOOTSTRAP_FILES = "--force-keep-bootstrap-files"
   OPT_LOG_LEVEL = "--log-level"
   OPT_OVERRIDE_DEBIAN_MIRROR = "--override-debian-mirror"
   OPT_PROJECT_FILE = "--project"

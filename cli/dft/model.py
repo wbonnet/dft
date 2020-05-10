@@ -69,10 +69,15 @@ class Configuration(object):
     self.working_directory = None
 
     # During installation ansible files from DFT toolkit are copied to
-    # /dft_bootstrap in the target rootfs. This falgs prevents DFT from
+    # /dft_bootstrap in the target rootfs. This flag prevents DFT from
     # removing these files if set to True. This is useful to debug
     # ansible stuff and replay an playbooks at will
     self.keep_bootstrap_files = False
+
+    # Force to keep bootstrap files after rootfs creation. This argument
+    # is valid in all commands target not only build_rootfs that it will
+    # be overridden
+    self.force_keep_bootstrap_files = False
 
     # Initialize members used in configuration
     self.project_name = None
