@@ -1,6 +1,12 @@
+dft (0.6.33-1) unstable; urgency=low
+
+  * Update Arwmwizard pubkey
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 11 May 2020 18:41:00 +0100
+
 dft (0.6.32-1) unstable; urgency=low
 
-  * Update ubutun keyserver url
+  * Update ubuntu keyserver url
 
  -- William Bonnet <wbonnet@theitmakers.com>  Mon, 11 May 2020 18:21:00 +0100
 

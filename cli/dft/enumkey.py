@@ -65,7 +65,7 @@ class Key(Enum):
   ARMEL = "armel"
   ARMHF = "armhf"
   ARMWIZARD = "armwizard"
-  ARMWIZARD_SIGNING_PUBKEY = "D43E2EE7A3A57B24"
+  ARMWIZARD_SIGNING_PUBKEY = "C95B44B8013A9CA2"
   ASSEMBLE_FIRMWARE = "assemble_firmware"
   AUFS = "aufs"
   BANK_0 = "bank_0"
