@@ -243,7 +243,7 @@ INSTALL_ARGS    ?= $(ARCH_COMMON_INSTALL_ARGS) $(ARCH_$(shell echo $(BOARD_ARCH)
 
 # debuild configuration
 DEBUILD        = debuild
-DEBUILD_ARGS   = -us -uc
+DEBUILD_ARGS   = --no-sign
 DEBUILD_ENV    = DEBUILD_TGZ_CHECK=no
 
 # ------------------------------------------------------------------------------
