@@ -1812,13 +1812,13 @@ class BuildImage(CliCommand):
 
       # Copy kernel_cmdline_extra_parameters templates to /boot
       os.makedirs(target + "/boot/", exist_ok=True)
-      src = self.project.get_dft_base() + "/scripts/kernel_cmdline_extra_parameters.txt"
+      src = self.project.get_dft_base() + "/cli/scripts/kernel_cmdline_extra_parameters.txt"
       dest = target + "/boot/kernel_cmdline_extra_parameters.txt"
       self.project.logging.debug("Copying " + src + " to " + dest)
       shutil.copyfile(src, dest)
 
       # Copy uEnv.txt templates to /boot
-      src = self.project.get_dft_base() + "/scripts/uEnv.txt"
+      src = self.project.get_dft_base() + "/cli/scripts/uEnv.txt"
       dest = target + "/boot/uEnv.txt"
       self.project.logging.debug("Copying " + src + " to " + dest)
       shutil.copyfile(src, dest)

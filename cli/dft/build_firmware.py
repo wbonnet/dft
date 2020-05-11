@@ -125,7 +125,7 @@ class BuildFirmware(CliCommand):
                                   self.project.firmware[Key.RESILIENCE.value] \
                                                        [Key.RESCUE_IMAGE.value]):
       # Install script in the rootfs
-      src = self.project.get_dft_base() + "/scripts/dft_clean_bootflag"
+      src = self.project.get_dft_base() + "/cli/scripts/dft_clean_bootflag"
       dest = self.project.get_rootfs_mountpoint() + "/usr/bin/dft_clean_bootflag"
 
       self.project.logging.debug("Copying " + src + " to " + dest)
