@@ -1,3 +1,9 @@
+dft (0.6.34-1) unstable; urgency=low
+
+  * Fixe boot script path after directory renaming
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 12 May 2020 00:18:00 +0100
+
 dft (0.6.33-1) unstable; urgency=low
 
   * Update Arwmwizard pubkey
