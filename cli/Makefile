@@ -61,6 +61,6 @@ deb-package:
 #
 #	Build if needed the debian packages using debuild then push to repository repository incoming folder
 #
-publish_dft_to_repo: deb-package
+publish_dft_to_repo: 
 	@COPY_LIST="$(shell ls ../dft_*.deb ../dft-*.deb ../dft_*.changes ../dft_*.buildinfo ../dft_*.dsc ../dft_*.debian.tar.xz ../dft_*.orig.tar.gz)" ;  \
 	scp $$COPY_LIST ${DFT_REPO_USER}@${DFT_REPO_SERVER}:${DFT_REPO_INCOMING_PATH} ; \

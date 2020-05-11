@@ -330,7 +330,7 @@ class CliCommand(object):
 
 #TODO keyserver should be a configuration value
     command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
-    command += " apt-key adv --recv-keys --keyserver keyserver.ubuntu.com " + key
+    command += " apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com " + key
     self.execute_command(command)
 
     # Import the key into GnuPG - It has to be done in three step because
