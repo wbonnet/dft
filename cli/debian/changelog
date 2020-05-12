@@ -1,6 +1,6 @@
 dft (0.6.36-1) unstable; urgency=low
 
-  * Fix regresion on local user creation with plaintext password
+  * Fix regression on local user creation with plaintext password
 
  -- William Bonnet <wbonnet@theitmakers.com>  Wed, 13 May 2020 01:19:00 +0100
 
@@ -231,8 +231,6 @@ dft (0.5.9-4) unstable; urgency=low
   * Add OS Banner
 
  -- William Bonnet <wbonnet@theitmakers.com>  Sat, 23 Dec 2017 19:37:00 +0100
-
-dft (0.5.8-1) unstable; urgency=low
 
 dft (0.5.8-1) unstable; urgency=low
 
