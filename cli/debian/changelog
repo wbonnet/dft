@@ -1,6 +1,12 @@
+dft (0.6.36-1) unstable; urgency=low
+
+  * Fix regresion on local user creation with plaintext password
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 13 May 2020 01:19:00 +0100
+
 dft (0.6.34-1) unstable; urgency=low
 
-  * Fixe boot script path after directory renaming
+  * Fix boot script path after directory renaming
 
  -- William Bonnet <wbonnet@theitmakers.com>  Tue, 12 May 2020 00:18:00 +0100
 
