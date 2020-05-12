@@ -63,4 +63,22 @@ deb-package:
 #
 publish_dft_to_repo: 
 	@COPY_LIST="$(shell ls ../dft_*.deb ../dft-*.deb ../dft_*.changes ../dft_*.buildinfo ../dft_*.dsc ../dft_*.debian.tar.xz ../dft_*.orig.tar.gz)" ;  \
-	scp $$COPY_LIST ${DFT_REPO_USER}@${DFT_REPO_SERVER}:${DFT_REPO_INCOMING_PATH} ; \
+ 	if [ ! "" = "$(DFT_DEB_UPLOAD_PATH)" ] && [ ! "" = "$(DFT_DEB_UPLOAD_USER)" ] && [ ! "" = "$(DFT_DEB_UPLOAD_SERVER)" ] ; then \
+		scp $$COPY_LIST $(DFT_DEB_UPLOAD_USER)@$(DFT_DEB_UPLOAD_SERVER):$(DFT_DEB_UPLOAD_PATH) ; \
+	else \
+		if [ "" = "$(DFT_DEB_UPLOAD_SERVER)" ] ; then \
+		    echo "        Variable DFT_DEB_UPLOAD_SERVER is not set, please define it your shell environment." ; \
+		else \
+	    	echo "        DFT_DEB_UPLOAD_SERVER = $(DFT_DEB_UPLOAD_SERVER)."  ; \
+		fi ; \
+		if [ "" = "$(DFT_DEB_UPLOAD_USER)" ] ; then \
+		    echo "        Variable DFT_DEB_UPLOAD_USER is not set, please define it your shell environment." ; \
+		else \
+	    	echo "        DFT_DEB_UPLOAD_USER = $(DFT_DEB_UPLOAD_USER)."  ; \
+		fi ; \
+		if [ "" = "$(DFT_DEB_UPLOAD_PATH)" ] ; then \
+	    	echo "        Variable DFT_DEB_UPLOAD_PATH is not set, please define it your shell environment." ; \
+		else \
+	    	echo "        DFT_DEB_UPLOAD_PATH = $(DFT_DEB_UPLOAD_PATH)"  ; \
+		fi ; \
+	fi ; \
