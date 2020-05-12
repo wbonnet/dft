@@ -66,31 +66,23 @@ reupload: package pre-reupload do-reupload upload post-repupload
 #
 
 do-upload:
-	@if [ "$(SW_VERSION)" = "" ] ; then \
-		echo "DEBUG : SW_VERSION is empty or undefined. Not at a defined version level skipping upload" ; \
-		exit 73 ; \
-	fi ; 
-	if [ -f $(COOKIE_DIR)/do-upload ] ; then \
-		true ; \
-	else \
-		echo "        running upload"  ; \
-	 	if [ ! "" = "$(DFT_DEB_UPLOAD_PATH)" ] && [ ! "" = "$(DFT_DEB_UPLOAD_SERVER)" ] ; then \
-			scp $(PACKAGE_DIR)/*.deb $(DFT_DEB_UPLOAD_SERVER):$(DFT_DEB_UPLOAD_PATH) ; \
-	 	else \
-	 	    if [ "" = "$(DFT_DEB_UPLOAD_SERVER)" ] ; then \
-			    echo "        Variable DFT_DEB_UPLOAD_SERVER is not set, please define it your shell environment." ; \
-			else \
-			    echo "        DFT_DEB_UPLOAD_SERVER = $(DFT_DEB_UPLOAD_SERVER)."  ; \
-			fi ; \
-	 	    if [ "" = "$(DFT_DEB_UPLOAD_PATH)" ] ; then \
-			    echo "        Variable DFT_DEB_UPLOAD_PATH is not set, please define it your shell environment." ; \ 
-			else \
-			    echo "        DFT_DEB_UPLOAD_PATH = $(DFT_DEB_UPLOAD_PATH)"  ; \
-			fi ; \
-			exit 74 ; \
+	@if [ ! -f $(COOKIE_DIR)/do-upload ] ; then \
+ 	    if [ "" = "$(DFT_DEB_UPLOAD_SERVER)" ] ; then \
+			echo "        Variable DFT_DEB_UPLOAD_SERVER is not set, please define it your shell environment." ; \
+			$(call dft_error ,2005-1201) ; \
+	    fi ; \
+ 	    if [ "" = "$(DFT_DEB_UPLOAD_PATH)" ] ; then \
+			echo "        Variable DFT_DEB_UPLOAD_PATH is not set, please define it your shell environment." ; \
+			$(call dft_error ,2005-1202) ; \
 		fi ; \
-	fi ;
-	@$(TARGET_DONE)
+ 	    if [ "" = "$(DFT_DEB_UPLOAD_USER)" ] ; then \
+			echo "        Variable DFT_DEB_UPLOAD_USER is not set, please define it your shell environment." ; \
+			$(call dft_error ,2005-1203) ; \
+		fi ; \
+	else \
+ 		scp $(WORK_DIR)/*.deb $(WORK_DIR)/*.buildinfo $(WORK_DIR)/*.orig.tar.gz $(WORK_DIR)/*.changes $(DFT_DEB_UPLOAD_USER)@$(DFT_DEB_UPLOAD_SERVER):$(DFT_DEB_UPLOAD_PATH) ; \
+	fi ; 
+	$(TARGET_DONE)
 
 do-reupload:
 	@if [ -f $(COOKIE_DIR)/do-upload ] ; then \

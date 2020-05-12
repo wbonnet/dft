@@ -50,7 +50,7 @@
 # execution returning with provided error code or 1 as default value
 # TODO Handle default error code
 define dft_error =
-echo "DFT ERROR : $1" ; exit 73
+echo "DFT ERROR : $1" && exit 75
 endef
 
 define dft_error_message =
@@ -62,7 +62,7 @@ endef
 # definition of function dft_warning : display a message and continue execution
 #
 define dft_warning =
-echo "DFT warning : $(1)" && [ "$(warning_as_error)" == "1" ] && exit 73
+echo "DFT warning : $(1)" && [ "$(warning_as_error)" == "1" ] && exit 76
 endef
 
 define dft_warning_message =
