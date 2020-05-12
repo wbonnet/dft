@@ -96,7 +96,7 @@
         update_password=always
         state=present
   with_items: "{{ dft_users }}"
-  when: dft_users is defined and item.password_hash is defined
+  when: dft_users is defined and item.password_hash is not defined
 
 - name: DFT - Copy SSH keys to user directories
   authorized_key:  key="{{ lookup('file', 'files/{{ item.ssh_key_file }}') }}"
