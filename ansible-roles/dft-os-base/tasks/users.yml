@@ -38,7 +38,7 @@
   user: name="{{ item.name }}"
         password="{{ item.password_hash }}"
         createhome="{{ item.createhome }}"
-        {% if item.comment != None%}
+        {% if item.comment != None %}
         comment="{{ item.comment }}"
         {% endif %}
         home="{{ item.home }}"
