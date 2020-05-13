@@ -38,37 +38,37 @@
   user: name="{{ item.name }}"
         password="{{ item.password_hash }}"
         createhome="{{ item.createhome }}"
-        {% if item.comment != None %}
+        {% if item.comment is defined and  != None %}
         comment="{{ item.comment }}"
         {% endif %}
         home="{{ item.home }}"
-        {% if item.append != None %}
+        {% if item.append is defined and item.append != None %}
         append="{{ item.append }}"
         {% endif %}
         group="{{ item.group }}"
-        {% if item.groups != None %}
+        {% if item.groupsis defined and item.groups != None %}
         groups="{{ item.groups }}"
         {% endif %}
         shell="{{ item.shell }}"
-        {% if item.skeleton != None %}
+        {% if item.skeleton is defined and item.skeleton != None %}
         skeleton="{{ item.skeleton | default(omit) }}"
         {% endif %}
-        {% if item.ssh_key_bits != None %}
+        {% if item.ssh_key_bits is defined and item.ssh_key_bits != None %}
         ssh_key_bits="{{ item.ssh_key_bits | default(omit) }}"
         {% endif %}
-        {% if item.ssh_key_comment != None %}
+        {% if item.ssh_key_comment is defined and item.ssh_key_comment != None %}
         ssh_key_comment="{{ item.ssh_key_comment | default(omit) }}"
         {% endif %}
-        {% if item.ssh_key_file != None %}
+        {% if  item.ssh_key_file is defined and item.ssh_key_file != None %}
         ssh_key_file="{{ item.ssh_key_file | default(omit) }}"
         {% endif %}
-        {% if item.ssh_key_passphrase != None %}
+        {% if item.ssh_key_passphrase is defined and item.ssh_key_passphrase != None %}
         ssh_key_passphrase="{{ item.ssh_key_passphrase| default(omit)  }}"
         {% endif %}
-        {% if item.ssh_key_type != None %}
+        {% if item.ssh_key_type is defined and item.ssh_key_type != None %}
         ssh_key_type="{{ item.ssh_key_type| default(omit)  }}"
         {% endif %}
-        {% if item.generate_ssh_key != None %}
+        {% if item.generate_ssh_key is defined and item.generate_ssh_key != None %}
         generate_ssh_key="{{ item.generate_ssh_key | default ('no') }}"
         {% endif %}
         update_password=always
@@ -80,37 +80,37 @@
   user: name="{{ item.name }}"
         password="{{ item.password | password_hash('sha512') }}"
         createhome="{{ item.createhome }}"
-        {% if item.comment != None %}
+        {% if item.comment is defined and  != None %}
         comment="{{ item.comment }}"
         {% endif %}
         home="{{ item.home }}"
-        {% if item.append != None %}
+        {% if item.append is defined and item.append != None %}
         append="{{ item.append }}"
         {% endif %}
         group="{{ item.group }}"
-        {% if item.groups != None %}
+        {% if item.groupsis defined and item.groups != None %}
         groups="{{ item.groups }}"
         {% endif %}
         shell="{{ item.shell }}"
-        {% if item.skeleton != None %}
+        {% if item.skeleton is defined and item.skeleton != None %}
         skeleton="{{ item.skeleton | default(omit) }}"
         {% endif %}
-        {% if item.ssh_key_bits != None %}
+        {% if item.ssh_key_bits is defined and item.ssh_key_bits != None %}
         ssh_key_bits="{{ item.ssh_key_bits | default(omit) }}"
         {% endif %}
-        {% if item.ssh_key_comment != None %}
+        {% if item.ssh_key_comment is defined and item.ssh_key_comment != None %}
         ssh_key_comment="{{ item.ssh_key_comment | default(omit) }}"
         {% endif %}
-        {% if item.ssh_key_file != None %}
+        {% if  item.ssh_key_file is defined and item.ssh_key_file != None %}
         ssh_key_file="{{ item.ssh_key_file | default(omit) }}"
         {% endif %}
-        {% if item.ssh_key_passphrase != None %}
+        {% if item.ssh_key_passphrase is defined and item.ssh_key_passphrase != None %}
         ssh_key_passphrase="{{ item.ssh_key_passphrase| default(omit)  }}"
         {% endif %}
-        {% if item.ssh_key_type != None %}
+        {% if item.ssh_key_type is defined and item.ssh_key_type != None %}
         ssh_key_type="{{ item.ssh_key_type| default(omit)  }}"
         {% endif %}
-        {% if item.generate_ssh_key != None %}
+        {% if item.generate_ssh_key is defined and item.generate_ssh_key != None %}
         generate_ssh_key="{{ item.generate_ssh_key | default ('no') }}"
         {% endif %}
         update_password=always
