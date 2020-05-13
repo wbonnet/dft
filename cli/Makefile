@@ -62,7 +62,8 @@ deb-package:
 #	Build if needed the debian packages using debuild then push to repository repository incoming folder
 #
 publish_dft_to_repo:
-	@if [ ! "" = "$(DFT_DEB_UPLOAD_PATH)" ] && [ ! "" = "$(DFT_DEB_UPLOAD_USER)" ] && [ ! "" = "$(DFT_DEB_UPLOAD_SERVER)" ] ; then \
+	@COPY_LIST="$(shell ls ../dft_*.deb ../dft-*.deb ../dft_*.changes ../dft_*.buildinfo ../dft_*.dsc ../dft_*.debian.tar.xz ../dft_*.orig.tar.gz)" ;  \
+	if [ ! "" = "$(DFT_DEB_UPLOAD_PATH)" ] && [ ! "" = "$(DFT_DEB_UPLOAD_USER)" ] && [ ! "" = "$(DFT_DEB_UPLOAD_SERVER)" ] ; then \
 		scp $$COPY_LIST $(DFT_DEB_UPLOAD_USER)@$(DFT_DEB_UPLOAD_SERVER):$(DFT_DEB_UPLOAD_PATH) ; \
 	else \
 		if [ "" = "$(DFT_DEB_UPLOAD_SERVER)" ] ; then \
