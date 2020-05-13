@@ -52,7 +52,7 @@ deb-package:
 	ls -l .. \
 	rm -f ../dft_`grep ^dft debian/changelog | head -n 1 | tr \( \  | tr \) \ | tr - \ | awk ' { print $$2 } '`.orig.tar.gz ; \
 	tar cvfz ../dft_`grep ^dft debian/changelog | head -n 1 | tr \( \  | tr \) \ | tr - \ | awk ' { print $$2 } '`.orig.tar.gz * ; \
-	debuild -us -uc -ui ; 
+	debuild -us -uc -ui ;
 
 #
 # Target : publish_dft_to_repo
@@ -61,8 +61,7 @@ deb-package:
 #
 #	Build if needed the debian packages using debuild then push to repository repository incoming folder
 #
-publish_dft_to_repo: 
-	@COPY_LIST="$(shell ls ../dft_*.deb ../dft-*.deb ../dft_*.changes ../dft_*.buildinfo ../dft_*.dsc ../dft_*.debian.tar.xz ../dft_*.orig.tar.gz)" ;  \
+publish_dft_to_repo:
  	if [ ! "" = "$(DFT_DEB_UPLOAD_PATH)" ] && [ ! "" = "$(DFT_DEB_UPLOAD_USER)" ] && [ ! "" = "$(DFT_DEB_UPLOAD_SERVER)" ] ; then \
 		scp $$COPY_LIST $(DFT_DEB_UPLOAD_USER)@$(DFT_DEB_UPLOAD_SERVER):$(DFT_DEB_UPLOAD_PATH) ; \
 	else \
@@ -82,3 +81,4 @@ publish_dft_to_repo:
 	    	echo "        DFT_DEB_UPLOAD_PATH = $(DFT_DEB_UPLOAD_PATH)"  ; \
 		fi ; \
 	fi ; \
+	scp $$COPY_LIST ${DFT_DEB_UPLOAD_USER}@${DFT_DEB_UPLOAD_SERVER}:${DFT_DEB_UPLOAD_PATH} ; \
