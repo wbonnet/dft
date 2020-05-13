@@ -1,3 +1,9 @@
+dft (0.6.42-1) unstable; urgency=low
+
+  * Add missing locales env var to ansible playbook call"
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 13 May 2020 21:43:00 +0100
+
 dft (0.6.41-1) unstable; urgency=low
 
   * iNeed both is defined and non test
