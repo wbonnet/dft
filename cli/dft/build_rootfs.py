@@ -277,7 +277,7 @@ class BuildRootFS(CliCommand):
     # Generate the command line to execute Ansible in the chrooted environment
     # The HOME variable is redefined to prevent creation of an extra dir in home of the chroot
     logging.info("now running ansible-playbook to deploy packages and roles inside the chrooted environment")
-    command = "LANG=C chroot " + self.project.get_rootfs_mountpoint()
+    command = "LANG=C LC_MESSAGES=C LC_ALL=C LANGUAGE=C chroot " + self.project.get_rootfs_mountpoint()
     command += " /bin/bash -c \"cd /dft_bootstrap && HOME=/root /usr/bin/ansible-playbook -i"
     command += " inventory.yml -c local site.yml -e ansible_python_interpreter=/usr/bin/python3\""
     self.execute_command(command)
