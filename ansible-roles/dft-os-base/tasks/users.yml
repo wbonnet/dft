@@ -38,7 +38,7 @@
   user: name="{{ item.name }}"
         password="{{ item.password_hash }}"
         createhome="{{ item.createhome }}"
-        {% if item.comment is defined and  != None %}
+        {% if item.comment is defined and item.comment != None %}
         comment="{{ item.comment }}"
         {% endif %}
         home="{{ item.home }}"
@@ -80,7 +80,7 @@
   user: name="{{ item.name }}"
         password="{{ item.password | password_hash('sha512') }}"
         createhome="{{ item.createhome }}"
-        {% if item.comment is defined and  != None %}
+        {% if item.comment is defined and item.comment != None %}
         comment="{{ item.comment }}"
         {% endif %}
         home="{{ item.home }}"
