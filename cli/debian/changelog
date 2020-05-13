@@ -1,3 +1,9 @@
+dft (0.6.43-1) unstable; urgency=low
+
+  * Add missing localadmin home in netshell project"
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 13 May 2020 22:47:00 +0100
+
 dft (0.6.42-1) unstable; urgency=low
 
   * Add missing locales env var to ansible playbook call"
