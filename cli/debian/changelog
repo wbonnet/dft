@@ -1,3 +1,9 @@
+dft (0.6.40-1) unstable; urgency=low
+
+  * iNeed both is defined and non test
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 13 May 2020 19:37:00 +0100
+
 dft (0.6.39-1) unstable; urgency=low
 
   * Fix typo in jinja missing space
