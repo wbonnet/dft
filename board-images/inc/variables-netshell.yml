@@ -7,7 +7,9 @@ dft_groups:
 
 # Create the default user add put it into localadmin group
 dft_users:
-        - { name: "localadmin" , password: "localadmin" , createhome: True , groups: 'localadmin' , group: 'localadmin' , shell: '/bin/bash' , home: '/home/localadmin', comment: 'Local sysadmin'}
+        - { name: "localadmin" , password: "localadmin" , createhome: True , groups: 'localadmin',
+            group: 'localadmin' , shell: '/bin/bash' , home: '/home/localadmin',
+            comment: 'Local sysadmin'}
 
   # Defines specific sudo options, and the list of additional files to add into
 # /etc/sudoers.d
