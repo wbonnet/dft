@@ -60,14 +60,18 @@ do-package:
 					cp -frv --dereference $(PWD)/files $(PACKAGE_DIR)/doc ; \
 				fi ; \
 				if [ "$(SW_NAME)" = "linux" ] ; then \
-					cp -fr --dereference $(DFT_BUILDSYSTEM)/templates/debian-kernel-package $(PACKAGE_DIR)/debian ; \
+					cp -fr --dereference $(DFT_BUILDSYSTEM)/templates/debian-kernel-package/* $(PACKAGE_DIR)/debian ; \
+					pwd ; \
+					echo "DEBUG PLOP 1" ; \
+					echo "PACKAGE_DIR : $(PACKAGE_DIR)" ; \
 					mv  $(PACKAGE_DIR)/debian/linux-kernel.install $(PACKAGE_DIR)/debian/linux-kernel-$(BOARD_NAME).install ; \
-					mv  $(PACKAGE_DIR)/debian/linux_kernel.postinst $(PACKAGE_DIR)/debian/linux-kernel-$(BOARD_NAME).postinst ; \
-					mv  $(PACKAGE_DIR)/debian/linux-kernel.postrm $(PACKAGE_DIR)/debian/linux-kernel-$(BOARD_NAME).postrm ; \
 					mv  $(PACKAGE_DIR)/debian/linux-kernel.preinst $(PACKAGE_DIR)/debian/linux-kernel-$(BOARD_NAME).preinst ; \
+					mv  $(PACKAGE_DIR)/debian/linux-kernel.postinst $(PACKAGE_DIR)/debian/linux-kernel-$(BOARD_NAME).postinst ; \
+					mv  $(PACKAGE_DIR)/debian/linux-kernel.prerm $(PACKAGE_DIR)/debian/linux-kernel-$(BOARD_NAME).prerm ; \
 					mv  $(PACKAGE_DIR)/debian/linux-kernel.postrm $(PACKAGE_DIR)/debian/linux-kernel-$(BOARD_NAME).postrm ; \
+					echo "DEBUG PLOP 22" ; \
 				else \
-					cp -fr $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package $(PACKAGE_DIR)/debian ; \
+					cp -fr $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package/* $(PACKAGE_DIR)/debian ; \
 					mv  $(PACKAGE_DIR)/debian/u-boot.install $(PACKAGE_DIR)/debian/u-boot-$(BOARD_NAME).install ; \
 					mv  $(PACKAGE_DIR)/debian/u-boot.postinst $(PACKAGE_DIR)/debian/u-boot-$(BOARD_NAME).postinst ; \
 					mv  $(PACKAGE_DIR)/debian/u-boot.postrm $(PACKAGE_DIR)/debian/u-boot-$(BOARD_NAME).postrm ; \
