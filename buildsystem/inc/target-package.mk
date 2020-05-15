@@ -48,8 +48,7 @@ SW_VERSION  ?= no-version-at-target-package
 #
 
 do-package:
-	echo "DEBUG : SW_VERSION " $(SW_VERSION) ; \
-	if [ ! "$(SW_VERSION)" = "" ] ; then \
+	@if [ ! "$(SW_VERSION)" = "" ] ; then \
 		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 			echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 		       	echo "Compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
@@ -57,15 +56,11 @@ do-package:
 			echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
 		else \
 			if [ ! -f $(COOKIE_DIR)/do-package ] ; then \
-				echo "DEBUG do-package : je suis dans le PWD :$(PWD)"  ; \
 				if [ "$(SW_NAME)" = "u-boot" ] ; then \
-					echo "DEBUG : je fais cp -frv --dereference $(PWD)/files $(PACKAGE_DIR)/doc" ; \
 					cp -frv --dereference $(PWD)/files $(PACKAGE_DIR)/doc ; \
 				fi ; \
 				if [ "$(SW_NAME)" = "linux" ] ; then \
 					cp -fr --dereference $(DFT_BUILDSYSTEM)/templates/debian-kernel-package $(PACKAGE_DIR)/debian ; \
-					echo "JE DEBUG cp --dereference $(DFT_BUILDSYSTEM)/templates/linux-kernel-version.makefile $(PACKAGE_DIR)/Makefile" ; \
-					echo "DEBUG je vire le call concret a cp --dereference $(DFT_BUILDSYSTEM)/templates/linux-kernel-version.makefile $(PACKAGE_DIR)/Makefile" ; \
 					mv  $(PACKAGE_DIR)/debian/linux-kernel.install $(PACKAGE_DIR)/debian/linux-kernel-$(BOARD_NAME).install ; \
 				else \
 					cp -fr $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package $(PACKAGE_DIR)/debian ; \
@@ -91,14 +86,9 @@ do-package:
 				else \
 					tar cfz ../$(SW_NAME)-$(BOARD_NAME)_$(SW_VERSION).orig.tar.gz * ; \
 				fi ; \
-			else \
-				echo " DEBUG : cookie $(COOKIE_DIR)/$@ already exist, nothing left to do for make do-package" ; \
 			fi ; \
 		fi ; \
 		cd $(PACKAGE_DIR) ; \
-		echo " DEBUG : la jy suis" ; \
-		pwd ; \
-		echo " DEBUG : $(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS)" ; \
 		$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ; \
 	fi ; 
 	$(TARGET_DONE)
