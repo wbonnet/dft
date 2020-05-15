@@ -5,7 +5,7 @@ Maintainer: William Bonnet <wbonnet@theitmakers.com>
 Standards-Version: 3.9.8
 Build-Depends: debhelper (>= 9)
 
-Package: linux-image-jetson-tx1
+Package: linux-kernel-jetson-tx1
 Architecture: any
 Depends: ${misc:Depends},
          kmod, 

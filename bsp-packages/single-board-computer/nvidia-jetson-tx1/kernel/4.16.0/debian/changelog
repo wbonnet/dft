@@ -4,7 +4,7 @@ linux-kernel-jetson-tx1 (4.16.0-1) unstable; urgency=medium
 
  -- William Bonnet <wbonnet@theitmakers.com>  Fri, 06 Apr 2018 08:16:53 +0200
 
-linux-image-jetson-tx1 (4.16.0-1) unstable; urgency=medium
+linux-kernel-jetson-tx1 (4.16.0-1) unstable; urgency=medium
 
   * Initial release.
 

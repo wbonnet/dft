@@ -5,7 +5,7 @@ Maintainer: William Bonnet <wbonnet@theitmakers.com>
 Standards-Version: 3.9.8
 Build-Depends: debhelper (>= 9)
 
-Package: linux-image-odroid-c2
+Package: linux-kernel-odroid-c2
 Architecture: any
 Depends: ${misc:Depends},
          kmod, 

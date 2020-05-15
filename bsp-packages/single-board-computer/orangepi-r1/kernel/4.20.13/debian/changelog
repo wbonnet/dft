@@ -4,7 +4,7 @@ linux-kernel-orangepi-r1 (4.20.13-1) unstable; urgency=medium
 
  -- William Bonnet <wbonnet@theitmakers.com>  Thu, 28 Feb 2019 11:39:14 +0000
 
-linux-image-orangepi-r1 (4.20.13-1) unstable; urgency=medium
+linux-kernel-orangepi-r1 (4.20.13-1) unstable; urgency=medium
 
   * Initial release.
 

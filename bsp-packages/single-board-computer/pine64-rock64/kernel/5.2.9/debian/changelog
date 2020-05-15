@@ -4,7 +4,7 @@ linux-kernel-rock64 (5.2.9-1) unstable; urgency=medium
 
  -- William Bonnet <wbonnet@theitmakers.com>  Sat, 17 Aug 2019 16:55:41 +0200
 
-linux-image-rock64 (5.2.9-1) unstable; urgency=medium
+linux-kernel-rock64 (5.2.9-1) unstable; urgency=medium
 
   * Initial release.
 

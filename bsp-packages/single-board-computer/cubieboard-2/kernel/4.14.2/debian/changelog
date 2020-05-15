@@ -4,7 +4,7 @@ linux-kernel-cubieboard-2 (4.14.2-1) unstable; urgency=medium
 
  -- William Bonnet <wbonnet@theitmakers.com>  Mon, 27 Nov 2017 11:05:13 +0000
 
-linux-image-cubieboard-2 (4.14.2-1) unstable; urgency=medium
+linux-kernel-cubieboard-2 (4.14.2-1) unstable; urgency=medium
 
   * Initial release.
 

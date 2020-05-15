@@ -4,7 +4,7 @@ linux-kernel-odroid-c1-plus (4.16.1-1) unstable; urgency=medium
 
  -- William Bonnet <wbonnet@theitmakers.com>  Tue, 10 Apr 2018 09:47:01 +0200
 
-linux-image-odroid-c1-plus (4.16.1-1) unstable; urgency=medium
+linux-kernel-odroid-c1-plus (4.16.1-1) unstable; urgency=medium
 
   * Initial release.
 

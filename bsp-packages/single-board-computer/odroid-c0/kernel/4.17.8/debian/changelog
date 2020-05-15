@@ -4,7 +4,7 @@ linux-kernel-odroid-c0 (4.17.8-1) unstable; urgency=medium
 
  -- William Bonnet <wbonnet@theitmakers.com>  Fri, 20 Jul 2018 17:25:02 +0200
 
-linux-image-odroid-c0 (4.17.8-1) unstable; urgency=medium
+linux-kernel-odroid-c0 (4.17.8-1) unstable; urgency=medium
 
   * Initial release.
 

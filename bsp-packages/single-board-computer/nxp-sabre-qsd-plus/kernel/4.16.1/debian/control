@@ -5,7 +5,7 @@ Maintainer: William Bonnet <wbonnet@theitmakers.com>
 Standards-Version: 3.9.8
 Build-Depends: debhelper (>= 9)
 
-Package: linux-image-sabre-qsd
+Package: linux-kernel-sabre-qsd
 Architecture: any
 Depends: ${misc:Depends},
          kmod, 

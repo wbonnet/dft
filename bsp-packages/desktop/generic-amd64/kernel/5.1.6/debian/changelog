@@ -4,7 +4,7 @@ linux-kernel-generic-amd64 (5.1.6-1) unstable; urgency=medium
 
  -- William Bonnet <wbonnet@theitmakers.com>  Fri, 31 May 2019 23:50:33 +0200
 
-linux-image-generic-amd64 (5.1.6-1) unstable; urgency=medium
+linux-kernel-generic-amd64 (5.1.6-1) unstable; urgency=medium
 
   * Initial release.
 

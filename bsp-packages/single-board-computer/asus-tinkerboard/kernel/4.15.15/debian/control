@@ -5,7 +5,7 @@ Maintainer: William Bonnet <wbonnet@theitmakers.com>
 Standards-Version: 3.9.8
 Build-Depends: debhelper (>= 9)
 
-Package: linux-image-asus-tinkerboard
+Package: linux-kernel-asus-tinkerboard
 Architecture: any
 Depends: ${misc:Depends},
          kmod, 

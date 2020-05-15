@@ -4,7 +4,7 @@ linux-kernel-nanopi-neo (4.17.8-1) unstable; urgency=medium
 
  -- William Bonnet <wbonnet@theitmakers.com>  Fri, 20 Jul 2018 17:24:59 +0200
 
-linux-image-nanopi-neo (4.17.8-1) unstable; urgency=medium
+linux-kernel-nanopi-neo (4.17.8-1) unstable; urgency=medium
 
   * Initial release.
 

@@ -4,7 +4,7 @@ linux-kernel-raspberry-pi0 (4.16.1-1) unstable; urgency=medium
 
  -- William Bonnet <wbonnet@theitmakers.com>  Tue, 10 Apr 2018 09:46:45 +0200
 
-linux-image-raspberry-pi0 (4.16.1-1) unstable; urgency=medium
+linux-kernel-raspberry-pi0 (4.16.1-1) unstable; urgency=medium
 
   * Initial release.
 

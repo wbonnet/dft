@@ -4,7 +4,7 @@ linux-kernel-nanopi-neo2 (4.16.1-1) unstable; urgency=medium
 
  -- William Bonnet <wbonnet@theitmakers.com>  Tue, 10 Apr 2018 09:46:41 +0200
 
-linux-image-nanopi-neo2 (4.16.1-1) unstable; urgency=medium
+linux-kernel-nanopi-neo2 (4.16.1-1) unstable; urgency=medium
 
   * Initial release.
 

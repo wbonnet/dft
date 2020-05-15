@@ -5,7 +5,7 @@ Maintainer: William Bonnet <wbonnet@theitmakers.com>
 Standards-Version: 3.9.8
 Build-Depends: debhelper (>= 9)
 
-Package: linux-image-orangepi-zero-plus
+Package: linux-kernel-orangepi-zero-plus
 Architecture: any
 Depends: ${misc:Depends},
          kmod, 

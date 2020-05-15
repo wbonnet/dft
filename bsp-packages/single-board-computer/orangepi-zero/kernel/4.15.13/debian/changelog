@@ -4,7 +4,7 @@ linux-kernel-orangepi-zero (4.15.13-1) unstable; urgency=medium
 
  -- William Bonnet <wbonnet@theitmakers.com>  Sun, 25 Mar 2018 19:28:47 +0200
 
-linux-image-orangepi-zero (4.15.13-1) unstable; urgency=medium
+linux-kernel-orangepi-zero (4.15.13-1) unstable; urgency=medium
 
   * Initial release.
 

@@ -4,7 +4,7 @@ linux-kernel-bananapi-r2 (4.16.0-1) unstable; urgency=medium
 
  -- William Bonnet <wbonnet@theitmakers.com>  Fri, 06 Apr 2018 08:16:54 +0200
 
-linux-image-bananapi-r2 (4.16.0-1) unstable; urgency=medium
+linux-kernel-bananapi-r2 (4.16.0-1) unstable; urgency=medium
 
   * Initial release.
 

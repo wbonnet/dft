@@ -4,7 +4,7 @@ linux-kernel-odroid-hc1 (5.0-1) unstable; urgency=medium
 
  -- William Bonnet <wbonnet@theitmakers.com>  Mon, 04 Mar 2019 19:02:54 +0000
 
-linux-image-odroid-hc1 (5.0-1) unstable; urgency=medium
+linux-kernel-odroid-hc1 (5.0-1) unstable; urgency=medium
 
   * Initial release.
 

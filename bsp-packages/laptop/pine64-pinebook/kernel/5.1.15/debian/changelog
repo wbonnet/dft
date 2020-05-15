@@ -4,7 +4,7 @@ linux-kernel-pinebook (5.1.15-1) unstable; urgency=medium
 
  -- William Bonnet <wbonnet@theitmakers.com>  Tue, 25 Jun 2019 09:04:44 +0000
 
-linux-image-pinebook (5.1.15-1) unstable; urgency=medium
+linux-kernel-pinebook (5.1.15-1) unstable; urgency=medium
 
   * Initial release.
 
