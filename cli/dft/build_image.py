@@ -1583,7 +1583,7 @@ class BuildImage(CliCommand):
         script += "rootfs"
       else:
         script += "firmware"
-      script += ".txt"
+      script += ".scr"
 
       # Create a temp file in with the script template is copied in text format. Then we do
       # variables expansion, before generating the binary script into the target file system.
