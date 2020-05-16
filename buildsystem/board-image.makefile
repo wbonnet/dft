@@ -31,7 +31,8 @@ include image.mk
 # Target that call the dft command line tool to build the image
 #
 build-image:
-	sudo dft run_sequence --project project.yml --sequence produce-image  --log-level debug --config-file ~/.dftrc 
+	echo "time commande is only for cache profiling purpose and will be removed soon" ; \
+	time sudo dft run_sequence --project project.yml --sequence produce-image  --log-level debug --config-file ~/.dftrc 
 
 list-images:
 	@echo $(IMAGE_NAME)
