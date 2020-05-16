@@ -542,7 +542,7 @@ class Project(object):
 
             # There is specific file, thus use the default path
             # Build the path to the file containing the BSP definition
-            bsp_file = self.get_bsp_base() + "/boards/" + target[Key.BOARD.value] + ".yml"
+            bsp_file = self.get_bsp_base() + "/blueprint-" + target[Key.BOARD.value] + ".yml"
 
 #FIXME: Does not choose configuration in right order. .dftrc BSP defined path not taken in account
 
