@@ -62,25 +62,6 @@ sanity-check:
 	fi ; 
 	@for image in $(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n') ; do \
 		echo "Checking $(BOARD_NAME) image $$image definition" ; \
-		if [ ! -L "$$image/inc" ] ; then \
-			echo "The inc symlink in ${CURDIR}/$$image is missing. It should be a symlink to ../../../inc" ; \
-			echo "You can fix with the following shell commands :" ; \
-			echo "ln -s ../../../inc ${CURDIR}/$$image/inc" ; \
-			echo "git add ${CURDIR}/$$image/inc" ; \
-			echo "make sanity-check" ; \
-			$(call dft_error ,2005-0816) ; \
-		fi ; \
-		s=`readlink $$image/inc` ; \
-		if [ !  "$$s" = "../../../inc" ] ; then \
-			echo "The inc symlink in $$image must link to ../../../inc" ; \
-			echo "The link currently targets to $$s" ; \
-			echo "You can fix with the following shell commands :" ; \
-			echo "git rm -f ${CURDIR}/$$image/inc || rm -f ${CURDIR}/$$image/inc" ; \
-			echo "ln -s ../../../inc ${CURDIR}/$$image/inc" ; \
-			echo "git add ${CURDIR}/$$image/inc" ; \
-			echo "make sanity-check" ; \
-			$(call dft_error ,2015-0815) ; \
-		fi ; \
 		if [ ! -L "$$image/Makefile" ] ; then \
 			echo "The Makefile symlink in ${CURDIR}/$$image is missing. It should be a symlink to ../$(DFT_BUILDSYSTEM)/board-image.makefile" ; \
 			echo "You can fix with the following shell commands :" ; \
@@ -121,6 +102,22 @@ sanity-check:
 			echo "Please you should read this warning before copy paste it or shell command will fail" ; \
 			echo "You have to check the disk image definition in disk-image.yml. You may have to change partitionning and file names" ; \
 			$(call dft_error ,2005-0817) ; \
+		fi ; \
+		if [ ! -e "$$image/blueprint.yml" ] ; then \
+			echo "The file or symlink blueprint.yml is missing in ${CURDIR}/$$image" ; \
+			echo "You can use the board generic blueprint by creating a symlink :" ; \
+			echo "ln -s ../$(BOARD_NAME)-blueprint.yml ${CURDIR}/$$image/blueprint.yml" ; \
+			echo "git add ${CURDIR}/$$image/blueprint.yml" ; \
+			echo "make sanity-check" ; \
+			echo "" ; \
+			echo "or create a new file using board generic files template" ; \
+			echo "cp ../$(BOARD_NAME)-blueprint.yml ${CURDIR}/$$image/blueprint.yml" ; \
+			echo "git add ${CURDIR}/$$image/blueprint.yml" ; \
+			echo "make sanity-check" ; \
+			echo "" ; \
+			echo "Please you should read this warning before copy paste it or shell command will fail" ; \
+			echo "You have to check the disk image definition in disk-image.yml. You may have to change partitionning and file names" ; \
+			$(call dft_error ,2005-1601) ; \
 		fi ; \
 	done ; \
 	
