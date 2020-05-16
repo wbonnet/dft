@@ -39,7 +39,7 @@
 configuration:
   # Define the filename used when generatig the squashfs file
   # Currently only one file is hqndled
-  filename: raspberry-pi0-wifi.fw
+  filename: raspberry-pi0w.fw
 
 # ----------------------------------------------------------------------------
 #
