@@ -705,7 +705,8 @@ class Project(object):
                       self.dft.configuration[Key.CONFIGURATION.value][Key.BSP_BASE.value]
       else:
         # Global is not defined, then default to /usr/share/bsp value
-        self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value] = self.get_dft_base() + "/bsp"
+        # TODO: self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value] = self.get_dft_base() + "/bsp"
+        self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value] = "../"
 
     # Expand the path starting with ~/
     self.project[Key.CONFIGURATION.value][Key.BSP_BASE.value] = \
