@@ -215,6 +215,7 @@ class Project(object):
 
     self.targets = None
     self.rootfs = None
+    self.bootscript = None
     self.check = None
     self.content_information = None
     self.firmware = None

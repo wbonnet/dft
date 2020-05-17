@@ -1,6 +1,9 @@
 config/dftrc /etc/dft/
-ansible /usr/share/dft
-bsp /usr/share/dft
+../ansible-roles /usr/share/dft
+../board-images /usr/share/dft
+../bsp-packages /usr/share/dft
+../buildsystem /usr/share/dft
+../board-status.yml /usr/share/dft
 library /usr/share/dft
 scripts /usr/share/dft
 bin/* /usr/bin

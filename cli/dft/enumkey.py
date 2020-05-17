@@ -76,6 +76,7 @@ class Key(Enum):
   BOARD = "board"
   BOOTCHAIN = "bootchain"
   BOOTCHAIN_WORKDIR = "bootchain"
+  BOOTSCRIPT = "bootscript"
   BSP = "bsp"
   BSP_BASE = "bsp_base"
   BSP_FILE = "bsp_file"
