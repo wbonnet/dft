@@ -44,6 +44,7 @@ class Key(Enum):
 
   ABSENT = "absent"
   ACTION = "action"
+  ACTIVATE_DEBOOTSTRAP_CACHEDIR = "activate_debootstrap_cachedir"
   ADDITIONAL_BINARIES = "additional_binaries"
   ADDITIONAL_MODULES = "additional_modules"
   ADDITIONAL_ROLES = "additional_roles"
@@ -110,6 +111,7 @@ class Key(Enum):
   DEBIAN = "debian"
   DEBOOTSTRAP_REPOSITORY = "debootstrap_repository"
   DEBOOTSTRAP_TARGET = "minbase"
+  DEBOOTSTRAP_CACHEDIR = "deboostrap_cachedir"
   DEFAULT_CONFIGURATION_FILE = "~/.dftrc"
   DEFAULT_PROJECT_FILE = "project.yml"
   DEFAULT_SEQUENCE_NAME = "__dft_default_sequence__"

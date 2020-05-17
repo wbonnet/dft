@@ -323,7 +323,13 @@ class BuildRootFS(CliCommand):
   #
   # -------------------------------------------------------------------------
   def generate_debootstrap_rootfs(self):
-    """ This method run deboostrap to create the initial rootfs.
+    """ This method run deboostrap to create the initial rootfs. Is is in charge
+    to concatenante debbostrap command line arguments such as acticate cachedir
+    or switche to multi stage bootstrap using qemu depending on host and target
+    arch.
+
+    Finally it configures apt inside the chrooted environnement so that Ansible
+    work at nest stage.
     """
 
     logging.info("generating debootstrap rootfs")
@@ -331,16 +337,22 @@ class BuildRootFS(CliCommand):
     # Generate the base debootstrap command
     debootstrap_command = "debootstrap --no-check-gpg"
 
+    #  Test if a local cache-dir should be used by debootstrap and concatenate path if activated
+    if self.project.get_use_debootstrap_cachedir():
+      debootstrap_command += " --cache-dir=" + self.project.get_debootstrap_cachedir()
+      # Ensure that the cache directory exist
+      os.makedirs(self.project.get_debootstrap_cachedir(), exist_ok=True)
+
     # Check if the target is different from host dpkg arch. If yes, a --arch flag
     # Needs to be appended to debootstrap call. It does not mean that qemu muse be
     # used (64 kernels can run 32 bits userland). QEMU use is checked next
     if self.use_debootstrap_arch:
       debootstrap_command += " --arch=" + self.project.get_target_arch()
 
-      # Add the foreign flag if host and target are different (ie: amd64 and armhf)
-      if self.use_qemu_static:
-        logging.info("running debootstrap stage 1")
-        debootstrap_command += " --foreign"
+    # Add the foreign flag if host and target are different (ie: amd64 and armhf)
+    if self.use_qemu_static:
+      logging.info("running debootstrap stage 1")
+      debootstrap_command += " --foreign"
     else:
       logging.info("running debootstrap")
 
@@ -352,6 +364,8 @@ class BuildRootFS(CliCommand):
     debootstrap_command += self.project.get_rootfs_mountpoint() + " "
     debootstrap_command += self.project.project[Key.PROJECT_DEFINITION.value]\
                                                    [Key.DEBOOTSTRAP_REPOSITORY.value]
+
+    print (debootstrap_command)
 
     # Finally run the subprocess
     self.execute_command(debootstrap_command)

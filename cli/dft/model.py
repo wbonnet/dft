@@ -128,11 +128,11 @@ class Configuration(object):
         # Yes then, load it
         with open(self.filename, 'r') as working_file:
           self.configuration = yaml.load(working_file)
-
+          
           # Now we may have to expand a few paths...
-          # First check if the configurationis really defined
+          # First check if the configuration is really defined
           if self.configuration is not None and Key.CONFIGURATION.value in self.configuration:
-            # Yes then we now have to check one by one th different path to expand
+            # Yes then we now have to check one by one the different path to expand
             # First let's process working_dir
             if Key.WORKING_DIR.value in self.configuration[Key.CONFIGURATION.value]:
               self.configuration[Key.CONFIGURATION.value][Key.WORKING_DIR.value] = \
@@ -226,6 +226,9 @@ class Project(object):
     self.stripping = None
     self.variables = None
 
+    # Cache options (for debootstrap and chrooted env package installation)
+    self.use_debootstrap_cachedir = True
+    self.debootstrap_cachedir = None
 
 
   # ---------------------------------------------------------------------------
@@ -334,7 +337,43 @@ class Project(object):
     # Return what has been generated
     return filename
 
+  # ---------------------------------------------------------------------------
+  #
+  # get_use_debootstrap_cachedir
+  #
+  # ---------------------------------------------------------------------------
+  def get_use_debootstrap_cachedir(self):
+    """ Simple getter to retrieve if the debootstrap cachedir if activated or not.
+    """
 
+    # Return the boolean flag
+    return self.use_debootstrap_cachedir
+
+  # ---------------------------------------------------------------------------
+  #
+  # get_debootstrap_cachedir
+  #
+  # ---------------------------------------------------------------------------
+  def get_debootstrap_cachedir(self):
+    """ Simple getter to retrieve the debootstrap cachedir if activated. If cache
+    use is not activated or path undefined, this method returns /dev/null as
+    cache location to avoid writes to unattended location.
+    """
+
+    # Default safe path is to send cache to dev/null
+    path = "/dev/null"
+
+    # Check if the project path is defined into the project file
+#    if Key.DEBOOTSTRAP_CACHEDIR.value in self.dft.configuration and self.dft.configuration[Key.DEBOOTSTRAP_CACHEDIR.value] is not None:
+    path = self.dft.configuration[Key.CONFIGURATION.value][Key.DEBOOTSTRAP_CACHEDIR.value]
+    if Key.DEBOOTSTRAP_CACHEDIR.value in self.dft.configuration[Key.CONFIGURATION.value]:
+      path = self.dft.configuration[Key.CONFIGURATION.value][Key.DEBOOTSTRAP_CACHEDIR.value]
+
+    # Path has been generated, return it to the caller. This means that the
+    # config contains a value, but it does not mean the directory exist in
+    # the file system, caller hase to create it, this module deals only with
+    # reading parameters from config files
+    return path
 
   # ---------------------------------------------------------------------------
   #

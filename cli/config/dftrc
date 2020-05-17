@@ -18,7 +18,6 @@
 #
 #
 
-
 # ----------------------------------------------------------------------------
 #
 # Definition of the project working directories
@@ -51,16 +50,11 @@ configuration:
   # Path to the dft bsp definition directory. Default value is /usr/share/dft/bsp
   bsp_base: "/usr/share/dft/bsp"
 
-  # Define a list of directories with additional content (roles, playbooks, etc)
-  # which are copied to /dft_bootstrap during rootfs bootstrapping. These paths
-  # contains project specific definition (which are not included in the dft
-  # open-source tool)
-  # additional_roles:
-  # - "/home/bar/examples/redefined-roles"
-  #
+  # Defines if the debootstrap cache dir should be activated
+  activate_debootstrap_cachedir: True
 
   # Defines the debootstrap cache location
-  deboostrap_cachedir: "/home/william/dft-work/debootstrap-cachedir"
+  deboostrap_cachedir: "/var/cache/dft-work/debootstrap-cachedir"
 
   # Defines if an apt proxy should be used inside the chrooted environment
   activate_chroot_apt_proxy: True
@@ -68,7 +62,13 @@ configuration:
   # Defines the apt-proxy parameters. It must be a string as defined by apt.
   # It is highly recommanded to use IP adress instead of hostname. According to
   # the roles you use, hostname resolution inside the chroot may not be
-  # properly configured yeti when proxy will be used. This situation could
+  # properly configured yet when proxy will be used. This situation could
   # lead to cache missi or worst errors.
-  chroot_apt_proxy: "Acquire::http::proxy "http://proxy-sortant:3142";"
+  chroot_apt_proxy: "Acquire::http::proxy \"http://outgoing-proxy:3142\";"
 
+  # Define a list of directories with additional content (roles, playbooks, etc)
+  # which are copied to /dft_bootstrap during rootfs bootstrapping. These paths
+  # contains project specific definition (which are not included in the dft
+  # open-source tool)
+  # additional_roles:
+  # - "/home/bar/examples/redefined-roles"

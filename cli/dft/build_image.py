@@ -1572,6 +1572,14 @@ class BuildImage(CliCommand):
       # Generation is deactivated, just log it
       logging.debug("boot.scr generation was deactivated by configuration")
     else:
+      # Check if the bootscript file template is defined in the project file
+      if self.project.project[Key.PROJECT_DEFINITION.value][Key.BOOTSCRIPT.value]:
+        logging.debug("project.project[Key.PROJECT_DEFINITION.value][Key.BOOTSCRIPT.value] : " + self.project.project[Key.PROJECT_DEFINITION.value][Key.BOOTSCRIPT.value])
+      else:
+        logging.debug("suis dans le else de project.project[Key.PROJECT_DEFINITION.value][Key.BOOTSCRIPT.value]")
+      # Bootscript template name is not defined thus generate default valu based on board name
+      # and image type.
+
       # Defines the name of the script to copy the bootscript to target
       script = self.project.get_bsp_base() + "/bootscripts/"
       script += self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
@@ -1584,6 +1592,9 @@ class BuildImage(CliCommand):
       else:
         script += "firmware"
       script += ".scr"
+
+
+
 
       # Create a temp file in with the script template is copied in text format. Then we do
       # variables expansion, before generating the binary script into the target file system.
