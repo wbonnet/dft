@@ -1,0 +1,315 @@
+
+# ----------------------------------------------------------------------------
+#
+# DFT firmare u-boot script for Generic Board
+#
+# Generation date : __GENERATION_DATE__
+# DFT version     : __DFT_VERSION__
+#
+# ----------------------------------------------------------------------------
+
+
+# ----------------------------------------------------------------------------
+#
+# Environnement section
+#
+# Definition of environment constants. These should not be redefined unless
+# your really know what you are hacking.
+#
+# ----------------------------------------------------------------------------
+
+setenv initrd_file            boot/initrd.img
+setenv fdtfile                boot/${board}-${board_type}.dtb
+setenv image                  boot/zImage
+setenv dft_bank0_bootflag     /dft_bank0_boot_was_dirty
+setenv dft_bank1_bootflag     /dft_bank1_boot_was_dirty
+setenv dft_rescue_bootflag    /dft_rescue_boot_was_dirty
+
+# Set default baudrate to 115200 if not defined
+if itest.s "x${baudrate}" == "x" ; then
+  setenv baudrate 115200
+fi
+
+# Defines the filesystem ype used to store the firmwares.
+setenv fstype                   __FILESYSTEM_TYPE__
+
+# Defines the filesystem ype used to store the firmwares.
+setenv fstype                 __FILESYSTEM_TYPE__
+
+# Defines bank0 storage parameters
+setenv dft_bank0_type           __DFT_BANK0_TYPE__
+setenv dft_bank0_device_uboot   __DFT_BANK0_DEVICE_UBOOT__
+setenv dft_bank0_device_linux   __DFT_BANK0_DEVICE_LINUX__
+setenv dft_bank0_partition      __DFT_BANK0_PARTITION__
+
+# Defines bank1 storage parameters
+setenv dft_bank1_type           __DFT_BANK1_TYPE__
+setenv dft_bank1_device_uboot   __DFT_BANK1_DEVICE_UBOOT__
+setenv dft_bank1_device_linux   __DFT_BANK1_DEVICE_LINUX__
+setenv dft_bank1_partition      __DFT_BANK1_PARTITION__
+
+# Defines rescue storage parameters
+setenv dft_rescue_type          __DFT_RESCUE_TYPE__
+setenv dft_rescue_device_uboot  __DFT_RESCUE_DEVICE_UBOOT__
+setenv dft_rescue_device_linux  __DFT_RESCUE_DEVICE_LINUX__
+setenv dft_rescue_partition     __DFT_RESCUE_PARTITION__
+
+# Defines update storage parameters
+setenv dft_update_type          __DFT_UPDATE_TYPE__
+setenv dft_update_device_uboot  __DFT_UPDATE_DEVICE_UBOOT__
+setenv dft_update_device_linux  __DFT_UPDATE_DEVICE_LINUX__
+setenv dft_update_partition     __DFT_UPDATE_PARTITION__
+
+# Defines failover storage parameters
+setenv dft_failover_type          __DFT_FAILOVER_TYPE__
+setenv dft_failover_device_uboot  __DFT_FAILOVER_DEVICE_UBOOT__
+setenv dft_failover_device_linux  __DFT_FAILOVER_DEVICE_LINUX__
+setenv dft_failover_partition     __DFT_FAILOVER_PARTITION__
+
+# Defines if the rescue partition is used or not
+setenv dft_use_rescue           __DFT_USE_RESCUE__
+
+# Defines if the dual_banks mode is activated
+setenv dft_dual_banks           __DFT_DUAL_BANKS__
+
+# ----------------------------------------------------------------------------
+#
+# Macro definitions
+#
+# ----------------------------------------------------------------------------
+
+#
+# Defines the macro used to load the initrd into memory
+#
+setenv dft_load_initrd '\
+if load ${dft_current_type} ${dft_current_device_uboot}:${dft_current_partition} ${ramdisk_addr_r} ${initrd_file} ; then \
+  setexpr initrd_size ${filesize} \
+  echo "InitRD successully loaded" \
+else \
+  echo "Failed to the InitRD into memory." \
+  echo "Bork ! Bork ! Bork !"\
+fi'
+
+#
+# Defines the macro used to load the DTB into memory
+#
+setenv dft_load_fdt '\
+if load ${dft_current_type} ${dft_current_device_uboot}:${dft_current_partition} ${fdt_addr_r} ${fdtfile} ; then \
+  echo "DTB successully loaded" \
+else \
+  echo "Failed to the DTB into memory." \
+  echo "Bork ! Bork ! Bork !" \
+fi'
+
+#
+# Defines the macro used to load the kernel into memory
+#
+setenv dft_load_kernel '\
+if load ${dft_current_type} ${dft_current_device_uboot}:${dft_current_partition} ${kernel_addr_r} ${image} ; then \
+  echo "Kernel successully loaded" \
+else \
+  echo "Failed to the kernel into memory." \
+  echo "Bork ! Bork ! Bork !" \
+fi'
+
+#
+# Defines the macro used to set the storage root
+#
+setenv set_storage_root '\
+if itest.s "${dft_current_type}" == "mmc" ; then \
+  setenv storage_root  /dev/mmcblk${dft_current_device_linux}p${dft_current_partition} rootwait ro \
+fi'
+
+#
+# Defines the macro used to set the bootargs root
+#
+setenv set_bootargs '\
+  setenv bootargs console=${console} root=${storage_root} rootfstype=${fstype} dft_failover=${dft_kernel_cmdline_failover_flag} \
+'
+
+#
+# Defines the macro used to setup environment and boot the kernel
+#
+setenv boot_firmware '\
+  run set_storage_root ; \
+  run set_bootflags ; \
+  run set_bootargs ; \
+  run save_bootflags ; \
+  run dft_load_fdt ; \
+  run dft_load_kernel ; \
+  run dft_load_initrd ; \
+  bootz ${kernel_addr_r} ${ramdisk_addr_r}:${initrd_size} ${fdt_addr_r} \
+'
+
+#
+# Defines the macro used to save the bootflag on failover partition
+#
+setenv save_bootflags '\
+  save ${dft_failover_type} ${dft_failover_uboot}:${dft_failover_partition} ${scriptaddr} ${dft_current_bootflag} 0 \
+'
+
+#
+# Defines the macro used to set the kernel command line failover arguments
+#
+setenv set_bootflags '\
+  setenv dft_kernel_cmdline_failover_flag "${dft_failover_type}:${dft_failover_device_linux}:${dft_failover_partition}:${dft_current_bootflag}" \
+'
+
+# ----------------------------------------------------------------------------
+#
+# Control environment and set default values in case of first boot ever
+#
+# ----------------------------------------------------------------------------
+
+# Defines the current values for type device and partition only if not existing
+# These are used to load uEnv, kernel, dtb and initrd
+setenv flag_env_modified  0
+if itest.s "x${dft_current_type}" == "x" ; then
+  setenv dft_current_type      __DFT_STORAGE_DEFAULT_TYPE__
+  setenv flag_env_modified     1
+  echo "Variable dft_current_type not yet defined adding its default value => mmc"
+fi
+
+if itest.s "x${dft_current_device_uboot}" == "x" ; then
+  setenv dft_current_device_uboot  __DFT_STORAGE_DEFAULT_DEVICE_UBOOT__
+  setenv flag_env_modified     1
+  echo "Variable dft_current_device_uboot not yet defined adding its default value => 0"
+fi
+
+if itest.s "x${dft_current_device_linux}" == "x" ; then
+  setenv dft_current_device_linux   __DFT_STORAGE_DEFAULT_DEVICE_LINUX__
+  setenv flag_env_modified     1
+  echo "Variable dft_current_device_linux not yet defined adding its default value => 0"
+fi
+
+if itest.s "x${dft_current_partition}" == "x" ; then
+  setenv dft_current_partition __DFT_STORAGE_DEFAULT_PARTITION__
+  setenv flag_env_modified     1
+  echo "Variable dft_current_partition not yet defined adding its default value => 1"
+fi
+
+if itest.s "x${dft_current_bank}" == "x" ; then
+  setenv dft_current_bank      __DFT_STORAGE_DEFAULT_BANK__
+  setenv flag_env_modified     1
+  echo "Variable dft_current_bank not yet defined adding its default value => 1"
+fi
+
+if itest.s "x${dft_current_bootflag}" == "x" ; then
+  setenv dft_current_bootflag  ${dft_bank0_bootflag}
+  setenv flag_env_modified     1
+  echo "Variable dft_current_bootflag not yet defined adding its default value => bank0"
+fi
+
+# Adding a x in variable test prevents errors in case setenv went wrong
+if itest.s "x${flag_env_modified}" == "x1" ; then
+  echo "One or more default variables were defined, environment is now saved"
+  saveenv
+fi
+
+# ----------------------------------------------------------------------------
+#
+# Booting from current active bank
+#
+# ----------------------------------------------------------------------------
+
+# Try to load the flag file from current bank, if it fails then it means that
+# it is either the first boot (flag never created), or that it has been cleared
+# thus the boot was clean. In both case boot process can continue.
+if test -e ${dft_failover_type} ${dft_failover_device_uboot}:${dft_failover_partition} ${dft_current_bootflag} ; then
+  echo "Last boot from bank ${dft_current_bank} was not completed successfully."
+else
+  echo "Booting from bank ${dft_current_bank}"
+  run boot_firmware
+fi
+
+
+# ----------------------------------------------------------------------------
+#
+# Booting from failover bank
+#
+# ----------------------------------------------------------------------------
+
+# Still here ?
+# It means that either the dirty flag was still here, or that the boot failed
+# Which alse means that the flag now exist since it has been created before trying to boot
+# We have to switch bank, if dual banks is activated, and try again exactly the same code
+# once banks switch.
+
+# TODO handle case where bank 2 is activated ? => rescue
+
+# Test if dual banks is activated
+if itest.s "${dft_dual_banks}" == "1" ; then
+  # Yes, thus switch banks. Failover becomes active
+  echo "Switching banks..."
+  if itest.s "${dft_current_bank}" == "0" ; then
+    setenv dft_current_bank           1
+    setenv dft_current_type           ${dft_bank1_type}
+    setenv dft_current_device_uboot   ${dft_bank1_device_uboot}
+    setenv dft_current_device_linux   ${dft_bank1_device_linux}
+    setenv dft_current_partition      ${dft_bank1_partition}
+    setenv dft_current_bootflag       ${dft_bank1_bootflag}
+  else
+    setenv dft_current_bank           0
+    setenv dft_current_type           ${dft_bank0_type}
+    setenv dft_current_device_uboot   ${dft_bank0_device_uboot}
+    setenv dft_current_device_linux   ${dft_bank0_device_linux}
+    setenv dft_current_partition      ${dft_bank0_partition}
+    setenv dft_current_bootflag       ${dft_bank0_bootflag}
+  fi
+
+  # Banks have been switched, need to save env
+  saveenv
+
+  # Try again
+  if test -e ${dft_failover_type} ${dft_failover_device}:${dft_failover_partition} ${dft_current_bootflag} ; then
+    echo "Last boot from bank ${dft_current_bank} was not completed successfully, trying rescue bank..."
+  else
+    echo "Booting from bank ${dft_current_bank}"
+    run boot_firmware
+  fi
+fi
+
+
+# ----------------------------------------------------------------------------
+#
+# Booting from rescue bank
+#
+# ----------------------------------------------------------------------------
+
+# Still still here ?
+# It means that both banks failed and now are flaged as dirty
+# Last thing to try is to boot from rescue, if rescue exist.
+
+# Test if dual bank is activated
+if itest.s "${dft_use_rescue}" == "1" ; then
+  # Switch to rescue bank
+  setenv dft_current_bank           2
+  setenv dft_current_type           ${dft_rescue_type}
+  setenv dft_current_device_uboot   ${dft_rescue_device_uboot}
+  setenv dft_current_device_linux   ${dft_rescue_device_linux}
+  setenv dft_current_partition      ${dft_rescue_partition}
+  setenv dft_current_bootflag       ${dft_rescue_bootflag}
+
+  # Do not make it persistent, it is the catch all thing
+  saveenv
+
+  # And try to boot
+  if test -e ${dft_failover_type} ${dft_failover_device}:${dft_failover_partition} ${dft_current_bootflag} ; then
+    echo "Last boot from rescue bank was not completed successfully. Trying to boot from network..."
+  else
+    echo "Booting from rescue bank..."
+    run boot_firmware
+  fi
+fi
+
+
+# ----------------------------------------------------------------------------
+#
+# Booting from rescue bank failed
+#
+# ----------------------------------------------------------------------------
+
+echo "Failed to boot from rescue bank"
+echo "Bork ! Bork ! Bork !"
+
+reset
