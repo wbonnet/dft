@@ -32,7 +32,7 @@ include image.mk
 #
 build-image:
 	echo "time command is only for cache profiling purpose and will be removed soon" ; \
-	time sudo dft run_sequence --project project.yml --sequence produce-image  --log-level debug --config-file ~/.dftrc 
+	time sudo dft run_sequence --project project.yml --sequence produce-image  --log-level debug --config-file /home/william/.dftrc 
 
 list-images:
 	@echo $(IMAGE_NAME)

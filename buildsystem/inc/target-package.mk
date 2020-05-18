@@ -48,7 +48,7 @@ SW_VERSION  ?= no-version-at-target-package
 #
 
 do-package:
-	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+	if [ ! "$(SW_VERSION)" = "" ] ; then \
 		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 			echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 		       	echo "Compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
@@ -57,26 +57,23 @@ do-package:
 		else \
 			if [ ! -f $(COOKIE_DIR)/do-package ] ; then \
 				if [ "$(SW_NAME)" = "u-boot" ] ; then \
-					cp -frv --dereference $(PWD)/files $(PACKAGE_DIR)/doc ; \
-				fi ; \
-				if [ "$(SW_NAME)" = "linux" ] ; then \
-					cp -fr --dereference $(DFT_BUILDSYSTEM)/templates/debian-kernel-package/* $(PACKAGE_DIR)/debian ; \
-					pwd ; \
-					echo "DEBUG PLOP 1" ; \
-					echo "PACKAGE_DIR : $(PACKAGE_DIR)" ; \
-					mv  $(PACKAGE_DIR)/debian/linux-kernel.install $(PACKAGE_DIR)/debian/linux-kernel-$(BOARD_NAME).install ; \
-					mv  $(PACKAGE_DIR)/debian/linux-kernel.preinst $(PACKAGE_DIR)/debian/linux-kernel-$(BOARD_NAME).preinst ; \
-					mv  $(PACKAGE_DIR)/debian/linux-kernel.postinst $(PACKAGE_DIR)/debian/linux-kernel-$(BOARD_NAME).postinst ; \
-					mv  $(PACKAGE_DIR)/debian/linux-kernel.prerm $(PACKAGE_DIR)/debian/linux-kernel-$(BOARD_NAME).prerm ; \
-					mv  $(PACKAGE_DIR)/debian/linux-kernel.postrm $(PACKAGE_DIR)/debian/linux-kernel-$(BOARD_NAME).postrm ; \
-					echo "DEBUG PLOP 22" ; \
-				else \
-					cp -fr $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package/* $(PACKAGE_DIR)/debian ; \
+					mkdir $(PACKAGE_DIR)/debian ; \
+					cp -fr --dereference $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package/* $(PACKAGE_DIR)/debian ; \
 					mv  $(PACKAGE_DIR)/debian/u-boot.install $(PACKAGE_DIR)/debian/u-boot-$(BOARD_NAME).install ; \
 					mv  $(PACKAGE_DIR)/debian/u-boot.postinst $(PACKAGE_DIR)/debian/u-boot-$(BOARD_NAME).postinst ; \
 					mv  $(PACKAGE_DIR)/debian/u-boot.postrm $(PACKAGE_DIR)/debian/u-boot-$(BOARD_NAME).postrm ; \
 					mv  $(PACKAGE_DIR)/debian/u-boot.preinst $(PACKAGE_DIR)/debian/u-boot-$(BOARD_NAME).preinst ; \
 					mv  $(PACKAGE_DIR)/debian/u-boot.postrm $(PACKAGE_DIR)/debian/u-boot-$(BOARD_NAME).postrm ; \
+					cp -frv --dereference $(PWD)/files $(PACKAGE_DIR)/doc ; \
+				fi ; \
+				if [ "$(SW_NAME)" = "linux" ] ; then \
+					mkdir $(PACKAGE_DIR)/debian ; \
+					cp -fr --dereference $(DFT_BUILDSYSTEM)/templates/debian-linux-kernel-package/* $(PACKAGE_DIR)/debian ; \
+					mv  $(PACKAGE_DIR)/debian/linux-kernel.install $(PACKAGE_DIR)/debian/linux-kernel-$(BOARD_NAME).install ; \
+					mv  $(PACKAGE_DIR)/debian/linux-kernel.preinst $(PACKAGE_DIR)/debian/linux-kernel-$(BOARD_NAME).preinst ; \
+					mv  $(PACKAGE_DIR)/debian/linux-kernel.postinst $(PACKAGE_DIR)/debian/linux-kernel-$(BOARD_NAME).postinst ; \
+					mv  $(PACKAGE_DIR)/debian/linux-kernel.prerm $(PACKAGE_DIR)/debian/linux-kernel-$(BOARD_NAME).prerm ; \
+					mv  $(PACKAGE_DIR)/debian/linux-kernel.postrm $(PACKAGE_DIR)/debian/linux-kernel-$(BOARD_NAME).postrm ; \
 				fi ; \
 				if [ "$(DEBEMAIL)" = "" ] ; then \
 					find $(PACKAGE_DIR)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/unknown/g" ; \
