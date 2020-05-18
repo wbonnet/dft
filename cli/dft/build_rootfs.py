@@ -365,8 +365,6 @@ class BuildRootFS(CliCommand):
     debootstrap_command += self.project.project[Key.PROJECT_DEFINITION.value]\
                                                    [Key.DEBOOTSTRAP_REPOSITORY.value]
 
-    print (debootstrap_command)
-
     # Finally run the subprocess
     self.execute_command(debootstrap_command)
 
