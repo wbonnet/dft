@@ -128,7 +128,7 @@ class Configuration(object):
         # Yes then, load it
         with open(self.filename, 'r') as working_file:
           self.configuration = yaml.load(working_file)
-          
+
           # Now we may have to expand a few paths...
           # First check if the configuration is really defined
           if self.configuration is not None and Key.CONFIGURATION.value in self.configuration:
@@ -227,7 +227,7 @@ class Project(object):
     self.variables = None
 
     # Cache options (for debootstrap and chrooted env package installation)
-    self.use_debootstrap_cachedir = True
+    self.use_debootstrap_cachedir = False
     self.debootstrap_cachedir = None
 
 
@@ -365,9 +365,10 @@ class Project(object):
 
     # Check if the project path is defined into the project file
 #    if Key.DEBOOTSTRAP_CACHEDIR.value in self.dft.configuration and self.dft.configuration[Key.DEBOOTSTRAP_CACHEDIR.value] is not None:
-    path = self.dft.configuration[Key.CONFIGURATION.value][Key.DEBOOTSTRAP_CACHEDIR.value]
-    if Key.DEBOOTSTRAP_CACHEDIR.value in self.dft.configuration[Key.CONFIGURATION.value]:
+    if self.get_use_debootstrap_cachedir():
       path = self.dft.configuration[Key.CONFIGURATION.value][Key.DEBOOTSTRAP_CACHEDIR.value]
+      if Key.DEBOOTSTRAP_CACHEDIR.value in self.dft.configuration[Key.CONFIGURATION.value]:
+        path = self.dft.configuration[Key.CONFIGURATION.value][Key.DEBOOTSTRAP_CACHEDIR.value]
 
     # Path has been generated, return it to the caller. This means that the
     # config contains a value, but it does not mean the directory exist in
