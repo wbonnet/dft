@@ -66,7 +66,7 @@ reinstall: build pre-reinstall do-reinstall install post-reinstall
 #
 
 do-install:
-	if [ ! "$(SW_VERSION)" = "" ] ; then \
+	@if [ ! "$(SW_VERSION)" = "" ] ; then \
 		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 			echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 		       	echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
