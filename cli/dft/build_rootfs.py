@@ -162,21 +162,21 @@ class BuildRootFS(CliCommand):
     # Create the target directory. DFT files will be installed under this
     # directory.
     try:
-      logging.debug("copying DFT toolkit")
+      # Defines the path where the toolkit should be copied to be accessible once chrooted
+      dft_target_path = self.project.get_rootfs_mountpoint() + "/dft_bootstrap/"
 
       # Check that target directory is in the rootfs. It has been previously created at the same
       # time as the mountpoint. This test check for both bootstrap and mountpoint.
-      dft_target_path = self.project.get_rootfs_mountpoint() + "/dft_bootstrap/"
       if not os.path.exists(dft_target_path):
         logging.debug("creating dft_bootstrap under " + dft_target_path)
         os.makedirs(dft_target_path, exist_ok=True)
-        logging.debug("created !")
       else:
         logging.debug("dft_bootstrap already exist under " + dft_target_path)
 
       # Copy the DFT toolkit content to the target rootfs
+      logging.info("Copying DFT toolkit into chrooted environment : " + self.ansible_roles_dir + \
+                                                                    " => " + dft_target_path )
       for copy_target in os.listdir(self.ansible_roles_dir):
-        logging.debug("Copy the DFT toolkit : preparing to copy " + copy_target)
         copy_target_path = os.path.join(self.ansible_roles_dir, copy_target)
         if os.path.isfile(copy_target_path):
           logging.debug("copying file " + copy_target_path + " => " + dft_target_path)
