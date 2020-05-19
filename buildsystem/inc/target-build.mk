@@ -53,7 +53,7 @@ show-build-targets:
 	@echo $(BUILD_TARGETS) ;
 
 build: configure pre-build $(BUILD_TARGETS) post-build
-	echo "DEBUG : target is $@ make is running in " ; \
+	@echo "DEBUG : target is $@ make is running in " ; \
 	if [ "$(SW_VERSION)" = "" ] ; then \
 		echo "DEBUG : SW_VERSION is empty or undefined. Not at a defined version level skipping build. Make was running in the path below :" ; \
 		pwd ; \
@@ -94,7 +94,7 @@ rebuild: configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 #
 
 build-%:
-	if [ ! "$(SW_VERSION)" = "" ] ; then \
+	@if [ ! "$(SW_VERSION)" = "" ] ; then \
 		cd $(BUILD_DIR) ; \
 		if [ ! -f $(COOKIE_DIR)/build-$* ] ; then \
 			$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
