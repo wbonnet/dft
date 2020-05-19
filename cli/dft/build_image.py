@@ -1573,15 +1573,16 @@ class BuildImage(CliCommand):
       logging.debug("boot.scr generation was deactivated by configuration")
     else:
       # Check if the bootscript file template is defined in the project file
-      if self.project.project[Key.PROJECT_DEFINITION.value][Key.BOOTSCRIPT.value]:
-        logging.debug("project.project[Key.PROJECT_DEFINITION.value][Key.BOOTSCRIPT.value] : " + self.project.project[Key.PROJECT_DEFINITION.value][Key.BOOTSCRIPT.value])
-      else:
-        logging.debug("suis dans le else de project.project[Key.PROJECT_DEFINITION.value][Key.BOOTSCRIPT.value]")
-      # Bootscript template name is not defined thus generate default valu based on board name
-      # and image type.
+#      if [Key.BOOTSCRIPT.value] in self.project.project[Key.PROJECT_DEFINITION.value]:
+#        logging.debug("project.project[Key.PROJECT_DEFINITION.value][Key.BOOTSCRIPT.value] : " + self.project.project[Key.PROJECT_DEFINITION.value][Key.BOOTSCRIPT.value])
+#      else:
+#        logging.debug("suis dans le else de project.project[Key.PROJECT_DEFINITION.value][Key.BOOTSCRIPT.value]")
 
-      # Defines the name of the script to copy the bootscript to target
-      script = self.project.get_bsp_base() + "/bootscripts/"
+      # Bootscript template name is not defined, generate the script path based on board name and
+      # image type.
+      print ("get_bsp_base " + self.project.get_bsp_base())
+# FIXME:      script = self.project.get_bsp_base() + "/bootscripts/"
+      script = "../buildsystem/bootscripts/"
       script += self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
                                     [Key.BOARD.value]
       script += ".boot."
@@ -1593,13 +1594,11 @@ class BuildImage(CliCommand):
         script += "firmware"
       script += ".scr"
 
-
-
-
       # Create a temp file in with the script template is copied in text format. Then we do
       # variables expansion, before generating the binary script into the target file system.
       output_file = tempfile.mktemp()
       file_util.copy_file(script, output_file)
+      logging.debug("Using bootscript template : " + script + " instanciated into " + output_file)
 
       # Replace the generation date, the dft version, the filesystem
       filesys = self.project.image[Key.DEVICES.value][Key.PARTITIONS.value][0]\
