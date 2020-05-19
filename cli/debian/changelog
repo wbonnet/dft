@@ -1,3 +1,9 @@
+dft (0.6.48-1) unstable; urgency=low
+
+  * Rootfs image generation in progress
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 19 May 2020 15:50:00 +0100
+
 dft (0.6.47-1) unstable; urgency=low
 
   * Add cache dir support for debootstrap command
