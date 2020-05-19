@@ -315,6 +315,9 @@ class BuildRootFS(CliCommand):
     command = "mv -f " + working_file.name + " " + filepath
     self.execute_command(command)
 
+    command = "chmod a+r " + filepath
+    self.execute_command(command)
+
 
 
   # -------------------------------------------------------------------------
@@ -437,6 +440,10 @@ class BuildRootFS(CliCommand):
 
       command = "mv -f " + working_file.name + " " + filepath
       self.execute_command(command)
+
+      command = "chmod a+r " + filepath
+      self.execute_command(command)
+
     # If generation is deactivated, only output a debug message
     else:
       logging.debug("/etc/apt/apt.conf.d/10no-check-valid-until generation is deactivated")
@@ -535,6 +542,9 @@ class BuildRootFS(CliCommand):
     command = "mv -f " + working_file.name + " " + filepath
     self.execute_command(command)
 
+    command = "chmod a+r " + filepath
+    self.execute_command(command)
+
 
 
   # -------------------------------------------------------------------------
@@ -601,6 +611,9 @@ class BuildRootFS(CliCommand):
     # Finally move the temporary file under the rootfs tree
     filepath = self.project.get_rootfs_mountpoint() + "/etc/apt/preferences.d/pinning"
     command = "mv -f " + working_file.name + " " + filepath
+    self.execute_command(command)
+
+    command = "chmod a+r " + filepath
     self.execute_command(command)
 
 
@@ -695,6 +708,10 @@ class BuildRootFS(CliCommand):
 
     # Move the temporary file under the rootfs tree
     command = "mv -f " + working_file.name + " " + filepath
+    self.execute_command(command)
+
+    # Reag access only granted to root groupe since fstab may contain passwords
+    command = "chmod g+r " + filepath
     self.execute_command(command)
 
 
