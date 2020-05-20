@@ -31,7 +31,7 @@ include $(DFT_BUILDSYSTEM)/dft.mk
 MAKE_FILTERS  = Makefile README.md . inc
 
 # definition of the board categories to process
-CATEGORIES    = laptop desktop set-top-box single-board-computer
+CATEGORIES    = laptop desktop set-top-box single-board-computer phone tablet
 
 
 # Simple target forwarder
