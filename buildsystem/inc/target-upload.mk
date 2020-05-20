@@ -66,7 +66,7 @@ reupload: package pre-reupload do-reupload upload post-repupload
 #
 
 do-upload:
-	@if [ ! -f $(COOKIE_DIR)/do-upload ] ; then \
+	if [ ! -f $(COOKIE_DIR)/do-upload ] ; then \
  	    if [ "" = "$(DFT_DEB_UPLOAD_SERVER)" ] ; then \
 			echo "        Variable DFT_DEB_UPLOAD_SERVER is not set, please define it your shell environment." ; \
 			$(call dft_error ,2005-1201) ; \

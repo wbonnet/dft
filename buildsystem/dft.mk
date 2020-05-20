@@ -247,10 +247,16 @@ show-config:
 		echo "  GIT_BRANCH                        $(GIT_BRANCH)" ; \
 	fi
 	@echo
+	@echo "Packages upload parameters (using $(UPLOAD_TOOL))" ;
+	@if [ "$(UPLOAD_TOOL)" = "scp" ] ; then \
+                echo "  DFT_DEB_UPLOAD_SERVER             $(DFT_DEB_UPLOAD_SERVER)" ; \
+                echo "  DFT_DEB_UPLOAD_PATH               $(DFT_DEB_UPLOAD_PATH)" ; \
+                echo "  DFT_DEB_UPLOAD_USER               $(DFT_DEB_UPLOAD_USER)" ; \
+	fi
+	@echo
 	@echo "Directories configuration"
 	@echo "  DFT_BUILDSYSTEM                   $(DFT_BUILDSYSTEM)"
 	@echo "  DFT_HOME                          $(DFT_HOME)"
-	@echo "  DFT_WORK                          $(DFT_WORK)"
 	@echo "  DFT_WORKSPACE                     $(DFT_WORKSPACE)"
 	@echo "  WORK_DIR                          $(WORK_DIR)"
 	@echo "  FILE_DIR                          $(FILE_DIR)"
@@ -305,7 +311,6 @@ show-config:
 #
 
 setup:
-	@mkdir -p $(DFT_WORK)
 	@mkdir -p $(DFT_WORKSPACE)
 	@if [ ! "$(SW_VERSION)" = "" ] ; then \
 		mkdir -p $(WORK_DIR) ; \
