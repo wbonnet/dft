@@ -28,7 +28,9 @@
 #  . the kernel current version
 #  . the list of target that should be produced on a daily basis
 
-board-status:
+board-catalog:
+  tablet:
+  phone:
   desktop:
           - b1eelink-j45:
             support-level: planning
@@ -145,10 +147,18 @@ board-status:
                   support-level: planning
          - orangepi-r1:
                   support-level: stable
+                  uboot_provider: armwizard
+                  uboot_version: 2020.04
+                  kernel_provider: armwizard
+                  kernel_version: 4.17.1
+                  feature_support:
+                    video: unavailable
          - orangepi-zero:
                   support-level: stable
+                  uboot_provider: armwizard
+                  uboot_version: 2020.04
+                  kernel_provider: armwizard
                   kernel_version: 4.17.1
-                  uboot_version: 4.17.1
                   feature_support:
                     wifi: supported
                     lan: supported
