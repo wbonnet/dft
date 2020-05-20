@@ -94,34 +94,40 @@ HOST_ARCH ?= $(shell uname -m)
 
 # Defines the work root (subfolders are persistent but workdir is destroyed)A
 # TODO remove all DFT_HOME after current debug sessions
-# TODO remove all DFT_WORKSPACE after current debug sessions keep only WORKDIR ?
 # reference to /fordidden are made to force failure of make an detect misuse
 # of env vars. The /fobidden should have access flags 400 and belong to root.
 # Keep It Stupid Simple KISS ;)
 
 # DFT_HOME is the path to where DFT is installed. It should contain buildsystem
-# folder storng all the Makefiles tool chain with and its .mk include files
+# folder storiing all the Makefiles tool chain with and its .mk include files
 DFT_HOME            = /usr/share/dft
 
-# DFT_WORK is the root (highest level) of all work dirs used by DFT. Its
-# content is considered as volatile even if it will store some git stuff. 
-# It means it is "work dir" and if you changes and add to git folders are 
-# important you have to commit / push the files to upstream github.
-# Several context dependant wordirs will be created under this place 
-# during makefiles execution and recursion (for kernels etc.).
+# DFT_WORKSPACE is the root of all work dirs used by DFT. Its content is 
+# considered as volatile even if it will store some git stuff. 
 #
+# It means it is "a work dir" and if you make some changes or add materials to
+# git folders which are important to you, you will have to commit / push the 
+# files to upstream github or they will get lost at some cleanup time.
+#
+# DFT_WORKSPACE is where the current build space should be located. 
+# DFT_WORKSPACE can be overriden on the commande line used to run make
+# (to use a different place because of storage capacity or performance  reasons.
+DFT_WORKSPACE         ?= /tmp/dft-workspace
+
 # It is up to you to ensure there will be enough free space depending
 # on how many targets you are building at a time. SSD or even ramdisk 
 # can really speed up thing s but don't expect to build all versions for a
 # board unles you have a few gigs of Ram :)
 #
-# If you build rootfs or firmware images the file system underneath DFT_WORK
+# In order to build rootfs or firmware images the FS underneath DFT_WORKSPACE
 # has to support 'mount bind ' in chrooted environnement, so be careful is 
 # you use a NFS backend.
-# If variable is not defined in the makefile variables then its value is
-# retrieved from shell env. This means DFT_WORK value can be defined on the 
-# command line using DFT_WORK=/path/to/somewhere make show-config
-DFT_WORK ?= /tmp/dft-work
+#
+# If the DFT_WORKSPACE variable is not defined in the makefile env then its value is
+# retrieved from shell env. This means DFT_WORKSPACE value can be defined on the 
+# command line using :
+# DFT_WORKSPACE=/path/to/somewhere make show-config
+DFT_WORKSPACE ?= /tmp/dft-workspace
 
 # DFT_BUILDSYSTEM is where the Mafile toolchain is installed. The following 
 # value is computed from the current makefile location if it has not been 
@@ -132,11 +138,6 @@ DFT_WORK ?= /tmp/dft-work
 # this use case fail fast approch is better).
 DFT_BUILDSYSTEM     ?= $(dir $(lastword $(MAKEFILE_LIST)))
 
-# DFT_WORKSPACE is where the current workdir should be located. It should be 
-# under DFT_WORK and can be vorriden on the commande line used to run make for 
-# instance to use a different place because of storage capacity or 
-# performance  reasons.
-DFT_WORKSPACE         ?= $(DFT_WORK)/dft-workspace
 
 # DFT_WORK is the name of directory under DFT_WORKSPACE used to build a version 
 # of a given pice of software (kernel, u-boot, etc.) or even a rootfs or firware
@@ -193,6 +194,10 @@ DOWNLOAD_TOOL       := wget
 
 # Default is to turn wget to quiet mode to hide progress bar in shell output 
 WGET_OPTS           := -q
+
+# Default upload tool is scp. rsync is not yet supported
+# DOWNLOAD_TOOL should beset to git in custom makefiles if needed
+UPLOAD_TOOL         := scp
 
 # Defines default values to undefined (to make simple retrieval with grep in logs...)
 BOARD_NAME          ?= undefined-board-name
