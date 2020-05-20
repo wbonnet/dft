@@ -57,6 +57,7 @@ install: build pre-install do-install post-install
 #
 
 reinstall: build pre-reinstall do-reinstall install post-reinstall
+	@rm -f $(COOKIE_DIR)/install
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -73,8 +74,8 @@ do-install:
 			echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
 			echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
 		else \
-			if [ -f $(COOKIE_DIR)/do-install ] ; then \
-				echo " DEBUG : cookie $(COOKIE_DIR)/$@ already exist, nothing left to do for make do-install" ; \
+			if [ -f $(COOKIE_DIR)/install ] ; then \
+				echo " DEBUG : cookie $(COOKIE_DIR)/install already exist, nothing left to do for make install" ; \
 			else \
 				if [ "$(SW_NAME)" = "u-boot" ] ; then \
 					cp -frv ../files $(INSTALL_DIR)/doc ; \

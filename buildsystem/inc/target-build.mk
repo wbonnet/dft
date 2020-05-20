@@ -85,6 +85,7 @@ build: configure pre-build $(BUILD_TARGETS) post-build
 REBUILD_TARGETS ?= $(addprefix rebuild-,$(BUILD_TARGETS))
 
 rebuild: configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
+	@rm -f $(COOKIE_DIR)/build
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 

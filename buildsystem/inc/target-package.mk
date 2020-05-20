@@ -124,6 +124,7 @@ package: install pre-package do-package post-package
 #
 
 repackage: install pre-repackage do-repackage package post-repackage
+	@rm -f $(COOKIE_DIR)/package
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 

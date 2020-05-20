@@ -56,7 +56,8 @@ upload: package pre-upload do-upload post-upload
 # Execute once again the upload target
 #
 
-reupload: package pre-reupload do-reupload upload post-repupload
+reupload: upload 
+	@rm -f $(COOKIE_DIR)/upload
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -66,28 +67,21 @@ reupload: package pre-reupload do-reupload upload post-repupload
 #
 
 do-upload:
-	if [ ! -f $(COOKIE_DIR)/do-upload ] ; then \
- 	    if [ "" = "$(DFT_DEB_UPLOAD_SERVER)" ] ; then \
+	if [ ! -f $(COOKIE_DIR)/upload ] ; then \
+		if [ "x" = "x$(DFT_DEB_UPLOAD_SERVER)" ] ; then \
 			echo "        Variable DFT_DEB_UPLOAD_SERVER is not set, please define it your shell environment." ; \
 			$(call dft_error ,2005-1201) ; \
-	    fi ; \
- 	    if [ "" = "$(DFT_DEB_UPLOAD_PATH)" ] ; then \
+		fi ; \
+		if [ "x" = "x$(DFT_DEB_UPLOAD_PATH)" ] ; then \
 			echo "        Variable DFT_DEB_UPLOAD_PATH is not set, please define it your shell environment." ; \
 			$(call dft_error ,2005-1202) ; \
 		fi ; \
- 	    if [ "" = "$(DFT_DEB_UPLOAD_USER)" ] ; then \
+		if [ "x" = "x$(DFT_DEB_UPLOAD_USER)" ] ; then \
 			echo "        Variable DFT_DEB_UPLOAD_USER is not set, please define it your shell environment." ; \
 			$(call dft_error ,2005-1203) ; \
 		fi ; \
-	else \
- 		scp $(WORK_DIR)/*.deb $(WORK_DIR)/*.buildinfo $(WORK_DIR)/*.orig.tar.gz $(WORK_DIR)/*.changes $(DFT_DEB_UPLOAD_USER)@$(DFT_DEB_UPLOAD_SERVER):$(DFT_DEB_UPLOAD_PATH) ; \
+		scp $(WORK_DIR)/*.deb $(WORK_DIR)/*.buildinfo $(WORK_DIR)/*.orig.tar.gz $(WORK_DIR)/*.changes $(DFT_DEB_UPLOAD_USER)@$(DFT_DEB_UPLOAD_SERVER):$(DFT_DEB_UPLOAD_PATH) ; \
 	fi ; 
-	$(TARGET_DONE)
-
-do-reupload:
-	@if [ -f $(COOKIE_DIR)/do-upload ] ; then \
-		rm -f $(COOKIE_DIR)/do-upload ; \
-	fi ;
 	$(TARGET_DONE)
 
 # Match initial ifdef DFT_TARGET_UPLOAD
