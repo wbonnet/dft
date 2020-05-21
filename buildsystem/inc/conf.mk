@@ -38,8 +38,8 @@ else
 DFT_CONF = 1
 
 # Some temporary default values used to debug where where variables are initialized
-SW_NAME     ?= no-name-at-conf
-SW_VERSION  ?= no-version-at-conf
+SW_NAME     ?= undefined-sw-name
+SW_VERSION  ?= undefined-sw-version
 
 # ------------------------------------------------------------------------------
 #

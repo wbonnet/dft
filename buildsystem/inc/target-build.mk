@@ -39,8 +39,8 @@ else
 DFT_TARGET_BUILD = 1
 
 # Some temporary default values used to debug where where variables are initialized
-SW_NAME     ?= no-name-at-target-build
-SW_VERSION  ?= no-version-at-target-build
+SW_NAME     ?= out-of-scope
+SW_VERSION  ?= out-of-scope
 
 # ------------------------------------------------------------------------------
 #

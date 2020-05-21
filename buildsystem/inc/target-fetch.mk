@@ -39,8 +39,8 @@ else
 DFT_TARGET_FETCH = 1
 
 # Some temporary default values used to debug where where variables are initialized
-SW_NAME     ?= no-name-at-target-fetch
-SW_VERSION  ?= no-version-at-target-fetch
+SW_NAME     ?= out-of-scope
+SW_VERSION  ?= out-of-scope
 
 # ------------------------------------------------------------------------------
 #
@@ -74,10 +74,13 @@ fetch : setup pre-fetch $(FETCH_TARGETS) post-fetch
 # To keep stuf clean the useless empty folders are removed by command rmdir 
 # --ignore-fail-on-non-empty
 fetch-archive-%:
-	@if [ ! "$(SW_VERSION)" = "" ] && [ ! "$(SW_VERSION)" = "no-linux-version" ] ; then \
+	echo 'SW_NAME    : $(SW_NAME)' ; \
+	echo 'SW_VERSION : $(SW_VERSION)' ; \
+	if [ ! "$(SW_VERSION)" = "" ] && [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		if [ -f $(COOKIE_DIR)/$@ ] ; then \
 			true ; \
 		else \
+			echo "getting archive : $*" ; \
 			wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$* ; \
 			mv $(PARTIAL_DIR)/$* $(DOWNLOAD_DIR) ; \
 			rmdir --ignore-fail-on-non-empty $(PARTIAL_DIR) ; \
@@ -88,6 +91,8 @@ fetch-archive-%:
 			        $(call dft_error ,2004-1602); \
 			fi ; \
 		fi ; \
+	else  \
+		echo "ta la version $(SW_VERSION)" ; \
 	fi ; 
 	$(DISPLAY_COMPLETED_TARGET_NAME) 
 	$(TARGET_DONE) 

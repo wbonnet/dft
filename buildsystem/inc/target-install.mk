@@ -39,8 +39,8 @@ else
 DFT_TARGET_INSTALL = 1
 
 # Some temporary default values used to debug where where variables are initialized
-SW_NAME     ?= no-name-at-target-install
-SW_VERSION  ?= no-version-at-target-install
+SW_NAME     ?= out-of-scope
+SW_VERSION  ?= out-of-scope
 
 # ------------------------------------------------------------------------------
 #

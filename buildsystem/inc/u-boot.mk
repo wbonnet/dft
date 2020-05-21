@@ -38,8 +38,8 @@ else
 #$(info now including u-boot.mk)
 DFT_UBOOT = 1
 # Some temporary default values used to debug where where variables are initialized
-SW_NAME     ?= no-name-at-u-boot
-SW_VERSION  ?= no-version-at-u-boot
+SW_NAME     := u-boot
+SW_VERSION  ?= out-of-scope
 
 # ------------------------------------------------------------------------------
 #

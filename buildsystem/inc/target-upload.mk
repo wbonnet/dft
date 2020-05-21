@@ -39,14 +39,13 @@ else
 DFT_TARGET_UPLOAD = 1
 
 # Some temporary default values used to debug where where variables are initialized
-SW_NAME     ?= no-name-at-target-upload
-SW_VERSION  ?= no-version-at-target-upload
+SW_NAME     ?= out-of-scope
+SW_VERSION  ?= out-of-scope
 
 # ------------------------------------------------------------------------------
 #
 # Upload the Debian package
 #
-
 upload: package pre-upload do-upload post-upload
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
@@ -56,10 +55,26 @@ upload: package pre-upload do-upload post-upload
 # Execute once again the upload target
 #
 
-reupload: upload 
-	@rm -f $(COOKIE_DIR)/upload
+reupload: pre-reupload upload 
+	echo "reupload : entree dans reupload"
+	ls -la $(COOKIE_DIR)
+	rm -f $(COOKIE_DIR)/upload
+	echo "j ai vire le cookie upload"
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
+	ls -la $(COOKIE_DIR)
+	echo "sortie de reupload"
+
+pre-reupload: 
+	echo "pre-reuploadentree dans pre-reupload"
+	ls -la $(COOKIE_DIR)
+	rm -f $(COOKIE_DIR)/upload
+	echo "j ai vire le cookie upoad"
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
+	ls -la $(COOKIE_DIR)
+	echo "sortie de prereupload"
+
 
 # ------------------------------------------------------------------------------
 #
@@ -67,7 +82,8 @@ reupload: upload
 #
 
 do-upload:
-	if [ ! -f $(COOKIE_DIR)/upload ] ; then \
+	@if [ ! -e $(COOKIE_DIR)/do-upload ] ; then \
+		ls -lah $(COOKIE_DIR)* ; \
 		if [ "x" = "x$(DFT_DEB_UPLOAD_SERVER)" ] ; then \
 			echo "        Variable DFT_DEB_UPLOAD_SERVER is not set, please define it your shell environment." ; \
 			$(call dft_error ,2005-1201) ; \
@@ -81,7 +97,10 @@ do-upload:
 			$(call dft_error ,2005-1203) ; \
 		fi ; \
 		scp $(WORK_DIR)/*.deb $(WORK_DIR)/*.buildinfo $(WORK_DIR)/*.orig.tar.gz $(WORK_DIR)/*.changes $(DFT_DEB_UPLOAD_USER)@$(DFT_DEB_UPLOAD_SERVER):$(DFT_DEB_UPLOAD_PATH) ; \
-	fi ; 
+	else \
+		echo "The cookie $(COOKIE_DIR)/upload already exist, $@ is skipped to avoid doing it once and again" ; \
+	fi ; \
+	ls -lah $(COOKIE_DIR) ; 
 	$(TARGET_DONE)
 
 # Match initial ifdef DFT_TARGET_UPLOAD

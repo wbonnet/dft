@@ -39,8 +39,8 @@ else
 DFT_LINUX_KERNEL = 1
 
 # Some temporary default values used to debug where where variables are initialized
-SW_NAME     ?= no-name-at-linux-kernel
-SW_VERSION  ?= no-version-at-linux-kernel
+SW_NAME     ?= linux
+SW_VERSION  ?= out-of-scope
 
 
 # ------------------------------------------------------------------------------

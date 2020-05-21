@@ -21,7 +21,7 @@
 
 # Defines variables specific to u-boot
 SW_NAME    := u-boot
-SW_VERSION := no-$(SW_NAME)-version
+#SW_VERSION ?= u-boot-undef-version
 
 # Build system sould be available under board folder as a symlink. Keep it
 # locally available under board folder computing a relative path is a nightmare
@@ -194,30 +194,9 @@ add-u-boot-version:
 	@echo "DEBUG : end of add-u-boot-version in u-boot.makefile" ;
 
 # Override standard targets
-install:
-	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
-		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
-    echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
-    echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
-		echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
-	else \
-		for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-			$(MAKE) --directory=$$v  install; \
-		done \
-	fi ; \
-
+configure:
 build:
-	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
-		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
-	  	echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
-		echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
-		echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
-	else \
-		for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-			$(MAKE) --directory=$$v  build; \
-		done \
-	fi ; \
-
+install:
 package:
 	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
@@ -225,37 +204,17 @@ package:
 		echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
 		echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
 	else \
-		for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-			$(MAKE) --directory=$$v  package; \
+		for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" -printf '%P\n' | sort)) ; do \
+			$(MAKE) --directory=$$v  $@; \
 		done \
 	fi ; \
 
 # Simple forwarder
 extract:
 fetch:
-	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" )) ; do \
-		$(MAKE) --directory=$$v  fetch ; \
-	done
-
-configure:
-	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
-		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
-	  	echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
-		echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
-		echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
-	else \
-		for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" -printf '%P\n')) ; do \
-			$(MAKE) --directory=$$v  configure ; \
-		done \
-	fi ; \
-
 check-u-boot-defconfig:
-	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" -printf '%P\n')) ; do \
-		$(MAKE) --directory=$$v  check-u-boot-defconfig ; \
-
 setup:
-	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
-		if [ -e ${CURDIR}/$$v/Makefile ] ; then \
-                	$(MAKE) --directory=$$v $@ ; \
-		fi ; \
+mrproper:
+	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" -printf '%P\n' | sort)) ; do \
+		$(MAKE) --directory=$$v  $@ ; \
 	done

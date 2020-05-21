@@ -39,8 +39,8 @@ else
 DFT_TARGET_CHECKSUM = 1
 
 # Some temporary default values used to debug where where variables are initialized
-SW_NAME     ?= no-name-at-target-checksum
-SW_VERSION  ?= no-version-at-target-checksum
+SW_NAME     ?= out-of-scope 
+SW_VERSION  ?= out-of-scope
 
 # ------------------------------------------------------------------------------
 #

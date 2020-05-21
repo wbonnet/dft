@@ -88,7 +88,9 @@ DISPLAY_COMPLETED_TARGET_NAME  = @echo "    completed [$@] "
 #
 # The cookie monster^Wmaker
 #
-TARGET_DONE = @mkdir -p $(COOKIE_DIR) && touch $(COOKIE_DIR)/$(notdir $@)
+# Change only access time not modification
+#
+TARGET_DONE = @mkdir -p $(COOKIE_DIR) && touch -a $(COOKIE_DIR)/$(notdir $@)
 
 # ------------------------------------------------------------------------------
 #
@@ -222,7 +224,11 @@ clean:
 # Delete everthing from the work, cookies and download directories
 #
 mrproper:
-	@rm -rf "$(WORK_DIR)" --one-file-system --preserve-root
+	@echo "WORKDIR : $(WORK_DIR)"
+	@echo "SW_NAME : $(SW_NAME)"
+	@echo "SW_VERSION : $(SW_VERSION)"
+	@echo "rm -rf $(WORK_DIR) --one-file-system --preserve-root"
+#	@rm -rf "$(WORK_DIR)" --one-file-system --preserve-root
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 
 
