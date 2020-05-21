@@ -161,7 +161,7 @@ add-u-boot-version:
 		echo "DEBUG : from u-boot.makefile Argument new-version is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2001-0801) ; \
 	fi ;
-	if [ -d "./$(new-version)" ] ; then \
+	@if [ -d "./$(new-version)" ] ; then \
 		echo ". Version $(new-version) already exist. Doing nothing..." ; \
 	else  \
 		echo ". Creating the directory for u-boot version $(new-version)" ; \
@@ -208,6 +208,6 @@ configure build install package:
 
 # Simple forwarder
 check-u-boot-defconfig setup extract fetch mrproper:
-	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" -printf '%P\n' | sort)) ; do \
+	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" -printf '%P\n' | sort)) ; do \
 		$(MAKE) --directory=$$v  $@ ; \
 	done
