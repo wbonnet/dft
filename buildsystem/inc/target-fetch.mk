@@ -76,8 +76,11 @@ fetch : setup pre-fetch $(FETCH_TARGETS) post-fetch
 fetch-archive-%:
 	echo 'SW_NAME    : $(SW_NAME)' ; \
 	echo 'SW_VERSION : $(SW_VERSION)' ; \
-	if [ ! "$(SW_VERSION)" = "" ] && [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
+	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		true ; \
+	else \
 		if [ -f $(COOKIE_DIR)/$@ ] ; then \
+			echo "dans le true cookiei exist de la version $(SW_VERSION)" ; \
 			true ; \
 		else \
 			echo "getting archive : $*" ; \
@@ -91,7 +94,6 @@ fetch-archive-%:
 			        $(call dft_error ,2004-1602); \
 			fi ; \
 		fi ; \
-	else  \
 		echo "ta la version $(SW_VERSION)" ; \
 	fi ; 
 	$(DISPLAY_COMPLETED_TARGET_NAME) 

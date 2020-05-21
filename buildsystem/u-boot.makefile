@@ -194,10 +194,7 @@ add-u-boot-version:
 	@echo "DEBUG : end of add-u-boot-version in u-boot.makefile" ;
 
 # Override standard targets
-configure:
-build:
-install:
-package:
+configure build install package:
 	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 	  	echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
@@ -210,11 +207,7 @@ package:
 	fi ; \
 
 # Simple forwarder
-extract:
-fetch:
-check-u-boot-defconfig:
-setup:
-mrproper:
+check-u-boot-defconfig setup extract fetch mrproper:
 	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" -printf '%P\n' | sort)) ; do \
 		$(MAKE) --directory=$$v  $@ ; \
 	done
