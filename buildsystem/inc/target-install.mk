@@ -87,7 +87,6 @@ do-install:
 					cp -fv $(BUILD_DIR)/$(UBOOT_BINARY_FILE) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION) ; \
 					cp -fv $(BUILD_DIR)/u-boot.dtb $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb ; \
 					ln -sf u-boot-$(BOARD_NAME)-$(SW_VERSION) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME); \
-					tree $(INSTALL_DIR)/u-boot/; \
 				else \
 					if [ "$(SW_NAME)" = "linux" ] ; then \
 						mkdir -p $(INSTALL_DIR)/boot/dtb ; \
