@@ -76,7 +76,7 @@ configuration:
 
 # ----------------------------------------------------------------------------
 #
-# Definition of the sub configuration files (for rootfs, repositorie, etc.)
+# Definition of the sub configuration files (for rootfs, repositories, etc.)
 #
 #   The sections can be defined in any order. But inside a definition, the
 #   list of yml files is ordered. The files are loaded in the same order as
