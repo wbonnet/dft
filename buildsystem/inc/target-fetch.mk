@@ -71,9 +71,14 @@ fetch : setup pre-fetch $(FETCH_TARGETS) post-fetch
 	$(TARGET_DONE)
 
 # Some directories that will remain empty are created by dependancy mechanism
-# To keep stuf clean the useless empty folders are removed by command rmdir 
+# To keep stuf clean the useless empty folders are removed by command rmdir
 # --ignore-fail-on-non-empty
 fetch-archive-%:
+		@if [ ! "$(SW_VERSION)" = "" ] && [ ! "$(SW_VERSION)" = "no-linux-version" ]; then \
+		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
+			if [ "x$(arch-warning)" = "x1" ] ; then \
+				if [ ! "x$(only-native-arch)" = "x1" ] ; then \
+
 	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		true ; \
 	else \
@@ -91,9 +96,9 @@ fetch-archive-%:
 			        $(call dft_error ,2004-1602); \
 			fi ; \
 		fi ; \
-	fi ; 
-	$(DISPLAY_COMPLETED_TARGET_NAME) 
-	$(TARGET_DONE) 
+	fi ;
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
 
 clone-git-%:
 	@if [ -f $(COOKIE_DIR)/$(GIT_DIR)/$@ ] ; then \

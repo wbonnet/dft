@@ -63,7 +63,7 @@ build: configure pre-build $(BUILD_TARGETS) post-build
 \
 	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
 		skip_target=1 ; \
-		if [ ! "x$(no-arch-warning-arch)" = "x1" ] ; then \
+		if [ "x$(arch-warning-arch)" = "x1" ] ; then \
 			echo "Makefile processing had to be stopped during target $@ execution. Cross compilation is not supported. " ; \
 			echo "The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 		  echo "The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
@@ -81,7 +81,7 @@ build: configure pre-build $(BUILD_TARGETS) post-build
 		echo "dans skip_target  != 1 : x $$skip_target _x_" ;  \
 			if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 			$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
-				                     only-native-arch=$(only-native-arch) no-arch-warning=$(no-arch-warning); \
+				                     only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
 		fi ; \
 	fi ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
@@ -121,7 +121,7 @@ build-%:
 		skip_target=1 ; \
 		echo "debug 6 : Je force le skip_target" ;  \
 		echo "debug 4 : $$skip_target" ;  \
-		if [ ! "x$(no-arch-warning-arch)" = "x1" ] ; then \
+		if [ "x$(arch-warning-arch)" = "x1" ] ; then \
 			echo "Makefile processing had to be stopped during target $@ execution. Cross compilation is not supported. " ; \
 			echo "The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 		  echo "The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \

@@ -195,7 +195,7 @@ help:
 	@echo "                           The following command line variables can be used to control make behavior when dealing"
 	@echo "                           with arch dependant targets:"
 	@echo "                           "
-	@echo "                           no-arch-warning=1  (do not display warning when skipping a target because of arch"
+	@echo "                           arch-warning=0     (display warning when skipping a target because of arch"
 	@echo "                                               compatibility. default value=0)"
 	@echo "                           only-native-arch=1 (skip all targets, it means no dowload nor extract, if builder"
 	@echo "                                               arch is different from target board arch. You need a distinct"
