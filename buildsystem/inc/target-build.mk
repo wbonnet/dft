@@ -63,7 +63,7 @@ build: configure pre-build $(BUILD_TARGETS) post-build
 \
 	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
 		skip_target=1 ; \
-		if [ "x$(arch-warning-arch)" = "x1" ] ; then \
+		if [ "x$(arch-warning)" = "x1" ] ; then \
 			echo "Makefile processing had to be stopped during target $@ execution. Cross compilation is not supported. " ; \
 			echo "The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 		  echo "The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
@@ -118,7 +118,7 @@ build-%:
 		skip_target=1 ; \
 		echo "debug 6 : Je force le skip_target" ;  \
 		echo "debug 4 : $$skip_target" ;  \
-		if [ "x$(arch-warning-arch)" = "x1" ] ; then \
+		if [ "x$(arch-warning)" = "x1" ] ; then \
 			echo "Makefile processing had to be stopped during target $@ execution. Cross compilation is not supported. " ; \
 			echo "The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 		  echo "The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
