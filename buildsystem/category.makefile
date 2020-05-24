@@ -27,9 +27,11 @@
 DFT_BUILDSYSTEM := buildsystem
 include $(DFT_BUILDSYSTEM)/dft.mk
 
+SW_NAME     := out-of-scope
+SW_VERSION  := out-of-scope
+
 # Do not recurse the following subdirs
 MAKE_FILTERS  := Makefile workdir README.md .
-SW_NAME       := SW_NAME_undefined_at_category_level
 
 # Board category directory contains several folders, on per board in this category
 # Each board folder must contain a board.mk file with board specific information,
