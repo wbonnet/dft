@@ -39,7 +39,6 @@ USE_CONFIG_FILE := $(strip $(USE_CONFIG_FILE))
 
 # Do not recurse the following subdirs
 MAKE_FILTERS := kernel u-boot buildsystem files Makefile README.md
-SW_NAME      := SW_NAME_undefined_at_board_level
 
 # ------------------------------------------------------------------------------
 #
