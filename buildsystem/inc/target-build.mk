@@ -53,7 +53,7 @@ show-build-targets:
 	@echo $(BUILD_TARGETS) ;
 
 build: configure pre-build $(BUILD_TARGETS) post-build
-	skip_target=0 ; \
+	@skip_target=0 ; \
 \
 # Check if make is running at generic level or target to build level \
 	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
@@ -75,13 +75,10 @@ build: configure pre-build $(BUILD_TARGETS) post-build
 # Check if target should be executed even if current arch is different from target arch \
 # Check if skip flag has been raised it not then do the job \
 	if [ ! "x$$skip_target" = "x1" ] ; then \
-		echo "debug 15 : skip_target : $$skip_target " ; \
 		cd $(BUILD_DIR) ; \
-		pwd ; \
-		echo "dans skip_target  != 1 : x $$skip_target _x_" ;  \
-			if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
-			$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
-				                     only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
+		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
+			$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) \
+                   only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
 		fi ; \
 	fi ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
