@@ -77,7 +77,9 @@ show-extract-targets:
 
 extract-archive-v.tar:
 extract-archive-%.tar:
-	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		true ; \
+	else \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 			echo "        extracting $(DOWNLOAD_DIR)/$*.tar" ; \
 			tar $(TAR_ARGS) -xf $(DOWNLOAD_DIR)/$*.tar -C $(BUILD_DIR) ; \
@@ -87,7 +89,9 @@ extract-archive-%.tar:
 
 extract-archive-v.tar.gz:
 extract-archive-%.tar.gz:
-	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		true ; \
+	else \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 			if [ ! -f $(DOWNLOAD_DIR)/$*.tar.gz ] ; then \
 				echo "        archive $(DOWNLOAD_DIR)/$*.tar.gz is missing please check the files retrieved by the fetch target" ; \
@@ -102,7 +106,9 @@ extract-archive-%.tar.gz:
 
 extract-archive-v.tgz:
 extract-archive-%.tgz:
-	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		true ; \
+	else \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 			if [ ! -f $(DOWNLOAD_DIR)/$*.tgz ] ; then \
 				echo "        archive $(DOWNLOAD_DIR)/$*.tgz is missing please check the files retrieved by the fetch target" ; \
@@ -117,7 +123,9 @@ extract-archive-%.tgz:
 
 extract-archive-v.tar.bz2: 
 extract-archive-%.tar.bz2:
-	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		true ; \
+	else \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 			echo "        extracting $(DOWNLOAD_DIR)/$*.tar.bz2" ; \
 			tar $(TAR_ARGS) -xjf $(DOWNLOAD_DIR)/$*.tar.bz2 -C $(BUILD_DIR) ; \
@@ -129,7 +137,9 @@ extract-archive-%.tar.bz2:
 
 extract-archive-v.tar.xz:
 extract-archive-%.tar.xz:
-	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		true ; \
+	else \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 			echo "        extracting $(DOWNLOAD_DIR)/$*.tar.xz" ; \
 			tar $(TAR_ARGS) -xJf $(DOWNLOAD_DIR)/$*.tar.xz -C $(BUILD_DIR) ; \
@@ -141,7 +151,9 @@ extract-archive-%.tar.xz:
 
 extract-archive-v.zip: 
 extract-archive-%.zip: 
-	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		true ; \
+	else \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 			echo "        extracting $(DOWNLOAD_DIR)/$*.zip" ; \
 			unzip $(DOWNLOAD_DIR)/$*.zip -d $(BUILD_DIR) ; \
@@ -153,7 +165,9 @@ extract-archive-%.zip:
 
 extract-git-v: 
 extract-git-%:
-	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		true ; \
+	else \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 		  	echo "        moving git data to $(EXTRACT)/$*" ; \
 			mv $(GIT_BUILD_DIR)/$(SRC_GIT_REPO)/* $(BUILD_DIR)/ ; \
@@ -170,8 +184,12 @@ PATCH_DIR_FUZZ  ?= 2
 PATCH_ARGS       = --directory=$(WORK_DIR) --strip=$(PATCH_DIR_LEVEL) --fuzz=$(PATCH_DIR_FUZZ)
 
 apply-patch-%:
-	@echo " ==> Applying $(PATCH_DIR)/$*"
-	@patch $(PATCH_ARGS) < $(PATCH_DIR)/$*
+	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		true ; \
+		else \
+		echo " ==> Applying $(PATCH_DIR)/$*"
+		patch $(PATCH_ARGS) < $(PATCH_DIR)/$*
+	fi ;
 	$(TARGET_DONE)
 
 # ------------------------------------------------------------------------------

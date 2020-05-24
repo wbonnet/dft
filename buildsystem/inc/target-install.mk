@@ -67,7 +67,9 @@ reinstall: build pre-reinstall do-reinstall install post-reinstall
 #
 
 do-install:
-	@if [ ! "$(SW_VERSION)" = "" ] && [ ! "$(SW_VERSION)" = "no-linux-version" ]; then \
+	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		true ; \
+	else \
 		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 			if [ ! "x$(no-arch-warning)" = "x1" ] ; then \
 				if [ ! "x$(only-native-arch)" = "x1" ] ; then \
