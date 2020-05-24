@@ -53,29 +53,35 @@ show-build-targets:
 	@echo $(BUILD_TARGETS) ;
 
 build: configure pre-build $(BUILD_TARGETS) post-build
-	@echo "DEBUG : target is $@ make is running in " ; \
-		@if [ ! "$(SW_VERSION)" = "" ] && [ ! "$(SW_VERSION)" = "no-linux-version" ]; then \
-		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
-			if [ ! "x$(no-arch-warning)" = "x1" ] ; then \
-				if [ ! "x$(only-native-arch)" = "x1" ] ; then \
-					echo "Makefile processing had to be stopped during target $@ execution. Cross compilation is not supported. " ; \
-					echo "The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
-				  echo "The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
-					echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running" ; \
-					echo "this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
-					echo "In order to generate binaries for existing architectures, you need several builders, one for each target arch." ; \
-				fi ; \
-			fi ; \
-		else \
+	skip_target=0 ; \
+\
+# Check if make is running at generic level or target to build level \
+	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		skip_target=1 ; \
+		true ; \
+  fi ; \
+\
+	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
+		skip_target=1 ; \
+		if [ ! "x$(no-arch-warning-arch)" = "x1" ] ; then \
+			echo "Makefile processing had to be stopped during target $@ execution. Cross compilation is not supported. " ; \
+			echo "The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
+		  echo "The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
+			echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running" ; \
+			echo "this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
+			echo "In order to generate binaries for existing architectures, you need several builders, one for each target arch." ; \
+		fi ; \
+	fi ; \
+# Check if target should be executed even if current arch is different from target arch \
+# Check if skip flag has been raised it not then do the job \
+	if [ ! "x$$skip_target" = "x1" ] ; then \
+		echo "debug 15 : skip_target : $$skip_target " ; \
+		cd $(BUILD_DIR) ; \
+		pwd ; \
+		echo "dans skip_target  != 1 : x $$skip_target _x_" ;  \
 			if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
-				echo "DEBUG : cookie $(COOKIE_DIR)/$@ does not exist. Make was running in the path below :" ; \
-				echo "DEBUG : now running this make command" ; \
-				echo "DEBUG : $(BUILD_ENV) $(MAKE) -C $(BUILD_DIR) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS)" ; \
-				$(BUILD_ENV) $(MAKE) -C $(BUILD_DIR) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) \
+			$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
 				                     only-native-arch=$(only-native-arch) no-arch-warning=$(no-arch-warning); \
-			else \
-				echo " DEBUG : cookie $(COOKIE_DIR)/$@ already exist, nothing left to do for make build" ; \
-			fi ; \
 		fi ; \
 	fi ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
@@ -99,26 +105,43 @@ rebuild: configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 #
 
 build-%:
-		@if [ ! "$(SW_VERSION)" = "" ] && [ ! "$(SW_VERSION)" = "no-linux-version" ]; then \
-			if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
-				if [ ! "x$(no-arch-warning)" = "x1" ] ; then \
-					if [ ! "x$(only-native-arch)" = "x1" ] ; then \
-						echo "Makefile processing had to be stopped during target $@ execution. Cross compilation is not supported. " ; \
-						echo "The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
-					  echo "The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
-						echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running" ; \
-						echo "this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
-						echo "In order to generate binaries for existing architectures, you need several builders, one for each target arch." ; \
-					fi ; \
-				fi ; \
-				cd $(BUILD_DIR) ; \
-				if [ ! -f $(COOKIE_DIR)/build-$* ] ; then \
-					$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
-				fi ; \
-			fi ; \
-		fi ;
-		$(DISPLAY_COMPLETED_TARGET_NAME)
-		$(TARGET_DONE)
+	echo "debug 1 : $$skip_target" ;  \
+	skip_target=0 ; \
+	echo "debug 2 : $$skip_target" ;  \
+\
+# Check if make is running at generic level or target to build level
+	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		skip_target=1 ; \
+		echo "debug 3 : $$skip_target _x_" ;  \
+		true ; \
+  fi ; \
+\
+# Check if target should be executed even if current arch is different from target arch
+	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
+		skip_target=1 ; \
+		echo "debug 6 : Je force le skip_target" ;  \
+		echo "debug 4 : $$skip_target" ;  \
+		if [ ! "x$(no-arch-warning-arch)" = "x1" ] ; then \
+			echo "Makefile processing had to be stopped during target $@ execution. Cross compilation is not supported. " ; \
+			echo "The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
+		  echo "The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
+			echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running" ; \
+			echo "this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
+			echo "In order to generate binaries for existing architectures, you need several builders, one for each target arch." ; \
+		fi ; \
+	fi ; \
+ # Check if skip flag has been raised it not then do the job \
+	if [ ! "x$$skip_target" = "x1" ] ; then \
+		echo "debug 5 : x_$$skip_target _x_" ;  \
+		cd $(BUILD_DIR) ; \
+		pwd ; \
+		echo "dans skip_target  != 1 : x $$skip_target _x_" ;  \
+		if [ ! -f $(COOKIE_DIR)/build-$* ] ; then \
+			$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
+		fi ; \
+	fi ;
+	$(DISPLAY_COMPLETED_TARGET_NAME)
+	$(TARGET_DONE)
 
 rebuild-%:
 	@if [ -f $(COOKIE_DIR)/build-$* ] ; then \
