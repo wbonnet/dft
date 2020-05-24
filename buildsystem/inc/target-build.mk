@@ -71,7 +71,8 @@ build: configure pre-build $(BUILD_TARGETS) post-build
 				echo "DEBUG : cookie $(COOKIE_DIR)/$@ does not exist. Make was running in the path below :" ; \
 				echo "DEBUG : now running this make command" ; \
 				echo "DEBUG : $(BUILD_ENV) $(MAKE) -C $(BUILD_DIR) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS)" ; \
-				$(BUILD_ENV) $(MAKE) -C $(BUILD_DIR) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
+				$(BUILD_ENV) $(MAKE) -C $(BUILD_DIR) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) \
+				                     only-native-arch=$(only-native-arch) no-arch-warning=$(no-arch-warning); \
 			else \
 				echo " DEBUG : cookie $(COOKIE_DIR)/$@ already exist, nothing left to do for make build" ; \
 			fi ; \
