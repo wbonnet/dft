@@ -74,26 +74,25 @@ fetch : setup pre-fetch $(FETCH_TARGETS) post-fetch
 # To keep stuf clean the useless empty folders are removed by command rmdir
 # --ignore-fail-on-non-empty
 fetch-archive-%:
-		@if [ ! "$(SW_VERSION)" = "" ] && [ ! "$(SW_VERSION)" = "no-linux-version" ]; then \
-		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
-			if [ "x$(arch-warning)" = "x1" ] ; then \
-				if [ ! "x$(only-native-arch)" = "x1" ] ; then \
-
 	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		true ; \
 	else \
-		if [ -f $(COOKIE_DIR)/$@ ] ; then \
-			true ; \
-		else \
-			echo "getting archive : $*" ; \
-			wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$* ; \
-			mv $(PARTIAL_DIR)/$* $(DOWNLOAD_DIR) ; \
-			rmdir --ignore-fail-on-non-empty $(PARTIAL_DIR) ; \
-			if [ -f $(DOWNLOAD_DIR)/$* ] ; then \
-				true ; \
-			else \
-				echo 'ERROR : Failed to download $(SRC_DIST_URL)/$*' 1>&2; \
-			        $(call dft_error ,2004-1602); \
+		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
+			if [ ! "x$(only-native-arch)" = "x1" ] ; then \
+				if [ -f $(COOKIE_DIR)/$@ ] ; then \
+					true ; \
+				else \
+					echo "getting archive : $*" ; \
+					wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$* ; \
+					mv $(PARTIAL_DIR)/$* $(DOWNLOAD_DIR) ; \
+					rmdir --ignore-fail-on-non-empty $(PARTIAL_DIR) ; \
+					if [ -f $(DOWNLOAD_DIR)/$* ] ; then \
+						true ; \
+					else \
+						echo 'ERROR : Failed to download $(SRC_DIST_URL)/$*' 1>&2; \
+					        $(call dft_error ,2004-1602); \
+					fi ; \
+				fi ; \
 			fi ; \
 		fi ; \
 	fi ;

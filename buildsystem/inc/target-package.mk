@@ -48,7 +48,7 @@ SW_VERSION  ?= out-of-scope
 #
 
 do-package:
-	skip_target=0 ; \
+	@skip_target=0 ; \
 # Check if make is running at generic level or target to build level \
 	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		skip_target=1 ; \
