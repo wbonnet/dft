@@ -67,15 +67,21 @@ reinstall: build pre-reinstall do-reinstall install post-reinstall
 #
 
 do-install:
-	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+	@if [ ! "$(SW_VERSION)" = "" ] && [ ! "$(SW_VERSION)" = "no-linux-version" ]; then \
 		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
-			echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
-		       	echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
-			echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
-			echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
+			if [ ! "x$(no-arch-warning)" = "x1" ] ; then \
+				if [ ! "x$(only-native-arch)" = "x1" ] ; then \
+					echo "Makefile processing had to be stopped during target $@ execution. Cross compilation is not supported. " ; \
+					echo "The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
+				  echo "The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
+					echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running" ; \
+					echo "this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
+					echo "In order to generate binaries for existing architectures, you need several builders, one for each target arch." ; \
+				fi ; \
+			fi ; \
 		else \
-			if [ -f $(COOKIE_DIR)/install ] ; then \
-				echo " DEBUG : cookie $(COOKIE_DIR)/install already exist, nothing left to do for make install" ; \
+			if [ -f $(COOKIE_DIR)/$@ ] ; then \
+				echo " DEBUG : cookie $(COOKIE_DIR)/$@ already exist, nothing left to do for make do-configure" ; \
 			else \
 				if [ "$(SW_NAME)" = "u-boot" ] ; then \
 					cp -frv ../files $(INSTALL_DIR)/doc ; \
