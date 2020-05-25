@@ -48,7 +48,7 @@ SW_VERSION  ?= out-of-scope
 #
 
 do-package:
-	@skip_target=0 ; \
+	skip_target=0 ; \
 # Check if make is running at generic level or target to build level \
 	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		skip_target=1 ; \
@@ -69,10 +69,13 @@ do-package:
 # Check if target should be executed even if current arch is different from target arch \
 # Check if skip flag has been raised it not then do the job \
 	if [ ! "x$$skip_target" = "x1" ] ; then \
-		if [ ! -f $(COOKIE_DIR)/do-package ] ; then \
-				echo " DEBUG : cookie $(COOKIE_DIR)/$@ already exist, nothing left to do for make do-configure" ; \
+		if [ -f $(COOKIE_DIR)/do-package ] ; then \
+				echo " DEBUG : cookie $(COOKIE_DIR)/$@ already exist, nothing left to do for make do-package" ; \
 		else \
 # Create the workdir used to generate packaging scripts \
+			echo " DEBUG : Je sauis dans target package" ; \
+			pwd ; \
+			ls -lah ; \
 			mkdir $(PACKAGE_DIR)/debian ; \
 			if [ "$(SW_NAME)" = "u-boot" ] ; then \
 # Test if current package is a u-boot then copy template and expand variables in files copy \
