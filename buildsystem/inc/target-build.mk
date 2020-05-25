@@ -125,8 +125,6 @@ build-%:
  # Check if skip flag has been raised it not then do the job \
 	if [ ! "x$$skip_target" = "x1" ] ; then \
 		cd $(BUILD_DIR) ; \
-		pwd ; \
-		echo "dans skip_target  != 1 : x $$skip_target _x_" ;  \
 		if [ ! -f $(COOKIE_DIR)/build-$* ] ; then \
 			$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
 		fi ; \
