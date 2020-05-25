@@ -74,25 +74,29 @@ fetch : setup pre-fetch $(FETCH_TARGETS) post-fetch
 # To keep stuf clean the useless empty folders are removed by command rmdir
 # --ignore-fail-on-non-empty
 fetch-archive-%:
-	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		@skip_target=0 ; \
+# Check if make is running at generic level or target to build level \
+	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		skip_target=1 ; \
 		true ; \
-	else \
-		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
-			if [ ! "x$(only-native-arch)" = "x1" ] ; then \
-				if [ -f $(COOKIE_DIR)/$@ ] ; then \
-					true ; \
-				else \
-					echo "getting archive : $*" ; \
-					wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$* ; \
-					mv $(PARTIAL_DIR)/$* $(DOWNLOAD_DIR) ; \
-					rmdir --ignore-fail-on-non-empty $(PARTIAL_DIR) ; \
-					if [ -f $(DOWNLOAD_DIR)/$* ] ; then \
-						true ; \
-					else \
-						echo 'ERROR : Failed to download $(SRC_DIST_URL)/$*' 1>&2; \
-					        $(call dft_error ,2004-1602); \
-					fi ; \
-				fi ; \
+	fi; \
+\
+	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
+		skip_target=1 ; \
+	fi ; \
+	if [ ! "x$$skip_target" = "x1" ] ; then \
+		if [ -f $(COOKIE_DIR)/$@ ] ; then \
+			true ; \
+		else \
+			echo "getting archive : $*" ; \
+			wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$* ; \
+			mv $(PARTIAL_DIR)/$* $(DOWNLOAD_DIR) ; \
+			rmdir --ignore-fail-on-non-empty $(PARTIAL_DIR) ; \
+			if [ -f $(DOWNLOAD_DIR)/$* ] ; then \
+				true ; \
+			else \
+				echo 'ERROR : Failed to download $(SRC_DIST_URL)/$*' 1>&2; \
+			        $(call dft_error ,2004-1602); \
 			fi ; \
 		fi ; \
 	fi ;
@@ -100,12 +104,24 @@ fetch-archive-%:
 	$(TARGET_DONE)
 
 clone-git-%:
-	@if [ -f $(COOKIE_DIR)/$(GIT_DIR)/$@ ] ; then \
+		@skip_target=0 ; \
+# Check if make is running at generic level or target to build level \
+	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		skip_target=1 ; \
 		true ; \
-	else \
-		echo "        cloning into $(GIT_DIR)/$*" ; \
-		cd $(GIT_DIR) ; \
-		git clone --single-branch $(GIT_OPTS) -b $(GIT_BRANCH) $(GIT_URL)/$(GIT_REPO)$(GIT_REPO_EXT) ; \
+	fi; \
+\
+	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
+		skip_target=1 ; \
+	fi ; \
+	if [ ! "x$$skip_target" = "x1" ] ; then \
+		if [ -f $(COOKIE_DIR)/$@ ] ; then \
+			true ; \
+		else \
+			echo "        cloning into $(GIT_DIR)/$*" ; \
+			cd $(GIT_DIR) ; \
+			git clone --single-branch $(GIT_OPTS) -b $(GIT_BRANCH) $(GIT_URL)/$(GIT_REPO)$(GIT_REPO_EXT) ; \
+		fi ; \
 	fi ;
 	$(TARGET_DONE)
 
