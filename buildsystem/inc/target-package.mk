@@ -121,7 +121,7 @@ do-package:
 			fi ; \
 			$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ; \
 		fi ; \
-	fi ; \
+	fi ; 
 	$(TARGET_DONE)
 
 do-repackage:

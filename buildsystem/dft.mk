@@ -90,7 +90,7 @@ DISPLAY_COMPLETED_TARGET_NAME  = @echo "    completed [$@] "
 #
 # Change only access time not modification
 #
-TARGET_DONE = mkdir -p $(COOKIE_DIR) && touch -a $(COOKIE_DIR)/$(notdir $@)
+TARGET_DONE = @mkdir -p $(COOKIE_DIR) && touch -a $(COOKIE_DIR)/$(notdir $@)
 
 # ------------------------------------------------------------------------------
 #
