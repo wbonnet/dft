@@ -102,22 +102,17 @@ rebuild: configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 #
 
 build-%:
-	echo "debug 1 : $$skip_target" ;  \
-	skip_target=0 ; \
-	echo "debug 2 : $$skip_target" ;  \
+	@skip_target=0 ; \
 \
 # Check if make is running at generic level or target to build level
 	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		skip_target=1 ; \
-		echo "debug 3 : $$skip_target _x_" ;  \
 		true ; \
   fi ; \
 \
 # Check if target should be executed even if current arch is different from target arch
 	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
 		skip_target=1 ; \
-		echo "debug 6 : Je force le skip_target" ;  \
-		echo "debug 4 : $$skip_target" ;  \
 		if [ "x$(arch-warning)" = "x1" ] ; then \
 			echo "Makefile processing had to be stopped during target $@ execution. Cross compilation is not supported. " ; \
 			echo "The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
@@ -129,7 +124,6 @@ build-%:
 	fi ; \
  # Check if skip flag has been raised it not then do the job \
 	if [ ! "x$$skip_target" = "x1" ] ; then \
-		echo "debug 5 : x_$$skip_target _x_" ;  \
 		cd $(BUILD_DIR) ; \
 		pwd ; \
 		echo "dans skip_target  != 1 : x $$skip_target _x_" ;  \

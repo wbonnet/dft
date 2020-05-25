@@ -88,7 +88,6 @@ fetch-archive-%:
 		if [ -f $(COOKIE_DIR)/$@ ] ; then \
 			true ; \
 		else \
-			echo "getting archive : $*" ; \
 			wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$* ; \
 			mv $(PARTIAL_DIR)/$* $(DOWNLOAD_DIR) ; \
 			rmdir --ignore-fail-on-non-empty $(PARTIAL_DIR) ; \
