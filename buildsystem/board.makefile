@@ -147,19 +147,19 @@ sanity-check:
 	        $(call dft_error ,1911-1804) ; \
 	fi ;
 	@make --directory=u-boot $*
-	@make --directory=kernel $*
+	@make --directory=kernel $* 
 	@for version in $(find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n') ; do \
-		$(MAKE) --directory=$$version $* ; \
+		$(MAKE) --directory=$$version $* only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) ; \
         done
 
 # Build only u-boot  package target
 u-boot-package:
-	$(MAKE) --directory=u-boot package ;
+	$(MAKE) --directory=u-boot package only-native-arch=$(only-native-arch) arch-warning=$(arch-warning);
 
 # Build only linux kernel an package target
 linux-kernel-package:
 kernel-package:
-	$(MAKE) --directory=kernel package ;
+	$(MAKE) --directory=kernel package only-native-arch=$(only-native-arch) arch-warning=$(arch-warning);
 
 # Catch all target. Call the same targets in each subfolder
 # cd $$i && $(MAKE) $* && cd .. ;
@@ -186,7 +186,7 @@ configure:
 setup:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
-                	$(MAKE) --directory=$$v $@ ; \
+                	$(MAKE) --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
 		fi ; \
 	done
 

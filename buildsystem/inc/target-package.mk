@@ -60,7 +60,7 @@ do-package:
 		if [ "x$(arch-warning)" = "x1" ] ; then \
 			echo "Makefile processing had to be stopped during target $@ execution. Cross compilation is not supported. " ; \
 			echo "The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
-		  echo "The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
+			echo "The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
 			echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running" ; \
 			echo "this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
 			echo "In order to generate binaries for existing architectures, you need several builders, one for each target arch." ; \

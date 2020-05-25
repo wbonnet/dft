@@ -218,7 +218,7 @@ fetch:
 setup:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
-                	$(MAKE) --directory=$$v $@ ; \
+                	$(MAKE) --directory=$$v $@  only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
 		fi ; \
 	done
 
