@@ -99,7 +99,7 @@ do-configure:
 		else \
 			if [ "$(SW_NAME)" = "u-boot" ] ; then \
 # Test if current package is a u-boot then copy template files \
-				if [ ! -f "configs/$(UBOOT_DEFCONFIG)" ] ; then \
+				if [ ! -f "$(BUILD_DIR)/configs/$(UBOOT_DEFCONFIG)" ] ; then \
 					echo "ERROR defconfig file $(UBOOT_DEFCONFIG) for board $(BOARD_NAME) does not exist in $(SW_NAME) v$(SW_VERSION) sources." ; \
 					$(call dft_error ,2001-1001) ; \
 				else \
