@@ -23,7 +23,7 @@
 #
 
 # The board name fragment will be used in package naming, path and files content generation
-BOARD_NAME = sunvell-t95maxorangepi-zero
+BOARD_NAME = sunvell-t95max
 
 # Board architecture as defined by uname -m (armv7l, mips, aarch64, x86_64, etc.)
 BOARD_ARCH = aarch64
