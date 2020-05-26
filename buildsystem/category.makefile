@@ -89,7 +89,7 @@ sanity-check:
 	done ; \
 	for folder in $(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n') ; do \
 		if [ -e $$folder/Makefile ] ; then \
-			$(MAKE) --directory=$$folder sanity-check ; \
+			$(MAKE) sanity-check --directory=$$folder  ; \
 		else  \
 			echo "Error there is no Makefile in ${CURDIR}/$$folder" ; \
 			pwd ; \
@@ -107,7 +107,7 @@ do-configure:
 	echo "DEBUG : configure in category.makefile" ;
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f $$i/Makefile ] ; then \
-			$(MAKE) --directory=$$i configure ; \
+			$(MAKE) configure --directory=$$i  ; \
 		fi ; \
         done
 
@@ -116,7 +116,7 @@ u-boot-package:
 	@echo "DEBUG : $@ in category.makefile" ;
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f $$i/Makefile ] ; then \
-			$(MAKE) --directory=$$i u-boot-package ; \
+			$(MAKE) u-boot-package --directory=$$i ; \
 		fi ; \
         done
 
@@ -126,7 +126,7 @@ kernel-package:
 	@echo "DEBUG : $@ in category.makefile" ;
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f $$i/Makefile ] ; then \
-			$(MAKE) --directory=$$i kernel-package ; \
+			$(MAKE) kernel-package --directory=$$i  ; \
 		fi ; \
         done
 
@@ -135,13 +135,13 @@ add-u-boot-version:
 	@echo "DEBUG : in category.makefile add-u-boot-version with argument new-version $(new-version)" ;
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f $$i/Makefile ] ; then \
-			$(MAKE) --warn-undefined-variables --print-directory --directory=$$i add-u-boot-version new-version=$(new-version) ; \
+			$(MAKE) add-u-boot-version --warn-undefined-variables --print-directory --directory=$$i new-version=$(new-version) ; \
 		fi ; \
         done
 
 check-u-boot-defconfig:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
-		$(MAKE) --directory=$$v  check-u-boot-defconfig ; \
+		$(MAKE) check-u-boot-defconfig --directory=$$v  ; \
 	done
 
 # Create a new board entry
@@ -213,14 +213,25 @@ new-board:
 	fi ;
 
 # Simple target forwarder
-extract:
-fetch:
-setup:
+extract fetch setup:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
                 	$(MAKE) --directory=$$v $@  only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
 		fi ; \
 	done
+# Forward target call to subfolders where are stored the board.mk files specifying board architecture
+list-architectures:
+
+# Forward target call to subfolders where are stored the board.mk files specifying board architecture
+list-boards:
+	@for board in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+		if [ ! "$(arch)" = "" ] ; then \
+			$(MAKE) $@ --directory=$$board $@ arch=$(arch); \
+		else \
+			$(MAKE) $@ --directory=$$board $@ ; \
+		fi ; \
+	done ; \
+
 
 # ------------------------------------------------------------------------------
 #

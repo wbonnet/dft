@@ -190,3 +190,16 @@ setup:
 		fi ; \
 	done
 
+# Output board name if arch match criteria or if there is no defined criteria (or filter)
+list-boards:
+	@if [ "$(arch)" = "" ] ; then \
+			echo "$(BOARD_NAME)" ; \
+	else \
+			if [ "$(arch)" = "$(BOARD_ARCH)" ]; then \
+				echo "$(BOARD_NAME)" ; \
+			fi ; \
+	fi ; \
+
+# Output board architecture. The ouput is sorted and deduplicated by caller
+list-architectures:
+	@echo "$(BOARD_ARCH)" ; \

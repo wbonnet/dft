@@ -103,3 +103,23 @@ setup:
                 	$(MAKE) -C $$i $@ ; \
 		fi ; \
 	done
+# Forward target call to subfolders where are stored the board.mk files specifying board architecture
+list-architectures:
+
+# Forward target call to subfolders where are stored the board.mk files specifying board architecture
+list-boards:
+	@if [ ! "$(category)" = "" ] ; then \
+		if [ ! "$(arch)" = "" ] ; then \
+			$(MAKE) $@ --directory=$(category) arch=$(arch)| sort -u ; \
+		else \
+			$(MAKE) $@ --directory=$(category) | sort -u ; \
+		fi ; \
+	else \
+	for category in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+		if [ ! "$(arch)" = "" ] ; then \
+			$(MAKE) $@ --directory=$$category arch=$(arch) | sort -u ; \
+		else \
+			$(MAKE) $@ --directory=$$category |sort -u ; \
+		fi ; \
+	done ; \
+	fi; \

@@ -41,6 +41,10 @@ sanity-check:
 		fi ; \
 	done
 
+# Forward list-boards to bsp-packages folder
+list-boards:
+		@$(MAKE) -C bsp-packages $@ arch=$(arch) category=$(category); \
+
 # ------------------------------------------------------------------------------
 #
 # Target that prints the help
@@ -50,4 +54,7 @@ help:
 	@echo "   sanity-check            Check the availability of required items (files, symlinks, directories)"
 	@echo "                           In the following subdirs $(CHECK_FOR_SANITY)."
 	@echo "                           This target only warns you and do not make any change to the tree content."
+	@echo "   list-boards             Display the list of supported boards. Available filters are"
+	@echo "                              arch=      (supported values are return values of command uname --machine)"
+	@echo "                              category=  (desktop laptop phone set-top-box single-board-computer tablet)"
 	@echo "   help                    Display this help"
