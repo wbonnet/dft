@@ -112,7 +112,7 @@ list-architectures list-boards:
 		if [ ! "$(arch)" = "" ] ; then \
 			$(MAKE) $@ --no-print-directory --directory=$$category arch=$(arch) | sort -u ; \
 		else \
-			$(MAKE) $@ --no-print-directory--directory=$$category | sort -u ; \
+			$(MAKE) $@ --no-print-directory --directory=$$category | sort -u ; \
 		fi ; \
 	done ; \
 	fi; \
