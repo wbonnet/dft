@@ -149,7 +149,7 @@ sanity-check:
 # second loop is to forward recursive cal to version folders \
 		for version in $(shell find . -mindepth 1 -maxdepth 1 -type d -name '*\.*') ; do \
 			if [ -f $$version/Makefile ] ; then \
-				$(MAKE) --directory=$$version sanity-check ; \
+				$(MAKE) --no-print-directory --directory=$$version sanity-check ; \
 			fi ; \
 		done ; \
 	fi ; \
@@ -202,12 +202,12 @@ configure build install package:
 		echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
 	else \
 		for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" -printf '%P\n' | sort)) ; do \
-			$(MAKE) --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) ; \
+			$(MAKE) --no-print-directory --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) ; \
 		done \
 	fi ; \
 
 # Simple forwarder
 check-u-boot-defconfig setup extract fetch mrproper:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" -printf '%P\n' | sort)) ; do \
-		$(MAKE) --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) ; \
+		$(MAKE) --no-print-directory --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) ; \
 	done

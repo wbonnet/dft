@@ -154,7 +154,7 @@ sanity-check:
 	done ;
 	@for version in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -name "*\.*" -type d -printf '%P\n' )) ; do \
 		if [ -f $$version/Makefile ] ; then \
-			$(MAKE) --directory=$$version sanity-check || $(call dft_error ,2004-2708); \
+			$(MAKE) --no-print-directory --directory=$$version sanity-check || $(call dft_error ,2004-2708); \
 		fi ; \
 	done ;
 
@@ -167,7 +167,7 @@ build configure package install:
 		echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
 	else \
 		for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" -printf '%P\n')) ; do \
-			$(MAKE) -C $$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
+			$(MAKE) --no-print-directory -C $$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
 		done ; \
 	fi ; \
 
@@ -175,5 +175,5 @@ build configure package install:
 # Simple forwarder
 setup fetch extract:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
-		$(MAKE) -C --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
+		$(MAKE) --no-print-directory -C --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
 	done ; \

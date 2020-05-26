@@ -37,7 +37,7 @@ CATEGORIES    = laptop desktop set-top-box single-board-computer phone tablet
 u-boot-package:
 	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
-			echo "$(MAKE) -directory=$$i u-boot-package"; \
+			echo "$(MAKE) --no-print-directory --directory=$$i u-boot-package"; \
 		fi ; \
         done
 
@@ -46,7 +46,7 @@ linux-kernel-package:
 kernel-package:
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
-			$(MAKE) --directory=$$i kernel-package ; \
+			$(MAKE) --no-print-directory --directory=$$i kernel-package ; \
 		fi ; \
         done
 
@@ -84,17 +84,18 @@ sanity-check:
 			$(call dft_error ,191103-01) ; \
 		fi ; \
 		if [ -f ${CURDIR}/$$category/Makefile ] ; then \
-			$(MAKE) -C $$category sanity-check ; \
+			$(MAKE) --no-print-directory --directory=$$category sanity-check ; \
 		else  \
 			echo "DEBUG: Makefile is missing in ${CURDIR}/$$category" ; \
 		fi ; \
 	done
 
 # Simple forwarder
-extract configure install package build fetch setup:
+#extract configure install package build fetch setup:
+package:
 	@for i in $(CATEGORIES) ; do \
 		if [ -f ${CURDIR}/$$i/Makefile ] ; then \
-                	$(MAKE) -C $$i $@ ; \
+                	$(MAKE) --no-print-directory -C $$i $@ ; \
 		fi ; \
 	done
 
@@ -102,16 +103,16 @@ extract configure install package build fetch setup:
 list-architectures list-boards:
 	@if [ ! "$(category)" = "" ] ; then \
 		if [ ! "$(arch)" = "" ] ; then \
-			$(MAKE) $@ --directory=$(category) arch=$(arch)| sort -u ; \
+			$(MAKE) $@ --no-print-directory --directory=$(category) arch=$(arch)| sort -u ; \
 		else \
-			$(MAKE) $@ --directory=$(category) | sort -u ; \
+			$(MAKE) $@ --no-print-directory --directory=$(category) | sort -u ; \
 		fi ; \
 	else \
 	for category in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ ! "$(arch)" = "" ] ; then \
-			$(MAKE) $@ --directory=$$category arch=$(arch) | sort -u ; \
+			$(MAKE) $@ --no-print-directory --directory=$$category arch=$(arch) | sort -u ; \
 		else \
-			$(MAKE) $@ --directory=$$category |sort -u ; \
+			$(MAKE) $@ --no-print-directory--directory=$$category | sort -u ; \
 		fi ; \
 	done ; \
 	fi; \

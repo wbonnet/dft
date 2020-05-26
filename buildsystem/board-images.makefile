@@ -40,7 +40,7 @@ MAKE_FILTERS  := Makefile workdir README.md .
 show-images:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
-                	$(MAKE) --directory=$$v list-images ; \
+                	$(MAKE) --no-print-directory --directory=$$v list-images ; \
 		fi ; \
 	done
 

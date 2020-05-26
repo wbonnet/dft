@@ -50,7 +50,7 @@ sanity-check:
 			$(call dft_error ,2005-0304) ; \
 		fi ; \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
-                	$(MAKE) --directory=$$v sanity-check ; \
+                	$(MAKE) --no-print-directory --directory=$$v sanity-check ; \
 		fi ; \
 	done
 
@@ -59,7 +59,7 @@ list-images:
 	@echo "DEBUG list-images is still TO TODO"
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
-                	$(MAKE) --directory=$$v list-images ; \
+                	$(MAKE) --no-print-directory --directory=$$v list-images ; \
 		fi ; \
 	done
 
