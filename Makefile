@@ -42,7 +42,7 @@ sanity-check:
 	done
 
 # Forward list-boards to bsp-packages folder
-list-boards:
+list-boards list-architectures :
 		@$(MAKE) -C bsp-packages $@ arch=$(arch) category=$(category); \
 
 # ------------------------------------------------------------------------------
