@@ -110,9 +110,12 @@ help-examples:
 # Help about targets handling catalog of supported items printing and querying
 #
 help-catalog:
+	@echo "Catalog management functionalities. The following helper targets can be used to query"
+	@echo "and modify the catalog (such as adding new boards or categories)"
+	@echo
 	@echo "Available targets are :"
-	@echo "    list-boards             Display the list of supported boards (this target support filters)."
-	@echo "    list-architectures      Display the list of supported CPU architectures (this target support filters)"
+	@echo "    list-boards             Display the list of supported boards (support filters)."
+	@echo "    list-architectures      Display the list of supported CPU architectures (support filters)"
 	@echo
 	@echo "Available filters for the list targets are :"
 	@echo "    arch=                   (supported values are return values of command uname --machine)"
