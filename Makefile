@@ -98,7 +98,7 @@ help-bsp:
 # Help about configuration file
 #
 help-config-file:
-	@echo "Displays variables from defined in used dftrc confiy2yguration"
+	@echo "Displays variables from defined in used dftrc configuration"
 	@echo
 	@echo "Available targets are :"
 	@echo "    list-config-vars        List variables which can be defined in configuration file"
