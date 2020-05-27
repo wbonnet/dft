@@ -47,14 +47,76 @@ list-boards list-architectures :
 
 # ------------------------------------------------------------------------------
 #
-# Target that prints the help
+# Target that prints the generic top level help
 #
 help:
 	@echo "Available targets are :"
-	@echo "   sanity-check            Check the availability of required items (files, symlinks, directories)"
-	@echo "                           In the following subdirs $(CHECK_FOR_SANITY)."
+	@echo " help-bsp                Help about BSP building targets"
+	@echo " help-config-file        Help about configuration file"
+	@echo " help-env-vars           Help about environnment variables"
+	@echo " help-catalog            Help about catalog listing target (list of supported board, arch, versions)"
+	@echo " help-images             Help about image building targets"
+	@echo " help-examples           Help about examples building targets"
+	@echo " help-sanity             Help about buildsystem sanity check targets"
+	@echo " help                    Display this help"
+
+# ------------------------------------------------------------------------------
+#
+# Help about images building targets
+#
+help-images:
+	@echo "Available targets are :"
+
+# ------------------------------------------------------------------------------
+#
+# Help about bsp building targets
+#
+help-bsp:
+	@echo "Available targets are :"
+
+# ------------------------------------------------------------------------------
+#
+# Help about configuration file
+#
+help-config-file:
+	@echo "Available targets are :"
+
+# ------------------------------------------------------------------------------
+#
+# Help about configuration file
+#
+help-env-vars:
+	@echo "Available targets are :"
+
+# ------------------------------------------------------------------------------
+#
+# Help about buildsystem sanity check targets
+#
+help-sanity:
+	@echo "Available targets are :"
+	@echo "    sanity-check           Check the availability of required items (files, symlinks, directories)"
+	@echo "                           Recursivly in subdirs $(CHECK_FOR_SANITY)."
 	@echo "                           This target only warns you and do not make any change to the tree content."
-	@echo "   list-boards             Display the list of supported boards. Available filters are"
-	@echo "                              arch=      (supported values are return values of command uname --machine)"
-	@echo "                              category=  (desktop laptop phone set-top-box single-board-computer tablet)"
-	@echo "   help                    Display this help"
+
+# ------------------------------------------------------------------------------
+#
+# Help about examples building targets
+#
+help-examples:
+	@echo "Available targets are :"
+
+# ------------------------------------------------------------------------------
+#
+# Help about targets handling catalog of supported items printing and querying
+#
+help-catalog:
+	@echo "Available targets are :"
+	@echo "    list-boards             Display the list of supported boards (this target support filters)."
+	@echo "    list-architectures      Display the list of supported CPU architectures (this target support filters)"
+	@echo
+	@echo "Available filters for the list targets are :"
+	@echo "    arch=                   (supported values are return values of command uname --machine)"
+	@echo "    category=               (desktop laptop phone set-top-box single-board-computer tablet)"
+	@echo
+	@echo "One or several filters can be passed to the make command to reduce the ouput of list-* targets"
+
