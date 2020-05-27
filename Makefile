@@ -86,11 +86,11 @@ help-images:
 help-bsp:
 	@echo "Board Support Packages management functionalities. The following helper targets can be used to ..."
 	@echo
-	@echo "board level, or upper, available targets are :"
+	@echo "At board level, or upper, available targets are :"
 	@echo "    kernel-package          Recursivly build Linux kernel packages (support filters)"
 	@echo "    u-boot-package          Recursivly build u-boot packages (support filters)"
 	@echo
-	@echo "sofware level (kernel or u-boot) available targets are :"
+	@echo "At sofware level (kernel or u-boot) available targets are :"
 	@echo " XXX Todo add filters in help"
 
 # ------------------------------------------------------------------------------
