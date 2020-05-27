@@ -103,16 +103,16 @@ package:
 list-architectures list-boards:
 	@if [ ! "$(category)" = "" ] ; then \
 		if [ ! "$(arch)" = "" ] ; then \
-			$(MAKE) $@ --no-print-directory --directory=$(category) arch=$(arch)| sort -u ; \
+			$(MAKE) $@ --no-print-directory --directory=$(category) arch=$(arch) ; \
 		else \
-			$(MAKE) $@ --no-print-directory --directory=$(category) | sort -u ; \
+			$(MAKE) $@ --no-print-directory --directory=$(category) ; \
 		fi ; \
 	else \
 	for category in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ ! "$(arch)" = "" ] ; then \
-			$(MAKE) $@ --no-print-directory --directory=$$category arch=$(arch) | sort -u ; \
+			$(MAKE) $@ --no-print-directory --directory=$$category arch=$(arch) ; \
 		else \
-			$(MAKE) $@ --no-print-directory --directory=$$category | sort -u ; \
+			$(MAKE) $@ --no-print-directory --directory=$$category ; \
 		fi ; \
 	done ; \
-	fi; \
+	fi | sort -u ; \
