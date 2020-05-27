@@ -101,7 +101,10 @@ package:
 
 # Forward target call to subfolders where are stored the board.mk files specifying board architecture
 list-architectures list-boards:
-	@if [ ! "$(category)" = "" ] ; then \
+	@if [ "$(arch)" = "armhf" ] ; then \
+		arch = "armv7l"; \
+	fi ; \
+	if [ ! "$(category)" = "" ] ; then \
 		if [ ! "$(arch)" = "" ] ; then \
 			$(MAKE) $@ --no-print-directory --directory=$(category) arch=$(arch) ; \
 		else \
