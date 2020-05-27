@@ -50,7 +50,9 @@ list-boards list-architectures :
 # Target that prints the generic top level help
 #
 help:
-	@echo "Available targets are :"
+	@echo "Inline help is allocated in several categories according to functionnal scope"
+	@echo 
+	@echo "Available targets to display scoped help are :"
 	@echo " help-bsp                Help about BSP building targets"
 	@echo " help-config-file        Help about configuration file"
 	@echo " help-env-vars           Help about environnment variables"
