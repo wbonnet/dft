@@ -112,6 +112,7 @@ include $(DFT_BUILDSYSTEM)/inc/target-fetch.mk
 include $(DFT_BUILDSYSTEM)/inc/target-install.mk
 include $(DFT_BUILDSYSTEM)/inc/target-package.mk
 include $(DFT_BUILDSYSTEM)/inc/target-upload.mk
+include $(DFT_BUILDSYSTEM)/inc/target-help.mk
 
 # ------------------------------------------------------------------------------
 #
