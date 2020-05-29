@@ -126,4 +126,4 @@ list-architectures:
 			$(MAKE) $@ --no-print-directory --directory=$$category ; \
 		fi ; \
 	done ; \
-	fi | sort -u ; \
+	fi | sort -u ;
