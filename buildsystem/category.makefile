@@ -33,10 +33,16 @@ SW_VERSION  := out-of-scope
 # Do not recurse the following subdirs
 MAKE_FILTERS  := Makefile workdir README.md .
 
-# Board category directory contains several folders, on per board in this category
+# ------------------------------------------------------------------------------
+#
+# Targets not associated with a file (aka PHONY)
+#
+.PHONY: sanity-check list-boards list-architectures
+
+# Board category directory contains several folders, one per board in the category
 # Each board folder must contain a board.mk file with board specific information,
-# a mandatory kernel folder, optional folders like u-boot for boot loader and files
-# to store needed additionnal files
+# a mandatory kernel folder, optional folders like 'u-boot' or 'grub' for 
+# boot loaders and 'files' to store needed additionnal files
 sanity-check:
 	@for board in $(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n') ; do \
 		echo "Now checking manifest sanity for board $$board" ; \
@@ -204,19 +210,22 @@ new-board:
 	fi ;
 
 # Simple target forwarder
-extract fetch setup:
+extract:
+fetch:
+setup:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
                 	$(MAKE) --no-print-directory --directory=$$v $@  only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
 		fi ; \
 	done
 # Forward target call to subfolders where are stored the board.mk files specifying board architecture
-list-architectures list-boards:
+list-architectures:
+list-boards:
 	@for board in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ ! "$(arch)" = "" ] ; then \
-			$(MAKE) $@ --no-print-directory --directory=$$board $@ arch=$(arch); \
+			$(MAKE) --no-print-directory --directory=$$board $@ arch=$(arch); \
 		else \
-			$(MAKE) $@ --no-print-directory --directory=$$board $@ ; \
+			$(MAKE) --no-print-directory --directory=$$board $@ ; \
 		fi ; \
 	done ; \
 

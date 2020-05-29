@@ -22,7 +22,7 @@ DFT_BUILDSYSTEM := ../buildsystem
 include $(DFT_BUILDSYSTEM)/dft.mk
 
 # Do not recurse the following subdirs
-MAKE_FILTERS  = Makefile README.md .
+MAKE_FILTERS  = Makefile kernel-defconfig-fragments README.md .
 
 # definition of the board categories to process
 CATEGORIES    = laptop desktop set-top-box single-board-computer phone tablet
@@ -31,7 +31,7 @@ CATEGORIES    = laptop desktop set-top-box single-board-computer phone tablet
 #
 # Targets not associated with a file (aka PHONY)
 #
-.PHONY: help sanity-check
+.PHONY: help sanity-check list-boards list-architectures
 
 # Build only u-boot package target
 u-boot-package:
@@ -100,7 +100,9 @@ package:
 	done
 
 # Forward target call to subfolders where are stored the board.mk files specifying board architecture
-list-architectures list-boards:
+# $(MAKE) $@ --no-print-directory --directory=$(category) arch=$(arch) ; 
+list-boards:
+list-architectures:
 	@if [ "$(arch)" = "armhf" ] ; then \
 		arch="armv7l"; \
 	fi ; \
