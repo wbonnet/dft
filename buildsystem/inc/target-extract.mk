@@ -35,7 +35,6 @@
 ifdef DFT_TARGET_EXTRACT
 $(info target-extract.mk has already been included)
 else
-#$(info now including target-extract.mk)
 DFT_TARGET_EXTRACT = 1
 
 # Some temporary default values used to debug where where variables are initialized
@@ -121,7 +120,7 @@ extract-archive-%.tgz:
 	fi ;
 	$(TARGET_DONE)
 
-extract-archive-v.tar.bz2: 
+extract-archive-v.tar.bz2:
 extract-archive-%.tar.bz2:
 	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		true ; \
@@ -149,8 +148,8 @@ extract-archive-%.tar.xz:
 	fi ;
 	$(TARGET_DONE)
 
-extract-archive-v.zip: 
-extract-archive-%.zip: 
+extract-archive-v.zip:
+extract-archive-%.zip:
 	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		true ; \
 	else \
@@ -163,7 +162,7 @@ extract-archive-%.zip:
 	fi ;
 	$(TARGET_DONE)
 
-extract-git-v: 
+extract-git-v:
 extract-git-%:
 	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		true ; \

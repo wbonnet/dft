@@ -35,7 +35,6 @@
 ifdef DFT_TARGET_PACKAGE
 $(info target-package.mk has already been included)
 else
-#$(info now including target-package.mk)
 DFT_TARGET_PACKAGE = 1
 
 # Some temporary default values used to debug where where variables are initialized
@@ -121,7 +120,7 @@ do-package:
 			fi ; \
 			$(DEBUILD_ENV) $(DEBUILD) $(DEBUILD_ARGS) ; \
 		fi ; \
-	fi ; 
+	fi ;
 	$(TARGET_DONE)
 
 do-repackage:

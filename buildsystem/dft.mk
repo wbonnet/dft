@@ -111,6 +111,7 @@ include $(DFT_BUILDSYSTEM)/inc/target-extract.mk
 include $(DFT_BUILDSYSTEM)/inc/target-fetch.mk
 include $(DFT_BUILDSYSTEM)/inc/target-install.mk
 include $(DFT_BUILDSYSTEM)/inc/target-package.mk
+include $(DFT_BUILDSYSTEM)/inc/target-setup.mk
 include $(DFT_BUILDSYSTEM)/inc/target-upload.mk
 include $(DFT_BUILDSYSTEM)/inc/target-help.mk
 
@@ -322,35 +323,6 @@ show-config:
 	@echo
 	@echo "Internal variables"
 	@echo "  MAKE_FILTERS                      $(MAKE_FILTERS)"
-
-# ------------------------------------------------------------------------------
-#
-# Setup target. Currently does nothing, should check for basic building
-# packages to be avaiable. Should add a check based on the flavor.
-#
-
-setup:
-	@mkdir -p $(DFT_WORKSPACE)
-	@if [ ! "$(SW_VERSION)" = "" ] ; then \
-		mkdir -p $(WORK_DIR) ; \
-		mkdir -p $(COOKIE_DIR) ; \
-		mkdir -p $(INSTALL_DIR) ; \
-		mkdir -p $(PACKAGE_DIR) ; \
-		mkdir -p $(DOWNLOAD_DIR) ; \
-		mkdir -p $(BUILD_DIR) ; \
-		mkdir -p $(LOG_DIR) ; \
-		if [ "$(DOWNLOAD_TOOL)" = "wget" ] ; then \
-			mkdir -p $(PARTIAL_DIR) ; \
-		fi ; \
-		if [ "$(DOWNLOAD_TOOL)" = "wget" ] ; then \
-			mkdir -p $(GIT_DIR) ; \
-		fi ; \
-	fi
-	@mkdir -p $(FILE_DIR)
-	@mkdir -p $(DEFCONFIG_DIR)
-	@mkdir -p $(PATCH_DIR)
-	$(DISPLAY_COMPLETED_TARGET_NAME)
-	$(TARGET_DONE)
 
 # ------------------------------------------------------------------------------
 # Match initial ifdef

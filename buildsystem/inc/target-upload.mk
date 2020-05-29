@@ -35,7 +35,6 @@
 ifdef DFT_TARGET_UPLOAD
 $(info target-upload.mk has already been included)
 else
-#$(info now including target-upload.mk)
 DFT_TARGET_UPLOAD = 1
 
 # Some temporary default values used to debug where where variables are initialized
@@ -55,7 +54,7 @@ upload: package pre-upload do-upload post-upload
 # Execute once again the upload target
 #
 
-reupload: pre-reupload upload 
+reupload: pre-reupload upload
 	echo "reupload : entree dans reupload"
 	ls -la $(COOKIE_DIR)
 	rm -f $(COOKIE_DIR)/upload
@@ -65,7 +64,7 @@ reupload: pre-reupload upload
 	ls -la $(COOKIE_DIR)
 	echo "sortie de reupload"
 
-pre-reupload: 
+pre-reupload:
 	echo "pre-reuploadentree dans pre-reupload"
 	ls -la $(COOKIE_DIR)
 	rm -f $(COOKIE_DIR)/upload
@@ -100,7 +99,7 @@ do-upload:
 	else \
 		echo "The cookie $(COOKIE_DIR)/upload already exist, $@ is skipped to avoid doing it once and again" ; \
 	fi ; \
-	ls -lah $(COOKIE_DIR) ; 
+	ls -lah $(COOKIE_DIR) ;
 	$(TARGET_DONE)
 
 # Match initial ifdef DFT_TARGET_UPLOAD
