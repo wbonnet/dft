@@ -105,7 +105,7 @@ help-bsp:
 	@echo "                            to support the clean target or an arror will occur)"
 	@echo "    show-config            Display the build system configuration and internal variables"
 	@echo
-	@echo "    mrproper               Destroy the target (target context only) work directory and cookies. 
+	@echo "    mrproper               Destroy the target (target context only) work directory and cookies."
 	@echo "                           Thus every steps done for this target will have to be executed again"
 	@echo "                           since there will be nothing left in this context work directory."
 	@echo "                           Sources will be (re)downloaded then extracted, compiled, etc."
