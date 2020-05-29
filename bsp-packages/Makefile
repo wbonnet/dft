@@ -102,7 +102,13 @@ package:
 # Forward target call to subfolders where are stored the board.mk files specifying board architecture
 list-architectures list-boards:
 	@if [ "$(arch)" = "armhf" ] ; then \
-		arch = "armv7l"; \
+		arch="armv7l"; \
+	fi ; \
+	if [ "$(arch)" = "arm64" ] ; then \
+		arch="aarch64"; \
+	fi ; \
+	if [ "$(arch)" = "am64" ] ; then \
+		arch="x86_64"; \
 	fi ; \
 	if [ ! "$(category)" = "" ] ; then \
 		if [ ! "$(arch)" = "" ] ; then \

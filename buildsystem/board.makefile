@@ -202,4 +202,10 @@ list-boards:
 
 # Output board architecture. The ouput is sorted and deduplicated by caller
 list-architectures:
-	@echo "$(BOARD_ARCH)" ; \
+	@if [ "$(arch)" = "" ] ; then \
+		echo "$(BOARD_ARCH)" ; \
+	else \
+			if [ "$(arch)" = "$(BOARD_ARCH)" ]; then \
+				echo "$(BOARD_ARCH)" ; \
+			fi ; \
+	fi ; \
