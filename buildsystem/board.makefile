@@ -147,19 +147,19 @@ sanity-check:
 	        $(call dft_error ,1911-1804) ; \
 	fi ;
 	@make --directory=u-boot $*
-	@make --directory=kernel $* 
+	@make --directory=kernel $*
 	@for version in $(find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n') ; do \
-		$(MAKE) --directory=$$version $* only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) ; \
+		$(MAKE) --directory=$$version $* only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) verbority=$(verbosity) ; \
         done
 
-# Build only u-boot  package target
-u-boot-package:
-	$(MAKE) --directory=u-boot package only-native-arch=$(only-native-arch) arch-warning=$(arch-warning);
+# cd $$i && $(MAKE) $* && cd .. ;
+sanity-check: do-sanity-check
+	$(MAKE) --directory=u-boot package only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) verbosity=$(verbosity);
 
 # Build only linux kernel an package target
 linux-kernel-package:
 kernel-package:
-	$(MAKE) --directory=kernel package only-native-arch=$(only-native-arch) arch-warning=$(arch-warning);
+	$(MAKE) --directory=kernel package only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) verbosity=$(verbosity);
 
 # Catch all target. Call the same targets in each subfolder
 # cd $$i && $(MAKE) $* && cd .. ;
@@ -167,7 +167,7 @@ sanity-check:
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		echo "examen de $$i" ; \
 		if [ -f $$i/Makefile ] ; then \
-			$(MAKE) --directory=$$i $* ; \
+			$(MAKE) --directory=$$i $* verbosity=$(verbosity); \
 		fi ; \
         done
 
@@ -176,7 +176,7 @@ add-u-boot-version:
 	$(MAKE) --warn-undefined-variables --directory=u-boot add-u-boot-version new-version=$(new-version) ;
 
 check-u-boot-defconfig:
-	$(MAKE) --directory=u-boot check-u-boot-defconfig ;
+	$(MAKE) --directory=u-boot check-u-boot-defconfig verbosity=$(verbosity);
 
 # Simple forwarder
 extract:
@@ -202,10 +202,4 @@ list-boards:
 
 # Output board architecture. The ouput is sorted and deduplicated by caller
 list-architectures:
-	@if [ "$(arch)" = "" ] ; then \
-		echo "$(BOARD_ARCH)" ; \
-	else \
-			if [ "$(arch)" = "$(BOARD_ARCH)" ]; then \
-				echo "$(BOARD_ARCH)" ; \
-			fi ; \
-	fi ; \
+	@echo "$(BOARD_ARCH)" ; \

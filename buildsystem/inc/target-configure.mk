@@ -93,9 +93,7 @@ do-configure:
 # Check if target should be executed even if current arch is different from target arch \
 # Check if skip flag has been raised it not then do the job \
 	if [ ! "x$$skip_target" = "x1" ] ; then \
-		if [ -f $(COOKIE_DIR)/$@ ] ; then \
-			echo " DEBUG : cookie $(COOKIE_DIR)/$@ already exist, nothing left to do for make do-configure" ; \
-		else \
+		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 			if [ "$(SW_NAME)" = "u-boot" ] ; then \
 # Test if current package is a u-boot then copy template files \
 				if [ ! -f "$(BUILD_DIR)/configs/$(UBOOT_DEFCONFIG)" ] ; then \

@@ -41,7 +41,7 @@ MAKE_FILTERS  := Makefile workdir README.md .
 
 # Board category directory contains several folders, one per board in the category
 # Each board folder must contain a board.mk file with board specific information,
-# a mandatory kernel folder, optional folders like 'u-boot' or 'grub' for 
+# a mandatory kernel folder, optional folders like 'u-boot' or 'grub' for
 # boot loaders and 'files' to store needed additionnal files
 sanity-check:
 	@for board in $(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n') ; do \
@@ -104,7 +104,6 @@ sanity-check:
 	done ;
 
 # If package is called then make both u-boot and kernel-package
-package: bsp-package
 bsp: bsp-package
 bsp-package: u-boot-package kernel-package
 
@@ -212,7 +211,6 @@ new-board:
 # Simple target forwarder
 extract:
 fetch:
-setup:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
                 	$(MAKE) --no-print-directory --directory=$$v $@  only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \

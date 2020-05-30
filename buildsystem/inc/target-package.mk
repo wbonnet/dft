@@ -47,7 +47,7 @@ SW_VERSION  ?= out-of-scope
 #
 
 do-package:
-	skip_target=0 ; \
+	@skip_target=0 ; \
 # Check if make is running at generic level or target to build level \
 	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		skip_target=1 ; \
@@ -68,9 +68,7 @@ do-package:
 # Check if target should be executed even if current arch is different from target arch \
 # Check if skip flag has been raised it not then do the job \
 	if [ ! "x$$skip_target" = "x1" ] ; then \
-		if [ -f $(COOKIE_DIR)/do-package ] ; then \
-				echo " DEBUG : cookie $(COOKIE_DIR)/$@ already exist, nothing left to do for make do-package" ; \
-		else \
+		if [ ! -f $(COOKIE_DIR)/do-package ] ; then \
 # Create the workdir used to generate packaging scripts \
 			echo " DEBUG : Je sauis dans target package" ; \
 			pwd ; \
@@ -135,6 +133,10 @@ do-repackage:
 #
 
 package: install pre-package do-package post-package
+	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+		$(MAKE) --no-print-directory -C --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
+	done ;
+
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 

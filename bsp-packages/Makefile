@@ -90,20 +90,10 @@ sanity-check:
 		fi ; \
 	done
 
-# Simple forwarder
-#extract configure install package build fetch setup:
-package:
-	@for i in $(CATEGORIES) ; do \
-		if [ -f ${CURDIR}/$$i/Makefile ] ; then \
-                	$(MAKE) --no-print-directory -C $$i $@ ; \
-		fi ; \
-	done
-
 # Forward target call to subfolders where are stored the board.mk files specifying board architecture
-# $(MAKE) $@ --no-print-directory --directory=$(category) arch=$(arch) ; 
-list-boards:
-list-architectures:
-	@if [ "$(arch)" = "armhf" ] ; then \
+# $(MAKE) $@ --no-print-directory --directory=$(category) arch=$(arch) ;
+list-boards list-architectures:
+	if [ "$(arch)" = "armhf" ] ; then \
 		arch="armv7l"; \
 	fi ; \
 	if [ "$(arch)" = "arm64" ] ; then \
@@ -114,16 +104,16 @@ list-architectures:
 	fi ; \
 	if [ ! "$(category)" = "" ] ; then \
 		if [ ! "$(arch)" = "" ] ; then \
-			$(MAKE) $@ --no-print-directory --directory=$(category) arch=$(arch) ; \
+			$(MAKE) $@ --no-print-directory --directory=$(category) arch=$(arch) verbosity=$(verbosity); \
 		else \
-			$(MAKE) $@ --no-print-directory --directory=$(category) ; \
+			$(MAKE) $@ --no-print-directory --directory=$(category) verbosity=$(verbosity); \
 		fi ; \
 	else \
 	for category in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ ! "$(arch)" = "" ] ; then \
-			$(MAKE) $@ --no-print-directory --directory=$$category arch=$(arch) ; \
+			$(MAKE) $@ --no-print-directory --directory=$$category arch=$(arch) verbosity=$(verbosity); \
 		else \
-			$(MAKE) $@ --no-print-directory --directory=$$category ; \
+			$(MAKE) $@ --no-print-directory --directory=$$category verbosity=$(verbosity); \
 		fi ; \
 	done ; \
 	fi | sort -u ;
