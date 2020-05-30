@@ -37,13 +37,13 @@ CHECK_FOR_SANITY    = ansible-roles bsp-packages board-images
 sanity-check:
 	@for i in $(CHECK_FOR_SANITY) ; do \
 		if [ -f ${CURDIR}/$$i/Makefile ] ; then \
-			$(MAKE) -C $$i $@ ; \
+			$(MAKE) --directory=$$i $@ ; \
 		fi ; \
 	done
 
 # Forward list-boards to bsp-packages folder
 list-boards list-architectures :
-	@$(MAKE) --no-print-directory -C bsp-packages $@ arch=$(arch) category=$(category); \
+	$(MAKE) --no-print-directory --directory=bsp-packages $@ arch=$(arch) category=$(category); \
 
 # ------------------------------------------------------------------------------
 #

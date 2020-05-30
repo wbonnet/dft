@@ -93,25 +93,25 @@ sanity-check:
 # Forward target call to subfolders where are stored the board.mk files specifying board architecture
 # $(MAKE) $@ --no-print-directory --directory=$(category) arch=$(arch) ;
 list-boards list-architectures:
-	if [ "$(arch)" = "armhf" ] ; then \
-		arch="armv7l"; \
+	@if [ "$(arch)" = "armhf" ] ; then \
+		arch=armv7l; \
 	fi ; \
 	if [ "$(arch)" = "arm64" ] ; then \
-		arch="aarch64"; \
+		arch=aarch64; \
 	fi ; \
 	if [ "$(arch)" = "am64" ] ; then \
-		arch="x86_64"; \
+		arch=x86_64; \
 	fi ; \
 	if [ ! "$(category)" = "" ] ; then \
 		if [ ! "$(arch)" = "" ] ; then \
-			$(MAKE) $@ --no-print-directory --directory=$(category) arch=$(arch) verbosity=$(verbosity); \
+			$(MAKE) $@ --no-print-directory --directory=$(category) arch=$$arch verbosity=$(verbosity); \
 		else \
 			$(MAKE) $@ --no-print-directory --directory=$(category) verbosity=$(verbosity); \
 		fi ; \
 	else \
 	for category in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ ! "$(arch)" = "" ] ; then \
-			$(MAKE) $@ --no-print-directory --directory=$$category arch=$(arch) verbosity=$(verbosity); \
+			$(MAKE) $@ --no-print-directory --directory=$$category arch=$$arch verbosity=$(verbosity); \
 		else \
 			$(MAKE) $@ --no-print-directory --directory=$$category verbosity=$(verbosity); \
 		fi ; \
