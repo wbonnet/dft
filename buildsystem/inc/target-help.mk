@@ -208,6 +208,7 @@ help-catalog:
 	@echo "Available filters for the list targets are :"
 	@echo "    arch=                   (supported values are return values of command uname --machine)"
 	@echo "    category=               (desktop laptop phone set-top-box single-board-computer tablet)"
+	@echo "    verbosity=              (value 1 displays arch and category after the board name, default is 0)"
 	@echo
 	@echo "One or several filters can be passed to the make command to reduce the ouput of list-* targets"
 
