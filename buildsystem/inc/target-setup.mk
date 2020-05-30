@@ -63,6 +63,9 @@ setup:
 	@mkdir -p $(FILE_DIR)
 	@mkdir -p $(DEFCONFIG_DIR)
 	@mkdir -p $(PATCH_DIR)
+	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+		$(MAKE) --no-print-directory -C --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
+	done ; \
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 

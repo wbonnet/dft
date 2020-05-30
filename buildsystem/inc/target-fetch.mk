@@ -66,6 +66,9 @@ show-fetch-targets:
 	@echo $(FETCH_TARGETS)
 
 fetch : setup pre-fetch $(FETCH_TARGETS) post-fetch
+	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+		$(MAKE) --no-print-directory -C --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
+	done ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 

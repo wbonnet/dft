@@ -170,10 +170,3 @@ build configure package install:
 			$(MAKE) --no-print-directory -C $$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
 		done ; \
 	fi ; \
-
-
-# Simple forwarder
-setup fetch extract:
-	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
-		$(MAKE) --no-print-directory -C --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
-	done ; \
