@@ -199,7 +199,7 @@ show-config:
 	@echo "Directories configuration"
 	@echo "  DFT_BUILDSYSTEM                   $(DFT_BUILDSYSTEM)"
 	@echo "  DFT_HOME                          $(DFT_HOME)"
-	@echo "  DFT_WORKSPACE                     $(DFT_WORKSPACE)"
+	@echo "  DFT_FORGE                         $(DFT_FORGE)"
 	@echo "  WORK_DIR                          $(WORK_DIR)"
 	@echo "  FILE_DIR                          $(FILE_DIR)"
 	@echo "  DEFCONFIG_DIR                     $(DEFCONFIG_DIR)"

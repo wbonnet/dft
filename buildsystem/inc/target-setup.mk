@@ -44,7 +44,7 @@ DFT_TARGET_SETUP = 1
 #
 
 setup:
-	@mkdir -p $(DFT_WORKSPACE)
+	@mkdir -p $(DFT_FORGE)
 	@if [ ! "$(SW_VERSION)" = "" ] ; then \
 		mkdir -p $(WORK_DIR) ; \
 		mkdir -p $(COOKIE_DIR) ; \
@@ -65,7 +65,7 @@ setup:
 	@mkdir -p $(PATCH_DIR)
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		$(MAKE) --no-print-directory -C --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
-	done ; 
+	done ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 

@@ -67,23 +67,23 @@ HOST_ARCH ?= $(shell uname -m)
 # Defines the default values for directories
 #
 # WORK_DIR is the root of the workspace used to build the target software
-# including all steps such as downloading, configuring, compiling, packaging, 
+# including all steps such as downloading, configuring, compiling, packaging,
 # etc.
 #
-# This folder contains either temporary, or volatile, subfolders (such as 
-# package, extract) that can be rebuild from upstream sources even if it can 
-# take some extra long long time, or version/board specific files under git 
+# This folder contains either temporary, or volatile, subfolders (such as
+# package, extract) that can be rebuild from upstream sources even if it can
+# take some extra long long time, or version/board specific files under git
 # source control.
 #
 # The following items are under source control :
 #  . Makefile (by default it is a symlink to a generic shared makefile)
-#  . patches folder which contains local patches to apply on sources after 
-#    extract stage. Patches file have to be listed in the Makefile (it 
+#  . patches folder which contains local patches to apply on sources after
+#    extract stage. Patches file have to be listed in the Makefile (it
 #    can be a nice feature to add).
 #  . files folder contains files needed to compile and produce package which
 #    are not provided with upstream sources
 #
-# The following items are not under source control (and should not be) thus 
+# The following items are not under source control (and should not be) thus
 # they will be removed and destroyed by make mrproper :
 #  . 'sources' folder and its subfolders (since sources are downloaded from
 #    upstream and not kept in DFT git repository).
@@ -102,52 +102,51 @@ HOST_ARCH ?= $(shell uname -m)
 # folder storiing all the Makefiles tool chain with and its .mk include files
 DFT_HOME            = /usr/share/dft
 
-# DFT_WORKSPACE is the root of all work dirs used by DFT. Its content is 
-# considered as volatile even if it will store some git stuff. 
+# DFT_FORGE is the root of all work dirs used by DFT. Its content is
+# considered as volatile even if it will store some git stuff.
 #
 # It means it is "a work dir" and if you make some changes or add materials to
-# git folders which are important to you, you will have to commit / push the 
+# git folders which are important to you, you will have to commit / push the
 # files to upstream github or they will get lost at some cleanup time.
 #
-# DFT_WORKSPACE is where the current build space should be located. 
-# DFT_WORKSPACE can be overriden on the commande line used to run make
+# DFT_FORGE is where the current build space should be located.
+# DFT_FORGE can be overriden on the commande line used to run make
 # (to use a different place because of storage capacity or performance  reasons.
-DFT_WORKSPACE         ?= /tmp/dft-workspace
-
+#
 # It is up to you to ensure there will be enough free space depending
-# on how many targets you are building at a time. SSD or even ramdisk 
+# on how many targets you are building at a time. SSD or even ramdisk
 # can really speed up thing s but don't expect to build all versions for a
 # board unles you have a few gigs of Ram :)
 #
-# In order to build rootfs or firmware images the FS underneath DFT_WORKSPACE
-# has to support 'mount bind ' in chrooted environnement, so be careful is 
+# In order to build rootfs or firmware images the FS underneath DFT_FORGE
+# has to support 'mount bind ' in chrooted environnement, so be careful is
 # you use a NFS backend.
 #
-# If the DFT_WORKSPACE variable is not defined in the makefile env then its value is
-# retrieved from shell env. This means DFT_WORKSPACE value can be defined on the 
+# If the DFT_FORGE variable is not defined in the makefile env then its value is
+# retrieved from shell env. This means DFT_FORGE value can be defined on the
 # command line using :
-# DFT_WORKSPACE=/path/to/somewhere make show-config
-DFT_WORKSPACE ?= /tmp/dft-workspace
+# DFT_FORGE=/path/to/somewhere make show-config
+DFT_FORGE ?= /tmp/dft-forge
 
-# DFT_BUILDSYSTEM is where the Mafile toolchain is installed. The following 
-# value is computed from the current makefile location if it has not been 
+# DFT_BUILDSYSTEM is where the Mafile toolchain is installed. The following
+# value is computed from the current makefile location if it has not been
 # manually set. This is useful development purposes since all path are relative.
-# In the packaged version relative path are still the same (meaning don't care 
-# since it works out of the box), and this prevent you to add absolute path to 
-# git repo since it would fail when trying to write to a rea only place (in 
+# In the packaged version relative path are still the same (meaning don't care
+# since it works out of the box), and this prevent you to add absolute path to
+# git repo since it would fail when trying to write to a rea only place (in
 # this use case fail fast approch is better).
 DFT_BUILDSYSTEM     ?= $(dir $(lastword $(MAKEFILE_LIST)))
 
 
-# DFT_WORK is the name of directory under DFT_WORKSPACE used to build a version 
+# DFT_WORK is the name of directory under DFT_FORGE used to build a version
 # of a given pice of software (kernel, u-boot, etc.) or even a rootfs or firware
 # bootable disk image.
-WORK_DIR            ?= $(DFT_WORKSPACE)/$(BOARD_NAME)_$(SW_NAME)/$(SW_VERSION)
+WORK_DIR            ?= $(DFT_FORGE)/$(BOARD_NAME)_$(SW_NAME)/$(SW_VERSION)
 
-# Hint : All the variables with a name ending with DIR define a path located in the 
-# context of the current board for a given software, then a given version of this 
+# Hint : All the variables with a name ending with DIR define a path located in the
+# context of the current board for a given software, then a given version of this
 # sofware. Hoping thus hint can help you understand the logic behind the naming convention
-# 
+#
 # FILE_DIR contain all the static files nedeed by compilation of packaging steps
 # Since files in this folder are supposed to be static this folder should be located under
 # DFT_BUILDSYSTEM which is read-only for common use. DFT development like adding support
@@ -192,7 +191,7 @@ BUILD_SCRIPTS       ?= $(WORK_DIR)/Makefile
 # DOWNLOAD_TOOL should beset to git in custom makefiles if needed
 DOWNLOAD_TOOL       := wget
 
-# Default is to turn wget to quiet mode to hide progress bar in shell output 
+# Default is to turn wget to quiet mode to hide progress bar in shell output
 WGET_OPTS           := -q
 
 # Default upload tool is scp. rsync is not yet supported

@@ -149,7 +149,7 @@ help-bsp:
 	@echo "                           "
 	@echo "   The following targets are recursive and available only if write access to buildsystem is granted. New files"
 	@echo "   and folders will be created under buildsystem during execution. New items will not be added automatically to git."
-	@echo "   git add has to be done manually, depending on you workspace, as the pull request if needed by the git server."
+	@echo "   git add has to be done manually, depending on your workspace, as the pull request if needed by the git server."
 	@echo "                           "
 	@echo "    add-u-boot-version      new-version=YYYY.MM (require write acess)"
 	@echo "                            Create a new supported u-boot version entry. ex: make add-u-boot-version new-version=2019.07"
