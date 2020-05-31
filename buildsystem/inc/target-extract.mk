@@ -80,7 +80,9 @@ extract-archive-%.tar:
 		true ; \
 	else \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
-			echo "        extracting $(DOWNLOAD_DIR)/$*.tar" ; \
+			if [ $(verbosity) = 1 ] ; then \
+				echo "        extracting $(DOWNLOAD_DIR)/$*.tar" ; \
+			fi ; \
 			tar $(TAR_ARGS) -xf $(DOWNLOAD_DIR)/$*.tar -C $(BUILD_DIR) ; \
 		fi ; \
 	fi ;
@@ -93,7 +95,9 @@ extract-archive-%.tar.gz:
 	else \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 			if [ ! -f $(DOWNLOAD_DIR)/$*.tar.gz ] ; then \
-				echo "        archive $(DOWNLOAD_DIR)/$*.tar.gz is missing please check the files retrieved by the fetch target" ; \
+				if [ $(verbosity) = 1 ] ; then \
+					echo "        archive $(DOWNLOAD_DIR)/$*.tar.gz is missing please check the files retrieved by the fetch target" ; \
+				fi ; \
 			fi ; \
 			echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz" ; \
 			tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tar.gz -C $(BUILD_DIR) ; \
@@ -110,7 +114,9 @@ extract-archive-%.tgz:
 	else \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 			if [ ! -f $(DOWNLOAD_DIR)/$*.tgz ] ; then \
-				echo "        archive $(DOWNLOAD_DIR)/$*.tgz is missing please check the files retrieved by the fetch target" ; \
+				if [ $(verbosity) = 1 ] ; then \
+					echo "        archive $(DOWNLOAD_DIR)/$*.tgz is missing please check the files retrieved by the fetch target" ; \
+				fi ; \
 			fi ; \
 			echo "        extracting $(DOWNLOAD_DIR)/$*.tgz" ; \
 			tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tgz -C $(BUILD_DIR) ; \
@@ -126,7 +132,9 @@ extract-archive-%.tar.bz2:
 		true ; \
 	else \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
-			echo "        extracting $(DOWNLOAD_DIR)/$*.tar.bz2" ; \
+			if [ $(verbosity) = 1 ] ; then \
+				echo "        extracting $(DOWNLOAD_DIR)/$*.tar.bz2" ; \
+			fi ; \
 			tar $(TAR_ARGS) -xjf $(DOWNLOAD_DIR)/$*.tar.bz2 -C $(BUILD_DIR) ; \
 			mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
 			rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
@@ -140,7 +148,9 @@ extract-archive-%.tar.xz:
 		true ; \
 	else \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
-			echo "        extracting $(DOWNLOAD_DIR)/$*.tar.xz" ; \
+			if [ $(verbosity) = 1 ] ; then \
+				echo "        extracting $(DOWNLOAD_DIR)/$*.tar.xz" ; \
+			fi ; \
 			tar $(TAR_ARGS) -xJf $(DOWNLOAD_DIR)/$*.tar.xz -C $(BUILD_DIR) ; \
 			mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
 			rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
@@ -154,7 +164,9 @@ extract-archive-%.zip:
 		true ; \
 	else \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
-			echo "        extracting $(DOWNLOAD_DIR)/$*.zip" ; \
+			if [ $(verbosity) = 1 ] ; then \
+				echo "        extracting $(DOWNLOAD_DIR)/$*.zip" ; \
+			fi ; \
 			unzip $(DOWNLOAD_DIR)/$*.zip -d $(BUILD_DIR) ; \
 			mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
 			rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
@@ -168,7 +180,9 @@ extract-git-%:
 		true ; \
 	else \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
-		  	echo "        moving git data to $(EXTRACT)/$*" ; \
+			if [ $(verbosity) = 1 ] ; then \
+		  		echo "        moving git data to $(EXTRACT)/$*" ; \
+			fi ; \
 			mv $(GIT_BUILD_DIR)/$(SRC_GIT_REPO)/* $(BUILD_DIR)/ ; \
 		fi ; \
 	fi ;
@@ -185,8 +199,10 @@ PATCH_ARGS       = --directory=$(WORK_DIR) --strip=$(PATCH_DIR_LEVEL) --fuzz=$(P
 apply-patch-%:
 	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		true ; \
-		else \
-		echo " ==> Applying $(PATCH_DIR)/$*"
+	else \
+		if [ $(verbosity) = 1 ] ; then \
+			echo " ==> Applying $(PATCH_DIR)/$*"
+		fi ; \
 		patch $(PATCH_ARGS) < $(PATCH_DIR)/$*
 	fi ;
 	$(TARGET_DONE)

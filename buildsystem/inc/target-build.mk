@@ -78,6 +78,7 @@ build: configure pre-build $(BUILD_TARGETS) post-build
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 			$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) \
                    only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
+                   verbosity=$(verbosity); \
 		fi ; \
 	fi ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
