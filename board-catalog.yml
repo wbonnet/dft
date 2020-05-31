@@ -41,7 +41,7 @@ board-catalog:
   laptop:
           - pine64-pinebook:
             support-level: planning
-          - pine64-pinebookpro:
+          - pine64-pinebook-pro:
             support-level: planning
   set-top-box:
           - alfawise-s95:
