@@ -153,7 +153,7 @@ sanity-check:
         done
 
 # cd $$i && $(MAKE) $* && cd .. ;
-sanity-check: do-sanity-check
+u-boot-package: 
 	$(MAKE) --directory=u-boot package only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) verbosity=$(verbosity);
 
 # Build only linux kernel an package target
