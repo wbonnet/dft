@@ -113,18 +113,6 @@ board-catalog:
                   support-level: planning
          - nanopi-neo-plus2:
                   support-level: planning
-         - nvidia-jetson-nano:
-                  support-level: planning
-         - nvidia-jetson-tk1:
-                  support-level: planning
-         - nvidia-jetson-tx1:
-                  support-level: planning
-         - nvidia-jetson-tx2:
-                  support-level: planning
-         - nxp-sabre-qsd:
-                  support-level: planning
-         - nxp-sabre-qsd-plus:
-                  support-level: planning
          - odroid-c0:
                   support-level: planning
          - odroid-c1-plus:
@@ -191,4 +179,17 @@ board-catalog:
          - raspberry-pi4b:
                   support-level: planning
          - raspberry-pi3-32bits:
+                  support-level: planning
+ devkit:
+         - nvidia-jetson-nano:
+                  support-level: planning
+         - nvidia-jetson-tk1:
+                  support-level: planning
+         - nvidia-jetson-tx1:
+                  support-level: planning
+         - nvidia-jetson-tx2:
+                  support-level: planning
+         - nxp-sabre-qsd:
+                  support-level: planning
+         - nxp-sabre-qsd-plus:
                   support-level: planning
