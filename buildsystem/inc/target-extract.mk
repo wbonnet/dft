@@ -95,11 +95,11 @@ extract-archive-%.tar.gz:
 	else \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 			if [ ! -f $(DOWNLOAD_DIR)/$*.tar.gz ] ; then \
-				if [ $(verbosity) = 1 ] ; then \
 					echo "        archive $(DOWNLOAD_DIR)/$*.tar.gz is missing please check the files retrieved by the fetch target" ; \
-				fi ; \
 			fi ; \
-			echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz" ; \
+			if [ $(verbosity) = 1 ] ; then \
+				echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz" ; \
+			fi ; \
 			tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tar.gz -C $(BUILD_DIR) ; \
 			mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
 			rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
@@ -114,11 +114,11 @@ extract-archive-%.tgz:
 	else \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 			if [ ! -f $(DOWNLOAD_DIR)/$*.tgz ] ; then \
-				if [ $(verbosity) = 1 ] ; then \
 					echo "        archive $(DOWNLOAD_DIR)/$*.tgz is missing please check the files retrieved by the fetch target" ; \
-				fi ; \
 			fi ; \
-			echo "        extracting $(DOWNLOAD_DIR)/$*.tgz" ; \
+			if [ $(verbosity) = 1 ] ; then \
+				echo "        extracting $(DOWNLOAD_DIR)/$*.tgz" ; \
+			fi ; \
 			tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tgz -C $(BUILD_DIR) ; \
 			mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
 			rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
