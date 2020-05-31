@@ -81,9 +81,7 @@ do-install:
 				fi ; \
 			fi ; \
 		else \
-			if [ -f $(COOKIE_DIR)/$@ ] ; then \
-				echo " DEBUG : cookie $(COOKIE_DIR)/$@ already exist, nothing left to do for make do-configure" ; \
-			else \
+			if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 				if [ "$(SW_NAME)" = "u-boot" ] ; then \
 					cp -frv ../files $(INSTALL_DIR)/doc ; \
 				fi ; \
