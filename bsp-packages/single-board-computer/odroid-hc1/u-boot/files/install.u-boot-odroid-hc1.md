@@ -33,7 +33,5 @@ u-boot itself.
  
 ## shell commands
 
-# Given as example (copied from orangepi-zero) this comment has to be removed 
-# after validation of the following lines
-# sudo dd if=/dev/zero of=/dev/mmcblk0 bs=1k count=1023 seek=1 status=noxfer
-# sudo dd if=/boot/u-boot/u-boot-odroid-hc1 of=/dev/mmcblk0 bs=1024 seek=8 status=noxfer
+# sudo dd if=/dev/zero of=/dev/mmcblk1 bs=1k count=1023 seek=1 status=noxfer
+# sudo dd if=/boot/u-boot/u-boot-odroid-hc1 of=/dev/mmcblk1 bs=1024 seek=8 status=noxfer
