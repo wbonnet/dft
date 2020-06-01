@@ -74,21 +74,37 @@ help-bsp:
 	@echo "Board Support Packages management functionalities. The following helper targets can be used to ..."
 	@echo
 	@echo "   The following targets are recursive and available only if write access to buildsystem is granted. New files"
-	@echo "   and folders will be created under buildsystem during execution. New items will not be added automatically to git."
-	@echo "   git add has to be done manually, depending on you workspace, as the pull request if needed by the git server."
+	@echo "   and folders will be created under buildsystem during execution. New items are not added automatically to git."
+	@echo "   git add has to be done manually, depending on your workspace, as the pull request if needed by the git server."
 	@echo "                           "
 	@echo "   check-u-boot-defconfig  Check defconfig target availability from upstream sources"
-	@echo "board level, or upper, available targets are :"
+	@echo "                           "
+	@echo "Category level targets are :"
+	@echo "    add-board               Create a new board entry ane Makefiles (require write acess)"
+	@echo "                            The following variables are mandatory : (grub is not yet supported)"
+	@echo "                                board_name=xxx"
+	@echo "                                board_arch=xxx"
+	@echo "                                uboot_support=[0|1]"
+	@echo "                                uboot_defconfig=change_me_defconfig"
+	@echo "                                default_dtb=change_me.dtb"
+	@echo "                            This target create a subdirectory named after the board_name variable."
+	@echo "                            and instanciate from buildsystem templates the Makefile used to build"
+	@echo "                            Linux kernel and u-boot packages."
+	@echo
+	@echo "Board level targets are :"
 	@echo "    kernel-package          Recursivly build Linux kernel packages (support filters)"
 	@echo "    u-boot-package          Recursivly build u-boot packages (support filters)"
 	@echo
 	@echo "    add-u-boot-version      new-version=YYYY.MM (require write acess)"
-	@echo "                            Create a new supported u-boot version entry. ex: make add-u-boot-version new-version=2019.07"
-	@echo "                            This target will create a subdirectory named after the content of the new-version variable."
+	@echo "                            Create a new supported u-boot version entry"
+	@echo "                            ex: make add-u-boot-version new-version=2019.07"
+	@echo "                            This target create a subdirectory named after the content of new-version variable."
 	@echo "                            It will contain the Makefile and all the files needed to fetch and build the given"
 	@echo "                            version. It also instanciate Debian package template."
 	@echo
-	@echo "sofware level (kernel or u-boot) available targets are :"
+	@echo
+	@echo
+	@echo "Sofware level (kernel or u-boot) targets are :"
 	@echo " XXX Todo add filters in help"
 	@echo "Available targets are :"
 	@echo "   clean                   Call the clean target inside the work directory"
@@ -139,8 +155,8 @@ help-bsp:
 	@echo
 	@echo "                           While recursively walking the tree of category and board, make encounters targets using"
 	@echo "                           a CPU architecture different from the one make and build toolchain are running on."
-	@echo "                           The following command line variables can be used to control make behavior when dealing"
-	@echo "                           with arch dependant targets:"
+	@echo "                           The following command line variables can be used to control make command behavior when"
+	@echo "                           dealing with arch dependant targets:"
 	@echo
 	@echo "                           arch-warning=0     (display warning when skipping a target because of arch"
 	@echo "                                               compatibility. default value=0)"
@@ -154,7 +170,7 @@ help-bsp:
 # Help about configuration file
 #
 help-config-file:
-	@echo "Displays variables from defined in used dftrc confiy2yguration"
+	@echo "Displays variables from defined in used dftrc configuration"
 	@echo
 	@echo "Available targets are :"
 	@echo "    list-config-vars        List variables which can be defined in configuration file"
