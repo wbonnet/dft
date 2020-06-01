@@ -128,7 +128,7 @@ kernel-package:
 
 # Create a new u-boot version entry
 add-u-boot-version:
-	@echo "DEBUG : in category.makefile add-u-boot-version with argument new-version $(new-version)" ;
+	@echo "DEBUG : in category.makefile add-u-boot-version with argument add-version $(new-version)" ;
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f $$i/Makefile ] ; then \
 			$(MAKE) add-u-boot-version --warn-undefined-variables --no-print-directory --directory=$$i new-version=$(new-version) ; \
@@ -141,8 +141,8 @@ check-u-boot-defconfig:
 	done
 
 # Create a new board entry
-new-board:
-	echo "DEBUG : in category.makefile running new-board with argument board_name $(board_name) board_arch $(board_arch) board_arch $(board_arch) uboot_support $(uboot_support) uboot_support $(uboot_support)  uboot_defconfig $(uboot_defconfig) default_dtb $(default_dtb)" ; \
+add-board:
+	echo "DEBUG : in category.makefile running add-board with argument board_name $(board_name) board_arch $(board_arch) board_arch $(board_arch) uboot_support $(uboot_support) uboot_support $(uboot_support)  uboot_defconfig $(uboot_defconfig) default_dtb $(default_dtb)" ; \
 	if [ "$(board_name)" == "" ] ; then \
 		echo "DEBUG : from category.makefile argument board_name is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2001-1601) ; \
@@ -205,7 +205,7 @@ new-board:
 		echo "git add $(board_name)" ; \
 		echo "Last step before building is to add a u-boot version to the new $(board_name) board. You can use this example :" ; \
 		echo "cd $(board_name)/u-boot" ; \
-		echo "make add-u-boot-version new-version=2020.04" ; \
+		echo "make add-u-boot-version add-version=2020.04" ; \
 	fi ;
 
 # Simple target forwarder
@@ -227,11 +227,3 @@ list-boards:
 		fi ; \
 	done ; \
 
-
-# ------------------------------------------------------------------------------
-#
-# Target that prints the help
-#
-help:
-	@echo "The existing local targets are the following. Local targets are executed only at this"
-	@echo "level in the category, without recursion nor walk down the tree of board categories"
