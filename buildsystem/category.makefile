@@ -188,7 +188,7 @@ add-board:
 			sed -i -e "s/__GRUB_SUPPORT__/0/g" $(board_name)/board.mk ; \
 		else  \
 			echo "grub_support value should be 0 or 1. No value is equivalent to 0, grub will be deactivated" ; \
-			export grub-support=0 ; \
+			export grub_support=0 ; \
 		fi ; \
 	fi ; \
 	mkdir $(board_name)/kernel/ ; \
@@ -205,7 +205,7 @@ add-board:
 		echo "git add $(board_name)" ; \
 		echo "Last step before building is to add a u-boot version to the new $(board_name) board. You can use this example :" ; \
 		echo "cd $(board_name)/u-boot" ; \
-		echo "make add-u-boot-version add-version=2020.04" ; \
+		echo "make add-u-boot-version new-version=2020.04" ; \
 	fi ;
 
 # Simple target forwarder
