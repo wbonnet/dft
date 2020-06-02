@@ -54,7 +54,6 @@ show-build-targets:
 build: configure pre-build $(BUILD_TARGETS) post-build
 	@skip_target=0 ; \
 \
-# Check if make is running at generic level or target to build level \
 	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		skip_target=1 ; \
 		true ; \
@@ -71,8 +70,6 @@ build: configure pre-build $(BUILD_TARGETS) post-build
 			echo "In order to generate binaries for existing architectures, you need several builders, one for each target arch." ; \
 		fi ; \
 	fi ; \
-# Check if target should be executed even if current arch is different from target arch \
-# Check if skip flag has been raised it not then do the job \
 	if [ ! "x$$skip_target" = "x1" ] ; then \
 		cd $(BUILD_DIR) ; \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
