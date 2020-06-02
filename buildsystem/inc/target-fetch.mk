@@ -76,13 +76,11 @@ fetch : setup pre-fetch $(FETCH_TARGETS) post-fetch
 # To keep stuf clean the useless empty folders are removed by command rmdir
 # --ignore-fail-on-non-empty
 fetch-archive-%:
-		@skip_target=0 ; \
-# Check if make is running at generic level or target to build level \
+	@skip_target=0 ; \
 	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		skip_target=1 ; \
 		true ; \
 	fi; \
-\
 	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
 		skip_target=1 ; \
 	fi ; \
@@ -105,13 +103,11 @@ fetch-archive-%:
 	$(TARGET_DONE)
 
 clone-git-%:
-		@skip_target=0 ; \
-# Check if make is running at generic level or target to build level \
+	@skip_target=0 ; \
 	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		skip_target=1 ; \
 		true ; \
 	fi; \
-\
 	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
 		skip_target=1 ; \
 	fi ; \
