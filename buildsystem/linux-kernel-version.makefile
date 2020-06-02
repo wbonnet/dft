@@ -48,7 +48,7 @@ USE_CONFIG_FILE := $(subst ,,$(USE_CONFIG_FILE))
 HOST_ARCH      ?= $(shell uname -m)
 
 # Do not recurse the following subdirs
-MAKE_FILTERS  := Makefile README.md .
+MAKE_FILTERS  := Makefile README.md debian patches
 
 # ------------------------------------------------------------------------------
 #
@@ -134,4 +134,3 @@ sanity-check:
 # Simple forwarder just  in case
 linux-kernel-package : package
 kernel-package : package
-

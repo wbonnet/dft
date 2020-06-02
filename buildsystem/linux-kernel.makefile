@@ -158,6 +158,40 @@ sanity-check:
 		fi ; \
 	done ;
 
+# Create a new linux-kernel version entry
+add-linux-kernel-version:
+	@echo "DEBUG : in linux-kernel.makefile running add-u-boot-version with argument new-version $(new-version)" ;
+	@if [ "$(new-version)" == "" ] ; then \
+		echo "DEBUG : from linux-kernel.makefile argument new-version is missing or has no value. Doing nothing..." ; \
+		$(call dft_error ,2001-0801) ; \
+	fi ;
+	@if [ -d "./$(new-version)" ] ; then \
+		echo ". Version $(new-version) already exist. Doing nothing..." ; \
+	else  \
+		echo ". Creating the directory for linux-kernel version $(new-version)" ; \
+		mkdir -p $(new-version) ; \
+		ln -s ../$(DFT_BUILDSYSTEM) $(new-version)/buildsystem ; \
+		ln -s ../$(DFT_BUILDSYSTEM)/linux-kernel-version.makefile $(new-version)/Makefile ; \
+		mkdir -p $(new-version)/patches ; \
+		touch $(new-version)/patches/.gitkeep ; \
+		cp -fr ../$(DFT_BUILDSYSTEM)/templates/debian-linux-kernel-package $(new-version)/debian ; \
+		find $(new-version)/debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(new-version)/g" \
+                                           -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" \
+                                           -e "s/__DATE__/$(shell LC_ALL=C date +"%a, %d %b %Y %T %z")/g" ; \
+		if [ "${DEBEMAIL}" = "" ] ; then \
+			find $(new-version)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/unknown/g" ; \
+		else \
+			find $(new-version)/debian -type f | xargs sed -i -e "s/__MAINTAINER_EMAIL__/${DEBEMAIL}/g" ; \
+		fi ; \
+		if [ "${DEBFULLNAME}" = "" ] ; then \
+			find $(new-version)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/unknown/g" ; \
+		else \
+			find $(new-version)/debian -type f | xargs sed -i -e "s/__MAINTAINER_NAME__/${DEBFULLNAME}/g" ; \
+		fi ; \
+		git add $(new-version) ; \
+	fi ;
+	@echo "DEBUG : end of add-linux-kernel-version in linux-kernel.makefile" ;
+
 # Override standard targets
 build configure package install:
 	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
