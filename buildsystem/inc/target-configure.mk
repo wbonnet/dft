@@ -72,7 +72,7 @@ reconfigure: patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconfi
 
 configure: extract pre-configure do-configure post-configure
 do-configure:
-	@skip_target=0 ; \
+	skip_target=0 ; \
 \
 # Check if make is running at generic level or target to build level \
 	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
