@@ -37,7 +37,7 @@ CATEGORIES    = laptop desktop devkit set-top-box single-board-computer phone ta
 u-boot-package:
 	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
-			echo "$(MAKE) --no-print-directory --directory=$$i u-boot-package"; \
+			$(MAKE) --no-print-directory --directory=$$i u-boot-package; \
 		fi ; \
         done
 
