@@ -74,7 +74,6 @@ configure: extract pre-configure do-configure post-configure
 do-configure:
 	skip_target=0 ; \
 \
-# Check if make is running at generic level or target to build level \
 	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		skip_target=1 ; \
 		true ; \
@@ -85,37 +84,33 @@ do-configure:
 		if [ "x$(arch-warning)" = "x1" ] ; then \
 			echo "Makefile processing had to be stopped during target $@ execution. Cross compilation is not supported. " ; \
 			echo "The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
-		  echo "The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
+		    echo "The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
 			echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running" ; \
 			echo "this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
 			echo "In order to generate binaries for existing architectures, you need several builders, one for each target arch." ; \
 		fi ; \
 	fi ; \
-# Check if target should be executed even if current arch is different from target arch \
-# Check if skip flag has been raised it not then do the job \
 	if [ ! "x$$skip_target" = "x1" ] ; then \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 			if [ "$(SW_NAME)" = "u-boot" ] ; then \
-# Test if current package is a u-boot then copy template files \
 				if [ ! -f "$(BUILD_DIR)/configs/$(UBOOT_DEFCONFIG)" ] ; then \
 					echo "ERROR defconfig file $(UBOOT_DEFCONFIG) for board $(BOARD_NAME) does not exist in $(SW_NAME) v$(SW_VERSION) sources." ; \
 					$(call dft_error ,2001-1001) ; \
 				else \
-					cd $(BUILD_DIR) ; \
+					cd "$(BUILD_DIR)" ; \
 					echo "    running u-boot make $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) in $(BUILD_DIR)" ; \
 					make -C $(BUILD_DIR) $(BUILD_FLAGS) $(UBOOT_DEFCONFIG) ; \
 				fi ; \
 			else \
-# Test if current package is a linux kernel then copy template files \
 				if [ "$(SW_NAME)" = "linux" ] ; then \
 					if [ ! -f "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ] ; then \
 						echo "DEBUG : config/$(BOARD_NAME)-kernel-$(SW_VERSION).config does not exist using default instead" ; \
-						cp "config/$(BOARD_NAME)-kernel-default.config" $(BUILD_DIR)/.config ; \
+						cp "config/$(BOARD_NAME)-kernel-default.config" "$(BUILD_DIR)/.config" ; \
 					else \
 						echo "DEBUG : config/$(BOARD_NAME)-kernel-$(SW_VERSION).config exist !" ; \
-						cp "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" $(BUILD_DIR)/.config ; \
+						cp "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" "$(BUILD_DIR)/.config" ; \
 					fi ; \
-					cd $(BUILD_DIR) ; \
+					cd "$(BUILD_DIR)" ; \
 					echo "DEBUG : now running kernel make olddefconfig in `pwd`" ; \
 					echo "DEBUG : existing .config files have been backuped up to beforolddefconfig and afterolddefconfig" ; \
 					cp .config "$(BOARD_NAME)-kernel-$(SW_VERSION).beforeolddefconfig" ; \
