@@ -90,7 +90,7 @@ extract-archive-%.tar:
 
 extract-archive-v.tar.gz:
 extract-archive-%.tar.gz:
-	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		true ; \
 	else \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
