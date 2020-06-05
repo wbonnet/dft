@@ -90,7 +90,7 @@ DISPLAY_COMPLETED_TARGET_NAME  = @echo "    completed [$@] "
 #
 # Change only access time not modification
 #
-TARGET_DONE = @mkdir -p $(COOKIE_DIR) && touch -a $(COOKIE_DIR)/$(notdir $@)
+TARGET_DONE = @mkdir -p "$(COOKIE_DIR)" && touch -a "$(COOKIE_DIR)/$(notdir $@)"
 
 # ------------------------------------------------------------------------------
 #
@@ -130,7 +130,7 @@ include $(DFT_BUILDSYSTEM)/inc/target-help.mk
 # Remove existing task cookie when entering the generic pre-redo task target
 #
 pre-re%:
-	@rm -rf $(COOKIE_DIR)/$*
+	@rm -f $(COOKIE_DIR)/$*
 	@true
 
 pre-%:
@@ -145,7 +145,6 @@ post-%:
 # Run the clean target only inside the sources directory. Compilation occurs in
 # BUILD_DIR, not in WORK_DIR which is parent of BUILD_DIR and also contain cookies
 # download, install etc. directories (thus no Makefile)
-#	if [ -d $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ] ; then rmdir $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; fi
 clean:
 	@echo " DEBUG : Entering target clean from dft.mk"
 	@echo "BUILD_DIR : $(BUILD_DIR)"
