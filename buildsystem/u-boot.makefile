@@ -158,7 +158,7 @@ sanity-check:
 add-u-boot-version:
 	@echo "DEBUG : in u-boot.makefile running add-u-boot-version with argument new-version $(new-version)" ;
 	@if [ "$(new-version)" == "" ] ; then \
-		echo "DEBUG : from u-boot.makefile Argument new-version is missing or has no value. Doing nothing..." ; \
+		echo "DEBUG : from u-boot.makefile argument new-version is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2001-0801) ; \
 	fi ;
 	@if [ -d "./$(new-version)" ] ; then \
@@ -170,7 +170,6 @@ add-u-boot-version:
 		ln -s ../$(DFT_BUILDSYSTEM)/u-boot-version.makefile $(new-version)/Makefile ; \
 		mkdir -p $(new-version)/files ; \
 		ln -s ../../files/install.u-boot-$(BOARD_NAME).md $(new-version)/files/ ; \
-		mkdir -p $(new-version)/files ; \
 		touch $(new-version)/files/.gitkeep ; \
 		mkdir -p $(new-version)/patches ; \
 		touch $(new-version)/patches/.gitkeep ; \
