@@ -41,7 +41,7 @@ help:
 	@echo
 	@echo "Available targets to display scoped help are :"
 	@echo " help-bsp                Help about BSP building targets"
-	@echo " help-config-file        Help about configuration file"
+	@echo " help-config-file        Help about configuration file ans variables"
 	@echo " help-env-vars           Help about environnment variables"
 	@echo " help-catalog            Help about catalog listing target (list of supported board, arch, versions)"
 	@echo " help-images             Help about image building targets"
