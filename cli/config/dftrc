@@ -54,7 +54,7 @@ configuration:
   activate_debootstrap_cachedir: True
 
   # Defines the debootstrap cache location
-  deboostrap_cachedir: "/var/cache/dft-work/debootstrap-cachedir"
+  deboostrap_cachedir: "/var/cache/dft-forge/debootstrap-cachedir"
 
   # Defines if an apt proxy should be used inside the chrooted environment
   activate_chroot_apt_proxy: True
