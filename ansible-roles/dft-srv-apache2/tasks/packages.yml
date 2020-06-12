@@ -23,5 +23,12 @@
 # files, one file per functionnality.
 #
 
+#
+# Instal the needed Apache2 packages (core and libs)
+#
 ---
-- include: apache2.yml
+- name : DFT - Install Apache2
+  apt:
+       pkg: apache2
+       state: latest
+       install_recommends: no

@@ -142,7 +142,7 @@ check-u-boot-defconfig:
 
 # Create a new board entry
 add-board:
-	echo "DEBUG : in category.makefile running add-board with argument board_name $(board_name) board_arch $(board_arch) board_arch $(board_arch) uboot_support $(uboot_support) uboot_support $(uboot_support)  uboot_defconfig $(uboot_defconfig) default_dtb $(default_dtb)" ; \
+	@echo "DEBUG : in category.makefile running add-board with argument board_name $(board_name) board_arch $(board_arch) board_arch $(board_arch) uboot_support $(uboot_support) uboot_support $(uboot_support)  uboot_defconfig $(uboot_defconfig) default_dtb $(default_dtb)" ; \
 	if [ "$(board_name)" == "" ] ; then \
 		echo "DEBUG : from category.makefile argument board_name is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2001-1601) ; \

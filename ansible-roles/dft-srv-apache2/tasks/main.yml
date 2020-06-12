@@ -24,4 +24,6 @@
 #
 
 ---
-- include: apache2.yml
+- include: packages.yml
+- include: apache2-vhosts.yml
+- include: apache2-modules.yml
