@@ -26,3 +26,17 @@
 ---
 - include: packages.yml
 - include: configuration.yml
+
+- name: DFT - Add generated tar archiving scripts to cron table
+  cron:
+        name: "tar archiving script"
+        month: {{ dft_sysop_archive_tar.cron_definition.month }}
+        weekday: {{ dft_sysop_archive_tar.cron_definition.weekday }}
+        day: {{ dft_sysop_archive_tar.cron_definition.day }}
+        hour: {{ dft_sysop_archive_tar.cron_definition.hour }}
+        minute: {{ dft_sysop_archive_tar.cron_definitionminute }}
+        user: {{ dft_sysop_archive_tar.cron_definition.username }}
+        job: /opt/dft/bin/create-{{item.name}}-tar-archive
+  with_items: "{{ dft_sysop_archive_tar.archives }}"
+  when: dft_sysop_archive_tar is defined and dft_sysop_archive_tar.add_cronjob is defined and
+        dft_sysop_archive_tar.add_cronjob
