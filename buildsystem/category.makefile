@@ -178,7 +178,7 @@ add-board:
 		if [ "$(uboot_support)" == "0" ] ; then \
 			sed -i -e "s/__UBOOT_SUPPORT__/0/g" $(board_name)/board.mk ; \
 		else  \
-			echo "uboot_support value should be 0 or 1. No value is equivalent to 1, u-boot wiil be activated" ; \
+			echo "uboot_support value should be 0 or 1. No value is equivalent to 1, thus u-boot is activated" ; \
 		fi ; \
 	fi ; \
 	if [ "$(grub_support)" == "1" ] ; then \
@@ -187,7 +187,7 @@ add-board:
 		if [ "$(grub_support)" == "0" ] ; then \
 			sed -i -e "s/__GRUB_SUPPORT__/0/g" $(board_name)/board.mk ; \
 		else  \
-			echo "grub_support value should be 0 or 1. No value is equivalent to 0, grub will be deactivated" ; \
+			echo "grub_support value should be 0 or 1. No value is equivalent to 0, thus grub is deactivated" ; \
 			export grub_support=0 ; \
 		fi ; \
 	fi ; \
