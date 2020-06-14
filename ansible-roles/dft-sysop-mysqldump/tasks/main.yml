@@ -26,6 +26,3 @@
 ---
 - include: packages.yml
 - include: configuration.yml
-
-- name: DFT - Add generated mysqldump scripts to cron table
-  debug: msg="{{ dft_sysop_mysqldump.databases_to_dump }}"

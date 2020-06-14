@@ -35,16 +35,15 @@
   with_items: "{{ dft_sysop_archive_tar.archives }}"
   when: dft_sysop_archive_tar is defined and dft_sysop_archive_tar.archives is defined
 
-#- name: DFT - Add generated tar archiving scripts to cron table
-#  cron:
-#    month: {{ item.crontab_entry.month }}
-#    weekday: {{ item.crontab_entry.weekday }}
-#    day: {{ item.crontab_entry.day }}
-#    hour: {{ item.crontab_entry.hour }}
-#    minute: {{ item.crontab_entry.minute }}
-#    user: {{ item.crontab_entry.username }}
-#    job: /opt/dft/bin/create-{{item.name}}-tar-archive
-#    state: present
-#  with_items: "{{ dft_sysop_archive_tar.archives }}"
-#  when: dft_sysop_archive_tar is defined and dft_sysop_archive_tar.add_cronjob is defined and
-#        dft_sysop_archive_tar.add_cronjob
+- name: DFT - Add generated tar based archiving scripts to cron table
+  cron:
+    name: "{{ item.name }}"
+    month: "{{ item.crontab_entry.month }}"
+    weekday: "{{ item.crontab_entry.weekday }}"
+    day: "{{ item.crontab_entry.day }}"
+    hour: "{{ item.crontab_entry.hour }}"
+    minute: "{{ item.crontab_entry.minute }}"
+    user: "{{ item.crontab_entry.username }}"
+    job: "/opt/dft/bin/create-tar-archive-{{item.name}}"
+  with_items: "{{ dft_sysop_archive_tar.archives }}"
+  when: dft_sysop_archive_tar.archives is defined

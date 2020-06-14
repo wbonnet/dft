@@ -42,3 +42,16 @@
             mode="0755"
   with_items: "{{ dft_sysop_mysqldump.databases_to_dump }}"
   when: dft_sysop_mysqldump is defined and item.name is defined
+
+- name: DFT - Add generated mysqldump based generated scripts to cron table
+  cron:
+    name: "{{ item.name }}"
+    month: "{{ item.crontab_entry.month }}"
+    weekday: "{{ item.crontab_entry.weekday }}"
+    day: "{{ item.crontab_entry.day }}"
+    hour: "{{item.crontab_entry.hour }}"
+    minute: "{{item.crontab_entry.minute }}"
+    user: "{{item.crontab_entry.username }}"
+    job: "/opt/dft/bin/sqldump-database-{{ item.name }}"
+  with_items: "{{ dft_sysop_mysqldump.databases_to_dump }}"
+  when: dft_sysop_mysqldump.databases_to_dump is defined
