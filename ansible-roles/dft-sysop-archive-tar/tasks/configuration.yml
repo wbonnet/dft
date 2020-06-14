@@ -28,7 +28,7 @@
 
 - name: DFT - Deploy tar archiving script
   template:  src=create-tar-archive.j2
-             dest=/opt/dft/bin/create-{{ item.name }}-tar-archive
+             dest=/opt/dft/bin/create-tar-archive-{{ item.name }}
              owner=root
              group=root
              mode="0755"
