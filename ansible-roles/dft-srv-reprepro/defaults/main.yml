@@ -55,7 +55,7 @@ dft_srv_reprepro:
       groups: "www-data"
       home_dir: /home/reprepro/
       shell: /bin/bash
-    cron_definition:
+    crontab_entry:
       month: "*"
       weekday: "*"
       day: "*"

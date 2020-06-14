@@ -28,9 +28,23 @@
 
 - name: DFT - Deploy tar archiving script
   template:  src=create-tar-archive.j2
-             dest=/opt/dft/bin/create-{{item.name}}-tar-archive
+             dest=/opt/dft/bin/create-{{ item.name }}-tar-archive
              owner=root
              group=root
              mode="0755"
   with_items: "{{ dft_sysop_archive_tar.archives }}"
   when: dft_sysop_archive_tar is defined and dft_sysop_archive_tar.archives is defined
+
+#- name: DFT - Add generated tar archiving scripts to cron table
+#  cron:
+#    month: {{ item.crontab_entry.month }}
+#    weekday: {{ item.crontab_entry.weekday }}
+#    day: {{ item.crontab_entry.day }}
+#    hour: {{ item.crontab_entry.hour }}
+#    minute: {{ item.crontab_entry.minute }}
+#    user: {{ item.crontab_entry.username }}
+#    job: /opt/dft/bin/create-{{item.name}}-tar-archive
+#    state: present
+#  with_items: "{{ dft_sysop_archive_tar.archives }}"
+#  when: dft_sysop_archive_tar is defined and dft_sysop_archive_tar.add_cronjob is defined and
+#        dft_sysop_archive_tar.add_cronjob

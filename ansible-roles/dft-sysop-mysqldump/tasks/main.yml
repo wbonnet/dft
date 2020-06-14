@@ -28,15 +28,4 @@
 - include: configuration.yml
 
 - name: DFT - Add generated mysqldump scripts to cron table
-  cron:
-        name: "tar archiving script"
-        month: {{ dft_sysop_mysqldump.cron_definition.month }}
-        weekday: {{ dft_sysop_mysqldump.cron_definition.weekday }}
-        day: {{ dft_sysop_mysqldump.cron_definition.day }}
-        hour: {{ dft_sysop_mysqldump.cron_definition.hour }}
-        minute: {{ dft_sysop_mysqldump.cron_definitionminute }}
-        user: {{ dft_sysop_mysqldump.cron_definition.username }}
-        job: /opt/dft/bin/mysqldump-archive-database-{{ item.name }}
-  with_items: "{{ dft_sysop_mysqldump.archives }}"
-  when: dft_sysop_mysqldump is defined and dft_sysop_mysqldump.add_cronjob is defined and
-        dft_sysop_mysqldump.add_cronjob
+  debug: msg="{{ dft_sysop_mysqldump.databases_to_dump }}"

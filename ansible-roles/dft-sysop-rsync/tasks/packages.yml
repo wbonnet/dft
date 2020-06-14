@@ -23,6 +23,5 @@
   apt:
        pkg:
           - rsync
-          - openssh-client
        state: latest
        install_recommends: no

@@ -29,14 +29,13 @@
 
 - name: DFT - Add generated rsync scripts to cron table
   cron:
-        name: "rsync script"
-        month: {{ dft_sysop_rsync.cron_definition.month }}
-        weekday: {{ dft_sysop_rsync.cron_definition.weekday }}
-        day: {{ dft_sysop_rsync.cron_definition.day }}
-        hour: {{ dft_sysop_rsync.cron_definition.hour }}
-        minute: {{ dft_sysop_rsync.cron_definitionminute }}
-        user: {{ dft_sysop_rsync.cron_definition.username }}
-        job: /opt/dft/bin/rsync-path-{{ item.name }}
-  with_items: "{{ dft_sysop_rsync.archives }}"
-  when: dft_sysop_rsync is defined and dft_sysop_rsync.add_cronjob is defined and
-        dft_sysop_rsync.add_cronjob
+    name: "{{ item.name }}"
+    month: "{{ item.crontab_entry.month }}"
+    weekday: "{{ item.crontab_entry.weekday }}"
+    day: "{{ item.crontab_entry.day }}"
+    hour: "{{item.crontab_entry.hour }}"
+    minute: "{{item.crontab_entry.minute }}"
+    user: "{{item.crontab_entry.username }}"
+    job: "/opt/dft/bin/rsync-path-{{ item.name }}"
+  with_items: "{{ dft_sysop_rsync.sources }}"
+  when: dft_sysop_rsync.sources is defined

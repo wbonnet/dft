@@ -146,11 +146,11 @@
 # -------------------------------------------------------------------------------------------------
 # Add processincoming script cron table for user reprepro. Scheduled every hour by default
 - cron: name="Repository update"
-        month={{ dft_debian_repository_cron_definition.month }}
-        weekday={{ dft_debian_repository_cron_definition.weekday }}
-        day={{ dft_debian_repository_cron_definition.day }}
-        hour={{ dft_debian_repository_cron_definition.hour }}
-        minute={{ dft_debian_repository_cron_definition.minute }}
+        month={{ dft_debian_repository_crontab_entry.month }}
+        weekday={{ dft_debian_repository_crontab_entry.weekday }}
+        day={{ dft_debian_repository_crontab_entry.day }}
+        hour={{ dft_debian_repository_crontab_entry.hour }}
+        minute={{ dft_debian_repository_crontab_entry.minute }}
         user="{{ dft_debian_repository_user_definition.username }}"
         job="cd {{ dft_debian_repository_user_definition.home_dir }} && {{ dft_debian_repository_user_definition.home_dir }}/bin/reprepro_import_packages"
 
