@@ -36,7 +36,7 @@
 
 - name: DFT - Create mysqldump based scripts to archive databases in separate backup files
   template: src=mysqldump-archive-single-database.j2
-            dest=/opt/dft/bin/mysqldump-archive-database-{{ item.name }}
+            dest=/opt/dft/bin/sqldump-database-{{ item.name }}
             owner=root
             group=root
             mode="0755"
