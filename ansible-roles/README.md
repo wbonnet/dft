@@ -10,7 +10,7 @@ A role name is made of three components or fields which are dashed separated. Th
   * bsp (drivers and hardware support)
   * devel (development and compilers)
   * os (operating system and unix system itself)
-  * network
+  * network (system level only, end user apps go to srv)
   * security
   * sysop (administration tasks such as backups)
   * webapps (web and remote software applications)
