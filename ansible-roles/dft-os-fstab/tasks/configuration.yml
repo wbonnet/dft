@@ -20,13 +20,10 @@
 
 ---
 - name : DFT - Setup /etc/fstab
-  template: src=fstab.j2
+  template: src=templates/fstab.j2
             dest=/etc/fstab
             owner=root
             group=root
             mode="0660"
   # Excute this task only if the filesystems variable is defined
-  with_items: "{{ dft_os_fstab.filesystems }}"
   when: dft_os_fstab.filesystems is defined
-
-
