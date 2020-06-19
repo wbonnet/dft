@@ -29,7 +29,7 @@
 
 - name : DFT - Instantiate playbook deployment log file
   template: src=templates/ansible-playbook.log.j2
-            dest=/var/log/dft/dft-sysop-playbook-{{ ansible_date_time.date }}-{{ ansible_date_time.time }}.log
+            dest=/var/log/dft/{{ role_name }}-{{ ansible_date_time.date }}-{{ ansible_date_time.time }}.log
             owner=root
             group=root
             mode="0660"
