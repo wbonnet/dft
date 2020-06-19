@@ -1,7 +1,7 @@
 This log file has been generated on {{ ansible_date_time.date }} {{ ansible_date_time.time }} during deployment of role {{ role_name }} to host {{ ansible_host }}
 
 Ansible internal variables inventory defined values
-(plese check Ansible documenation for default value of undefined variables)
+(please check Ansible documentation for default value of undefined variables)
 
 #
 # section : Magic
@@ -258,7 +258,8 @@ ansible_local : {{ ansible_local }}
 #
 # Connection variables are normally used to set the specifics on how to execute actions on a target. Most of them correspond to connection plugins, but not all
 # are specific to them; other plugins like shell, terminal and become are normally involved. Only the common ones are described as each
-# connection/become/shell/etc plugin # can define its own overrides and specific variables. See Controlling how Ansible behaves: precedence rules for how
+# connection/become/shell/etc plugin
+# can define its own overrides and specific variables. See Controlling how Ansible behaves: precedence rules for how
 # connection variables interact with configuration # settings, command-line options, and playbook keywords.
 #
 {% if ansible_become_user is defined %}
