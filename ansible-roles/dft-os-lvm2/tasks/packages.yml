@@ -21,6 +21,6 @@
 ---
 - name : DFT - Install LVM2
   apt:
-       name=lvm2
-       state=latest
-       install_recommends=no
+    name: lvm2
+    state: latest
+    install_recommends: no

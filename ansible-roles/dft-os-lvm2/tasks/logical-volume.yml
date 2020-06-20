@@ -19,10 +19,21 @@
 #
 
 # Documentation https://docs.ansible.com/ansible/latest/modules/lvol_module.html
- 
+
 ---
-- name : DFT - Create LVM2 Logical Volume(s)
-  apt:
-       name=lvm2
-       state=latest
-       install_recommends=no
+- name : Create LVM2 Logical Volume(s)
+  lvol:
+    active: "{{ item.active }}"
+    force: "{{ item.force }}"
+    lv: "{{ item.lv }}"
+    opts: "{{ item.opts }}"
+    pvs: "{{ item.pvs }}"
+    resizefs: "{{ item.resizefs }}"
+    shrink: "{{ item.shrink }}"
+    size: "{{ item.size }}"
+    snapshot: "{{ item.snapshot }}"
+    state: "{{ item.state }}"
+    thinpool: "{{ item.thinpool }}"
+    vg: "{{ item.vg }}"
+  with_items: "{{ dft_os_lvm2.logical_volumes }}"
+  when: dft_os_lvm2.logical_volumes is defined

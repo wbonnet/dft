@@ -21,10 +21,14 @@
 # Documentation https://docs.ansible.com/ansible/latest/modules/lvg_module.html
 
 ---
-- name : DFT - Create LVM2 Volume Group(s)
-  apt:
-       name=lvm2
-       state=latest
-       install_recommends=no
-
-
+- name : Create LVM2 Volume Group(s)
+  lvg:
+    force: "{{ item.force }}"
+    pesize: "{{ item.pesize }}"
+    pv_options: "{{ item.pv_options }}"
+    pvs: "{{ item.pvs }}"
+    state: "{{ item.state }}"
+    vg: "{{ item.vg }}"
+    vg_options: "{{ item.vg_options }}"
+  with_items: "{{ dft_os_lvm2.volume_groups }}"
+  when: dft_os_lvm2.volume_group is defined
