@@ -38,5 +38,4 @@ This role and provided files are subject to the Apache 2.0 license unless specif
 Author Information
 ------------------
 
-Contributors list :
-	- William Bonnet     (wllmbnnt@gmail.com, wbonnet@theitmakers.com)
+William Bonnet     (wllmbnnt@gmail.com, wbonnet@theitmakers.com)
