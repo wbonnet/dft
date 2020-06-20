@@ -26,3 +26,5 @@
 ---
 - include: packages.yml
 - include: configuration.yml
+- include: volume-group.yml
+- include: logical-volume.yml
