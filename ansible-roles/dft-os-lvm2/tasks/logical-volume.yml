@@ -21,7 +21,7 @@
 # Documentation https://docs.ansible.com/ansible/latest/modules/lvol_module.html
 
 ---
-- name : Create LVM2 Logical Volume(s)
+- name: Create LVM2 Logical Volume(s)
   lvol:
     active: "{{ item.active }}"
     force: "{{ item.force }}"
