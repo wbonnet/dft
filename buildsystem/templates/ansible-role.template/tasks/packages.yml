@@ -19,7 +19,7 @@
 #
 
 ---
-#- name : DFT - Install XXX
+#- name: DFT - Install XXX
 #  apt:
 #       name={{item}}
 #       state=latest

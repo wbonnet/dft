@@ -21,7 +21,7 @@
 # Documentation https://docs.ansible.com/ansible/latest/modules/lvg_module.html
 
 ---
-- name : Create LVM2 Volume Group(s)
+- name: Create LVM2 Volume Group(s)
   lvg:
     force: "{{ item.force }}"
     pesize: "{{ item.pesize }}"

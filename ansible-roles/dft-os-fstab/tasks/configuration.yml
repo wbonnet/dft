@@ -19,7 +19,7 @@
 #
 
 ---
-- name : Setup /etc/fstab
+- name: Setup /etc/fstab
   template: src=templates/fstab.j2
             dest=/etc/fstab
             owner=root
