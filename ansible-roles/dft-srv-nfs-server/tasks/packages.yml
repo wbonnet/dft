@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install NFS server
+- name: Install NFS server
   apt: name={{ item }}
        state=latest
        install_recommends=no

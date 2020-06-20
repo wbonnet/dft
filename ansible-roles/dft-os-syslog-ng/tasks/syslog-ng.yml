@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install syslog-ng
+- name: Install syslog-ng
   apt: name={{ item }}
        state=latest
        install_recommends=no

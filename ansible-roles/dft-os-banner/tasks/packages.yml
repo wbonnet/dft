@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install software used to output banner (figlet and toilet)
+- name: Install software used to output banner (figlet and toilet)
   apt:
     pkg:
       - toilet

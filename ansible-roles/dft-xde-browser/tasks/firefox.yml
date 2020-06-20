@@ -27,7 +27,7 @@
 #
 # Install firefox browser
 #
-- name : DFT - Install Firefox
+- name: Install Firefox
   apt: name={{ item }}
        state=latest
        install_recommends=no
@@ -37,7 +37,7 @@
 #
 # Create the directory needed to store the firefox desktop entry
 #
-- name : DFT - Create desktop autostart directory
+- name: Create desktop autostart directory
   file: path=/home/{{ dft_username }}/.config/autostart
         state=directory
         mode=0775
@@ -48,7 +48,7 @@
 #
 # Create the chromium desktop entry used to start firefox when session opens
 #
-- name : DFT - Install firefox autostart
+- name: Install firefox autostart
   template: src=templates/firefox.desktop.j2
           dest=/home/{{ dft_username }}/.config/autostart/firefox.desktop
           owner={{ dft_username }}

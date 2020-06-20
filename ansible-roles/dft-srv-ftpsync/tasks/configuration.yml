@@ -37,7 +37,7 @@
         append=yes
 
 # Create the ftpsync script directory
-- name: DFT - Create ftpsync home directory
+- name: Create ftpsync home directory
   file: path={{ dft_srv_ftpsync.home | default('/home/ftpsync') }}
         state=directory
         recurse=yes
@@ -45,7 +45,7 @@
         group={{ dft_srv_ftpsync.group }}
         mode="0755"
 
-- name: DFT - Create ftpsync configuration directory
+- name: Create ftpsync configuration directory
   file: path={{ dft_srv_ftpsync.home | default('/home/ftpsync') }}/.config/ftpsync
         state=directory
         recurse=yes
@@ -53,7 +53,7 @@
         group={{ dft_srv_ftpsync.group }}
         mode="0755"
 
-- name: DFT - Create ftpsync synchrnization scripts directory
+- name: Create ftpsync synchrnization scripts directory
   file: path={{ dft_srv_ftpsync.home | default('/home/ftpsync') }}/bin
         state=directory
         recurse=yes
@@ -62,7 +62,7 @@
         mode="0755"
 
 # Create the ftpsync log directory
-- name: DFT - Create ftpsync log directory
+- name: Create ftpsync log directory
   file: path=/var/log/ftpsync
         state=directory
         owner={{ dft_srv_ftpsync.username }}
@@ -76,7 +76,7 @@
 #
 # Create the ftpsync configuration file
 #
-- name : DFT - Generate ftpsync synchronization script
+- name: Generate ftpsync synchronization script
   template:  src=ftpsync.conf.j2
              dest={{ dft_srv_ftpsync.home }}/.config/ftpsync/ftpsync.conf
              owner={{ dft_srv_ftpsync.username }}
@@ -89,7 +89,7 @@
 #
 # Create the ftpsync script file (used by cron)
 #
-- name : DFT - Generate ftpsync synchronization script
+- name: Generate ftpsync synchronization script
   template:  src=run-ftpsync.j2
              dest={{ dft_srv_ftpsync.home }}/bin/run-ftpsync-{{ item.name }}.sh
              owner={{ dft_srv_ftpsync.username }}
@@ -102,7 +102,7 @@
 
 
 # Create the ftpsync target directory
-- name: DFT - Create ftpsync target directory
+- name: Create ftpsync target directory
   file: path={{ item.sync_path }}
         state=directory
         owner={{ dft_srv_ftpsync.username }}

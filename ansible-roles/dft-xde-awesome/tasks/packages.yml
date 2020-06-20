@@ -23,7 +23,7 @@
 #
 # Install Awesome packages
 #
-- name : DFT - Install Awesome desktop
+- name: Install Awesome desktop
   apt: name={{ item }}
        state=latest
        install_recommends=no

@@ -25,7 +25,7 @@
 
 ---
 # Installation of the fillewall itself
-- name : DFT - Install shorewall
+- name: Install shorewall
   apt: name={{ item }}
        state=latest
        install_recommends=no
@@ -34,7 +34,7 @@
 
 # Generate the content of the /etc/default/shorewall files from template
 # This files control several global variables, including startup at boot
-- name: DFT - Configure /etc/default/shorewall
+- name: Configure /etc/default/shorewall
   template: src=default-shorewall.j2
             dest=/etc/default/shorewall
             owner=root
@@ -44,7 +44,7 @@
 
 # Generate the content of the /etc/shorewall/params files from template
 # This files defines global variables for the shorewall frontend (to iptables)
-- name: DFT - Configure /etc/shorewall/params
+- name: Configure /etc/shorewall/params
   template: src=params.j2
             dest=/etc/shorewall/params
             owner=root
@@ -54,7 +54,7 @@
 
 # Generate the content of the /etc/shorewall/policy files from template
 # This files defines the policy (ACCEPT, REJECT, DROP, etc.) between the diffrent zones
-- name: DFT - Configure /etc/shorewall/policy
+- name: Configure /etc/shorewall/policy
   template: src=policy.j2
             dest=/etc/shorewall/policy
             owner=root
@@ -64,7 +64,7 @@
 
 # Generate the content of the /etc/shorewall/interfaces files from template
 # This files defines the interfaces managened by the firewall (eth0, eth1, etc.)
-- name: DFT - Configure /etc/shorewall/interfaces
+- name: Configure /etc/shorewall/interfaces
   template: src=interfaces.j2
             dest=/etc/shorewall/interfaces
             owner=root
@@ -74,7 +74,7 @@
 
 # Generate the content of the /etc/shorewall/masq files from template
 # This files defines which interface are masqueraded
-- name: DFT - Configure /etc/shorewall/masq
+- name: Configure /etc/shorewall/masq
   template: src=masq.j2
             dest=/etc/shorewall/masq
             owner=root
@@ -84,7 +84,7 @@
 
 # Generate the content of the /etc/shorewall/rules files from template
 # This files defines the firewalling rules
-- name: DFT - Configure /etc/shorewall/rules
+- name: Configure /etc/shorewall/rules
   template: src=rules.j2
             dest=/etc/shorewall/rules
             owner=root
@@ -94,7 +94,7 @@
 
 # Generate the content of the /etc/shorewall/shorewall.conf files from template
 # This files defines the firewall scripts variables values
-- name: DFT - Configure /etc/shorewall/shorewall.conf
+- name: Configure /etc/shorewall/shorewall.conf
   template: src=shorewall.conf.j2
             dest=/etc/shorewall/shorewall.conf
             owner=root
@@ -104,7 +104,7 @@
 
 # Generate the content of the /etc/shorewall/stoppedrules files from template
 # This files defines what traffic goes through the firewall when it is in the stopped state
-- name: DFT - Configure /etc/shorewall/stoppedrules
+- name: Configure /etc/shorewall/stoppedrules
   template: src=stoppedrules.j2
             dest=/etc/shorewall/stoppedrules
             owner=root
@@ -114,7 +114,7 @@
 
 # Generate the content of the /etc/shorewall/zones files from template
 # This files defines the zones managed by the firewall
-- name: DFT - Configure /etc/shorewall/zones
+- name: Configure /etc/shorewall/zones
   template: src=zones.j2
             dest=/etc/shorewall/zones
             owner=root

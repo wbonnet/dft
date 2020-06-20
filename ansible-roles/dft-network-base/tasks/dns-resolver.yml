@@ -19,7 +19,7 @@
 #
 
 ---
-- name : DFT - Configure DNS resolver
+- name: Configure DNS resolver
   template: src=resolv.conf.j2
             dest=/etc/resolv.conf
             owner=root

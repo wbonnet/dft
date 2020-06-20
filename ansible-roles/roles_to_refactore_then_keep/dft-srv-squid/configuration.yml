@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install squid.conf
+- name: Install squid.conf
   template: src=squid.conf.j2
             dest=/etc/squid/squid.conf
             owner=root

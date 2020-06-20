@@ -19,7 +19,7 @@
 #
 
 ---
-# - name : DFT - Configure smartmontools.conf
+# - name: Configure smartmontools.conf
 #   template: src=templates/smartmontools.conf.j2
 #             dest=/etc/smartmontools/smartmontools.conf
 #             owner=root

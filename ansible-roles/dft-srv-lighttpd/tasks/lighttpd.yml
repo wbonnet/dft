@@ -24,14 +24,14 @@
 #
 
 #---
-- name : DFT - Install lighttpd
+- name: Install lighttpd
   apt: name={{ item }}
        state=latest
        install_recommends=no
   with_items:
     - lighttpd
 
-- name : DFT - Configure lighttpd.conf
+- name: Configure lighttpd.conf
   template: src=lighttpd.conf.j2
             dest=/etc/lighttpd/lighttpd.conf
             owner=root

@@ -19,7 +19,7 @@
 #
 
 ---
-- name : DFT - Install bluetooth manager "blueman"
+- name: Install bluetooth manager "blueman"
   apt: name={{ item }}
        state=latest
        install_recommends=no

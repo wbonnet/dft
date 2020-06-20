@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install rkhunter
+- name: Install rkhunter
   apt: name={{ item }}
        state=latest
        install_recommends=no

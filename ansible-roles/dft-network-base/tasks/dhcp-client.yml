@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install dhcp client
+- name: Install dhcp client
   apt:
       state: latest
       install_recommends: no
@@ -32,7 +32,7 @@
         - isc-dhcp-client
 
     # Generate the DHCP client configuration file
-- name: DFT - Generate dhclient configuration
+- name: Generate dhclient configuration
   template: src=dhclient.conf.j2
             dest=/etc/dhcp/dhclient.conf
             owner=root

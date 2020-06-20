@@ -19,7 +19,7 @@
 #
 
 ---
-- name : DFT - Install rsync
+- name: Install rsync
   apt:
        pkg:
           - rsync

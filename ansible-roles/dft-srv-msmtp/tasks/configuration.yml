@@ -19,7 +19,7 @@
 #
 
 # ---
- - name: DFT - Deploy MSMTP configuration file
+ - name: Deploy MSMTP configuration file
    template: src=msmtprc-system.j2
              dest=/etc/msmtprc
              owner=root

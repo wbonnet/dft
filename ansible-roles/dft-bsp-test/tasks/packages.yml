@@ -19,7 +19,7 @@
 #
 
 ---
-- name : DFT - Install BSP sbit tests
+- name: Install BSP sbit tests
   apt: name={{ item }}
         state=latest
         install_recommends=no

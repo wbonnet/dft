@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install plymouth
+- name: Install plymouth
   apt: name={{ item }}
        state=latest
        install_recommends=no

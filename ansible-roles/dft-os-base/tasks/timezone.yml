@@ -24,20 +24,20 @@
 #
 
 ---
-- name : DFT - Install timezone data
+- name: Install timezone data
   apt:
        pkg=tzdata
        state=latest
        install_recommends=no
 
 # Use the timezone module if it does not run on a local connection, otherwise bus is not available
-- name: DFT - Configure timezone (non local connection)
+- name: Configure timezone (non local connection)
   timezone: name={{ dft_timezone }}
   when: ansible_connection != "local"
 
 # If it is run through a local connection, we assume it is working in a chrooted environment
 # thus only modify /etc/hostname file since timedatectl will not be able to connect to the bus
-- name: DFT - Configure timezone (local connection)
+- name: Configure timezone (local connection)
   template:  src=timezone.j2
              dest=/etc/timezone
              owner=root

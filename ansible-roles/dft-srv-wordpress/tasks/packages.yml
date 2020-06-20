@@ -19,7 +19,7 @@
 #
 
 ---
-- name : DFT - Install MariaDB client
+- name: Install MariaDB client
   apt:
        name={{item}}
        state=latest

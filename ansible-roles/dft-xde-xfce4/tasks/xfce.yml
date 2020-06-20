@@ -23,7 +23,7 @@
 #
 # Install Xfce packages needed to have a desktop session
 #
-- name : DFT - Install Xfce4 desktop
+- name: Install Xfce4 desktop
   apt: name={{ item }}
        state=latest
        install_recommends=no

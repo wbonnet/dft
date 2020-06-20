@@ -24,7 +24,7 @@
 #
 
 #---
-- name : DFT - Install acpid
+- name: Install acpid
   apt: name={{ item }}
        state=latest
        install_recommends=no

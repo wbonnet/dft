@@ -20,12 +20,12 @@
 
 ---
 # First import the key from the jenkins repository
-- name : DFT - Import jenkins repository key
+- name: Import jenkins repository key
   apt_key: url="https://pkg.jenkins.io/debian/jenkins.io.key"
            state=present
 
 # Copy the package list to /etc/apt/sources.list.d
-- name : DFT - Install jenkins packages source list
+- name: Install jenkins packages source list
   copy: src=files/jenkins.list
         dest=/etc/apt/sources.list.d/jenkins.list
         owner=root
@@ -33,7 +33,7 @@
         mode=0644
 
 # Then install jenkins package
-- name : DFT - Install jenkins
+- name: Install jenkins
   apt: name={{ item }}
        state=latest
        install_recommends=no

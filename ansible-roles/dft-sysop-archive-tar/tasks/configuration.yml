@@ -19,14 +19,14 @@
 #
 
 ---
-- name: DFT - Create script target directory
+- name: Create script target directory
   file:     path=/opt/dft/bin
             state=directory
             owner=root
             group=root
             mode="0755"
 
-- name: DFT - Deploy tar archiving script
+- name: Deploy tar archiving script
   template:  src=create-tar-archive.j2
              dest=/opt/dft/bin/create-tar-archive-{{ item.name }}
              owner=root
@@ -35,7 +35,7 @@
   with_items: "{{ dft_sysop_archive_tar.archives }}"
   when: dft_sysop_archive_tar is defined and dft_sysop_archive_tar.archives is defined
 
-- name: DFT - Add generated tar based archiving scripts to cron table
+- name: Add generated tar based archiving scripts to cron table
   cron:
     name: "{{ item.name }}"
     month: "{{ item.crontab_entry.month }}"

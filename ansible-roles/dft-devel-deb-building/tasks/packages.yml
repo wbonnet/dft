@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install software needed to build Debian packages
+- name: Install software needed to build Debian packages
   apt: name={{ item }}
        state=latest
        install_recommends=no

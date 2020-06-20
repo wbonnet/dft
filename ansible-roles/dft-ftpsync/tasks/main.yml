@@ -35,7 +35,7 @@
         groups={{ dft_ftpsync_user_group }}
         append=yes
 
-- name : DFT - Install Apache2 Web server and rsync
+- name: Install Apache2 Web server and rsync
   apt: name={{ item }}
        state=latest
        install_recommends=no

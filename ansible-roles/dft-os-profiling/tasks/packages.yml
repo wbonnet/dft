@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install bootchart profiling tools
+- name: Install bootchart profiling tools
   apt: name={{ item }}
        state=latest
        install_recommends=no

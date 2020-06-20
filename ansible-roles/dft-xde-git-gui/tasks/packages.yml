@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install graphical softwares and frontend to work with Git
+- name: Install graphical softwares and frontend to work with Git
   apt: name={{ item }}
        state=latest
        install_recommends=no

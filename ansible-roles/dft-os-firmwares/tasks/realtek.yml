@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install firmware realtek
+- name: Install firmware realtek
   apt: name={{ item }}
        state=latest
        install_recommends=no

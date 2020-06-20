@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install freeradius
+- name: Install freeradius
   apt: name={{ item }}
        state=latest
        install_recommends=no

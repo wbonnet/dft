@@ -21,7 +21,7 @@
 #
 
 ---
-- name : DFT - Create logging directory
+- name: Create logging directory
   file:
     state: directory
     dest: /var/log/dft/
@@ -29,7 +29,7 @@
     group: root
     mode: "0660"
 
-- name : DFT - Instantiate playbook deployment log file
+- name: Instantiate playbook deployment log file
   template:
     src: "{{ dft_playbook_logger }}/templates/ansible-playbook.log.j2"
     dest: /var/log/dft/{{ role_name }}-{{ ansible_date_time.date }}-{{ ansible_date_time.time }}.log

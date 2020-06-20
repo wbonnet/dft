@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install software needed to build Linux kernel
+- name: Install software needed to build Linux kernel
   apt: name={{ item }}
        state=latest
        install_recommends=no

@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install ntp
+- name: Install ntp
   apt:
       state: latest
       install_recommends: no
@@ -32,7 +32,7 @@
         - ntp
 
 # Generate the NTP client and server configuration file
-- name : DFT - Configure NTP client
+- name: Configure NTP client
   template: src=ntp.conf.j2
             dest=/etc/ntp.conf
             owner=root

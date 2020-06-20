@@ -24,14 +24,14 @@
 #
 
 ---
-- name : DFT - Create /srv/nfs directory
+- name: Create /srv/nfs directory
   file: path=/srv/nfs
         state=directory
         mode=0755
         owner=root
         group=root
 
-- name : DFT - Setup /etc/exports
+- name: Setup /etc/exports
   template: src=templates/exports.j2
             dest=/etc/exports
             owner=root

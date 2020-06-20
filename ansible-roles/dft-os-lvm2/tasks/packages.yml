@@ -19,7 +19,7 @@
 #
 
 ---
-- name : DFT - Install LVM2
+- name: Install LVM2
   apt:
     name: lvm2
     state: latest

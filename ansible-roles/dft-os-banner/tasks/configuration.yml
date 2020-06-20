@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install /etc/issue
+- name: Install /etc/issue
   copy: src=files/issue
         dest=/etc/issue
         mode=0644
@@ -32,7 +32,7 @@
         group=root
   when: dft_banner_install_issue is defined and dft_banner_install_issue == True
 
-- name : DFT - Install /etc/issue.net
+- name: Install /etc/issue.net
   copy: src=files/issue.net
         dest=/etc/issue.net
         mode=0644
@@ -40,7 +40,7 @@
         group=root
   when: dft_banner_install_issue_net is defined and dft_banner_install_issue_net == True
 
-- name : DFT - Install /etc/motd
+- name: Install /etc/motd
   copy: src=files/motd
         dest=/etc/motd
         mode=0644
@@ -48,7 +48,7 @@
         group=root
   when: dft_banner_install_motd is defined and dft_banner_install_motd == True
 
-- name : DFT - Install /etc/update-motd.d content
+- name: Install /etc/update-motd.d content
   copy: src=files/update-motd.d/{{ item }}
         dest=/etc/update-motd.d/{{ item }}
         mode=0755

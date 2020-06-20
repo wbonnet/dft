@@ -24,8 +24,8 @@
 #
 
 ---
-- name : DFT - Install OS base packages
-  apt: 
+- name: Install OS base packages
+  apt:
     state: latest
     install_recommends: no
     pkg:

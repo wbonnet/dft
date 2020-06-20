@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install cpufrequtils
+- name: Install cpufrequtils
   apt: name={{ item }}
        state=latest
        install_recommends=no
@@ -32,14 +32,14 @@
     - cpufrequtils
     - sysfsutils
 
-- name : DFT - Configure cpufrequtils
+- name: Configure cpufrequtils
   template: src=cpufrequtils.j2
             dest=/etc/default/cpufrequtils
             owner=root
             group=root
             mode="0644"
 
-- name : DFT - Configure sysfsutils
+- name: Configure sysfsutils
   template: src=sysfs.conf.j2
             dest=/etc/sysfs.conf
             owner=root

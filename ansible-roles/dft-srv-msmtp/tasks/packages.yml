@@ -19,11 +19,11 @@
 #
 
 ---
-- name : DFT - Install MSMTP
+- name: Install MSMTP
   apt:
        name={{item}}
        state=latest
        install_recommends=no
   with_items:
-       - msmtp 
+       - msmtp
        - msmtp-mta

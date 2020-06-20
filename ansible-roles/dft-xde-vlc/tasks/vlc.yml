@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install vlc
+- name: Install vlc
   apt: name={{ item }}
        state=latest
        install_recommends=no

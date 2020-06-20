@@ -28,7 +28,7 @@
 # Install chromium browser (only on i386 and x86_64 arch since the package is
 # not available for other architectures)
 #
-- name : DFT - Install Chromium
+- name: Install Chromium
   apt: name={{ item }}
        state=latest
        install_recommends=no
@@ -43,7 +43,7 @@
 #
 # Create the directory needed to store the chromium desktop entry
 #
-- name : DFT - Create desktop autostart directory
+- name: Create desktop autostart directory
   file: path=/home/{{ dft_username }}/.config/autostart
         state=directory
         mode=0775
@@ -55,7 +55,7 @@
 #
 # Create the chromium desktop entry used to start chromium when session opens
 #
-- name : DFT - Install chromium autostart
+- name: Install chromium autostart
   template: src=chromium.desktop.j2
           dest=/home/{{ dft_username }}/.config/autostart/chromium.desktop
           owner={{ dft_username }}

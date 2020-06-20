@@ -30,6 +30,6 @@
 #
 # Dummy task
 #
-- name : DFT - NT-28 - R01
+- name: NT-28 - R01
   debug:
       msg: "DFT - NT-28 - R01"

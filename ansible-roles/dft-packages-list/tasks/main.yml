@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install package list
+- name: Install package list
   apt: name={{ item }}
        state=latest
        install_recommends=no

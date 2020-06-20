@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install rsyslog
+- name: Install rsyslog
   apt: name={{ item }}
        state=latest
        install_recommends=no

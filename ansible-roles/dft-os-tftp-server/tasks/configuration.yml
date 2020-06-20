@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Create {{ dft_tftp_server.directory }} directory
+- name: Create {{ dft_tftp_server.directory }} directory
   file: path={{ dft_tftp_server.directory }}
         state=directory
         mode=0755
@@ -32,7 +32,7 @@
         owner=root
         group=root
 
-- name : DFT - Setup /etc/default/tftpd-hpa
+- name: Setup /etc/default/tftpd-hpa
   template: src=templates/tftpd-hpa.j2
             dest=/etc/default/tftpd-hpa
             owner=root

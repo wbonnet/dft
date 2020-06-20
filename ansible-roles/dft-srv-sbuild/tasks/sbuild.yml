@@ -19,14 +19,14 @@
 #
 
 ---
-- name : DFT - Install sbuild
+- name: Install sbuild
   apt: name={{ item }}
        state=latest
        install_recommends=no
   with_items:
     - sbuild
 
-- name : DFT - Configure sbuild users
+- name: Configure sbuild users
   shell: sbuild-adduser {{ item.login }}
   with_items: "{{ dft_sbuild.users }}"
   when: dft_sbuild is defined and dft_sbuild.users is defined

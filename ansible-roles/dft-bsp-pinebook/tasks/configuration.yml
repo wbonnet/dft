@@ -18,7 +18,7 @@
 #
 #
 
-- name : DFT - Add pinebook module loading configuration files
+- name: Add pinebook module loading configuration files
   copy: src=files/load-pinebook-{{ item }}.conf
         dest=/etc/modules-load.d/pinebook-{{ item }}.conf
         mode=0644
@@ -30,7 +30,7 @@
     - hall
     - wifi
 
-- name : DFT - Add pinebook module probing configuration files
+- name: Add pinebook module probing configuration files
   copy: src=files/probe-pinebook-{{ item }}.conf
         dest=/etc/modprobe.d/pinebook-{{ item }}.conf
         mode=0644

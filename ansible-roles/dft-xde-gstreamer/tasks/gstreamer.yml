@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install GStreamer
+- name: Install GStreamer
   apt: name={{ item }}
        state=latest
        install_recommends=no

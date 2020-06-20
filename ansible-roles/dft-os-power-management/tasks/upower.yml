@@ -24,7 +24,7 @@
 #
 
 #---
-- name : DFT - Install upower
+- name: Install upower
   apt: name={{ item }}
        state=latest
        install_recommends=no

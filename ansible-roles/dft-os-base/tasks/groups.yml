@@ -24,7 +24,7 @@
 #
 
 ---
-- name: DFT - Create local groups
+- name: Create local groups
   group: name="{{ item.name }}"
          gid="{{ item.gid | default(omit)}}"
          system="{{ item.sytem | default ('no') }}"

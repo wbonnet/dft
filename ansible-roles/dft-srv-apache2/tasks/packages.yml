@@ -27,7 +27,7 @@
 # Instal the needed Apache2 packages (core and libs)
 #
 ---
-- name : DFT - Install Apache2
+- name: Install Apache2
   apt:
        pkg: apache2
        state: latest

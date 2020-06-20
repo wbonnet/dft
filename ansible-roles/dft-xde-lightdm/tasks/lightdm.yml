@@ -19,14 +19,14 @@
 #
 
 ---
-- name : DFT - Install LightDM
+- name: Install LightDM
   apt: name={{ item }}
        state=latest
        install_recommends=no
   with_items:
     - lightdm
 
-- name : DFT - Configure LightDM
+- name: Configure LightDM
   template: src=lightdm.conf.j2
             dest=/etc/lightdm/lightdm.conf
             owner=root

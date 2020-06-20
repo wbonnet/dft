@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install snort
+- name: Install snort
   apt: name={{ item }}
        state=latest
        install_recommends=no

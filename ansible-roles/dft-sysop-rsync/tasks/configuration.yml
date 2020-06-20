@@ -38,14 +38,14 @@
 #
 
 ---
-- name: DFT - Create script target directory
+- name: Create script target directory
   file:     path=/opt/dft/bin
             state=directory
             owner=root
             group=root
             mode="0755"
 
-- name: DFT - Deploy rsync based path (files or folders) synchronization script
+- name: Deploy rsync based path (files or folders) synchronization script
   template:  src=rsync-path.j2
              dest="/opt/dft/bin/rsync-path-{{ item.name }}"
              owner=root
@@ -54,7 +54,7 @@
   with_items: "{{ dft_sysop_rsync.sources }}"
   when: dft_sysop_rsync.sources is defined and item.name is defined
 
-- name: DFT - Add generated rsync based generated scripts to cron table
+- name: Add generated rsync based generated scripts to cron table
   cron:
     name: "{{ item.name }}"
     month: "{{ item.crontab_entry.month }}"

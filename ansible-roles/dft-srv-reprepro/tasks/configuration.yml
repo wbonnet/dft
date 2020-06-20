@@ -37,7 +37,7 @@
         append=yes
 
 # Create the reprepro script directory
-- name: DFT - Create reprepro script directory
+- name: Create reprepro script directory
   file: path={{ dft_srv_reprepro.user_definition.home_dir }}/bin
         state=directory
         recurse=yes
@@ -46,7 +46,7 @@
         mode="0755"
 
 # Create the reprepro log directory
-- name: DFT - Create reprepro log directory
+- name: Create reprepro log directory
   file: path=/var/log/reprepro
         state=directory
         owner={{ dft_srv_reprepro.user_definition.username | default('reprepro')}}
@@ -54,7 +54,7 @@
         mode="0750"
 
 # Instanciate the options template file
-- name: DFT - Copy reprepro_import_packages script template
+- name: Copy reprepro_import_packages script template
   template: src=reprepro_import_packages.j2
             dest={{ dft_srv_reprepro.user_definition.home_dir }}/bin/reprepro_import_{{ item.name }}_packages
             owner={{ dft_srv_reprepro.user_definition.username | default('reprepro')}}
@@ -65,7 +65,7 @@
 
 # -------------------------------------------------------------------------------------------------
 # Create the repositories subdirectories
-- name: DFT - Create repository directories
+- name: Create repository directories
   file: path={{ dft_srv_reprepro.base_directory }}/{{ item[1].directory }}/{{ item[0] }}
         state=directory
         recurse=yes
@@ -77,7 +77,7 @@
     - "{{ dft_srv_reprepro.repositories }}"
 
 # Create the deb override files
-- name: DFT - Create override files
+- name: Create override files
   file: path={{ dft_srv_reprepro.base_directory }}/{{ item.directory }}/conf/{{ item.deb_override }}
         state=touch
         owner={{ dft_srv_reprepro.webserver_definition.username | default('www-data')}}
@@ -88,7 +88,7 @@
     - "{{ dft_srv_reprepro.repositories }}"
 
 # Create the dsc override files
-- name: DFT - Create override files
+- name: Create override files
   file: path={{ dft_srv_reprepro.base_directory }}/{{ item.directory }}/conf/{{ item.dsc_override }}
         state=touch
         owner={{ dft_srv_reprepro.webserver_definition.username | default('www-data')}}
@@ -99,7 +99,7 @@
     - "{{ dft_srv_reprepro.repositories }}"
 
 # Incoming is created alone because of the different mode
-- name: DFT - Create repository incoming directory
+- name: Create repository incoming directory
   file: path={{ dft_srv_reprepro.base_directory }}/{{ item.directory }}/incoming
         state=directory
         recurse=yes
@@ -110,7 +110,7 @@
     - "{{ dft_srv_reprepro.repositories }}"
 
 # Instanciate the distributions template file
-- name: DFT - Copy distributions template
+- name: Copy distributions template
   template: src=distributions.j2
             dest={{ dft_srv_reprepro.base_directory }}/{{ item.directory }}/conf/distributions
             owner={{ dft_srv_reprepro.webserver_definition.username | default('reprepro')}}
@@ -120,7 +120,7 @@
     - "{{ dft_srv_reprepro.repositories }}"
 
 # Instanciate the options template file
-- name: DFT - Copy options template
+- name: Copy options template
   template: src=options.j2
             dest={{ dft_srv_reprepro.base_directory }}/{{ item.directory }}/conf/options
             owner={{ dft_srv_reprepro.webserver_definition.username | default('reprepro')}}
@@ -130,7 +130,7 @@
     - "{{ dft_srv_reprepro.repositories }}"
 
 # Instanciate the incoming template file
-- name: DFT - Copy incoming template
+- name: Copy incoming template
   template: src=incoming.j2
             dest={{ dft_srv_reprepro.base_directory }}/{{ item.directory }}/conf/incoming
             owner={{ dft_srv_reprepro.webserver_definition.username | default('reprepro')}}
@@ -140,7 +140,7 @@
     - "{{ dft_srv_reprepro.repositories }}"
 
 # Instanciate the uploaders template file
-- name: DFT - Copy uploaders template
+- name: Copy uploaders template
   template: src=uploaders.j2
             dest={{ dft_srv_reprepro.base_directory }}/{{ item.directory }}/conf/uploaders
             owner={{ dft_srv_reprepro.webserver_definition.username | default('reprepro')}}

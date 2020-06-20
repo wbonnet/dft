@@ -21,7 +21,7 @@
 ---
 # No specific packages should be installed so far. This may be removed in a near future
 
-#- name : DFT - Install XXX
+#- name: Install XXX
 #  apt:
 #       name={{item}}
 #       state=latest

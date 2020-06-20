@@ -19,7 +19,7 @@
 #
 
 ---
-- name : DFT - Install ftpsync
+- name: Install ftpsync
   apt:
        pkg: ftpsync
        state: latest

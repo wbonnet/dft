@@ -19,7 +19,7 @@
 #
 
 ---
-- name : DFT - Install Thunderbird
+- name: Install Thunderbird
   apt: name={{ item }}
        state=latest
        install_recommends=no

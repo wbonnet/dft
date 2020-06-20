@@ -23,7 +23,7 @@
 #
 # Create the virtual hosts configuration files into sites-available from template
 #
-- name : DFT - Install apache2 HTTP virtual hosts
+- name: Install apache2 HTTP virtual hosts
   template:  src=virtual-host.j2
              dest=/etc/apache2/sites-available/{{ item.name }}.conf
              owner=root
@@ -32,7 +32,7 @@
   with_items: "{{ dft_apache2.http_sites_available }}"
   when: dft_apache2.http_sites_available is defined
 
-- name : DFT - Install apache2 HTTPS virtual hosts
+- name: Install apache2 HTTPS virtual hosts
   template:  src=ssl-virtual-host.j2
              dest=/etc/apache2/sites-available/{{ item.name }}.conf
              owner=root
@@ -44,7 +44,7 @@
 #
 # Activate the virtual hosts configuration files
 #
-- name : DFT - Activate apache2 enabled virtual hosts
+- name: Activate apache2 enabled virtual hosts
   command: a2ensite {{ item.name }}
   with_items: "{{ dft_apache2.sites_enabled}}"
   when: dft_apache2.sites_enabled is defined
@@ -54,7 +54,7 @@
 #
 # Deactivate the virtual hosts configuration files
 #
-- name : DFT - Deactivate apache2 disabled virtual hosts
+- name: Deactivate apache2 disabled virtual hosts
   command: a2dissite {{ item.name }}
   with_items: "{{ dft_apache2.sites_disabled}}"
   when: dft_apache2.sites_disabled is defined

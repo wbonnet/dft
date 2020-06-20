@@ -19,10 +19,10 @@
 #
 
 ---
-- name : DFT - Install MariaBD client (containing mysqldump)
+- name: Install MariaBD client (containing mysqldump)
   apt:
        name={{item}}
        state=latest
        install_recommends=no
   with_items:
-       - mariadb-client 
+       - mariadb-client

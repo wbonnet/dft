@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install isc-dhcp-server
+- name: Install isc-dhcp-server
   apt: name={{ item }}
        state=latest
        install_recommends=no

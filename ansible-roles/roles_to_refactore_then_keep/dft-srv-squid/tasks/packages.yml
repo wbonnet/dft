@@ -19,8 +19,8 @@
 #
 
 ---
-- name : DFT - Install Squid
-  apt: 
+- name: Install Squid
+  apt:
        name={{item}}
        state=latest
        install_recommends=no

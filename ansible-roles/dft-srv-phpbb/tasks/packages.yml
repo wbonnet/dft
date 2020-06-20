@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install phpBB dependencies
+- name: Install phpBB dependencies
   apt:
        name={{item}}
        state=latest

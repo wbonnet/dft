@@ -19,7 +19,7 @@
 #
 
 ---
-- name : DFT - Install X11
+- name: Install X11
   apt: name={{ item }}
        state=latest
        install_recommends=no

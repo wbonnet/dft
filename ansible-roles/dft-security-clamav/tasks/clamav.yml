@@ -24,14 +24,14 @@
 #
 
 #---
-- name : DFT - Install clamav
+- name: Install clamav
   apt: name={{ item }}
        state=latest
        install_recommends=no
   with_items:
     - clamav
 
-- name : DFT - Configure clamav
+- name: Configure clamav
   template: src=freshclam.conf.j2
             dest=/etc/clamav/freshclam.conf
             owner=root

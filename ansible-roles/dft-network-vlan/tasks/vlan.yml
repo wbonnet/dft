@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install vlan
+- name: Install vlan
   apt: name={{ item }}
        state=latest
        install_recommends=no

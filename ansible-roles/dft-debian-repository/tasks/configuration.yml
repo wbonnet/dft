@@ -40,7 +40,7 @@
         append=yes
 
 # Create the reprepro script directory
-- name: DFT - Create reprepro script directory
+- name: Create reprepro script directory
   file: path={{ dft_debian_repository_user_definition.home_dir }}/bin
         state=directory
         recurse=yes
@@ -49,7 +49,7 @@
         mode="0755"
 
 # Instanciate the options template file
-- name: DFT - Copy reprepro_import_packages script template
+- name: Copy reprepro_import_packages script template
   template: src=reprepro_import_packages.j2
             dest={{ dft_debian_repository_user_definition.home_dir }}/bin/reprepro_import_packages
             owner={{ dft_debian_repository_user_definition.username }}
@@ -58,7 +58,7 @@
 
 # -------------------------------------------------------------------------------------------------
 # Create the repositories subdirectories
-- name: DFT - Create repository directories
+- name: Create repository directories
   file: path={{ dft_debian_repository_directory }}/{{ item[1].base_dir }}/{{ item[0] }}
         state=directory
         recurse=yes
@@ -70,7 +70,7 @@
     - "{{ dft_debian_repository_configuration }}"
 
 # Create the deb override files
-- name: DFT - Create override files
+- name: Create override files
   file: path={{ dft_debian_repository_directory }}/{{ item.base_dir }}/conf/{{ item.deb_override }}
         state=touch
         owner={{ dft_debian_repository_webserver_definition.group }}
@@ -81,7 +81,7 @@
     - "{{ dft_debian_repository_configuration }}"
 
 # Create the dsc override files
-- name: DFT - Create override files
+- name: Create override files
   file: path={{ dft_debian_repository_directory }}/{{ item.base_dir }}/conf/{{ item.dsc_override }}
         state=touch
         owner={{ dft_debian_repository_webserver_definition.group }}
@@ -92,7 +92,7 @@
     - "{{ dft_debian_repository_configuration }}"
 
 # Incoming is created alone because of the different mode
-- name: DFT - Create repository incoming directory
+- name: Create repository incoming directory
   file: path={{ dft_debian_repository_directory }}/{{ item.base_dir }}/incoming
         state=directory
         recurse=yes
@@ -103,7 +103,7 @@
     - "{{ dft_debian_repository_configuration }}"
 
 # Instanciate the distributions template file
-- name: DFT - Copy distributions template
+- name: Copy distributions template
   template: src=distributions.j2
             dest={{ dft_debian_repository_directory }}/{{ item.base_dir }}/conf/distributions
             owner={{ dft_debian_repository_webserver_definition.group }}
@@ -113,7 +113,7 @@
     - "{{ dft_debian_repository_configuration }}"
 
 # Instanciate the options template file
-- name: DFT - Copy options template
+- name: Copy options template
   template: src=options.j2
             dest={{ dft_debian_repository_directory }}/{{ item.base_dir }}/conf/options
             owner={{ dft_debian_repository_webserver_definition.group }}
@@ -123,7 +123,7 @@
     - "{{ dft_debian_repository_configuration }}"
 
 # Instanciate the incoming template file
-- name: DFT - Copy incoming template
+- name: Copy incoming template
   template: src=incoming.j2
             dest={{ dft_debian_repository_directory }}/{{ item.base_dir }}/conf/incoming
             owner={{ dft_debian_repository_webserver_definition.group }}
@@ -133,7 +133,7 @@
     - "{{ dft_debian_repository_configuration }}"
 
 # Instanciate the uploaders template file
-- name: DFT - Copy uploaders template
+- name: Copy uploaders template
   template: src=uploaders.j2
             dest={{ dft_debian_repository_directory }}/{{ item.base_dir }}/conf/uploaders
             owner={{ dft_debian_repository_webserver_definition.group }}
@@ -156,7 +156,7 @@
 
 # -------------------------------------------------------------------------------------------------
 # Instanciate the APACHE VIRTUALHOST File
-- name: DFT - Copy virtualhost file
+- name: Copy virtualhost file
   template: src=repositories-vhost.j2
             dest=/etc/apache2/sites-available/042-debian-repositories.conf
             owner=root
@@ -164,7 +164,7 @@
             mode="0644"
 
 # Enable repositories virtualhost
-- name: DFT - Enable repositories virtualhost
+- name: Enable repositories virtualhost
   command: a2ensite 042-debian-repositories.conf
 
 

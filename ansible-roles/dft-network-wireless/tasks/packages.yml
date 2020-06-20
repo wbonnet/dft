@@ -19,7 +19,7 @@
 #
 
 ---
-- name : DFT - Install wireless support and tools
+- name: Install wireless support and tools
   apt: name={{ item }}
        state=latest
        install_recommends=no

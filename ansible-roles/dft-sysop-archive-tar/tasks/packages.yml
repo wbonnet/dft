@@ -19,7 +19,7 @@
 #
 
 ---
-- name : DFT - Install tar
+- name: Install tar
   apt:
        name=tar
        state=latest

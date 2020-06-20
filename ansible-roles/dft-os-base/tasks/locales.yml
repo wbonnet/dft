@@ -24,13 +24,13 @@
 #
 
 ---
-- name : DFT - Install locales
+- name: Install locales
   apt:
        pkg=locales
        state=latest
        install_recommends=no
 
-- name: DFT - Configure locales
+- name: Configure locales
   locale_gen: name={{ item.name }}
               state={{ item.state | default("present") }}
   with_items: "{{ dft_locales }}"

@@ -19,7 +19,7 @@
 #
 
 ---
-- name : DFT - Install mmc-utils
+- name: Install mmc-utils
   apt: name={{ item }}
        state=latest
        install_recommends=no

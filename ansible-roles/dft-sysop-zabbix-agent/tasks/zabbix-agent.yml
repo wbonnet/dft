@@ -24,14 +24,14 @@
 #
 
 ---
-- name : DFT - Install Zabbix agent
+- name: Install Zabbix agent
   apt: name={{ item }}
        state=latest
        install_recommends=no
   with_items:
     - zabbix-agent
 
-- name : DFT - Configure Zabbix agent
+- name: Configure Zabbix agent
   template: src=templates/zabbix-agent.conf.j2
           dest=/etc/zabbix-agent/zabbix-agent.conf
           owner=root

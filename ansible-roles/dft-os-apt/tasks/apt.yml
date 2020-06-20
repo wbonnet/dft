@@ -25,7 +25,7 @@
 
 #---
 # Deactivate repository validity check
-- name : DFT - Deactivate repository expiration check
+- name: Deactivate repository expiration check
   copy: src=files/10no-check-valid-until
         dest=/etc/apt/apt.conf.d/10no-check-valid-until
         mode=0644
@@ -36,7 +36,7 @@
           dft_os_apt.options.deactivate_check_valid_until == True)
 
 # Generate the sources.list file
-- name: DFT - Deploy APT sources main configuration file (/etc/apt/sources.list)
+- name: Deploy APT sources main configuration file (/etc/apt/sources.list)
   template: src=sources.list.j2
             dest=/etc/apt/sources.list
             owner=root
@@ -46,7 +46,7 @@
           dft_os_apt.generate_sources_list == True)
 
 # Generate the extra sources.list.d files
-- name: DFT - Deploy APT sources.list.d extra configuration files (/etc/apt/sources.list.d/)
+- name: Deploy APT sources.list.d extra configuration files (/etc/apt/sources.list.d/)
   template: src=sources.list.d.j2
             dest=/etc/apt/sources.list.d/{{ item.file }}.list
             owner=root
@@ -57,7 +57,7 @@
           dft_os_apt.generate_sources_list == True and dft_os_apt.extra_sources_list_content is defined)
 
 # Import the needed keys
-- name: DFT - Import APT keys (from a keyserver)
+- name: Import APT keys (from a keyserver)
   apt_key: id={{ item.key_id }}
            keyserver={{ item.key_server }}
            state=present
@@ -66,19 +66,19 @@
           item.key_id is defined)
 
 # Import the needed keys
-- name: DFT - Import APT keys (from a key url)
+- name: Import APT keys (from a key url)
   apt_key: url={{ item.key_url }}
   with_items: "{{ dft_os_apt.repositories_keys }}"
   when: ( dft_os_apt is defined and dft_os_apt.repositories_keys is defined and
           item.key_url is defined)
 
 # Update APT catalog once new apt list has been deployed
-- name : DFT - Update catalog after sources.list modification
+- name: Update catalog after sources.list modification
   apt:
     update_cache: yes
 
 # Install the "apt" packages
-- name : DFT - Install APT packages management
+- name: Install APT packages management
   apt: name={{ item }}
        state=latest
        install_recommends=no

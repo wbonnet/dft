@@ -24,7 +24,7 @@
 #
 
 #---
-- name : DFT - Install fail2ban
+- name: Install fail2ban
   apt: name={{ item }}
        state=latest
        install_recommends=no

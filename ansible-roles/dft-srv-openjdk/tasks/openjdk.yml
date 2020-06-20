@@ -25,7 +25,7 @@
 
 ---
 # ----- OpenJDK 8 rules ---------------------------------------------------------------------------
-- name : DFT - Install openjre8
+- name: Install openjre8
   apt: name={{ item }}
        state=latest
        install_recommends=no
@@ -34,7 +34,7 @@
   when: (ansible_distribution == "Debian" and ansible_distribution_major_version == "9" and
          dft_openjre_is_headless == False and dft_openjdk_install_jdk == True)
 
-- name : DFT - Install openjre8
+- name: Install openjre8
   apt: name={{ item }}
        state=latest
        install_recommends=no
@@ -43,7 +43,7 @@
   when: (ansible_distribution == "Debian" and ansible_distribution_major_version == "9" and
          dft_openjre_is_headless == True and dft_openjdk_install_jdk == True)
 
-- name : DFT - Install openjdk8
+- name: Install openjdk8
   apt: name={{ item }}
        state=latest
        install_recommends=no
@@ -52,7 +52,7 @@
   when: (ansible_distribution == "Debian" and ansible_distribution_major_version == "9" and
          dft_openjdk_is_headless == False and dft_openjdk_install_jdk == True)
 
-- name : DFT - Install openjdk8
+- name: Install openjdk8
   apt: name={{ item }}
        state=latest
        install_recommends=no
@@ -62,7 +62,7 @@
          dft_openjdk_is_headless == True and dft_openjdk_install_jdk == True)
 
 # ----- OpenJDK 7 rules ---------------------------------------------------------------------------
-- name : DFT - Install openjre7
+- name: Install openjre7
   apt: name={{ item }}
        state=latest
        install_recommends=no
@@ -71,7 +71,7 @@
   when: (ansible_distribution == "Debian" and ansible_distribution_major_version == "8" and
          dft_openjre_is_headless == False and dft_openjdk_install_jdk == True)
 
-- name : DFT - Install openjre7
+- name: Install openjre7
   apt: name={{ item }}
        state=latest
        install_recommends=no
@@ -80,7 +80,7 @@
   when: (ansible_distribution == "Debian" and ansible_distribution_major_version == "8" and
          dft_openjre_is_headless == False and dft_openjdk_install_jdk == True)
 
-- name : DFT - Install openjdk7
+- name: Install openjdk7
   apt: name={{ item }}
        state=latest
        install_recommends=no
@@ -89,7 +89,7 @@
   when: (ansible_distribution == "Debian" and ansible_distribution_major_version == "8" and
          dft_openjdk_is_headless == False and dft_openjdk_install_jdk == True)
 
-- name : DFT - Install openjdk7
+- name: Install openjdk7
   apt: name={{ item }}
        state=latest
        install_recommends=no

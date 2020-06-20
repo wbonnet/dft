@@ -24,17 +24,17 @@
 #
 
 ---
-- name : DFT - Update root password when the defined password
+- name: Update root password when the defined password
   user: name=root
         password="{{ dft_root_password }}"
         update_password=always
   when: dft_root_password is defined
 
-- name : DFT - Update root password with random value when no password is defined
+- name: Update root password with random value when no password is defined
   shell: /usr/sbin/usermod root -p $(/usr/bin/openssl rand -base64 32)
   when: dft_root_password is not defined
 
-- name: DFT - Create local users (using password hash)
+- name: Create local users (using password hash)
   user: name="{{ item.name }}"
         password="{{ item.password_hash }}"
         createhome="{{ item.createhome }}"
@@ -76,7 +76,7 @@
   with_items: "{{ dft_users }}"
   when: dft_users is defined and item.password_hash is defined
 
-- name: DFT - Create local users (plaintext password)
+- name: Create local users (plaintext password)
   user: name={{ item.name }}
         password={{ item.password | password_hash('sha512') }}
         createhome={{ item.createhome }}
@@ -98,7 +98,7 @@
   with_items: "{{ dft_users }}"
   when: dft_users is defined and item.password_hash is not defined
 
-- name: DFT - Copy SSH keys to user directories
+- name: Copy SSH keys to user directories
   authorized_key:  key="{{ lookup('file', 'files/{{ item.ssh_key_file }}') }}"
                    manage_dir=yes
                    state=present

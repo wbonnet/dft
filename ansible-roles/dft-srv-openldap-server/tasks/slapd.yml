@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install slapd
+- name: Install slapd
   apt: name={{ item }}
        state=latest
        install_recommends=no

@@ -19,7 +19,7 @@
 #
 
 ---
-- name : DFT - Install apt-cacher-ng
+- name: Install apt-cacher-ng
   apt:
        name={{item}}
        state=latest

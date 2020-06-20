@@ -24,7 +24,7 @@
 #
 
 ---
-- name : DFT - Install network base packages
+- name: Install network base packages
   apt:
       state: latest
       install_recommends: no

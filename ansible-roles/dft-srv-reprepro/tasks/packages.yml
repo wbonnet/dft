@@ -19,7 +19,7 @@
 #
 
 ---
-- name : DFT - Install reprepro
+- name: Install reprepro
   apt:
        pkg=reprepro
        state=latest
