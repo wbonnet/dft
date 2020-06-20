@@ -31,7 +31,7 @@
     resizefs: "{{ item.resizefs }}"
     shrink: "{{ item.shrink }}"
     size: "{{ item.size }}"
-    snapshot: "{{ item.snapshot }}"
+#    snapshot: "{{ item.snapshot }}"
     state: "{{ item.state }}"
     thinpool: "{{ item.thinpool }}"
     vg: "{{ item.vg }}"
