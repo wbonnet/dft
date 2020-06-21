@@ -142,10 +142,18 @@
         SSLOptions +StdEnvVars
     </Directory>
 
+{% if item.SSLCertificateFile is defined %}
     # Defines path to the web site certificate
-    SSLCertificateFile /etc/ssl/certs/{{ item.ServerName }}-fullchain.pem
+    SSLCertificateFile {{ item.SSLCertificateFile }}
+{% else %}
+#   SSLCertificateFile is undefined in inventory
+{% endif %}
 
+{% if item.SSLCertificateKeyFile is defined %}
     # Defines path to the certificate private key
-    SSLCertificateKeyFile /etc/ssl/private/{{ item.ServerName }}-privkey.pem
+    SSLCertificateKeyFile {{ item.SSLCertificateKeyFile }}
+{% else %}
+#   SSLCertificateKeyFile is undefined in inventory
+{% endif %}
   </VirtualHost>
 </IfModule>
