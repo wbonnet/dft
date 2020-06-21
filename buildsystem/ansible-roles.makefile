@@ -38,17 +38,17 @@ MAKE_FILTERS  := Makefile README.md .
 
 # Create a role entry
 new-role:
-	@echo "DEBUG : in ansible-roles.makefile running new-role with argument role-name $(role-name)" ; \
-	if [ -z "$(role-name)" ] ; then \
+	@if [ -z "$(role-name)" ] ; then \
 		echo "DEBUG : from ansible-roles.makefile argument role-name is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2004-1701) ; \
 	else  \
 		if [ -d "./$(role-name)" ] ; then \
 			echo ". Role $(role-name) already exist. Doing nothing..." ; \
 		else  \
-			echo ". Creating the directory for role $(role-name)" ; \
 			cp -fr $(DFT_BUILDSYSTEM)/templates/ansible-role.template $(role-name)/ ; \
 			sed -i -e "s/__ROLENAME__/$(role-name)/g" $(role-name)/README.md ; \
+			echo "Role $(role-name) has been instanciated from template" ; \
+			echo "You may have to edit $(role-name)/README.md and $(role-name)/meta/main.yml to update informations, then run git add $(role-name)" ; \
 		fi ; \
 	fi ;
 
