@@ -24,6 +24,9 @@
 #
 
 ---
+- include: "{{ dft_playbook_logger }}/tasks/logging.yml"
+  when: dft_playbook_logger is defined
+
 - name: Install package list
   apt: name={{ item }}
        state=latest

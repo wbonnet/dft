@@ -19,4 +19,6 @@
 #
 
 ---
+- include: "{{ dft_playbook_logger }}/tasks/logging.yml"
+  when: dft_playbook_logger is defined
 - include: packages.yml

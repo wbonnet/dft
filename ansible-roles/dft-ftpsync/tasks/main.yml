@@ -23,6 +23,9 @@
 #
 
 ---
+- include: "{{ dft_playbook_logger }}/tasks/logging.yml"
+  when: dft_playbook_logger is defined
+
 # Create the ftpsync group
 - name: Create the ftpsync group
   group: name={{ dft_ftpsync_user_group }} state=present
