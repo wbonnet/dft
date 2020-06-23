@@ -45,7 +45,7 @@
 
 - name: Add generated mysqldump based generated scripts to cron table
   cron:
-    name: "create daily {{ item.name }} mysqldump backup"
+    name: "create daily {{ item.description }} mysqldump backup"
     month: "{{ item.crontab_entry.month }}"
     weekday: "{{ item.crontab_entry.weekday }}"
     day: "{{ item.crontab_entry.day }}"
