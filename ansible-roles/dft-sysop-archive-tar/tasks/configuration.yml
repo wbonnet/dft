@@ -37,7 +37,7 @@
 
 - name: Add generated tar based archiving scripts to cron table
   cron:
-    name: "{{ item.description }}"
+    name: "{{ item.crontab_entry.description }}"
     month: "{{ item.crontab_entry.month }}"
     weekday: "{{ item.crontab_entry.weekday }}"
     day: "{{ item.crontab_entry.day }}"
