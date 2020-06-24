@@ -52,9 +52,9 @@
             owner=root
             group=root
             mode="0644"
-  with_items: "{{ dft_os_apt.extra_sources_list_content }}"
+  with_items: "{{ dft_os_apt.extra_sources_list.repositories }}"
   when: ( dft_os_apt is defined and dft_os_apt.generate_sources_list is defined and
-          dft_os_apt.generate_sources_list == True and dft_os_apt.extra_sources_list_content is defined)
+          dft_os_apt.generate_sources_list == True and dft_os_apt.extra_sources_list.repositories is defined)
 
 # Import the needed keys
 - name: Import APT keys (from a keyserver)
@@ -76,15 +76,4 @@
 - name: Update catalog after sources.list modification
   apt:
     update_cache: yes
-
-# Install the "apt" packages
-- name: Install APT packages management
-  apt: name={{ item }}
-       state=latest
-       install_recommends=no
-  with_items:
-    - apt
-#  when: (ansible_distribution == "Debian" and ansible_distribution_major_version == "8")
-  when: (ansible_distribution == "Debian")
-
 
