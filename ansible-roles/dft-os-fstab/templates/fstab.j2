@@ -10,8 +10,10 @@
 # You can access documentation on the content of this file by running man fstab
 
 {% for item in dft_os_fstab.filesystems %}
+{% if item.active is not defined or item.active != False %}
 {% if item.fs_comment is defined %}
 # {{ item.fs_comment }}
 {% endif %}
 {{ item.fs_spec }} {{ item.fs_file }} {{ item.fs_vfstype }} {{ item.fs_mntops }} {{ item.fs_freq }} {{ item.fs_passno }}
+{% endif %}
 {% endfor %}
