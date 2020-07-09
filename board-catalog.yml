@@ -119,6 +119,8 @@ board-catalog:
                   support-level: planning
          - odroid-c2:
                   support-level: planning
+         - odroid-c4:
+                  support-level: planning
          - odroid-hc1:
                   support-level: planning
          - odroid-n2:
