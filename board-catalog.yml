@@ -123,7 +123,7 @@ board-catalog:
                   support-level: planning
          - odroid-n2:
                   support-level: planning
-         - odroid-:xu4:
+         - odroid-xu4:
                   support-level: planning
          - orangepi-3:
                   support-level: planning
@@ -144,7 +144,7 @@ board-catalog:
          - orangepi-zero:
                   support-level: stable
                   uboot_provider: armwizard
-                  uboot_version: 2020.04
+                  uboot_version: 2020.07
                   kernel_provider: armwizard
                   kernel_version: 4.17.1
                   feature_support:
