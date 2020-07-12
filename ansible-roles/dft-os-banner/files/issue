@@ -1,4 +1,6 @@
-\d \t
-Welcome to \n.
+\n \l
 
-This system is running \s \m version : \v (kernel \r)
+Debian GNU/Linux generated using firmaretoolkit.org
+
+The default account to complete setup is localadmin, the password is also localadmin (full sudo granted)
+Please change the password and remove this message from /etc/issue once setup is done
