@@ -22,9 +22,17 @@
 # a slightly different syntax for some operators. This way it a known shell.
 SHELL := bash
 
-# Include image variables definition
-include ../board.mk
+# Build system sould be available under board folder as a symlink. Keep it
+# locally available under board folder computing a relative path is a nightmare
+# and does not work in all cases. Environment variables are not git friendly
+# since git add will loose variable name and generate an absolute path, which
+# is not comptible with user need ans or workspace relocation nor packagng needs.
+# better solutions wille be really welcomeds contributions.
+
+DFT_BUILDSYSTEM := buildsystem
 include image.mk
+include ../board.mk
+include $(DFT_BUILDSYSTEM)/dft.mk
 
 # ------------------------------------------------------------------------------
 #
@@ -32,7 +40,7 @@ include image.mk
 #
 build-image:
 	echo "time command is only for cache profiling purpose and will be removed soon" ; \
-	time sudo dft run_sequence --project project.yml --sequence produce-image  --log-level debug --config-file /home/william/.dftrc 
+	time sudo dft run_sequence --project project.yml --sequence produce-image  --log-level debug --config-file /home/william/.dftrc
 
 list-images:
 	@echo $(IMAGE_NAME)
@@ -41,17 +49,74 @@ list-images:
 #
 # Checks that all mandatory files are available
 #
-check-sanity:
-	@echo "l outil dft controle pas des trucs aussi?"
-	@echo "firmware.yml"
-	@echo "image-firmware.yml"
-	@echo "image-rootfs.yml"
-	@echo "project-firmware.yml"
-	@echo "project-rootfs.yml"
-	@echo "repositories.yml -> /usr/share/dft/library/repositories/repository-debian-fr-stretch.yml"
-	@echo "rootfs.yml -> /usr/share/dft/library/rootfs/rootfs-netshell.yml"
-	@echo "variables-orangepi-zero.yml"
-	@echo "variables.yml -> /usr/share/dft/examples/rootfs-projects/netshell/variables.yml"
+sanity-check:
+	@echo "Checking $(BOARD_NAME) $(IMAGE_TYPE)-$(IMAGE_NAME) image folder"
+	@if [ ! -e "image.mk" ] ; then \
+		echo "The image.mk file is missing in directory ${CURDIR}/" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "cp $(DFT_BUILDSYSTEM)/templates/image.mk ${CURDIR}/" ; \
+		echo "git add ${CURDIR}/image.mk" ; \
+		echo "make sanity-check" ; \
+		$(call dft_error ,2007-1301) ; \
+	fi ;
+	@if [ ! -e "project.yml" ] ; then \
+		echo "The project.yml file is missing in directory ${CURDIR}/" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "cp $(DFT_BUILDSYSTEM)/templates/board-image-project.yml ${CURDIR}/project.yml" ; \
+		echo "git add ${CURDIR}/project.yml" ; \
+		echo "make sanity-check" ; \
+		$(call dft_error ,2007-1302) ; \
+	fi ;
+	@if [ ! -L "Makefile" ] ; then \
+		echo "The Makefile symlink to ./buildsystem/board-image.makefile is missing in directory ${CURDIR}/" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "ln -s ./buildsystem/board-image.makefile ${CURDIR}/Makefile" ; \
+		echo "git add ${CURDIR}/Makefile" ; \
+		echo "make sanity-check" ; \
+		$(call dft_error ,2007-1304) ; \
+	fi ;
+	@if [ ! "$(shell readlink Makefile)" = "./buildsystem/board-image.makefile" ] ; then \
+		echo "The target of symlink Makefile should be ./buildsystem/board-image.makefile in directory ${CURDIR}/" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "git rm -f ${CURDIR}/Makefile" ; \
+		echo "ln -s ./buildsystem/board-image.makefile ${CURDIR}/Makefile" ; \
+		echo "git add ${CURDIR}/Makefile" ; \
+		echo "make sanity-check" ; \
+		$(call dft_error ,2007-1303) ; \
+	fi ;
+	@if [ ! -L "blueprint.yml" ] ; then \
+		echo "The blueprint.yml to ../blueprint-$(BOARD_NAME).yml is missing in directory ${CURDIR}/" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "ln -s ../blueprint-$(BOARD_NAME).yml blueprint.yml" ; \
+		echo "git add ${CURDIR}/blueprint.yml" ; \
+		echo "make sanity-check" ; \
+		$(call dft_error ,2007-1305) ; \
+	fi ;
+	@if [ ! "$(shell readlink blueprint.yml)" = "../blueprint-$(BOARD_NAME).yml" ] ; then \
+		echo "The target of symlink blueprint.yml should be ../blueprint-$(BOARD_NAME).yml in directory ${CURDIR}/" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "git rm -f ${CURDIR}/blueprint.yml" ; \
+		echo "ln -s ../blueprint-$(BOARD_NAME).yml ${CURDIR}/blueprint.yml" ; \
+		echo "git add ${CURDIR}/Makefile" ; \
+		echo "make sanity-check" ; \
+		$(call dft_error ,2007-1306) ; \
+	fi ;
+	@if [ ! -e "board-variables.yml" ] ; then \
+		echo "The board-variables.yml file is missing in directory ${CURDIR}/" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "cp $(DFT_BUILDSYSTEM)/templates/board-variables.yml ${CURDIR}/board-variables.yml" ; \
+		echo "git add ${CURDIR}/board-variables.yml" ; \
+		echo "make sanity-check" ; \
+		$(call dft_error ,2007-1307) ; \
+	fi ;
+	@if [ ! -e "disk-image.yml" ] ; then \
+		echo "The disk-image.yml file is missing in directory ${CURDIR}/" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "cp $(DFT_BUILDSYSTEM)/templates/disk-image.yml ${CURDIR}/disk-image.yml" ; \
+		echo "git add ${CURDIR}/disk-image.yml" ; \
+		echo "make sanity-check" ; \
+		$(call dft_error ,2007-1309) ; \
+	fi ;
 
 # ------------------------------------------------------------------------------
 #
