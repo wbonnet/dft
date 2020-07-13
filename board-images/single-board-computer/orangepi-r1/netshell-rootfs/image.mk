@@ -18,5 +18,8 @@
 #
 
 # The image type (supported types are rootfs and firmware)
-IMAGE_NAME = rootfs
+IMAGE_TYPE = rootfs
+
+# The image name (used with IMAGE_TYPE value in filename generation dash separated)
+IMAGE_NAME = netshell
 
