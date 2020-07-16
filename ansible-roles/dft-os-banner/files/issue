@@ -1,6 +1,6 @@
 \n \l
 
-Debian GNU/Linux generated using firmaretoolkit.org
+Debian GNU/Linux generated with firmaretoolkit.org
 
 The default account to complete setup is localadmin, the password is also localadmin (full sudo granted)
 Please change the password and remove this message from /etc/issue once setup is done
