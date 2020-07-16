@@ -58,7 +58,7 @@ kernel:
 
   # List of packages to install from the repository to add kernel
   packages:
-    - linux-image-armmp-lpae
+    - linux-kernel-orangepi-r1 
 
   # Defines if the source generated to install kernel packaged should be kept or not after
   # intallation. Default value is True
