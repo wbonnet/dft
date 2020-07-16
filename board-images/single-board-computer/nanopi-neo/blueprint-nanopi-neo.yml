@@ -46,7 +46,7 @@ kernel:
   # pubkey:
 
   # List of packages to install from the repository
- packages:
+  packages:
    - linux-kernel-nanopi-neo
 
 # The uboot section defines the different parameters needed to select and install the uboot
