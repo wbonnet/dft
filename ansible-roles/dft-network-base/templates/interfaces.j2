@@ -22,7 +22,7 @@ iface lo inet loopback
 # {{ interface.comment }}
 {% endif %}
 auto {{ interface.name }}
-{% if interface.dhcp is defined %}
+{% if interface.dhcp is defined and interface.dhcp %}
 iface {{ interface.name }} inet dhcp
 {% else %}
 iface {{ interface.name }} inet static
