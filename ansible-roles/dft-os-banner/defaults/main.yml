@@ -26,13 +26,13 @@
 #
 
 # If true will copy files/issue to /etc/isssue, otherwise do nothing
-dft_banner_install_issue: False
+dft_banner_install_issue: True
 
 # If true will copy files/issue.net to /etc/isssue.net, otherwise do nothing
-dft_banner_install_issue_net: False
+dft_banner_install_issue_net: True
 
 # If true will copy files/motd to /etc/motd, otherwise do nothing
-dft_banner_install_motd: False
+dft_banner_install_motd: True
 
 # If true will copy files/update-motd.d content to /etc/update-motd.d, otherwise do nothing
 dft_banner_install_update_motd: True
