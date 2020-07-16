@@ -45,6 +45,14 @@ show-images:
 	done
 
 sanity-check:
+	@if [ ! -e "${CURDIR}/blueprint-$(BOARD_NAME).yml" ] ; then \
+		echo "The blueprint-$(BOARD_NAME).yml file is mising in ${CURDIR}" ; \
+		echo "You can fix with the following shell commands :" ; \
+		echo "cp ../buildsystem/templates/board-blueprint.template ${CURDIR}/blueprint-$(BOARD_NAME).yml" ; \
+		sed -i -e "s/__BOARD_ARCH__/$(BOARD_ARCH)/g" -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" ${CURDIR}/blueprint-$(BOARD_NAME).yml ; \
+		echo "git add ${CURDIR}/blueprint-$(BOARD_NAME).yml" ; \
+		$(call dft_error ,2007-0154) ; \
+	fi ; 
 	@if [ ! -e "${CURDIR}/buildsystem" ] ; then \
 		echo "buildsystem symlink ${CURDIR}/buildsystem is Missing. It should be a symlink to ../buildsystem" ; \
 		echo "You can fix with the following shell commands :" ; \
