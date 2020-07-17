@@ -19,22 +19,25 @@
 #
 
 ---
-- name: Setup /etc/fstab
-  template:
-    src: templates/fstab.j2
-    dest: /etc/fstab
-    owner: root
-    group: root
-    mode: "0660"
-  # Excute this task only if filesystems variable is defined in inventory
-  when: dft_os_fstab.filesystems is defined
-
-# Excute this task only if filesystems variable is defined in inventory
-- name: create filesystems mount points
+# Execute this task only if filesystems variable is defined in inventory
+- name: Create filesystems mount points
   file:
-    path:  "{{ item.fs_file }}"
+    path:  "{{ item.path }}"
     state: directory
     owner: root
     group: root
-    mode: "{{ item.fs_mode | default('0755') }}"
+    mode: "{{ item.mode | default('0755') }}"
+  loop: "{{ dft_os_fstab.filesystems|flatten }}"
+
+# Set the filesystem mount status according to inventory
+- name: Mount filesystems
+  mount:
+    boot: "{{ item.boot | default(True) }}"
+    dump: "{{ item.dump | default(0) }}"
+    fstype: "{{ item.fstype }}"
+    opts: "{{ item.opts }}"
+    passno: "{{ item.passno | default (2) }}"
+    src: "{{ item.src }}"
+    path:  "{{ item.path }}"
+    state: "{{ item.state | default('present') }}"
   loop: "{{ dft_os_fstab.filesystems|flatten }}"
