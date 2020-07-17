@@ -19,3 +19,11 @@
 #
 
 ---
+- name: Create filesystems on physical devices
+  filesystem:
+    dev: "{{ item.dev }}"
+    force: "{{ item.force | default(false) }}"
+    fstype: "{{ item.fstype }}"
+    opts: "{{ item.opts | default() }}"
+    resizefs: "{{ item.resizefs }}"
+  with_items: "{{ dft_os_filesystem.filesystems }}"
