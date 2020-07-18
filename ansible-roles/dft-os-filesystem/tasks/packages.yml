@@ -21,10 +21,9 @@
 ---
 - name: Install filesystems format tools
   apt:
-       name={{item}}
-       state=latest
-       install_recommends=no
-  with_items:
-       - e2fsprogs
-       - btrfs-progs
-       - exfat-utils
+    state: latest
+    install_recommends: no
+    pkg:
+      - e2fsprogs
+      - btrfs-progs
+      - exfat-utils
