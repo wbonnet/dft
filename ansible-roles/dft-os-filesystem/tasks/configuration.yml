@@ -27,3 +27,4 @@
     opts: "{{ item.opts | default() }}"
     resizefs: "{{ item.resizefs }}"
   with_items: "{{ dft_os_filesystem.filesystems }}"
+  when: dft_os_filesystem.filesystems is defined
