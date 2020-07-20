@@ -24,7 +24,7 @@
 #
 
 ---
-- name: Update root password when the defined password
+- name: Update root password when a clear text password is defined
   user: name=root
         password="{{ dft_root_password }}"
         update_password=always
