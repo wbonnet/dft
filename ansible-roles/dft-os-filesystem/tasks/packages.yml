@@ -27,3 +27,4 @@
       - e2fsprogs
       - btrfs-progs
       - exfat-utils
+      - dosfstools
