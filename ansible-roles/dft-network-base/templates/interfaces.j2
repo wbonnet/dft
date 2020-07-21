@@ -21,7 +21,12 @@ iface lo inet loopback
 {% if interface.comment is defined %}
 # {{ interface.comment }}
 {% endif %}
+{% if interface.auto is defined and interface.auto %}
 auto {{ interface.name }}
+{% endif %}
+{% if interface.allow_hotplug is defined and interface.allow_hotplug %}
+allow-hotplug {{ interface.name }}
+{% endif %}
 {% if interface.dhcp is defined and interface.dhcp %}
 iface {{ interface.name }} inet dhcp
 {% else %}
@@ -32,18 +37,18 @@ iface {{ interface.name }} inet static
 {% if interface.network is defined %}
     network   {{ interface.network }}
 {% endif %}
-{% if interface.netmask is defined %}
-    netmask   {{ interface.netmask }}
-{% endif %}
 {% if interface.gateway is defined %}
     gateway   {{ interface.gateway }}
 {% endif %}
-{% if interface.broadcast is defined %}
-    broadcast {{ interface.broadcast }}
-{% endif %}
 {% if interface.vlan_raw_device is defined %}
-    vlan_raw_device {{ interface.vlan_raw_device }}
+    vlan-raw-device {{ interface.vlan_raw_device }}
 {% endif %}
+{% endif %}
+{% if interface.wpa_ssid is defined %}
+    wpa-ssid    {{ interface.wpa_ssid }}
+{% endif %}
+{% if interface.wpa_psk is defined %}
+    wpa-psk     {{ interface.wpa_psk }}
 {% endif %}
 
 {% endfor %}
