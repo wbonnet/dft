@@ -27,5 +27,6 @@
 - include: "{{ dft_playbook_logger }}/tasks/logging.yml"
   when: dft_playbook_logger is defined
 
-- include: packages.yml
-- include: configuration.yml
+# The is nothing to include (no package to install or to configure for this logging only role)
+# - include: packages.yml
+# - include: configuration.yml

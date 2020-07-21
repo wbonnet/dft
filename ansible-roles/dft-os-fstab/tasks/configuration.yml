@@ -27,17 +27,32 @@
     owner: root
     group: root
     mode: "{{ item.mode | default('0755') }}"
-  loop: "{{ dft_os_fstab.filesystems|flatten }}"
+  loop: "{{ dft_os_fstab.filesystems }}"
+  when: dft_os_fstab is defined and dft_os_fstab.filesystems is defined
+
+# Generate /etc/fstab file
+- name: Generate /etc/fstab
+  template:
+    src: fstab.j2
+    dest: "/etc/fstab"
+    owner: root
+    group: root
+    mode: "0660"
+
+  # Excute this task only if a fstab variable is defined
+  when: dft_os_fstab is defined and dft_os_fstab.filesystems is defined
 
 # Set the filesystem mount status according to inventory
 - name: Mount filesystems
   mount:
+    backup: "{{ item.backup | default(False) }}"
     boot: "{{ item.boot | default(True) }}"
     dump: "{{ item.dump | default(0) }}"
     fstype: "{{ item.fstype }}"
     opts: "{{ item.opts }}"
     passno: "{{ item.passno | default (2) }}"
-    src: "{{ item.src }}"
     path:  "{{ item.path }}"
+    src: "{{ item.src }}"
     state: "{{ item.state | default('present') }}"
-  loop: "{{ dft_os_fstab.filesystems|flatten }}"
+  loop: "{{ dft_os_fstab.filesystems }}"
+  when: dft_os_fstab is defined and dft_os_fstab.filesystems is defined
