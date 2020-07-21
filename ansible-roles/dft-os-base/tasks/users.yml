@@ -26,7 +26,7 @@
 ---
 - name: Update root password when a clear text password is defined
   user: name=root
-        password="{{ dft_root_password }}"
+        password="{{ dft_root_password | password_hash('sha512')}}"
         update_password=always
   when: dft_root_password is defined
 
