@@ -22,9 +22,9 @@
 - name: Create filesystems on physical devices
   filesystem:
     dev: "{{ item.dev }}"
-    force: "{{ item.force | default(false) }}"
+    force: "{{ item.force | default(False) }}"
     fstype: "{{ item.fstype }}"
     opts: "{{ item.opts | default() }}"
     resizefs: "{{ item.resizefs }}"
-  with_items: "{{ dft_os_filesystem.filesystems }}"
-  when: dft_os_filesystem.filesystems is defined
+  with_items: "{{ dft_os_filesystem.devices }}"
+  when : dft_os_filesystem is defined
