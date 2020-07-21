@@ -25,8 +25,8 @@
 
 ---
 - name: Install tftpd-hpa
-  apt: name={{ item }}
-       state=latest
-       install_recommends=no
-  with_items:
-    - tftpd-hpa
+  apt:
+    state: latest
+    install_recommends: no
+    pkg:
+      - tftpd-hpa

@@ -21,6 +21,7 @@
 ---
 - name: Install LVM2
   apt:
-    name: lvm2
     state: latest
     install_recommends: no
+    pkg:
+      - lvm2

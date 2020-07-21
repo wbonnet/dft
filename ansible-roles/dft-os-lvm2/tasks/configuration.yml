@@ -21,8 +21,8 @@
 #---
 - name: Deploy LVM2 main configuration file
   template:
-      src: lvm.conf.j2
-      dest: /etc/lvm/lvm.conf
-      owner: root
-      group: root
-      mode: "0644"
+    src: lvm.conf.j2
+    dest: /etc/lvm/lvm.conf
+    owner: root
+    group: root
+    mode: "0644"
