@@ -21,11 +21,11 @@
 ---
 # No specific packages should be installed so far. This may be removed in a near future
 
-#- name: Install XXX
-#  apt:
-#       name={{item}}
-#       state=latest
-#       install_recommends=no
-#  with_items:
-#       - rsync
-#       - openssh-client
+- name: Install default file system support (ext and FAT)
+  apt:
+    state: latest
+    install_recommends: no
+    pkg:
+      - e2fsprogs
+      - dosfstools
+
