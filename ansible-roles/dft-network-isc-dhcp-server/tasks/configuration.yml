@@ -18,3 +18,26 @@
 #
 #
 
+# Generate /etc/fstab file
+- name: Generate /etc/default/isc-dhcp-server.default.j2
+  template:
+    src: isc-dhcp-server.default.j2
+    dest: /etc/default/isc-dhcp-server
+    owner: root
+    group: root
+    mode: "0644"
+
+  # Excute this task only if a fstab variable is defined
+  when: dft_network_isc_dhcp_server is defined
+
+# Generate /etc/fstab file
+- name: Generate /etc/dhcp/dhcpd.conf
+  template:
+    src: dhcpd.conf.j2
+    dest: /etc/dhcp/dhcpd.conf
+    owner: root
+    group: root
+    mode: "0644"
+
+  # Excute this task only if a fstab variable is defined
+  when: dft_network_isc_dhcp_server is defined and dft_network_isc_dhcp_server.dhcpd is defined
