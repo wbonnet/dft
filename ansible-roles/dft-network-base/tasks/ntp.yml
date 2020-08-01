@@ -24,7 +24,7 @@
 #
 
 ---
-- name: Install ntp
+- name: Install NTP
   apt:
       state: latest
       install_recommends: no

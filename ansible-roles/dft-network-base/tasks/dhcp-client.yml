@@ -24,7 +24,7 @@
 #
 
 ---
-- name: Install dhcp client
+- name: Install DHCP client
   apt:
       state: latest
       install_recommends: no
