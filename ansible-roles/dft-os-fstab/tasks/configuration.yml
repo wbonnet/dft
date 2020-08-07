@@ -20,15 +20,6 @@
 
 ---
 # Execute this task only if filesystems variable is defined in inventory
-- name: Create filesystems mount points
-  file:
-    path:  "{{ item.path }}"
-    state: directory
-    owner: root
-    group: root
-    mode: "{{ item.mode | default('0755') }}"
-  loop: "{{ dft_os_fstab.filesystems }}"
-  when: dft_os_fstab is defined and dft_os_fstab.filesystems is defined
 
 # Generate /etc/fstab file
 - name: Generate /etc/fstab
