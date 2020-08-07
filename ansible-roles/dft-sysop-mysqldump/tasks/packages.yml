@@ -21,8 +21,7 @@
 ---
 - name: Install MariaBD client (containing mysqldump)
   apt:
-       name={{item}}
-       state=latest
-       install_recommends=no
-  with_items:
+    state: latest
+    install_recommends: no
+    pkg:
        - mariadb-client
