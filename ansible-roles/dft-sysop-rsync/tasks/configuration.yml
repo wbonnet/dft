@@ -56,7 +56,7 @@
 
 - name: Add generated rsync based generated scripts to cron table
   cron:
-    name: "{{ item.description }}"
+    name: "{{ item.name }}"
     month: "{{ item.crontab_entry.month }}"
     weekday: "{{ item.crontab_entry.weekday }}"
     day: "{{ item.crontab_entry.day }}"
