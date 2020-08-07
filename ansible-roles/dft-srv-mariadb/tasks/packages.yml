@@ -21,10 +21,9 @@
 ---
 - name: Install MariaDB
   apt:
-       name={{item}}
-       state=latest
-       install_recommends=no
-  with_items:
-       - mariadb-server
-       - mariadb-client
+    state: latest
+    install_recommends: no
+    pkg:
+      - mariadb-server
+      - mariadb-client
 
