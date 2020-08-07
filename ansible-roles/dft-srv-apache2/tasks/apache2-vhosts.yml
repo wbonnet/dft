@@ -42,12 +42,25 @@
   when: dft_apache2.https_sites_available is defined
 
 #
+# Register virtual host enable status
+#
+- name: Check if apache2 virtual hosts are activated
+  stat:
+    path: /etc/apache2/sites-enabled/{{ item.name }}
+  register: is_virtual_host_activated
+  with_items: "{{ dft_apache2.sites_enabled}}"
+  when: dft_apache2.sites_enabled is defined
+
+ #/etc/apache2/sites-available/
+ #mods et conf
+
+#
 # Activate the virtual hosts configuration files
 #
 - name: Activate apache2 enabled virtual hosts
   command: a2ensite {{ item.name }}
-  with_items: "{{ dft_apache2.sites_enabled}}"
-  when: dft_apache2.sites_enabled is defined
+  with_items: "{{ dft_apache2.sites_enabled }}"
+  when: dft_apache2.sites_enabled is defined and is_virtual_host_activated.stat.exists == false
 #-  notify:
 #    - restart apache
 
