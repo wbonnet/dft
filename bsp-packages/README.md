@@ -7,7 +7,7 @@ The Firmware toolkit project contributes the build manifests you need to rebuild
 
 The bsp-packages directory tree is organized in the same way as others top level directories containing a board ***category*** level.
 
-An extra folder named ///linux-kernel/// fragments contains the kernel configuration fragments shared among categories and boards.
+An extra folder named *linux-kernel* fragments contains the kernel configuration fragments shared among categories and boards.
 
 * The following categories are availables :
   * desktop
