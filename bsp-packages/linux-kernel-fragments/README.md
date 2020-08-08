@@ -7,7 +7,7 @@ Fragments are stored in two distinct subfolders according to the nature of the p
 
 Features are assigned to independant axis ***functional*** and ***hardware*** axis (stored in subfolders). Thus, you can select which features are enabled or not on a given hardware. This can be used for instance to activate hardware acceleration on a given platform according to its specifications and available hardware components or accelerators.
 
-On both axis, features are grouped into folders by function type. Each set of functionality is defined into a distinct file that should be included, at compilation time, from kernel Makefile (please see documantation and howto from in the Makefile section).
+On both axis, features are grouped into folders by function type. Each set of functionality is defined into a distinct file that should be included, at kernel compilation time, from kernel Makefile (please see documantation and howto from in the Makefile section).
 
 * The ***functional*** axis group features into categories (by using subfolders). Each file within a category controls the activation (or deactivation) of a set of features (security, network, etc.).
 * The ***hardware*** axis provides definition for :

@@ -1,9 +1,9 @@
 # BSP Packages
 This folder contains the makefiles used to compile and build BSP (Board Support Packages) from upstream sources, a local mirror or even modified/patched sources, handling both Linux kernel and u-boot.
 
-The produced Debian ***deb*** packages can be installed to your own system and can also be used by the DFT command line tool when producing a bootable image.
+The produced Debian ***deb*** packages can be installed to your own system and can also be used by the ***DFT*** command line tool when producing a bootable image.
 
-The Firmware toolkit project contributes the build manifests you need to rebuild the BSP from sources, using either provided configuration files, or your own tuned defconfigs. This feature is compliant with the tracking of used defconfigs and configure options in your own SCM system (such as git). It also covers needs such as, tuning the kernel, enable specific options or drivers to reduce the footprint by switching drivers from module to static mode etc.
+The Firmware Toolkit project contributes the build manifests you need to rebuild the BSP from sources, using either provided configuration files, or your own tuned defconfigs. This feature is compliant with the tracking of used defconfigs and configure options in your own SCM system (such as git). It also covers needs such as, tuning the kernel, enable specific options or drivers to reduce the footprint by switching drivers from module to static mode etc.
 
 The bsp-packages directory tree is organized in the same way as others top level directories containing a board ***category*** level.
 
