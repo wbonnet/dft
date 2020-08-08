@@ -1,20 +1,14 @@
 # Linux Kernel functional categories
-This folder contains the Ansible roles provided by the DFT project.
-Roles are named according the following rules.
 
-A role name is made of three components or fields which are dashed separated. The fields are :
-* The ***name of the project*** it belongs to (ie dft). DFT role names are always prefixed by 'dft' as first field value
+The functional folder contains Linux kernel configuration fragments grouped by functional categories.
+Each category is assigned to a folder storing one or several fragments (files) defining sets of features (network, security, etc.) which can be activated separatly and or in addition of your own fragments.
 
-* The ***category*** of the role. Roles are available for the following categories:
-  * apps (local software applications)
-  * bsp (drivers and hardware support)
-  * devel (development and compilers)
-  * os (operating system and unix system itself)
-  * network (system level only, end user apps go to srv)
-  * security
-  * sysop (administration tasks such as backups)
-  * webapps (web and remote software applications)
-  * xde (X Desktop Environment)
-  * srv (service or server, a service runs on a server)
-* The software ***functionality***
-  * Definitions coming soon...
+* The ***functional*** features are grouped into the following categories (or subfolders). Each file within a category sontrol the activation (or deactivation) of a sets of features):
+  * containers (activate cgroups and namespaces, virtualization is below)
+  * crypto (cryptography functionalities)
+  * debug (kernel debug and trace functionalities)
+  * filesystems (filesystems support)
+  * network (network functionalities)
+  * security (security functionalities)
+  * virtualization (virtualization functionalities)
+
