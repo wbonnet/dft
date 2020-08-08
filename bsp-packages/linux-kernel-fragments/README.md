@@ -20,5 +20,5 @@ On both axis, features are grouped into folders by function type. Each set of fu
   * virtualization (virtualization functionalities)
 
 * The ***hardware*** features axis
-  * board blueprints (board and architectures specific features)
-  * device drivers (device support which can be reused by distinct boards)
+  * board blueprints (board and architecture specific components or functionalities)
+  * device drivers (device support which can be reused and shared accross distinct boards)
