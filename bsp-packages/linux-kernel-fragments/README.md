@@ -6,7 +6,7 @@ your own customized kernel.
 
 Fragments are stored in two distinct sublfolders according to the nature of provided features. Either hardware or kernel functionality support.
 
-Features are assigned to independant axis ***functional*** and ***hardware*** axis (stored in subfolders). This let you select enabled which features are enabled or not on a given hardware. This is used for instance to activate hardware acceleration on some platform according to specifications and available hardware accelerators.
+Features are assigned to independant axis ***functional*** and ***hardware*** axis (stored in subfolders). Thhus, you can select which features are enabled or not on a given hardware. It can be used for instance to activate hardware acceleration on a given platform according to its  specifications and available hardware components or  accelerators.
 
 On both axis, features are grouped into folders by function type. Each set of functionality is defined into a distinct file that should be included, at compilation time, from kernel Makefile (please see documantation and howto from in the Makefile section).
 
