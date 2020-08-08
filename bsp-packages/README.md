@@ -6,6 +6,7 @@ The produced Debian ***deb*** packages can be installed to your own system and c
 The Firmware toolkit project contributes the build manifests you need to rebuild the BSP from sources, using either provided configuration files, or your own tuned defconfigs. This feature is compliant with the tracking of used defconfigs and configure options in your own SCM system (such as git). It also covers needs such as, tuning the kernel, enable specific options or drivers to reduce the footprint by switching drivers from module to static mode etc.
 
 The bsp-packages directory tree is organized in the same way as others top level directories containing a board ***category*** level.
+An extra folder named linux-kernel fragments contains kernel configuration fragments shared among categories and boards.
 
 * The following categories are availables :
   * desktop
