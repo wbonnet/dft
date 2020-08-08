@@ -10,6 +10,6 @@ Features are assigned to independant axis ***functional*** and ***hardware*** ax
 On both axis, features are grouped into folders by function type. Each set of functionality is defined into a distinct file that should be included, at compilation time, from kernel Makefile (please see documantation and howto from in the Makefile section).
 
 * The ***functional*** axis group features into categories (by using subfolders). Each file within a category controls the activation (or deactivation) of a set of features (security, network, etc.).
-* The ***hardware*** axis provides definition of :
+* The ***hardware*** axis provides definition for :
   * board blueprints (board and architecture specific components, hardware dependant and tight functionalities)
   * device drivers (device support which can be reused and shared accross distinct boards using the same hardware)
