@@ -1,7 +1,7 @@
 # Linux Kernel configuration fragments
 The folder linux-kernel-fragments contains the Linux kernel configuration fragments provided with Firmware Toolkit.
 
-These defconfig fragments are available in order to simplify kernel rebuild and can be used starting point or example to configure then build your own customized kernel.
+These defconfig fragments are available in order to simplify kernel rebuild and can be used as starting points or examples how to configure then build your own customized kernel.
 
 Fragments are stored in two distinct subfolders according to the nature of the provided features which can fall under hardware support or kernel functionality support.
 
