@@ -3,10 +3,10 @@
 The board-blueprints folder contains Linux kernel sets of defconfig options used to activate support of a given board.
 
 When generating the defconfig in order to build kernel the fragment include order is
- * *hardware/mutual*
- * The board blueprint is included in second, updating mutual definitions.
- * *hardware/device-drivers* is included in third
- * finaly *functional* fragments ar included
+ # The *hardware/mutual* definitions
+ # The board blueprint, updating mutual definitions
+ # The *hardware/device-drivers* definition according to list from Makefile
+ # Finaly *functional* fragments are included according to list from Makefile
 
 Each board definition is stored in a file named after the board (same as in board-catalog.yml).
 
