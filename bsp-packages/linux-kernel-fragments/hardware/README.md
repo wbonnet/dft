@@ -1,20 +1,9 @@
-# Ansible naming rules
-This folder contains the Ansible roles provided by the DFT project.
-Roles are named according the following rules.
+# Linux kernel hardware configuration fragments
 
-A role name is made of three components or fields which are dashed separated. The fields are :
-* The ***name of the project*** it belongs to (ie dft). DFT role names are always prefixed by 'dft' as first field value
+The hardware folder contains Linux kernel configuration fragments grouped by functional categories.
+Each category is assigned to a folder storing one or several fragments (files) defining sets of features (network, security, etc.) which can be activated separatly and or in addition of your own fragments.
 
-* The ***category*** of the role. Roles are available for the following categories:
-  * apps (local software applications)
-  * bsp (drivers and hardware support)
-  * devel (development and compilers)
-  * os (operating system and unix system itself)
-  * network (system level only, end user apps go to srv)
-  * security
-  * sysop (administration tasks such as backups)
-  * webapps (web and remote software applications)
-  * xde (X Desktop Environment)
-  * srv (service or server, a service runs on a server)
-* The software ***functionality***
-  * Definitions coming soon...
+The ***hardware*** folder contains definition for :
+  * mutual (the mutual layer is the basic set of defconfig options shared accros all boards. This set is and applied first before any other config overlay).
+  * board blueprints (defining in board distinct files the minimal set of options to suppord board specific components, hardware dependant functionalities, etc.)
+  * device drivers (devices definition can be shared accross distinct boards using the same hardware. Nonetheless distinct compilations are needed to match kernel symbols)
