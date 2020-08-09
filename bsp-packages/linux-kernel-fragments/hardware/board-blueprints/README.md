@@ -1,15 +1,7 @@
 # Linux kernel board blueprints configuration fragments
 
+The board-bluprints folder contains Linux kernel sets of defconfig options used to activate support of a given board.
 
+The board blueprint is included in second place when generating kernel defconfig. First is always *hardware/mutual*, third is *hardware/device-drivers* and finaly *functional* fragments.
 
-
-
-
-
-
-
-The mutual folder contains Linux kernel sets of defconfig options shared accros all boards regardless of board hardware nor kernel versions.
-
-The *mutual* configurations should be seen as the common defconfig ancestor, used by Firmware Toolkit for Linux kernel production, when generating configuration files.
-
-Thus *mutual* should be included first, before *hardware* or *functional* fragments in the kernel Makefiles.
+Each board definition is stored in a file named after the board (same as in board-catalog.yml). There must be only one board blueprint included in a kernel production manifest. Otherwise, you are assuming this decision and doing it at your own risks. No configuration consistancy can be provided by Firmware Toolkit.
