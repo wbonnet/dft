@@ -14,6 +14,6 @@ The main folders are :
   * char-devices
   * graphics
   * multimedia
-  *network
+  * network
   * sound
   * usb
