@@ -8,7 +8,8 @@ When building a custom kernel package, you have to ensure that hardware is avail
 
 The consistency checks upon hardware availability and support are provided by Firmware Toolkit and included in provided board Makefiles.
 
-Kernel ragments files are allocated into directories named after kernel menuconfig entry names.
+
+Kernel fragments files are allocated into directories named after kernel menuconfig entry names.
 
 The main folders are :
   * android
