@@ -6,8 +6,8 @@ When generating the defconfig in order to build kernel the fragment include orde
  1. The *hardware/mutual* definitions
  2. The board blueprint, updating mutual definitions
  3. The *hardware/device-drivers* definition according to list from Makefile
- 4. Finaly *functional* fragments are included according to list from Makefile
+ 4. The *functional* fragments are included according to list from Makefile
 
-Each board definition is stored in a file named after the board (same as in board-catalog.yml).
+Each board definition is stored in a separate file named after the board (same as in board-catalog.yml) ex: orangepi-zero.defconfig
 
 There must be only one board blueprint included in a kernel production manifest. Otherwise, you are assuming this decision and doing it at your own risks. No configuration consistancy can be provided by Firmware Toolkit.
