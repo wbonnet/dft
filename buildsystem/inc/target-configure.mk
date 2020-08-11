@@ -105,7 +105,7 @@ do-configure:
 				if [ "$(SW_NAME)" = "linux" ] ; then \
 					if [ ! -f "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ] ; then \
 						echo "DEBUG : config/$(BOARD_NAME)-kernel-$(SW_VERSION).config does not exist using default instead" ; \
-						cp "config/$(BOARD_NAME)-kernel-default.config" "$(BUILD_DIR)/.config" ; \
+						cp "../config/$(BOARD_NAME)-kernel-default.config" "$(BUILD_DIR)/.config" ; \
 					else \
 						echo "DEBUG : config/$(BOARD_NAME)-kernel-$(SW_VERSION).config exist !" ; \
 						cp "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" "$(BUILD_DIR)/.config" ; \
@@ -114,10 +114,7 @@ do-configure:
 					echo "DEBUG : now running kernel make olddefconfig in `pwd`" ; \
 					echo "DEBUG : existing .config files have been backuped up to beforolddefconfig and afterolddefconfig" ; \
 					cp .config "$(BOARD_NAME)-kernel-$(SW_VERSION).beforeolddefconfig" ; \
-					md5sum "$(BOARD_NAME)-kernel-$(SW_VERSION).beforeolddefconfig" ; \
 					make olddefconfig ; \
-					cp .config "$(BOARD_NAME)-kernel-$(SW_VERSION).afterolddefconfig" ; \
-					md5sum "$(BOARD_NAME)-kernel-$(SW_VERSION).afterolddefconfig" ; \
 				fi ; \
 			fi ; \
 		fi ; \
