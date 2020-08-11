@@ -48,6 +48,44 @@ DEFAULT_DTB = sun8i-h2-plus-orangepi-zero.dtb
 
 
 #
-# GRUB support and configuration (u-boot or grub should be activated to be able to boot the board).
+# GRUB support and configuration (u-boot or grub should be activated to be able to boot the board)
 #
 GRUB_SUPPORT = 0
+
+
+#
+# Linux Kernel  support and configuration
+#
+
+# Should the Linux Kernel be generated (set LINUX_KERNEL_SUPPORT to 1) (0 means do not generate linux kernel)
+# if LINUX_KERNEL_SUPPORT is disabled packaging is skipped. In this case, you will have to activate an alternate kernel
+LINUX_KERNEL_SUPPORT = 1
+
+# Defines the board specific kernel config files. Other defconfig files are layers applied on top of this one
+LINUX_KERNEL_BOARD_BLUEPRINT ?= $(BOARD_NAME).defconfig
+
+
+
+defconfig communs
+defconfig overlays list
+/home/william/workspace/dft/bsp-packages/linux-kernel-fragments/hardware/mutual/
+pour le moment ya rien
+/home/william/workspace/dft/bsp-packages/linux-kernel-fragments/hardware/board-blueprints/
+la j'ai board-name.defconfig
+
+/home/william/workspace/dft/bsp-packages/linux-kernel-fragments/hardware/device-drivers/
++=usb/plop.defconfig
+/home/william/workspace/dft/bsp-packages/linux-kernel-fragments/functional/
++= containers/
+config_cgroups.config
+config_ns.cfg
+security/security.USE_CONFIG_FILE
+c du fonctionel
+
+# Make use the defconfig file from UBOOT_DEFCONFIG unless you specify your own in USE_CONFIG_FILE
+UBOOT_DEFCONFIG = orangepi_zero_defconfig
+
+# List of files to copy from build to install directory (path is relative to build dir)
+UBOOT_BINARY_FILE = u-boot-sunxi-with-spl.bin
+DEFAULT_DTB = sun8i-h2-plus-orangepi-zero.dtb
+
