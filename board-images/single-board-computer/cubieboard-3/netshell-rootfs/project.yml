@@ -89,7 +89,7 @@ configuration:
 project_definition:
 
   # Defines the project name. Mostly used for output and directories creation
-  project_name: "cubieboard-3-rootfs"
+  project_name: "cubieboard-3_rootfs"
 
   # Definition of the repositories used for bootstrapping
   # There can be only one repo, thus its url is defined here
@@ -97,20 +97,20 @@ project_definition:
 
   # Definition of the repositories to use
   repositories:
-    - repositories.yml
+    - repository-debian.yml
 
   # Definition of the rootfs content
   rootfs:
-    - rootfs.yml
+    - project-rootfs.yml
 
   # Definition of the image structure
   image:
-    - image-rootfs.yml
+    - disk-image.yml
 
   # Definition of the variables to be passed to rootfs creation
   variables:
-    - variables.yml
-    - variables-cubieboard-3.yml
+    - project-variables.yml
+    - board-variables.yml
 
   # Definition of the list of targets, with architectures, versions and optionaly board.
   # Firmware will be generated for each of the architecture in this list
@@ -122,7 +122,7 @@ project_definition:
   # DFT installation
   #
   targets:
-    - { version: stretch , board: cubieboard-3 }
+    - { version: buster , board: cubieboard-3 }
 
 # ----------------------------------------------------------------------------
 #
