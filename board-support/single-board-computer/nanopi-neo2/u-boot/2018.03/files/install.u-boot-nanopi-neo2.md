@@ -1,0 +1,1 @@
+../../files/install.u-boot-nanopi-neo2.md

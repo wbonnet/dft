@@ -3,7 +3,7 @@ The folder board-support contains resources (build descriptions, configuration f
 
 Board definitions are allocated into category folders (single-board-computer, laptop, etc.).
 
-Board support ressources include production of both ***BSP*** itself and generation of the different bootable images using this BSP.
+The board support resources include materials needed for production of both ***BSP*** itself and generation of the bootable images using this BSP for supported boards.
 
 Binaries production is Makefile driven. Make command is in charge of making calls to the dedicated build tools and synchronize tools execution.
 This allow users to execute the build steps by hand, replay process and customize execution.

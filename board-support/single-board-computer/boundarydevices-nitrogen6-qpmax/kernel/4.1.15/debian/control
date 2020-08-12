@@ -1,0 +1,21 @@
+Source: linux-kernel-nitrogen6-qpmax
+Section: kernel
+Priority: optional
+Maintainer: William Bonnet <wbonnet@theitmakers.com>
+Standards-Version: 3.9.8
+Build-Depends: debhelper (>= 9)
+
+Package: linux-kernel-nitrogen6-qpmax
+Architecture: any
+Depends: ${misc:Depends},
+         kmod, 
+         linux-base (>= 4.3~), 
+         initramfs-tools (>= 0.120+deb8u2) | linux-initramfs-tool
+Description: Linux kernel, version 4.1.15 for nitrogen6-qpmax
+ This packages contains the Linux kernel version 4.1.15 compiled for nitrogen6-qpmax board.
+
+# Package: linux-headers-nitrogen6-qpmax-4.1.15
+# Architecture: any
+# Depends: ${misc:Depends}
+# Description: Linux kernel headers, version 4.1.15 for nitrogen6-qpmax
+#  This packages contains the Linux kernel headers version 4.1.15 for nitrogen6-qpmax board.

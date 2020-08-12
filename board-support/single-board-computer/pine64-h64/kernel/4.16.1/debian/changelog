@@ -1,0 +1,17 @@
+linux-kernel-pineH64 (4.16.1-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 10 Apr 2018 09:46:49 +0200
+
+linux-kernel-pineH64 (4.16.1-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 10 Apr 2018 09:46:49 +0200
+
+linux-headers-pineH64 (4.16.1-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 10 Apr 2018 09:46:49 +0200

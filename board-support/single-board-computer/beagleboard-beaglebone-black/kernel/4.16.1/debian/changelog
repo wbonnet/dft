@@ -1,0 +1,17 @@
+linux-kernel-beaglebone-black (4.16.1-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 10 Apr 2018 09:46:47 +0200
+
+linux-kernel-beaglebone-black (4.16.1-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 10 Apr 2018 09:46:47 +0200
+
+linux-headers-beaglebone-black (4.16.1-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 10 Apr 2018 09:46:47 +0200

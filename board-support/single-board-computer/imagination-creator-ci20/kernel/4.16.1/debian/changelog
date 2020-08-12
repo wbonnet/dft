@@ -1,0 +1,17 @@
+linux-kernel-creator-ci20 (4.16.1-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 10 Apr 2018 09:46:56 +0200
+
+linux-kernel-creator-ci20 (4.16.1-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 10 Apr 2018 09:46:56 +0200
+
+linux-headers-creator-ci20 (4.16.1-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 10 Apr 2018 09:46:56 +0200

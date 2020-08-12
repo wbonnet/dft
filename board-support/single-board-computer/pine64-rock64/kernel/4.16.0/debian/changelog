@@ -1,0 +1,17 @@
+linux-kernel-rock64 (4.16.0-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 06 Apr 2018 08:16:51 +0200
+
+linux-kernel-rock64 (4.16.0-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 06 Apr 2018 08:16:51 +0200
+
+linux-headers-rock64 (4.16.0-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 06 Apr 2018 08:16:51 +0200
