@@ -1,1 +1,0 @@
-../../files/install.u-boot-cubieboard-3.md

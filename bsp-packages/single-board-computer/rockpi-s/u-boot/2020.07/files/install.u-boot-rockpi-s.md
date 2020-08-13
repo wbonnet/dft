@@ -1,1 +1,0 @@
-../../files/install.u-boot-rockpi-s.md

@@ -1,1 +1,0 @@
-../../files/install.u-boot-nanopi-k2.md

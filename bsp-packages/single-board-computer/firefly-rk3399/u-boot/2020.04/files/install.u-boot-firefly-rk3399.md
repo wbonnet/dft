@@ -1,1 +1,0 @@
-../../files/install.u-boot-firefly-rk3399.md

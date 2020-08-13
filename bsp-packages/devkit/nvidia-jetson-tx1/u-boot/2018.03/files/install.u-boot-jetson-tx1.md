@@ -1,1 +1,0 @@
-../../files/install.u-boot-jetson-tx1.md

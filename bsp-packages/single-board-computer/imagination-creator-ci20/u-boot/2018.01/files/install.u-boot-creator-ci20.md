@@ -1,1 +1,0 @@
-../../files/install.u-boot-creator-ci20.md

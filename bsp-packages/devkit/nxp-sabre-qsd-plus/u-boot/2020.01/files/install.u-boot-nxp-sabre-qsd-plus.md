@@ -1,1 +1,0 @@
-../../files/install.u-boot-nxp-sabre-qsd-plus.md
