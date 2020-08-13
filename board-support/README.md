@@ -11,3 +11,5 @@ This allow users to execute the build steps by hand, replay process and customiz
 The build and packaging process is controled with two configuration files :
 * bsp-boardname.mk a Makefile include defining how to build the ***BSP*** packages (in Makefile syntax)
 * blueprint-boardname.yml a YAML configuration file for the ***DFT*** tool used to specify which BSP should be installed for this board and how.
+
+The bord images are in a separate folder at the same level as board-support. Images use these resources in their build definition.
