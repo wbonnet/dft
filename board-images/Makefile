@@ -17,7 +17,7 @@
 #
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
- 
+
 # Build system sould be available under board folder as a symlink. Keep it
 # locally available under board folder computing a relative path is a nightmare
 # and does not work in all cases. Environment variables are not git friendly
@@ -31,7 +31,7 @@ include $(DFT_BUILDSYSTEM)/dft.mk
 MAKE_FILTERS  = Makefile README.md . inc
 
 # definition of the board categories to process
-CATEGORIES    = laptop desktop set-top-box single-board-computer phone tablet
+CATEGORIES    = laptop desktop devkit set-top-box single-board-computer phone tablet
 
 
 # Simple target forwarder
