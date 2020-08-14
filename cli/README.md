@@ -1,7 +1,10 @@
 dft
 ====
 
-Debian Firmware Toolkit is an Experimentation project with LFS and Debian to build squashfs firmware targetting Raspberry PI, Beagle board and x86 VMs. 
+This documentation is obsolete and should be completly reworked. Please do not ue this Readme content yet
+
+
+Debian Firmware Toolkit is an Experimentation project with LFS and Debian to build squashfs firmware targetting Raspberry PI, Beagle board and x86 VMs.
 
 It was originnaly named Linux Firmware From Scratch
 
