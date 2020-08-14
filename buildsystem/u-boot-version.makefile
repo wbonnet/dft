@@ -67,7 +67,7 @@ endif
 # the same level as this Makefile.
 
 # Do not recurse the following subdirs
-MAKE_FILTERS  = debian files patches
+MAKE_FILTERS = debian files patches
 
 # ------------------------------------------------------------------------------
 #
