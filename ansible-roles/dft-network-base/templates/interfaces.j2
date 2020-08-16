@@ -21,7 +21,11 @@ iface lo inet loopback
 {% if interface.comment is defined %}
 # {{ interface.comment }}
 {% endif %}
-{% if interface.auto is defined and interface.auto %}
+{% if interface.auto is defined %}
+{% if interface.auto %}
+auto {{ interface.name }}
+{% endif %} 
+{% else %} 
 auto {{ interface.name }}
 {% endif %}
 {% if interface.allow_hotplug is defined and interface.allow_hotplug %}
