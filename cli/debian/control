@@ -16,7 +16,7 @@ Architecture: all
 Depends: ${misc:Depends},
          ${python3:Depends},
          python3-parted,
-	 python3-distutils,
+         python3-distutils,
          python3-yaml,
          debootstrap,
          ansible,
@@ -36,8 +36,7 @@ Description: Debian Framework Toolkit
 
 Package: dft-doc
 Architecture: all
-Depends: ${misc:Depends},
-         dft
+Depends: ${misc:Depends}
 Description: Debian Framework Toolkit documentation
 
 Package: dft-ci
@@ -55,6 +54,5 @@ Description: Debian Framework Toolkit continuous examples
 Package: dft-test-bsp
 Architecture: all
 Depends: ${misc:Depends},
-         dft,
          sbit
 Description: Debian Framework Toolkit scripts for BSP testing
