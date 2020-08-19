@@ -22,7 +22,7 @@ DFT_BUILDSYSTEM := ../buildsystem
 include $(DFT_BUILDSYSTEM)/dft.mk
 
 # Do not recurse the following subdirs
-MAKE_FILTERS  = Makefile kernel-defconfig-fragments README.md .
+MAKE_FILTERS  = Makefile  linux-kernel-fragments README.md . sbit
 
 # definition of the board categories to process
 CATEGORIES    = laptop desktop devkit set-top-box single-board-computer phone tablet
@@ -48,10 +48,10 @@ kernel-package:
 		if [ -f $$i/Makefile ] ; then \
 			$(MAKE) --no-print-directory --directory=$$i kernel-package ; \
 		fi ; \
-        done
+   done
 
 sanity-check:
-	@for category in $(CATEGORIES) ; do \
+	for category in $(CATEGORIES) ; do \
 		if [ ! -d ${CURDIR}/$$category ] ; then \
 			echo "Warning : $$category folder is missing, recursive targets may fail or produce incomplete set of binaries." ; \
 		fi ; \
@@ -88,6 +88,15 @@ sanity-check:
 		else  \
 			echo "DEBUG: Makefile is missing in ${CURDIR}/$$category" ; \
 		fi ; \
+		for board in `find $$category -mindepth 1 -maxdepth 1 -type d | tr / \  | cut --delimiter=\  --fields=2` ; do \
+			if [ ! -f sbit/$$board.sbit.yml ] ; then \
+				echo "Missing board support tests description file sbit/$$board.sbit.yml" ; \
+				$(call dft_error ,200819-01) ; \
+				fi ; \
+	  done ; \
+		if [ ! -d ${CURDIR}/$$category ] ; then \
+			echo "Warning : $$category folder is missing, recursive targets may fail or produce incomplete set of binaries." ; \
+		fi ; \
 	done
 
 # Forward target call to subfolders where are stored the board.mk files specifying board architecture
@@ -98,8 +107,8 @@ list-boards list-architectures:
 	fi ; \
 	if [ "$(arch)" = "arm64" ] ; then \
 		arch=aarch64; \
-	fi ; \
-	if [ "$(arch)" = "am64" ] ; then \
+11	fi ; \
+	if [ "$(arch)" = "amd64" ] ; then \
 		arch=x86_64; \
 	fi ; \
 	if [ ! "$(category)" = "" ] ; then \
