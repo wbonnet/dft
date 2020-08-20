@@ -28,29 +28,29 @@ DFT_BUILDSYSTEM := buildsystem
 include $(DFT_BUILDSYSTEM)/dft.mk
 
 # Do not recurse the following subdirs
-MAKE_FILTERS  := Makefile workdir README.md .
+MAKE_FILTERS  := Makefile workdir README.md . buildsystem
 
 # Forward sanity-check in subdirs
 sanity-check:
-	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
-		if [ ! -L "${CURDIR}/$$v/buildsystem" ] ; then \
-			echo "The buildsystem symlink in ${CURDIR}/$$v/buildsystem is Missing. It should be a symlink to ../buildsystem" ; \
+	for board in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+		if [ ! -L "${CURDIR}/$$board/buildsystem" ] ; then \
+			echo "The buildsystem symlink in ${CURDIR}/$$board/ is Missing. It should be a symlink to ../buildsystem" ; \
 			echo "You can fix with the following shell commands :" ; \
-			echo "ln -s ../buildsystem ${CURDIR}/$$v/buildsystem" ; \
-			echo "git add ${CURDIR}/$$v/buildsystem" ; \
+			echo "ln -s ../buildsystem ${CURDIR}/$$board/buildsystem" ; \
+			echo "git add ${CURDIR}/$$board/buildsystem" ; \
 			echo "make sanity-check" ; \
 			$(call dft_error ,2005-0204) ; \
 		fi ; \
-		if [ ! -L "${CURDIR}/$$v/board.mk" ] ; then \
-			echo "The board.mk symlink in ${CURDIR}/$$v/buildsystem is Missing. It should be a symlink to ../../../bsp-packages/$(shell basename `pwd`)/$$v/board.mk" ; \
+		if [ ! -L "${CURDIR}/$$board/board.mk" ] ; then \
+			echo "The board.mk symlink in ${CURDIR}/$$board is Missing. It should be a symlink to ../../board-support/$(shell basename `pwd`)/$$board/board.mk" ; \
 			echo "You can fix with the following shell commands :" ; \
-			echo "ln -s ../../../bsp-packages/$(shell basename `pwd`)/$$v/board.mk ${CURDIR}/$$v/board.mk" ; \
-			echo "git add ${CURDIR}/$$v/board.mk" ; \
+			echo "ln -s ../../board-support/$(shell basename `pwd`)/$$board/board.mk ${CURDIR}/$$board/board.mk" ; \
+			echo "git add ${CURDIR}/$$board/board.mk" ; \
 			echo "make sanity-check" ; \
 			$(call dft_error ,2005-0304) ; \
 		fi ; \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
-                	$(MAKE) --no-print-directory --directory=$$v sanity-check ; \
+                	$(MAKE) --no-print-directory --directory=$$board sanity-check ; \
 		fi ; \
 	done
 
