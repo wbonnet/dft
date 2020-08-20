@@ -66,21 +66,21 @@ LINUX_KERNEL_BOARD_BLUEPRINT ?= $(BOARD_NAME).defconfig
 
 
 
-defconfig communs
-defconfig overlays list
-/home/william/workspace/dft/bsp-packages/linux-kernel-fragments/hardware/mutual/
-pour le moment ya rien
-/home/william/workspace/dft/bsp-packages/linux-kernel-fragments/hardware/board-blueprints/
-la j'ai board-name.defconfig
+#defconfig communs
+#defconfig overlays list
+#/home/william/workspace/dft/bsp-packages/linux-kernel-fragments/hardware/mutual/
+#pour le moment ya rien
+#/home/william/workspace/dft/bsp-packages/linux-kernel-fragments/hardware/board-blueprints/
+#la j'ai board-name.defconfig
 
-/home/william/workspace/dft/bsp-packages/linux-kernel-fragments/hardware/device-drivers/
-+=usb/plop.defconfig
-/home/william/workspace/dft/bsp-packages/linux-kernel-fragments/functional/
-+= containers/
-config_cgroups.config
-config_ns.cfg
-security/security.USE_CONFIG_FILE
-c du fonctionel
+#/home/william/workspace/dft/bsp-packages/linux-kernel-fragments/hardware/device-drivers/
+#+=usb/plop.defconfig
+#/home/william/workspace/dft/bsp-packages/linux-kernel-fragments/functional/
+#+= containers/
+#config_cgroups.config
+#config_ns.cfg
+#security/security.USE_CONFIG_FILE
+#c du fonctionel
 
 # Make use the defconfig file from UBOOT_DEFCONFIG unless you specify your own in USE_CONFIG_FILE
 UBOOT_DEFCONFIG = orangepi_zero_defconfig
