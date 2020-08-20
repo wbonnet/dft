@@ -65,4 +65,4 @@
     user: "{{ item.crontab_entry.username }}"
     job: "/opt/dft/bin/rsync-path-{{ item.name }}"
   with_items: "{{ dft_sysop_rsync.sources }}"
-  when: dft_sysop_rsync.sources is defined
+  when: dft_sysop_rsync.sources is defined and item.crontab_entry is defined
