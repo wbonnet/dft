@@ -201,7 +201,6 @@ show-config:
 	@echo "  DFT_FORGE                         $(DFT_FORGE)"
 	@echo "  WORK_DIR                          $(WORK_DIR)"
 	@echo "  FILE_DIR                          $(FILE_DIR)"
-	@echo "  DEFCONFIG_DIR                     $(DEFCONFIG_DIR)"
 	@echo "  PATCH_DIR                         $(PATCH_DIR)"
 	@echo "  DOWNLOAD_DIR                      $(DOWNLOAD_DIR)"
 	@echo "  PARTIAL_DIR                       $(PARTIAL_DIR)"
