@@ -22,7 +22,7 @@
 # Test board CPU support (number of available cores, etc.)
 #
 - category: CPU
-  description: Checking BCM2837B0 CPU support
+  description: Checking A57 CPU support
   test:
     - description: "Checking availability of the 4 cores"
       script: "cpu_available_processor_count"

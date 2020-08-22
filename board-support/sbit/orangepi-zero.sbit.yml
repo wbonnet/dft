@@ -58,16 +58,6 @@
           args: "vlan"
 
 #
-# Test network (available interfaces, hardware support, etc.)
-#
-- category: Memory
-  description: Checking memory amout
-  test:
-    - description: "Available total memory"
-      script: "mem_available_physical_amount"
-      args: "507956"
-
-#
 # Test system itself. Functionality availability, loaded drivers, etc
 #
 - category: System

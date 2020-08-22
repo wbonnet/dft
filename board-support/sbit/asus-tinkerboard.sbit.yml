@@ -1,0 +1,86 @@
+# vim: ft=yaml ts=2 sw=2 expandtab
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2020 DFT project (http://www.firmwaretoolkit.org).
+# All rights reserved. Use is subject to license terms.
+#
+#
+# Contributors list :
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#
+
+#
+# Test board CPU support (number of available cores, etc.)
+#
+- category: CPU
+  description: Checking RK3288 CPU support
+  test:
+    - description: "Checking availability of the 4 cores"
+      script: "cpu_available_processor_count"
+      args: "4"
+  test-suite:
+    - category: Features
+      escription: CPU feature availability
+      test:
+        - description: "Feature : NEON"
+          script: "cpu_feature_is_available"
+          args: "neon"
+
+#
+# Test system memory (physical, gpu dedicated, etc.)
+#
+- category: Network
+  description: Checking network, interfaces and functionalities support
+  test-suite:
+    - category: Interfaces
+      description: Network interfaces availability
+      test:
+        - description: "Interface 'eth0' availability"
+          script: "net_interface_is_available"
+          args: "eth0"
+        - description: "Interface 'wlan0' availability"
+          script: "net_interface_is_available"
+          args: "wlan0"
+    - category: Features
+      description: Network features availability
+      test:
+        - description: "VLAN support"
+          script: "deb_package_is_installed"
+          args: "vlan"
+
+#
+# Test system itself. Functionality availability, loaded drivers, etc
+#
+- category: System
+  description: Checking system configuration
+  test-suite:
+    - category: Kernel
+      description: Kernel configuration
+      test:
+        - description: "Kernel /proc/config.gz is activated"
+          script: "fs_file_exist"
+          args: "/proc/config.gz"
+#
+# Test instaled software packages
+#
+- category: Packages
+  description: Checking installed software packages (debian based)
+  test:
+    - description: "Package netbase is installed"
+      script: "deb_package_is_installed"
+      args: "netbase"
+    - description: "Package openssh-server is installed"
+      script: "deb_package_is_installed"
+      args: "openssh-server"
+    - description: "Package apt is installed"
+      script: "deb_package_is_installed"
+      args: "apt"

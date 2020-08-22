@@ -22,11 +22,11 @@
 # Test board CPU support (number of available cores, etc.)
 #
 - category: CPU
-  description: Checking CPU multi coresupport
+  description: Checking BCM2835 CPU support
   test:
-    - description: "Checking availability of the 4 cores"
+    - description: "Checking availability of the single core"
       script: "cpu_available_processor_count"
-      args: "4"
+      args: "1"
   test-suite:
     - category: Features
       escription: CPU feature availability
@@ -44,25 +44,12 @@
     - category: Interfaces
       description: Network interfaces availability
       test:
-        - description: "Interface 'wlan0' availability"
-          script: "net_interface_is_available"
-          args: "wlan0"
     - category: Features
       description: Network features availability
       test:
         - description: "VLAN support"
           script: "deb_package_is_installed"
           args: "vlan"
-
-#
-# Test network (available interfaces, hardware support, etc.)
-#
-- category: Memory
-  description: Checking memory amout
-  test:
-    - description: "Available total memory"
-      script: "mem_available_physical_amount"
-      args: "507956"
 
 #
 # Test system itself. Functionality availability, loaded drivers, etc
