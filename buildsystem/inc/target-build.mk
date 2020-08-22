@@ -52,13 +52,12 @@ show-build-targets:
 	@echo $(BUILD_TARGETS) ;
 
 build: configure pre-build $(BUILD_TARGETS) post-build
-	@skip_target=0 ; \
-\
+	echo "entering build in target-build.mk" ; \
+	skip_target=0 ; \
 	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		skip_target=1 ; \
 		true ; \
-  fi ; \
-\
+	fi ; \
 	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
 		skip_target=1 ; \
 		if [ "x$(arch-warning)" = "x1" ] ; then \
@@ -99,16 +98,13 @@ rebuild: configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 #
 
 build-%:
-	@skip_target=0 ; \
-\
-# Check if make is running at generic level or target to build level
-	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+	echo "entering wildcard target $@ in target-build.mk" ; \
+	skip_target=0 ; \
+	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		skip_target=1 ; \
 		true ; \
-  fi ; \
-\
-# Check if target should be executed even if current arch is different from target arch
-	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
+	fi ; \
+	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
 		skip_target=1 ; \
 		if [ "x$(arch-warning)" = "x1" ] ; then \
 			echo "Makefile processing had to be stopped during target $@ execution. Cross compilation is not supported. " ; \
@@ -119,9 +115,13 @@ build-%:
 			echo "In order to generate binaries for existing architectures, you need several builders, one for each target arch." ; \
 		fi ; \
 	fi ; \
- # Check if skip flag has been raised it not then do the job \
 	if [ ! "x$$skip_target" = "x1" ] ; then \
 		cd $(BUILD_DIR) ; \
+		pwd ; \
+		ls -la ; \
+		md5sum .config ; \
+		echo "before real make config should bde same as defined in git repo for this given kernel version" ; \
+		echo "config should bde same as defined in git repo for this given kernel version" ; \
 		if [ ! -f $(COOKIE_DIR)/build-$* ] ; then \
 			$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
 		fi ; \

@@ -73,12 +73,10 @@ reconfigure: patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconfi
 configure: extract pre-configure do-configure post-configure
 do-configure:
 	skip_target=0 ; \
-\
 	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		skip_target=1 ; \
 		true ; \
 	fi; \
-\
 	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
 		skip_target=1 ; \
 		if [ "x$(arch-warning)" = "x1" ] ; then \
@@ -106,15 +104,22 @@ do-configure:
 					if [ ! -f "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" ] ; then \
 						echo "DEBUG : config/$(BOARD_NAME)-kernel-$(SW_VERSION).config does not exist using default instead" ; \
 						cp "../config/$(BOARD_NAME)-kernel-default.config" "$(BUILD_DIR)/.config" ; \
+						cd "$(BUILD_DIR)" ; \
+						echo "default config before make olddefconfig" ; \
+						md5sum .config ; \
+						make olddefconfig ; \
+						md5sum .config ; \
+						echo "after make olddefconfig" ; \
 					else \
-						echo "DEBUG : config/$(BOARD_NAME)-kernel-$(SW_VERSION).config exist !" ; \
+						echo "DEBUG : config/$(BOARD_NAME)-kernel-$(SW_VERSION).config exist using it" ; \
 						cp "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" "$(BUILD_DIR)/.config" ; \
+						cd "$(BUILD_DIR)" ; \
+						md5sum "$(BUILD_DIR)/.config" ; \
+						echo "config defined in git repo for this given kernel version" ; \
+						make olddefconfig ; \
+						md5sum .config ; \
+						echo "after make olddefconfig" ; \
 					fi ; \
-					cd "$(BUILD_DIR)" ; \
-					echo "DEBUG : now running kernel make olddefconfig in `pwd`" ; \
-					echo "DEBUG : existing .config files have been backuped up to beforolddefconfig and afterolddefconfig" ; \
-					cp .config "$(BOARD_NAME)-kernel-$(SW_VERSION).beforeolddefconfig" ; \
-					make olddefconfig ; \
 				fi ; \
 			fi ; \
 		fi ; \
