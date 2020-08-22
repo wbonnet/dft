@@ -154,11 +154,6 @@ WORK_DIR            ?= $(DFT_FORGE)/$(BOARD_NAME)_$(SW_NAME)/$(SW_VERSION)
 # thus git repo must be placed elsewhere than thedefault location which is /usr/share).
 FILE_DIR            ?= $(WORK_DIR)/files
 
-# DEFCONFIG_DIR contains the defconfig files used for kernel building. There
-# is one file under git per kernel version of a given board (the board is defined
-# by folder hierarchy).
-DEFCONFIG_DIR       ?= $(WORK_DIR)/config
-
 # PATCH_DIR contain all the patches to be applied on upstream sources during
 # make patch target execution.
 PATCH_DIR           ?= $(WORK_DIR)/patches
