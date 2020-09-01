@@ -38,7 +38,7 @@ BOARD_ARCH = aarch64
 UBOOT_SUPPORT     = 0
 
 # Make use the defconfig file from UBOOT_DEFCONFIG unless you specify your own in USE_CONFIG_FILE
-UBOOT_DEFCONFIG   = not_yet_available_defconfig
+UBOOT_DEFCONFIG   = pinebook-pro-rk3399_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
 UBOOT_BINARY_FILE = u-boot-$(BOARD_NAME)
