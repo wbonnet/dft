@@ -41,7 +41,7 @@ UBOOT_SUPPORT     = 0
 UBOOT_DEFCONFIG   = pinebook-pro-rk3399_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
-UBOOT_BINARY_FILE = u-boot-$(BOARD_NAME)
+UBOOT_BINARY_FILE = u-boot
 DEFAULT_DTB       = rk3399-pinebook-pro.dtb
 
 #
