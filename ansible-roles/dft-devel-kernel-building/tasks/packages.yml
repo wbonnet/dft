@@ -25,17 +25,17 @@
 
 ---
 - name: Install software needed to build Linux kernel
-  apt: name={{ item }}
-       state=latest
-       install_recommends=no
-  with_items:
-    - bc
-    - curl
-    - gcc
-    - git
-    - libncurses5-dev
-    - lzop
-    - make
-    - u-boot-tools
-    - p7zip-full
-    - device-tree-compiler
+  apt:
+    state: latest
+    install_recommends: no
+    pkg:
+      - bc
+      - curl
+      - gcc
+      - git
+      - libncurses5-dev
+      - lzop
+      - make
+      - u-boot-tools
+      - p7zip-full
+      - device-tree-compiler

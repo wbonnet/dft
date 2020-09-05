@@ -33,8 +33,8 @@
   # Excute this task only if a fstab variable is defined
   when: dft_os_fstab is defined and dft_os_fstab.filesystems is defined
 
-# Create th mount point directories if needed
-- name: Create th mount point directories
+# Create mount point target directories
+- name: Create mount point target directories
   file:
     path: "{{ item.path }}"
     state: directory
