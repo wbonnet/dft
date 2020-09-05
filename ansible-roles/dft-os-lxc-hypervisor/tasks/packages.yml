@@ -19,10 +19,9 @@
 #
 
 ---
-#- name: DFT - Install LXC
+- name: DFT - Install LXC containers system
   apt:
-       name={{item}}
-       state=latest
-       install_recommends=no
-  with_items:
-       - lxc
+    state: latest
+    install_recommends: no
+    pkg:
+    - lxc
