@@ -33,6 +33,18 @@
   # Excute this task only if a fstab variable is defined
   when: dft_os_fstab is defined and dft_os_fstab.filesystems is defined
 
+# Create th mount point directories if needed
+- name: Create th mount point directories
+  file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0775
+  loop: "{{ dft_os_fstab.filesystems }}"
+  when: dft_os_fstab is defined and dft_os_fstab.filesystems is defined
+
+
 # Set the filesystem mount status according to inventory
 - name: Mount filesystems
   mount:

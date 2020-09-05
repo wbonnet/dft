@@ -21,11 +21,11 @@
 ---
 # No specific packages should be installed so far. This may be removed in a near future
 
-- name: Install default file system support (ext and FAT)
+- name: Install default file system support (NFS, ext* and FAT)
   apt:
     state: latest
     install_recommends: no
     pkg:
+      - nfs-common
       - e2fsprogs
       - dosfstools
-
