@@ -37,3 +37,4 @@
       - dh-make
       - deborphan
       - autopkgtest
+      - lsb-release

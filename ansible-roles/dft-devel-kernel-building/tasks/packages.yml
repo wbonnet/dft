@@ -39,3 +39,4 @@
       - u-boot-tools
       - p7zip-full
       - device-tree-compiler
+      - lsb-release

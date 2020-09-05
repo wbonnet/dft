@@ -20,11 +20,11 @@
 
 ---
 - name: Install sbuild
-  apt: name={{ item }}
-       state=latest
-       install_recommends=no
-  with_items:
-    - sbuild
+  apt:
+    state: latest
+    install_recommends: no
+    pkg:
+      - sbuild
 
 - name: Configure sbuild users
   shell: sbuild-adduser {{ item.login }}
