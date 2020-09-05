@@ -19,10 +19,9 @@
 #
 
 ---
-#- name: DFT - Install Xen hypervisor kernel
+- name: DFT - Install Xen hypervisor kernel
   apt:
-       name={{item}}
-       state=latest
-       install_recommends=no
-  with_items:
-       - xen-hypervisor
+    state: latest
+    install_recommends: no
+    pkg:
+    - xen-hypervisor
