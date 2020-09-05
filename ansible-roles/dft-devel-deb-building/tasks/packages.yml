@@ -25,15 +25,15 @@
 
 ---
 - name: Install software needed to build Debian packages
-  apt: name={{ item }}
-       state=latest
-       install_recommends=no
-  with_items:
-    - build-essential
-    - fakeroot
-    - devscripts
-    - git
-    - debootstrap
-    - dh-make
-    - deborphan
-    - autopkgtest
+  apt:
+    state: latest
+    install_recommends: no
+    pkg:
+      - build-essential
+      - fakeroot
+      - devscripts
+      - git
+      - debootstrap
+      - dh-make
+      - deborphan
+      - autopkgtest
