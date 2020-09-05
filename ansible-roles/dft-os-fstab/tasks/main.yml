@@ -26,6 +26,5 @@
 ---
 - include: "{{ dft_playbook_logger }}/tasks/logging.yml"
   when: dft_playbook_logger is defined
-# No specific package to include since this role is only passing args to Ansible logger
-# - include: packages.yml
+- include: packages.yml
 - include: configuration.yml

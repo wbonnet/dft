@@ -44,7 +44,6 @@
   loop: "{{ dft_os_fstab.filesystems }}"
   when: dft_os_fstab is defined and dft_os_fstab.filesystems is defined
 
-
 # Set the filesystem mount status according to inventory
 - name: Mount filesystems
   mount:
