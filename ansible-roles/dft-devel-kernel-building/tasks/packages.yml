@@ -42,3 +42,4 @@
       - lsb-release
       - bison
       - flex
+      - libssl-dev
