@@ -40,7 +40,7 @@
     state: directory
     owner: root
     group: root
-    mode: 0775
+    mode: "{{ item.mode | default(0775) }}"
   loop: "{{ dft_os_fstab.filesystems }}"
   when: dft_os_fstab is defined and dft_os_fstab.filesystems is defined
 
