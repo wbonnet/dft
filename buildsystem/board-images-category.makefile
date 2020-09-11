@@ -18,66 +18,111 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
 
+# Force bash use instead of sh which is a symlink to dash on Debian. Dash use
+# a slightly different syntax for some operators. This way it a known shell.
+SHELL := bash
+
 # Build system sould be available under board folder as a symlink. Keep it
 # locally available under board folder computing a relative path is a nightmare
 # and does not work in all cases. Environment variables are not git friendly
 # since git add will loose variable name and generate an absolute path, which
 # is not comptible with user need ans or workspace relocation nor packagng needs.
 # better solutions wille be really welcomeds contributions.
+
 DFT_BUILDSYSTEM := buildsystem
+include board.mk
 include $(DFT_BUILDSYSTEM)/dft.mk
 
-# Do not recurse the following subdirs
-MAKE_FILTERS  := Makefile workdir README.md . buildsystem
-
-# Forward sanity-check in subdirs
-sanity-check:
-	for board in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
-		if [ ! -L "${CURDIR}/$$board/buildsystem" ] ; then \
-			echo "The buildsystem symlink in ${CURDIR}/$$board/ is Missing. It should be a symlink to ../buildsystem" ; \
-			echo "You can fix with the following shell commands :" ; \
-			echo "ln -s ../buildsystem ${CURDIR}/$$board/buildsystem" ; \
-			echo "git add ${CURDIR}/$$board/buildsystem" ; \
-			echo "make sanity-check" ; \
-			$(call dft_error ,2005-0204) ; \
-		fi ; \
-		if [ ! -L "${CURDIR}/$$board/board.mk" ] ; then \
-			echo "The board.mk symlink in ${CURDIR}/$$board is Missing. It should be a symlink to ../../board-support/$(shell basename `pwd`)/$$board/board.mk" ; \
-			echo "You can fix with the following shell commands :" ; \
-			echo "ln -s ../../board-support/$(shell basename `pwd`)/$$board/board.mk ${CURDIR}/$$board/board.mk" ; \
-			echo "git add ${CURDIR}/$$board/board.mk" ; \
-			echo "make sanity-check" ; \
-			$(call dft_error ,2005-0304) ; \
-		fi ; \
-		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
-                	$(MAKE) --no-print-directory --directory=$$board sanity-check ; \
-		fi ; \
-	done
+# ------------------------------------------------------------------------------
+#
+# Target that call the dft command line tool to build the image
+#
+build-image:
+	echo "time command is only for cache profiling purpose and will be removed soon" ; \
+	time sudo dft run_sequence --project project.yml --sequence produce-image  --log-level debug --config-file /home/william/.dftrc
 
 list-images:
-	@echo "DEBUG list-images in board-images-category.makefile"
-	@echo "DEBUG list-images is still TO TODO"
-	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
-		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
-                	$(MAKE) --no-print-directory --directory=$$v list-images ; \
-		fi ; \
-	done
+	@echo $(IMAGE_NAME)
+
+# ------------------------------------------------------------------------------
+#
+# Checks that all mandatory files are available
+#
+sanity-check:
+	@echo "Checking $(BOARD_NAME) $(IMAGE_TYPE)-$(IMAGE_NAME) image folder"
+	@if [ ! -e "image.mk" ] ; then \
+		echo "The image.mk file is missing in directory ${CURDIR}/" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "cp $(DFT_BUILDSYSTEM)/templates/image.mk ${CURDIR}/" ; \
+		echo "git add ${CURDIR}/image.mk" ; \
+		echo "make sanity-check" ; \
+		$(call dft_error ,2007-1301) ; \
+	fi ;
+	@if [ ! -e "project.yml" ] ; then \
+		echo "The project.yml file is missing in directory ${CURDIR}/" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "cp $(DFT_BUILDSYSTEM)/templates/board-image-project.yml ${CURDIR}/project.yml" ; \
+		echo "git add ${CURDIR}/project.yml" ; \
+		echo "make sanity-check" ; \
+		$(call dft_error ,2007-1302) ; \
+	fi ;
+	@if [ ! -L "Makefile" ] ; then \
+		echo "The Makefile symlink to ./buildsystem/board-image.makefile is missing in directory ${CURDIR}/" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "ln -s ./buildsystem/board-image.makefile ${CURDIR}/Makefile" ; \
+		echo "git add ${CURDIR}/Makefile" ; \
+		echo "make sanity-check" ; \
+		$(call dft_error ,2007-1304) ; \
+	fi ;
+	@if [ ! "$(shell readlink Makefile)" = "./buildsystem/board-image.makefile" ] ; then \
+		echo "The target of symlink Makefile should be ./buildsystem/board-image.makefile in directory ${CURDIR}/" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "git rm -f ${CURDIR}/Makefile" ; \
+		echo "ln -s ./buildsystem/board-image.makefile ${CURDIR}/Makefile" ; \
+		echo "git add ${CURDIR}/Makefile" ; \
+		echo "make sanity-check" ; \
+		$(call dft_error ,2007-1303) ; \
+	fi ;
+	@if [ ! -L "blueprint.yml" ] ; then \
+		echo "The blueprint.yml to ../blueprint-$(BOARD_NAME).yml is missing in directory ${CURDIR}/" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "ln -s ../blueprint-$(BOARD_NAME).yml blueprint.yml" ; \
+		echo "git add ${CURDIR}/blueprint.yml" ; \
+		echo "make sanity-check" ; \
+		$(call dft_error ,2007-1305) ; \
+	fi ;
+	@if [ ! "$(shell readlink blueprint.yml)" = "../blueprint-$(BOARD_NAME).yml" ] ; then \
+		echo "The target of symlink blueprint.yml should be ../blueprint-$(BOARD_NAME).yml in directory ${CURDIR}/" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "git rm -f ${CURDIR}/blueprint.yml" ; \
+		echo "ln -s ../blueprint-$(BOARD_NAME).yml ${CURDIR}/blueprint.yml" ; \
+		echo "git add ${CURDIR}/Makefile" ; \
+		echo "make sanity-check" ; \
+		$(call dft_error ,2007-1306) ; \
+	fi ;
+	@if [ ! -e "board-variables.yml" ] ; then \
+		echo "The board-variables.yml file is missing in directory ${CURDIR}/" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "cp $(DFT_BUILDSYSTEM)/templates/board-variables.yml ${CURDIR}/board-variables.yml" ; \
+		echo "git add ${CURDIR}/board-variables.yml" ; \
+		echo "make sanity-check" ; \
+		$(call dft_error ,2007-1307) ; \
+	fi ;
+	@if [ ! -e "disk-image.yml" ] ; then \
+		echo "The disk-image.yml file is missing in directory ${CURDIR}/" ; \
+		echo "You can fix with the following commands : " ; \
+		echo "cp $(DFT_BUILDSYSTEM)/templates/disk-image.yml ${CURDIR}/disk-image.yml" ; \
+		echo "git add ${CURDIR}/disk-image.yml" ; \
+		echo "make sanity-check" ; \
+		$(call dft_error ,2007-1309) ; \
+	fi ;
 
 # ------------------------------------------------------------------------------
 #
 # Target that prints the help
 #
 help:
-	@echo "DEBUG help in board-images-category.makdefile"
 	@echo "Available targets are :"
-	@echo "   list-images             Display the liste of images available in this category."
-	@echo "                           The following filters can be used to display only matching images : "
-	@echo "                           arch=(armv7l,aarch64,x86_64 or any valid arch from uname -m)."
-	@echo "                           type=(rootfs or firmware)."
-	@echo "   sanity-check            Check the availability of required items (files, symlinks, directories)"
-	@echo "                           In the following subdirs $(CHECK_FOR_SANITY)."
-	@echo "                           This target only warns you and do not make any change to the tree content."
+	@echo "   build-image             Build the $(BOARD_NAME) board image"
 	@echo "   help                    Display this help"
-	@echo ""
-	@echo "The existing local targets are the following. Local targets are executed only at this"
-	@echo "level in the category, without recursion nor walk down the tree of board categories"
+
