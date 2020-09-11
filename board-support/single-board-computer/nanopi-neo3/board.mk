@@ -9,7 +9,7 @@
 # License.
 #
 #
-# Copyright 2019 DFT project (http://www.firmwaretoolkit.org).
+# Copyright 2016 DFT project (http://www.firmwaretoolkit.org).
 # All rights reserved. Use is subject to license terms.
 #
 #
@@ -29,20 +29,23 @@ BOARD_NAME = nanopi-neo3
 # Board architecture as defined by uname -m (armv7l, mips, aarch64, x86_64, etc.)
 BOARD_ARCH = aarch64
 
+
+
 #
 # u-boot support and configuration
 #
 
-# Defines if u-boot should be generated (UBOOT_SUPPORT is set to 1) (0 means u-boot is not available).
+# Defines if u-boot should be generated (set UBOOT_SUPPORT to 1) (0 means u-boot is not available).
 # if UBOOT_SUPPORT is disabled packaging is skipped. In this case, you may have to activate GRUB.
-UBOOT_SUPPORT     = 1
+UBOOT_SUPPORT = 1
 
 # Make use the defconfig file from UBOOT_DEFCONFIG unless you specify your own in USE_CONFIG_FILE
-UBOOT_DEFCONFIG   = unknown_defconfig
+UBOOT_DEFCONFIG = nanoponeo3-rk3328_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
-UBOOT_BINARY_FILE = u-boot-$(BOARD_NAME)
-DEFAULT_DTB       = default.dtb
+UBOOT_BINARY_FILE = u-boot.bin
+DEFAULT_DTB = nanopi-neo3.dtb
+
 
 #
 # GRUB support and configuration (u-boot or grub should be activated to be able to boot the board).
