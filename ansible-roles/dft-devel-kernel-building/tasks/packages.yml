@@ -41,5 +41,6 @@
       - device-tree-compiler
       - lsb-release
       - bison
+      - swig
       - flex
       - libssl-dev
