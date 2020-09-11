@@ -28,3 +28,6 @@
   when: dft_playbook_logger is defined
 - include: packages.yml
 - include: configuration.yml
+- include: lxc-system.yml
+- include: lxc-container.yml
+
