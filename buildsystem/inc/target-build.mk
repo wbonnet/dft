@@ -52,8 +52,7 @@ show-build-targets:
 	@echo $(BUILD_TARGETS) ;
 
 build: configure pre-build $(BUILD_TARGETS) post-build
-	echo "entering build in target-build.mk" ; \
-	skip_target=0 ; \
+	@skip_target=0 ; \
 	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		skip_target=1 ; \
 		true ; \
@@ -98,8 +97,7 @@ rebuild: configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 #
 
 build-%:
-	echo "entering wildcard target $@ in target-build.mk" ; \
-	skip_target=0 ; \
+	@skip_target=0 ; \
 	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		skip_target=1 ; \
 		true ; \
@@ -117,9 +115,6 @@ build-%:
 	fi ; \
 	if [ ! "x$$skip_target" = "x1" ] ; then \
 		cd $(BUILD_DIR) ; \
-		pwd ; \
-		ls -la ; \
-		md5sum .config ; \
 		echo "before real make config should bde same as defined in git repo for this given kernel version" ; \
 		echo "config should bde same as defined in git repo for this given kernel version" ; \
 		if [ ! -f $(COOKIE_DIR)/build-$* ] ; then \

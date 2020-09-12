@@ -65,10 +65,7 @@ do-package:
 	fi ; \
 	if [ ! "x$$skip_target" = "x1" ] ; then \
 		if [ ! -f $(COOKIE_DIR)/do-package ] ; then \
-			echo " DEBUG : Je sauis dans target package" ; \
-			pwd ; \
-			ls -lah ; \
-			mkdir $(PACKAGE_DIR)/debian ; \
+			mkdir -p $(PACKAGE_DIR)/debian ; \
 			if [ "$(SW_NAME)" = "u-boot" ] ; then \
 				cp -fr --dereference $(DFT_BUILDSYSTEM)/templates/debian-u-boot-package/* $(PACKAGE_DIR)/debian ; \
 				mv  $(PACKAGE_DIR)/debian/u-boot.install $(PACKAGE_DIR)/debian/u-boot-$(BOARD_NAME).install ; \

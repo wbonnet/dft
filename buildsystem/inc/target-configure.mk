@@ -72,7 +72,7 @@ reconfigure: patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconfi
 
 configure: extract pre-configure do-configure post-configure
 do-configure:
-	skip_target=0 ; \
+	@skip_target=0 ; \
 	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		skip_target=1 ; \
 		true ; \
