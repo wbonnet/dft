@@ -60,7 +60,7 @@ configuration:
 
   # Defines if the file /etc/apt/apt.conf.d/10no-check-valid-until should be generated or not
   # If generated this file contains Acquire::Check-Valid-Until: "0"; which disables validity
-  # date checking when updating the local repository catalog. Default valueis True
+  # date checking when updating the local repository catalog. Default value is True
   # generate_validity_check: True
 
   # Defines if the file /etc/apt/apt.conf.d/10no-check-valid-until should be removed at the end
