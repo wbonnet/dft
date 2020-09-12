@@ -91,7 +91,7 @@ devices:
         name: "boot" ,
 
         # Defines the partition type. Valid values are "primary", "logical", or "extended"
-        # Default valueis primary
+        # Default value is primary
         type: "primary" ,
 
         # Defines the size of the partition to create. The size value is numerical
