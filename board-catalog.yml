@@ -180,8 +180,6 @@ board-catalog:
                   support-level: planning
          - raspberry-pi4b:
                   support-level: planning
-         - raspberry-pi3-32bits:
-                  support-level: planning
  devkit:
          - nvidia-jetson-nano:
                   support-level: planning

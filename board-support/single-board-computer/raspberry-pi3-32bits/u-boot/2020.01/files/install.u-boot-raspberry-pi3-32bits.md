@@ -1,1 +1,0 @@
-../../files/install.u-boot-raspberry-pi3-32bits.md
