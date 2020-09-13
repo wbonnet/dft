@@ -1,1 +1,1 @@
-../../../bsp-packages/single-board-computer/nvidia-jetson-tx1/board.mk
+./../../../board-support/devkit/nvidia-jetson-tx1/board.mk

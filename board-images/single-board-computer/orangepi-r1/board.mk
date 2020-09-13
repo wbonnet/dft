@@ -1,1 +1,1 @@
-../../../bsp-packages/single-board-computer/orangepi-r1/board.mk
+./../../../board-support/single-board-computer/orangepi-r1/board.mk

@@ -1,1 +1,1 @@
-../../../bsp-packages/single-board-computer/asus-tinkerboard/board.mk
+./../../../board-support/single-board-computer/asus-tinkerboard/board.mk

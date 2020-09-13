@@ -1,1 +1,1 @@
-../../../bsp-packages/single-board-computer/nanopi-m1/board.mk
+./../../../board-support/single-board-computer/nanopi-m1/board.mk

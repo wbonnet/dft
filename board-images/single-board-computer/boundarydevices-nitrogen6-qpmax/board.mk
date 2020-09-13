@@ -1,1 +1,1 @@
-../../../bsp-packages/single-board-computer/boundarydevices-nitrogen6-qpmax/board.mk
+./../../../board-support/single-board-computer/boundarydevices-nitrogen6-qpmax/board.mk

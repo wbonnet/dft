@@ -1,1 +1,1 @@
-../../../bsp-packages/single-board-computer/orangepi-zero-plus/board.mk
+./../../../board-support/single-board-computer/orangepi-zero-plus/board.mk

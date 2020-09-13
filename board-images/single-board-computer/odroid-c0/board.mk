@@ -1,1 +1,1 @@
-../../../bsp-packages/single-board-computer/odroid-c0/board.mk
+./../../../board-support/single-board-computer/odroid-c0/board.mk

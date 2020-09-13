@@ -1,1 +1,1 @@
-../../../bsp-packages/single-board-computer/cubieboard-1/board.mk
+./../../../board-support/single-board-computer/cubieboard-1/board.mk

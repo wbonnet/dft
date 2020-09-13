@@ -1,1 +1,1 @@
-../../../bsp-packages/single-board-computer/orangepi-zero-2g-iot/board.mk
+./../../../board-support/single-board-computer/orangepi-zero-2g-iot/board.mk

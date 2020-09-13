@@ -1,1 +1,1 @@
-../../../bsp-packages/single-board-computer/raspberry-pi1/board.mk
+./../../../board-support/single-board-computer/raspberry-pi1/board.mk
