@@ -30,7 +30,6 @@ SHELL := bash
 # better solutions wille be really welcomeds contributions.
 
 DFT_BUILDSYSTEM := buildsystem
-include board.mk
 include $(DFT_BUILDSYSTEM)/dft.mk
 
 # ------------------------------------------------------------------------------
