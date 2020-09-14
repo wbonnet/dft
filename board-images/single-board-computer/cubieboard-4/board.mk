@@ -1,1 +1,1 @@
-./../../../board-support/single-board-computer/cubieboard-4/board.mk
+../../../board-support/single-board-computer/cubieboard-4/board.mk
