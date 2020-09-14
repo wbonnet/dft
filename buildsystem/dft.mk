@@ -176,6 +176,7 @@ show-config:
 	@echo "Sources download with $(DOWNLOAD_TOOL) and parameters" ;
 	@echo "  SW_NAME                           $(SW_NAME)" ;
 	@echo "  SW_VERSION                        $(SW_VERSION)" ;
+	@echo "  SW_LATEST                         $(SW_LATEST)" ;
 	@if [ "$(DOWNLOAD_TOOL)" = "wget" ] ; then \
                 echo "  SRC_DIST_FILES                    $(SRC_DIST_FILES)" ; \
                 echo "  SRC_SIGN_FILES                    $(SRC_SIGN_FILES)" ; \

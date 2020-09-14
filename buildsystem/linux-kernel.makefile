@@ -21,7 +21,6 @@
 
 # Defines variables specific to Linux kernel
 SW_NAME	   := linux
-#SW_VERSION ?= linux-undef-version
 
 # Build system sould be available under board folder as a symlink. Keep it
 # locally available under board folder computing a relative path is a nightmare
