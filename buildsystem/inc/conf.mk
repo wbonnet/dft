@@ -141,7 +141,7 @@ DFT_BUILDSYSTEM     ?= $(dir $(lastword $(MAKEFILE_LIST)))
 # DFT_WORK is the name of directory under DFT_FORGE used to build a version
 # of a given pice of software (kernel, u-boot, etc.) or even a rootfs or firware
 # bootable disk image.
-WORK_DIR            ?= $(DFT_FORGE)/$(BOARD_NAME)_$(SW_NAME)/$(SW_VERSION)
+WORK_DIR            ?= $(DFT_FORGE)/$(BOARD_NAME)/$(SW_NAME)/$(SW_VERSION)
 
 # Hint : All the variables with a name ending with DIR define a path located in the
 # context of the current board for a given software, then a given version of this
