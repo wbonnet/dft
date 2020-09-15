@@ -159,9 +159,8 @@ sanity-check:
 
 # Create a new linux-kernel version entry
 add-linux-kernel-version:
-	@echo "DEBUG : in linux-kernel.makefile running add-u-boot-version with argument new-version $(new-version)" ;
 	@if [ "$(new-version)" == "" ] ; then \
-		echo "DEBUG : from linux-kernel.makefile argument new-version is missing or has no value. Doing nothing..." ; \
+		echo "WARNING : from linux-kernel.makefile argument new-version is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2001-0801) ; \
 	fi ;
 	@if [ -d "./$(new-version)" ] ; then \
@@ -189,7 +188,6 @@ add-linux-kernel-version:
 		fi ; \
 		git add $(new-version) ; \
 	fi ;
-	@echo "DEBUG : end of add-linux-kernel-version in linux-kernel.makefile" ;
 
 # Override standard targets
 build configure package install:
