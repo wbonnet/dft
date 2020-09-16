@@ -80,7 +80,6 @@ class SnapshotDebootstrap(CliCommand):
   #
   # -------------------------------------------------------------------------
 
-  t en la faudra regarer lheritage et faire le menage dans les doublons et apres coder la creation de l archie et son utilisation dans le fichier de build_rootfs
   def create_rootfs(self):
     """This method implement the business logic of generating the rootfs.
     It calls dedicated method for each step. The main steps are :

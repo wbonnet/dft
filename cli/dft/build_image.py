@@ -1594,6 +1594,28 @@ class BuildImage(CliCommand):
         script += "firmware"
       script += ".scr"
 
+      # Test if board specific boot script template is defined
+      if not os.path.isfile(script):
+        # Board specific bootscript template does not exist, use the generic script instead
+        logging.info("The board specific boot script (" + script + ") does not exist. Using the generic script to boot")
+        script = "../buildsystem/bootscripts/generic-board.boot"
+        script += ".boot."
+
+      # Name has to be either board_name.boot.[firmware|rootfs].scr
+      if self.project.is_image_content_rootfs():
+        script += "rootfs"
+      else:
+        script += "firmware"
+      script += ".scr"
+
+      # Name has to be either board_name.boot.[firmware|rootfs].scr
+      if self.project.is_image_content_rootfs():
+        script += "rootfs"
+      else:
+        script += "firmware"
+      script += ".scr"
+
+
       # Create a temp file in with the script template is copied in text format. Then we do
       # variables expansion, before generating the binary script into the target file system.
       output_file = tempfile.mktemp()

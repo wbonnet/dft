@@ -1,8 +1,15 @@
+dft (0.6.50-1) unstable; urgency=low
+
+  * Move sbit file to us share dft sbit  use generic boot script if no specific is defined
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 16 Sep 2020 19:25:00 +0100
+
 dft (0.6.49-1) unstable; urgency=low
 
   * Fix permissions on generated fstab sources list and apt.conf.d files
 
  -- William Bonnet <wbonnet@theitmakers.com>  Mon, 19 May 2020 21:10:00 +0100
+
 
 dft (0.6.48-1) unstable; urgency=low
 
