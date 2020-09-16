@@ -47,7 +47,7 @@ kernel:
 
   # List of packages to install from the repository
   packages:
-    - linux-kernel-pine64
+    - linux-kernel-pine64-a64
 
 #TODO: add flag to define if a specific source list ha to be generated under sources.list.define
 
