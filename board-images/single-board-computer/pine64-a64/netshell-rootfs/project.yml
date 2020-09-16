@@ -56,8 +56,8 @@ configuration:
   # which are copied to /dft_bootstrap during rootfs bootstrapping. These paths
   # contains project specific definition (which are not included in the dft
   # open-source tool)
-  additional_roles:
-    - "/usr/share/dft/examples/redefined-roles"
+  # additional_roles:
+  #  - "/usr/share/dft/examples/redefined-roles"
 
   # Defines if the file /etc/apt/apt.conf.d/10no-check-valid-until should be generated or not
   # If generated this file contains Acquire::Check-Valid-Until: "0"; which disables validity
@@ -88,7 +88,7 @@ configuration:
 project_definition:
 
   # Defines the project name. Mostly used for output and directories creation
-  project_name: "pine64"
+  project_name: "pine64-a64_rootfs"
 
   # Definition of the repositories used for bootstrapping
   # There can be only one repo, thus its url is defined here
@@ -96,19 +96,15 @@ project_definition:
 
   # Definition of the repositories to use
   repositories:
-    - repositories.yml
+    - repository-debian.yml
 
   # Definition of the rootfs content
   rootfs:
-    - rootfs.yml
-
-  # Definition of the firmware content and structure
-  firmware:
-    - firmware.yml
+    - rootfs-netshell.yml
 
   # Definition of the image structure
   image:
-    - image.yml
+    - disk-image.yml
 
   # Definition of the control to apply on the rootfs
 #  check:
@@ -124,8 +120,8 @@ project_definition:
 
   # Definition of the variables to be passed to rootfs creation
   variables:
-    - variables.yml
-    - variables-pine64.yml
+    - variables-netshell.yml
+    - board-variables.yml
 
   # Definition of the list of targets, with architectures, versions and optionaly board.
   # Firmware will be generated for each of the architecture in this list
@@ -137,4 +133,59 @@ project_definition:
   # DFT installation
   #
   targets:
-    - { version: stretch , board: pine64 }
+    - { version: buster , board: pine64-a64 }
+
+# ----------------------------------------------------------------------------
+#
+# Definition of the project building sequence
+#
+#   This dictionnary defines the list of 'dft' comand to be launched,
+#   parameters and sequencing.
+#
+#   Project building sequence occurs when you have to run several execution
+#   of dft in a given sequence to produce a firmware. For instance, a typical
+#   sequence of action is :
+#     - build_rootfs
+#     - strip_rootfs
+#     - build_firmware
+#     - install_bootchain
+#     - assemble_firmware
+#     - build_image
+#
+#   The command associated to each can be run seperatly and manually, or in
+#   sequence, by the dft tool itself, according to the order you define below.
+#
+# ----------------------------------------------------------------------------
+building_sequences:
+
+# Sequences are defined as a list. Each list entry is distinct sequence.
+# dft invocation will run one and only one sequence, according to the
+# arguments you provided.
+#
+# A project can defines several sequence to fit different production and
+# automation needs.
+#
+# A sequence is defined by its name (passed as argument when invoking a
+# build_sequence command), and a list of steps. Each step is equivalet to a
+# manual call to dft (build_rootfs, or build_firmware, etc.)
+#
+# An extra operation, out side dft can be done, running a shell script in
+# the sequence. This is used in case such as building multiple firmwares
+# before geerating a single image including all the firmwares.
+#
+# Other case, especially more complex ones should be processed outside of
+# dft, using a task scheduler such as a Makefile.
+#
+
+  # Name of the sequence - Sequence name can be any string, but __dft_default_sequence__
+  # which is reserved for internal use.
+  - sequence_name: "produce-image"
+    # This list defines each the steps composing the sequence of action to execute
+    # Order of steps in the list is order of execution
+    steps:
+      # Each step is defined by an action, which has to be a command word of the
+      # dft tool (assemble_firmware, build_firmware, build_rootfs, etc.), and the
+      # list of arguments to pass. Arguments are the same as arguments from the CLI
+      - action: build_rootfs
+      - action: install_bootchain
+      - action: build_image
