@@ -153,7 +153,7 @@ sanity-check:
         done
 
 # cd $$i && $(MAKE) $* && cd .. ;
-u-boot-package: 
+u-boot-package:
 	$(MAKE) --directory=u-boot package only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) verbosity=$(verbosity);
 
 # Build only linux kernel an package target
@@ -198,8 +198,8 @@ list-boards:
 			if [ "$(arch)" = "$(BOARD_ARCH)" ]; then \
 				echo "$(BOARD_NAME)" ; \
 			fi ; \
-	fi ; \
+	fi ;
 
 # Output board architecture. The ouput is sorted and deduplicated by caller
 list-architectures:
-	@echo "$(BOARD_ARCH)" ; \
+	@echo "$(BOARD_ARCH)" ;

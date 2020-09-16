@@ -25,7 +25,7 @@ DFT_BUILDSYSTEM := ./buildsystem
 MAKE_FILTERS  = Makefile README.md .
 
 # Definition of the folders to check for sanity
-CHECK_FOR_SANITY    = ansible-roles bsp-packages board-images
+CHECK_FOR_SANITY    = ansible-roles board-support board-images
 
 # ------------------------------------------------------------------------------
 #
@@ -43,7 +43,8 @@ sanity-check:
 
 # Forward list-boards to bsp-packages folder
 list-boards list-architectures :
-	$(MAKE) --no-print-directory --directory=bsp-packages $@ arch=$(arch) category=$(category); \
+	$(MAKE) --no-print-directory --directory=board-support $@ arch=$(arch) category=$(category);
+#	$(MAKE) --no-print-directory --directory=board-images $@ arch=$(arch) category=$(category);
 
 # ------------------------------------------------------------------------------
 #
@@ -51,7 +52,7 @@ list-boards list-architectures :
 #
 help:
 	@echo "Inline help is allocated in several sections according to covered functionnal scope"
-	@echo 
+	@echo
 	@echo "Available targets to display scoped help are :"
 	@echo " help-bsp                Help about BSP building targets"
 	@echo " help-config-file        Help about configuration file"

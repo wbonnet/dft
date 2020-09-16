@@ -218,12 +218,39 @@ fetch:
 	done
 # Forward target call to subfolders where are stored the board.mk files specifying board architecture
 list-architectures:
-list-boards:
-	@for board in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+	@if [ "$(arch)" = "armhf" ] ; then \
+		arch=armv7l; \
+	fi ; \
+	if [ "$(arch)" = "arm64" ] ; then \
+		arch=aarch64; \
+	fi ; \
+	if [ "$(arch)" = "amd64" ] ; then \
+		arch=x86_64; \
+	fi ; \
+	for board in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ ! "$(arch)" = "" ] ; then \
 			$(MAKE) --no-print-directory --directory=$$board $@ arch=$(arch); \
 		else \
 			$(MAKE) --no-print-directory --directory=$$board $@ ; \
 		fi ; \
-	done ; \
+	done | sort -u ;
+
+list-boards:
+	@if [ "$(arch)" = "armhf" ] ; then \
+		arch=armv7l; \
+	fi ; \
+	if [ "$(arch)" = "arm64" ] ; then \
+		arch=aarch64; \
+	fi ; \
+	if [ "$(arch)" = "amd64" ] ; then \
+		arch=x86_64; \
+	fi ; \
+	for board in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+		if [ ! "$(arch)" = "" ] ; then \
+			$(MAKE) --no-print-directory --directory=$$board $@ arch=$(arch); \
+		else \
+			$(MAKE) --no-print-directory --directory=$$board $@ ; \
+		fi ; \
+	done | sort ;
+
 
