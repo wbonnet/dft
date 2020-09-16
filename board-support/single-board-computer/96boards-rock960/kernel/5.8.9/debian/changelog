@@ -1,0 +1,17 @@
+linux-kernel-96boards-rock960 (5.8.9-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 15 Sep 2020 19:58:46 +0000
+
+linux-kernel-96boards-rock960 (5.8.9-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 15 Sep 2020 19:58:46 +0000
+
+linux-headers-96boards-rock960 (5.8.9-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 15 Sep 2020 19:58:46 +0000
