@@ -1608,14 +1608,6 @@ class BuildImage(CliCommand):
         script += "firmware"
       script += ".scr"
 
-      # Name has to be either board_name.boot.[firmware|rootfs].scr
-      if self.project.is_image_content_rootfs():
-        script += "rootfs"
-      else:
-        script += "firmware"
-      script += ".scr"
-
-
       # Create a temp file in with the script template is copied in text format. Then we do
       # variables expansion, before generating the binary script into the target file system.
       output_file = tempfile.mktemp()
