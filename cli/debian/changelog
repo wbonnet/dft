@@ -1,6 +1,12 @@
+dft (0.6.52-1) unstable; urgency=low
+
+  * Fix duplicated boot script filename generation
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 17 Sep 2020 16:36:00 +0100
+
 dft (0.6.51-1) unstable; urgency=low
 
-  * Fix duplicated code in boot script filname generation
+  * Fix duplicated code in boot script filename generation
 
  -- William Bonnet <wbonnet@theitmakers.com>  Tue, 17 Sep 2020 14:32:00 +0100
 

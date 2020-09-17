@@ -1572,41 +1572,33 @@ class BuildImage(CliCommand):
       # Generation is deactivated, just log it
       logging.debug("boot.scr generation was deactivated by configuration")
     else:
-      # Check if the bootscript file template is defined in the project file
-#      if [Key.BOOTSCRIPT.value] in self.project.project[Key.PROJECT_DEFINITION.value]:
-#        logging.debug("project.project[Key.PROJECT_DEFINITION.value][Key.BOOTSCRIPT.value] : " + self.project.project[Key.PROJECT_DEFINITION.value][Key.BOOTSCRIPT.value])
-#      else:
-#        logging.debug("suis dans le else de project.project[Key.PROJECT_DEFINITION.value][Key.BOOTSCRIPT.value]")
-
-      # Bootscript template name is not defined, generate the script path based on board name and
-      # image type.
-      print ("get_bsp_base " + self.project.get_bsp_base())
-# FIXME:      script = self.project.get_bsp_base() + "/bootscripts/"
+      # Generate the board specific boot script filename
       script = "../buildsystem/bootscripts/"
       script += self.project.project[Key.PROJECT_DEFINITION.value][Key.TARGETS.value][0]\
                                     [Key.BOARD.value]
       script += ".boot."
 
-      # Name has to be either board_name.boot.[firmware|rootfs].scr
       if self.project.is_image_content_rootfs():
         script += "rootfs"
       else:
         script += "firmware"
+
+      # Finally concatenate file extension
       script += ".scr"
 
-      # Test if board specific boot script template is defined
+
+    # Test the specific script does not existe replace file path to use with the generic script filename
       if not os.path.isfile(script):
         # Board specific bootscript template does not exist, use the generic script instead
         logging.info("The board specific boot script (" + script + ") does not exist. Using the generic script to boot")
-        script = "../buildsystem/bootscripts/generic-board.boot"
-        script += ".boot."
+        script = "../buildsystem/bootscripts/generic-board.boot."
+        if self.project.is_image_content_rootfs():
+          script += "rootfs"
+        else:
+          script += "firmware"
 
-      # Name has to be either board_name.boot.[firmware|rootfs].scr
-      if self.project.is_image_content_rootfs():
-        script += "rootfs"
-      else:
-        script += "firmware"
-      script += ".scr"
+        # finally concatenate file extension
+        script += ".scr"
 
       # Create a temp file in with the script template is copied in text format. Then we do
       # variables expansion, before generating the binary script into the target file system.
