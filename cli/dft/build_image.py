@@ -723,7 +723,7 @@ class BuildImage(CliCommand):
                                      [Key.BSP.value][Key.UBOOT.value]
 
         if Key.PACKAGES.value in target:
-          logging.info("Installing the boot support packages (uboot or grub)")
+          logging.info("Installing boot system packages (uboot or grub)")
 
           # Check if we are working with foreign arch, then ...
           if self.use_qemu_static:
@@ -1828,13 +1828,13 @@ class BuildImage(CliCommand):
 
       # Copy kernel_cmdline_extra_parameters templates to /boot
       os.makedirs(target + "/boot/", exist_ok=True)
-      src = self.project.get_dft_base() + "kernel_cmdline_extra_parameters.txt"
+      src = self.project.get_dft_base() + "/kernel_cmdline_extra_parameters.txt"
       dest = target + "/boot/kernel_cmdline_extra_parameters.txt"
       self.project.logging.debug("Copying " + src + " to " + dest)
       shutil.copyfile(src, dest)
 
       # Copy uEnv.txt templates to /boot
-      src = self.project.get_dft_base() + "uEnv.txt"
+      src = self.project.get_dft_base() + "/uEnv.txt"
       dest = target + "/boot/uEnv.txt"
       self.project.logging.debug("Copying " + src + " to " + dest)
       shutil.copyfile(src, dest)
