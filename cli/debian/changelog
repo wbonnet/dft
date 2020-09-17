@@ -1,3 +1,9 @@
+dft (0.6.51-1) unstable; urgency=low
+
+  * Fix duplicated code in boot script filname generation
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 17 Sep 2020 14:32:00 +0100
+
 dft (0.6.50-1) unstable; urgency=low
 
   * Move sbit file to us share dft sbit  use generic boot script if no specific is defined
