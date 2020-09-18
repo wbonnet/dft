@@ -102,7 +102,7 @@ project_definition:
 
   # Definition of the rootfs content
   rootfs:
-    - project.yml
+    - rootfs-netshell.yml 
 
   # Definition of the image structure
   image:
