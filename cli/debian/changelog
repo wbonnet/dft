@@ -1,3 +1,9 @@
+dft (0.6.54-1) unstable; urgency=low
+
+  * Fix missing / in path generation
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 17 Sep 2020 18:35:00 +0100
+
 dft (0.6.53-1) unstable; urgency=low
 
   * Move  cli/scripts content to /usr/share/dft
