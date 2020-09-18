@@ -47,20 +47,32 @@ kernel:
 
   # List of packages to install from the repository
   packages:
-    - linux-kernel-pinebook
-
-#TODO: add flag to define if a specific source list ha to be generated under sources.list.define
+    - linux-kernel-pine64-pinebook
 
 # The uboot section defines the different parameters needed to select and install the uboot
 # used to boot the board an run kernel. It is defined by XXX
-#uboot:
-#  - {
+u-boot:
+  # Defines the upstream site used to provide kernel for this device
+  origin: armwizard
+
+  # List of packages to install from the repository to add u-boot.
+  packages:
+    - u-boot-pine64-pinebook
+
+  # List of action needed to install the u-boot binary to the image
+  installation:
+  - {
       # Defines the source of the data to be copied to the image
       # The source can be either a file or a special device like /dev/zero or /dev/random
       # If the path is absolute, it will be left unchanged, otherwise it is prefix by the
       # BSP path
-#      source: "u-boot-sunxi-with-spl.bin" ,
+      source: "/dev/zero" ,
 
       # Defines the options to be passed to dd
-#      options: "bs=1k seek=8 conv=fsync"
-#    }
+      options: "bs=1k count=1023 seek=1 status=noxfer"
+    }
+  - {
+      source: "/boot/u-boot/u-boot-pine64-pinebook" ,
+      options: "bs=1024 seek=8 status=noxfer"
+    }
+
