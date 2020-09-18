@@ -44,6 +44,7 @@ configuration:
   # project name will be created under this path, and subdirectories used to
   # store rootfs, bootchain, image, etc will be created
   # working_dir: "../../working_dir"
+  working_dir: "/home/william/dft-forge"
 
   # Defines the path to project configuration files. By default (undefined
   # value) configuration files are searched in the same directory as the
@@ -57,8 +58,8 @@ configuration:
   # which are copied to /dft_bootstrap during rootfs bootstrapping. These paths
   # contains project specific definition (which are not included in the dft
   # open-source tool)
-  additional_roles:
-    - "/usr/share/dft/examples/redefined-roles"
+  #  additional_roles:
+  #  - "/usr/share/dft/examples/redefined-roles"
 
   # Defines if the file /etc/apt/apt.conf.d/10no-check-valid-until should be generated or not
   # If generated this file contains Acquire::Check-Valid-Until: "0"; which disables validity
