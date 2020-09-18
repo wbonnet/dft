@@ -70,7 +70,7 @@ configuration:
   # of rootfs generation process. Default value is False
   # remove_validity_check: False
 
-  keep_bootstrap_files: true
+  # keep_bootstrap_files: true
 
 # ----------------------------------------------------------------------------
 #
