@@ -38,7 +38,7 @@ BOARD_ARCH = aarch64
 UBOOT_SUPPORT     = 1
 
 # Make use the defconfig file from UBOOT_DEFCONFIG unless you specify your own in USE_CONFIG_FILE
-UBOOT_DEFCONFIG   = unknown_defconfig
+UBOOT_DEFCONFIG   = roc-cc-rk3308_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
 UBOOT_BINARY_FILE = u-boot-$(BOARD_NAME)
