@@ -100,7 +100,7 @@ HOST_ARCH ?= $(shell uname -m)
 
 # DFT_HOME is the path to where DFT is installed. It should contain buildsystem
 # folder storiing all the Makefiles tool chain with and its .mk include files
-DFT_HOME            = /usr/share/dft
+DFT_HOME            ?= /usr/share/dft
 
 # DFT_FORGE is the root of all work dirs used by DFT. Its content is
 # considered as volatile even if it will store some git stuff.
