@@ -105,20 +105,13 @@ do-configure:
 						echo "DEBUG : config/$(BOARD_NAME)-kernel-$(SW_VERSION).config does not exist using default instead" ; \
 						cp "../config/$(BOARD_NAME)-kernel-default.config" "$(BUILD_DIR)/.config" ; \
 						cd "$(BUILD_DIR)" ; \
-						echo "default config before make olddefconfig" ; \
-						md5sum .config ; \
 						make olddefconfig ; \
-						md5sum .config ; \
-						echo "after make olddefconfig" ; \
+						cp "$(BUILD_DIR)/.config" "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config"  ; \
 					else \
 						echo "DEBUG : config/$(BOARD_NAME)-kernel-$(SW_VERSION).config exist using it" ; \
 						cp "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" "$(BUILD_DIR)/.config" ; \
 						cd "$(BUILD_DIR)" ; \
-						md5sum "$(BUILD_DIR)/.config" ; \
-						echo "config defined in git repo for this given kernel version" ; \
 						make olddefconfig ; \
-						md5sum .config ; \
-						echo "after make olddefconfig" ; \
 					fi ; \
 				fi ; \
 			fi ; \
