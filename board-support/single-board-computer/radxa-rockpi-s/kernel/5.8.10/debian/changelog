@@ -1,0 +1,17 @@
+linux-kernel-radxa-rockpi-s (5.8.10-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 20 Sep 2020 19:27:44 +0000
+
+linux-kernel-radxa-rockpi-s (5.8.10-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 20 Sep 2020 19:27:44 +0000
+
+linux-headers-radxa-rockpi-s (5.8.10-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 20 Sep 2020 19:27:44 +0000
