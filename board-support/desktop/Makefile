@@ -1,1 +1,1 @@
-../../buildsystem/category.makefile
+../../buildsystem/board-support-category.makefile
