@@ -253,4 +253,50 @@ list-boards:
 		fi ; \
 	done | sort ;
 
+# Create a new board entry
+add-board:
+	@echo "DEBUG : in category.makefile running add-board with argument board_name $(board_name) board_arch $(board_category) board_category" ; \
+	if [ "$(board_name)" == "" ] ; then \
+		echo "DEBUG : from category.makefile argument board_name is missing or has no value. Doing nothing..." ; \
+		$(call dft_error ,2009-2201) ; \
+	fi ; \
+	if [ "$(board_category)" == "" ] ; then \
+		echo "DEBUG : from category.makefile argument board_category is missing or has no value. Doing nothing..." ; \
+		$(call dft_error ,2009-2202) ; \
+	fi ; \
+	if [ "$(board_arch)" == "" ] ; then \
+		echo "DEBUG : from category.makefile argument board_arch is missing or has no value. Doing nothing..." ; \
+		$(call dft_error ,2009-2203) ; \
+	fi ; \
+	if [ -d "./$(board_name)" ] ; then \
+		echo ". Board $(board_name) already exist. Doing nothing..." ; \
+	else  \
+		echo ". Creating the directory for board $(board_name)" ; \
+		mkdir -p $(board_name) ; \
+		cp  $(DFT_BUILDSYSTEM)/templates/board.mk.template $(board_name)/board.mk ; \
+		sed -i -e "s/__BOARD_ARCH__/$(board_arch)/g" -e "s/__BOARD_NAME__/$(board_name)/g" $(board_name)/board.mk ; \
+		ln -s buildsystem/board.makefile $(board_name)/Makefile ; \
+		ln -s ../buildsystem $(board_name)/buildsystem ; \
+	fi ; \
+	mkdir $(board_name) ; \
+	ln -s ../buildsystem $(board_name)/buildsystem ; \
+	ln -s buildsystem/buildsystem/board-images.makefile $(board_name)/Makefile ; \
+	ln -s ../../../board-support/$(board_category)/$(board_name)/board.mk  $(board_name)/board.mk ; \
+	cp  $(DFT_BUILDSYSTEM)/templates/board.blueprint.yml.template $(board_name)/blueprint-$(board_name).yml ; \
+	sed -i -e "s/__BOARD_ARCH__/$(board_arch)/g" -e "s/__BOARD_NAME__/$(board_name)/g" $(board_name)/board.mk ; \
+	sed -i -e "s/__BOARD_ARCH__/$(board_arch)/g" -e "s/__BOARD_NAME__/$(board_name)/g" $(board_name)/blueprint-$(board_name).yml ; \
+	echo "Your work is still local, to make it available, you have to run git add commit and push : " ; \
+	echo "git add $(board_name)" ; \
+	echo "Last step before building is to add an image u-boot version to the new $(board_name) board. You can use this example :" ; \
+	echo "cd $(board_name)/u-boot" ; \
+	echo "TODO make add-image image-name=netshell-rootfs" ; \
 
+# ------------------------------------------------------------------------------
+#
+# Target that prints the help
+#
+help:
+	@echo "Available targets are :"
+	@echo "   list-architectures      Display the list of supported board in this category"
+	@echo "   list-boards             Display the list of supported architectures in this category"
+	@echo "   help                    Display this help"
