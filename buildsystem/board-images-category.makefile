@@ -116,12 +116,63 @@ sanity-check:
 		$(call dft_error ,2007-1309) ; \
 	fi ;
 
+list-architectures:
+	for board in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+		$(MAKE) --no-print-directory --directory=$$board $@ ; \
+	done | sort ;
+
+list-boards:
+	@echo "DEBUG : in board-images-category.makefile running list-boards with argument arch $(arch)" ; \
+	if [ "$(arch)" == "armhf" ] ; then \
+		arch=armv7l; \
+	fi ; \
+	if [ "$(arch)" == "arm64" ] ; then \
+		arch=aarch64; \
+	fi ; \
+	if [ "$(arch)" == "amd64" ] ; then \
+		arch=x86_64; \
+	fi ; \
+	for board in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+		if [ ! "$(arch)" = "" ] ; then \
+			$(MAKE) --no-print-directory --directory=$$board $@ arch=$(arch); \
+		else \
+			$(MAKE) --no-print-directory --directory=$$board $@ ; \
+		fi ; \
+	done | sort ;
+
+# Create a new board entry
+add-board:
+	@echo "DEBUG : in board-images-category.makefile running add-board with arguments board_name $(board_name)" ; \
+	if [ "$(board_name)" == "" ] ; then \
+		echo "DEBUG : from category.makefile argument board_name is missing or has no value. Doing nothing..." ; \
+		$(call dft_error ,2009-2201) ; \
+	fi ; \
+	if [ -d "./$(board_name)" ] ; then \
+		echo ". Board $(board_name) already exist. Doing nothing..." ; \
+	else  \
+		echo ". Creating the directory for board $(board_name)" ; \
+		mkdir -p $(board_name) ; \
+		ln -s buildsystem/board.makefile $(board_name)/Makefile ; \
+		ln -s ../buildsystem $(board_name)/buildsystem ; \
+		ln -s ../../../board-support/$(shell echo $(PWD) | tr '/' ' ' | awk '{ print $$NF ; }')/$(board_name)/board.mk  $(board_name)/board.mk ; \
+		cp  $(DFT_BUILDSYSTEM)/templates/board-blueprint.yml.template $(board_name)/blueprint-$(board_name).yml ; \
+		sed -i -e "s/__BOARD_NAME__/$(board_name)/g" $(board_name)/blueprint-$(board_name).yml ; \
+		echo "Your work is still local, to make it available, you have to run git add commit and push : " ; \
+		echo "git add $(board_name)" ; \
+		echo "Last step before building is to add an image u-boot version to the new $(board_name) board. You can use this example :" ; \
+		echo "cd $(board_name)/u-boot" ; \
+		echo "TODO make add-image image-name=netshell-rootfs" ; \
+	fi ;
+
 # ------------------------------------------------------------------------------
 #
 # Target that prints the help
 #
-help:
-	@echo "Available targets are :"
-	@echo "   build-image             Build the $(BOARD_NAME) board image"
-	@echo "   help                    Display this help"
+help-contextual-targets help-context:
+	@echo "Contextual targets are :"
+	@echo "   add-board               Add a new board entry"
+	@echo "   list-boards             Display the list of supported boards in this category"
+	@echo "   list-architectures      Display the list of distinct architecture of boards supported in this category"
+	@echo "   help-context            Display this help about contextual (or local) targets"
+	@echo "   help                    Display global help menu and topics"
 
