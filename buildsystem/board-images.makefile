@@ -37,7 +37,7 @@ include board.mk
 MAKE_FILTERS  := Makefile workdir README.md .
 
 # List available images
-show-images:
+list-images:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
                 	$(MAKE) --no-print-directory --directory=$$v list-images ; \
@@ -52,14 +52,14 @@ sanity-check:
 		sed -i -e "s/__BOARD_ARCH__/$(BOARD_ARCH)/g" -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" ${CURDIR}/blueprint-$(BOARD_NAME).yml ; \
 		echo "git add ${CURDIR}/blueprint-$(BOARD_NAME).yml" ; \
 		$(call dft_error ,2007-0154) ; \
-	fi ; 
+	fi ;
 	@if [ ! -e "${CURDIR}/buildsystem" ] ; then \
 		echo "buildsystem symlink ${CURDIR}/buildsystem is Missing. It should be a symlink to ../buildsystem" ; \
 		echo "You can fix with the following shell commands :" ; \
 		echo "ln -s ../buildsystem ${CURDIR}/buildsystem" ; \
 		echo "git add ${CURDIR}//buildsystem" ; \
 		$(call dft_error ,2005-0205) ; \
-	fi ; 
+	fi ;
 	@if [ ! "$(shell readlink ./Makefile)" = "$(DFT_BUILDSYSTEM)/board-images.makefile" ] ; then \
 		echo "The target of symlink Makefile should be $(DFT_BUILDSYSTEM)/board-images.makefile in directory ${CURDIR}" ; \
 		echo "You can fix with the following commands : " ; \
@@ -67,7 +67,7 @@ sanity-check:
 		echo "ln -s $(DFT_BUILDSYSTEM)/board-images.makefile ${CURDIR}/Makefile" ; \
 		echo "git add ${CURDIR}/Makefile" ; \
 		$(call dft_error ,2005-0809) ; \
-	fi ; 
+	fi ;
 	@for image in $(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n') ; do \
 		echo "Checking $(BOARD_NAME) image $$image definition" ; \
 		if [ ! -L "$$image/Makefile" ] ; then \
@@ -128,7 +128,7 @@ sanity-check:
 			$(call dft_error ,2005-1601) ; \
 		fi ; \
 	done ; \
-	
+
 # ------------------------------------------------------------------------------
 #
 # Target that prints the help
