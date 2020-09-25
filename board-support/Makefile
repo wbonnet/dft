@@ -39,7 +39,7 @@ u-boot-package:
 		if [ -f $$i/Makefile ] ; then \
 			$(MAKE) --no-print-directory --directory=$$i u-boot-package; \
 		fi ; \
-        done
+	done
 
 # Build only linux kernel an package target
 linux-kernel-package:
@@ -152,3 +152,4 @@ list-boards:
 		fi ; \
 	done ; \
 	fi | sort -u ;
+
