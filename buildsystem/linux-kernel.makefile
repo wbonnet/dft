@@ -175,15 +175,8 @@ add-linux-kernel-version:
 		cp -fr ../$(DFT_BUILDSYSTEM)/templates/debian-linux-kernel-package $(new-version)/debian ; \
 		mv $(new-version)/debian/linux-headers.install $(new-version)/debian/linux-headers-$(BOARD_NAME).install ; \
 		for suffix in install postinst postrm preinst prerm ; do \
-		mv $(new-version)/debian/linux-kernel.$(suffix) $(new-version)/debian/linux-kernel-$(BOARD_NAME).$(suffix) ; \
-
-
-
-    mv $(new-version)/debian/linux-kernel.install $(new-version)/debian/linux-kernelheaders-$(BOARD_NAME).install ; \
-    linux-kernel.postinst
-    linux-kernel.postrm
-    linux-kernel.preinst
-    linux-kernel.prerm
+			mv $(new-version)/debian/linux-kernel.$$suffix $(new-version)/debian/linux-kernel-$(BOARD_NAME).$$suffix ; \
+    		done ; \
 		find $(new-version)/debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(new-version)/g" \
                                            -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" \
                                            -e "s/__DATE__/$(shell LC_ALL=C date +"%a, %d %b %Y %T %z")/g" ; \
