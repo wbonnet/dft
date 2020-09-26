@@ -143,7 +143,7 @@ list-boards:
 
 # Create a new board entry
 add-image:
-	echo "DEBUG : in board-images-board.makefile running add-image with argument image-name $(image-name)" ; \
+	@echo "DEBUG : in board-images-board.makefile running add-image with argument image-name $(image-name)" ; \
 	if [ "$(image-name)" == "" ] ; then \
 		echo "DEBUG : from category.makefile argument image-name is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2009-2301) ; \
@@ -160,12 +160,7 @@ add-image:
 	ln -s ../../../inc/repository-debian-de-buster.yml $(image-name)/repository-debian.yml ; \
 	ln -s ../../../inc/rootfs-$(image-name).yml $(image-name)/project-rootfs.yml ; \
 	ln -s ../../../inc/variables-$(image-name).yml $(image-name)/project-variables.yml ; \
-	echo "plop 1"; \
-	ls -l --color $(image-name) ; \
-	echo "plop 2"; \
 	cp  $(DFT_BUILDSYSTEM)/templates/board-images/$(image-name)/* $(image-name)/ ; \
-	sed -i -e "s/__IMAGE_NAME__/$(image-name)/g" -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" $(image-name)/board.mk ; \
-	ls -l --color $(image-name) ; 
 	echo "Your work is still local, to make it available, you have to run git add commit and push : " ; \
 	echo "git add $(image-name)" ; \
 	echo "You are done, you can now build the image using" ; \
