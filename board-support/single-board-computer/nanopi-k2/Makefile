@@ -1,1 +1,0 @@
-../../buildsystem/board-support-support.makefile
