@@ -68,3 +68,11 @@ endef
 define dft_warning_message =
 echo "DFT warning message : $(1)"
 endef
+
+# Display the upstream versions
+show-kernel-upstream-version:
+	@echo "in show-kernel-upstream-version"
+
+show-u-boot-upstream-version:
+	@echo "in show-u-boot-upstream-version"
+

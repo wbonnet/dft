@@ -173,6 +173,10 @@ add-linux-kernel-version:
 		mkdir -p $(new-version)/patches ; \
 		touch $(new-version)/patches/.gitkeep ; \
 		cp -fr ../$(DFT_BUILDSYSTEM)/templates/debian-linux-kernel-package $(new-version)/debian ; \
+		mv $(new-version)/debian/linux-headers.install $(new-version)/debian/linux-headers-$(BOARD_NAME).install ; \
+		for suffix in install postinst postrm preinst prerm ; do \
+			mv $(new-version)/debian/linux-kernel.$$suffix $(new-version)/debian/linux-kernel-$(BOARD_NAME).$$suffix ; \
+    		done ; \
 		find $(new-version)/debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(new-version)/g" \
                                            -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" \
                                            -e "s/__DATE__/$(shell LC_ALL=C date +"%a, %d %b %Y %T %z")/g" ; \
@@ -190,14 +194,19 @@ add-linux-kernel-version:
 	fi ;
 
 # Override standard targets
-build configure package install:
+# upaload is overriden too otherwise make would walk through arch and latest tests and build because of dependancies
+build configure package install upload :
 	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
-	  	echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
+	 	echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
 		echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
 		echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
 	else \
-		for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" -printf '%P\n')) ; do \
-			$(MAKE) --no-print-directory -C $$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
-		done ; \
+		if [ "$(only-latest)" = "1" ] ; then \
+			$(MAKE) --no-print-directory -C $(SW_LATEST) $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
+		else \
+			for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" -printf '%P\n')) ; do \
+				$(MAKE) --no-print-directory -C $$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
+			done ; \
+		fi ; \
 	fi ; \

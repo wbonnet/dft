@@ -1,0 +1,21 @@
+Source: linux-kernel-odroid-c4
+Section: kernel
+Priority: optional
+Maintainer: William Bonnet <wbonnet@theitmakers.com>
+Standards-Version: 3.9.8
+Build-Depends: debhelper (>= 9)
+
+Package: linux-kernel-odroid-c4
+Architecture: any
+Depends: ${misc:Depends},
+         kmod, 
+         linux-base (>= 4.3~), 
+         initramfs-tools (>= 0.120+deb8u2) | linux-initramfs-tool
+Description: Linux kernel, version 5.8.10 for odroid-c4
+ This packages contains the Linux kernel version 5.8.10 compiled for odroid-c4 board.
+
+# Package: linux-headers-odroid-c4-5.8.10
+# Architecture: any
+# Depends: ${misc:Depends}
+# Description: Linux kernel headers, version 5.8.10 for odroid-c4
+#  This packages contains the Linux kernel headers version 5.8.10 for odroid-c4 board.

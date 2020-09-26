@@ -55,24 +55,16 @@ upload: package pre-upload do-upload post-upload
 #
 
 reupload: pre-reupload upload
-	echo "reupload : entree dans reupload"
-	ls -la $(COOKIE_DIR)
-	rm -f $(COOKIE_DIR)/upload
-	echo "j ai vire le cookie upload"
+	@rm -f $(COOKIE_DIR)/do-upload
+	@rm -f $(COOKIE_DIR)/upload
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
-	ls -la $(COOKIE_DIR)
-	echo "sortie de reupload"
 
 pre-reupload:
-	echo "pre-reuploadentree dans pre-reupload"
-	ls -la $(COOKIE_DIR)
-	rm -f $(COOKIE_DIR)/upload
-	echo "j ai vire le cookie upoad"
+	@rm -f $(COOKIE_DIR)/do-upload
+	@rm -f $(COOKIE_DIR)/upload
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
-	ls -la $(COOKIE_DIR)
-	echo "sortie de prereupload"
 
 
 # ------------------------------------------------------------------------------
@@ -81,8 +73,7 @@ pre-reupload:
 #
 
 do-upload:
-	@if [ ! -e $(COOKIE_DIR)/do-upload ] ; then \
-		ls -lah $(COOKIE_DIR)* ; \
+	if [ ! -e $(COOKIE_DIR)/do-upload ] ; then \
 		if [ "x" = "x$(DFT_DEB_UPLOAD_SERVER)" ] ; then \
 			echo "        Variable DFT_DEB_UPLOAD_SERVER is not set, please define it your shell environment." ; \
 			$(call dft_error ,2005-1201) ; \
@@ -99,7 +90,6 @@ do-upload:
 	else \
 		echo "The cookie $(COOKIE_DIR)/upload already exist, $@ is skipped to avoid doing it once and again" ; \
 	fi ; \
-	ls -lah $(COOKIE_DIR) ;
 	$(TARGET_DONE)
 
 # Match initial ifdef DFT_TARGET_UPLOAD

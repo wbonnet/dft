@@ -1,0 +1,184 @@
+#
+# The contents of this file are subject to the Apache 2.0 license you may not
+# use this file except in compliance with the License.
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+#
+# Copyright 2016 DFT project (http://www.firmwaretoolkit.org).
+# All rights reserved. Use is subject to license terms.
+#
+#
+# Contributors list :
+#
+#    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
+#
+
+
+# ----------------------------------------------------------------------------
+#
+# Definition of the project working directories
+#
+#   The value define hereafter overrides tools default configuration. This
+#   mechanism is use to have custom working directories, dedicated to a given
+#   project.
+#
+#   Directories can be defined completly, or partially at project scope. This
+#   means that only some of the directories can be redefined. Undefined ones
+#   default to the values defined in dft tool configuration
+#
+#   Some values contains a list of dirctories, for instance 'additional_roles'
+#   The list is used to defined exta roles and playbooks, within scope project
+#   (thus which are not in the dft open-source scope). Additional directories
+#   content is copied to /dft_bootstrap during bootstrap phase, and can be used
+#   to install additional oftware nd configuration to the firmware.
+#
+# ----------------------------------------------------------------------------
+configuration:
+
+  # Defines the root of the working directories. A directory named after
+  # project name will be created under this path, and subdirectories used to
+  # store rootfs, bootchain, image, etc will be created
+  # working_dir: "../../working_dir"
+
+  # Defines the path to project configuration files. By default (undefined
+  # value) configuration files are searched in the same directory as the
+  # current project.yml file
+  # project_path: "~/Devel/dft/examples/starter-projects/netshell"
+
+  # Path to the dft installation directory. Default value is /usr/share/dft
+  # dft_base: "../ansible"
+
+  # Define a list of directories with additional content (roles, playbooks, etc)
+  # which are copied to /dft_bootstrap during rootfs bootstrapping. These paths
+  # contains project specific definition (which are not included in the dft
+  # open-source tool)
+  # additional_roles:
+  #  - "/usr/share/dft/examples/redefined-roles"
+
+  # Defines if the file /etc/apt/apt.conf.d/10no-check-valid-until should be generated or not
+  # If generated this file contains Acquire::Check-Valid-Until: "0"; which disables validity
+  # date checking when updating the local repository catalog. Default value is True
+  # generate_validity_check: True
+
+  # Defines if the file /etc/apt/apt.conf.d/10no-check-valid-until should be removed at the end
+  # of rootfs generation process. Default value is False
+  # remove_validity_check: False
+
+
+# ----------------------------------------------------------------------------
+#
+# Definition of the sub configuration files (for rootfs, repositories, etc.)
+#
+#   The section can be defined in any order. But inside a definition, the
+#   list of yml files is ordered. The files are loaded in the same order as
+#   the list. This mechanism is used to overload previous definitions
+#
+#   If a step is not defined (no yaml configuration file), it will be skipped
+#   As an example, if you only want to generate a rootfs and check its content
+#   you only have to define :
+#   - debootstrap_repository
+#   - repositories (if different from debootstrap_repository)
+#   - rootfs
+#   - check
+# ----------------------------------------------------------------------------
+project_definition:
+
+  # Defines the project name. Mostly used for output and directories creation
+  project_name: "pine64-h64"
+
+  # Definition of the repositories used for bootstrapping
+  # There can be only one repo, thus its url is defined here
+  debootstrap_repository: "http://ftp.de.debian.org/debian"
+
+   # Definition of the repositories to use
+  repositories:
+    - repository-debian.yml
+
+  # Definition of the rootfs content
+  rootfs:
+    - rootfs-netshell.yml
+
+  # Definition of the image structure
+  image:
+    - disk-image.yml
+
+  # Path to bootscript template to instanciate and inject in to the image.
+  # This field is optional, if not defined
+  # bootscript: /path/to/boot.scr
+
+  # Definition of the variables to be passed to rootfs creation
+  variables:
+    - variables-netshell.yml
+    - board-variables.yml
+
+  # Definition of the list of targets, with architectures, versions and optionaly board.
+  # Firmware will be generated for each of the architecture in this list
+  #
+  # version and board are mandatory attributes of the a item definition.
+  # bsp_file is an optional attribute used to define the path to a specific bsp file
+  # this attribute can be used when the target board is not supprted by DFT and a specific BSP
+  # definition has to be passed to the tool. Otherwise the BSP will be loaded from the default
+  # DFT installation
+  #
+  targets:
+    - { version: buster , board: pine64-h64 }
+
+# ----------------------------------------------------------------------------
+#
+# Definition of the project building sequence
+#
+#   This dictionnary defines the list of 'dft' comand to be launched,
+#   parameters and sequencing.
+#
+#   Project building sequence occurs when you have to run several execution
+#   of dft in a given sequence to produce a firmware. For instance, a typical
+#   sequence of action is :
+#     - build_rootfs
+#     - strip_rootfs
+#     - build_firmware
+#     - install_bootchain
+#     - assemble_firmware
+#     - build_image
+#
+#   The command associated to each can be run seperatly and manually, or in
+#   sequence, by the dft tool itself, according to the order you define below.
+#
+# ----------------------------------------------------------------------------
+building_sequences:
+
+# Sequences are defined as a list. Each list entry is distinct sequence.
+# dft invocation will run one and only one sequence, according to the
+# arguments you provided.
+#
+# A project can defines several sequence to fit different production and
+# automation needs.
+#
+# A sequence is defined by its name (passed as argument when invoking a
+# build_sequence command), and a list of steps. Each step is equivalet to a
+# manual call to dft (build_rootfs, or build_firmware, etc.)
+#
+# An extra operation, out side dft can be done, running a shell script in
+# the sequence. This is used in case such as building multiple firmwares
+# before geerating a single image including all the firmwares.
+#
+# Other case, especially more complex ones should be processed outside of
+# dft, using a task scheduler such as a Makefile.
+#
+
+  # Name of the sequence - Sequence name can be any string, but __dft_default_sequence__
+  # which is reserved for internal use.
+  - sequence_name: "produce-image"
+    # This list defines each the steps composing the sequence of action to execute
+    # Order of steps in the list is order of execution
+    steps:
+      # Each step is defined by an action, which has to be a command word of the
+      # dft tool (assemble_firmware, build_firmware, build_rootfs, etc.), and the
+      # list of arguments to pass. Arguments are the same as arguments from the CLI
+      - action: build_rootfs
+      - action: install_bootchain
+      - action: build_image
+

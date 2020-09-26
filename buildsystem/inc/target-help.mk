@@ -40,6 +40,7 @@ help:
 	@echo "Inline help is allocated in several categories according to functionnal scope"
 	@echo
 	@echo "Available targets to display scoped help are :"
+	@echo " help-context            Display contextual help (according to Makefile location)"
 	@echo " help-bsp                Help about BSP building targets"
 	@echo " help-config-file        Help about configuration file ans variables"
 	@echo " help-env-vars           Help about environnment variables"
@@ -101,7 +102,7 @@ help-bsp:
 	@echo "                            This target create a subdirectory named after the content of new-version variable."
 	@echo "                            It will contain the Makefile and all the files needed to fetch and build the given"
 	@echo "                            version. It also instanciate Debian package template."
-	@echo "    add-board               board_name=xxx board_arch=xxx uboot_support=[1|0] uboot_support=[0|1] uboot_defconfig=name_defconfig default_dtb board.dtb" ; 
+	@echo "    add-board               board_name=xxx board_arch=xxx uboot_support=[1|0] uboot_support=[0|1] uboot_defconfig=name_defconfig default_dtb board.dtb" ;
 	@echo  XXX
 	@echo
 	@echo
