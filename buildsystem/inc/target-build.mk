@@ -115,8 +115,6 @@ build-%:
 	fi ; \
 	if [ ! "x$$skip_target" = "x1" ] ; then \
 		cd $(BUILD_DIR) ; \
-		echo "before real make config should bde same as defined in git repo for this given kernel version" ; \
-		echo "config should bde same as defined in git repo for this given kernel version" ; \
 		if [ ! -f $(COOKIE_DIR)/build-$* ] ; then \
 			$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) ; \
 		fi ; \
