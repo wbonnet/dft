@@ -161,6 +161,7 @@ add-image:
 	ln -s ../../../inc/rootfs-$(image-name).yml $(image-name)/project-rootfs.yml ; \
 	ln -s ../../../inc/variables-$(image-name).yml $(image-name)/project-variables.yml ; \
 	cp  $(DFT_BUILDSYSTEM)/templates/board-images/$(image-name)/* $(image-name)/ ; \
+	sed -i -s "s/__BOARD_NAME__/$(BOARD_NAME)/g" $(image-name)/project.yml $(image-name)/disk-image.yml $(image-name)/board-variables.yml ; \
 	echo "Your work is still local, to make it available, you have to run git add commit and push : " ; \
 	echo "git add $(image-name)" ; \
 	echo "You are done, you can now build the image using" ; \
