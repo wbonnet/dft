@@ -50,7 +50,7 @@ devices:
 
   # Defines the filename used to store the device image. This file is created and allocated at
   # image creation.
-  filename: "__BOARD_NAME__-rootfs"
+  filename: "pine64-pinebookpro"
 
   # Defines the suffix appended to the filename. Default value is img. The dot should not be
   # included in suffix, it zill be added automatically. If the string is emty, no suffix at all

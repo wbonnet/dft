@@ -1,2 +1,2 @@
 # Set the hostname according to the project name
-dft_hostname: "__BOARD_NAME__"
+dft_hostname: "pine64-pinebookpro"
