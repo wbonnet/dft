@@ -1,0 +1,17 @@
+linux-kernel-nanopi-k2 (5.8.12-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 27 Sep 2020 01:04:36 +0200
+
+linux-kernel-nanopi-k2 (5.8.12-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 27 Sep 2020 01:04:36 +0200
+
+linux-headers-nanopi-k2 (5.8.12-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 27 Sep 2020 01:04:36 +0200
