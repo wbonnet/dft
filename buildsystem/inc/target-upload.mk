@@ -73,7 +73,7 @@ pre-reupload:
 #
 
 do-upload:
-	if [ ! -e $(COOKIE_DIR)/do-upload ] ; then \
+	@if [ ! -e $(COOKIE_DIR)/do-upload ] ; then \
 		if [ "x" = "x$(DFT_DEB_UPLOAD_SERVER)" ] ; then \
 			echo "        Variable DFT_DEB_UPLOAD_SERVER is not set, please define it your shell environment." ; \
 			$(call dft_error ,2005-1201) ; \
