@@ -142,26 +142,30 @@ list-boards:
 
 # Create a new board entry
 add-board:
-	@echo "DEBUG : in board-images-category.makefile running add-board with arguments board_name $(board_name)" ; \
-	if [ "$(board_name)" == "" ] ; then \
-		echo "DEBUG : from category.makefile argument board_name is missing or has no value. Doing nothing..." ; \
+	@echo "DEBUG : in board-images-category.makefile running add-board with arguments board-name $(board-name)" ; \
+	if [ "$(board-name)" == "" ] ; then \
+		echo "DEBUG : from category.makefile argument board-name is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2009-2201) ; \
 	fi ; \
-	if [ -d "./$(board_name)" ] ; then \
-		echo ". Board $(board_name) already exist. Doing nothing..." ; \
+	if [ "$(board-arch)" == "" ] ; then \
+		echo "DEBUG : from category.makefile argument board-arch is missing or has no value. Doing nothing..." ; \
+		$(call dft_error ,2009-2901) ; \
+	fi ; \
+	if [ -d "./$(board-name)" ] ; then \
+		echo ". Board $(board-name) already exist. Doing nothing..." ; \
 	else  \
-		echo ". Creating the directory for board $(board_name)" ; \
-		mkdir -p $(board_name) ; \
-		ln -s buildsystem/board.makefile $(board_name)/Makefile ; \
-		ln -s ../buildsystem $(board_name)/buildsystem ; \
-		ln -s ../../../board-support/$(shell echo $(PWD) | tr '/' ' ' | awk '{ print $$NF ; }')/$(board_name)/board.mk  $(board_name)/board.mk ; \
-		cp  $(DFT_BUILDSYSTEM)/templates/board-blueprint.yml.template $(board_name)/blueprint-$(board_name).yml ; \
-		sed -i -e "s/__BOARD_NAME__/$(board_name)/g" $(board_name)/blueprint-$(board_name).yml ; \
+		echo ". Creating the directory for board $(board-name)" ; \
+		mkdir -p $(board-name) ; \
+		ln -s buildsystem/board-images-board.makefile $(board-name)/Makefile ; \
+		ln -s ../buildsystem $(board-name)/buildsystem ; \
+		ln -s ../../../board-support/$(shell echo $(PWD) | tr '/' ' ' | awk '{ print $$NF ; }')/$(board-name)/board.mk  $(board-name)/board.mk ; \
+		cp  $(DFT_BUILDSYSTEM)/templates/board-blueprint.yml.template $(board-name)/blueprint-$(board-name).yml ; \
+		sed -i -e "s/__BOARD_NAME__/$(board-name)/g" -e "s/__BOARD_ARCH__/$(board-arch)/g" $(board-name)/blueprint-$(board-name).yml ; \
 		echo "Your work is still local, to make it available, you have to run git add commit and push : " ; \
-		echo "git add $(board_name)" ; \
-		echo "Last step before building is to add an image u-boot version to the new $(board_name) board. You can use this example :" ; \
-		echo "cd $(board_name)/u-boot" ; \
-		echo "TODO make add-image image-name=netshell-rootfs" ; \
+		echo "git add $(board-name)" ; \
+		echo "Last step before building is to add an image u-boot version to the new $(board-name) board. You can use this example :" ; \
+		echo "cd $(board-name)" ; \
+		echo "make add-image image-name=netshell" ; \
 	fi ;
 
 # ------------------------------------------------------------------------------
