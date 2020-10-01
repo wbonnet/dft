@@ -38,10 +38,10 @@ BOARD_ARCH = armv7l
 UBOOT_SUPPORT     = 1
 
 # Make use the defconfig file from UBOOT_DEFCONFIG unless you specify your own in USE_CONFIG_FILE
-UBOOT_DEFCONFIG   = nanopi_r1_defconfig
+UBOOT_DEFCONFIG   = nanopi_m1_plus_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
-UBOOT_BINARY_FILE = u-boot-$(BOARD_NAME)
+UBOOT_BINARY_FILE = u-boot-sunxi-with-spl.bin
 DEFAULT_DTB       = nanopir1.dtb
 
 #
