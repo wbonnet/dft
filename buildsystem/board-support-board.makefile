@@ -152,7 +152,6 @@ sanity-check:
 		$(MAKE) --directory=$$version $* only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) verbority=$(verbosity) ; \
         done
 
-# cd $$i && $(MAKE) $* && cd .. ;
 u-boot-package:
 	$(MAKE) --directory=u-boot package only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) verbosity=$(verbosity);
 
