@@ -142,69 +142,69 @@ check-u-boot-defconfig:
 
 # Create a new board entry
 add-board:
-	@echo "DEBUG : in category.makefile running add-board with argument board_name $(board_name) board_arch $(board_arch) board_arch $(board_arch) uboot_support $(uboot_support) uboot_support $(uboot_support)  uboot_defconfig $(uboot_defconfig) default_dtb $(default_dtb)" ; \
-	if [ "$(board_name)" == "" ] ; then \
-		echo "DEBUG : from category.makefile argument board_name is missing or has no value. Doing nothing..." ; \
+	@echo "DEBUG : in category.makefile running add-board with argument board-name $(board-name) board-arch $(board-arch) board-arch $(board-arch) uboot-support $(uboot-support) uboot-support $(uboot-support)  uboot-defconfig $(uboot-defconfig) default-dtb $(default-dtb)" ; \
+	if [ "$(board-name)" == "" ] ; then \
+		echo "DEBUG : from category.makefile argument board-name is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2001-1601) ; \
 	fi ; \
-	if [ "$(board_arch)" == "" ] ; then \
-		echo "DEBUG : from category.makefile argument board_arch is missing or has no value. Doing nothing..." ; \
+	if [ "$(board-arch)" == "" ] ; then \
+		echo "DEBUG : from category.makefile argument board-arch is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2001-1602) ; \
 	fi ; \
-	if [ -d "./$(board_name)" ] ; then \
-		echo ". Board $(board_name) already exist. Doing nothing..." ; \
+	if [ -d "./$(board-name)" ] ; then \
+		echo ". Board $(board-name) already exist. Doing nothing..." ; \
 	else  \
-		echo ". Creating the directory for board $(board_name)" ; \
-		mkdir -p $(board_name) ; \
-		cp  $(DFT_BUILDSYSTEM)/templates/board.mk.template $(board_name)/board.mk ; \
-		sed -i -e "s/__BOARD_ARCH__/$(board_arch)/g" -e "s/__BOARD_NAME__/$(board_name)/g" $(board_name)/board.mk ; \
-		ln -s buildsystem/board.makefile $(board_name)/Makefile ; \
-		ln -s ../buildsystem $(board_name)/buildsystem ; \
+		echo ". Creating the directory for board $(board-name)" ; \
+		mkdir -p $(board-name) ; \
+		cp  $(DFT_BUILDSYSTEM)/templates/board.mk.template $(board-name)/board.mk ; \
+		sed -i -e "s/__BOARD_ARCH__/$(board-arch)/g" -e "s/__BOARD_NAME__/$(board-name)/g" $(board-name)/board.mk ; \
+		ln -s buildsystem/board-images-board.makefile $(board-name)/Makefile ; \
+		ln -s ../buildsystem $(board-name)/buildsystem ; \
 	fi ; \
-	if [ ! "$(uboot_defconfig)" == "" ] ; then \
-		sed -i -e "s/__UBOOT_DEFCONFIG__/$(uboot_defconfig)/g" $(board_name)/board.mk ; \
+	if [ ! "$(uboot-defconfig)" == "" ] ; then \
+		sed -i -e "s/__UBOOT_DEFCONFIG__/$(uboot-defconfig)/g" $(board-name)/board.mk ; \
 	else  \
-		sed -i -e "s/__UBOOT_DEFCONFIG__/unknown_defconfig/g" $(board_name)/board.mk ; \
-		echo "uboot_defconfig variable was not set on make commande line, you will have to set it manually in $(board_name)/board.mk It is currely defined to unknown_defconffig by defaul and thus won't compile" ; \
+		sed -i -e "s/__UBOOT_DEFCONFIG__/unknown_defconfig/g" $(board-name)/board.mk ; \
+		echo "uboot-defconfig variable was not set on make commande line, you will have to set it manually in $(board-name)/board.mk It is currely defined to unknown_defconffig by defaul and thus won't compile" ; \
 	fi ; \
-	if [ ! "$(default_dtb)" == "" ] ; then \
-		sed -i -e "s/__DEFAULT_DTB__/$(default_dtb)/g" $(board_name)/board.mk ; \
+	if [ ! "$(default-dtb)" == "" ] ; then \
+		sed -i -e "s/__DEFAULT_DTB__/$(default-dtb)/g" $(board-name)/board.mk ; \
 	else  \
-		sed -i -e "s/__DEFAULT_DTB__/default.dtb/g" $(board_name)/board.mk ; \
+		sed -i -e "s/__DEFAULT_DTB__/default.dtb/g" $(board-name)/board.mk ; \
 	fi ; \
-	if [ "$(uboot_support)" == "1" ] ; then \
-		sed -i -e "s/__UBOOT_SUPPORT__/1/g" $(board_name)/board.mk ; \
+	if [ "$(uboot-support)" == "1" ] ; then \
+		sed -i -e "s/__UBOOT_SUPPORT__/1/g" $(board-name)/board.mk ; \
 	else  \
-		if [ "$(uboot_support)" == "0" ] ; then \
-			sed -i -e "s/__UBOOT_SUPPORT__/0/g" $(board_name)/board.mk ; \
+		if [ "$(uboot-support)" == "0" ] ; then \
+			sed -i -e "s/__UBOOT_SUPPORT__/0/g" $(board-name)/board.mk ; \
 		else  \
-			echo "uboot_support value should be 0 or 1. No value is equivalent to 1, thus u-boot is activated" ; \
+			echo "uboot-support value should be 0 or 1. No value is equivalent to 1, thus u-boot is activated" ; \
 		fi ; \
 	fi ; \
-	if [ "$(grub_support)" == "1" ] ; then \
-		sed -i -e "s/__GRUB_SUPPORT__/1/g" $(board_name)/board.mk ; \
+	if [ "$(grub-support)" == "1" ] ; then \
+		sed -i -e "s/__GRUB_SUPPORT__/1/g" $(board-name)/board.mk ; \
 	else  \
-		if [ "$(grub_support)" == "0" ] ; then \
-			sed -i -e "s/__GRUB_SUPPORT__/0/g" $(board_name)/board.mk ; \
+		if [ "$(grub-support)" == "0" ] ; then \
+			sed -i -e "s/__GRUB_SUPPORT__/0/g" $(board-name)/board.mk ; \
 		else  \
-			echo "grub_support value should be 0 or 1. No value is equivalent to 0, thus grub is deactivated" ; \
-			export grub_support=0 ; \
+			echo "grub-support value should be 0 or 1. No value is equivalent to 0, thus grub is deactivated" ; \
+			export grub-support=0 ; \
 		fi ; \
 	fi ; \
-	mkdir $(board_name)/kernel/ ; \
-	ln -s ../buildsystem $(board_name)/kernel/buildsystem ; \
-	ln -s buildsystem/linux-kernel.makefile $(board_name)/kernel/Makefile ; \
-	if [ "$(uboot_support)" == "1" ] ; then \
-		mkdir $(board_name)/u-boot/ ; \
-		mkdir $(board_name)/u-boot/files/ ; \
-		touch $(board_name)/u-boot/files/.gitkeep ; \
-		ln -s ../buildsystem $(board_name)/u-boot/buildsystem ; \
-		ln -s ../board.mk $(board_name)/u-boot/board.mk ; \
-		ln -s buildsystem/u-boot.makefile $(board_name)/u-boot/Makefile ; \
+	mkdir $(board-name)/kernel/ ; \
+	ln -s ../buildsystem $(board-name)/kernel/buildsystem ; \
+	ln -s buildsystem/linux-kernel.makefile $(board-name)/kernel/Makefile ; \
+	if [ "$(uboot-support)" == "1" ] ; then \
+		mkdir $(board-name)/u-boot/ ; \
+		mkdir $(board-name)/u-boot/files/ ; \
+		touch $(board-name)/u-boot/files/.gitkeep ; \
+		ln -s ../buildsystem $(board-name)/u-boot/buildsystem ; \
+		ln -s ../board.mk $(board-name)/u-boot/board.mk ; \
+		ln -s buildsystem/u-boot.makefile $(board-name)/u-boot/Makefile ; \
 		echo "Your work is still local, to make it available, you have to run git add commit and push : " ; \
-		echo "git add $(board_name)" ; \
-		echo "Last step before building is to add a u-boot version to the new $(board_name) board. You can use this example :" ; \
-		echo "cd $(board_name)/u-boot" ; \
+		echo "git add $(board-name)" ; \
+		echo "Last step before building is to add a u-boot version to the new $(board-name) board. You can use this example :" ; \
+		echo "cd $(board-name)/u-boot" ; \
 		echo "make add-u-boot-version new-version=2020.04" ; \
 	fi ;
 
@@ -255,41 +255,66 @@ list-boards:
 
 # Create a new board entry
 add-board:
-	@echo "DEBUG : in category.makefile running add-board with argument board_name $(board_name) board_arch $(board_category) board_category" ; \
-	if [ "$(board_name)" == "" ] ; then \
-		echo "DEBUG : from category.makefile argument board_name is missing or has no value. Doing nothing..." ; \
+	@echo "DEBUG : in category.makefile running add-board with argument board-name $(board-name) board-arch $(board-arch) board-category $(board-category)" ; \
+	if [ "$(board-name)" == "" ] ; then \
+		echo "DEBUG : from category.makefile argument board-name is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2009-2201) ; \
 	fi ; \
-	if [ "$(board_category)" == "" ] ; then \
-		echo "DEBUG : from category.makefile argument board_category is missing or has no value. Doing nothing..." ; \
+	if [ "$(board-category)" == "" ] ; then \
+		echo "DEBUG : from category.makefile argument board-category is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2009-2202) ; \
 	fi ; \
-	if [ "$(board_arch)" == "" ] ; then \
-		echo "DEBUG : from category.makefile argument board_arch is missing or has no value. Doing nothing..." ; \
+	if [ "$(board-arch)" == "" ] ; then \
+		echo "DEBUG : from category.makefile argument board-arch is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2009-2203) ; \
 	fi ; \
-	if [ -d "./$(board_name)" ] ; then \
-		echo ". Board $(board_name) already exist. Doing nothing..." ; \
-	else  \
-		echo ". Creating the directory for board $(board_name)" ; \
-		mkdir -p $(board_name) ; \
-		cp  $(DFT_BUILDSYSTEM)/templates/board.mk.template $(board_name)/board.mk ; \
-		sed -i -e "s/__BOARD_ARCH__/$(board_arch)/g" -e "s/__BOARD_NAME__/$(board_name)/g" $(board_name)/board.mk ; \
-		ln -s buildsystem/board.makefile $(board_name)/Makefile ; \
-		ln -s ../buildsystem $(board_name)/buildsystem ; \
+	if [ "$(uboot-support)" == "" ] ; then \
+		echo "DEBUG : from category.makefile argument uboot-support is missing or has no value. Doing nothing..." ; \
+		$(call dft_error ,2010-0101) ; \
 	fi ; \
-	mkdir $(board_name) ; \
-	ln -s ../buildsystem $(board_name)/buildsystem ; \
-	ln -s buildsystem/buildsystem/board-images.makefile $(board_name)/Makefile ; \
-	ln -s ../../../board-support/$(board_category)/$(board_name)/board.mk  $(board_name)/board.mk ; \
-	cp  $(DFT_BUILDSYSTEM)/templates/board.blueprint.yml.template $(board_name)/blueprint-$(board_name).yml ; \
-	sed -i -e "s/__BOARD_ARCH__/$(board_arch)/g" -e "s/__BOARD_NAME__/$(board_name)/g" $(board_name)/board.mk ; \
-	sed -i -e "s/__BOARD_ARCH__/$(board_arch)/g" -e "s/__BOARD_NAME__/$(board_name)/g" $(board_name)/blueprint-$(board_name).yml ; \
+	if [ "$(uboot-defconfig)" == "" ] ; then \
+		echo "DEBUG : from category.makefile argument uboot-defconfig is missing or has no value. Doing nothing..." ; \
+		$(call dft_error ,2010-0102) ; \
+	fi ; \
+	if [ "$(default-dtb)" == "" ] ; then \
+		echo "DEBUG : from category.makefile argument defaul-dtb is missing or has no value. Doing nothing..." ; \
+		$(call dft_error ,2010-0103) ; \
+	fi ; \
+	if [ -d "./$(board-name)" ] ; then \
+		echo ". Board $(board-name) already exist. Doing nothing..." ; \
+	else  \
+		echo ". Creating the directory for board $(board-name)" ; \
+		mkdir -p $(board-name) ; \
+		cp  $(DFT_BUILDSYSTEM)/templates/board.mk.template $(board-name)/board.mk ; \
+		cp  $(DFT_BUILDSYSTEM)/templates/board-blueprint.yml.template $(board-name)/blueprint-$(board-name).yml ; \
+		sed -i -e "s/__BOARD_ARCH__/$(board-arch)/g" -e "s/__BOARD_NAME__/$(board-name)/g" $(board-name)/blueprint-$(board-name).yml ; \
+		sed -i -e "s/__BOARD_ARCH__/$(board-arch)/g" -e "s/__BOARD_NAME__/$(board-name)/g" $(board-name)/board.mk ; \
+		sed -i -e "s/__UBOOT_DEFCONFIG__/$(uboot-defconfig)/g" -e "s/__UBOOT_SUPPORT__/$(uboot-support)/g" $(board-name)/board.mk ; \
+		sed -i -e "s/__DEFAULT_DTB__/$(default-dtb)/g" $(board-name)/board.mk ; \
+		ln -s buildsystem/board-support-board.makefile $(board-name)/Makefile ; \
+		ln -s ../buildsystem $(board-name)/buildsystem ; \
+	fi ; \
+	mkdir $(board-name)/kernel ; \
+	mkdir $(board-name)/kernel/config ; \
+	touch $(board-name)/kernel/config/.gitkeep ; \
+	ln -s ../board.mk $(board-name)/kernel/ ; \
+	ln -s ../../../../buildsystem $(board-name)/kernel/ ; \
+	ln -s buildsystem/linux-kernel.makefile $(board-name)/kernel/Makefile ; \
+	if [ -d "./$(board-name)" ] ; then \
+		mkdir $(board-name)/u-boot ; \
+		mkdir $(board-name)/u-boot/files ; \
+		cp  $(DFT_BUILDSYSTEM)/templates/u-boot.install.template $(board-name)/u-boot/files/install.u-boot-$(board-name).md ; \
+		sed -i -e "s/__BOARD_NAME__/$(board-name)/g" $(board-name)/u-boot/files/install.u-boot-$(board-name).md ; \
+		ln -s ../board.mk $(board-name)/u-boot/ ; \
+		ln -s ../../../../buildsystem $(board-name)/u-boot/ ; \
+		ln -s buildsystem/u-boot.makefile $(board-name)/u-boot/Makefile ; \
+	fi ; \
+	echo "The next steps are to add u-boot and kernel versions definition to $(board-name) board. You can use this example :" ; \
+	echo "cd $(board-name) && make add-u-boot-version new-version=YYYY.MM" ; \
+	echo "cd kernel && make add-linux-kernel-version new-version=AA.BB.CC && cd ../.." ; \
+	echo ; \
 	echo "Your work is still local, to make it available, you have to run git add commit and push : " ; \
-	echo "git add $(board_name)" ; \
-	echo "Last step before building is to add an image u-boot version to the new $(board_name) board. You can use this example :" ; \
-	echo "cd $(board_name)/u-boot" ; \
-	echo "TODO make add-image image-name=netshell-rootfs" ; \
+	echo "git add $(board-name)" ; \
 
 # ------------------------------------------------------------------------------
 #
