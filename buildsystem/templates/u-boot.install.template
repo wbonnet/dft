@@ -37,7 +37,7 @@ u-boot itself.
 # after validation of the following lines
 
 # Blank and erase u-boot environnment variables stored on MMC (does not modify u-boot binary itself)
-sudo dd if=/dev/zero of=/dev/mmcblk0 bs=1k count=1023 seek=1 status=noxfer
+sudo dd if=/dev/zero of=/dev/mmcblk0 bs=1k count=1023 seek=1 status=noxfer conv=nocreat,notrunc
 
 # Copy binary to MMC and update u-boot (environnment variables stored on MMC are not modified)
-sudo dd if=/boot/u-boot/u-boot-__BOARD_NAME__ of=/dev/mmcblk0 bs=1024 seek=8 status=noxfer
+sudo dd if=/boot/u-boot/u-boot-__BOARD_NAME__ of=/dev/mmcblk0 bs=1024 seek=8 status=noxfer conv=nocreat,notrunc
