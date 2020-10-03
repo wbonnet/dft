@@ -51,3 +51,4 @@ DEFAULT_DTB =
 # GRUB support and configuration (u-boot or grub should be activated to be able to boot the board).
 #
 GRUB_SUPPORT = 0
+
