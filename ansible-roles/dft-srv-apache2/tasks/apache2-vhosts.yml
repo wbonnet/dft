@@ -47,7 +47,6 @@
 - name: Check if apache2 virtual hosts are activated
   stat:
     path: /etc/apache2/sites-enabled/{{ item.name }}
-  register: is_virtual_host_activated
   with_items: "{{ dft_apache2.sites_enabled}}"
   when: dft_apache2.sites_enabled is defined
 
@@ -60,9 +59,10 @@
 - name: Activate apache2 enabled virtual hosts
   command: a2ensite {{ item.name }}
   with_items: "{{ dft_apache2.sites_enabled }}"
-  when: dft_apache2.sites_enabled is defined and is_virtual_host_activated.stat.exists == false
+  when: dft_apache2.sites_enabled is defined
+
 #-  notify:
-#    - restart apache
+#    - reload apache
 
 #
 # Deactivate the virtual hosts configuration files
@@ -72,7 +72,7 @@
   with_items: "{{ dft_apache2.sites_disabled}}"
   when: dft_apache2.sites_disabled is defined
 #-  notify:
-#    - restart apache
+#    - reload apache
 
 
 #  apt: name={{ item }}
