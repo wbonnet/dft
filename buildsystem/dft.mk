@@ -245,6 +245,12 @@ show-config:
 	@echo "Internal variables"
 	@echo "  MAKE_FILTERS                      $(MAKE_FILTERS)"
 
+show-kernel-upstream-version:
+	@wget -O-  https://www.kernel.org/ 2>&1| grep "<td><strong>" | tr '<' ' ' | tr '>' ' ' | awk '{ print $$3 }' | head -n 2 | tail -n 1
+
+show-u-boot-upstream-version:
+	@wget -O- https://github.com/u-boot/u-boot/releases 2>&1 | grep -v "rc" | grep "v20" | tr '<' ' ' | tr '>' ' ' | tr 'v' ' ' | head -n 2 | tail -n 1 | awk '{ print $$1 }'
+
 # ------------------------------------------------------------------------------
 # Match initial ifdef
 endif
