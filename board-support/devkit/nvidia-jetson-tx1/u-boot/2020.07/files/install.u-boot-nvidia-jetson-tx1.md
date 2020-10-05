@@ -1,1 +1,0 @@
-../../files/install.u-boot-nvidia-jetson-tx1.md
