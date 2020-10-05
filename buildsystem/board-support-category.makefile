@@ -37,7 +37,7 @@ MAKE_FILTERS  := Makefile workdir README.md .
 #
 # Targets not associated with a file (aka PHONY)
 #
-.PHONY: sanity-check list-boards list-architectures
+.PHONY: sanity-check list-boards list-architectures show-kernel-dft-version show-u-boot-dft-version show-kernel-upstream-version show-u-boot-upstream-version sanity-check list-boards list-architectures
 
 # Board category directory contains several folders, one per board in the category
 # Each board folder must contain a board.mk file with board specific information,
@@ -209,13 +209,34 @@ add-board:
 	fi ;
 
 # Simple target forwarder
+show-u-boot-available-upgrade:
+	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
+                	$(MAKE) --no-print-directory --directory=$$v $@  only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
+		fi ; \
+	done
+
+show-kernel-available-upgrade:
+	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
+                	$(MAKE) --no-print-directory --directory=$$v $@  only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
+		fi ; \
+	done
+
 extract:
+	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
+                	$(MAKE) --no-print-directory --directory=$$v $@  only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
+		fi ; \
+	done
+
 fetch:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
                 	$(MAKE) --no-print-directory --directory=$$v $@  only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
 		fi ; \
 	done
+
 # Forward target call to subfolders where are stored the board.mk files specifying board architecture
 list-architectures:
 	@if [ "$(arch)" = "armhf" ] ; then \
