@@ -204,10 +204,10 @@ show-kernel-dft-version show-u-boot-dft-version:
 
 # Output board name if arch match criteria or if there is no defined criteria (or filter)
 list-boards:
-	@if [ "$(arch)" = "" ] ; then \
+	@if [ "$(board-arch)" = "" ] ; then \
 			echo "$(BOARD_NAME)" ; \
 	else \
-			if [ "$(arch)" = "$(BOARD_ARCH)" ]; then \
+			if [ "$(board-arch)" = "$(BOARD_ARCH)" ]; then \
 				echo "$(BOARD_NAME)" ; \
 			fi ; \
 	fi ;
@@ -218,25 +218,62 @@ list-architectures:
 
 # Display the locally available versions
 show-u-boot-dft-version:
-	@find $$PWD/u-boot -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1
+	@if [ ! "$(board-arch)" = "" ] ; then \
+			if [ "$(board-arch)" = "$(BOARD_ARCH)" ]; then \
+				find $$PWD/u-boot -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1
+			fi ; \
+	else ; \
+			find $$PWD/u-boot -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1
+	fi ;
 
 show-kernel-dft-version:
-	@find $$PWD/kernel -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1
+	@if [ ! "$(board-arch)" = "" ] ; then \
+		if [ "$(board-arch)" = "$(BOARD_ARCH)" ]; then \
+			find $$PWD/kernel -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1
+		fi ; \
+	else  \
+		find $$PWD/kernel -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1
+	fi ;
+
 
 show-u-boot-available-upgrade:
-	@UBOOT_DFT_VERSION=$(shell find $$PWD/u-boot -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1) ; \
-	UBOOT_UPSTREAM_VERSION=$(shell wget -O- https://github.com/u-boot/u-boot/releases 2>&1 | grep -v "rc" | grep "v20" | tr '<' ' ' | tr '>' ' ' | tr 'v' ' ' | head -n 2 | tail -n 1 | awk '{ print $$1 }') ; \
-	if [ ! "$$UBOOT_DFT_VERSION" = "$$UBOOT_UPSTREAM_VERSION" ] ; then \
-		echo "$(BOARD_NAME) u-boot can be upgraded from $$UBOOT_DFT_VERSION to $$UBOOT_UPSTREAM_VERSION" ; \
+	@if [ "$(board-arch)" = "" ] ; then \
+		UBOOT_DFT_VERSION=$(shell find $$PWD/u-boot -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1) ; \
+		UBOOT_UPSTREAM_VERSION=$(shell wget -O- https://github.com/u-boot/u-boot/releases 2>&1 | grep -v "rc" | grep "v20" | tr '<' ' ' | tr '>' ' ' | tr 'v' ' ' | head -n 2 | tail -n 1 | awk '{ print $$1 }') ; \
+		if [ ! "$$UBOOT_DFT_VERSION" = "$$UBOOT_UPSTREAM_VERSION" ] ; then \
+			echo "$(BOARD_NAME) u-boot can be upgraded from $$UBOOT_DFT_VERSION to $$UBOOT_UPSTREAM_VERSION" ; \
+		else \
+		  echo "$(BOARD_NAME) u-boot is up to date" ; \
+		fi ; \
 	else \
-	  echo "$(BOARD_NAME) u-boot is up to date" ; \
-	fi
+		if [ "$(board-arch)" = "$(BOARD_ARCH)" ]; then \
+			UBOOT_DFT_VERSION=$(shell find $$PWD/u-boot -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1) ; \
+			UBOOT_UPSTREAM_VERSION=$(shell wget -O- https://github.com/u-boot/u-boot/releases 2>&1 | grep -v "rc" | grep "v20" | tr '<' ' ' | tr '>' ' ' | tr 'v' ' ' | head -n 2 | tail -n 1 | awk '{ print $$1 }') ; \
+			if [ ! "$$UBOOT_DFT_VERSION" = "$$UBOOT_UPSTREAM_VERSION" ] ; then \
+				echo "$(BOARD_NAME) u-boot can be upgraded from $$UBOOT_DFT_VERSION to $$UBOOT_UPSTREAM_VERSION" ; \
+			else \
+			  echo "$(BOARD_NAME) u-boot is up to date" ; \
+			fi ; \
+		fi ; \
+	fi ;
 
 show-kernel-available-upgrade:
-	@KERNEL_DFT_VERSION=$(shell find $$PWD/kernel -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1) ; \
-	KERNEL_UPSTREAM_VERSION=$(shell wget -O-  https://www.kernel.org/ 2>&1| grep "<td><strong>" | tr '<' ' ' | tr '>' ' ' | awk '{ print $$3 }' | head -n 2 | tail -n 1) ; \
-	if [ ! "$$KERNEL_DFT_VERSION" = "$$KERNEL_UPSTREAM_VERSION" ] ; then \
-		echo "$(BOARD_NAME) kernel can be upgraded from $$KERNEL_DFT_VERSION to $$KERNEL_UPSTREAM_VERSION" ; \
-	else \
-	  echo "$(BOARD_NAME) u-boot is up to date" ; \
-	fi
+	@if [ "$(board-arch)" = "" ] ; then \
+		KERNEL_DFT_VERSION=$(shell find $$PWD/kernel -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1) ; \
+		KERNEL_UPSTREAM_VERSION=$(shell wget -O-  https://www.kernel.org/ 2>&1| grep "<td><strong>" | tr '<' ' ' | tr '>' ' ' | awk '{ print $$3 }' | head -n 2 | tail -n 1) ; \
+		if [ ! "$$KERNEL_DFT_VERSION" = "$$KERNEL_UPSTREAM_VERSION" ] ; then \
+			echo "$(BOARD_NAME) kernel can be upgraded from $$KERNEL_DFT_VERSION to $$KERNEL_UPSTREAM_VERSION" ; \
+		else \
+		  echo "$(BOARD_NAME) u-boot is up to date" ; \
+		fi ; \
+	else  \
+		if [ "$(board-arch)" = "$(BOARD_ARCH)" ]; then \
+			KERNEL_DFT_VERSION=$(shell find $$PWD/kernel -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1) ; \
+			KERNEL_UPSTREAM_VERSION=$(shell wget -O-  https://www.kernel.org/ 2>&1| grep "<td><strong>" | tr '<' ' ' | tr '>' ' ' | awk '{ print $$3 }' | head -n 2 | tail -n 1) ; \
+			if [ ! "$$KERNEL_DFT_VERSION" = "$$KERNEL_UPSTREAM_VERSION" ] ; then \
+				echo "$(BOARD_NAME) kernel can be upgraded from $$KERNEL_DFT_VERSION to $$KERNEL_UPSTREAM_VERSION" ; \
+			else \
+			  echo "$(BOARD_NAME) u-boot is up to date" ; \
+			fi ; \
+		fi ; \
+	fi ;
