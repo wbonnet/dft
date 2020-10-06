@@ -174,7 +174,11 @@ add-u-boot-version:
 		mkdir -p $(new-version)/patches ; \
 		touch $(new-version)/patches/.gitkeep ; \
 		cp -fr ../$(DFT_BUILDSYSTEM)/templates/debian-u-boot-package $(new-version)/debian ; \
-		mv $(new-version)/debian/u-boot.install $(new-version)/debian/u-boot-$(BOARD_NAME).install ; \
+		for suffix in install postinst postrm preinst prerm ; do \
+			if [ -f $(new-version)/debian/u-boot.$$suffix ] ; then \
+				mv $(new-version)/debian/u-boot.$$suffix $(new-version)/debian/u-boot-$(BOARD_NAME).$$suffix ; \
+			fi ; \
+    		done ; \
 		find $(new-version)/debian -type f | xargs sed -i -e "s/__SW_VERSION__/$(new-version)/g" \
                                            -e "s/__BOARD_NAME__/$(BOARD_NAME)/g" \
                                            -e "s/__DATE__/$(shell LC_ALL=C date +"%a, %d %b %Y %T %z")/g" ; \
