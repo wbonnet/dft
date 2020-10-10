@@ -27,7 +27,7 @@
 BOARD_NAME = orangepi-one-plus
 
 # Board architecture as defined by uname -m (armv7l, mips, aarch64, x86_64, etc.)
-BOARD_ARCH = armv7l
+BOARD_ARCH = aarch64
 
 
 
