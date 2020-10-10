@@ -1,0 +1,12 @@
+Source: u-boot-nanopi-neo3
+Section: misc
+Priority: optional
+Maintainer: William Bonnet <wbonnet@theitmakers.com>
+Standards-Version: 3.9.8
+Build-Depends: debhelper (>= 9)
+
+Package: u-boot-nanopi-neo3
+Architecture: any
+Depends: ${misc:Depends}
+Description: u-boot, version 2020.10 for nanopi-neo3
+ This packages contains u-boot version 2020.10 compiled for nanopi-neo3 board.

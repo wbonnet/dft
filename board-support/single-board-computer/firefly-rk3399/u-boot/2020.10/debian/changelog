@@ -1,0 +1,5 @@
+u-boot-firefly-rk3399 (2020.10-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 10 Oct 2020 23:56:42 +0200
