@@ -1,0 +1,12 @@
+Source: u-boot-cubieboard-5
+Section: misc
+Priority: optional
+Maintainer: William Bonnet <wbonnet@theitmakers.com>
+Standards-Version: 3.9.8
+Build-Depends: debhelper (>= 9)
+
+Package: u-boot-cubieboard-5
+Architecture: any
+Depends: ${misc:Depends}
+Description: u-boot, version 2020.10 for cubieboard-5
+ This packages contains u-boot version 2020.10 compiled for cubieboard-5 board.

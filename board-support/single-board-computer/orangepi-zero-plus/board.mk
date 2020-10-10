@@ -27,7 +27,7 @@
 BOARD_NAME = orangepi-zero-plus
 
 # Board architecture as defined by uname -m (armv7l, mips, aarch64, x86_64, etc.)
-BOARD_ARCH = armv7l
+BOARD_ARCH = aarch64
 
 
 
@@ -44,7 +44,7 @@ UBOOT_DEFCONFIG = orangepi_zero_plus_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
 UBOOT_BINARY_FILE = u-boot-sunxi-with-spl.bin
-DEFAULT_DTB = sun8i-h3-orangepi-plus.dtb
+#DEFAULT_DTB = sun8i-h3-orangepi-plus.dtb
 
 
 #
