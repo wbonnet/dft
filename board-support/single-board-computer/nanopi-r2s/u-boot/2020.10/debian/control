@@ -1,0 +1,12 @@
+Source: u-boot-nanopi-r2s
+Section: misc
+Priority: optional
+Maintainer: William Bonnet <wbonnet@theitmakers.com>
+Standards-Version: 3.9.8
+Build-Depends: debhelper (>= 9)
+
+Package: u-boot-nanopi-r2s
+Architecture: any
+Depends: ${misc:Depends}
+Description: u-boot, version 2020.10 for nanopi-r2s
+ This packages contains u-boot version 2020.10 compiled for nanopi-r2s board.
