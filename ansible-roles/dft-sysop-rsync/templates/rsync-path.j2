@@ -48,5 +48,8 @@ RSYNC_SRC=""
 RSYNC_SRC="${RSYNC_SRC} {{ source.path }}"
 {% endfor %}
 
+# Ensure destination directory exist
+mkdir -p "${RSYNC_DST}"
+
 # Finally run the rsync command
 rsync ${RSYNC_OPTIONS} ${RSYNC_SRC} ${RSYNC_DST}
