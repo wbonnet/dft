@@ -25,3 +25,4 @@
     install_recommends: no
     pkg:
     - lxc
+    - bridge-utils
