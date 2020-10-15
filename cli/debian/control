@@ -37,6 +37,7 @@ Depends: ${misc:Depends},
          hfsprogs,
          ntfs-3g,
          reiser4progs,
+         lsb-release,
          reiserfsprogs,
          squashfs-tools
 Description: Debian Framework Toolkit
