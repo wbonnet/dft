@@ -1,0 +1,17 @@
+linux-kernel-marsboard-imx6 (5.9-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 16 Oct 2020 16:15:05 +0000
+
+linux-kernel-marsboard-imx6 (5.9-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 16 Oct 2020 16:15:05 +0000
+
+linux-headers-marsboard-imx6 (5.9-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 16 Oct 2020 16:15:05 +0000
