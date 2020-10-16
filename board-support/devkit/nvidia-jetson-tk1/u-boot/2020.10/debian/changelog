@@ -1,0 +1,5 @@
+u-boot-jetson-tk1 (2020.10-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 16 Oct 2020 19:33:42 +0000
