@@ -156,7 +156,6 @@ sanity-check:
 
 # Create a new u-boot version entry
 add-u-boot-version:
-	@echo "DEBUG : in u-boot.makefile running add-u-boot-version with argument new-version $(new-version)" ;
 	@if [ "$(new-version)" == "" ] ; then \
 		echo "DEBUG : from u-boot.makefile argument new-version is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2001-0801) ; \
@@ -194,7 +193,6 @@ add-u-boot-version:
 		fi ; \
 		git add $(new-version) ; \
 	fi ;
-	@echo "DEBUG : end of add-u-boot-version in u-boot.makefile" ;
 
 # Override standard targets
 configure build install package:
