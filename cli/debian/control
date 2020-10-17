@@ -57,7 +57,7 @@ Package: dft-examples
 Architecture: all
 Depends: ${misc:Depends},
          dft
-Description: Debian Framework Toolkit continuous examples
+Description: Debian Framework Toolkit examples
 
 Package: dft-test-bsp
 Architecture: all
