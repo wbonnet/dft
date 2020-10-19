@@ -9,44 +9,6 @@
 
 # You can access documentation on the content of this file by running man lxc.conf(5)
 
-
 lxc.net.0.type = empty
 lxc.apparmor.profile = generated
 lxc.apparmor.allow_nesting = 1
-
-
-                                                                                               lxc.conf(5)
-
-NAME
-       lxc.conf - Configuration files for LXC.
-
-DESCRIPTION
-       LXC configuration is split in two parts. Container configuration and system configuration.
-
-   CONTAINER CONFIGURATION
-       The container configuration is held in the config stored in the container's directory.
-
-       A  basic  configuration  is generated at container creation time with the default's recommended for the chosen
-       template as well as extra default keys coming from the default.conf file.
-
-       That default.conf file is either located at /etc/lxc/default.conf or for unprivileged  containers  at  ~/.con‐
-       fig/lxc/default.conf.
-
-       Details about the syntax of this file can be found in: lxc.container.conf(5)
-
-   SYSTEM CONFIGURATION
-       The  system  configuration is located at /etc/lxc/lxc.conf or ~/.config/lxc/lxc.conf for unprivileged contain‐
-       ers.
-
-       This configuration file is used to set values such as default lookup paths and storage  backend  settings  for
-       LXC.
-
-       Details about the syntax of this file can be found in: lxc.system.conf(5)
-
-SEE ALSO
-       lxc(1), lxc.container.conf(5), lxc.system.conf(5), lxc-usernet(5)
-
-AUTHOR
-       Stéphane Graber <stgraber@ubuntu.com>
-
-                                                      2019-04-14                                          lxc.conf(5)
