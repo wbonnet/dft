@@ -18,4 +18,30 @@
 #
 #
 
+
 ---
+
+#
+# Create system config file /etc/default/lxc
+#
+- name: Create /etc/default/lxc
+  template:  src=lxc.conf.j2
+             dest=/etc/default/lxc
+             owner=root
+             group=root
+             mode="0644"
+  with_items: "{{ dft_lxc_hypervisor.config.default }}"
+  when: dft_lxc_hypervisor.config is defined and dft_lxc_hypervisor.config.default is defined
+
+#
+# Create system config file /etc/lxc/lxc.conf
+#
+- name: Create /etc/lxc/lxc.conf
+  template:  src=lxc.conf.j2
+             dest=/etc/lxc/lxc.conf
+             owner=root
+             group=root
+             mode="0644"
+  with_items: "{{ dft_lxc_hypervisor.config.system }}"
+  when: dft_lxc_hypervisor.config is defined and dft_lxc_hypervisor.config.system is defined
+
