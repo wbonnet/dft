@@ -12,6 +12,7 @@
 {% for export in dft_srv_nfs_server.exports %}
 {% if export.active == true %}
 {{ export.path }}	{% for host in export.access_list %} {{ host.hostname }}({{ host.options }}) {% endfor %}
+
 {% else %}
 # {{ export.path }}	{% for host in export.access_list %} {{ host.hostname }}({{ host.options }}) {% endfor %}
 {% endif %}
