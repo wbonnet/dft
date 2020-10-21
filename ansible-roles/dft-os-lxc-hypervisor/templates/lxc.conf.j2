@@ -9,6 +9,6 @@
 
 # You can access documentation on the content of this file by running man lxc.conf(5)
 
-lxc.net.0.type = empty
-lxc.apparmor.profile = generated
-lxc.apparmor.allow_nesting = 1
+{% for item in dft_os_lxc_hypervisor.config.system %}
+ {{ item.name }} {{ item.value }}
+{% endfor %}
