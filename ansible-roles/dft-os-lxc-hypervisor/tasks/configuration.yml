@@ -34,8 +34,7 @@
     owner: root
     group: root
     mode: "0644"
-  when: dft_os_lxc_hypervisor.config is defined and dft_os_lxc_hypervisor.config.system is defined
-#  with_items: "{{ dft_lxc_hypervisor.config.default }}"
+  when: dft_os_lxc_hypervisor.config is defined and dft_os_lxc_hypervisor.config.default is defined
 
 #
 # Create system config file /etc/lxc/lxc.conf
@@ -47,6 +46,5 @@
     owner: root
     group: root
     mode: "0644"
-  when: dft_os_lxc_hypervisor.config is defined and dft_os_lxc_hypervisor.config.system is defined
-# with_items: "{{ dft_lxc_hypervisor.config.system }}"
+  when: dft_os_lxc_hypervisor.config.system is defined
 
