@@ -76,7 +76,7 @@ fetch : setup pre-fetch $(FETCH_TARGETS) post-fetch
 # To keep stuf clean the useless empty folders are removed by command rmdir
 # --ignore-fail-on-non-empty
 fetch-archive-%:
-	@skip_target=0 ; \
+	skip_target=0 ; \
 	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		skip_target=1 ; \
 		true ; \
@@ -88,9 +88,7 @@ fetch-archive-%:
 		if [ -f $(COOKIE_DIR)/$@ ] ; then \
 			true ; \
 		else \
-			mkdir -p $(PARTIAL_DIR) ; \
-			wget $(WGET_OPTS) -T 30 -c -P $(PARTIAL_DIR) $(SRC_DIST_URL)/$* ; \
-			mv $(PARTIAL_DIR)/$* $(DOWNLOAD_DIR) ; \
+			wget --quiet $(WGET_OPTS) --timeout=30 --continue $(SRC_DIST_URL)/$* --directory-prefix=$(DOWNLOAD_DIR) ; \
 			rmdir --ignore-fail-on-non-empty $(PARTIAL_DIR) ; \
 			if [ -f $(DOWNLOAD_DIR)/$* ] ; then \
 				true ; \
