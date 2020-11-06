@@ -76,7 +76,7 @@ fetch : setup pre-fetch $(FETCH_TARGETS) post-fetch
 # To keep stuf clean the useless empty folders are removed by command rmdir
 # --ignore-fail-on-non-empty
 fetch-archive-%:
-	skip_target=0 ; \
+	@skip_target=0 ; \
 	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		skip_target=1 ; \
 		true ; \
