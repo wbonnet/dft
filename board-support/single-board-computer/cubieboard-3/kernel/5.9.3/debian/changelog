@@ -1,0 +1,17 @@
+linux-kernel-cubieboard-3 (5.9.3-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 06 Nov 2020 16:22:53 +0000
+
+linux-kernel-cubieboard-3 (5.9.3-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 06 Nov 2020 16:22:53 +0000
+
+linux-headers-cubieboard-3 (5.9.3-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 06 Nov 2020 16:22:53 +0000
