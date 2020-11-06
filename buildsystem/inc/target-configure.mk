@@ -106,7 +106,9 @@ do-configure:
 						cp "../config/$(BOARD_NAME)-kernel-default.config" "$(BUILD_DIR)/.config" ; \
 						cd "$(BUILD_DIR)" ; \
 						make olddefconfig ; \
+						cd - ; \
 						cp "$(BUILD_DIR)/.config" "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config"  ; \
+						git add "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config"  ; \
 					else \
 						echo "DEBUG : config/$(BOARD_NAME)-kernel-$(SW_VERSION).config exist using it" ; \
 						cp "../config/$(BOARD_NAME)-kernel-$(SW_VERSION).config" "$(BUILD_DIR)/.config" ; \
