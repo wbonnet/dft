@@ -1,0 +1,17 @@
+linux-kernel-pine64-rock64 (5.9.7-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 11 Nov 2020 00:28:47 +0100
+
+linux-kernel-pine64-rock64 (5.9.7-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 11 Nov 2020 00:28:47 +0100
+
+linux-headers-pine64-rock64 (5.9.7-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 11 Nov 2020 00:28:47 +0100
