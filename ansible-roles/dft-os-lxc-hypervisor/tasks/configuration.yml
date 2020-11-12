@@ -34,7 +34,20 @@
     owner: root
     group: root
     mode: "0644"
-  when: dft_os_lxc_hypervisor.config is defined and dft_os_lxc_hypervisor.config.default is defined
+  when: dft_os_lxc_hypervisor.system.default is defined
+
+#
+# Create system config file /etc/default/lxc-net
+#
+- name: Create /etc/default/lxc-net
+  template:
+    src: lxc-net.j2
+    dest: /etc/default/lxc-net
+    owner: root
+    group: root
+    mode: "0644"
+  when: dft_os_lxc_hypervisor.system.default is defined
+
 
 #
 # Create system config file /etc/lxc/lxc.conf
@@ -46,5 +59,5 @@
     owner: root
     group: root
     mode: "0644"
-  when: dft_os_lxc_hypervisor.config.system is defined
+  when: dft_os_lxc_hypervisor.system.config is defined
 
