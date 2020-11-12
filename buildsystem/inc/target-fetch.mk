@@ -67,14 +67,11 @@ show-fetch-targets:
 
 fetch : setup pre-fetch $(FETCH_TARGETS) post-fetch
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
-		echo "$(MAKE) --no-print-directory --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity)" ; \
+		$(MAKE) --no-print-directory --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity)" ; \
 	done ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
-
-# Some directories that will remain empty are created by dependancy mechanism
-# To keep stuf clean the useless empty folders are removed by command rmdir
-# --ignore-fail-on-non-empty
+	
 fetch-archive-%:
 	@skip_target=0 ; \
 	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
