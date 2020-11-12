@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-version=5.8.8
+version=5.9.8
 image_path=/boot/vmlinuz-$version
 
 if [ "$1" = abort-upgrade ]; then

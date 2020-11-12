@@ -11,11 +11,11 @@ Depends: ${misc:Depends},
          kmod, 
          linux-base (>= 4.3~), 
          initramfs-tools (>= 0.120+deb8u2) | linux-initramfs-tool
-Description: Linux kernel, version 5.8.8 for orangepi-4
- This packages contains the Linux kernel version 5.8.8 compiled for orangepi-4 board.
+Description: Linux kernel, version 5.9.8 for orangepi-4
+ This packages contains the Linux kernel version 5.9.8 compiled for orangepi-4 board.
 
-# Package: linux-headers-orangepi-4-5.8.8
+# Package: linux-headers-orangepi-4-5.9.8
 # Architecture: any
 # Depends: ${misc:Depends}
-# Description: Linux kernel headers, version 5.8.8 for orangepi-4
-#  This packages contains the Linux kernel headers version 5.8.8 for orangepi-4 board.
+# Description: Linux kernel headers, version 5.9.8 for orangepi-4
+#  This packages contains the Linux kernel headers version 5.9.8 for orangepi-4 board.
