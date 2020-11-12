@@ -44,27 +44,26 @@ DFT_TARGET_SETUP = 1
 #
 
 setup:
-	@mkdir -p $(DFT_FORGE) ; 
-	@if [ ! "$(SW_VERSION)" = "" ] ; then \
-		mkdir -p $(WORK_DIR) ; \
-		mkdir -p $(COOKIE_DIR) ; \
-		mkdir -p $(INSTALL_DIR) ; \
-		mkdir -p $(PACKAGE_DIR) ; \
-		mkdir -p $(DOWNLOAD_DIR) ; \
-		mkdir -p $(BUILD_DIR) ; \
-		mkdir -p $(LOG_DIR) ; \
-		if [ "$(DOWNLOAD_TOOL)" = "wget" ] ; then \
-			mkdir -p $(PARTIAL_DIR) ; \
+	@mkdir -p "$(DFT_FORGE)" ; \
+	if [ ! "$(SW_VERSION)" = "" ] ; then \
+		if [ ! "$(SW_VERSION)" = "out-of-scope" ] ; then \
+			mkdir -p "$(WORK_DIR)" ; \
+			mkdir -p "$(COOKIE_DIR)" ; \
+			mkdir -p "$(INSTALL_DIR)" ; \
+			mkdir -p "$(PACKAGE_DIR)" ; \
+			mkdir -p "$(DOWNLOAD_DIR)" ; \
+			mkdir -p "$(BUILD_DIR)" ; \
+			mkdir -p "$(LOG_DIR)" ; \
+			mkdir -p "$(FILE_DIR)" ; \
+			mkdir -p "$(PATCH_DIR)" ; \
+			if [ "$(DOWNLOAD_TOOL)" = "git" ] ; then \
+                            mkdir -p "$(GIT_DIR)" ; \
+			fi ; \
 		fi ; \
-		if [ "$(DOWNLOAD_TOOL)" = "wget" ] ; then \
-			mkdir -p $(GIT_DIR) ; \
-		fi ; \
-	fi ; 
-	@mkdir -p $(FILE_DIR) ;
-	@mkdir -p $(PATCH_DIR) ;
-	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
-		$(MAKE) --no-print-directory -C --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
-	done ;
+	fi ; \
+	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+		echo "$(MAKE) --no-print-directory --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity)"; \
+	done ; 
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 

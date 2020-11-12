@@ -67,7 +67,7 @@ show-fetch-targets:
 
 fetch : setup pre-fetch $(FETCH_TARGETS) post-fetch
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
-		$(MAKE) --no-print-directory -C --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
+		echo "$(MAKE) --no-print-directory --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity)" ; \
 	done ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
@@ -89,7 +89,6 @@ fetch-archive-%:
 			true ; \
 		else \
 			wget --quiet $(WGET_OPTS) --timeout=30 --continue $(SRC_DIST_URL)/$* --directory-prefix=$(DOWNLOAD_DIR) ; \
-			rmdir --ignore-fail-on-non-empty $(PARTIAL_DIR) ; \
 			if [ -f $(DOWNLOAD_DIR)/$* ] ; then \
 				true ; \
 			else \

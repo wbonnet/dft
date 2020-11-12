@@ -167,7 +167,6 @@ PACKAGE_DIR         ?= $(WORK_DIR)/package
 CHECKSUM_FILE       ?= $(WORK_DIR)/checksums
 LOG_DIR             ?= $(WORK_DIR)/logs
 DOWNLOAD_DIR        ?= $(WORK_DIR)/download
-PARTIAL_DIR         ?= $(DOWNLOAD_DIR)/partial
 # if not overriden the temporary files will go to /tmp please check your env
 # in case you store /tmp into ramdisk it can use a lot a RAM...
 TEMP_DIR            ?= /tmp
