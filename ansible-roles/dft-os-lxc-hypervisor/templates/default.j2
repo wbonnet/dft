@@ -8,8 +8,8 @@
 # New variables declared in inventory will be added, undeclared ones (or no longer declared) removed.
 
 # LXC_AUTO - whether or not to start containers at boot
-{% if dft_os_lxc_hypervisor.config.default.lxc_auto is defined %}
-LXC_AUTO={{ dft_os_lxc_hypervisor.config.default.lxc_auto }}
+{% if dft_os_lxc_hypervisor.system.default.lxc_auto is defined %}
+LXC_AUTO={{ dft_os_lxc_hypervisor.system.default.lxc_auto }}
 {% else %}
 LXC_AUTO="true"
 {% endif %}
@@ -19,8 +19,8 @@ LXC_AUTO="true"
 #	Leading comma, trailing comma or embedded double
 #	comma indicates when the NULL group should be run.
 # Example (default): boot the onboot group first then the NULL group
-{% if dft_os_lxc_hypervisor.config.default.bootgroups is defined %}
-BOOTGROUPS={{ dft_os_lxc_hypervisor.config.default.bootgroups }}
+{% if dft_os_lxc_hypervisor.system.default.bootgroups is defined %}
+BOOTGROUPS={{ dft_os_lxc_hypervisor.system.default.bootgroups }}
 {% else %}
 BOOTGROUPS="onboot,"
 {% endif %}
@@ -29,8 +29,8 @@ BOOTGROUPS="onboot,"
 #	Container shutdown can result in lengthy system
 #	shutdown times.  Even 5 seconds per container can be
 #	too long.
-{% if dft_os_lxc_hypervisor.config.default.shutdown_delay is defined %}
-SHUTDOWNDELAY={{ dft_os_lxc_hypervisor.config.default.shutdown_delay }}
+{% if dft_os_lxc_hypervisor.system.default.shutdown_delay is defined %}
+SHUTDOWNDELAY={{ dft_os_lxc_hypervisor.system.default.shutdown_delay }}
 {% else %}
 SHUTDOWNDELAY=5
 {% endif %}
@@ -38,22 +38,22 @@ SHUTDOWNDELAY=5
 # OPTIONS can be used for anything else.
 #	If you want to boot everything then
 #	options can be "-a" or "-a -A".
-{% if dft_os_lxc_hypervisor.config.default.options is defined %}
-OPTIONS={{ dft_os_lxc_hypervisor.config.default.options }}
+{% if dft_os_lxc_hypervisor.system.default.options is defined %}
+OPTIONS={{ dft_os_lxc_hypervisor.system.default.options }}
 {% else %}
 OPTIONS=
 {% endif %}
 
 # STOPOPTS are stop options.  The can be used for anything else to stop.
 #	If you want to kill containers fast, use -k
-{% if dft_os_lxc_hypervisor.config.default.stop_options is defined %}
-STOPOPTS={{ dft_os_lxc_hypervisor.config.default.stop_options }}
+{% if dft_os_lxc_hypervisor.system.default.stop_options is defined %}
+STOPOPTS={{ dft_os_lxc_hypervisor.system.default.stop_options }}
 {% else %}
 STOPOPTS="-a -A -s"
 {% endif %}
 
-{% if dft_os_lxc_hypervisor.config.default.use_lxc_bridge is defined %}
-USE_LXC_BRIDGE={{ dft_os_lxc_hypervisor.config.default.use_lxc_bridge }}
+{% if dft_os_lxc_hypervisor.system.default.use_lxc_bridge is defined %}
+USE_LXC_BRIDGE={{ dft_os_lxc_hypervisor.system.default.use_lxc_bridge }}
 {% else %}
 USE_LXC_BRIDGE="false"  # overridden in lxc-net
 {% endif %}
