@@ -44,26 +44,40 @@ DFT_TARGET_SETUP = 1
 #
 
 setup:
-	@mkdir -p $(DFT_FORGE) ; 
-	@if [ ! "$(SW_VERSION)" = "" ] ; then \
-		mkdir -p $(WORK_DIR) ; \
-		mkdir -p $(COOKIE_DIR) ; \
-		mkdir -p $(INSTALL_DIR) ; \
-		mkdir -p $(PACKAGE_DIR) ; \
-		mkdir -p $(DOWNLOAD_DIR) ; \
-		mkdir -p $(BUILD_DIR) ; \
-		mkdir -p $(LOG_DIR) ; \
-		if [ "$(DOWNLOAD_TOOL)" = "wget" ] ; then \
-			mkdir -p $(GIT_DIR) ; \
-		fi ; \
+	@mkdir -p "$(DFT_FORGE)" ; 
+	@if [ "$(SW_VERSION)" = "" ] ; then \
+		exit ; \
+	fi ;
+	@mkdir -p "$(WORK_DIR)" ; 
+	@mkdir -p "$(COOKIE_DIR)" ; 
+	@mkdir -p "$(INSTALL_DIR)" ; 
+	@mkdir -p "$(PACKAGE_DIR)" ;
+	@mkdir -p "$(DOWNLOAD_DIR)" ;
+	@mkdir -p "$(BUILD_DIR)" ;
+	@mkdir -p "$(LOG_DIR)" ;
+	@if [ "$(DOWNLOAD_TOOL)" = "git" ] ; then \
+		mkdir -p "$(GIT_DIR)" ; \
 	fi ; 
-	@mkdir -p $(FILE_DIR) ;
-	@mkdir -p $(PATCH_DIR) ;
-	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
-		$(MAKE) --no-print-directory --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity); \
-	done ;
+	@mkdir -p "$(FILE_DIR)" ;
+	@mkdir -p "$(PATCH_DIR)" ;
+	@if [ "$(only-latest)" = "1" ] ; then \
+		echo "target-setup debut du if only-latest _$(SW_LATEST)_" ; \
+		if [ ! "$(SW_LATEST)" = "" ] ; then \
+			cd "$(SW_LATEST)" ; \
+			pwd ; \
+			$(MAKE) --no-print-directory $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity) \
+			cd .. ; \
+			pwd ; \
+		fi ; \
+	else \
+		pwd ; \
+		for v in target-setup muf_debug $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; \
+			do echo "target-setup : in for loop with $$v" ; \
+		done ; \
+	fi ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
 # Match initial ifdef DFT_TARGET_SETUP
+# $(MAKE) --no-print-directory --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity) 
 endif
