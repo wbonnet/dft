@@ -42,6 +42,12 @@ UBOOT_SUPPORT   := $(subst ,,$(UBOOT_SUPPORT))
 UBOOT_DEFCONFIG := $(subst ,,$(UBOOT_DEFCONFIG))
 USE_CONFIG_FILE := $(subst ,,$(USE_CONFIG_FILE))
 
+# default behavior is to process only th latest version
+only-latest      ?= 1
+only-native-arch ?= 0
+arch-warning     ?= 0
+verbosity        ?= "normal"
+
 # Do not recurse the following subdirs
 MAKE_FILTERS  := files config Makefile README.md .
 
@@ -204,10 +210,11 @@ build:
 		echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
 	else \
 		if [ "$(only-latest)" = "1" ] ; then \
-			$(MAKE) --no-print-directory -directory=$(SW_LATEST) $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) verbosity=$(verbosity) only-latest=$(only-latest); \
+			$(MAKE) --no-print-directory --directory=$(SW_LATEST) $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) verbosity=$(verbosity) only-latest=$(only-latest) \
 		else \
+			echo "latest version" ; \
 			for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" -printf '%P\n')) ; do \
-				$(MAKE) --no-print-directory --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) verbosity=$(verbosity) only-latest=$(only-latest) ; \
+				$(MAKE) --no-print-directory --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) verbosity=$(verbosity) only-latest=$(only-latest) \
 			done ; \
 		fi ; \
 	fi ; \
