@@ -34,7 +34,7 @@
 
 - name: Install apache2 HTTPS virtual hosts
   template:  src=ssl-virtual-host.j2
-             dest=/etc/apache2/sites-available/{{ item.name }}.conf
+             dest="/etc/apache2/sites-available/{{ item.name }}.conf"
              owner=root
              group=root
              mode="0644"
@@ -45,8 +45,8 @@
 # Register virtual host enable status
 #
 - name: Check if apache2 virtual hosts are activated
-  stat:
-    path: /etc/apache2/sites-enabled/{{ item.name }}
+  stat: path="/etc/apache2/sites-enabled/{{ item.name }}"
+  register: "{{ item.name }}_is_conf_enabled"
   with_items: "{{ dft_apache2.sites_enabled}}"
   when: dft_apache2.sites_enabled is defined
 
@@ -59,7 +59,7 @@
 - name: Activate apache2 enabled virtual hosts
   command: a2ensite {{ item.name }}
   with_items: "{{ dft_apache2.sites_enabled }}"
-  when: dft_apache2.sites_enabled is defined
+#  when: {{ item.name }}_is_conf_enabled.stat.exists
 
 #-  notify:
 #    - reload apache

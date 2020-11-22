@@ -76,7 +76,7 @@ do-configure:
 	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		skip_target=1 ; \
 		true ; \
-	fi; \
+	fi ; \
 	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
 		skip_target=1 ; \
 		if [ "x$(arch-warning)" = "x1" ] ; then \

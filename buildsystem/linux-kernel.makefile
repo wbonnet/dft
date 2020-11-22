@@ -42,6 +42,12 @@ UBOOT_SUPPORT   := $(subst ,,$(UBOOT_SUPPORT))
 UBOOT_DEFCONFIG := $(subst ,,$(UBOOT_DEFCONFIG))
 USE_CONFIG_FILE := $(subst ,,$(USE_CONFIG_FILE))
 
+# default behavior is to process only th latest version
+only-latest      ?= 1
+only-native-arch ?= 0
+arch-warning     ?= 0
+verbosity        ?= "normal"
+
 # Do not recurse the following subdirs
 MAKE_FILTERS  := files config Makefile README.md .
 
@@ -194,19 +200,21 @@ add-linux-kernel-version:
 	fi ;
 
 # Override standard targets
-# upaload is overriden too otherwise make would walk through arch and latest tests and build because of dependancies
-build configure package install upload :
-	@if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
+# upload is overriden too otherwise make would walk through arch and latest tests and build because of dependancies
+# build configure package install upload :
+build:
+	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
 		echo "Makefile processing had to be stopped during target $@ execution. The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
 	 	echo "Cross compilation is not supported. The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
 		echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
 		echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
 	else \
 		if [ "$(only-latest)" = "1" ] ; then \
-			$(MAKE) --no-print-directory -C $(SW_LATEST) $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
+			$(MAKE) --no-print-directory --directory=$(SW_LATEST) $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) verbosity=$(verbosity) only-latest=$(only-latest) \
 		else \
+			echo "latest version" ; \
 			for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" -printf '%P\n')) ; do \
-				$(MAKE) --no-print-directory -C $$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
+				$(MAKE) --no-print-directory --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) verbosity=$(verbosity) only-latest=$(only-latest) \
 			done ; \
 		fi ; \
 	fi ; \

@@ -37,7 +37,7 @@
 #
 # Directory maker used by the base rules
 #
-#$(sort $(FILE_DIR) $(GIT_DIR) $(WORK_DIR) $(PARTIAL_DIR) $(COOKIE_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR) $(BUILD_DIR)):
+#$(sort $(FILE_DIR) $(GIT_DIR) $(WORK_DIR) $(COOKIE_DIR) $(INSTALL_DIR) $(PACKAGE_DIR) $(LOG_DIR) $(DOWNLOAD_DIR) $(PATCH_DIR) $(BUILD_DIR)):
 #	@if [ ! -d $@ ] ; then \
 #		mkdir -p $@; \
 #	else \

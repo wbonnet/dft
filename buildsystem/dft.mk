@@ -204,7 +204,6 @@ show-config:
 	@echo "  FILE_DIR                          $(FILE_DIR)"
 	@echo "  PATCH_DIR                         $(PATCH_DIR)"
 	@echo "  DOWNLOAD_DIR                      $(DOWNLOAD_DIR)"
-	@echo "  PARTIAL_DIR                       $(PARTIAL_DIR)"
 	@echo "  COOKIE_DIR                        $(COOKIE_DIR)"
 	@echo "  BUILD_DIR                         $(BUILD_DIR)"
 	@echo "  INSTALL_DIR                       $(INSTALL_DIR)"

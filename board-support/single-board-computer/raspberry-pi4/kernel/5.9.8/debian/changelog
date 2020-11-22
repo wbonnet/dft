@@ -1,0 +1,17 @@
+linux-kernel-raspberry-pi4 (5.9.8-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 14 Nov 2020 15:20:32 +0100
+
+linux-kernel-raspberry-pi4 (5.9.8-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 14 Nov 2020 15:20:32 +0100
+
+linux-headers-raspberry-pi4 (5.9.8-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 14 Nov 2020 15:20:32 +0100
