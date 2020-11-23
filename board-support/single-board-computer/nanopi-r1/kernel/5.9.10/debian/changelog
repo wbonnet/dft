@@ -1,0 +1,17 @@
+linux-kernel-nanopi-r1 (5.9.10-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 23 Nov 2020 22:59:56 +0000
+
+linux-kernel-nanopi-r1 (5.9.10-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 23 Nov 2020 22:59:56 +0000
+
+linux-headers-nanopi-r1 (5.9.10-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 23 Nov 2020 22:59:56 +0000
