@@ -21,7 +21,6 @@
 
 # Defines variables specific to u-boot
 SW_NAME    := u-boot
-#SW_VERSION ?= u-boot-undef-version
 
 # Build system sould be available under board folder as a symlink. Keep it
 # locally available under board folder computing a relative path is a nightmare
@@ -31,8 +30,8 @@ SW_NAME    := u-boot
 # better solutions wille be really welcomeds contributions.
 
 DFT_BUILDSYSTEM := buildsystem
-include ../board.mk
 include $(DFT_BUILDSYSTEM)/inc/u-boot.mk
+include ../board.mk
 include $(DFT_BUILDSYSTEM)/dft.mk
 
 # Strip the variables defined in board.mk to remove trailing whitespaces or
