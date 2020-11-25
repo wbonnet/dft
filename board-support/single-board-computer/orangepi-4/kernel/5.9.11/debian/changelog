@@ -1,0 +1,17 @@
+linux-kernel-orangepi-4 (5.9.11-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 25 Nov 2020 20:03:47 +0100
+
+linux-kernel-orangepi-4 (5.9.11-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 25 Nov 2020 20:03:47 +0100
+
+linux-headers-orangepi-4 (5.9.11-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 25 Nov 2020 20:03:47 +0100
