@@ -1,0 +1,17 @@
+linux-kernel-odroid-c2 (5.9.11-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 25 Nov 2020 23:24:58 +0100
+
+linux-kernel-odroid-c2 (5.9.11-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 25 Nov 2020 23:24:58 +0100
+
+linux-headers-odroid-c2 (5.9.11-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 25 Nov 2020 23:24:58 +0100
