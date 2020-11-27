@@ -52,26 +52,30 @@ show-build-targets:
 	@echo $(BUILD_TARGETS) ;
 
 build: configure pre-build $(BUILD_TARGETS) post-build
-	@skip_target=0 ; \
+	skip_target=0 ;
+	echo "verbosity : $(verbosity)" ; 	
+	if [ "$(verbosity)" = "" ]  ; then \
+		verbosity=1 ; \
+	fi ;
 	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
 		skip_target=1 ; \
 		true ; \
-	fi ; \
+	fi ; 
 	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
 		skip_target=1 ; \
 		if [ "x$(arch-warning)" = "x1" ] ; then \
 			echo "Makefile processing had to be stopped during target $@ execution. Cross compilation is not supported. " ; \
 			echo "The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
-		  echo "The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
+			echo "The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
 			echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running" ; \
 			echo "this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
 			echo "In order to generate binaries for existing architectures, you need several builders, one for each target arch." ; \
 		fi ; \
-	fi ; \
+	fi ; 
 	if [ ! "x$$skip_target" = "x1" ] ; then \
 		cd $(BUILD_DIR) ; \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
-			$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity); \
+			$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity) ; \
 		fi ; \
 	fi ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
@@ -95,26 +99,26 @@ rebuild: configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 #
 
 build-%:
-	@skip_target=0 ; \
-	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
-		skip_target=1 ; \
-		true ; \
-	fi ; \
-	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
-		skip_target=1 ; \
-		if [ "x$(arch-warning)" = "x1" ] ; then \
-			echo "Makefile processing had to be stopped during target $@ execution. Cross compilation is not supported. " ; \
-			echo "The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
-		  echo "The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
-			echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running" ; \
-			echo "this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
-			echo "In order to generate binaries for existing architectures, you need several builders, one for each target arch." ; \
-		fi ; \
-	fi ; \
-	if [ ! "x$$skip_target" = "x1" ] ; then \
-		cd $(BUILD_DIR) ; \
-		if [ ! -f $(COOKIE_DIR)/build-$* ] ; then \
-			$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) ; \
+	@if [ !"$(SW_VERSION)" = "" ] ; then \
+		if [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
+			if [ "$(verbosity)" == "1" ] ; then \
+				echo " ==> Applying $(PATCH_DIR)/$*"
+			fi ; \
+			if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
+				if [ "x$(arch-warning)" = "x1" ] ; then \
+					echo "Makefile processing had to be stopped during target $@ execution. Cross compilation is not supported. " ; \
+					echo "The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
+					echo "The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
+					echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running" ; \
+					echo "this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
+					echo "In order to generate binaries for existing architectures, you need several builders, one for each target arch." ; \
+				fi ; \
+			else ; \
+				cd $(BUILD_DIR) ; \
+				if [ ! -f $(COOKIE_DIR)/build-$* ] ; then \
+					$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) ; \
+				fi ; \
+			fi ; \
 		fi ; \
 	fi ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
