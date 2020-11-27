@@ -62,6 +62,7 @@ endif
 endif
 
 extract: fetch pre-extract $(EXTRACT_TARGETS) post-extract
+	echo "EXTRACT_TARGETS : $(EXTRACT_TARGETS)" ; 
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -72,118 +73,119 @@ extract: fetch pre-extract $(EXTRACT_TARGETS) post-extract
 TAR_ARGS = --no-same-owner
 
 show-extract-targets:
+	@pwd ; 
 	@echo $(EXTRACT_TARGETS)
 
 extract-archive-v.tar:
 extract-archive-%.tar:
-	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
-		true ; \
-	else \
-		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
-			if [ "$(verbosity)" == "1" ] ; then \
-				echo "        extracting $(DOWNLOAD_DIR)/$*.tar" ; \
+	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+		if [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
+			if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
+				if [ "$(verbosity)" == "1" ] ; then \
+					echo "        extracting $(DOWNLOAD_DIR)/$*.tar" ; \
+				fi ; \
+				tar $(TAR_ARGS) -xf $(DOWNLOAD_DIR)/$*.tar -C $(BUILD_DIR) ; \
 			fi ; \
-			tar $(TAR_ARGS) -xf $(DOWNLOAD_DIR)/$*.tar -C $(BUILD_DIR) ; \
-		fi ; \
+		fi ;
 	fi ;
 	$(TARGET_DONE)
 
 extract-archive-v.tar.gz:
 extract-archive-%.tar.gz:
-	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
-		true ; \
-	else \
-		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
-			if [ ! -f $(DOWNLOAD_DIR)/$*.tar.gz ] ; then \
-					echo "        archive $(DOWNLOAD_DIR)/$*.tar.gz is missing please check the files retrieved by the fetch target" ; \
+	@if [ !  "$(SW_VERSION)" = "" ] ; then \
+		if [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
+			if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
+				if [ ! -f $(DOWNLOAD_DIR)/$*.tar.gz ] ; then \
+						echo "        archive $(DOWNLOAD_DIR)/$*.tar.gz is missing please check the files retrieved by the fetch target" ; \
+				fi ; \
+				if [ "$(verbosity)" == "1" ] ; then \
+					echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz" ; \
+				fi ; \
+				tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tar.gz -C $(BUILD_DIR) ; \
+				mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
+				rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 			fi ; \
-			if [ "$(verbosity)" == "1" ] ; then \
-				echo "        extracting $(DOWNLOAD_DIR)/$*.tar.gz" ; \
-			fi ; \
-			tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tar.gz -C $(BUILD_DIR) ; \
-			mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
-			rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 		fi ; \
 	fi ;
 	$(TARGET_DONE)
 
 extract-archive-v.tgz:
 extract-archive-%.tgz:
-	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
-		true ; \
-	else \
-		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
-			if [ ! -f $(DOWNLOAD_DIR)/$*.tgz ] ; then \
-					echo "        archive $(DOWNLOAD_DIR)/$*.tgz is missing please check the files retrieved by the fetch target" ; \
+	@if [ !"$(SW_VERSION)" = "" ] ; then \
+		if [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
+			if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
+				if [ ! -f $(DOWNLOAD_DIR)/$*.tgz ] ; then \
+						echo "        archive $(DOWNLOAD_DIR)/$*.tgz is missing please check the files retrieved by the fetch target" ; \
+				fi ; \
+				if [ "$(verbosity)" == "1" ] ; then \
+					echo "        extracting $(DOWNLOAD_DIR)/$*.tgz" ; \
+				fi ; \
+				tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tgz -C $(BUILD_DIR) ; \
+				mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
+				rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 			fi ; \
-			if [ "$(verbosity)" == "1" ] ; then \
-				echo "        extracting $(DOWNLOAD_DIR)/$*.tgz" ; \
-			fi ; \
-			tar $(TAR_ARGS) -xzf $(DOWNLOAD_DIR)/$*.tgz -C $(BUILD_DIR) ; \
-			mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
-			rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 		fi ; \
 	fi ;
 	$(TARGET_DONE)
 
 extract-archive-v.tar.bz2:
 extract-archive-%.tar.bz2:
-	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
-		true ; \
-	else \
-		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
-			if [ "$(verbosity)" == "1" ] ; then \
-				echo "        extracting $(DOWNLOAD_DIR)/$*.tar.bz2" ; \
+	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+		if [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
+			if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
+				if [ "$(verbosity)" == "1" ] ; then \
+					echo "        extracting $(DOWNLOAD_DIR)/$*.tar.bz2" ; \
+				fi ; \
+				tar $(TAR_ARGS) -xjf $(DOWNLOAD_DIR)/$*.tar.bz2 -C $(BUILD_DIR) ; \
+				mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
+				rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 			fi ; \
-			tar $(TAR_ARGS) -xjf $(DOWNLOAD_DIR)/$*.tar.bz2 -C $(BUILD_DIR) ; \
-			mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
-			rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 		fi ; \
 	fi ;
 	$(TARGET_DONE)
 
 extract-archive-v.tar.xz:
 extract-archive-%.tar.xz:
-	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
-		true ; \
-	else \
-		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
-			if [ "$(verbosity)" == "1" ] ; then \
-				echo "        extracting $(DOWNLOAD_DIR)/$*.tar.xz" ; \
+	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+		if [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
+			if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
+				if [ "$(verbosity)" == "1" ] ; then \
+					echo "        extracting $(DOWNLOAD_DIR)/$*.tar.xz" ; \
+				fi ; \
+				tar $(TAR_ARGS) -xJf $(DOWNLOAD_DIR)/$*.tar.xz -C $(BUILD_DIR) ; \
+				mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
+				rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 			fi ; \
-			tar $(TAR_ARGS) -xJf $(DOWNLOAD_DIR)/$*.tar.xz -C $(BUILD_DIR) ; \
-			mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
-			rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
-			fi ; \
+		fi ; \
 	fi ;
 	$(TARGET_DONE)
 
 extract-archive-v.zip:
 extract-archive-%.zip:
-	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
-		true ; \
-	else \
-		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
-			if [ "$(verbosity)" == "1" ] ; then \
-				echo "        extracting $(DOWNLOAD_DIR)/$*.zip" ; \
+	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+		if [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
+			if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
+				if [ "$(verbosity)" == "1" ] ; then \
+					echo "        extracting $(DOWNLOAD_DIR)/$*.zip" ; \
+				fi ; \
+				unzip $(DOWNLOAD_DIR)/$*.zip -d $(BUILD_DIR) ; \
+				mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
+				rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 			fi ; \
-			unzip $(DOWNLOAD_DIR)/$*.zip -d $(BUILD_DIR) ; \
-			mv $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION)/* $(BUILD_DIR) ; \
-			rm -fr $(BUILD_DIR)/$(SW_NAME)-$(SW_VERSION) ; \
 		fi ; \
 	fi ;
 	$(TARGET_DONE)
 
 extract-git-v:
 extract-git-%:
-	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
-		true ; \
-	else \
-		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
-			if [ "$(verbosity)" == "1" ] ; then \
-		  		echo "        moving git data to $(EXTRACT)/$*" ; \
-			fi ; \
+	@if [ ! "$(SW_VERSION)" = "" ] ; then \
+		if [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
+			if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
+				if [ "$(verbosity)" == "1" ] ; then \
+		  			echo "        moving git data to $(EXTRACT)/$*" ; \
+				fi ; \
 			mv $(GIT_BUILD_DIR)/$(SRC_GIT_REPO)/* $(BUILD_DIR)/ ; \
+			fi ; \
 		fi ; \
 	fi ;
 	$(TARGET_DONE)
@@ -197,13 +199,13 @@ PATCH_DIR_FUZZ  ?= 2
 PATCH_ARGS       = --directory=$(WORK_DIR) --strip=$(PATCH_DIR_LEVEL) --fuzz=$(PATCH_DIR_FUZZ)
 
 apply-patch-%:
-	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
-		true ; \
-	else \
-		if [ "$(verbosity)" == "1" ] ; then \
-			echo " ==> Applying $(PATCH_DIR)/$*"
+	@if [ !"$(SW_VERSION)" = "" ] ; then \
+		if [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
+			if [ "$(verbosity)" == "1" ] ; then \
+				echo " ==> Applying $(PATCH_DIR)/$*"
+			fi ; \
+			patch $(PATCH_ARGS) < $(PATCH_DIR)/$*
 		fi ; \
-		patch $(PATCH_ARGS) < $(PATCH_DIR)/$*
 	fi ;
 	$(TARGET_DONE)
 
