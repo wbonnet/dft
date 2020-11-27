@@ -35,7 +35,7 @@
 ifdef DFT_LINUX_KERNEL
 $(info linux-kernel.mk has already been included)
 else
-#$(info now including linux-kernel.mk)
+$(info now including linux-kernel.mk)
 DFT_LINUX_KERNEL = 1
 
 # Some temporary default values used to debug where where variables are initialized
@@ -57,10 +57,12 @@ DFT_SRC_SITE        ?= https://cdn.kernel.org
 SRC_FILE_VERSION    ?= $(SW_VERSION)
 SRC_DIST_URL        ?= $(DFT_SRC_SITE)/pub/linux/kernel/$(SRC_BRANCH)
 SRC_BRANCH          ?= v$(shell echo $(SRC_FILE_VERSION) | head -c 1).x
-SW_LATEST           ?= $(shell find .  -mindepth 1 -maxdepth 1 -type d -name "*\.*" | sort -r |  head -n 1 | cut -d \/ -f 2)
+SW_LATEST           := $(shell find .  -mindepth 1 -maxdepth 1 -type d -name "*\.*" | sort -r |  head -n 1 | cut -d \/ -f 2)
 # Defines the files to retrieve
 SRC_DIST_FILES      ?= $(SW_NAME)-$(SW_VERSION).tar.xz
 SRC_SIGN_FILES      ?= $(SW_NAME)-$(SW_VERSION).tar.xz.sign
+
+$(info SW_VERSION $(SW_VERSION))
 
 # ------------------------------------------------------------------------------
 #
