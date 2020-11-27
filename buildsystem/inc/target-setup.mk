@@ -60,19 +60,15 @@ setup:
 	fi ; 
 	@mkdir -p "$(FILE_DIR)" ;
 	@mkdir -p "$(PATCH_DIR)" ;
-	@if [ "$(only-latest)" = "1" ] ; then \
-		echo "target-setup debut du if only-latest _$(SW_LATEST)_" ; \
+	if [ "$(only-latest)" = "1" ] ; then \
 		if [ ! "$(SW_LATEST)" = "" ] ; then \
 			cd "$(SW_LATEST)" ; \
-			pwd ; \
-			$(MAKE) --no-print-directory $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity) \
+			$(MAKE) --no-print-directory $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity) ; \
 			cd .. ; \
-			pwd ; \
 		fi ; \
 	else \
-		pwd ; \
 		for v in target-setup muf_debug $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; \
-			do echo "target-setup : in for loop with $$v" ; \
+			do echo "target-setup : FIXME in for loop with $$v" ; \
 		done ; \
 	fi ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
