@@ -1,0 +1,21 @@
+Source: linux-kernel-pine64-pinebookpro
+Section: kernel
+Priority: optional
+Maintainer: William Bonnet <wbonnet@theitmakers.com>
+Standards-Version: 3.9.8
+Build-Depends: debhelper (>= 9)
+
+Package: linux-kernel-pine64-pinebookpro
+Architecture: any
+Depends: ${misc:Depends},
+         kmod, 
+         linux-base (>= 4.3~), 
+         initramfs-tools (>= 0.120+deb8u2) | linux-initramfs-tool
+Description: Linux kernel, version 5.9.11 for pine64-pinebookpro
+ This packages contains the Linux kernel version 5.9.11 compiled for pine64-pinebookpro board.
+
+# Package: linux-headers-pine64-pinebookpro-5.9.11
+# Architecture: any
+# Depends: ${misc:Depends}
+# Description: Linux kernel headers, version 5.9.11 for pine64-pinebookpro
+#  This packages contains the Linux kernel headers version 5.9.11 for pine64-pinebookpro board.
