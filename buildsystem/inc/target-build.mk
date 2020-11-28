@@ -99,11 +99,8 @@ rebuild: configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 #
 
 build-%:
-	@if [ !"$(SW_VERSION)" = "" ] ; then \
+	if [ ! "$(SW_VERSION)" = "" ] ; then \
 		if [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
-			if [ "$(verbosity)" == "1" ] ; then \
-				echo " ==> Applying $(PATCH_DIR)/$*"
-			fi ; \
 			if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
 				if [ "x$(arch-warning)" = "x1" ] ; then \
 					echo "Makefile processing had to be stopped during target $@ execution. Cross compilation is not supported. " ; \
@@ -113,7 +110,7 @@ build-%:
 					echo "this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
 					echo "In order to generate binaries for existing architectures, you need several builders, one for each target arch." ; \
 				fi ; \
-			else ; \
+			else \
 				cd $(BUILD_DIR) ; \
 				if [ ! -f $(COOKIE_DIR)/build-$* ] ; then \
 					$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) ; \
