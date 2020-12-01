@@ -30,8 +30,8 @@ SW_NAME    := u-boot
 # better solutions wille be really welcomeds contributions.
 
 DFT_BUILDSYSTEM := buildsystem
-include $(DFT_BUILDSYSTEM)/inc/u-boot.mk
 include ../board.mk
+include $(DFT_BUILDSYSTEM)/inc/u-boot.mk
 include $(DFT_BUILDSYSTEM)/dft.mk
 
 # Strip the variables defined in board.mk to remove trailing whitespaces or
@@ -41,6 +41,12 @@ BOARD_ARCH      := $(subst ,,$(BOARD_ARCH))
 UBOOT_SUPPORT   := $(subst ,,$(UBOOT_SUPPORT))
 UBOOT_DEFCONFIG := $(subst ,,$(UBOOT_DEFCONFIG))
 USE_CONFIG_FILE := $(subst ,,$(USE_CONFIG_FILE))
+
+# default behavior is to process only th latest version
+only-latest      ?= 1
+only-native-arch ?= 0
+arch-warning     ?= 0
+verbosity        ?= "normal"
 
 # Do not recurse the following subdirs
 MAKE_FILTERS  := files defconfig Makefile README.md patches .
