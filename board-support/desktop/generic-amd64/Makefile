@@ -1,1 +1,1 @@
-../../buildsystem/board-support-support.makefile
+buildsystem/board-support-board.makefile
