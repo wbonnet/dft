@@ -37,10 +37,6 @@ $(info target-checksum.mk has already been included)
 else
 DFT_TARGET_CHECKSUM = 1
 
-# Some temporary default values used to debug where where variables are initialized
-SW_NAME     ?= out-of-scope
-SW_VERSION  ?= out-of-scope
-
 # ------------------------------------------------------------------------------
 #
 # Compare checksum file contents and current md5
@@ -64,7 +60,7 @@ checksum_banner:
 # Check a given file's checksum against $(CHECKSUM_FILE) and error out if it
 # mentions the file without an "OK".
 checksum-%: $(CHECKSUM_FILE)
-	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+	@if [ "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
 		true ; \
 	else \
 		if grep -- '$*' $(CHECKSUM_FILE) > /dev/null; then \
