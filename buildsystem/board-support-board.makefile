@@ -238,7 +238,7 @@ show-u-boot-available-upgrade:
 	if [ "$(board-arch)" = "amd64" ] ; then \
 		MY_ARCH="x86_64"; \
 	fi ; \
-	@if [ "$(board-arch)" = "" ] || [ "$(BOARD_ARCH)" = "$$MY_ARCH" ] ; then \
+	if [ "$(board-arch)" = "" ] || [ "$(BOARD_ARCH)" = "$$MY_ARCH" ] ; then \
 		UBOOT_DFT_VERSION=$(shell find $$PWD/u-boot -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1) ; \
 		UBOOT_UPSTREAM_VERSION=$(shell wget -O- https://github.com/u-boot/u-boot/releases 2>&1 | grep -v "rc" | grep "v20" | tr '<' ' ' | tr '>' ' ' | tr 'v' ' ' | head -n 2 | tail -n 1 | awk '{ print $$1 }') ; \
 		if [ "$$UBOOT_DFT_VERSION" = "" ] ; then \
