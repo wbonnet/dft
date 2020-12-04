@@ -162,7 +162,7 @@ mrproper:
 	@echo "WORK_DIR : $(WORK_DIR)"
 	@echo "SW_NAME : $(SW_NAME)"
 	@echo "SW_VERSION : $(SW_VERSION)"
-	@echo "rm -rf $(WORK_DIR) --one-file-system --preserve-root"
+	@echo "would have executed : rm -rf $(WORK_DIR) --one-file-system --preserve-root"
 #	@rm -rf "$(WORK_DIR)" --one-file-system --preserve-root
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 
