@@ -42,8 +42,8 @@ sanity-check:
 	done
 
 # Forward list-boards to bsp-packages folder
-list-boards list-architectures :
-	$(MAKE) --no-print-directory --directory=board-support $@ arch=$(arch) category=$(category);
+#list-boards list-architectures:
+#	$(MAKE) --no-print-directory --directory=board-support $@ arch=$(arch) category=$(category);
 #	$(MAKE) --no-print-directory --directory=board-images $@ arch=$(arch) category=$(category);
 
 # ------------------------------------------------------------------------------
