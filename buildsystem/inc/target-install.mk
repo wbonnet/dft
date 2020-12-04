@@ -37,10 +37,6 @@ $(info target-install.mk has already been included)
 else
 DFT_TARGET_INSTALL = 1
 
-# Some temporary default values used to debug where where variables are initialized
-SW_NAME     ?= out-of-scope
-SW_VERSION  ?= out-of-scope
-
 # ------------------------------------------------------------------------------
 #
 # Install software to the target directory
@@ -66,7 +62,7 @@ reinstall: build pre-reinstall do-reinstall install post-reinstall
 #
 
 do-install:
-	@if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+	@if [ "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
 		true ; \
 	else \
 		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \

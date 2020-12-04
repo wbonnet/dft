@@ -46,7 +46,7 @@ DFT_TARGET_SETUP = 1
 setup: pre-setup do-setup post-setup
 do-setup:
 	@mkdir -p "$(DFT_FORGE)" ;
-	if [ ! "${SW_VERSION}" = "undefined-sw-version" ] && [ ! "${SW_NAME}" = "undefined-sw-name" ] && [ ! "${SW_NAME}" = "out-of-scope" ] && [ ! "${SW_VERSION}" = "out-of-scope" ] ; then \
+	if [ ! "${SW_VERSION}" = "undefined-sw-version" ] && [ ! "${SW_NAME}" = "undefined-sw-name" ] && [ ! "${SW_NAME}" = "" ] && [ ! "${SW_VERSION}" = "" ] ; then \
 		echo "SW_VERSION : $(SW_VERSION)"; \
 		echo "SW_NAME : $(SW_NAME)"; \
 		mkdir -p "$(WORK_DIR)" ; \
@@ -64,7 +64,7 @@ do-setup:
 	$(TARGET_DONE) ; \
 fi ;
 
-		if [ "$(only-latest)" = "1" ] ; then \
+	if [ "$(only-latest)" = "1" ] ; then \
 		if [ ! "$(SW_LATEST)" = "" ] ; then \
 			cd "$(SW_LATEST)" ; \
 			$(MAKE) --no-print-directory $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity) ; \

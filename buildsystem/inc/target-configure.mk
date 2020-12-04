@@ -37,10 +37,6 @@ $(info target-configure.mk has already been included)
 else
 DFT_TARGET_CONFIGURE = 1
 
-# Some temporary default values used to debug where where variables are initialized
-SW_NAME     ?= out-of-scope
-SW_VERSION  ?= out-of-scope
-
 # ------------------------------------------------------------------------------
 #
 # Run the configure script
@@ -73,7 +69,7 @@ reconfigure: patch pre-reconfigure $(RECONFIGURE_TARGETS) configure post-reconfi
 configure: extract pre-configure do-configure post-configure
 do-configure:
 	@skip_target=0 ; \
-	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+	if [ "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
 		skip_target=1 ; \
 		true ; \
 	fi ; \

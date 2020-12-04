@@ -37,10 +37,6 @@ $(info target-build.mk has already been included)
 else
 DFT_TARGET_BUILD = 1
 
-# Some temporary default values used to debug where where variables are initialized
-SW_NAME     ?= out-of-scope
-SW_VERSION  ?= out-of-scope
-
 # ------------------------------------------------------------------------------
 #
 # Build the target binaries
@@ -57,7 +53,7 @@ build: configure pre-build $(BUILD_TARGETS) post-build
 	if [ "$(verbosity)" = "" ]  ; then \
 		verbosity=1 ; \
 	fi ;
-	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+	if [ "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
 		skip_target=1 ; \
 		true ; \
 	fi ; 
@@ -100,7 +96,7 @@ rebuild: configure pre-rebuild $(REBUILD_TARGETS) build post-rebuild
 
 build-%:
 	if [ ! "$(SW_VERSION)" = "" ] ; then \
-		if [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		if [ ! "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
 			if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
 				if [ "x$(arch-warning)" = "x1" ] ; then \
 					echo "Makefile processing had to be stopped during target $@ execution. Cross compilation is not supported. " ; \

@@ -37,10 +37,6 @@ $(info target-package.mk has already been included)
 else
 DFT_TARGET_PACKAGE = 1
 
-# Some temporary default values used to debug where where variables are initialized
-SW_NAME     ?= out-of-scope
-SW_VERSION  ?= out-of-scope
-
 # ------------------------------------------------------------------------------
 #
 # Execute the package target script
@@ -48,7 +44,7 @@ SW_VERSION  ?= out-of-scope
 
 do-package:
 	@skip_target=0 ; \
-	if [ "$(SW_VERSION)" == "out-of-scope" ] ; then \
+	if [ "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
 		skip_target=1 ; \
 		true ; \
 	fi; \

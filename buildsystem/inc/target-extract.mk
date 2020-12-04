@@ -37,10 +37,6 @@ $(info target-extract.mk has already been included)
 else
 DFT_TARGET_EXTRACT = 1
 
-# Some temporary default values used to debug where where variables are initialized
-SW_NAME     ?= out-of-scope
-SW_VERSION  ?= out-of-scope
-
 # ------------------------------------------------------------------------------
 #
 # Extract the contents of the files downloaded by the fetch target
@@ -79,7 +75,7 @@ show-extract-targets:
 extract-archive-v.tar:
 extract-archive-%.tar:
 	@if [ ! "$(SW_VERSION)" = "" ] ; then \
-		if [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		if [ ! "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
 			if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 				if [ "$(verbosity)" == "1" ] ; then \
 					echo "        extracting $(DOWNLOAD_DIR)/$*.tar" ; \
@@ -93,7 +89,7 @@ extract-archive-%.tar:
 extract-archive-v.tar.gz:
 extract-archive-%.tar.gz:
 	@if [ !  "$(SW_VERSION)" = "" ] ; then \
-		if [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		if [ ! "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
 			if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 				if [ ! -f $(DOWNLOAD_DIR)/$*.tar.gz ] ; then \
 						echo "        archive $(DOWNLOAD_DIR)/$*.tar.gz is missing please check the files retrieved by the fetch target" ; \
@@ -112,7 +108,7 @@ extract-archive-%.tar.gz:
 extract-archive-v.tgz:
 extract-archive-%.tgz:
 	@if [ !"$(SW_VERSION)" = "" ] ; then \
-		if [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		if [ ! "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
 			if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 				if [ ! -f $(DOWNLOAD_DIR)/$*.tgz ] ; then \
 						echo "        archive $(DOWNLOAD_DIR)/$*.tgz is missing please check the files retrieved by the fetch target" ; \
@@ -131,7 +127,7 @@ extract-archive-%.tgz:
 extract-archive-v.tar.bz2:
 extract-archive-%.tar.bz2:
 	@if [ ! "$(SW_VERSION)" = "" ] ; then \
-		if [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		if [ ! "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
 			if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 				if [ "$(verbosity)" == "1" ] ; then \
 					echo "        extracting $(DOWNLOAD_DIR)/$*.tar.bz2" ; \
@@ -147,7 +143,7 @@ extract-archive-%.tar.bz2:
 extract-archive-v.tar.xz:
 extract-archive-%.tar.xz:
 	@if [ ! "$(SW_VERSION)" = "" ] ; then \
-		if [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		if [ ! "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
 			if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 				if [ "$(verbosity)" == "1" ] ; then \
 					echo "        extracting $(DOWNLOAD_DIR)/$*.tar.xz" ; \
@@ -163,7 +159,7 @@ extract-archive-%.tar.xz:
 extract-archive-v.zip:
 extract-archive-%.zip:
 	@if [ ! "$(SW_VERSION)" = "" ] ; then \
-		if [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		if [ ! "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
 			if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 				if [ "$(verbosity)" == "1" ] ; then \
 					echo "        extracting $(DOWNLOAD_DIR)/$*.zip" ; \
@@ -179,7 +175,7 @@ extract-archive-%.zip:
 extract-git-v:
 extract-git-%:
 	@if [ ! "$(SW_VERSION)" = "" ] ; then \
-		if [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		if [ ! "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
 			if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 				if [ "$(verbosity)" == "1" ] ; then \
 		  			echo "        moving git data to $(EXTRACT)/$*" ; \
@@ -200,7 +196,7 @@ PATCH_ARGS       = --directory=$(WORK_DIR) --strip=$(PATCH_DIR_LEVEL) --fuzz=$(P
 
 apply-patch-%:
 	@if [ !"$(SW_VERSION)" = "" ] ; then \
-		if [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		if [ ! "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
 			if [ "$(verbosity)" == "1" ] ; then \
 				echo " ==> Applying $(PATCH_DIR)/$*"
 			fi ; \

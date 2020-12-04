@@ -37,10 +37,6 @@ $(info target-upload.mk has already been included)
 else
 DFT_TARGET_UPLOAD = 1
 
-# Some temporary default values used to debug where where variables are initialized
-SW_NAME     ?= out-of-scope
-SW_VERSION  ?= out-of-scope
-
 # ------------------------------------------------------------------------------
 #
 # Upload the Debian package

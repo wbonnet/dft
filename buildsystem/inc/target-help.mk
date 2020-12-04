@@ -28,10 +28,6 @@ else
 #$(info now including target-help.mk)
 DFT_TARGET_HELP = 1
 
-# Some temporary default values used to debug where where variables are initialized
-SW_NAME     ?= out-of-scope
-SW_VERSION  ?= out-of-scope
-
 # ------------------------------------------------------------------------------
 #
 # Target that prints the generic top level help

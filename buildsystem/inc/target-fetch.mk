@@ -37,10 +37,6 @@ $(info target-fetch.mk has already been included)
 else
 DFT_TARGET_FETCH = 1
 
-# Some temporary default values used to debug where where variables are initialized
-SW_NAME     ?= out-of-scope
-SW_VERSION  ?= out-of-scope
-
 # ------------------------------------------------------------------------------
 #
 # Fetch target is in charge of getting idownloading sources from a remote server or local
@@ -90,7 +86,7 @@ fetch : setup pre-fetch $(FETCH_TARGETS) post-fetch
 	
 fetch-archive-%:
 	@if [ !"$(SW_VERSION)" = "" ] ; then \
-		if [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		if [ ! "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
 			if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
 				if [ -f $(COOKIE_DIR)/$@ ] ; then \
 					true ; \
@@ -111,7 +107,7 @@ fetch-archive-%:
 
 clone-git-%:
 	@if [ !"$(SW_VERSION)" = "" ] ; then \
-		if [ ! "$(SW_VERSION)" == "out-of-scope" ] ; then \
+		if [ ! "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
 			if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
 				if [ -f $(COOKIE_DIR)/$@ ] ; then \
 					true ; \
