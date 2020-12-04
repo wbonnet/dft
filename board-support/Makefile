@@ -31,7 +31,7 @@ CATEGORIES    = laptop desktop devkit set-top-box single-board-computer phone ta
 #
 # Targets not associated with a file (aka PHONY)
 #
-.PHONY: help sanity-check list-boards list-architectures
+.PHONY: help sanity-check list-boards list-architectures show-u-boot-available-upgrade show-kernel-available-upgrade
 
 # Build only u-boot package target
 u-boot-package:
@@ -132,3 +132,17 @@ list-architectures:
 	if [ ! "$(category)" = "" ] ; then \
 			$(MAKE) $@ --no-print-directory --directory=$(category) verbosity=$(verbosity); \
 	fi | sort -u ;
+
+show-u-boot-available-upgrade:
+	@for category in $(CATEGORIES) ; do \
+		if [ -f $$category/Makefile ] ; then \
+			$(MAKE) --no-print-directory --directory=$$category $@ board-arch=$(board-arch) verbosity=$(verbosity); \
+		fi ; \
+	done
+
+show-kernel-available-upgrade:
+	@for category in $(CATEGORIES) ; do \
+		if [ -f $$category/Makefile ] ; then \
+			$(MAKE) --no-print-directory --directory=$$category $@ board-arch=$(board-arch) verbosity=$(verbosity); \
+		fi ; \
+	done
