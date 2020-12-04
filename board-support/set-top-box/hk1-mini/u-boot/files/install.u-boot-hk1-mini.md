@@ -1,4 +1,4 @@
-# u-boot installation for hk1mini
+# u-boot installation for hk1-mini
 
 ## Disclaimer
 
@@ -12,17 +12,17 @@ You have been warned :)
 ## u-boot installation
 
 The u-boot binary to install has been copied by this package to :
-/boot/u-boot/u-boot-hk1mini
+/boot/u-boot/u-boot-hk1-mini
 
 This is a symlink to the current u-boot file stored at the same location in a
-file named u-boot-hk1mini.VERSION
+file named u-boot-hk1-mini.VERSION
 
 u-boot binary has to be installed on the first sectors of the device used by
 the board to boot. This can be done by the following commands, assuming that :
 
 . The commands are run as root or using sudo ( that's the example)
 
-. The commands are run on the target board (hk1mini)
+. The commands are run on the target board (hk1-mini)
 
 . Which means the /dev/mmcblk0 is the internal CF card used to boot
 
@@ -36,4 +36,4 @@ u-boot itself.
 sudo dd if=/dev/zero of=/dev/mmcblk0 bs=1k count=1023 seek=1 status=noxfer
 
 # Copy binary to MMC and update u-boot (environnment variables stored on MMC are not modified)
-sudo dd if=/boot/u-boot/u-boot-hk1mini of=/dev/mmcblk0 bs=1024 seek=8 status=noxfer
+sudo dd if=/boot/u-boot/u-boot-hk1-mini of=/dev/mmcblk0 bs=1024 seek=8 status=noxfer
