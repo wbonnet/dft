@@ -134,15 +134,23 @@ list-architectures:
 	fi | sort -u ;
 
 show-u-boot-available-upgrade:
-	@for category in $(CATEGORIES) ; do \
-		if [ -f $$category/Makefile ] ; then \
-			$(MAKE) --no-print-directory --directory=$$category $@ board-arch=$(board-arch) verbosity=$(verbosity); \
-		fi ; \
-	done
+	if [ ! "$(category)" = "" ] ; then \
+				$(MAKE) --no-print-directory --directory=$(category) $@ board-arch=$(board-arch) verbosity=$(verbosity); \
+	else \
+		for category in $(CATEGORIES) ; do \
+			if [ -f $$category/Makefile ] ; then \
+				$(MAKE) --no-print-directory --directory=$$category $@ board-arch=$(board-arch) verbosity=$(verbosity); \
+			fi ; \
+		done ; \
+	fi ; \
 
 show-kernel-available-upgrade:
-	@for category in $(CATEGORIES) ; do \
-		if [ -f $$category/Makefile ] ; then \
-			$(MAKE) --no-print-directory --directory=$$category $@ board-arch=$(board-arch) verbosity=$(verbosity); \
-		fi ; \
-	done
+	if [ ! "$(category)" = "" ] ; then \
+				$(MAKE) --no-print-directory --directory=$$category $@ board-arch=$(board-arch) verbosity=$(verbosity); \
+	else \
+		for category in $(CATEGORIES) ; do \
+			if [ -f $$category/Makefile ] ; then \
+				$(MAKE) --no-print-directory --directory=$$category $@ board-arch=$(board-arch) verbosity=$(verbosity); \
+			fi ; \
+		done ; \
+	fi ; \
