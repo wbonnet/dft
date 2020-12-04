@@ -35,13 +35,8 @@
 ifdef DFT_LINUX_KERNEL
 $(info linux-kernel.mk has already been included)
 else
-$(info now including linux-kernel.mk)
+#$(info now including linux-kernel.mk)
 DFT_LINUX_KERNEL = 1
-
-# Some temporary default values used to debug where where variables are initialized
-SW_NAME     ?= linux
-SW_VERSION  ?= out-of-scope
-
 
 # ------------------------------------------------------------------------------
 #
