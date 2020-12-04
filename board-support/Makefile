@@ -142,7 +142,7 @@ show-u-boot-available-upgrade:
 				$(MAKE) --no-print-directory --directory=$$category $@ board-arch=$(board-arch) verbosity=$(verbosity); \
 			fi ; \
 		done ; \
-	fi ; \
+	fi | sort -u ; \
 
 show-kernel-available-upgrade:
 	if [ ! "$(category)" = "" ] ; then \
@@ -153,4 +153,4 @@ show-kernel-available-upgrade:
 				$(MAKE) --no-print-directory --directory=$$category $@ board-arch=$(board-arch) verbosity=$(verbosity); \
 			fi ; \
 		done ; \
-	fi ; \
+	fi | sort -u ; \
