@@ -27,17 +27,12 @@
 DFT_BUILDSYSTEM := buildsystem
 include $(DFT_BUILDSYSTEM)/dft.mk
 
-SW_NAME     := out-of-scope
-SW_VERSION  := out-of-scope
+SW_NAME     ?= undefined-sw-name
+SW_VERSION  ?= undefined-sw-version
 
 # Do not recurse the following subdirs
 MAKE_FILTERS  := Makefile workdir README.md .
 
-# ------------------------------------------------------------------------------
-#
-# Targets not associated with a file (aka PHONY)
-#
-.PHONY: sanity-check list-boards list-architectures show-kernel-dft-version show-u-boot-dft-version show-kernel-upstream-version show-u-boot-upstream-version sanity-check list-boards list-architectures
 
 # Board category directory contains several folders, one per board in the category
 # Each board folder must contain a board.mk file with board specific information,
@@ -239,40 +234,28 @@ fetch:
 
 # Forward target call to subfolders where are stored the board.mk files specifying board architecture
 list-architectures:
-	@if [ "$(arch)" = "armhf" ] ; then \
-		arch=armv7l; \
+	@for board in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+			$(MAKE) --no-print-directory --directory=$$board $@ ; \
+	done | sort -u ;
+
+list-boards:
+	@MY_ARCH=$(arch) ; \
+	if [ "$(arch)" = "armhf" ] ; then \
+		MY_ARCH="armv7l"; \
 	fi ; \
 	if [ "$(arch)" = "arm64" ] ; then \
-		arch=aarch64; \
+		MY_ARCH="aarch64"; \
 	fi ; \
 	if [ "$(arch)" = "amd64" ] ; then \
-		arch=x86_64; \
+		MY_ARCH="x86_64"; \
 	fi ; \
 	for board in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
-		if [ ! "$(arch)" = "" ] ; then \
-			$(MAKE) --no-print-directory --directory=$$board $@ board-arch=$(board-arch); \
+		if [ ! "$sMY_AARCH" = "" ] ; then \
+			$(MAKE) --no-print-directory --directory=$$board $@ arch=$$MY_ARCH; \
 		else \
 			$(MAKE) --no-print-directory --directory=$$board $@ ; \
 		fi ; \
 	done | sort -u ;
-
-list-boards:
-	@if [ "$(arch)" = "armhf" ] ; then \
-		arch=armv7l; \
-	fi ; \
-	if [ "$(arch)" = "arm64" ] ; then \
-		arch=aarch64; \
-	fi ; \
-	if [ "$(arch)" = "amd64" ] ; then \
-		arch=x86_64; \
-	fi ; \
-	for board in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
-		if [ ! "$(arch)" = "" ] ; then \
-			$(MAKE) --no-print-directory --directory=$$board $@ arch=$(arch); \
-		else \
-			$(MAKE) --no-print-directory --directory=$$board $@ ; \
-		fi ; \
-	done | sort ;
 
 # Create a new board entry
 add-board:
