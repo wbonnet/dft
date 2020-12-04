@@ -100,56 +100,35 @@ sanity-check:
 	done
 
 # Forward target call to subfolders where are stored the board.mk files specifying board architecture
-# $(MAKE) $@ --no-print-directory --directory=$(category) arch=$(arch) ;
+# $(MAKE) $@ --no-print-directory --directory=$(category) board-arch=$(arch) ;
 list-boards:
-	@if [ "$(arch)" = "armhf" ] ; then \
-		arch=armv7l; \
+	@MY_ARCH=$(board-arch) ; \
+	if [ "$(board-arch)" = "armhf" ] ; then \
+		MY_ARCH="armv7l"; \
 	fi ; \
-	if [ "$(arch)" = "arm64" ] ; then \
-		arch=aarch64; \
+	if [ "$(board-arch)" = "arm64" ] ; then \
+		MY_ARCH="aarch64"; \
 	fi ; \
-	if [ "$(arch)" = "amd64" ] ; then \
-		arch=x86_64; \
+	if [ "$(board-arch)" = "amd64" ] ; then \
+		MY_ARCH="x86_64"; \
 	fi ; \
 	if [ ! "$(category)" = "" ] ; then \
-		if [ ! "$(arch)" = "" ] ; then \
-			$(MAKE) $@ --no-print-directory --directory=$(category) arch=$$arch verbosity=$(verbosity); \
+		if [ ! "$(board-arch)" = "" ] ; then \
+			$(MAKE) $@ --no-print-directory --directory=$(category) board-arch=$$MY_ARCH verbosity=$(verbosity); \
 		else \
 			$(MAKE) $@ --no-print-directory --directory=$(category) verbosity=$(verbosity); \
 		fi ; \
 	else \
-	for category in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
-		if [ ! "$(arch)" = "" ] ; then \
-			$(MAKE) $@ --no-print-directory --directory=$$category arch=$$arch verbosity=$(verbosity); \
+	for category in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+		if [ ! "$$MY_ARCH" = "" ] ; then \
+			$(MAKE) $@ --no-print-directory --directory=$$category board-arch=$$MY_ARCH verbosity=$(verbosity); \
 		else \
 			$(MAKE) $@ --no-print-directory --directory=$$category verbosity=$(verbosity); \
 		fi ; \
 	done ; \
 	fi | sort -u ;
 
-list-boards:
-	@if [ "$(arch)" = "armhf" ] ; then \
-		arch=armv7l; \
-	fi ; \
-	if [ "$(arch)" = "arm64" ] ; then \
-		arch=aarch64; \
-	fi ; \
-	if [ "$(arch)" = "amd64" ] ; then \
-		arch=x86_64; \
-	fi ; \
+list-architectures:
 	if [ ! "$(category)" = "" ] ; then \
-		if [ ! "$(arch)" = "" ] ; then \
-			$(MAKE) $@ --no-print-directory --directory=$(category) arch=$$arch verbosity=$(verbosity); \
-		else \
 			$(MAKE) $@ --no-print-directory --directory=$(category) verbosity=$(verbosity); \
-		fi ; \
-	else \
-	for category in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
-		if [ ! "$(arch)" = "" ] ; then \
-			$(MAKE) $@ --no-print-directory --directory=$$category arch=$$arch verbosity=$(verbosity); \
-		else \
-			$(MAKE) $@ --no-print-directory --directory=$$category verbosity=$(verbosity); \
-		fi ; \
-	done ; \
 	fi | sort -u ;
-
