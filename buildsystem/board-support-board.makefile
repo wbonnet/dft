@@ -44,9 +44,9 @@ MAKE_FILTERS := kernel u-boot buildsystem files Makefile README.md
 #
 # Targets not associated with a file (aka PHONY)
 #
-.phony: show-kernel-dft-version show-u-boot-dft-version show-kernel-upstream-version show-u-boot-upstream-version sanity-check list-boards list-architectures
+.PHONY:
 
-sanity-check:
+sanity-check: sanity-check-subdirs
 	@if [ ! -f "board.mk" ] ; then \
 		pwd ; \
 		echo "file board.mk is missing in directory ${CURDIR}" ; \
@@ -163,7 +163,7 @@ kernel-package:
 
 # Catch all target. Call the same targets in each subfolder
 # cd $$i && $(MAKE) $* && cd .. ;
-sanity-check:
+sanity-check-subdirs:
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		echo "examen de $$i" ; \
 		if [ -f $$i/Makefile ] ; then \
@@ -179,14 +179,16 @@ check-u-boot-defconfig:
 	$(MAKE) --directory=u-boot check-u-boot-defconfig verbosity=$(verbosity);
 
 # Simple forwarder
-setup extract fetch build configure:
+#post-setup extract fetch build configure:
+post-setup:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
                 	$(MAKE) --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning); \
 		fi ; \
 	done
 
-show-kernel-dft-version show-u-boot-dft-version :
+show-u-boot-dft-version-for:
+	echo "BSB : je suis la 1" ;
 	pwd ;
 	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
@@ -194,7 +196,8 @@ show-kernel-dft-version show-u-boot-dft-version :
 		fi ; \
 	done
 
-show-kernel-dft-version show-u-boot-dft-version:
+show-kernel-dft-version-for:
+	echo "BSB : je suis la 2" ;
 	pwd ;
 	for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
@@ -218,37 +221,19 @@ list-architectures:
 
 # Display the locally available versions
 show-u-boot-dft-version:
-	@if [ ! "$(board-arch)" = "" ] ; then \
-			if [ "$(board-arch)" = "$(BOARD_ARCH)" ]; then \
-				find $$PWD/u-boot -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1
-			fi ; \
-	else ; \
-			find $$PWD/u-boot -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1
-	fi ;
+#	find $$PWD/u-boot -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1
+	@find ./u-boot -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1
 
 show-kernel-dft-version:
-	@if [ ! "$(board-arch)" = "" ] ; then \
-		if [ "$(board-arch)" = "$(BOARD_ARCH)" ]; then \
-			find $$PWD/kernel -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1
-		fi ; \
-	else  \
-		find $$PWD/kernel -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1
-	fi ;
-
+	@find ./kernel -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1
 
 show-u-boot-available-upgrade:
-	@if [ "$(board-arch)" = "" ] ; then \
+	@if [ "$(board-arch)" = "" ] || [ "$(board-arch)" = "$(BOARD_ARCH)" ] ; then \
 		UBOOT_DFT_VERSION=$(shell find $$PWD/u-boot -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1) ; \
 		UBOOT_UPSTREAM_VERSION=$(shell wget -O- https://github.com/u-boot/u-boot/releases 2>&1 | grep -v "rc" | grep "v20" | tr '<' ' ' | tr '>' ' ' | tr 'v' ' ' | head -n 2 | tail -n 1 | awk '{ print $$1 }') ; \
-		if [ ! "$$UBOOT_DFT_VERSION" = "$$UBOOT_UPSTREAM_VERSION" ] ; then \
-			echo "$(BOARD_NAME) u-boot can be upgraded from $$UBOOT_DFT_VERSION to $$UBOOT_UPSTREAM_VERSION" ; \
+		if [ "$$UBOOT_DFT_VERSION" = "" ] ; then \
+			echo "$(BOARD_NAME) has no u-boot version available, latest version ($$UBOOT_UPSTREAM_VERSION) can be added" ; \
 		else \
-		  echo "$(BOARD_NAME) u-boot is up to date" ; \
-		fi ; \
-	else \
-		if [ "$(board-arch)" = "$(BOARD_ARCH)" ]; then \
-			UBOOT_DFT_VERSION=$(shell find $$PWD/u-boot -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1) ; \
-			UBOOT_UPSTREAM_VERSION=$(shell wget -O- https://github.com/u-boot/u-boot/releases 2>&1 | grep -v "rc" | grep "v20" | tr '<' ' ' | tr '>' ' ' | tr 'v' ' ' | head -n 2 | tail -n 1 | awk '{ print $$1 }') ; \
 			if [ ! "$$UBOOT_DFT_VERSION" = "$$UBOOT_UPSTREAM_VERSION" ] ; then \
 				echo "$(BOARD_NAME) u-boot can be upgraded from $$UBOOT_DFT_VERSION to $$UBOOT_UPSTREAM_VERSION" ; \
 			else \
@@ -258,22 +243,16 @@ show-u-boot-available-upgrade:
 	fi ;
 
 show-kernel-available-upgrade:
-	@if [ "$(board-arch)" = "" ] ; then \
-		KERNEL_DFT_VERSION=$(shell find $$PWD/kernel -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1) ; \
+	@if [ "$(board-arch)" = "" ] || [ "$(board-arch)" = "$(BOARD_ARCH)" ] ; then \
+		KERNEL_DFT_VERSION=$(shell find kernel -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1) ; \
 		KERNEL_UPSTREAM_VERSION=$(shell wget -O-  https://www.kernel.org/ 2>&1| grep "<td><strong>" | tr '<' ' ' | tr '>' ' ' | awk '{ print $$3 }' | head -n 2 | tail -n 1) ; \
-		if [ ! "$$KERNEL_DFT_VERSION" = "$$KERNEL_UPSTREAM_VERSION" ] ; then \
-			echo "$(BOARD_NAME) kernel can be upgraded from $$KERNEL_DFT_VERSION to $$KERNEL_UPSTREAM_VERSION" ; \
+		if [ "$$KERNEL_DFT_VERSION" = "" ] ; then \
+			echo "$(BOARD_NAME) has no kernel version available, latest version ($$KERNEL_UPSTREAM_VERSION) can be added" ; \
 		else \
-		  echo "$(BOARD_NAME) u-boot is up to date" ; \
-		fi ; \
-	else  \
-		if [ "$(board-arch)" = "$(BOARD_ARCH)" ]; then \
-			KERNEL_DFT_VERSION=$(shell find $$PWD/kernel -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r  | head -n 1) ; \
-			KERNEL_UPSTREAM_VERSION=$(shell wget -O-  https://www.kernel.org/ 2>&1| grep "<td><strong>" | tr '<' ' ' | tr '>' ' ' | awk '{ print $$3 }' | head -n 2 | tail -n 1) ; \
 			if [ ! "$$KERNEL_DFT_VERSION" = "$$KERNEL_UPSTREAM_VERSION" ] ; then \
 				echo "$(BOARD_NAME) kernel can be upgraded from $$KERNEL_DFT_VERSION to $$KERNEL_UPSTREAM_VERSION" ; \
 			else \
-			  echo "$(BOARD_NAME) u-boot is up to date" ; \
+			  echo "$(BOARD_NAME) kernel is up to date" ; \
 			fi ; \
 		fi ; \
 	fi ;
