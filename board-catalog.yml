@@ -113,6 +113,14 @@ board-catalog:
                   support-level: planning
          - nanopi-neo-plus2:
                   support-level: planning
+         - nanopi-r2s:
+                  support-level: planning
+                  uboot_provider: armwizard
+                  uboot_version: 2020.07
+                  kernel_provider: armwizard
+                  kernel_version: 5.9.11
+                  feature_support:
+                    video: unavailable
          - odroid-c0:
                   support-level: planning
          - odroid-c1-plus:
