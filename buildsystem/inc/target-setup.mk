@@ -37,30 +37,34 @@ $(info target-setup.mk has already been included)
 else
 DFT_TARGET_SETUP = 1
 
+
 # ------------------------------------------------------------------------------
 #
 # Setup target. Currently does nothing, should check for basic building
 # packages to be avaiable. Should add a check based on the flavor.
 #
+setup: pre-setup do-setup post-setup
+do-setup:
+	@mkdir -p "$(DFT_FORGE)" ;
+	if [ ! "${SW_VERSION}" = "undefined-sw-version" ] && [ ! "${SW_NAME}" = "undefined-sw-name" ] && [ ! "${SW_NAME}" = "out-of-scope" ] && [ ! "${SW_VERSION}" = "out-of-scope" ] ; then \
+		echo "SW_VERSION : $(SW_VERSION)"; \
+		echo "SW_NAME : $(SW_NAME)"; \
+		mkdir -p "$(WORK_DIR)" ; \
+		mkdir -p "$(COOKIE_DIR)" ; \
+		mkdir -p "$(INSTALL_DIR)" ; \
+		mkdir -p "$(PACKAGE_DIR)" ; \
+		mkdir -p "$(DOWNLOAD_DIR)" ; \
+		mkdir -p "$(BUILD_DIR)" ; \
+		mkdir -p "$(LOG_DIR)" ; \
+		if [ "$(DOWNLOAD_TOOL)" = "git" ] ; then \
+			mkdir -p "$(GIT_DIR)" ; \
+		fi ; \
+		mkdir -p "$(FILE_DIR)" ; \
+		mkdir -p "$(PATCH_DIR)" ; \
+	$(TARGET_DONE) ; \
+fi ;
 
-setup:
-	@mkdir -p "$(DFT_FORGE)" ; 
-	@if [ "$(SW_VERSION)" = "" ] ; then \
-		exit ; \
-	fi ;
-	@mkdir -p "$(WORK_DIR)" ; 
-	@mkdir -p "$(COOKIE_DIR)" ; 
-	@mkdir -p "$(INSTALL_DIR)" ; 
-	@mkdir -p "$(PACKAGE_DIR)" ;
-	@mkdir -p "$(DOWNLOAD_DIR)" ;
-	@mkdir -p "$(BUILD_DIR)" ;
-	@mkdir -p "$(LOG_DIR)" ;
-	@if [ "$(DOWNLOAD_TOOL)" = "git" ] ; then \
-		mkdir -p "$(GIT_DIR)" ; \
-	fi ; 
-	@mkdir -p "$(FILE_DIR)" ;
-	@mkdir -p "$(PATCH_DIR)" ;
-	if [ "$(only-latest)" = "1" ] ; then \
+		if [ "$(only-latest)" = "1" ] ; then \
 		if [ ! "$(SW_LATEST)" = "" ] ; then \
 			cd "$(SW_LATEST)" ; \
 			$(MAKE) --no-print-directory $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity) ; \
@@ -72,8 +76,7 @@ setup:
 		done ; \
 	fi ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
-	$(TARGET_DONE)
 
 # Match initial ifdef DFT_TARGET_SETUP
-# $(MAKE) --no-print-directory --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity) 
+# $(MAKE) --no-print-directory --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity)
 endif
