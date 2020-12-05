@@ -24,7 +24,7 @@
 #
 
 # The board name fragment will be used in package naming, path and files content generation
-BOARD_NAME = m96-x2
+BOARD_NAME = m96x-2
 
 # Board architecture as defined by uname -m (armv7l, mips, aarch64, x86_64, etc.)
 BOARD_ARCH = aarch64
