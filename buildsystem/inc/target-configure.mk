@@ -45,6 +45,16 @@ DFT_TARGET_CONFIGURE = 1
 CONFIGURE_TARGETS = $(addprefix configure-, $(CONFIGURE_SCRIPTS))
 
 configure: patch pre-configure do-configure post-configure
+	if [ "$(only-latest)" = "1" ] ; then \
+		if [ ! "$(SW_LATEST)" = "" ] ; then \
+			cd $(SW_LATEST) && $(MAKE) --no-print-directory $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity) && cd .. ;  \
+		fi ; \
+	else \
+		pwd ; \
+		for v in configure_debug $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; \
+			do echo "target-configure iterateur extract_debug : $$v" ; \
+		done ; \
+	fi ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 

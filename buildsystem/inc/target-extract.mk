@@ -58,7 +58,16 @@ endif
 endif
 
 extract: fetch pre-extract $(EXTRACT_TARGETS) post-extract
-	echo "EXTRACT_TARGETS : $(EXTRACT_TARGETS)" ; 
+	@if [ "$(only-latest)" = "1" ] ; then \
+		if [ ! "$(SW_LATEST)" = "" ] ; then \
+			cd $(SW_LATEST) && $(MAKE) --no-print-directory $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity) && cd .. ;  \
+		fi ; \
+	else \
+		pwd ; \
+		for v in extract_debug $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; \
+			do echo "target-extract iterateur extract_debug : $$v" ; \
+		done ; \
+	fi ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
@@ -69,7 +78,7 @@ extract: fetch pre-extract $(EXTRACT_TARGETS) post-extract
 TAR_ARGS = --no-same-owner
 
 show-extract-targets:
-	@pwd ; 
+	@pwd ;
 	@echo $(EXTRACT_TARGETS)
 
 extract-archive-v.tar:

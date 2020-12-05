@@ -62,32 +62,23 @@ show-fetch-targets:
 	@echo $(FETCH_TARGETS)
 
 fetch : setup pre-fetch $(FETCH_TARGETS) post-fetch
-	@echo "avant 1=1 dans la target fetch;" ;
 	@if [ "$(only-latest)" = "1" ] ; then \
-		echo "dans le only-latest = 1" ; \
 		if [ ! "$(SW_LATEST)" = "" ] ; then \
-			echo "dans le SW_LATEST n est pas vide $(SW_LATEST)" ; \
-			echo "$(MAKE) --no-print-directory --directory=$(SW_LATEST) $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity)" ; \
-			pwd ; \
 			cd $(SW_LATEST) && $(MAKE) --no-print-directory $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity) && cd .. ;  \
-			echo "je viens de finir la make en echo juste avant" ; \
-			echo "et j etais dans" ; \
-			pwd ; \
 		fi ; \
 	else \
 		pwd ; \
-		for v in muf_debug $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; \
-			do echo "target-fetch iterateur muf_fetch_debug : $$v" ; \
+		for v in fetch_debug $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; \
+			do echo "target-fetch iterateur fetch_debug : $$v" ; \
 		done ; \
 	fi ;
-	@echo "fin de la target fetch" ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
-	
+
 fetch-archive-%:
-	@if [ !"$(SW_VERSION)" = "" ] ; then \
+	@if [ ! "$(SW_VERSION)" = "" ] ; then \
 		if [ ! "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
-			if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
+			if [ "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] || [ ! "x$(only-native-arch)" = "x1" ] ; then \
 				if [ -f $(COOKIE_DIR)/$@ ] ; then \
 					true ; \
 				else \
@@ -96,7 +87,7 @@ fetch-archive-%:
 						true ; \
 					else \
 						echo 'ERROR : Failed to download $(SRC_DIST_URL)/$*' 1>&2; \
-			       			 $(call dft_error ,2004-1602); \
+						$(call dft_error ,2004-1602); \
 					fi ; \
 				fi ; \
 			fi ; \
@@ -108,7 +99,7 @@ fetch-archive-%:
 clone-git-%:
 	@if [ !"$(SW_VERSION)" = "" ] ; then \
 		if [ ! "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
-			if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
+			if [ "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
 				if [ -f $(COOKIE_DIR)/$@ ] ; then \
 					true ; \
 				else \
