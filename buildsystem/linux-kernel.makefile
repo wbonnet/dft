@@ -44,7 +44,7 @@ USE_CONFIG_FILE := $(subst ,,$(USE_CONFIG_FILE))
 
 # default behavior is to process only th latest version
 only-latest      ?= 1
-only-native-arch ?= 0
+only-native-arch ?= 1
 arch-warning     ?= 0
 verbosity        ?= "normal"
 
