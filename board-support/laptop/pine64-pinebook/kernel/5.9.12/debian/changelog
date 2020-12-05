@@ -1,0 +1,17 @@
+linux-kernel-pine64-pinebook (5.9.12-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 05 Dec 2020 19:20:43 +0100
+
+linux-kernel-pine64-pinebook (5.9.12-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 05 Dec 2020 19:20:43 +0100
+
+linux-headers-pine64-pinebook (5.9.12-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 05 Dec 2020 19:20:43 +0100
