@@ -57,8 +57,6 @@ SW_LATEST           := $(shell find .  -mindepth 1 -maxdepth 1 -type d -name "*\
 SRC_DIST_FILES      ?= $(SW_NAME)-$(SW_VERSION).tar.xz
 SRC_SIGN_FILES      ?= $(SW_NAME)-$(SW_VERSION).tar.xz.sign
 
-$(info SW_VERSION $(SW_VERSION))
-
 # ------------------------------------------------------------------------------
 #
 # Overrides some definition to compile uboot using the same makefiles
