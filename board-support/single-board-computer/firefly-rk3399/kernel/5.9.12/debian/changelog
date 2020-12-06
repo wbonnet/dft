@@ -1,0 +1,17 @@
+linux-kernel-firefly-rk3399 (5.9.12-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 06 Dec 2020 23:33:05 +0100
+
+linux-kernel-firefly-rk3399 (5.9.12-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 06 Dec 2020 23:33:05 +0100
+
+linux-headers-firefly-rk3399 (5.9.12-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 06 Dec 2020 23:33:05 +0100
