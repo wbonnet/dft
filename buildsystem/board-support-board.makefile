@@ -246,8 +246,6 @@ show-u-boot-available-upgrade:
 		else \
 			if [ ! "$$UBOOT_DFT_VERSION" = "$$UBOOT_UPSTREAM_VERSION" ] ; then \
 				echo "$(BOARD_NAME) u-boot can be upgraded from $$UBOOT_DFT_VERSION to $$UBOOT_UPSTREAM_VERSION" ; \
-			else \
-			  echo "$(BOARD_NAME) u-boot is up to date" ; \
 			fi ; \
 		fi ; \
 	fi ;
@@ -271,8 +269,6 @@ show-kernel-available-upgrade:
 		else \
 			if [ ! "$$KERNEL_DFT_VERSION" = "$$KERNEL_UPSTREAM_VERSION" ] ; then \
 				echo "$(BOARD_NAME) kernel can be upgraded from $$KERNEL_DFT_VERSION to $$KERNEL_UPSTREAM_VERSION" ; \
-			else \
-			  echo "$(BOARD_NAME) kernel is up to date" ; \
 			fi ; \
 		fi ; \
 	fi ;
