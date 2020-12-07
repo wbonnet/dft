@@ -1,0 +1,17 @@
+linux-kernel-raspberry-pi0w (5.9.12-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 07 Dec 2020 18:28:02 +0000
+
+linux-kernel-raspberry-pi0w (5.9.12-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 07 Dec 2020 18:28:02 +0000
+
+linux-headers-raspberry-pi0w (5.9.12-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Mon, 07 Dec 2020 18:28:02 +0000
