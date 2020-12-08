@@ -35,7 +35,7 @@ CATEGORIES    = laptop desktop devkit set-top-box single-board-computer phone ta
 
 # Build only u-boot package target
 u-boot-package:
-	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
+	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d )) ; do \
 		if [ -f $$i/Makefile ] ; then \
 			$(MAKE) --no-print-directory --directory=$$i u-boot-package; \
 		fi ; \
@@ -51,7 +51,7 @@ kernel-package:
    done
 
 sanity-check:
-	for category in $(CATEGORIES) ; do \
+	@for category in $(CATEGORIES) ; do \
 		if [ ! -d ${CURDIR}/$$category ] ; then \
 			echo "Warning : $$category folder is missing, recursive targets may fail or produce incomplete set of binaries." ; \
 		fi ; \
@@ -129,12 +129,12 @@ list-boards:
 	fi | sort -u ;
 
 list-architectures:
-	if [ ! "$(category)" = "" ] ; then \
+	@if [ ! "$(category)" = "" ] ; then \
 			$(MAKE) $@ --no-print-directory --directory=$(category) verbosity=$(verbosity); \
 	fi | sort -u ;
 
 show-u-boot-available-upgrade:
-	if [ ! "$(category)" = "" ] ; then \
+	@if [ ! "$(category)" = "" ] ; then \
 				$(MAKE) --no-print-directory --directory=$(category) $@ board-arch=$(board-arch) verbosity=$(verbosity); \
 	else \
 		for category in $(CATEGORIES) ; do \
@@ -145,7 +145,7 @@ show-u-boot-available-upgrade:
 	fi | sort -u ; \
 
 show-kernel-available-upgrade:
-	if [ ! "$(category)" = "" ] ; then \
+	@if [ ! "$(category)" = "" ] ; then \
 				$(MAKE) --no-print-directory --directory=$$category $@ board-arch=$(board-arch) verbosity=$(verbosity); \
 	else \
 		for category in $(CATEGORIES) ; do \
