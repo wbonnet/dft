@@ -1,0 +1,1 @@
+../../files/install.u-boot-nanopi-m1-plus.md
