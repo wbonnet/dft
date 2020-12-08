@@ -27,7 +27,7 @@
 BOARD_NAME = nanopi-m1-plus
 
 # Board architecture as defined by uname -m (armv7l, mips, aarch64, x86_64, etc.)
-BOARD_ARCH = armhf
+BOARD_ARCH = armv7l
 
 #
 # u-boot support and configuration
