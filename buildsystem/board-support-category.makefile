@@ -100,24 +100,24 @@ sanity-check:
 
 # If package is called then make both u-boot and kernel-package
 bsp: bsp-package
-bsp-package: u-boot-package kernel-package
+bsp-package: u-boot-package linux-kernel-package
+kernel-package: linux-kernel-package
 
 # Build only u-boot package target
 u-boot-package:
 	@echo "DEBUG : $@ in category.makefile" ;
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f $$i/Makefile ] ; then \
-			$(MAKE) --no-print-directory u-boot-package --directory=$$i ; \
+			$(MAKE) --no-print-directory u-boot-package --directory=$$i only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) arch=$(arch); \
 		fi ; \
         done
 
 # Build only linux kernel an package target
 linux-kernel-package:
-kernel-package:
 	@echo "DEBUG : $@ in category.makefile" ;
 	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f $$i/Makefile ] ; then \
-			$(MAKE) --no-print-directory kernel-package --directory=$$i  ; \
+			$(MAKE) --no-print-directory kernel-package --directory=$$i only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) arch=$(arch) ; \
 		fi ; \
         done
 
