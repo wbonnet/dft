@@ -139,28 +139,28 @@ check-u-boot-defconfig:
 show-u-boot-available-upgrade:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
-                	$(MAKE) --no-print-directory --directory=$$v $@  only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) board-arch=$(board-arch); \
+                	$(MAKE) --no-print-directory --directory=$$v $@  only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) arch=$(arch); \
 		fi ; \
 	done
 
 show-kernel-available-upgrade:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
-                	$(MAKE) --no-print-directory --directory=$$v $@  only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) board-arch=$(board-arch); \
+                	$(MAKE) --no-print-directory --directory=$$v $@  only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) arch=$(arch); \
 		fi ; \
 	done
 
 extract:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
-                	$(MAKE) --no-print-directory --directory=$$v $@  only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) board-arch=$(board-arch); \
+                	$(MAKE) --no-print-directory --directory=$$v $@  only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) arch=$(arch); \
 		fi ; \
 	done
 
 fetch:
 	@for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f ${CURDIR}/$$v/Makefile ] ; then \
-                	$(MAKE) --no-print-directory --directory=$$v $@  only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) board-arch=$(board-arch); \
+                	$(MAKE) --no-print-directory --directory=$$v $@  only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) arch=$(arch); \
 		fi ; \
 	done
 
@@ -191,13 +191,13 @@ list-boards:
 
 # Create a new board entry
 add-board:
-	@echo "DEBUG : in board-support-category.makefile running add-board with argument(s) board-name $(board-name) board-arch $(board-arch) board-arch $(board-arch) uboot-support $(uboot-support) grub-support $(grub-support) uboot-defconfig $(uboot-defconfig) default-dtb $(default-dtb)" ; \
+	@echo "DEBUG : in board-support-category.makefile running add-board with argument(s) board-name $(board-name) arch $(arch) arch $(arch) uboot-support $(uboot-support) grub-support $(grub-support) uboot-defconfig $(uboot-defconfig) default-dtb $(default-dtb)" ; \
 	if [ "$(board-name)" == "" ] ; then \
 		echo "DEBUG : from category.makefile argument board-name is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2009-2201) ; \
 	fi ; \
-	if [ "$(board-arch)" == "" ] ; then \
-		echo "DEBUG : from category.makefile argument board-arch is missing or has no value. Doing nothing..." ; \
+	if [ "$(arch)" == "" ] ; then \
+		echo "DEBUG : from category.makefile argument arch is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2009-2203) ; \
 	fi ; \
 	if [ "$(uboot-support)" == "" ] ; then \
@@ -219,8 +219,8 @@ add-board:
 		mkdir -p $(board-name) ; \
 		cp  $(DFT_BUILDSYSTEM)/templates/board.mk.template $(board-name)/board.mk ; \
 		cp  $(DFT_BUILDSYSTEM)/templates/board-blueprint.yml.template $(board-name)/blueprint-$(board-name).yml ; \
-		sed -i -e "s/__BOARD_ARCH__/$(board-arch)/g" -e "s/__BOARD_NAME__/$(board-name)/g" $(board-name)/blueprint-$(board-name).yml ; \
-		sed -i -e "s/__BOARD_ARCH__/$(board-arch)/g" -e "s/__BOARD_NAME__/$(board-name)/g" $(board-name)/board.mk ; \
+		sed -i -e "s/__BOARD_ARCH__/$(arch)/g" -e "s/__BOARD_NAME__/$(board-name)/g" $(board-name)/blueprint-$(board-name).yml ; \
+		sed -i -e "s/__BOARD_ARCH__/$(arch)/g" -e "s/__BOARD_NAME__/$(board-name)/g" $(board-name)/board.mk ; \
 		if [ ! "$(uboot-defconfig)" == "" ] ; then \
 			sed -i -e "s/__UBOOT_DEFCONFIG__/$(uboot-defconfig)/g" $(board-name)/board.mk ; \
 		else  \

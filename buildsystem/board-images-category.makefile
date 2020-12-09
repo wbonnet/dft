@@ -146,8 +146,8 @@ add-board:
 		echo "DEBUG : from category.makefile argument board-name is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2009-2201) ; \
 	fi ; \
-	if [ "$(board-arch)" == "" ] ; then \
-		echo "DEBUG : from category.makefile argument board-arch is missing or has no value. Doing nothing..." ; \
+	if [ "$(arch)" == "" ] ; then \
+		echo "DEBUG : from category.makefile argument arch is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2009-2901) ; \
 	fi ; \
 	if [ -d "./$(board-name)" ] ; then \
@@ -159,7 +159,7 @@ add-board:
 		ln -s ../buildsystem $(board-name)/buildsystem ; \
 		ln -s ../../../board-support/$(shell echo $(PWD) | tr '/' ' ' | awk '{ print $$NF ; }')/$(board-name)/board.mk  $(board-name)/board.mk ; \
 		cp  $(DFT_BUILDSYSTEM)/templates/board-blueprint.yml.template $(board-name)/blueprint-$(board-name).yml ; \
-		sed -i -e "s/__BOARD_NAME__/$(board-name)/g" -e "s/__BOARD_ARCH__/$(board-arch)/g" $(board-name)/blueprint-$(board-name).yml ; \
+		sed -i -e "s/__BOARD_NAME__/$(board-name)/g" -e "s/__BOARD_ARCH__/$(arch)/g" $(board-name)/blueprint-$(board-name).yml ; \
 		echo "Your work is still local, to make it available, you have to run git add commit and push : " ; \
 		echo "git add $(board-name)" ; \
 		echo "Last step before building is to add an image u-boot version to the new $(board-name) board. You can use this example :" ; \

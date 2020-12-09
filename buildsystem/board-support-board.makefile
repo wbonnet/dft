@@ -207,10 +207,10 @@ show-kernel-dft-version-for:
 
 # Output board name if arch match criteria or if there is no defined criteria (or filter)
 list-boards:
-	@if [ "$(board-arch)" = "" ] ; then \
+	@if [ "$(arch)" = "" ] ; then \
 			echo "$(BOARD_NAME)" ; \
 	else \
-			if [ "$(board-arch)" = "$(BOARD_ARCH)" ]; then \
+			if [ "$(arch)" = "$(BOARD_ARCH)" ]; then \
 				echo "$(BOARD_NAME)" ; \
 			fi ; \
 	fi ;
@@ -228,17 +228,17 @@ show-kernel-dft-version:
 	@find ./kernel -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r --sort=version | head -n 1
 
 show-u-boot-available-upgrade:
-	@MY_ARCH=$(board-arch) ; \
-	if [ "$(board-arch)" = "armhf" ] ; then \
+	@MY_ARCH=$(arch) ; \
+	if [ "$(arch)" = "armhf" ] ; then \
 		MY_ARCH="armv7l"; \
 	fi ; \
-	if [ "$(board-arch)" = "arm64" ] ; then \
+	if [ "$(arch)" = "arm64" ] ; then \
 		MY_ARCH="aarch64"; \
 	fi ; \
-	if [ "$(board-arch)" = "amd64" ] ; then \
+	if [ "$(arch)" = "amd64" ] ; then \
 		MY_ARCH="x86_64"; \
 	fi ; \
-	if [ "$(board-arch)" = "" ] || [ "$(BOARD_ARCH)" = "$$MY_ARCH" ] ; then \
+	if [ "$(arch)" = "" ] || [ "$(BOARD_ARCH)" = "$$MY_ARCH" ] ; then \
 		UBOOT_DFT_VERSION=$(shell find $$PWD/u-boot -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r --sort=version | head -n 1) ; \
 		UBOOT_UPSTREAM_VERSION=$(shell wget -O- https://github.com/u-boot/u-boot/releases 2>&1 | grep -v "rc" | grep "v20" | tr '<' ' ' | tr '>' ' ' | tr 'v' ' ' | head -n 2 | tail -n 1 | awk '{ print $$1 }') ; \
 		if [ "$$UBOOT_DFT_VERSION" = "" ] ; then \
@@ -251,17 +251,17 @@ show-u-boot-available-upgrade:
 	fi ;
 
 show-kernel-available-upgrade:
-	@MY_ARCH=$(board-arch) ; \
-	if [ "$(board-arch)" = "armhf" ] ; then \
+	@MY_ARCH=$(arch) ; \
+	if [ "$(arch)" = "armhf" ] ; then \
 		MY_ARCH="armv7l"; \
 	fi ; \
-	if [ "$(board-arch)" = "arm64" ] ; then \
+	if [ "$(arch)" = "arm64" ] ; then \
 		MY_ARCH="aarch64"; \
 	fi ; \
-	if [ "$(board-arch)" = "amd64" ] ; then \
+	if [ "$(arch)" = "amd64" ] ; then \
 		MY_ARCH="x86_64"; \
 	fi ; \
-	if [ "$(board-arch)" = "" ] || [ "$(BOARD_ARCH)" = "$$MY_ARCH" ] ; then \
+	if [ "$(arch)" = "" ] || [ "$(BOARD_ARCH)" = "$$MY_ARCH" ] ; then \
 		KERNEL_DFT_VERSION=$(shell find kernel -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | grep "\." | sort -r --sort=version | head -n 1) ; \
 		KERNEL_UPSTREAM_VERSION=$(shell wget -O-  https://www.kernel.org/ 2>&1| grep "<td><strong>" | tr '<' ' ' | tr '>' ' ' | awk '{ print $$3 }' | head -n 2 | tail -n 1) ; \
 		if [ "$$KERNEL_DFT_VERSION" = "" ] ; then \
