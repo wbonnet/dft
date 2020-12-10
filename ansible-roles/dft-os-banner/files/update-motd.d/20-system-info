@@ -32,7 +32,7 @@ kthread_count=$(ps --no-headers -Ao cmd | grep "^\[" | grep "\]$" | wc -l)
 
 # Retrieves the number of threads
 thread_count=$(( $(ps --no-headers -AL | wc -l) - ${process_count} - ${kthread_count} ))
-thread_count="${thread_count} (${kthread_count} kernel)"
+thread_count="${thread_count} (${kthread_count} kern)"
 
 # Retrieve zombie and defunct processes
 zombie_count=$(ps --no-headers axo stat | grep Z | wc -l)
