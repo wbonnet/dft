@@ -48,15 +48,15 @@ show-build-targets:
 	@echo $(BUILD_TARGETS) ;
 
 build: configure pre-build $(BUILD_TARGETS) post-build
-	skip_target=0 ;
+	skip_target=0 ; \
 	echo "verbosity : $(verbosity)" ; 	
 	if [ "$(verbosity)" = "" ]  ; then \
 		verbosity=1 ; \
-	fi ;
+	fi ; \
 	if [ "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
 		skip_target=1 ; \
 		true ; \
-	fi ; 
+	fi ; \
 	if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] && [ "x$(only-native-arch)" = "x1" ] ; then \
 		skip_target=1 ; \
 		if [ "x$(arch-warning)" = "x1" ] ; then \
@@ -67,7 +67,7 @@ build: configure pre-build $(BUILD_TARGETS) post-build
 			echo "this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
 			echo "In order to generate binaries for existing architectures, you need several builders, one for each target arch." ; \
 		fi ; \
-	fi ; 
+	fi ; \
 	if [ ! "x$$skip_target" = "x1" ] ; then \
 		cd $(BUILD_DIR) ; \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \

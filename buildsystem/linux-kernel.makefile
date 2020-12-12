@@ -210,11 +210,10 @@ build:
 		echo "To generate binaries for all architectures you need several builders, one for each target architecture flavor." ; \
 	else \
 		if [ "$(only-latest)" = "1" ] ; then \
-			$(MAKE) --no-print-directory --directory=$(SW_LATEST) $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) verbosity=$(verbosity) only-latest=$(only-latest) \
+			$(MAKE) --no-print-directory --directory=$(SW_LATEST) $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) verbosity=$(verbosity) only-latest=$(only-latest) ;  \
 		else \
-			echo "latest version" ; \
-			for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "2*" -printf '%P\n')) ; do \
-				$(MAKE) --no-print-directory --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) verbosity=$(verbosity) only-latest=$(only-latest) \
+			for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d  -name "*.*" -printf '%P\n')) ; do \
+				$(MAKE) --no-print-directory --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) verbosity=$(verbosity) only-latest=$(only-latest) ; \
 			done ; \
 		fi ; \
 	fi ; \
