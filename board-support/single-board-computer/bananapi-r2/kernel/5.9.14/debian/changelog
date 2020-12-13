@@ -1,0 +1,17 @@
+linux-kernel-bananapi-r2 (5.9.14-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 12 Dec 2020 22:53:47 +0000
+
+linux-kernel-bananapi-r2 (5.9.14-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 12 Dec 2020 22:53:47 +0000
+
+linux-headers-bananapi-r2 (5.9.14-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 12 Dec 2020 22:53:47 +0000
