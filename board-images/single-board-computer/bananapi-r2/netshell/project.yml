@@ -69,6 +69,7 @@ configuration:
   # of rootfs generation process. Default value is False
   # remove_validity_check: False
 
+  # keep_bootstrap_files: true
 
 # ----------------------------------------------------------------------------
 #
@@ -97,20 +98,24 @@ project_definition:
 
   # Definition of the repositories to use
   repositories:
-    - repositories.yml
+    - repository-debian.yml
 
   # Definition of the rootfs content
   rootfs:
-    - rootfs.yml
+    - rootfs-netshell.yml
 
   # Definition of the image structure
   image:
-    - image-rootfs.yml
+    - disk-image.yml
+
+  # Path to bootscript template to instanciate and inject in to the image.
+  # This field is optional, if not defined
+  # bootscript: /path/to/boot.scr
 
   # Definition of the variables to be passed to rootfs creation
   variables:
-    - variables.yml
-    - variables-bananapi-r2.yml
+    - variables-netshell.yml
+    - board-variables.yml
 
   # Definition of the list of targets, with architectures, versions and optionaly board.
   # Firmware will be generated for each of the architecture in this list
@@ -122,7 +127,7 @@ project_definition:
   # DFT installation
   #
   targets:
-    - { version: stretch , board: bananapi-r2 }
+    - { version: buster , board: bananapi-r2 }
 
 # ----------------------------------------------------------------------------
 #
