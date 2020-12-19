@@ -16,7 +16,7 @@
 #
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com
 #
-
+#
 
 # ----------------------------------------------------------------------------
 #
@@ -31,7 +31,7 @@
 # ----------------------------------------------------------------------------
 devices:
   # Defines the size of the device to create. The size value is numerical
-  size: "1024"
+  size: "4096"
 
   # Defines the unit used for size. Valid values are :
   # "s" (sectors), "B" (bytes),  "kB",  "MB",  "MiB", "GB",  "GiB",  "TB",  "TiB"
@@ -50,7 +50,19 @@ devices:
 
   # Defines the filename used to store the device image. This file is created and allocated at
   # image creation.
-  filename: "nanopi-zero-netshell-rootfs"
+  filename: "nanopi-neo-rootfs"
+
+  # Defines the suffix appended to the filename. Default value is img. The dot should not be
+  # included in suffix, it zill be added automatically. If the string is emty, no suffix at all
+  # will be appended
+  # filename_suffix: "img"
+
+  # Should the filename include a timestamp ? Default is false
+  filename_timestamp: True
+
+  # Defines the timestamp format. Syntax is based upon python datetime strftime method
+  # Default value is : %Y%m%d (ex: 20180312)
+  filename_timestamp_format: "%Y%m%d"
 
   # Defines the kind of compression to apply on the image once its created. Valid values are :
   # . bzip2
@@ -95,7 +107,7 @@ devices:
         type: "primary" ,
 
         # Defines the size of the partition to create. The size value is numerical
-        size: "1020" ,
+        size: "4092" ,
 
         # Defines the unit used for size. Valid values are :
         # "s" (sectors), "B" (bytes),  "kB",  "MB",  "MiB", "GB",  "GiB",  "TB",  "TiB",
@@ -124,7 +136,7 @@ devices:
         # can be set. Please check the man for more informatons
         #
         # Default value (commented out or not defined) means no options and no call to tune2fs
-        ext_fs_tune: "-m 0" ,
+        # ext_fs_tune: "-m 0" ,
 
         # Missing type from fdisk list
 
@@ -163,10 +175,12 @@ filesystems:
       filesystem: "/dev/mmcblk0p1" ,
       mountpoint: "/" ,
       type: "ext4" ,
-      options: "discard,noatime,nodiratime,errors=remount-ro" ,
+      options: "noatime,nodiratime,errors=remount-ro" ,
       dump: "0" ,
       pass: "1"
     }
+
+
 # ----------------------------------------------------------------------------
 #
 # Definition of the content ource to use. Source can be either firmware or
@@ -182,3 +196,7 @@ content:
   #
   # Default value is rootfs (even if content section is not defined)
   type: rootfs
+
+  # Defines if a boot.scr script should be added or not. Default is True
+  # generate_bootscr: True
+
