@@ -43,7 +43,7 @@ UBOOT_SUPPORT = 1
 UBOOT_DEFCONFIG = mt7623n_bpir2_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
-UBOOT_BINARY_FILE = u-boot-sunxi-with-spl.bin
+UBOOT_BINARY_FILE = u-boot-nodtb.bin
 DEFAULT_DTB =
 
 
