@@ -1,0 +1,17 @@
+linux-kernel-asus-tinkerboard (5.10.1-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 20 Dec 2020 23:00:50 +0000
+
+linux-kernel-asus-tinkerboard (5.10.1-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 20 Dec 2020 23:00:50 +0000
+
+linux-headers-asus-tinkerboard (5.10.1-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 20 Dec 2020 23:00:50 +0000
