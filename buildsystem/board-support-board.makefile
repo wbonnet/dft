@@ -154,12 +154,12 @@ sanity-check: sanity-check-subdirs
         done
 
 u-boot-package:
-	$(MAKE) --directory=u-boot package only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) verbosity=$(verbosity);
+	$(MAKE) --directory=u-boot package arch=$(arch) only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) verbosity=$(verbosity);
 
 # Build only linux kernel an package target
 linux-kernel-package:
 kernel-package:
-	$(MAKE) --directory=kernel package only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) verbosity=$(verbosity);
+	$(MAKE) --directory=kernel package arch=$(arch) only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) verbosity=$(verbosity);
 
 # Catch all target. Call the same targets in each subfolder
 # cd $$i && $(MAKE) $* && cd .. ;
