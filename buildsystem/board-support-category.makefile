@@ -115,7 +115,7 @@ u-boot-package:
 # Build only linux kernel an package target
 linux-kernel-package:
 	@echo "DEBUG : $@ in category.makefile" ;
-	@for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
+	for i in $(filter-out $(MAKE_FILTERS),$(shell find . -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; do \
 		if [ -f $$i/Makefile ] ; then \
 			$(MAKE) --no-print-directory kernel-package --directory=$$i only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) arch=$(arch) ; \
 		fi ; \
