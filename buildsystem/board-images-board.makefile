@@ -37,8 +37,8 @@ include board.mk
 #
 # Target that call the dft command line tool to build the image
 #
-build-image:
-	echo "build-image from board-images-board.makefile" ; \
+image:
+	echo "image from board-images-board.makefile" ; \
 #	time sudo dft run_sequence --project project.yml --sequence produce-image  --log-level debug --config-file /home/william/.dftrc
 
 list-images:
@@ -165,7 +165,7 @@ add-image:
 	echo "Your work is still local, to make it available, you have to run git add commit and push : " ; \
 	echo "git add $(image-name)" ; \
 	echo "You are done, you can now build the image using" ; \
-	echo "cd $(image-name) && make build-image" ; \
+	echo "cd $(image-name) && make image" ; \
 
 # ------------------------------------------------------------------------------
 #

@@ -38,7 +38,7 @@ include $(DFT_BUILDSYSTEM)/dft.mk
 #
 # Target that call the dft command line tool to build the image
 #
-build-image:
+image:
 	sudo dft run_sequence --project project.yml --sequence produce-image  --log-level debug --config-file /home/william/.dftrc
 
 list-images:
@@ -123,6 +123,6 @@ sanity-check:
 #
 help:
 	@echo "Available targets are :"
-	@echo "   build-image             Build the $(BOARD_NAME) board image"
+	@echo "   image                   Build the $(BOARD_NAME) bootable board image ready to be copied to storage"
 	@echo "   help                    Display this help"
 

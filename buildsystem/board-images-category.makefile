@@ -36,7 +36,7 @@ include $(DFT_BUILDSYSTEM)/dft.mk
 #
 # Target that call the dft command line tool to build the image
 #
-build-image:
+image:
 	sudo dft run_sequence --project project.yml --sequence produce-image  --log-level debug --config-file /home/william/.dftrc
 
 list-images:
