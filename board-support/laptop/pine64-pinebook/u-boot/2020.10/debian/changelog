@@ -1,0 +1,5 @@
+u-boot-pine64-pinebook (2020.10-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 26 Dec 2020 01:15:51 +0100
