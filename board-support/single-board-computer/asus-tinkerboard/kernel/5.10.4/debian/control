@@ -1,0 +1,21 @@
+Source: linux-kernel-asus-tinkerboard
+Section: kernel
+Priority: optional
+Maintainer: William Bonnet <wbonnet@theitmakers.com>
+Standards-Version: 3.9.8
+Build-Depends: debhelper (>= 9)
+
+Package: linux-kernel-asus-tinkerboard
+Architecture: any
+Depends: ${misc:Depends},
+         kmod, 
+         linux-base (>= 4.3~), 
+         initramfs-tools (>= 0.120+deb8u2) | linux-initramfs-tool
+Description: Linux kernel, version 5.10.4 for asus-tinkerboard
+ This packages contains the Linux kernel version 5.10.4 compiled for asus-tinkerboard board.
+
+# Package: linux-headers-asus-tinkerboard-5.10.4
+# Architecture: any
+# Depends: ${misc:Depends}
+# Description: Linux kernel headers, version 5.10.4 for asus-tinkerboard
+#  This packages contains the Linux kernel headers version 5.10.4 for asus-tinkerboard board.
