@@ -1,0 +1,17 @@
+linux-kernel-odroid-c4 (5.10.4-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 01 Jan 2021 00:58:29 +0100
+
+linux-kernel-odroid-c4 (5.10.4-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 01 Jan 2021 00:58:29 +0100
+
+linux-headers-odroid-c4 (5.10.4-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 01 Jan 2021 00:58:29 +0100
