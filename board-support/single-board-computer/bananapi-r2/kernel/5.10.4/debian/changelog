@@ -1,0 +1,17 @@
+linux-kernel-bananapi-r2 (5.10.4-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 02 Jan 2021 15:45:41 +0100
+
+linux-kernel-bananapi-r2 (5.10.4-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 02 Jan 2021 15:45:41 +0100
+
+linux-headers-bananapi-r2 (5.10.4-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 02 Jan 2021 15:45:41 +0100
