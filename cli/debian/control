@@ -39,6 +39,7 @@ Depends: ${misc:Depends},
          reiser4progs,
          lsb-release,
          reiserfsprogs,
+         u-boot-tools,
          squashfs-tools
 Description: Debian Framework Toolkit
 
