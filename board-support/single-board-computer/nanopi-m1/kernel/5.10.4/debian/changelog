@@ -1,0 +1,17 @@
+linux-kernel-nanopi-m1 (5.10.4-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 05 Jan 2021 19:00:14 +0100
+
+linux-kernel-nanopi-m1 (5.10.4-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 05 Jan 2021 19:00:14 +0100
+
+linux-headers-nanopi-m1 (5.10.4-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 05 Jan 2021 19:00:14 +0100
