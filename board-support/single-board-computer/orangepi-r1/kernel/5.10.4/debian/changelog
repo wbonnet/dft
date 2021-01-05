@@ -1,0 +1,17 @@
+linux-kernel-orangepi-r1 (5.10.4-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 05 Jan 2021 19:21:19 +0100
+
+linux-kernel-orangepi-r1 (5.10.4-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 05 Jan 2021 19:21:19 +0100
+
+linux-headers-orangepi-r1 (5.10.4-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Tue, 05 Jan 2021 19:21:19 +0100
