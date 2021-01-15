@@ -209,7 +209,7 @@ add-board:
 		$(call dft_error ,2010-0102) ; \
 	fi ; \
 	if [ "$(default-dtb)" == "" ] ; then \
-		echo "DEBUG : from category.makefile argument defaul-dtb is missing or has no value. Doing nothing..." ; \
+		echo "DEBUG : from category.makefile argument default-dtb is missing or has no value. Doing nothing..." ; \
 		$(call dft_error ,2010-0103) ; \
 	fi ; \
 	if [ -d "./$(board-name)" ] ; then \
