@@ -17,7 +17,6 @@
 #    William Bonnet     wllmbnnt@gmail.com, wbonnet@theitmakers.com, william@wbonnet.net
 #
 #
-
 # Documentation https://docs.ansible.com/ansible/latest/modules/lvol_module.html
 
 ---
@@ -31,7 +30,6 @@
     resizefs: "{{ item.resizefs }}"
     shrink: "{{ item.shrink }}"
     size: "{{ item.size }}"
-#    snapshot: "{{ item.snapshot }}"
     state: "{{ item.state }}"
     thinpool: "{{ item.thinpool }}"
     vg: "{{ item.vg }}"
