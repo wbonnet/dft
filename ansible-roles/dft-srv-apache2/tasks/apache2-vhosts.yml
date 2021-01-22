@@ -29,8 +29,8 @@
              owner=root
              group=root
              mode="0644"
-  with_items: "{{ dft_apache2.http_sites_available }}"
-  when: dft_apache2.http_sites_available is defined
+  with_items: "{{ dft_srv_apache2.http_sites_available }}"
+  when: dft_srv_apache2.http_sites_available is defined
 
 - name: Install apache2 HTTPS virtual hosts
   template:  src=ssl-virtual-host.j2
@@ -38,17 +38,18 @@
              owner=root
              group=root
              mode="0644"
-  with_items: "{{ dft_apache2.https_sites_available}}"
-  when: dft_apache2.https_sites_available is defined
+  with_items: "{{ dft_srv_apache2.https_sites_available}}"
+  when: dft_srv_apache2.https_sites_available is defined
 
 #
 # Register virtual host enable status
 #
-- name: Check if apache2 virtual hosts are activated
-  stat: path="/etc/apache2/sites-enabled/{{ item.name }}"
-  register: "{{ item.name }}_is_conf_enabled"
-  with_items: "{{ dft_apache2.sites_enabled}}"
-  when: dft_apache2.sites_enabled is defined
+
+#- name: Check if apache2 virtual hosts are activated
+#  stat: path="/etc/apache2/sites-enabled/{{ item.name }}"
+#  register: "{{ item.name }}_is_conf_enabled"
+#  with_items: "{{ dft_srv_apache2.sites_enabled}}"
+#  when: dft_srv_apache2.sites_enabled is defined
 
  #/etc/apache2/sites-available/
  #mods et conf
@@ -58,7 +59,8 @@
 #
 - name: Activate apache2 enabled virtual hosts
   command: a2ensite {{ item.name }}
-  with_items: "{{ dft_apache2.sites_enabled }}"
+  with_items: "{{ dft_srv_apache2.sites_enabled }}"
+  when: dft_srv_apache2.sites_enabled is defined
 #  when: {{ item.name }}_is_conf_enabled.stat.exists
 
 #-  notify:
@@ -69,8 +71,8 @@
 #
 - name: Deactivate apache2 disabled virtual hosts
   command: a2dissite {{ item.name }}
-  with_items: "{{ dft_apache2.sites_disabled}}"
-  when: dft_apache2.sites_disabled is defined
+  with_items: "{{ dft_srv_apache2.sites_disabled}}"
+  when: dft_srv_apache2.sites_disabled is defined
 #-  notify:
 #    - reload apache
 
