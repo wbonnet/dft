@@ -19,11 +19,10 @@
 #
 
 ---
-
 # -------------------------------------------------------------------------------------------------
 # Create the reprepro group
 - name: Create the reprepro group
-  group: name={{ dft_srv_reprepro.user_definition.group }}
+  group: name={{ dft_srv_reprepro.user_definition.group | default('reprepro') }}
          state=present
 
 # Add the user 'reprepro' with a bash shell, appending the group reprepro and
