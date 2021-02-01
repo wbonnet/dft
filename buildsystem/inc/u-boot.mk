@@ -54,7 +54,7 @@ SRC_GIT_REPO_EXT    ?= "SRC_GIT_REPO_EXT Not Used -- .git"
 SRC_FILE_VERSION    ?= $(shell echo $(SW_VERSION) | head -c 1)
 DFT_SRC_SITE        ?= https://github.com/
 SRC_DIST_URL        ?= $(DFT_SRC_SITE)/$(SW_NAME)/$(SW_NAME)/archive
-SW_LATEST           ?= $(shell find .. -mindepth 1 -maxdepth 1 -type d -name "*\.*" | sort -r --sort=version |  head -n 1 | cut -d \/ -f 2)
+SW_LATEST           ?= $(shell find . -mindepth 1 -maxdepth 1 -type d -name "*\.*" | sort -r --sort=version |  head -n 1 | cut -d \/ -f 2)
 
 # Defines the files to retrieve
 SRC_DIST_FILES      ?= v$(SW_VERSION).tar.gz
