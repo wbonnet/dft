@@ -45,8 +45,8 @@ DFT_TARGET_SETUP = 1
 #
 setup: pre-setup do-setup post-setup
 do-setup:
-	@mkdir -p "$(DFT_FORGE)" ;
-	@if [ ! "${SW_VERSION}" = "undefined-sw-version" ] && [ ! "${SW_NAME}" = "undefined-sw-name" ] && [ ! "${SW_NAME}" = "" ] && [ ! "${SW_VERSION}" = "" ] ; then \
+	@mkdir -p "$(DFT_FORGE)" ; \
+	if [ ! "${SW_VERSION}" = "undefined-sw-version" ] && [ ! "${SW_NAME}" = "undefined-sw-name" ] && [ ! "${SW_NAME}" = "" ] && [ ! "${SW_VERSION}" = "" ] ; then \
 		mkdir -p "$(WORK_DIR)" ; \
 		mkdir -p "$(COOKIE_DIR)" ; \
 		mkdir -p "$(INSTALL_DIR)" ; \
@@ -59,13 +59,12 @@ do-setup:
 		fi ; \
 		mkdir -p "$(FILE_DIR)" ; \
 		mkdir -p "$(PATCH_DIR)" ; \
-	$(TARGET_DONE) ; \
-fi ; \
-if [ "$(only-latest)" = "1" ] ; then \
-	if [ ! "$(SW_LATEST)" = "" ] ; then \
-			cd "$(SW_LATEST)" ; \
-			$(MAKE) --no-print-directory $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity) ; \
-			cd .. ; \
+	fi ; \
+	if [ "$(only-latest)" = "1" ] ; then \
+		if [ ! "$(SW_LATEST)" = "" ] ; then \
+	    $(MAKE) --directory=$(SW_LATEST) --no-print-directory $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity) ; \
+		else \
+			pwd ; \
 		fi ; \
 	else \
 		for v in $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; \
@@ -74,6 +73,7 @@ if [ "$(only-latest)" = "1" ] ; then \
 	fi ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
+
 # Match initial ifdef DFT_TARGET_SETUP
-# $(MAKE) --no-print-directory --directory=$$v $@ only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity)
 endif
+
