@@ -1,0 +1,12 @@
+Source: u-boot-96boards-rock960
+Section: misc
+Priority: optional
+Maintainer: William Bonnet <wbonnet@theitmakers.com>
+Standards-Version: 3.9.8
+Build-Depends: debhelper (>= 9)
+
+Package: u-boot-96boards-rock960
+Architecture: any
+Depends: ${misc:Depends}
+Description: u-boot, version 2021.01 for 96boards-rock960
+ This packages contains u-boot version 2021.01 compiled for 96boards-rock960 board.

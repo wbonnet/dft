@@ -1,0 +1,1 @@
+../../files/install.u-boot-beagleboard-beaglebone-black.md

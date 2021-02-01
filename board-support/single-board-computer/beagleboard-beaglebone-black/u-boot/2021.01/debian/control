@@ -1,0 +1,12 @@
+Source: u-boot-beagleboard-beaglebone-black
+Section: misc
+Priority: optional
+Maintainer: William Bonnet <wbonnet@theitmakers.com>
+Standards-Version: 3.9.8
+Build-Depends: debhelper (>= 9)
+
+Package: u-boot-beagleboard-beaglebone-black
+Architecture: any
+Depends: ${misc:Depends}
+Description: u-boot, version 2021.01 for beagleboard-beaglebone-black
+ This packages contains u-boot version 2021.01 compiled for beagleboard-beaglebone-black board.
