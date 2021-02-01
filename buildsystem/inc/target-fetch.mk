@@ -68,10 +68,10 @@ fetch : setup pre-fetch $(FETCH_TARGETS) post-fetch
 		fi ; \
 	else \
 		pwd ; \
-		for v in fetch_debug $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; \
-			do echo "target-fetch iterateur fetch_debug : $$v" ; \
-		done ; \
 	fi ;
+#		for v in fetch_debug $(filter-out $(MAKE_FILTERS),$(shell find .  -mindepth 1 -maxdepth 1 -type d -printf '%P\n')) ; \
+#			do echo "target-fetch iterateur fetch_debug : $$v" ; \
+#		done ; \
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
 
