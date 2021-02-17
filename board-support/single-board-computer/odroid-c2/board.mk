@@ -39,13 +39,18 @@ BOARD_ARCH = aarch64
 # if UBOOT_SUPPORT is disabled packaging is skipped. In this case, you may have to activate GRUB.
 UBOOT_SUPPORT = 1
 
+# Defines if trusted boot is enabled for this board and trusted binary has to be assembled
+UBOOT_TRUSTED = 1
+
+# Defines the script used to produce (assemble and sign) the u-boot binary
+UBOOT_ASSEMBLY_SCRIPT = assemble-uboot-$(BOARD_NAME).sh
+
 # Make use the defconfig file from UBOOT_DEFCONFIG unless you specify your own in USE_CONFIG_FILE
 UBOOT_DEFCONFIG = odroid-c2_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
 UBOOT_BINARY_FILE = u-boot.bin
 DEFAULT_DTB = meson-gxbb-odroidc2.dtb
-
 
 #
 # GRUB support and configuration (u-boot or grub should be activated to be able to boot the board).
