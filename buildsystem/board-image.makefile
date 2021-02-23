@@ -19,7 +19,7 @@
 #
 
 # Force bash use instead of sh which is a symlink to dash on Debian. Dash use
-# a slightly different syntax for some operators. This way it a known shell.
+# a slightly different syntax for some operators. This way we use a known shell.
 SHELL := bash
 
 # Build system sould be available under board folder as a symlink. Keep it
