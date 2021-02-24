@@ -37,8 +37,8 @@ BOARD_ARCH = aarch64
 # if UBOOT_SUPPORT is disabled packaging is skipped. In this case, you may have to activate GRUB.
 UBOOT_SUPPORT         = 1
 
-# Defines if trusted boot is enabled for this board and trusted binary has to be assembled
-UBOOT_TRUSTED         = 1
+# Defines if an assembly script has to be executed (this script can execute final assembly and/or signature operation)
+UBOOT_ASSEMBLING = 1
 
 # Defines the script used to produce (assemble and sign) the u-boot binary
 UBOOT_ASSEMBLY_SCRIPT = assemble-uboot-$(BOARD_NAME).sh
