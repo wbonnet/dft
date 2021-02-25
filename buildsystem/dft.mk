@@ -227,6 +227,8 @@ show-config:
 	@echo "  DEFAULT_DTB                       $(DEFAULT_DTB)"
 	@echo "  KERNEL_DEFCONFIG                  $(KERNEL_DEFCONFIG)"
 	@echo "  UBOOT_SUPPORT                     $(UBOOT_SUPPORT)"
+	@echo "  UBOOT_ASSEMBLING                  $(UBOOT_ASSEMBLING)"
+	@echo "  UBOOT_ASSEMBLY_SCRIPT             $(UBOOT_ASSEMBLY_SCRIPT)"
 	@echo "  UBOOT_DEFCONFIG                   $(UBOOT_DEFCONFIG)"
 	@echo "  UBOOT_BINARY_FILE                 $(UBOOT_BINARY_FILE)"
 	@echo "  GRUB_SUPPORT                      $(GRUB_SUPPORT)"
