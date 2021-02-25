@@ -62,7 +62,7 @@ reinstall: build pre-reinstall do-reinstall install post-reinstall
 #
 
 do-install:
-	@if [ "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
+	if [ "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
 		true ; \
 	else \
 		if [ ! "x$(HOST_ARCH)" = "x$(BOARD_ARCH)" ] ; then \
@@ -70,7 +70,7 @@ do-install:
 				if [ ! "x$(only-native-arch)" = "x1" ] ; then \
 					echo "Makefile processing had to be stopped during target $@ execution. Cross compilation is not supported. " ; \
 					echo "The target board is based on $(BOARD_ARCH) architecture and make is running on a $(HOST_ARCH) board." ; \
-				  echo "The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
+				        echo "The generated binaries might be invalid or scripts could fail before reaching the end of target." ; \
 					echo "Makefile will now continue and process only $(HOST_ARCH) based boards. You can get the missing binaries by running" ; \
 					echo "this target again on a $(BOARD_ARCH) based host and collect by yourself the generated items." ; \
 					echo "In order to generate binaries for existing architectures, you need several builders, one for each target arch." ; \
@@ -80,16 +80,13 @@ do-install:
 			if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
 				if [ "$(SW_NAME)" = "u-boot" ] ; then \
 					cp -frv ../files $(INSTALL_DIR)/doc ; \
-				fi ; \
-				pwd ; \
-				cd $(BUILD_DIR) ; \
-				if [ "$(SW_NAME)" = "u-boot" ] ; then \
-					mkdir $(INSTALL_DIR)/u-boot/ ; \
-					cp -fv $(BUILD_DIR)/$(UBOOT_BINARY_FILE) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION) ; \
-					cp -fv $(BUILD_DIR)/u-boot.dtb $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb ; \
-					ln -sf u-boot-$(BOARD_NAME)-$(SW_VERSION) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME); \
+					mkdir -p $(INSTALL_DIR)/u-boot/ ; \
+                                        cp -fv $(BUILD_DIR)/$(UBOOT_BINARY_FILE) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION) ; \
+                                        cp -fv $(BUILD_DIR)/u-boot.dtb $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb ; \
+                                        ln -sf u-boot-$(BOARD_NAME)-$(SW_VERSION) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME); \
 				else \
 					if [ "$(SW_NAME)" = "linux" ] ; then \
+						cd $(BUILD_DIR) ; \
 						mkdir -p $(INSTALL_DIR)/boot/dtb ; \
 						$(BUILD_ENV) $(MAKE) INSTALL_PATH=$(INSTALL_DIR)/boot $(INSTALL_ARGS) ; \
 						$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(INSTALL_DIR)/ INSTALL_MOD_STRIP=1 modules_install ; \
