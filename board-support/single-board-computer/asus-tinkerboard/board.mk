@@ -30,7 +30,6 @@ BOARD_NAME = asus-tinkerboard
 BOARD_ARCH = armv7l
 
 
-
 #
 # u-boot support and configuration
 #
@@ -39,11 +38,17 @@ BOARD_ARCH = armv7l
 # if UBOOT_SUPPORT is disabled packaging is skipped. In this case, you may have to activate GRUB.
 UBOOT_SUPPORT = 1
 
+# Defines if an assembly script has to be executed (this script can execute final assembly and/or signature operation)
+UBOOT_ASSEMBLING = 1
+
+# Defines the script used to produce (assemble and sign) the u-boot binary
+UBOOT_ASSEMBLY_SCRIPT = assemble-uboot-$(BOARD_NAME).sh
+
 # Make use the defconfig file from UBOOT_DEFCONFIG unless you specify your own in USE_CONFIG_FILE
 UBOOT_DEFCONFIG = tinker-rk3288_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
-UBOOT_BINARY_FILE = u-boot.bin
+UBOOT_BINARY_FILE = u-boot-$(BOARD_NAME)
 DEFAULT_DTB = rk3288-tinker.dtb
 
 
@@ -51,17 +56,3 @@ DEFAULT_DTB = rk3288-tinker.dtb
 # GRUB support and configuration (u-boot or grub should be activated to be able to boot the board).
 #
 GRUB_SUPPORT = 0
-# Defines board name
-BOARD_NAME = asus-tinkerboard
-BOARD_ARCH = armv7l
-
-# Defines if the board use u-boot (set UBOOT_SUPPORT to 1) (0 it does not)
-# if UBOOT_SUPPORT is disabled u-boot checks and generation are skipped
-UBOOT_SUPPORT = 1
-
-# Set config file to empty and define the name of the board to use a defconfig
-USE_CONFIG_FILE =
-UBOOT_DEFCONFIG = tinker-rk3288_defconfig
-
-# Defines the list of files to copy (path is relative to build dir)
-UBOOT_BINARY_FILE  = u-boot
