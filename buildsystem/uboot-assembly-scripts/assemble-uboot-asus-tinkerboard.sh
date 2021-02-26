@@ -31,7 +31,7 @@ cd $1
 DIR=asus-tinkerboard
 OUTPUT=u-boot-${DIR}
 
-mkimage -n rk3288 -T rksd -d spl/u-boot-spl-dtb.bin u-boot.img
+mkimage -n rk3288 -T rksd -d spl/u-boot-spl-nodtb.bin u-boot.img
 mkdir u-boot  
 cat u-boot-dtb.bin >> u-boot/u-boot.img
 
