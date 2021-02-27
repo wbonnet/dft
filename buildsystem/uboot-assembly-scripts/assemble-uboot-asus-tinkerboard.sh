@@ -25,7 +25,7 @@
 set -ex
 
 # The first and only argument is the directory where u-boot is being built
-cd  $1
+cd $1
 
 # The following procedure is provided with u-boot sources in readme from doc/board folder
 DIR=asus-tinkerboard
