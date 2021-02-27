@@ -29,10 +29,7 @@ cd  $1
 
 # The following procedure is provided with u-boot sources in readme from doc/board folder
 DIR=asus-tinkerboard
-OUTPUT=u-boot-$DIR
+OUTPUT=u-boot-${DIR}
 
-mkimage -n rk3288 -T rksd -d spl/u-boot-spl-dtb.bin dest-u-boot.img
-cat u-boot-dtb.bin >> dest-u-boot.img
-
-dd if=/dev/zero of=${OUTPUT} conv=fsync bs=1024 count=1024
-dd if=dest-u-boot.img of=${OUTPUT} seek=64 conv=notrunc
+mkimage -n rk3288 -T rksd -d ./tpl/u-boot-tpl.bin ${OUTPUT}
+cat ./spl/u-boot-spl-dtb.bin >> ${OUTPUT}
