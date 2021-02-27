@@ -33,7 +33,7 @@ u-boot itself.
 ## shell commands
 
 # sudo dd if=/dev/zero of=/dev/mmcblk0 bs=1k count=1023 seek=1 status=noxfer
-sudo dd if=/dev/zero of=/dev/mmcblk0 bs=1k count=1023 seek=1 status=noxfer
 
 # Copy binary to MMC and update u-boot (environnment variables stored on MMC are not modified)
-sudo dd if=/boot/u-boot/u-boot-u-boot-asus-tinkerboard.md of=/dev/mmcblk0 bs=1024 seek=8 status=noxfer
+sudo dd if=/boot/u-boot/u-boot-asus-tinkerboard of=/dev/mmcblk0 seek=64
+sudo dd if=/boot/u-boot/u-boot-dtb.img of=/dev/mmcblk0 seek=16384
