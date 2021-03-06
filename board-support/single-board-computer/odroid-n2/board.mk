@@ -48,7 +48,7 @@ UBOOT_ASSEMBLY_SCRIPT = assemble-uboot-$(BOARD_NAME).sh
 UBOOT_DEFCONFIG = odroid-n2_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
-UBOOT_BINARY_FILE = u-boot.bin
+UBOOT_BINARY_FILE = u-boot-odroid-n2
 DEFAULT_DTB = meson-g12b-odroid-n2.dtb
 
 

@@ -30,7 +30,6 @@ BOARD_NAME = odroid-c2
 BOARD_ARCH = aarch64
 
 
-
 #
 # u-boot support and configuration
 #

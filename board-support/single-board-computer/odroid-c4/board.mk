@@ -29,13 +29,14 @@ BOARD_NAME = odroid-c4
 # Board architecture as defined by uname -m (armv7l, mips, aarch64, x86_64, etc.)
 BOARD_ARCH = aarch64
 
+
 #
 # u-boot support and configuration
 #
 
-# Defines if u-boot should be generated (UBOOT_SUPPORT is set to 1) (0 means u-boot is not available).
+# Defines if u-boot should be generated (set UBOOT_SUPPORT to 1) (0 means u-boot is not available).
 # if UBOOT_SUPPORT is disabled packaging is skipped. In this case, you may have to activate GRUB.
-UBOOT_SUPPORT         = 1
+UBOOT_SUPPORT = 1
 
 # Defines if an assembly script has to be executed (this script can execute final assembly and/or signature operation)
 UBOOT_ASSEMBLING = 1
