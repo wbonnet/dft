@@ -81,7 +81,7 @@ build: configure pre-build $(BUILD_TARGETS) post-build
 #
 # Post-build target is in charge of assembling and signing of the final binary
 #
-post-build:
+post-build: 
 	@if [ "$(UBOOT_ASSEMBLING)" = "1" ] ; then \
 		if [ "$(UBOOT_ASSEMBLY_SCRIPT)" = "" ] ; then \
 			echo "Error variable : UBOOT_ASSEMBLY_SCRIPT is undefined" ; \
@@ -94,6 +94,9 @@ post-build:
 			fi ; \
 		fi ; \
 	else \
+		if [ ! -d  $(INSTALL_DIR)/u-boot ] ; then \
+			mkdir $(INSTALL_DIR)/u-boot ; \
+		fi ; \
 		cp -fv $(BUILD_DIR)/$(UBOOT_BINARY_FILE) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION) ; \
 		cp -fv $(BUILD_DIR)/u-boot.dtb $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb ; \
 		ln -sf u-boot-$(BOARD_NAME)-$(SW_VERSION) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME) ; \
