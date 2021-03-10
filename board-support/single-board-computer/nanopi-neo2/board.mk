@@ -51,20 +51,3 @@ DEFAULT_DTB = sun50i-h5-nanopi-neo2.dtb
 # GRUB support and configuration (u-boot or grub should be activated to be able to boot the board).
 #
 GRUB_SUPPORT = 0
-# Defines board name
-BOARD_NAME = nanopi-neo2
-BOARD_ARCH = aarch64
-
-# Defines if the board use u-boot (set UBOOT_SUPPORT to 1) (0 it does not)
-# if UBOOT_SUPPORT is disabled u-boot checks and generation are skipped
-UBOOT_SUPPORT = 1
-
-# Set config file to empty and define the name of the board to use a defconfig
-USE_CONFIG_FILE        =
-UBOOT_DEFCONFIG        = nanopi_neo2_defconfig
-
-# Defines the default dtb to use (symlink used by generic boot.scr)
-DEFAULT_DTB = sun50i-h5-nanopi-neo2.dtb
-
-# Defines the list of files to copy (path is relative to build dir)
-UBOOT_BINARY_FILE      = u-boot.bin
