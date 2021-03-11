@@ -36,16 +36,16 @@ BOARD_ARCH = aarch64
 
 # Defines if u-boot should be generated (set UBOOT_SUPPORT to 1) (0 means u-boot is not available).
 # if UBOOT_SUPPORT is disabled packaging is skipped. In this case, you may have to activate GRUB.
-UBOOT_SUPPORT         = 1
+UBOOT_SUPPORT = 1
 
-i# Defines if an assembly script has to be executed (this script can execute final assembly and/or signature operation)
+# Defines if an assembly script has to be executed (this script can execute final assembly and/or signature operation)
 UBOOT_ASSEMBLING = 1
 
 # Defines the script used to produce (assemble and sign) the u-boot binary
 UBOOT_ASSEMBLY_SCRIPT = assemble-uboot-$(BOARD_NAME).sh
 
 # Make use the defconfig file from UBOOT_DEFCONFIG unless you specify your own in USE_CONFIG_FILE
-UBOOT_DEFCONFIG       = odroid-n2_defconfig
+UBOOT_DEFCONFIG = odroid-n2_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
 UBOOT_BINARY_FILE = u-boot.bin
