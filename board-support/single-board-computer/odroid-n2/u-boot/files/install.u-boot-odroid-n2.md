@@ -32,8 +32,9 @@ u-boot itself.
 
 ## shell commands
 
-# Blank and erase u-boot environnment variables stored on MMC (does not modify u-boot binary itself)
+# Blank and erase u-boot and its environnement stored on MMC
 sudo dd if=/dev/zero of=/dev/mmcblk0 bs=1k count=1023 seek=1 status=noxfer
 
 # Copy binary to MMC and update u-boot (environnment variables stored on MMC are not modified)
-sudo dd if=/boot/u-boot/u-boot-odroid-n2 of=/dev/mmcblk0 bs=1024 seek=8 status=noxfer
+sudo dd if=/boot/u-boot/u-boot-odroid-n2 of=/dev/mmcblk0 conv=fsync,notrunc bs=512 skip=1 seek=1 
+sudo dd if=/boot/u-boot/u-boot-odroid-n2 of=/dev/mmcblk0 conv=fsync,notrunc bs=1 count=444

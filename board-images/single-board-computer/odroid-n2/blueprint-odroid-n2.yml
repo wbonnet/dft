@@ -73,5 +73,9 @@ u-boot:
     }
   - {
       source: "/boot/u-boot/u-boot-odroid-n2" ,
-      options: "bs=1024 seek=8 status=noxfer"
+      options: "conv=fsync,notrunc bs=512 skip=1 seek=1"
+    }
+  - {
+      source: "/boot/u-boot/u-boot-odroid-n2" ,
+      options: "conv=fsync,notrunc bs=1 count=444"
     }
