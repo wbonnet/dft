@@ -1,0 +1,17 @@
+linux-kernel-nanopi-neo3 (5.11.6-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 12 Mar 2021 16:01:54 +0100
+
+linux-kernel-nanopi-neo3 (5.11.6-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 12 Mar 2021 16:01:54 +0100
+
+linux-headers-nanopi-neo3 (5.11.6-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 12 Mar 2021 16:01:54 +0100
