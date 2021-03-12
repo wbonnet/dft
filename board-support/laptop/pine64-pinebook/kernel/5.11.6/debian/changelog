@@ -1,0 +1,17 @@
+linux-kernel-pine64-pinebook (5.11.6-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 12 Mar 2021 16:02:44 +0100
+
+linux-kernel-pine64-pinebook (5.11.6-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 12 Mar 2021 16:02:44 +0100
+
+linux-headers-pine64-pinebook (5.11.6-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Fri, 12 Mar 2021 16:02:44 +0100
