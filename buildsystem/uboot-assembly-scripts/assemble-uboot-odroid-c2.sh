@@ -37,6 +37,7 @@ cat $DIR/fip/gxb/bl2.package $DIR/fip.bin > $DIR/boot_new.bin
 qemu-x86_64-static $DIR/fip/gxb/aml_encrypt_gxb --bootsig --input $DIR/boot_new.bin --output $DIR/u-boot.img
 dd if=$DIR/u-boot.img of=$DIR/u-boot.gxbb bs=512 skip=96
 BL1=$DIR/sd_fuse/bl1.bin.hardkernel
+dd if=/dev/zero of=$OUTPUT conv=fsync bs=1024 count=1024
 dd if=$BL1 of=$OUTPUT conv=fsync bs=1 count=442
 dd if=$BL1 of=$OUTPUT conv=fsync bs=512 skip=1 seek=1
 dd if=$DIR/u-boot.gxbb of=$OUTPUT conv=fsync bs=512 seek=97
