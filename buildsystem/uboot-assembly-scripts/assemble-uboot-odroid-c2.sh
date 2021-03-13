@@ -28,6 +28,25 @@ set -ex
 cd  $1
 
 # The following procedure is provided with u-boot sources in readme from doc/board folder
+GITHUBDIR=github_odroid-c2
+OUTPUT=u-boot-odroid-c2
+UBOOTDIR=$1/$GITHUBDIR
+git clone --depth 1 https://github.com/hardkernel/u-boot.git -b odroidc2-v2015.01 $UBOOTDIR
+
+
+
+
+
+
+
+
+
+
+
+# The first and only argument is the directory where u-boot is being built
+cd  $1
+
+# The following procedure is provided with u-boot sources in readme from doc/board folder
 DIR=odroid-c2
 OUTPUT=u-boot-$DIR
 git clone --depth 1 https://github.com/hardkernel/u-boot.git -b odroidc2-v2015.01 $DIR
