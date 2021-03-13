@@ -82,7 +82,7 @@ build: configure pre-build $(BUILD_TARGETS) post-build
 # Post-build target is in charge of assembling and signing of the final binary
 #
 post-build: 
-	@if [ "$(UBOOT_ASSEMBLING)" = "1" ] ; then \
+	@if [ "$(SW_NAME)" = "u-boot" ] && [ "$(UBOOT_ASSEMBLING)" = "1" ] ; then \
 		if [ "$(UBOOT_ASSEMBLY_SCRIPT)" = "" ] ; then \
 			echo "Error variable : UBOOT_ASSEMBLY_SCRIPT is undefined" ; \
 		else \
