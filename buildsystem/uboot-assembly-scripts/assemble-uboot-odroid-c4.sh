@@ -31,7 +31,7 @@ cd  $1
 GITHUBDIR=odroid-c4
 OUTPUT=u-boot-odroid-c4
 UBOOTDIR=$1/$GITHUBDIR
-git clone --depth 1 https://github.com/hardkernel/u-boot.git -b odroidc2-v2015.01 $UBOOTDIR
+git clone --depth 1 https://github.com/hardkernel/u-boot.git -b odroidg12-v2015.01 $UBOOTDIR
 
 mkdir -p $UBOOTDIR/fip
 chmod +x $UBOOTDIR/fip/blx_fix.sh
