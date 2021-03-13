@@ -105,4 +105,6 @@ qemu-x86_64-static $UBOOTDIR/fip/g12b/aml_encrypt_g12b --bootmk \
             --ddrfw8 $UBOOTDIR/fip/aml_ddr.fw \
             --level v3
 
+# Does only copy the u-boot binary to ouput target, copying u-boot parts to the right sectors
+# is done in board image definition (because an image could use somthing else than u-boot)
 cp $UBOOTDIR/fip/u-boot.bin.sd.bin $1/$OUTPUT
