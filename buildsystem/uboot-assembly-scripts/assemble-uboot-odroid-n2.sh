@@ -31,6 +31,7 @@ cd  $1
 GITHUBDIR=github_odroid-n2
 OUTPUT=u-boot-odroid-n2
 UBOOTDIR=$1/$GITHUBDIR
+[ -d $UBOOTDIR ] && rm -fr $UBOOTDIR
 git clone --depth 1 https://github.com/hardkernel/u-boot.git -b odroidn2-v2015.01 $UBOOTDIR
 
 mkdir -p $UBOOTDIR/fip
