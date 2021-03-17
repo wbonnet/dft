@@ -82,7 +82,16 @@ do-install:
 					cp -frv ../files $(INSTALL_DIR)/doc ; \
 					mkdir -p $(INSTALL_DIR)/u-boot/ ; \
                                         cp -fv $(BUILD_DIR)/$(UBOOT_BINARY_FILE) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION) ; \
-                                        cp -fv $(BUILD_DIR)/u-boot.dtb $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb ; \
+					if [ ! "$(UBOOT_BINARY_EXTRA_FILES)" = "" ] ; then \
+					 	echo "to process : $(UBOOT_BINARY_EXTRA_FILES)";  \
+						for f in $(UBOOT_BINARY_EXTRA_FILES) ; do \
+							echo "copying: _$$f_" ; \
+							cp -fv $(BUILD_DIR)/$$f $(INSTALL_DIR)/u-boot/ ; \
+						done ; \
+					else \
+						echo "UBOOT_BINARY_EXTRA_FILES not defined or empty : $(UBOOT_BINARY_EXTRA_FILES)" ;  \
+					fi ; \
+					cp -fv $(BUILD_DIR)/u-boot.dtb $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb ; \
                                         ln -sf u-boot-$(BOARD_NAME)-$(SW_VERSION) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME); \
 				else \
 					if [ "$(SW_NAME)" = "linux" ] ; then \
