@@ -1,0 +1,17 @@
+linux-kernel-marsboard-imx6 (5.11.8-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 20 Mar 2021 16:44:35 +0000
+
+linux-kernel-marsboard-imx6 (5.11.8-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 20 Mar 2021 16:44:35 +0000
+
+linux-headers-marsboard-imx6 (5.11.8-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Sat, 20 Mar 2021 16:44:35 +0000
