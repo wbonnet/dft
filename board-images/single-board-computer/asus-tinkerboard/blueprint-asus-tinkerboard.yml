@@ -72,9 +72,13 @@ u-boot:
       source: "/dev/zero" ,
 
       # Defines the options to be passed to dd
-      options: "bs=1k count=1023 seek=1 status=noxfer"
+      options: "bs=1k count=1023 status=noxfer"
+    }
+  - {
+      source: "/boot/u-boot/idbloader.img" ,
+      options: "seek=64 status=noxfer"
     }
   - {
       source: "/boot/u-boot/u-boot-asus-tinkerboard" ,
-      options: "seek=64 conv=notrunc status=noxfer"
+      options: "seek= 16384 status=noxfer"
     }
