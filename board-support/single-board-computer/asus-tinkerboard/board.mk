@@ -49,7 +49,7 @@ UBOOT_DEFCONFIG = tinker-rk3288_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
 UBOOT_BINARY_FILE = u-boot-$(BOARD_NAME)
-UBOOT_BINARY_EXTRA_FILES = u-boot-dtb.img 
+UBOOT_BINARY_EXTRA_FILES = idbloader.img 
 DEFAULT_DTB = rk3288-tinker.dtb
 
 
