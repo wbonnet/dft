@@ -65,20 +65,11 @@ u-boot:
   # List of action needed to install the u-boot binary to the image
   installation:
   - {
-      # Defines the source of the data to be copied to the image
-      # The source can be either a file or a special device like /dev/zero or /dev/random
-      # If the path is absolute, it will be left unchanged, otherwise it is prefix by the
-      # BSP path
-      source: "/dev/zero" ,
-
-      # Defines the options to be passed to dd
-      options: "bs=1k count=1023 status=noxfer"
-    }
-  - {
-      source: "/boot/u-boot/idbloader.img" ,
-      options: "seek=64 status=noxfer"
-    }
-  - {
       source: "/boot/u-boot/u-boot-asus-tinkerboard" ,
-      options: "seek= 16384 status=noxfer"
+#      source: "/boot/u-boot/idbloader.img" ,
+      options: "seek=64 status=noxfer conv=notrunc"
     }
+#  - {
+#      source: "/boot/u-boot/u-boot-asus-tinkerboard" ,
+#      options: "seek=16384 status=noxfer"
+#    }
