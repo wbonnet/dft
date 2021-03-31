@@ -1,0 +1,17 @@
+linux-kernel-orangepi-zero (5.11.11-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 31 Mar 2021 13:59:18 +0000
+
+linux-kernel-orangepi-zero (5.11.11-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 31 Mar 2021 13:59:18 +0000
+
+linux-headers-orangepi-zero (5.11.11-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 31 Mar 2021 13:59:18 +0000
