@@ -44,7 +44,7 @@ UBOOT_SUPPORT = r0
 
 # List of files to copy from build to install directory (path is relative to build dir)
 # UBOOT_BINARY_FILE = u-boot-sunxi-with-spl.bin
-D# EFAULT_DTB = sun8i-h2-plus-orangepi-zero.dtb
+# DEFAULT_DTB = sun8i-h2-plus-orangepi-zero.dtb
 
 
 #
