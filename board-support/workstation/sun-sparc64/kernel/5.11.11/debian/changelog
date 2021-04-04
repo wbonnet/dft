@@ -1,0 +1,17 @@
+linux-kernel-undefined-board-name (5.11.11-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 04 Apr 2021 23:31:00 +0200
+
+linux-kernel-undefined-board-name (5.11.11-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 04 Apr 2021 23:31:00 +0200
+
+linux-headers-undefined-board-name (5.11.11-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Sun, 04 Apr 2021 23:31:00 +0200

@@ -1,0 +1,21 @@
+Source: linux-kernel-undefined-board-name
+Section: kernel
+Priority: optional
+Maintainer: William Bonnet <wbonnet@theitmakers.com>
+Standards-Version: 3.9.8
+Build-Depends: debhelper (>= 9)
+
+Package: linux-kernel-undefined-board-name
+Architecture: any
+Depends: ${misc:Depends},
+         kmod, 
+         linux-base (>= 4.3~), 
+         initramfs-tools (>= 0.120+deb8u2) | linux-initramfs-tool
+Description: Linux kernel, version 5.11.11 for undefined-board-name
+ This packages contains the Linux kernel version 5.11.11 compiled for undefined-board-name board.
+
+# Package: linux-headers-undefined-board-name-5.11.11
+# Architecture: any
+# Depends: ${misc:Depends}
+# Description: Linux kernel headers, version 5.11.11 for undefined-board-name
+#  This packages contains the Linux kernel headers version 5.11.11 for undefined-board-name board.
