@@ -136,7 +136,7 @@ build-%:
 			else \
 				cd $(BUILD_DIR) ; \
 				if [ ! -f $(COOKIE_DIR)/build-$* ] ; then \
-					$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) ; \
+					$(BUILD_ENV) $(MAKE) -j$(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) ; \
 				fi ; \
 			fi ; \
 		fi ; \
