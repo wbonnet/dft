@@ -71,7 +71,7 @@ build: configure pre-build $(BUILD_TARGETS) post-build
 	if [ ! "x$$skip_target" = "x1" ] ; then \
 		cd $(BUILD_DIR) ; \
 		if [ ! -f $(COOKIE_DIR)/$@ ] ; then \
-			$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity) ; \
+			$(BUILD_ENV) $(MAKE) -j $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) verbosity=$(verbosity) ; \
 		fi ; \
 	fi ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
@@ -94,12 +94,14 @@ post-build:
 			fi ; \
 		fi ; \
 	else \
-		if [ ! -d  $(INSTALL_DIR)/u-boot ] ; then \
-			mkdir $(INSTALL_DIR)/u-boot ; \
+		if [ "$(UBOOT_SUPPORT)" = "1" ] ; then \
+			if [ ! -d  $(INSTALL_DIR)/u-boot ] ; then \
+				mkdir $(INSTALL_DIR)/u-boot ; \
+			fi ; \
+			cp -fv $(BUILD_DIR)/$(UBOOT_BINARY_FILE) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION) ; \
+			cp -fv $(BUILD_DIR)/u-boot.dtb $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb ; \
+			ln -sf u-boot-$(BOARD_NAME)-$(SW_VERSION) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME) ; \
 		fi ; \
-		cp -fv $(BUILD_DIR)/$(UBOOT_BINARY_FILE) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION) ; \
-		cp -fv $(BUILD_DIR)/u-boot.dtb $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME)-$(SW_VERSION).dtb ; \
-		ln -sf u-boot-$(BOARD_NAME)-$(SW_VERSION) $(INSTALL_DIR)/u-boot/u-boot-$(BOARD_NAME) ; \
 	fi ;
 	$(DISPLAY_COMPLETED_TARGET_NAME)
 	$(TARGET_DONE)
