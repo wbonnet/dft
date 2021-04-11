@@ -1,0 +1,1 @@
+../../../board-support/single-board-computer/nanopi-r2s/board.mk
