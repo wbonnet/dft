@@ -24,7 +24,7 @@
 # Only one architecture can be set at a time, if a board can support several architecture
 # armel and armhf, or armhf and arm64, then you need to create several bsp definition file,
 # one for each architecture
-architecture: aarch64
+architecture: arm64
 
 # The kernel section defines the different parameters needed to select and install the kernel
 # used to boot the board. It is defined by a source (Debian repository) and a list of packages
@@ -87,7 +87,7 @@ u-boot:
       options: "seek=64 status=noxfer conv=notrunc"
     }
   - {
-      source: "/boot/u-boot/u-boot.img" ,
+      source: "/boot/u-boot/u-boot-nanopi-r2s" ,
       options: "seek=16384 status=noxfer conv=notrunc"
     }
 

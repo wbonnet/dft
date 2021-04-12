@@ -38,11 +38,12 @@ BOARD_ARCH = aarch64
 UBOOT_SUPPORT     = 1
 
 # Make use the defconfig file from UBOOT_DEFCONFIG unless you specify your own in USE_CONFIG_FILE
-UBOOT_DEFCONFIG   = nanopi-r2s-rk3328_defconfig 
+UBOOT_DEFCONFIG = nanopi-r2s-rk3328_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
-UBOOT_BINARY_FILE = u-boot-$(BOARD_NAME)
-DEFAULT_DTB       = default.dtb
+UBOOT_BINARY_EXTRA_FILES = idbloader.img  
+UBOOT_BINARY_FILE = u-boot-nanopi-r2s
+DEFAULT_DTB = default.dtb
 
 #
 # GRUB support and configuration (u-boot or grub should be activated to be able to boot the board).

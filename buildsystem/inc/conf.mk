@@ -216,12 +216,24 @@ CONFIG_OVERRIDES    ?=
 BUILD_PROCESS_COUNT ?= -j$(shell grep -c ^processor /proc/cpuinfo)
 
 # Defines default build arguments, depending on the board architectures
-ARCH_COMMON_BUILD_ARGS ?= modules
+ARCH_COMMON_BUILD_ARGS  ?= modules
 ARCH_ARMV7L_BUILD_ARGS  ?= zImage dtbs
+ARCH_AARCH64_BUILD_ARGS ?= zImage dtbs
+ARCH_PPC64_BUILD_ARGS   ?= zImage dtbs
+ARCH_SPARC64_BUILD_ARGS ?= zImage dtbs
+ARCH_SPARC_BUILD_ARGS   ?= zImage dtbs
+ARCH_MIPS_BUILD_ARGS    ?= zImage dtbs
+ARCH_POWERPC_BUILD_ARGS ?= zImage dtbs
 
 # Defines default build targets depending on the board architectures
 ARCH_COMMON_BUILD_FLAGS   ?=
 ARCH_ARMV7L_BUILD_FLAGS   ?=
+ARCH_AARCH64_BUILD_FLAGS  ?=
+ARCH_PPC64_BUILD_FLAGS    ?=
+ARCH_MIPS_BUILD_FLAGS     ?=
+ARCH_SPARC64_BUILD_FLAGS  ?=
+ARCH_SPARC_BUILD_FLAGS    ?=
+ARCH_POWERPC_BUILD_FLAGS  ?=
 
 # Defines default build arguments, depending on the board architectures
 # ARCH_COMMON_INSTALL_ARGS ?=
@@ -232,10 +244,16 @@ BUILD_FLAGS   ?= $(ARCH_COMMON_BUILD_FLAGS) $(ARCH_$(shell echo $(BOARD_ARCH) | 
 BUILD_ARGS    ?= $(ARCH_COMMON_BUILD_ARGS) $(ARCH_$(shell echo $(BOARD_ARCH) | tr a-z A-Z)_BUILD_ARGS)
 
 # Defines default installation arguments, depending on the board architectures
-ARCH_COMMON_INSTALL_ARGS ?=
-ARCH_ARMV7L_INSTALL_ARGS ?= zinstall
-ARCH_X86_64_INSTALL_ARGS ?= zinstall
-ARCH_I386_INSTALL_ARGS   ?= zinstall
+ARCH_COMMON_INSTALL_ARGS  ?=
+ARCH_ARMV7L_INSTALL_ARGS  ?= zinstall
+ARCH_X86_64_INSTALL_ARGS  ?= zinstall
+ARCH_I386_INSTALL_ARGS    ?= zinstall
+ARCH_AARCH64_INSTALL_ARGS ?= zinstall
+ARCH_PPC64_INSTALL_ARGS   ?= zinstall
+ARCH_MIPS_INSTALL_ARGS    ?= zinstall
+ARCH_SPARC64_INSTALL_ARGS ?= zinstall
+ARCH_SPARC_INSTALL_ARGS   ?= zinstall
+ARCH_POWERPC_INSTALL_ARGS ?= zinstall
 
 INSTALL_ARGS    ?= $(ARCH_COMMON_INSTALL_ARGS) $(ARCH_$(shell echo $(BOARD_ARCH) | tr a-z A-Z)_INSTALL_ARGS)
 

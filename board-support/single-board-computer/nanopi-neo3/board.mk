@@ -40,10 +40,12 @@ BOARD_ARCH = aarch64
 UBOOT_SUPPORT = 1
 
 # Make use the defconfig file from UBOOT_DEFCONFIG unless you specify your own in USE_CONFIG_FILE
-UBOOT_DEFCONFIG = nanopineo3-rk3328_defconfig
+#UBOOT_DEFCONFIG = nanopineo3-rk3328_defconfig
+UBOOT_DEFCONFIG = nanopi-r2s-rk3328_defconfig
 
 # List of files to copy from build to install directory (path is relative to build dir)
-UBOOT_BINARY_FILE = u-boot.bin
+UBOOT_BINARY_EXTRA_FILES = idbloader.img  
+UBOOT_BINARY_FILE = u-boot-nanopi-neo3
 DEFAULT_DTB = nanopi-neo3.dtb
 
 

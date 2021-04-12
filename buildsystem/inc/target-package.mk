@@ -105,8 +105,8 @@ do-package:
 	$(TARGET_DONE)
 
 do-repackage:
-	@if [ -f $(COOKIE_DIR)/do-package ]  ; then
-		rm -f $(COOKIE_DIR)/do-package ;
+	@if [ -f $(COOKIE_DIR)/do-package ]  ; then \
+		rm -f $(COOKIE_DIR)/do-package ; \
 	fi ;
 	$(TARGET_DONE)
 
