@@ -98,7 +98,7 @@ do-install:
 						cd $(BUILD_DIR) ; \
 						mkdir -p $(INSTALL_DIR)/boot/dtb ; \
 						$(BUILD_ENV) $(MAKE) INSTALL_PATH=$(INSTALL_DIR)/boot $(INSTALL_ARGS) ; \
-						$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(INSTALL_DIR)/ INSTALL_MOD_STRIP=1 modules_install ; \
+						$(BUILD_ENV) $(MAKE) INSTALL_MOD_PATH=$(INSTALL_DIR)/ INSTALL_MOD_STRIP=1 $(ARCH_COMMON_INSTALL_ARGS) ; \
 						cp -fr arch/arm/boot/dts/*.dtb $(INSTALL_DIR)/boot/dtb ; \
 						echo "DEBUG : le DEFAULT_DTB $(DEFAULT_DTB)" ; \
 			 	 		if [ ! "" = "$(DEFAULT_DTB)" ] ; then \
