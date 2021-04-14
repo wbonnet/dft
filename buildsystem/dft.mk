@@ -237,6 +237,7 @@ show-config:
 	@echo "  BUILD_ARGS                        $(BUILD_ARGS)"
 	@echo "  BUILD_ENV                         $(BUILD_ENV)"
 	@echo "  BUILD_PROCESS_COUNT               $(BUILD_PROCESS_COUNT)"
+	@echo "  INSTALL_ARGS                      $(INSTALL_ARGS)"
 	@echo
 	@echo "  MAKE                              $(MAKE)"
 	@echo "  DEBUILD                           $(DEBUILD)"
