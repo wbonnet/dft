@@ -1,0 +1,17 @@
+linux-kernel-odroid-n2 (5.11.14-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 14 Apr 2021 19:45:40 +0200
+
+linux-kernel-odroid-n2 (5.11.14-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 14 Apr 2021 19:45:40 +0200
+
+linux-headers-odroid-n2 (5.11.14-1) unstable; urgency=medium
+
+  * Initial release.
+ 
+ -- William Bonnet <wbonnet@theitmakers.com>  Wed, 14 Apr 2021 19:45:40 +0200
