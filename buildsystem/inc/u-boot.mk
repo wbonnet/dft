@@ -69,7 +69,7 @@ SRC_SIGN_FILES      ?= $(SW_NAME)-$(SW_VERSION).sign
 # Defines the git repository to use
 DOWNLOAD_TOOL       := wget
 SW_NAME             := u-boot
-BUILD_ARGS          =
+#BUILD_ARGS          =
 
 # Match initial ifdef DFT_UBOOT
 endif
