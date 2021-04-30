@@ -204,12 +204,12 @@ PATCH_DIR_FUZZ  ?= 2
 PATCH_ARGS       = --directory=$(WORK_DIR) --strip=$(PATCH_DIR_LEVEL) --fuzz=$(PATCH_DIR_FUZZ)
 
 apply-patch-%:
-	@if [ !"$(SW_VERSION)" = "" ] ; then \
+	if [ !"$(SW_VERSION)" = "" ] ; then \
 		if [ ! "$(SW_VERSION)" == "undefined-sw-version" ] ; then \
 			if [ "$(verbosity)" == "1" ] ; then \
-				echo " ==> Applying $(PATCH_DIR)/$*"
+				echo " ==> Applying $(PATCH_DIR)/$*" ; \
 			fi ; \
-			patch $(PATCH_ARGS) < $(PATCH_DIR)/$*
+			patch $(PATCH_ARGS) < $(PATCH_DIR)/$* ; \
 		fi ; \
 	fi ;
 	$(TARGET_DONE)
