@@ -48,7 +48,7 @@ show-build-targets:
 	@echo $(BUILD_TARGETS) ;
 
 build: configure pre-build $(BUILD_TARGETS) post-build
-	@skip_target=0 ; \
+	skip_target=0 ; \
 	echo "verbosity : $(verbosity)" ; 	
 	if [ "$(verbosity)" = "" ]  ; then \
 		verbosity=1 ; \
@@ -137,8 +137,15 @@ build-%:
 				fi ; \
 			else \
 				cd $(BUILD_DIR) ; \
-				if [ ! -f $(COOKIE_DIR)/build-$* ] ; then \
-					$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) ; \
+				if [ "$(SW_NAME)" = "linux" ] ; then \
+					if [ ! -f $(COOKIE_DIR)/build-$* ] ; then \
+						$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) ; \
+					fi ; \
+				fi ; \
+				if [ "$(SW_NAME)" = "u-boot" ] ; then \
+					if [ ! -f $(COOKIE_DIR)/build-$* ] ; then \
+						$(BUILD_ENV) $(MAKE) $(BUILD_PROCESS_COUNT) $(BUILD_FLAGS) $(BUILD_ARGS) only-native-arch=$(only-native-arch) arch-warning=$(arch-warning) only-latest=$(only-latest) ; \
+					fi ; \
 				fi ; \
 			fi ; \
 		fi ; \
