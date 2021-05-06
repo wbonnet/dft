@@ -26,15 +26,14 @@ set -ex
 
 # The following procedure is provided with u-boot sources in readme from doc/board folder
 # The one and only argument is the target platform of u-boot build
-cd  $1
+cd $1/
 
 # Build the required TF-A for ARM64 Rockchip SoCs platforms
 [ -d arm-trusted-firmware ] && rm -fr arm-trusted-firmware
 git clone https://github.com/ARM-software/arm-trusted-firmware.git
 cd arm-trusted-firmware
 make realclean
-echo make PLAT=rk3328
+make PLAT=rk3328
 
 # Does only copy the u-boot binary to ouput target, copying u-boot parts to the right sectors
 # is done in board image definition (because an image could use somthing else than u-boot)
-cp $UBOOTDIR/fip/u-boot.bin.sd.bin $1/$OUTPUT
