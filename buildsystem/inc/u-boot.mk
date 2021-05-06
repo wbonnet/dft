@@ -69,7 +69,10 @@ SRC_SIGN_FILES      ?= $(SW_NAME)-$(SW_VERSION).sign
 # Defines the git repository to use
 DOWNLOAD_TOOL       := wget
 SW_NAME             := u-boot
-#BUILD_ARGS          =
+BUILD_ARGS          =
+
+# Defines the default path to bl31.elf (used to build arm64 ATF)
+BL31               ?= $(BUILD_DIR)/bl31.elf
 
 # Match initial ifdef DFT_UBOOT
 endif

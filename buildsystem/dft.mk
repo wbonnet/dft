@@ -243,6 +243,7 @@ show-config:
 	@echo "  DEBUILD                           $(DEBUILD)"
 	@echo "  DEBUILD_ARGS                      $(DEBUILD_ARGS)"
 	@echo "  DEBUILD_ENV                       $(DEBUILD_ENV)"
+	@echo "  BL31                              $(BL31)"
 	@echo
 	@echo "Internal variables"
 	@echo "  MAKE_FILTERS                      $(MAKE_FILTERS)"
