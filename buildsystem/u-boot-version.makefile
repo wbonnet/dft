@@ -34,7 +34,8 @@ SW_VERSION       := $(shell echo $(PATH_WORDS) |  cut -d ' ' -f$(SW_VERSIONFIELD
 # Include DFT build system shared Makfile includes
 DFT_BUILDSYSTEM := buildsystem
 include ../board.mk
-include version.mk
+# -include means include only if file exist
+-include version.mk
 include $(DFT_BUILDSYSTEM)/inc/u-boot.mk
 include $(DFT_BUILDSYSTEM)/dft.mk
 
