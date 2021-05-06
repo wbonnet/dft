@@ -25,11 +25,11 @@
 
 # The board name fragment will be used in package naming, path and files content generation
 BOARD_NAME = nanopi-neo3
+BOARD_SOC = rockchip-rk3328
+BOARD_PLATFORM = rk3328
 
 # Board architecture as defined by uname -m (armv7l, mips, aarch64, x86_64, etc.)
 BOARD_ARCH = aarch64
-
-
 
 #
 # u-boot support and configuration
@@ -40,13 +40,26 @@ BOARD_ARCH = aarch64
 UBOOT_SUPPORT = 1
 
 # Make use the defconfig file from UBOOT_DEFCONFIG unless you specify your own in USE_CONFIG_FILE
-#UBOOT_DEFCONFIG = nanopineo3-rk3328_defconfig
 UBOOT_DEFCONFIG = nanopi-r2s-rk3328_defconfig
+#UBOOT_DEFCONFIG = nanopineo3-rk3328_defconfig
+
+# Defines if an assembly script has to be executed (this script can execute final assembly and/or signature operation)
+UBOOT_ASSEMBLING = 1
+
+# Defines the script used to produce (assemble and sign) the u-boot binary
+UBOOT_ASSEMBLY_SCRIPT = assemble-uboot-$(BOARD_SOC).sh
 
 # List of files to copy from build to install directory (path is relative to build dir)
+UBOOT_BINARY_FILE = u-boot-nodtb.bin
 UBOOT_BINARY_EXTRA_FILES = idbloader.img  
-UBOOT_BINARY_FILE = u-boot-nanopi-neo3
 DEFAULT_DTB = nanopi-neo3.dtb
+
+
+
+
+
+
+# List of files to copy from build to install directory (path is relative to build dir)
 
 
 #
