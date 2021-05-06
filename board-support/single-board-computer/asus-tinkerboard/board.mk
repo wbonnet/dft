@@ -39,10 +39,10 @@ BOARD_ARCH = armv7l
 UBOOT_SUPPORT = 1
 
 # Defines if an assembly script has to be executed (this script can execute final assembly and/or signature operation)
-UBOOT_ASSEMBLING = 1
+UBOOT_ASSEMBLING = 0
 
 # Defines the script used to produce (assemble and sign) the u-boot binary
-UBOOT_ASSEMBLY_SCRIPT = assemble-uboot-$(BOARD_NAME).sh
+#UBOOT_ASSEMBLY_SCRIPT = assemble-uboot-$(BOARD_NAME).sh
 
 # Make use the defconfig file from UBOOT_DEFCONFIG unless you specify your own in USE_CONFIG_FILE
 UBOOT_DEFCONFIG = tinker-rk3288_defconfig
