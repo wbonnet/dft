@@ -36,6 +36,6 @@ u-boot itself.
 sudo dd if=/dev/zero of=/dev/mmcblk0 bs=1k count=1023 seek=1 status=noxfer
 
 # Copy binary to MMC and update u-boot (environnment variables stored on MMC are not modified)
-sudo dd if=/boot/u-boot/idbloader.bin of=/dev/mmcblk0 seek=64 conv=notrunc
+sudo dd if=/boot/u-boot/idbloader.img of=/dev/mmcblk0 seek=64 conv=notrunc
 sudo dd if=/boot/u-boot/u-boot-nanopi-neo3 of=/dev/mmcblk0 seek=16384 conv=notrunc 
 
