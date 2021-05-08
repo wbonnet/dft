@@ -39,7 +39,7 @@ include board.mk
 #
 image:
 	echo "image from board-images-board.makefile" ; \
-#	time sudo dft run_sequence --project project.yml --sequence produce-image  --log-level debug --config-file /home/william/.dftrc
+#	time sudo dft run_sequence --project project.yml --sequence produce-image  --log-level debug 
 
 list-images:
 	echo "list-images from board-images-board.makefile" ; \
