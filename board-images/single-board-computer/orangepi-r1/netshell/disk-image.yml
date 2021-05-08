@@ -115,7 +115,7 @@ devices:
         unit: "MB" ,
 
         # Frst sector of the partition
-        start_sector: "8192" ,
+        start_sector: "65536" ,
 
         # Toggle the given set of flags on the partition
         # flag: "" ,
