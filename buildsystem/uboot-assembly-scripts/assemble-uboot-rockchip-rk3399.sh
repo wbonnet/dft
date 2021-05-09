@@ -87,6 +87,7 @@ qemu-x86_64-static $UBOOTDIR/fip/g12b/aml_encrypt_g12b --bl3sig --input $UBOOTDI
 qemu-x86_64-static $UBOOTDIR/fip/g12b/aml_encrypt_g12b --bl3sig --input $UBOOTDIR/fip/bl33.bin --compress lz4 \
                                     --output $UBOOTDIR/fip/bl33.bin.enc \
                                     --level v3 --type bl33 --compress lz4
+
 qemu-x86_64-static $UBOOTDIR/fip/g12b/aml_encrypt_g12b --bl2sig --input $UBOOTDIR/fip/bl2_new.bin \
                                     --output $UBOOTDIR/fip/bl2.n.bin.sig
 
